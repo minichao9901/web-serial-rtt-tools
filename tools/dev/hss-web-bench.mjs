@@ -3,6 +3,10 @@ import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { basename, dirname, resolve } from 'node:path';
 import { Cdp, sleep } from '../selftest/cdp-lib.mjs';
 import {checkHpmFrame} from './hpm-scope-contract.mjs';
+import {pathToFileURL} from 'node:url';
+
+// Optional real SPI/CDC load; the hook owns setup, integrity checks and cleanup.
+const load=process.env.SCOPE_LOAD_HOOK ? await import(pathToFileURL(resolve(process.env.SCOPE_LOAD_HOOK))) : null;
 
 const out = resolve(process.argv[2] || 'tmp/hss-web-bench.json');
 const cases = JSON.parse(process.argv[3] || '[{"period":2,"draw":true},{"period":2,"draw":false},{"period":2.25,"draw":true},{"period":2.5,"draw":true}]');
@@ -19,12 +23,14 @@ const highTick=contractName==='g_v_hi.tick';
 const results = { startedAt: new Date().toISOString(), elfPath, target, contractName, seconds, rows: [] };
 mkdirSync(dirname(out), { recursive: true });
 await c.connect();
+let failure=null;
 try {
   await c.send('Page.navigate', { url: app + '?hssbench=' + Date.now() + '#scope' });
   for (let i = 0; i < 50; i++) {
     await sleep(200);
     if (await c.eval('return !!window.__tools?.scope;').catch(() => false)) break;
   }
+  if(load)results.loadSetup=await load.setup(c);
   await c.eval(`
     const s=window.__tools.scope;
     await s.setMock(false);
@@ -37,7 +43,7 @@ try {
     s.selected=[]; const contract=s.all.find(v=>v.name===${JSON.stringify(contractName)});
     if(!contract)throw Error('Missing contract variable');s.toggleVar(contract,true);
     document.getElementById('sc-clock').value=${JSON.stringify(String(clockKhz))};
-    document.getElementById('sc-cdcoff').checked=true;
+    document.getElementById('sc-cdcoff').checked=${!load};
     document.getElementById('sc-batch').checked=true;
     document.getElementById('sc-raw').checked=false; s.captureRaw=false;
     window.__benchOriginalDraw=s.drawFrame;
@@ -53,8 +59,10 @@ try {
   results.calibration=await c.eval('const s=window.__tools.scope;await s.bench();return {readUs:s.benchUs,recommendedUs:s.recPeriodUs,fresh:s.benchFresh(),status:s.state};');
   if(!results.calibration.fresh)throw Error('Read calibration failed: '+results.calibration.status);
   for (const cfg of cases) {
+    const loadBefore=load ? await load.snapshot(c) : null;
     const row = await c.eval(`
       const s=window.__tools.scope,cfg=${JSON.stringify(cfg)};
+      if('cdcOff' in cfg)document.getElementById('sc-cdcoff').checked=!!cfg.cdcOff;
       document.getElementById('sc-batch').checked=cfg.batch!==false;
       if(cfg.vars){
         s.selected=[];for(const name of cfg.vars){const v=s.all.find(v=>v.name===name);if(!v)throw Error('Missing variable '+name);s.toggleVar(v,true);}
@@ -70,10 +78,12 @@ try {
       await s.start(); if(!s.running)throw Error(document.getElementById('sc-state').textContent);
       await new Promise(r=>setTimeout(r,500));
       const a=await window.__benchSnap();let last=performance.now(),maxLag=0;
+      const loadA=window.__benchLoadSnap ? await window.__benchLoadSnap() : null;
       const timer=setInterval(()=>{const now=performance.now();maxLag=Math.max(maxLag,now-last-20);last=now;},20);
       const stallTimer=cfg.stallMs?setInterval(()=>{const until=performance.now()+cfg.stallMs;while(performance.now()<until){};},cfg.stallEveryMs||500):null;
       await new Promise(r=>setTimeout(r,${seconds}*1000));
       const b=await window.__benchSnap();clearInterval(timer);
+      const loadB=window.__benchLoadSnap ? await window.__benchLoadSnap() : null;
       if(stallTimer)clearInterval(stallTimer);
       const valid=s.running&&s._capturing&&!!(b.w[11]&256)&&s.backend===${JSON.stringify(target)};
       const delta=(i)=>(b.w[i]-a.w[i])>>>0,dt=delta(1)/24000000;
@@ -101,13 +111,17 @@ try {
           if(checked.bad&&firstBad.length<8)firstBad.push({i,...checked});
         }
       }
-      return {cfg,valid,calibration,stable,samplesChecked:count,bad,waveformBad,tornFrames,phaseOutliers,hiPhaseBudget,phaseSkewCounts,counterBackwards,maxCounterStep,firstBad,summary:s.summary(),stalePackets:s.stalePackets,
+      return {cfg,valid,calibration,stable,loadWindow:loadA?{before:loadA,after:loadB}:undefined,samplesChecked:count,bad,waveformBad,tornFrames,phaseOutliers,hiPhaseBudget,phaseSkewCounts,counterBackwards,maxCounterStep,firstBad,summary:s.summary(),stalePackets:s.stalePackets,
         readAhead:{depth:s.transport.inFlight,bytes:s.transport.chunkBytes},
         requestedUs:cfg.period,effectiveUs:s._periodUs,actualUs:s.periodActualUs,
         advice:document.getElementById('sc-rate-advice')?.textContent,
         periodTicks:b.w[10],flags:b.w[11],sequenceReordered:s.seqT.reordered};
     `);
     results.rows.push(row);
+    if(load){
+      try{row.load=await load.check(c,loadBefore,row.loadWindow);}
+      catch(e){row.loadError=String(e.message||e);writeFileSync(out,JSON.stringify(results,null,2)+'\n');throw e;}
+    }
     writeFileSync(out, JSON.stringify(results, null, 2) + '\n');
     console.log(JSON.stringify({ cfg: row.cfg, valid: row.valid, ...row.stable, bad: row.bad, checked: row.samplesChecked,
       counterBackwards:row.counterBackwards,maxCounterStep:row.maxCounterStep,reordered:row.sequenceReordered, periodTicks:row.periodTicks }));
@@ -115,7 +129,9 @@ try {
       throw Error('Invalid capture or sample integrity failure; evidence saved at '+out);
     await sleep(500);
   }
-} finally {
+} catch(e){failure=e;throw e;} finally {
   await c.eval('const s=window.__tools.scope;await s.stop();if(window.__benchOriginalDraw)s.drawFrame=window.__benchOriginalDraw;return true;').catch(() => {});
-  c.close();
+  try{if(load)await load.cleanup(c);}
+  catch(e){if(failure)console.error('Load cleanup failed: '+e.message);else throw e;}
+  finally{c.close();}
 }

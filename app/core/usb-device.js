@@ -124,6 +124,9 @@ export class UsbLease {
     this.externalIfaces.delete(iface);
   }
   release(iface){ return this._run(() => this._release(iface)); }
+  canRetireHandle(){
+    return this.entry.clients.has(this) && this.entry.clients.size === 1 && !this.externalIfaces.size;
+  }
   async _reset(){
     const others = [...this.entry.clients].filter(c => c !== this && !c.abandoned);
     if (others.length) throw new Error(`USB 整设备复位需要先断开 ${others.map(c => c.owner).join('、')}`);

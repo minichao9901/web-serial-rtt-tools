@@ -32,9 +32,12 @@ const { VendorEpTransport } = await import('../../app/scope/transport.js');
 {
  const {device,events}=fakeUsb();const spi=new UsbLease(device,'spi');await spi.open();await spi.claim(5,[0x8b,11]);
  const scope=new VendorEpTransport(device);await scope.open();
- device.transferIn=()=>new Promise(()=>{});await scope.start(()=>{});await scope.stop();
+ const pending=[];device.transferIn=()=>new Promise((resolve,reject)=>pending.push({resolve,reject}));
+ const close=device.close;device.close=async function(){await close.call(this);for(const p of pending.splice(0))p.reject(new Error('native handle closed'));};
+ await scope.start(()=>{});await scope.stop();
  await assert.rejects(scope.close(),/先断开 spi/);assert.ok(!events.includes('reset'),'dirty scope cannot reset a live SPI stream');
- await spi.close();await scope.close();assert.ok(events.includes('reset'));assert.equal(events.at(-1),'close');
+ await spi.close();await scope.close();assert.ok(!events.includes('reset'),'exclusive handle close retires reads without a whole-device reset');
+ assert.equal(pending.length,0);assert.equal(events.at(-1),'close');
 }
 console.log('usb-transports: Scope clean close preserves SPI; dirty close retains lease until exclusive recovery PASS');
 const { WebUsbSpiTransport } = await import('../../app/spi/transport.js');

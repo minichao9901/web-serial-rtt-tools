@@ -160,6 +160,10 @@ export class VendorEpTransport {
    */
   async prepare(){
     if (!dirtyDevices.has(this.device)) return;
+    if (await this._retireReads()){
+      await withTimeout(this.open(), 5000, '重开采样数据端点');
+      return;
+    }
     // Generation checks cannot cancel native USB reads. Reset must retire them
     // before a new capture is allowed to submit any requests.
     try { await this._usb.reset(); }
@@ -192,6 +196,19 @@ export class VendorEpTransport {
     this.stalledInFlight = 0;
   }
 
+  async _retireReads(){
+    // SPI CDC uses HID/CDC rather than this WebUSB handle. Closing our
+    // exclusively owned handle can cancel native reads without resetting
+    // the whole probe or interrupting those independent streams.
+    if (!this._usb.canRetireHandle()) return false;
+    await this._usb.close({dirty: false});
+    this.claimed = false;
+    await withTimeout(Promise.allSettled([...this._pendingWorkers]), 1500, '等待采样接口读退出');
+    dirtyDevices.delete(this.device);
+    this.stalledInFlight = 0;
+    return true;
+  }
+
   async start(onChunk, onError){
     if (this.running) return;
     if (this._startPromise) return await this._startPromise;
@@ -209,6 +226,7 @@ export class VendorEpTransport {
     this.onError = typeof onError === 'function' ? onError : null;
     this.gen++;                                   // 新一轮的代号：上一轮没收干净的 worker 靠它作废
     this.chunks = 0; this.bytes = 0; this.errors = 0;
+    this._startedAt = performance.now();
     const g = this.gen;
     // One consumer awaits submission order. Native reads remain concurrent; promise
     // completion order is not necessarily stream order on Windows under load.
@@ -297,7 +315,17 @@ export class VendorEpTransport {
   }
 
   /** Stop rearming while the producer can still finish already submitted reads. */
-  async quiesce(timeoutMs = 40){
+  async quiesce(timeoutMs){
+    if (timeoutMs === undefined){
+      // Drain while the producer still runs. Under simultaneous SPI/CDC load
+      // a nominal 500 kHz plan can deliver far less: 16 x 8 KiB native reads
+      // then need nearly a second, rather than the usual 40 ms, to complete.
+      // Stop rearming first and bound the wait using observed USB throughput.
+      const elapsed = Math.max(1, performance.now() - (this._startedAt ?? performance.now()));
+      const bytesPerMs = this.bytes / elapsed;
+      const pendingBytes = (this._nativeInFlight || 0) * this.chunkBytes;
+      timeoutMs = bytesPerMs > 0 ? Math.max(40, Math.min(2000, Math.ceil(pendingBytes / bytesPerMs + 100))) : 40;
+    }
     this.running = false;
     this.gen++;
     if (this.workers.length)
@@ -320,6 +348,7 @@ export class VendorEpTransport {
 
   async close(){
     await this.stop();
+    if (dirtyDevices.has(this.device)) await this._retireReads();
     const dirty = dirtyDevices.has(this.device);
     try {
       await this._usb.close({ dirty });

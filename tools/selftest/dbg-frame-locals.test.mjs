@@ -10,7 +10,9 @@ import {DebugSession} from '../../app/dbg/session.js';
 import {runCmd} from '../../app/dbg/cmd.js';
 import {ARM_ARCH} from '../../app/dbg/thumb.js';
 const u32=v=>{const b=new Uint8Array(4);new DataView(b.buffer).setUint32(0,v,true);return b;};
-const elf=new Elf(new Uint8Array(readFileSync(new URL('../target-firmware/stm32f103_dbgstress/fw.elf',import.meta.url))));
+// Fixed readelf addresses below belong to this snapshot. A full_flow rebuild
+// can change compiler layout in the downloadable target ELF independently.
+const elf=new Elf(new Uint8Array(readFileSync(new URL('./fixtures/dbg-locals-arm.elf',import.meta.url))));
 const dwarf=new Dwarf(elf);
 const sp=0x20001000,pc=0x080001d0;
 // Independent readelf contract: engine_linear uses r7+24 as CFA after its prologue.
