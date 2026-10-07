@@ -1,0 +1,367 @@
+{
+  "kind": "offline-code-and-historical-data-audit",
+  "date": "2026-10-07",
+  "liveHardwareTest": false,
+  "webCommit": "b844956",
+  "recommendationFormula": "max(3, ceil(readUs * 1.15) + 1)",
+  "recommendations": [
+    {
+      "readUs": 1.54,
+      "recommendedUs": 3,
+      "handoff1_5xUs": 2.31
+    },
+    {
+      "readUs": 3.17,
+      "recommendedUs": 5,
+      "handoff1_5xUs": 4.755
+    },
+    {
+      "readUs": 36.6,
+      "recommendedUs": 44,
+      "handoff1_5xUs": 54.900000000000006
+    }
+  ],
+  "plans": [
+    {
+      "name": "contiguous-u32-pair",
+      "payloadBytes": 8,
+      "alignedReadBytes": 8,
+      "spans": 1,
+      "swdModelUs": 5.582000000000001,
+      "riscvModelUs": 13.48,
+      "currentFallbackRecommendedUs": 8,
+      "costOfOmittedReadBytes": {
+        "swdUs": 0,
+        "riscvUs": 0
+      }
+    },
+    {
+      "name": "u32-pair-with-12B-gap",
+      "payloadBytes": 8,
+      "alignedReadBytes": 20,
+      "spans": 1,
+      "swdModelUs": 5.582000000000001,
+      "riscvModelUs": 13.48,
+      "currentFallbackRecommendedUs": 8,
+      "costOfOmittedReadBytes": {
+        "swdUs": 3.3480000000000003,
+        "riscvUs": 11.52
+      }
+    },
+    {
+      "name": "one-unaligned-u8",
+      "payloadBytes": 1,
+      "alignedReadBytes": 4,
+      "spans": 1,
+      "swdModelUs": 3.629,
+      "riscvModelUs": 6.76,
+      "currentFallbackRecommendedUs": 6,
+      "costOfOmittedReadBytes": {
+        "swdUs": 0.8370000000000001,
+        "riscvUs": 2.88
+      }
+    },
+    {
+      "name": "eight-contiguous-u32",
+      "payloadBytes": 32,
+      "alignedReadBytes": 32,
+      "spans": 1,
+      "swdModelUs": 12.278,
+      "riscvModelUs": 36.519999999999996,
+      "currentFallbackRecommendedUs": 16,
+      "costOfOmittedReadBytes": {
+        "swdUs": 0,
+        "riscvUs": 0
+      }
+    }
+  ],
+  "changedAddressStillFresh": true,
+  "deviceDataBuffer": {
+    "buffers": 8,
+    "packetBytes": 512,
+    "frameBytes": 4,
+    "samplesPerPacket": 124,
+    "idealCoverageMsAt400kHz": 2.48,
+    "note": "上界估算；DEF/STAT 和在飞/填充包会减少可用余量。主机挂读不能等同设备缓存。"
+  },
+  "campaigns": [
+    {
+      "source": "tmp/campaign-result.json",
+      "startedAt": "2026-10-05T22:28:16.939Z",
+      "rows": [
+        {
+          "label": "1 变量 @2µs",
+          "periodUs": 2,
+          "rateHz": 480483,
+          "lostProbe": 58486,
+          "lostUsb": 29635,
+          "lostGap": 0,
+          "state": "已停止（时长到 3.000 s）：1441500 个样本 / 3.000 s，零丢包",
+          "vars": [
+            "g_lfsr@0x24000000"
+          ]
+        },
+        {
+          "label": "1 变量 @20µs",
+          "periodUs": 20,
+          "rateHz": 49999,
+          "lostProbe": 2,
+          "lostUsb": 0,
+          "lostGap": 0,
+          "state": "正在停止…",
+          "vars": [
+            "g_lfsr@0x24000000"
+          ]
+        },
+        {
+          "label": "3 变量 @2µs",
+          "periodUs": 2,
+          "rateHz": 76482,
+          "lostProbe": 1265231,
+          "lostUsb": 0,
+          "lostGap": 0,
+          "state": "已停止（时长到 3.000 s）：229467 个样本 / 3.000 s，零丢包",
+          "vars": [
+            "g_lfsr@0x24000000",
+            "g_far_cnt@0x24000008",
+            "g_far_sq100@0x2400000c"
+          ]
+        },
+        {
+          "label": "3 变量 @20µs",
+          "periodUs": 20,
+          "rateHz": 49999,
+          "lostProbe": 3,
+          "lostUsb": 0,
+          "lostGap": 0,
+          "state": "已停止（时长到 3.001 s）：150038 个样本 / 3.001 s，零丢包",
+          "vars": [
+            "g_lfsr@0x24000000",
+            "g_far_cnt@0x24000008",
+            "g_far_sq100@0x2400000c"
+          ]
+        },
+        {
+          "label": "1 变量 @2µs",
+          "periodUs": 2,
+          "rateHz": 484862,
+          "lostProbe": 45334,
+          "lostUsb": 21529,
+          "lostGap": 0,
+          "state": "已停止（时长到 3.000 s）：1454644 个样本 / 3.000 s，零丢包",
+          "vars": [
+            "g_lfsr@0x24000000"
+          ]
+        },
+        {
+          "label": "1 变量 @20µs",
+          "periodUs": 20,
+          "rateHz": 49999,
+          "lostProbe": 2,
+          "lostUsb": 0,
+          "lostGap": 0,
+          "state": "正在停止…",
+          "vars": [
+            "g_lfsr@0x24000000"
+          ]
+        },
+        {
+          "label": "3 变量 @2µs",
+          "periodUs": 2,
+          "rateHz": 76470,
+          "lostProbe": 1265476,
+          "lostUsb": 0,
+          "lostGap": 0,
+          "state": "已停止（时长到 3.000 s）：229418 个样本 / 3.000 s，零丢包",
+          "vars": [
+            "g_lfsr@0x24000000",
+            "g_far_cnt@0x24000008",
+            "g_far_sq100@0x2400000c"
+          ]
+        },
+        {
+          "label": "3 变量 @20µs",
+          "periodUs": 20,
+          "rateHz": 49999,
+          "lostProbe": 3,
+          "lostUsb": 0,
+          "lostGap": 0,
+          "state": "已停止（时长到 3.001 s）：150038 个样本 / 3.001 s，零丢包",
+          "vars": [
+            "g_lfsr@0x24000000",
+            "g_far_cnt@0x24000008",
+            "g_far_sq100@0x2400000c"
+          ]
+        }
+      ]
+    },
+    {
+      "source": "tmp/campaign-h743-local-repeat.json",
+      "startedAt": "2026-10-05T22:26:46.333Z",
+      "rows": [
+        {
+          "label": "1 变量 @2µs",
+          "periodUs": 2,
+          "rateHz": 474632,
+          "lostProbe": 76078,
+          "lostUsb": 52690,
+          "lostGap": 0,
+          "state": "已停止（时长到 3.000 s）：1424016 个样本 / 3.000 s，零丢包",
+          "vars": [
+            "g_lfsr@0x24000000"
+          ]
+        },
+        {
+          "label": "1 变量 @20µs",
+          "periodUs": 20,
+          "rateHz": 49999,
+          "lostProbe": 2,
+          "lostUsb": 0,
+          "lostGap": 0,
+          "state": "正在停止…",
+          "vars": [
+            "g_lfsr@0x24000000"
+          ]
+        },
+        {
+          "label": "3 变量 @2µs",
+          "periodUs": 2,
+          "rateHz": 76512,
+          "lostProbe": 1264637,
+          "lostUsb": 0,
+          "lostGap": 0,
+          "state": "已停止（时长到 3.000 s）：229565 个样本 / 3.000 s，零丢包",
+          "vars": [
+            "g_lfsr@0x24000000",
+            "g_far_cnt@0x24000008",
+            "g_far_sq100@0x2400000c"
+          ]
+        },
+        {
+          "label": "3 变量 @20µs",
+          "periodUs": 20,
+          "rateHz": 49999,
+          "lostProbe": 3,
+          "lostUsb": 0,
+          "lostGap": 0,
+          "state": "已停止（时长到 3.001 s）：150038 个样本 / 3.001 s，零丢包",
+          "vars": [
+            "g_lfsr@0x24000000",
+            "g_far_cnt@0x24000008",
+            "g_far_sq100@0x2400000c"
+          ]
+        }
+      ]
+    },
+    {
+      "source": "tmp/hpm-campaign-result.json",
+      "startedAt": "2026-10-06T02:38:06.598Z",
+      "rows": [
+        {
+          "label": "1 变量 @2µs",
+          "periodUs": 2,
+          "rateHz": 281486,
+          "lostProbe": 654950,
+          "lostUsb": 1107,
+          "lostGap": 0,
+          "state": "已停止（时长到 3.000 s）：844564 个样本 / 3.000 s，零丢包",
+          "vars": [
+            "g_v.tick@0x1240000"
+          ]
+        },
+        {
+          "label": "3 变量 @2µs",
+          "periodUs": 2,
+          "rateHz": 51953,
+          "lostProbe": 1336889,
+          "lostUsb": 0,
+          "lostGap": 0,
+          "state": "已停止（时长到 3.000 s）：155882 个样本 / 3.000 s，零丢包",
+          "vars": [
+            "g_v.tick@0x1240000",
+            "g_v.u_hi@0x1240004",
+            "g_v.f_sin@0x1240008"
+          ]
+        },
+        {
+          "label": "1 变量 @20µs",
+          "periodUs": 20,
+          "rateHz": 50000,
+          "lostProbe": 0,
+          "lostUsb": 0,
+          "lostGap": 0,
+          "state": "正在停止…",
+          "vars": [
+            "g_v.tick@0x1240000"
+          ]
+        },
+        {
+          "label": "3 变量 @30µs",
+          "periodUs": 30,
+          "rateHz": 33333,
+          "lostProbe": 0,
+          "lostUsb": 0,
+          "lostGap": 0,
+          "state": "已停止（时长到 3.001 s）：100040 个样本 / 3.001 s，零丢包",
+          "vars": [
+            "g_v.tick@0x1240000",
+            "g_v.u_hi@0x1240004",
+            "g_v.f_sin@0x1240008"
+          ]
+        },
+        {
+          "label": "1 变量 @2µs",
+          "periodUs": 2,
+          "rateHz": 281600,
+          "lostProbe": 654343,
+          "lostUsb": 287,
+          "lostGap": 0,
+          "state": "已停止（时长到 3.000 s）：844812 个样本 / 3.000 s，零丢包",
+          "vars": [
+            "g_v.tick@0x1240000"
+          ]
+        },
+        {
+          "label": "3 变量 @2µs",
+          "periodUs": 2,
+          "rateHz": 51802,
+          "lostProbe": 1341233,
+          "lostUsb": 0,
+          "lostGap": 0,
+          "state": "已停止（时长到 3.000 s）：155431 个样本 / 3.000 s，零丢包",
+          "vars": [
+            "g_v.tick@0x1240000",
+            "g_v.u_hi@0x1240004",
+            "g_v.f_sin@0x1240008"
+          ]
+        },
+        {
+          "label": "1 变量 @20µs",
+          "periodUs": 20,
+          "rateHz": 50000,
+          "lostProbe": 0,
+          "lostUsb": 0,
+          "lostGap": 0,
+          "state": "正在停止…",
+          "vars": [
+            "g_v.tick@0x1240000"
+          ]
+        },
+        {
+          "label": "3 变量 @30µs",
+          "periodUs": 30,
+          "rateHz": 33333,
+          "lostProbe": 0,
+          "lostUsb": 0,
+          "lostGap": 0,
+          "state": "已停止（时长到 3.001 s）：100040 个样本 / 3.001 s，零丢包",
+          "vars": [
+            "g_v.tick@0x1240000",
+            "g_v.u_hi@0x1240004",
+            "g_v.f_sin@0x1240008"
+          ]
+        }
+      ]
+    }
+  ]
+}
