@@ -746,6 +746,11 @@ test-adc-measure-page:
 test-adc-hw: page-prep
 	$(NODE) tools/selftest/adc-hw-stress.mjs $(ARGS)
 
+# 真实 BMP 发送测速：无需接屏，核对探针执行计数，默认两款屏各自整屏尺寸。
+.PHONY: test-spi-image-rate-hw
+test-spi-image-rate-hw: page-prep
+	$(NODE) tools/dev/spi-image-rate-hw.mjs $(ARGS)
+
 .PHONY: test-analog-wire
 test-analog-wire:
 	$(NODE) tools/selftest/analog-wire.test.mjs

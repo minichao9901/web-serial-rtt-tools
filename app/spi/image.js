@@ -292,7 +292,7 @@ export function windowItems({ x0, x1, y0, y1 }, g = {}, o = {}){
  * 档 1（SPI + DC）刷像素的**第一帧**：RAMWR 命令本身（DC=0），并且**保持 CS** —— 后面所有像素片
  * 都在同一个 CS 窗口里发完（真机验证过的"管道化"做法，见 akaLinkPro `tools/panel_show.py:133-143`）。
  *
- * 档 2（QSPI）不需要它：每片像素自带 `0x32 + 24bit 地址`。
+ * 档 2（QSPI）不需要它：首片像素携带 `0x32 + 24bit 地址`，随后连续发送数据。
  */
 export function ramwrCommandItem(o = {}){
   const cmdByte = (o.ramWr ?? 0x2c) & 0xff;
@@ -309,7 +309,8 @@ export function ramwrCommandItem(o = {}){
  * 像素数据 → XFER 帧（每片 ≤ 492 B）。
  *
  * 两种档位的线上结构**不一样**（都是真机验证过的）：
- *   · 档 2（QSPI）：每片自带 `cmd=qspi_color_opcode` + 24 bit 地址（= RAMWR<<16）+ 四线数据，各自一个 CS 窗口；
+ *   · 档 2（QSPI）：首片携带 `cmd=qspi_color_opcode` + 24 bit 地址（= RAMWR<<8），
+ *     随后只发送四线数据，CS 保持到最后一片；
  *   · 档 1（SPI+DC）：**先发一帧 RAMWR 命令**（见 `ramwrCommandItem`，DC=0），
  *     然后所有像素片 DC=1 且**除最后一片外都带 `CS_HOLD`** —— CS 一路不抬，最后一片才释放。
  */
