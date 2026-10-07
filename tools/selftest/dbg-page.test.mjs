@@ -535,6 +535,26 @@ console.log('== 11. 监视窗口（选 ELF 里的变量，停下来看它的值�
     await new Promise(r => setTimeout(r, 150));
     return { n: d.watch.items.length, dom: document.getElementById('d-watch-list').textContent };`);
   ok(del.n === 0 && /还没有监视项/.test(del.dom), 'wd all 清空监视窗口', JSON.stringify(del).slice(0, 120));
+
+  const removeButtons = await ev(`
+    const d = window.__tools.dbg, names=['g_bytes','g_bytes+4','0x20000010','main'];
+    const expressions=()=>d.watch.items.map(it=>it.expr);
+    const click=i=>document.querySelectorAll('#d-watch-list button[data-del]')[i].click();
+    d.addWatch(names[0]); click(0);
+    const single=expressions();
+    for(const name of names)d.addWatch(name);
+    const ids=[...document.querySelectorAll('#d-watch-list button[data-del]')].map(b=>Number(b.dataset.del));
+    click(1);const middle=expressions();
+    click(2);const last=expressions();
+    click(0);const first=expressions();
+    click(0);await new Promise(r=>setTimeout(r,150));
+    return {single,ids,middle,last,first,empty:expressions(),dom:document.getElementById('d-watch-list').textContent};`);
+  ok(removeButtons.single.length===0, '唯一监视项的 × 可以删除', JSON.stringify(removeButtons.single));
+  ok(JSON.stringify(removeButtons.ids)==='[1,2,3,4]', '删除按钮编号与 wd 的 1 起编号一致', JSON.stringify(removeButtons.ids));
+  ok(JSON.stringify(removeButtons.middle)==='["g_bytes","0x20000010","main"]', '点中间项 × 只删除该项', JSON.stringify(removeButtons.middle));
+  ok(JSON.stringify(removeButtons.last)==='["g_bytes","0x20000010"]', '中间项删除后再删末项不偏移', JSON.stringify(removeButtons.last));
+  ok(JSON.stringify(removeButtons.first)==='["0x20000010"]', '多项中的首项也能删除', JSON.stringify(removeButtons.first));
+  ok(removeButtons.empty.length===0&&/还没有监视项/.test(removeButtons.dom), '连续删除后保持空列表，不被异步刷新恢复', JSON.stringify(removeButtons.empty));
 }
 
 // ==================================================================== 12

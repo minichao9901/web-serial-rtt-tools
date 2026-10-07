@@ -1499,7 +1499,8 @@ export class DbgView {
       const x = document.createElement('button');
       x.className = 'mini x';
       x.textContent = '×';
-      x.dataset.del = String(i);
+      // WatchList.remove shares the command-line's one-based numbering.
+      x.dataset.del = String(i + 1);
       x.title = '删掉这一项';
       row.append(nm, vl, ty, x);
       box.appendChild(row);
