@@ -348,10 +348,38 @@ export class RiscvDebugSession extends DebugSession {
       this._badAddrs.delete(key);
       return got;
     } catch (e){
+      const msg = String(e?.message || e);
+      /**
+       * 🚨 2026-10 真机定因（用户现场：监视里加个结构体 → 之后**每次**读内存都失败，而断点/
+       *    单步照常）：这颗 DM 一旦在 SBA 上被判"超速/挂住"（`sbbusyerror`），它的系统总线
+       *    引擎会**粘死** —— 清错误位救不回来（实测），唯一的解药是重新初始化调试模块
+       *    （`dmcontrol` 0→1 + TAP 复位，见 riscv-dm.js 的 `init()` 注释）。
+       *
+       *    这**不是**"隐式复位目标"：它不动目标内存、不动程序，只是把调试模块重启一遍；
+       *    代价是 `haltreq` 会被清掉，所以修完立刻按 `dmstatus` 把"停住"重新确认（漂移了就补
+       *    一次 halt）。每会话只做一次，并且**如实记一行日志**，不做无声动作。
+       */
+      if (/sbcs|sbbusy|总线访问没有干净完成/.test(msg) && !this._sbaLinkRepaired){
+        this._sbaLinkRepaired = true;
+        try {
+          await this._healDm('SBA 卡死');
+          await this.refresh().catch(() => {});
+          if (this.halted) await this._ensureHalted('SBA 修复后复验').catch(() => {});
+          this._log('SBA 卡死 → 已重新初始化调试模块（不动目标内存/程序），重读一次', 'warn');
+          const again = await this.dm.readMem(a, n, 1500);
+          this._badAddrs.delete(key);
+          return again;
+        } catch (e2){
+          try { await this.dm.sbaClearErrors?.(); } catch { /* Preserve original read failure. */ }
+          if (this._badAddrs.size >= 256) this._badAddrs.delete(this._badAddrs.keys().next().value);
+          this._badAddrs.set(key, { msg: String(e2?.message || e2), at: Date.now() });
+          this._log(`读 0x${a.toString(16)}（${n} B）失败：${String(e2?.message || e2)}。已尝试重新初始化调试模块仍未恢复；请显式复位或重新连接。`, 'warn');
+          throw e2;
+        }
+      }
       // Clearing SBA error bits is link bookkeeping. dm.init()/ndmreset can
       // release a halted hart or erase hardware triggers and are never implicit.
       try { await this.dm.sbaClearErrors?.(); } catch { /* Preserve original read failure. */ }
-      const msg = String(e?.message || e);
       if (this._badAddrs.size >= 256) this._badAddrs.delete(this._badAddrs.keys().next().value);
       this._badAddrs.set(key, { msg, at: Date.now() });
       this._log(`读 0x${a.toString(16)}（${n} B）失败：${msg}。未自动复位调试模块或目标；若链路持续异常，请显式复位或重新连接。`, 'warn');

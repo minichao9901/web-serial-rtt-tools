@@ -32,6 +32,21 @@ export const DR_DMI_BITS = 41;
 export const DR_DTMCS_BITS = 32;
 export const DR_IDCODE_BITS = 32;
 
+/**
+ * SBA 批量读/写时，每拍之间多插几拍 RTI 空转（`drScan` 的 `idle`）。
+ *
+ * 🚨 2026-10 真机定因（用户现场：监视里加一个结构体 → 每次停住都报读失败，而断点/单步看着
+ *    完全正常）：SBA 是"访问 sbdata0 就触发下一笔总线访问"，DM 的总线访问比 JTAG 拍**慢**
+ *    —— 背靠背连发时只要有一笔还没完就收到下一次访问，DM 就置 `sbbusyerror`，**而且它的
+ *    SBA 引擎会就此卡住**（之后每次读内存都失败；抽象命令不受影响）。清位救不回来，只能
+ *    重新初始化 DM 或断电。目标在跑、总线还被 DMA 抢时（tcpecho 的网口就是）这笔访问更慢。
+ *
+ *    所以从源头拉开间隔，**用 `idle` 而不是多垫 NOP 拍**：idle 只把那条空转序列的**时钟数**
+ *    改大，TDI 字节数固定 8 B 不变 —— 不占 CMSIS-DAP 的 512 B/包预算（垫 NOP 拍要 ~18 B/拍，
+ *    13 字一批直接冲到 1909 B，被 make test-offline 当场拦下）。
+ */
+const SB_BEAT_IDLE = 64;
+
 export class RiscvTransport {
   /**
    * @param {{jtagSequences:(seqs:Array)=>Promise<Uint8Array[]>, connectJtag?:()=>Promise<void>}} dap
@@ -309,10 +324,10 @@ export class RiscvTransport {
     }
     reqs.push(dmiRequest(DMI_OP.READ, DM.SBCS, 0));      // 批尾自检
     reqs.push(dmiRequest(DMI_OP.NOP, 0, 0));
-    const resps = await this._scanDRMany(reqs);
+    const resps = await this._scanDRMany(reqs, { idle: SB_BEAT_IDLE });
     const sbcs = dmiResponse(resps[words.length * 2 + 1]).data >>> 0;
     for (let i = 0; i < words.length; i++){
-      const r = dmiResponse(resps[i * 2 + 1]);            // 第 i 个写的结果在第 i 个 NOP 那拍
+      const r = dmiResponse(resps[i * 2 + 1]);            // 第 i 个写的结果紧跟它的那一拍
       if (r.op !== DMI_STATUS.SUCCESS) return { ok: false, badAt: i, op: r.op, sbcs };
     }
     // 攒下 sbcs 错误位 ⇒ 这一批不能算数（哪一拍超速未知，整批重写）
@@ -693,11 +708,11 @@ export class RiscvTransport {
    * `DAP_JTAG_Sequence` 本来就能装几十拍 —— 逐拍发等于把 USB 延迟乘以拍数。
    * 真机实测（HPM6800EVK）：逐字读 5.7 KB/s，与 TCK 1 MHz 还是 60 MHz 无关 → 瓶颈全在 USB。
    */
-  async _scanDRMany(requests){
+  async _scanDRMany(requests, { idle = this.idle } = {}){
     const groups = [];
     const all = [];
     for (const rq of requests){
-      const seqs = drScan(DR_DMI_BITS, rq, { idle: this.idle });
+      const seqs = drScan(DR_DMI_BITS, rq, { idle });
       groups.push({ from: all.length, n: seqs.length });
       for (const s of seqs) all.push(s);
     }
@@ -758,11 +773,11 @@ export class RiscvTransport {
     }
     reqs.push(dmiRequest(DMI_OP.READ, DM.SBCS, 0));      // 批尾自检
     reqs.push(dmiRequest(DMI_OP.NOP, 0, 0));
-    const resps = await this._scanDRMany(reqs);
+    const resps = await this._scanDRMany(reqs, { idle: SB_BEAT_IDLE });
     const sbcs = dmiResponse(resps[count * 2 + 1]).data >>> 0;
     const words = new Uint32Array(count);
     for (let i = 0; i < count; i++){
-      const r = dmiResponse(resps[i * 2 + 1]);          // 第 i 个字的结果在第 i 个 NOP 那拍
+      const r = dmiResponse(resps[i * 2 + 1]);          // 第 i 个字的结果紧跟它的那一拍
       if (r.op !== DMI_STATUS.SUCCESS) return { words, ok: false, badAt: i, sbcs };
       words[i] = r.data >>> 0;
     }
@@ -782,7 +797,14 @@ export class RiscvTransport {
    */
   _burstWords(){
     const pkt = Math.min(this.dap?.probe?.pkt || this.dap?.pkt || 512, 512);
-    const byReq = Math.floor((pkt - 24) / 18 / 2);
+    /**
+     * 每拍请求 18 B（TDI 11 + 序列头 7）；`SB_BEAT_IDLE` 那条空转序列按 clocks/8 字节算
+     * （idle=8 的 1 B 已经含在 18 里，所以只加**多出来**的部分）。一个字 = 2 拍。
+     * 实测对照（hpm-flash.test 会把上限钉住）：idle=8、13 字批 = 492 B；
+     * idle=64、13 字批 = 701 B（每拍 +7 B）⇒ 现在一批 9 字 = 475 B。
+     */
+    const perBeat = 18 + Math.max(0, Math.ceil(Math.min(64, SB_BEAT_IDLE) / 8) - 1);
+    const byReq = Math.floor((pkt - 24) / perBeat / 2);
     const byResp = Math.floor((pkt - 8) / 6 / 2);
     return Math.max(2, Math.min(64, byReq, byResp));
   }
@@ -907,7 +929,15 @@ export class RiscvTransport {
           continue;
         }
         this._burstMiss++;
-        if (this._burstMiss >= 3) this._burstOff = true;
+        /**
+         * 🚨 撞到"超速"（sbbusyerror）就**立刻**关掉批量：这颗 DM 一旦被判超速，它的 SBA
+         *    引擎会就此卡住（之后每次内存读都失败）。宁可这一段慢（每字一次 USB 往返），
+         *    也不能把链路搞废。拍状态不对（badAt）只是"这批没批动"，容忍 3 次再关。
+         */
+        if (sbcsBad || this._burstMiss >= 3){
+          if (!this._burstOff) this.log('SBA 批量读撞到超速 → 本会话改走逐字慢路径（正确优先）');
+          this._burstOff = true;
+        }
         await this.dmiWrite(DM.SBADDRESS0, (start + i * 4) >>> 0);
         slowLeft = BURST;
         continue;
@@ -960,9 +990,9 @@ export class RiscvTransport {
         if (typeof b.sbcs === 'number' && (b.sbcs & (SBCS.SBBUSYERROR | SBCS.SBERROR)))
           await this.sbaClearErrors().catch(() => {});
         this._writeBurstMiss = (this._writeBurstMiss || 0) + 1;
-        if (this._writeBurstMiss >= 3){
+        if ((typeof b.sbcs === 'number' && (b.sbcs & (SBCS.SBBUSYERROR | SBCS.SBERROR)) !== 0) || this._writeBurstMiss >= 3){
           this._writeBurstOff = true;
-          this.log('DMI 批量写连续失败 3 次 → 本段改走逐字慢路径（正确优先）');
+          this.log('DMI 批量写撞到超速/连撞 3 次 → 本段改走逐字慢路径（正确优先）');
         }
         // 自增指针已经推进到出错那一拍：写回地址对齐，再从那里逐字补
         await this.dmiWrite(DM.SBADDRESS0, ((addr >>> 0) + off + b.badAt * 4) >>> 0);

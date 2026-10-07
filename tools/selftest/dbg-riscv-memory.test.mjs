@@ -49,6 +49,36 @@ s._badAddrs.get('18874368:8').at-=15001;
 assert.equal((await s.memRead(0x01200000,8))[0],7);
 assert.equal(s._badAddrs.has('18874368:8'),false);
 
+/**
+ * 粘死的 SBA（`sbbusyerror` 把 DM 的系统总线引擎卡住）是唯一允许**修一次**的失败：
+ * 重新初始化调试模块（`dmcontrol` 0→1 + TAP 复位，**不碰 ndmreset/目标内存**）+ 重读一次，
+ * 每会话一次、留一行日志。修不好就如实报错并记冷却，不反复折腾。
+ */
+{
+  const S=Object.create(RiscvDebugSession.prototype),log=[];
+  let inits=0,reads=0,healed=false;
+  Object.assign(S,{sym:null,halted:true,_frames:null,_log:t=>log.push(t),_badAddrs:new Map(),
+    refresh:async()=>{},_ensureHalted:async()=>{},_healDm:async()=>{inits++;healed=true;},
+    dm:{async readMem(a,n){reads++;if(!healed)throw Error('SBA 读 0x4000b638 出错（sbcs=0x20758407）');return new Uint8Array(n).fill(9);},
+        async sbaClearErrors(){}}});
+  const got=await S.memRead(0x4000b600,60);
+  assert.equal(got[0],9,'修复后重读要拿到数据');assert.equal(got.length,60);
+  assert.equal(inits,1,'粘死只修一次');assert.equal(reads,2,'修完要重读一次');
+  assert.ok(log.some(t=>/重新初始化调试模块/.test(t)),'要如实记一行日志');
+}
+{
+  const S=Object.create(RiscvDebugSession.prototype),log=[];
+  let inits=0;
+  Object.assign(S,{sym:null,halted:true,_frames:null,_log:t=>log.push(t),_badAddrs:new Map(),
+    refresh:async()=>{},_ensureHalted:async()=>{},_healDm:async()=>{inits++;},
+    dm:{async readMem(){throw Error('SBA 读 0x4000b638 出错（sbcs=0x20758407）');},async sbaClearErrors(){}}});
+  await assert.rejects(S.memRead(0x4000b600,60),/sbcs=0x20758407/);
+  assert.equal(inits,1,'修不好也不能反复初始化 DM');
+  assert.ok(log.some(t=>/仍未恢复/.test(t)),'修不好要如实说清楚');
+  await assert.rejects(S.memRead(0x4000b600,60),/15 秒/);
+  assert.equal(inits,1);
+}
+
 // Transport fences the complete aligned span before any hardware command.
 const t=Object.create(RiscvTransport.prototype);let touched=0;
 t.sbaConfig=async()=>{touched++;throw Error('allowed SBA path');};
@@ -106,6 +136,7 @@ function burstRig({overrunBursts = new Set()} = {}){
   const t = Object.create(RiscvTransport.prototype);
   Object.assign(t, {
     _burstOff: false, _burstMiss: 0, _holdAddr: null, lastSbcs: 0, sbaFailed: false,
+    log(){},                                    // 生产里由构造函数注入；桩里给个空实现
     _burstWords: () => 4,                       // 小批次：16 字节就是"跨批"了
     async sbaConfig(){},
     async sbaClearErrors(){ st.cleared++; st.sbcsErr = false; },
@@ -123,12 +154,14 @@ function burstRig({overrunBursts = new Set()} = {}){
       st.burst++;
       const willOverrun = overrunBursts.has(st.burst);
       const resps = [];
-      for (let k = 0; k < reqs.length; k += 2){
-        const op = Number(BigInt(reqs[k]) & 0x3n), addr = Number((BigInt(reqs[k]) >> 34n) & 0x7fn);
+      let prev = null;
+      for (let k = 0; k < reqs.length; k++){
+        // DMI 是"一拍请求、下一拍才回来"：第 k 拍的响应对应第 k-1 拍的请求
         let data = 0;
-        if (op === DMI_OP.READ && addr === DM.SBDATA0){ data = mem.get(st.cur) ?? 0; st.cur = (st.cur + 4) >>> 0; }
-        else if (op === DMI_OP.READ && addr === DM.SBCS) data = willOverrun ? SBCS.SBBUSYERROR : (st.sbcsErr ? SBCS.SBBUSYERROR : 0);
-        resps.push(dmiRequest(DMI_OP.NOP, 0, 0), BigInt(DMI_STATUS.SUCCESS) | (BigInt(data) << 2n));
+        if (prev?.op === DMI_OP.READ && prev.addr === DM.SBDATA0){ data = mem.get(st.cur) ?? 0; st.cur = (st.cur + 4) >>> 0; }
+        else if (prev?.op === DMI_OP.READ && prev.addr === DM.SBCS) data = willOverrun ? SBCS.SBBUSYERROR : (st.sbcsErr ? SBCS.SBBUSYERROR : 0);
+        resps.push(BigInt(DMI_STATUS.SUCCESS) | (BigInt(data) << 2n));
+        prev = { op: Number(BigInt(reqs[k]) & 0x3n), addr: Number((BigInt(reqs[k]) >> 34n) & 0x7fn) };
       }
       if (willOverrun) st.sbcsErr = true;        // 批后 DM 留下粘滞错误位，直到有人写 1 清掉
       return resps;
@@ -155,19 +188,17 @@ function burstRig({overrunBursts = new Set()} = {}){
   assert.equal(st.cleared, 1, 'sbbusyerror 是写 1 清零的粘滞位，必须清掉');
   assert.equal(st.sbcsErr, false);
   assert.equal(t._burstMiss, 1);
-  assert.equal(t._burstOff, false);
+  assert.equal(t._burstOff, true, '撞到一次超速就整会话别再批（真机会把 SBA 引擎搞卡）');
 }
 
-// ③ 连续 3 批都超速 ⇒ 关掉批量（BURST=4 ⇒ 48 字节正好 3 批）
+// ③ 关掉批量之后再读：不再走批量路径，数据照样正确
 {
-  const {t, st} = burstRig({overrunBursts: new Set([1, 2, 3])});
-  const b = await t.readMem(0x4000b600, 48);      // 12 个字 ⇒ 3 批，全部超速
-  assert.equal(b.length, 48);
-  assert.deepEqual([...b.subarray(0, 4)], [0x00,0x10,0,0]);
-  assert.deepEqual([...b.subarray(44, 48)], [0x0b,0x10,0,0], '被作废的每一批都要按字重读补齐');
-  assert.ok(st.cleared >= 2, '每一批超速都要各自清一次');
-  assert.equal(t._burstMiss, 3);
-  assert.equal(t._burstOff, true, '连撞 3 次就整段别再批（正确优先）');
+  const {t, st} = burstRig({overrunBursts: new Set([1])});
+  await t.readMem(0x4000b600, 16);
+  const scans = st.scans;
+  const b = await t.readMem(0x4000b600, 16);
+  assert.deepEqual([...b], [0x00,0x10,0,0, 0x01,0x10,0,0, 0x02,0x10,0,0, 0x03,0x10,0,0]);
+  assert.equal(st.scans, scans, '超速之后整会话不再走批量路径');
 }
 
 // ④ 单独读一次 sbcs 时短暂 sbbusy：先等它落，不许直接判定"卡死"
@@ -185,4 +216,4 @@ function burstRig({overrunBursts = new Set()} = {}){
   await assert.rejects(t._checkSbcsAt(0x4000b600, 100), /断开.*重连|断电重上电/);
   assert.equal(t.sbaFailed, true);
 }
-console.log('RISC-V SBA burst: in-scan sbcs fence, overrun burst discarded and re-read word-wise, sticky error cleared, burst disabled after 3 misses, transient sbbusy tolerated PASS');
+console.log('RISC-V SBA burst: idle-paced beats, in-scan sbcs fence, overrun burst discarded and re-read word-wise, sticky error cleared, batching disabled on first overrun, transient sbbusy tolerated PASS');
