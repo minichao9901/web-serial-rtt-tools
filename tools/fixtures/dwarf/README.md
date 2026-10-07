@@ -15,6 +15,10 @@
 
 ## 重新生成
 
+`riscv_array_scope.elf` 来自 `array_scope_fixture.c`，用于数组元素采样：u16 数组、二维 float、三维字节、结构体数组及 8 MB 大数组。大数组保留为目录项，按指定下标解析，不整批展开。
+
+生成命令与上面的 RISC-V 工具链相同，参数为：`-march=rv32imac_zicsr_zifencei -mabi=ilp32 -O0 -gdwarf-5 -nostdlib -nostartfiles -Wl,-Ttext=0x80003000 -Wl,-Tdata=0x40000000 tools/fixtures/dwarf/array_scope_fixture.c -o tools/fixtures/dwarf/riscv_array_scope.elf`。
+
 ```powershell
 cd tools\target-firmware\stm32f103_scope;   pwsh -File build.ps1
 cd tools\target-firmware\stm32f103_rtt_speed; pwsh -File build.ps1

@@ -670,20 +670,18 @@ export class DebugSession {
     if (!this.sym?.lines) throw new Error('这份 ELF 没有行号信息（编译时没带 -g？）—— 源码级单步用不了，用 `s` 走指令级单步');
     const pc = align2(await this.readReg('PC'));
     const next = this.sym.lines.nextStmtAddr(pc);
+    // 最后一条行记录（包括 is_stmt=1 的右花括号）没有 next，仍应执行收尾并返回。
+    // 没有当前行或可靠函数信息的汇编/行号空洞则保留明确的错误。
+    const atEnd = !next && this.sym.lines.at(pc) && this.sym.funcAt?.(pc)?.exact;
+    if (atEnd || (next?.tail && !next.isStmt)){
+      const out = await this.stepOut();
+      return `单步跳过：这一行是 ${this.sym.funcAt?.(pc)?.name || '函数'} 的最后一条语句 —— ` + out;
+    }
     if (!next){
       throw new Error(`这一行（${this._locText(pc) || hex32(pc)}）后面没有行号记录了（函数最后一行 / 汇编块）`
         + '—— 用 s 走指令级单步、c 继续，或 rc 指定目标行');
     }
     this.lastStepMode = 'over';
-    /**
-     * 🚨 当前这一行已经是函数的最后一条语句时（`next.tail`），**要像 gdb 那样跳出函数**：
-     *    后面只剩编译器给"右花括号/收尾"挂的非语句记录，若照停不误会停在 `}` 那一行，
-     *    用户按 F10 看着像"没反应"（真机压测：engine_linear 末尾要白按两次才回到调用者）。
-     */
-    if (next.tail && !next.isStmt){
-      const out = await this.stepOut();
-      return `单步跳过：这一行是 ${this.sym.funcAt?.(pc)?.name || '函数'} 的最后一条语句 —— ` + out;
-    }
     const hit = await this._tempBpRun(next.addr, { clearAt: pc, what: '单步跳过' });
     if (hit == null){
       /**

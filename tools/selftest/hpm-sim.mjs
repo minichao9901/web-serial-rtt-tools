@@ -10,11 +10,11 @@
  *   · flashloader：按**入口表**的七个函数语义执行（init/erase/program/read/info/erase_chip/deinit），
  *     数据写进一块"XPI flash"数组 —— 所以"擦干净了没有、写进去的对不对"都能真验。
  *
- * 不模拟的部分（真机才能验）：真实 JTAG 时序/时钟、DMI busy 的时序、ROM API 内部的 XPI 寄存器舞蹈、
+ * 不模拟的部分（真机才能验）：真实电气时序、ROM API 内部的 XPI 寄存器舞蹈、
  * 真实 flash 的擦写时间与 SFDP 探测。
  */
 
-import { DM, DMI_OP, DMI_STATUS, SBCS, sbcsBlock, sbcsHold, REGNO, DCSR_EBREAK } from '../../app/flash/hpm/jtag.js';
+import { DM, DMI_OP, sbcsBlock, REGNO, DCSR_EBREAK } from '../../app/flash/hpm/jtag.js';
 import { parseAlgoEntryTable, ENTRY_ORDER } from '../../app/flash/hpm/entry.js';
 import { XIP_COPY_ADDR } from '../../app/flash/hpm/xip-copy.js';
 
@@ -77,6 +77,16 @@ export class SimTarget {
     this.dmiResets = 0;                         // 主机侧写了几次 dtmcs.dmireset
     this.readWedgedNow = false;
     this.log = [];
+    // Independent protocol model: bus completion advances on TCK, not on host reads.
+    this.busDelayCycles = opts.busDelayCycles ?? 0;
+    this.busErrorAt = opts.busErrorAt ?? null;
+    this.busHangAt = opts.busHangAt ?? null;
+    this.busPending = null;
+    this.busAccesses = [];
+    this.busyConfigWrites = 0;
+    this.sbaError = 0;
+    this.sbaBusyError = false;
+    this.dmiSticky = 0;
     // 统计（自测断言用）
     this.stats = { scans: 0, dmiWrites: 0, dmiReads: 0, sbaReads: 0, sbaWrites: 0 };
   }
@@ -109,6 +119,8 @@ export class SimTarget {
 
   /** TAP 状态机 + 移位寄存器（DR/IR）*/
   _tick(tms, tdi){
+    if (this.busPending && this.busPending.addr !== this.busHangAt && --this.busPending.left <= 0)
+      this._sbaComplete();
     const S = this.tap || (this.tap = { state: 'TLR', ir: 0, dr: 0, drBits: 0, irBits: 0, tdo: 0 });
     let out = 0;
     switch (S.state){
@@ -164,19 +176,25 @@ export class SimTarget {
     if ((S.ir & 0x1f) === 0x10){
       // DTMCS 写：只认 dmireset（bit16）—— 真机语义：它清掉 DTM 的 DMI 错误态。
       // 2026-10-01 用户现场就靠这一下自愈（`DMI 写 0x39 失败（op=3）`）。
-      if (S.dr & (1n << 16n)) this.dmiResets = (this.dmiResets || 0) + 1;
+      if (S.dr & (1n << 16n)) {
+        this.dmiResets = (this.dmiResets || 0) + 1;
+        this.dmiSticky = 0;
+        this.pendingDmi = 0n;
+      }
       return;
     }
     if ((S.ir & 0x1f) !== 0x11) return;
     this.stats.scans++;
     /**
-     * 故障注入：模拟"DTM 的 DMI 进了错误态"—— 接下来 N 条 DMI 响应 op=3
-     * （既不是 SUCCESS 也不是 BUSY）。主机侧应该写 dtmcs.dmireset 后重试，而不是直接抛错。
+     * 故障注入：响应 op=3 是粘滞 BUSY，后续请求不处理，直到 dtmcs.dmireset。
+     * 主机只能重发明确未接收的请求；结果不确定的有副作用访问不能盲目重发。
      */
+    if (this.dmiSticky) { this.pendingDmi = BigInt(this.dmiSticky); return; }
     if (this.injectOp3 > 0){
       this.injectOp3--;
       this.op3Injected = (this.op3Injected || 0) + 1;
       this.pendingDmi = 3n;
+      this.dmiSticky = 3;
       return;
     }
     // 41 位 DMI：op(2) | data(32)<<2 | addr(7)<<34
@@ -190,17 +208,17 @@ export class SimTarget {
   /** 执行一条 DMI 请求，返回 41 位响应（op 在低 2 位）*/
   _dmiExecute(op, addr, data){
     const enc = (opCode, payload) => BigInt(opCode & 0x3) | (BigInt(payload >>> 0) << 2n);
-    if (op === DMI_OP.NOP) return enc(DMI_STATUS.SUCCESS, 0);
+    if (op === DMI_OP.NOP) return enc(0, 0);
     if (op === DMI_OP.READ){
       this.stats.dmiReads++;
-      return enc(DMI_STATUS.SUCCESS, this._readReg(addr));
+      return enc(0, this._readReg(addr));
     }
     if (op === DMI_OP.WRITE){
       this.stats.dmiWrites++;
       this._writeReg(addr, data);
-      return enc(DMI_STATUS.SUCCESS, 0);
+      return enc(0, 0);
     }
-    return enc(DMI_STATUS.ERROR, 0);
+    return enc(2, 0);
   }
 
   _readReg(addr){
@@ -221,18 +239,14 @@ export class SimTarget {
       case DM.DATA0: return d.data0 >>> 0;
       case DM.SBCS: {
         // sbbusy / sbbusyerror / sberror 由 SBA 状态决定；配置位回读
-        return (d.sbcs | (this.sbaBusyError ? SBCS.SBBUSYERROR : 0) | (this.sbaError ? SBCS.SBERROR : 0)) >>> 0;
+        return (d.sbcs | (1 << 29) | (32 << 5) | 4 |
+          (this.busPending ? 1 << 21 : 0) | (this.sbaBusyError ? 1 << 22 : 0) | (this.sbaError << 12)) >>> 0;
       }
       case DM.SBADDRESS0: return d.sbaddress >>> 0;
       case DM.SBDATA0: {
-        this.stats.sbaReads++;
-        // 读 sbdata0：若置了 sbreadondata 就顺带发起下一次读（块读靠它流水）
-        const v = (this.sbaNext !== undefined) ? (this.sbaNext & 0xffffffff) : this._sbaAccess(this.dm.sbaddress);
-        if (this.dm.sbcs & SBCS.SBREADONDATA){
-          this.sbaNext = this._sbaAccess(this.dm.sbaddress);   // 流水下一拍（地址已推进）
-        } else {
-          this.sbaNext = undefined;
-        }
+        if (this.busPending) this.sbaBusyError = true;
+        const v = this.sbaNext ?? 0;
+        if (!this.busPending && (this.dm.sbcs & (1 << 15))) this._sbaStart(false);
         return v >>> 0;
       }
       default: return 0;
@@ -276,24 +290,25 @@ export class SimTarget {
       }
       case DM.DATA0: d.data0 = data >>> 0; break;
       case DM.SBCS: {
-        // 写 1 清零错误位；其余位是配置
-        if (data & (SBCS.SBBUSYERROR | SBCS.SBERROR)){ this.sbaBusyError = false; this.sbaError = false; }
-        d.sbcs = (data & ~(SBCS.SBBUSYERROR | SBCS.SBERROR)) >>> 0;
+        if (this.busPending) { this.busyConfigWrites++; throw Error('SBCS write while sbbusy'); }
+        if (data & (1 << 22)) this.sbaBusyError = false;
+        this.sbaError &= ~((data >>> 12) & 7);
+        d.sbcs = (data & ((7 << 17) | (1 << 16) | (1 << 15) | (1 << 20))) >>> 0;
         break;
       }
       case DM.SBADDRESS0: {
+        if (this.busPending) { this.sbaBusyError = true; break; }
         d.sbaddress = data >>> 0;
         // 🚨 真实的 DM 语义：**写 sbaddress0 时若置了 sbreadonaddr 就立刻发起一次总线读**，
         //    读成功后按 sbautoincrement 把地址 +4 —— 所以"写地址 → 写数据"这条路上，
         //    第一笔数据会落到 addr+4（真机实测的错位就是这样来的）。
         //    模拟器必须照这个来，否则主机侧的 sbcs 配错在自测里根本发现不了。
-        if (d.sbcs & SBCS.SBREADONADDR){ this.sbaNext = this._sbaAccess(d.sbaddress); }
+        if (d.sbcs & (1 << 20)) this._sbaStart(false);
         break;
       }
       case DM.SBDATA0: {
-        this.stats.sbaWrites++;
-        this._sbaStore(data >>> 0);
-        if (d.sbcs & SBCS.SBAUTOINC) d.sbaddress = (d.sbaddress + 4) >>> 0;
+        if (this.busPending) { this.sbaBusyError = true; break; }
+        this._sbaStart(true, data >>> 0);
         break;
       }
       default: break;
@@ -301,11 +316,21 @@ export class SimTarget {
   }
 
   // ---------------------------------------------------------------- SBA
-  /** 一次"系统总线读"访问（会按 sbautoincrement 推进地址）—— 真实 DM 的语义 */
-  _sbaAccess(addr){
-    const v = this._loadWord(addr);
-    if (this.dm.sbcs & SBCS.SBAUTOINC) this.dm.sbaddress = (addr + 4) >>> 0;
-    return v;
+  _sbaStart(write, value = 0){
+    if (this.sbaBusyError || this.sbaError) return;
+    const addr=this.dm.sbaddress >>> 0;
+    this.busAccesses.push({addr,write});
+    this.stats[write?'sbaWrites':'sbaReads']++;
+    this.busPending={addr,write,value,left:this.busDelayCycles};
+    if (!this.busDelayCycles && addr !== this.busHangAt) this._sbaComplete();
+  }
+
+  _sbaComplete(){
+    const p=this.busPending; this.busPending=null;
+    if (p.addr === this.busErrorAt) this.sbaError=2;
+    else if (p.write) this._sbaStore(p.value);
+    else this.sbaNext=this._loadWord(p.addr);
+    if (!this.sbaError && (this.dm.sbcs & (1 << 16))) this.dm.sbaddress=(p.addr+4)>>>0;
   }
 
   _sbaStore(v){
@@ -315,7 +340,7 @@ export class SimTarget {
       dv.setUint32(0, v, true);
       // 写进 RAM 的可能是 flashloader 的代码/数据，也可能是普通数据 —— 都一样处理
     } else {
-      this.sbaError = true;                     // 写到没映射的地址：置错误位（真机也是这样）
+      this.sbaError = 2;
     }
   }
 
@@ -325,7 +350,7 @@ export class SimTarget {
       const dv = new DataView(this.ram.buffer, a, 4);
       return dv.getUint32(0, true);
     }
-    this.sbaError = true;
+    this.sbaError = 2;
     return 0;
   }
 

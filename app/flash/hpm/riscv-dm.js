@@ -19,8 +19,8 @@
  *     （"搬了一块就再也搬不动"），这里照它的做法处理。
  */
 
-import { DM, DMI_OP, DMI_STATUS, SBCS, sbcsBlock, sbcsWrite, sbcsHold, dmiRequest, dmiResponse,
-         tapReset, tapLoadIR, drScan, bitsToUint, abstractCommand, ABSTRACTCS, DMSTATUS, DMSTATUS_LAYOUT,
+import { DM, DMI_OP, DMI_STATUS, SBCS, sbcsBlock, sbcsWrite, dmiRequest, dmiResponse,
+         tapReset, tapLoadIR, drScan, abstractCommand, ABSTRACTCS, DMSTATUS, DMSTATUS_LAYOUT,
          DMCONTROL, CMDTYPE, REGNO, DCSR_EBREAK, PROGBUF_FENCE } from './jtag.js';
 
 /** IR 值（RISC-V DTM 规范：0x01 = IDCODE、0x10 = DTMCS、0x11 = DMI） */
@@ -32,25 +32,26 @@ export const DR_DMI_BITS = 41;
 export const DR_DTMCS_BITS = 32;
 export const DR_IDCODE_BITS = 32;
 
-/**
- * SBA 批量读/写时，每拍之间多插几拍 RTI 空转（`drScan` 的 `idle`）。
- *
- * 🚨 2026-10 真机定因（用户现场：监视里加一个结构体 → 每次停住都报读失败，而断点/单步看着
- *    完全正常）：SBA 是"访问 sbdata0 就触发下一笔总线访问"，DM 的总线访问比 JTAG 拍**慢**
- *    —— 背靠背连发时只要有一笔还没完就收到下一次访问，DM 就置 `sbbusyerror`，**而且它的
- *    SBA 引擎会就此卡住**（之后每次读内存都失败；抽象命令不受影响）。清位救不回来，只能
- *    重新初始化 DM 或断电。目标在跑、总线还被 DMA 抢时（tcpecho 的网口就是）这笔访问更慢。
- *
- *    所以从源头拉开间隔，**用 `idle` 而不是多垫 NOP 拍**：idle 只把那条空转序列的**时钟数**
- *    改大，TDI 字节数固定 8 B 不变 —— 不占 CMSIS-DAP 的 512 B/包预算（垫 NOP 拍要 ~18 B/拍，
- *    13 字一批直接冲到 1909 B，被 make test-offline 当场拦下）。
- */
+// Separate learned delays: DMI acceptance and system-bus completion are different.
 const SB_BEAT_IDLE = 64;
+const SBA_ERRORS = SBCS.SBBUSYERROR | SBCS.SBERROR;
+// Do not start a USB round trip in the final sliver of a logical timeout.
+// Even a healthy probe cannot reliably finish OUT + IN in < 1 ms. A bus
+// timeout must leave DMI usable; actual in-flight wire timeouts still quarantine.
+const MIN_WIRE_BUDGET_MS = 10;
+const now = () => globalThis.performance?.now() ?? Date.now();
+
+export class RiscvAccessError extends Error {
+  constructor(code, message, details = {}){
+    super(message); this.name = 'RiscvAccessError'; this.code = code;
+    Object.assign(this, details);
+  }
+}
 
 export class RiscvTransport {
   /**
    * @param {{jtagSequences:(seqs:Array)=>Promise<Uint8Array[]>, connectJtag?:()=>Promise<void>}} dap
-   * @param {{idle?:number, log?:Function}} [opts]
+   * @param {{idle?:number, log?:Function, burst?:boolean}} [opts] burst=false 使用逐字路径
    */
   constructor(dap, opts = {}){
     this.dap = dap;
@@ -63,8 +64,12 @@ export class RiscvTransport {
     this.scans = 0;
     this.sbaFailed = false;
     this._sbcsCfg = null;
-    this._burstOff = false;    // 批量读被真机拒绝过就关掉（见 readMem / sbaReadBurst）
+    this._burstOff = opts.burst === false;
     this._burstMiss = 0;
+    this._writeBurstOff = opts.burst === false;
+    this.dmiBusyDelay = 0;
+    this.sbaReadDelay = SB_BEAT_IDLE;
+    this.sbaWriteDelay = SB_BEAT_IDLE;
     this._holdAddr = null;
     this.dmLayout = null;      // dmstatus 的位布局（'legacy' = halted 在 bit8/9，'spec' = bit14/15），init 时实测
   }
@@ -80,6 +85,7 @@ export class RiscvTransport {
    *   ⑥ 读 dmstatus 作为"DM 真的醒了吗"的判据
    */
   async init(){
+    this._sbcsCfg = null; this._holdAddr = null; this.sbaFailed = false;
     await this.dap.connectJtag?.();
     await this.sequences(tapReset());
     await this.sequences(tapLoadIR(IR_IDCODE));
@@ -199,9 +205,9 @@ export class RiscvTransport {
    * 🚨 位对齐很容易写错：只有带 capture 的序列会回 TDO，而**每条序列回了多少位**由它的拍数决定
    *    （不是字节数）。这里逐条按位收集，避免"按字节拼接"把最后那条 1 拍的序列算成 8 位。
    */
-  async _scanDR(nbits, tdi){
-    const seqs = drScan(nbits, tdi, { idle: this.idle });
-    const caps = await this.sequences(seqs);
+  async _scanDR(nbits, tdi, deadline = Infinity, idle = this.idle){
+    const seqs = drScan(nbits, tdi, { idle });
+    const caps = await this.sequences(seqs, { deadline });
     const bits = [];
     let ci = 0;
     for (const s of seqs){
@@ -217,8 +223,24 @@ export class RiscvTransport {
   }
 
   /** 把一批序列交给下层（真机是一条 DAP_JTAG_Sequence 命令，模拟器直接执行）*/
-  async sequences(seqs){
-    const caps = await this.dap.jtagSequences(seqs);
+  async sequences(seqs, { deadline = Infinity } = {}){
+    if (this._wireFault) throw this._wireFault;
+    if (this._remaining(deadline) < MIN_WIRE_BUDGET_MS)
+      throw new RiscvAccessError('DMI_TIMEOUT', '调试访问时间预算已耗尽；未启动新的 JTAG 传输');
+    // A JS timeout cannot cancel a USB transfer. Quarantine this transport so
+    // neither cleanup nor a queued operation can start a competing transfer.
+    let timer;
+    const pending = this.dap.jtagSequences(seqs, { deadline });
+    let caps;
+    try {
+      caps = Number.isFinite(deadline) ? await Promise.race([pending,
+        new Promise((_, reject) => { timer = setTimeout(() => {
+          this._wireFault = new RiscvAccessError('DMI_TIMEOUT', 'JTAG 传输超时；请断开重连', { uncertain: true });
+          reject(this._wireFault);
+        }, this._remaining(deadline)); })]) : await pending;
+    } catch (e){
+      this._wireFault = e; throw e;
+    } finally { clearTimeout(timer); }
     if (!caps || caps.length !== seqs.filter(s => s.captureBytes > 0).length){
       // 下层的返回长度必须与"要捕获的序列条数"一致，否则位对齐全错（宁可报错也别继续）
       throw new Error(`JTAG 序列返回条数不对：期望 ${seqs.filter(s => s.captureBytes > 0).length}，实际 ${caps?.length}`);
@@ -228,112 +250,118 @@ export class RiscvTransport {
 
   /**
    * 发一条 DMI 请求，返回**上一次**请求的响应（流水线语义）*/
-  async dmiPost(op, addr = 0, data = 0){
-    const bits = await this._scanDR(DR_DMI_BITS, dmiRequest(op, addr, data));
+  async dmiPost(op, addr = 0, data = 0, deadline = Infinity){
+    const bits = await this._scanDR(DR_DMI_BITS, dmiRequest(op, addr, data), deadline,
+      this.idle + this.dmiBusyDelay);
     return dmiResponse(bits);
   }
 
-  /**
-   * **解 DTM 的 DMI 错误态**：响应 `op=3`（既不是 SUCCESS 也不是 BUSY）就是它。
-   *
-   * 🚨 2026-10-01 真机现场（用户手动烧录，挂在这里）：日志 `DMI 写 0x39 失败（op=3）`——
-   *    0x39 是 `sbaddress0`，op=3 说明 DTM 的 DMI 状态机进了错误态；规范写明
-   *    **此后所有 DMI 操作都不会被处理，直到写 `dtmcs.dmireset`**（sticky，自愈不了）。
-   *    我们原来只对 BUSY(1) 重试，遇到 op=3 直接抛错 → 整轮烧录中止（第一段已经写着"校验 OK"了）。
-   *    OpenOCD 处理这条（它的 dmi 层会看 dtmcs），我们照做：
-   *      装 IR=DTMCS → 写 bit16（dmireset）→ 装回 IR=DMI → 投两条 NOP 排空流水线。
-   *    写 dmireset 只清错误态、不动 DM 里的任何状态，所以**重试是安全的**。
-   */
-  async dmiReset(){
+  _remaining(deadline){
+    const left = deadline - now();
+    if (left <= 0) throw new RiscvAccessError('DMI_TIMEOUT', '调试访问超时；未自动复位目标');
+    return left;
+  }
+
+  _exclusive(key, fn){
+    const pending = (this[key] || Promise.resolve()).then(fn);
+    this[key] = pending.catch(() => {});
+    return pending;
+  }
+
+  _learnDelay(kind){
+    const key = kind === 'dmi' ? 'dmiBusyDelay' : kind === 'read' ? 'sbaReadDelay' : 'sbaWriteDelay';
+    const old = this[key] || 0;
+    // Keep even a single scan inside the 512-byte command limit. When larger
+    // bus delays leave no room for a batch, _burstWords selects the slow path.
+    this[key] = Math.min(kind === 'dmi' ? 512 : 1024, old + Math.floor(old / 10) + 1);
+  }
+
+  async _dmiReset(deadline){
     this.dmiResets = (this.dmiResets || 0) + 1;
-    await this.sequences(tapLoadIR(IR_DTMCS));
-    await this._scanDR(DR_DTMCS_BITS, 1n << 16n);        // bit16 = dmireset（写 1 清 sticky 错误 + 复位 DMI 状态机）
-    await this.sequences(tapLoadIR(IR_DMI));
-    await this.dmiPost(DMI_OP.NOP, 0, 0);                // 排空一拍，丢掉复位前那条挂起的响应
-    this.log(` DTM 的 DMI 进了错误态（op=3）→ 写 dmireset 清掉，第 ${this.dmiResets} 次`);
+    await this.sequences(tapLoadIR(IR_DTMCS), { deadline });
+    await this._scanDR(DR_DTMCS_BITS, 1n << 16n, deadline);
+    await this.sequences(tapLoadIR(IR_DMI), { deadline });
+    await this.dmiPost(DMI_OP.NOP, 0, 0, deadline);
   }
 
-  /**
-   * 同步 DMI 读（两次扫描；DM busy 时重试）。
-   * 🚨 整个重试循环有**墙钟上限**（默认 5 s）：探针固件在"目标总线被卡住的 SBA 读"之后
-   *    可能连 DMI 都不应答，没有上限的话这里会一轮轮重试到几分钟，界面看着就是"卡死"
-   *    （2026-10 真机踩到：SBA 读一个外设寄存器 → 之后整条链路都在等超时）。
-   */
-  async dmiRead(addr, timeoutMs = 5000){
-    const t0 = Date.now();
-    for (let i = 0; i < 8; i++){
-      await this.dmiPost(DMI_OP.READ, addr, 0);          // 冲掉上一条挂起的响应
-      const r = await this.dmiPost(DMI_OP.NOP, 0, 0);    // 这条才是读的结果
+  dmiReset(timeoutMs = 5000){
+    const deadline = now() + timeoutMs;
+    return this._exclusive('_dmiQueue', () => this._dmiReset(deadline));
+  }
+
+  async _dmiOp(op, addr, data, deadline){
+    for (let attempt = 0; attempt < 64; attempt++){
+      this._remaining(deadline);
+      let r = await this.dmiPost(op, addr, data, deadline);
+      const requestAccepted = r.op === DMI_STATUS.SUCCESS;
+      if (requestAccepted) r = await this.dmiPost(DMI_OP.NOP, 0, 0, deadline);
       if (r.op === DMI_STATUS.SUCCESS) return r.data;
-      /**
-       * 🚨 `op=3` = DTM 的 DMI 进了错误态（不是 BUSY、也不是目标回 ERROR）——
-       *    规范：此后所有 DMI 操作都不被处理，**必须写 `dtmcs.dmireset` 才能继续**。
-       *    这里当场清掉重试（2026-10-01 用户现场：一个 op=3 就把整轮烧录中止了）。
-       */
-      if (r.op === 3){ await this.dmiReset(); continue; }
-      if (r.op !== DMI_STATUS.BUSY) throw new Error(`DMI 读 0x${addr.toString(16)} 失败（op=${r.op}）`);
-      if (Date.now() - t0 > timeoutMs){
-        throw new Error(`DMI 读 0x${addr.toString(16)} 一直 BUSY（超过 ${timeoutMs} ms）——` +
-          ' 目标总线/外设不响应，或 DM 处于复位中');
+      if (r.op === DMI_STATUS.BUSY || r.op === DMI_STATUS.ERROR){
+        if (r.op === DMI_STATUS.BUSY) this._learnDelay('dmi');
+        await this._dmiReset(deadline);
+        if (r.op === DMI_STATUS.ERROR)
+          throw new RiscvAccessError('DMI_FAILED', `DMI 访问 0x${addr.toString(16)} 失败（op=2）`, { addr, op: r.op });
+        // These registers can start/consume a bus transfer. An accepted request
+        // with a lost result must not be blindly replayed.
+        if (requestAccepted && (addr === DM.SBADDRESS0 || addr === DM.SBDATA0))
+          throw new RiscvAccessError('DMI_BUSY', `DMI 访问 0x${addr.toString(16)} 完成状态不确定`,
+            { addr, op: r.op, uncertain: true });
+        continue;
       }
+      throw new RiscvAccessError('DMI_INVALID', `DMI 响应使用保留状态（op=${r.op}）`, { addr, op: r.op });
     }
-    throw new Error(`DMI 读 0x${addr.toString(16)} 一直 BUSY`);
+    throw new RiscvAccessError('DMI_TIMEOUT', `DMI 访问 0x${addr.toString(16)} 一直 BUSY`);
   }
 
-  /**
-   * 同步 DMI 写（发 + 用一次 NOP 收状态）。
-   * 🚨 **BUSY 要重试，不是直接抛**（2026-10 对照 OpenOCD 定因）：DMI 只有一级流水，
-   *    上一拍还没处理完时投进来的请求会被 DM 回 BUSY 丢掉 —— OpenOCD 的 `dmi_op` 就是
-   *    "BUSY 就重来"，我们原来是直接抛错 → 表现成"烧录偶发失败/卡住"。这里最多重试 4 次。
-   */
-  async dmiWrite(addr, data){
-    for (let attempt = 0; attempt < 6; attempt++){
-      await this.dmiPost(DMI_OP.WRITE, addr, data);
-      const r = await this.dmiPost(DMI_OP.NOP, 0, 0);
-      if (r.op === DMI_STATUS.SUCCESS) return;
-      // `op=3` = DTM 的 DMI 进了错误态 → 写 dmireset 清掉重试（见 dmiReset 的注释）
-      if (r.op === 3){ await this.dmiReset(); continue; }
-      if (r.op !== DMI_STATUS.BUSY) throw new Error(`DMI 写 0x${addr.toString(16)} 失败（op=${r.op}）`);
-    }
-    throw new Error(`DMI 写 0x${addr.toString(16)} 一直 BUSY（DM 没跟上）`);
+  dmiRead(addr, timeoutMs = 5000){
+    const deadline = now() + timeoutMs;
+    return this._exclusive('_dmiQueue', () => this._dmiOp(DMI_OP.READ, addr, 0, deadline));
   }
 
-  /**
-   * **批量 DMI 写** —— 烧录慢的大头就在这里。
-   *
-   * 老写法每个字 = `dmiWrite` = WRITE 一次扫描 + NOP 一次扫描 = **两次 USB 往返**；
-   * 1388 B 的 flashloader 就是 347 个字 ≈ 694 次往返，真机 ~0.3 ms/次也要 0.2 s，
-   * 链路稍慢（几十 ms/次）就变成几十秒 —— 用户看到的就是"卡在加载 flashloader"。
-   * 对照数据（2026-10 同一块板、同一支探针、同一份 246 KB 镜像）：
-   *   OpenOCD 0.12（DMI 压批）**4.9 s / 49 KiB/s**；我们逐字写 **42~78 s**。
-   * 这里照 `sbaReadBurst` 的**同一套时序**：`WRITE,NOP,WRITE,NOP,…` 压进**一条**
-   * `DAP_JTAG_Sequence`，**每拍都收状态**（DMI 只一级深，丢一拍会静默写错地方）。
-   * 任何一拍不是 SUCCESS 就返回 `badAt`，调用方从那一个字起退回逐字慢路径并重对齐地址。
-   *
-   * 🚨 2026-10 真机补充（同 `sbaReadBurst`）：批内每拍背靠背，DM 有一拍没写完就收到下一次
-   *    `sbdata0` 写时会置 `sbbusyerror` —— 而**每拍状态仍报 SUCCESS**，于是写入静默丢失
-   *    （flash 烧出来就是坏的）。所以批尾补一拍 `READ sbcs`（同一扫描，不额外花 USB 命令）。
-   *
-   * @returns {{ok:boolean, badAt:number, op?:number, sbcs:number|null}} badAt=-1 表示全成功
-   */
-  async dmiWriteBurst(words){
+  dmiWrite(addr, data, timeoutMs = 5000){
+    const deadline = now() + timeoutMs;
+    return this._exclusive('_dmiQueue', () => this._dmiOp(DMI_OP.WRITE, addr, data, deadline));
+  }
+
+  _busIdle(kind){
+    return this.idle + this.dmiBusyDelay + (kind === 'write' ? this.sbaWriteDelay : this.sbaReadDelay);
+  }
+
+  _burstWords(kind = 'read'){
+    const pkt = Math.min(this.dap?.probe?.pkt || this.dap?.pkt || 512, 512);
+    const seqs = drScan(DR_DMI_BITS, 0n, { idle: this._busIdle(kind) });
+    const beatBytes = seqs.reduce((n, s) => n + 1 + s.tdi.length, 0);
+    const scans = Math.min(Math.floor((pkt - 2) / beatBytes), Math.floor(255 / seqs.length), Math.floor((pkt - 2) / 6));
+    return Math.max(1, Math.floor(scans / 2) - 1); // Reserve READ SBCS + NOP.
+  }
+
+  async _sbaBurst(values, kind, deadline){
+    const count = kind === 'read' ? values : values.length;
     const reqs = [];
-    for (const w of words){
-      reqs.push(dmiRequest(DMI_OP.WRITE, DM.SBDATA0, w >>> 0));
+    for (let i = 0; i < count; i++){
+      reqs.push(dmiRequest(kind === 'read' ? DMI_OP.READ : DMI_OP.WRITE, DM.SBDATA0,
+        kind === 'read' ? 0 : values[i]));
       reqs.push(dmiRequest(DMI_OP.NOP, 0, 0));
     }
-    reqs.push(dmiRequest(DMI_OP.READ, DM.SBCS, 0));      // 批尾自检
-    reqs.push(dmiRequest(DMI_OP.NOP, 0, 0));
-    const resps = await this._scanDRMany(reqs, { idle: SB_BEAT_IDLE });
-    const sbcs = dmiResponse(resps[words.length * 2 + 1]).data >>> 0;
-    for (let i = 0; i < words.length; i++){
-      const r = dmiResponse(resps[i * 2 + 1]);            // 第 i 个写的结果紧跟它的那一拍
-      if (r.op !== DMI_STATUS.SUCCESS) return { ok: false, badAt: i, op: r.op, sbcs };
-    }
-    // 攒下 sbcs 错误位 ⇒ 这一批不能算数（哪一拍超速未知，整批重写）
-    if (sbcs & (SBCS.SBBUSYERROR | SBCS.SBERROR)) return { ok: false, badAt: 0, sbcs };
-    return { ok: true, badAt: -1, sbcs };
+    reqs.push(dmiRequest(DMI_OP.READ, DM.SBCS, 0), dmiRequest(DMI_OP.NOP, 0, 0));
+    return this._exclusive('_dmiQueue', async () => {
+      const resps = await this._scanDRMany(reqs, { idle: this._busIdle(kind), deadline });
+      const words = new Uint32Array(count);
+      // Check every scan, including request-phase and the SBCS response.
+      for (let k = 0; k < resps.length; k++){
+        const r = dmiResponse(resps[k]);
+        if (r.op !== DMI_STATUS.SUCCESS)
+          return { words, ok: false, badAt: Math.min(count, Math.floor(k / 2)), op: r.op, sbcs: null };
+        if (k < count * 2 && (k & 1)) words[k >> 1] = r.data;
+      }
+      const sbcs = dmiResponse(resps[count * 2 + 1]).data >>> 0;
+      this.lastSbcs = sbcs;
+      return { words, ok: !(sbcs & SBA_ERRORS), badAt: (sbcs & SBA_ERRORS) ? 0 : -1, sbcs };
+    });
   }
+
+  sbaReadBurst(count, timeoutMs = 2000){ return this._sbaBurst(count, 'read', now() + timeoutMs); }
+  dmiWriteBurst(words, timeoutMs = 2000){ return this._sbaBurst(words, 'write', now() + timeoutMs); }
 
   // ---------------------------------------------------------------- 目标控制
   /** 让 DM 上线（dmactive=1）并选 hart 0 */
@@ -585,41 +613,66 @@ export class RiscvTransport {
   }
 
   // ---------------------------------------------------------------- SBA（系统总线）
-  async sbaConfig(extra = sbcsBlock()){
-    if (this.sbaFailed){ await this.sbaClearErrors(); this.sbaFailed = false; }
-    if (this._sbcsCfg === extra) return;
-    await this.dmiWrite(DM.SBCS, extra >>> 0);
-    this._sbcsCfg = extra >>> 0;
-    this.lastSbcs = extra >>> 0;
+  async _waitSba(deadline, addr = 0){
+    let polls = 0;
+    for (;;) {
+      let left;
+      try { left = this._remaining(deadline); }
+      catch { throw this._sbaError('SBA_TIMEOUT', addr, this.lastSbcs, 'sbbusy 等待超时；请显式复位或断开重连'); }
+      let sbcs;
+      try { sbcs = (await this.dmiRead(DM.SBCS, left)) >>> 0; }
+      catch (e){
+        if (e.code === 'DMI_TIMEOUT' && !this._wireFault)
+          throw this._sbaError('SBA_TIMEOUT', addr, this.lastSbcs, 'sbbusy 等待超时；请显式复位或断开重连');
+        throw e;
+      }
+      this.lastSbcs = sbcs;
+      if (!(sbcs & SBCS.SBBUSY)) return sbcs;
+      // Real USB calls already yield. Avoid a host timer per poll (Windows
+      // timers can be much longer than 1 ms); yield periodically for simulators.
+      if (++polls % 32 === 0) await new Promise(resolve => setTimeout(resolve, 0));
+    }
   }
 
-  /**
-   * sberror/sbbusyerror 是**写 1 清零**（固件里踩过"写 0 等于没做"）。
-   *
-   * 🚨 2026-10 真机补充：**在飞的事务没落定时写进去的清位会被丢掉** —— 坏事务随后完成，
-   *    又会把 `sberror` 立起来，于是"读一次没映射的地址 → 之后每一次内存读都失败"。
-   *    所以这里先等 `sbbusy` 落（有界），清完**再读回来复验**，还挂着就再清一次。
-   */
-  async sbaClearErrors(){
-    for (let i = 0; i < 25; i++){
-      const s = await this.dmiRead(DM.SBCS).catch(() => null);
-      if (s === null) return;
-      this.lastSbcs = s;
-      if (!(s & SBCS.SBBUSY)) break;
-      await new Promise(r => setTimeout(r, 2));
+  _sbaError(code, addr, sbcs, message){
+    this.sbaFailed = true;
+    return new RiscvAccessError(code,
+      `SBA 访问 0x${(addr >>> 0).toString(16)} 失败（sbcs=0x${(sbcs >>> 0).toString(16)}）：${message}`,
+      { addr, sbcs, sberror: (sbcs & SBCS.SBERROR) >>> 12 });
+  }
+
+  async _clearSba(deadline, addr = 0){
+    const sbcs = await this._waitSba(deadline, addr);
+    // Stop both automatic triggers. Only writable configuration/W1C bits.
+    await this.dmiWrite(DM.SBCS, (sbcs & SBA_ERRORS) | SBCS.SBACCESS32, this._remaining(deadline));
+    this._sbcsCfg = null; this._holdAddr = null;
+    const back = await this._waitSba(deadline, addr);
+    if (back & SBA_ERRORS) throw this._sbaError('SBA_CLEAR_FAILED', addr, back, '错误位清除失败');
+    this.sbaFailed = false;
+    return back;
+  }
+
+  sbaClearErrors(timeoutMs = 500){
+    const deadline = now() + timeoutMs;
+    return this._exclusive('_sbaQueue', () => this._clearSba(deadline));
+  }
+
+  async sbaConfig(extra = sbcsBlock(), timeoutMs = 2000){
+    const deadline = now() + timeoutMs;
+    const sbcs = await this._waitSba(deadline);
+    if (sbcs & SBA_ERRORS) await this._clearSba(deadline);
+    if (this._sbcsCfg !== (extra >>> 0)){
+      await this.dmiWrite(DM.SBCS, extra >>> 0, this._remaining(deadline));
+      this._sbcsCfg = extra >>> 0;
     }
-    const sbcs = await this.dmiRead(DM.SBCS);
-    this.lastSbcs = sbcs;
-    if (sbcs & (SBCS.SBBUSYERROR | SBCS.SBERROR)){
-      await this.dmiWrite(DM.SBCS, (sbcs | SBCS.SBBUSYERROR | SBCS.SBERROR) >>> 0);
-      const back = await this.dmiRead(DM.SBCS).catch(() => null);      // 复验：粘滞位没清掉的话后面每次读都会失败
-      if (back !== null){
-        this.lastSbcs = back;
-        if (back & (SBCS.SBBUSYERROR | SBCS.SBERROR))
-          await this.dmiWrite(DM.SBCS, (back | SBCS.SBBUSYERROR | SBCS.SBERROR) >>> 0);
-      }
-    }
-    this._sbcsCfg = null;                 // 清错之后配置要重写
+    this.sbaFailed = false;
+  }
+
+  async _checkSbcsAt(addr, timeoutMs = 2000){
+    const sbcs = await this._waitSba(now() + timeoutMs, addr);
+    if (sbcs & SBA_ERRORS) throw this._sbaError((sbcs & SBCS.SBERROR) ? 'SBA_BUS_ERROR' : 'SBA_BUSY',
+      addr, sbcs, '总线访问未完成；未自动复位目标');
+    return sbcs;
   }
 
   /**
@@ -708,7 +761,7 @@ export class RiscvTransport {
    * `DAP_JTAG_Sequence` 本来就能装几十拍 —— 逐拍发等于把 USB 延迟乘以拍数。
    * 真机实测（HPM6800EVK）：逐字读 5.7 KB/s，与 TCK 1 MHz 还是 60 MHz 无关 → 瓶颈全在 USB。
    */
-  async _scanDRMany(requests, { idle = this.idle } = {}){
+  async _scanDRMany(requests, { idle = this.idle, deadline = Infinity } = {}){
     const groups = [];
     const all = [];
     for (const rq of requests){
@@ -716,7 +769,7 @@ export class RiscvTransport {
       groups.push({ from: all.length, n: seqs.length });
       for (const s of seqs) all.push(s);
     }
-    const caps = await this.sequences(all);
+    const caps = await this.sequences(all, { deadline });
     const out = [];
     let ci = 0;
     for (const g of groups){
@@ -736,297 +789,146 @@ export class RiscvTransport {
     return out;
   }
 
-  /**
-   * 一批 SBA 读：`READ, NOP, READ, NOP, …`（**每拍都收状态**，不是"投一批再收"）。
-   *
-   * 🚨 为什么不是"READ×N 再收 N 拍"（看着更省）：本文件 `writeMem` 的注释里记着那次教训 ——
-   *    DMI 流水线只有一级深，前一条没处理完时投进去的请求会被 DM 回 BSY 并**丢掉**。
-   *    读路径虽然丢的是"没读成"而不是"写错地方"，但一旦丢一拍，后面所有字都会**整体错位一个**
-   *    （自增是硬件推进的）—— 这种静默错位比慢一点坏得多。所以这里严格照已验证过的逐字时序
-   *    （READ 之后必有 NOP 收状态），只是把它们压进**同一条** DAP 命令里省 USB 往返。
-   *    任何一拍不是 SUCCESS 就返回 `badAt`，调用方从那里起退回逐字慢路径（并把地址写回去对齐）。
-   *
-   * @returns {{words:Uint32Array, ok:boolean, badAt:number}} badAt=-1 表示全成功
-   */
-  /**
-   * 一批读：把 count 个字的 `sbdata0` 读压进**一条** `DAP_JTAG_Sequence`。
-   *
-   * 🚨 2026-10 真机定因（用户现场：往监视里加一个**结构体**变量 → 复位并停就报
-   *    `读 0x4000b600（60 B）失败：SBA 读 0x4000b638 出错（sbcs=0x20758407）`，
-   *    而且从此**所有内存读全废**）：
-   *      60 B = 15 字 = 一批 13 字 + 一批 2 字；批内每拍是**背靠背**发出的，DM 只要有一拍
-   *      还没来得及读完就收到下一次 `sbdata0` 访问，就会置 **`sbbusyerror`** —— 而
-   *      **每一拍的 DMI 状态仍然报 SUCCESS**，所以只看拍状态根本发现不了，那一批的数据
-   *      也就不可信（可能读到上一笔的残值）。目标在跑、总线被抢时更容易踩中。
-   *
-   *    所以批尾在**同一条扫描**里补一拍 `READ sbcs`：校验成本 0 条额外 USB 命令（只多 2 拍
-   *    JTAG），但每一批都能当场判定"这批到底算不算数"，`ok=false` 时调用方清错误位并按字重读。
-   *
-   * @returns {{words:Uint32Array, ok:boolean, badAt:number, sbcs:number|null}}
-   *          ok=false 且 badAt=0 ⇒ 这批攒下了 sbcs 错误位，整批不可信
-   */
-  async sbaReadBurst(count, perWordMs = 2000){
-    const reqs = [];
-    for (let i = 0; i < count; i++){
-      reqs.push(dmiRequest(DMI_OP.READ, DM.SBDATA0, 0));
-      reqs.push(dmiRequest(DMI_OP.NOP, 0, 0));
-    }
-    reqs.push(dmiRequest(DMI_OP.READ, DM.SBCS, 0));      // 批尾自检
-    reqs.push(dmiRequest(DMI_OP.NOP, 0, 0));
-    const resps = await this._scanDRMany(reqs, { idle: SB_BEAT_IDLE });
-    const sbcs = dmiResponse(resps[count * 2 + 1]).data >>> 0;
-    const words = new Uint32Array(count);
-    for (let i = 0; i < count; i++){
-      const r = dmiResponse(resps[i * 2 + 1]);          // 第 i 个字的结果紧跟它的那一拍
-      if (r.op !== DMI_STATUS.SUCCESS) return { words, ok: false, badAt: i, sbcs };
-      words[i] = r.data >>> 0;
-    }
-    if (sbcs & (SBCS.SBBUSYERROR | SBCS.SBERROR)) return { words, ok: false, badAt: 0, sbcs };
-    return { words, ok: true, badAt: -1, sbcs };
-  }
-
-  /**
-   * 一批能塞几个字？按 CMSIS-DAP 包长算：每拍请求 18 B（TDI 11 + 序列头 7）、响应 6 B，
-   * 一个字 = READ/NOP 或 WRITE/NOP 两拍。留点余量（命令字节 + 固件自己的开销）。
-   *
-   * 🚨 2026-10 逐档实测的**命令长度天花板**（同一支 akaLinkPro 探针）：
-   *    请求 577 B（16 字/批）正常；**721 B（20 字）起响应恒少 222 B**、973 B 更乱。
-   *    探针固件 `DAP_XFER_SIZE` 明明是 1024 且 `DAP.c` 没有任何条数上限 —— 所以问题在
-   *    USB 多包收发那一层（待单独攻）。在那之前**按 512 B 端点包长算批次**，不赌。
-   *    上限 64 只是兜底（真接上支持大包的目标时别再被写死的 12 卡住）。
-   */
-  _burstWords(){
-    const pkt = Math.min(this.dap?.probe?.pkt || this.dap?.pkt || 512, 512);
-    /**
-     * 每拍请求 18 B（TDI 11 + 序列头 7）；`SB_BEAT_IDLE` 那条空转序列按 clocks/8 字节算
-     * （idle=8 的 1 B 已经含在 18 里，所以只加**多出来**的部分）。一个字 = 2 拍。
-     * 实测对照（hpm-flash.test 会把上限钉住）：idle=8、13 字批 = 492 B；
-     * idle=64、13 字批 = 701 B（每拍 +7 B）⇒ 现在一批 9 字 = 475 B。
-     */
-    const perBeat = 18 + Math.max(0, Math.ceil(Math.min(64, SB_BEAT_IDLE) / 8) - 1);
-    const byReq = Math.floor((pkt - 24) / perBeat / 2);
-    const byResp = Math.floor((pkt - 8) / 6 / 2);
-    return Math.max(2, Math.min(64, byReq, byResp));
-  }
-
-  /** 查一次 sbcs：攒着的总线错误要当场报出来，别让它变成后一段的错位读 */
-  async _checkSbcsAt(here, perWordMs){
-    this.lastSbcs = await this.dmiRead(DM.SBCS, perWordMs);
-    if (this.lastSbcs & (SBCS.SBBUSYERROR | SBCS.SBERROR)){
-      this.sbaFailed = true;
-      throw new Error(`SBA 读 0x${(here >>> 0).toString(16)} 出错（sbcs=0x${this.lastSbcs.toString(16)}）——`
-        + ' 这一笔总线访问没有干净完成；若之后每次读内存都失败，请「断开」重连（或给板子断电重上电）恢复。');
-    }
-    if (this.lastSbcs & SBCS.SBBUSY){
-      /**
-       * 这颗 DM 的 `sbbusy` 会在"刚发过访问"的窗口里短暂置起（实测：读内存明明成功，紧接着
-       * 单读一次 sbcs 也是这个位亮着），所以先给它几毫秒自己落，别急着宣判"卡死"。
-       * 真的不落才算故障 —— 那种情况会把后面**所有**内存读带走，必须给用户一条能走的恢复路径。
-       */
-      for (let i = 0; i < 8; i++){
-        await new Promise(r => setTimeout(r, 2));
-        this.lastSbcs = await this.dmiRead(DM.SBCS, perWordMs);
-        if (!(this.lastSbcs & SBCS.SBBUSY)) return;
-      }
-      this.sbaFailed = true;
-      throw new Error(`SBA 读 0x${(here >>> 0).toString(16)} 时 sbbusy 一直不落 —— 总线事务没完成`
-        + '（地址没映射 / 外设没时钟）。它会让之后所有内存读都失败：请「断开」重连或给板子断电重上电恢复。');
-    }
-  }
-
-  /**
-   * 块读：addr 可以不对齐；返回 length 字节。
-   *
-   * 🚨 出错信息要给得"能直接定位"（2026-10 真机教训）：SBA 去读一个**没映射/没时钟**的
-   *    外设窗口时，总线事务可能永远不完成 —— 此时 `sbdata0` 读不出来、`sbbusy` 也一直不落。
-   *    这里对每个字都给了上限，并且明确告诉用户"这个地址不对/外设没时钟"，而不是干等。
-   *    （SBA 只适合 RAM/已配好的 flash 窗口；片内外设一律走算法/内核去读。）
-   */
-  async readMem(addr, length, perWordMs = 2000){
-    /**
-     * 🚨 2026-10 真机定因（HPM6800EVK，稳定复现）：`复位并停`（ndmreset）之后的**第一笔**
-     *    SBA 访问会被 DM 判成 `sbbusyerror`（`sbcs` 从干净的 `0x20158407` 变成 `0x20758407`），
-     *    于是"复位并停 → 读内存"这一步必错；而 `复位并跑` + 等一会儿再读就正常 —— 说明只是
-     *    复位后总线还没落定，既不是地址错也不是数据错。
-     *
-     *    这类位是**写 1 清零的记账位**：清掉再读一次通常就干净了。直接抛给用户，他看到的就是
-     *    "复位并停之后就报读失败"。所以这里只对这类错误清位重试一次；重试仍带同样的错才认输
-     *    （真·地址不通时两次都会失败，由上层记冷却并如实报错）。
-     */
-    try {
-      return await this._readMemOnce(addr, length, perWordMs);
-    } catch (e){
-      if (!/sbcs|总线访问没有干净完成|sbbusy/.test(String(e?.message || ''))) throw e;
-      await this.sbaClearErrors().catch(() => {});
-      return await this._readMemOnce(addr, length, perWordMs);
-    }
-  }
-
-  async _readMemOnce(addr, length, perWordMs = 2000){
+  _validateMemory(addr, length, read = true){
     if (!Number.isInteger(addr) || addr < 0 || addr > 0xffffffff ||
         !Number.isInteger(length) || length < 0 || addr + length > 0x100000000)
       throw new Error('SBA 地址或长度超出 32 位地址空间');
-    if (!length) return new Uint8Array(0);
-    // SBA reads full words, including the bytes before/after an unaligned request.
-    // Fence the entire native span before issuing any DMI command.
-    const nativeStart = Math.floor(addr / 4) * 4;
-    const nativeEnd = Math.ceil((addr + length) / 4) * 4;
-    if (nativeStart < 0x90000000 && nativeEnd > 0x80000000){
+    const start = Math.floor(addr / 4) * 4, end = Math.ceil((addr + length) / 4) * 4;
+    if (read && length && start < 0x90000000 && end > 0x80000000)
       throw new Error('读取范围覆盖 XIP/flash 窗口：拒绝 SBA 访问；请使用已载入 ELF 的只读镜像');
-    }
-    const out = new Uint8Array(length);
-    const start = nativeStart;
-    const first = (addr >>> 0) - start;                 // 头部补齐
-    const words = Math.ceil((first + length) / 4);
-    await this.sbaConfig();
-    this._holdAddr = null;
-    await this.dmiWrite(DM.SBADDRESS0, start);
-    const put = (i, w) => {
-      const b = [w & 0xff, (w >>> 8) & 0xff, (w >>> 16) & 0xff, (w >>> 24) & 0xff];
-      for (let k = 0; k < 4; k++){
-        const pos = i * 4 + k - first;
-        if (pos >= 0 && pos < length) out[pos] = b[k];
-      }
-    };
+    return { start, end, words: (end - start) / 4 };
+  }
 
-    /**
-     * 两条路：
-     *   · **批量**（默认）：一批十几个字压进**一条** DAP_JTAG_Sequence 命令；
-     *   · **逐字**（保底）：原来看过真机的那套写法 —— 批次出错、或目标就是批不动时退回来。
-     *
-     * 🚨 批量那条**每拍都验状态**（见 `sbaReadBurst`）：DMI 流水线只有一级深，丢一拍不会报错，
-     *    只会让后面所有字**整体错位一个**（自增在硬件里推进）。所以任何一拍不是 SUCCESS，
-     *    就从那个字起退回逐字，并且**把 sbaddress0 写回去对齐**（不重写就不知道自增停在哪）。
-     *    另外"批不动"不算错误（逐字照样读得全，只是慢）：连撞 3 次就整段不再批。
-     */
-    const BURST = this._burstWords();
-    let i = 0, slowLeft = 0;
-    while (i < words){
-      const want = Math.min(BURST, words - i);
-      if (!this._burstOff && slowLeft <= 0 && want >= 2){
-        const b = await this.sbaReadBurst(want, perWordMs);
-        /**
-         * 批尾自检判定"这批不算数"（`sbbusyerror`/`sberror`）时：**先清掉那个写 1 清零的
-         * 粘滞位**，再把地址写回去对齐，这一段整批改按字重读（每个字一次 USB 往返，天然
-         * 给总线留了时间）。
-         *
-         * 🚨 以前这里是直接抛错 —— 抛出去时那一笔事务还挂在总线上，之后**每一次** SBA
-         *    访问都失败。用户现场就是"往监视里加了个结构体变量 → 复位并停报错 → 从此全废"。
-         *    读内存失败不该把整颗 DM 的内存通路一起带走：能降级就降级，只有物理不通才报错。
-         */
-        const sbcsBad = typeof b.sbcs === 'number' && (b.sbcs & (SBCS.SBBUSYERROR | SBCS.SBERROR));
-        if (sbcsBad && !b.ok) await this.sbaClearErrors().catch(() => {});
-        const good = b.ok ? want : (sbcsBad ? 0 : Math.max(0, b.badAt));
-        for (let k = 0; k < good; k++) put(i + k, b.words[k]);
-        i += good;
-        if (b.ok){
-          /**
-           * sbcs 检查**不必每批都做**：查一次 = 两次 DMI 扫描（= 两条 USB 命令），
-           * 每批都查会把命令数翻三倍（实测 512 个字 133 条 → 改成每 4 批查一次后 ~50 条）。
-           * 批次内部的"每拍验状态"已经能抓住丢拍，这里只是兜底看有没有攒着的总线错误。
-           */
-          if (i % (BURST * 4) === 0 || i === words) await this._checkSbcsAt(start + (i - 1) * 4, perWordMs);
+  async _runSba(fn, deadline){
+    try { return await fn(); }
+    catch (e){
+      this.sbaFailed = true; this._sbcsCfg = null; this._holdAddr = null;
+      e.sbaHandled = true;
+      // Cleanup shares the original budget; never reset DM/hart or launch a
+      // transfer after the wire timed out. Preserve the original failure.
+      if (!this._wireFault && now() < deadline){
+        try { await this._clearSba(deadline, e.addr); } catch {}
+      }
+      throw e;
+    }
+  }
+
+  async _burstStatus(b, deadline, addr, kind){
+    if (b.op != null){
+      if (b.op === DMI_STATUS.BUSY) this._learnDelay('dmi');
+      if (b.op === DMI_STATUS.BUSY || b.op === DMI_STATUS.ERROR) await this.dmiReset(this._remaining(deadline));
+      else throw new RiscvAccessError('DMI_INVALID', `DMI 批量响应使用保留状态（op=${b.op}）`, { addr });
+      if (b.op !== DMI_STATUS.BUSY || kind === 'read')
+        throw new RiscvAccessError(b.op === DMI_STATUS.BUSY ? 'DMI_BUSY' : 'DMI_FAILED',
+          `DMI 批量${kind === 'read' ? '读' : '写'}完成状态不确定；未重复访问`, { addr, uncertain: true });
+    } else if (!b.ok && !(b.sbcs & SBA_ERRORS)){
+      throw new RiscvAccessError('SBA_BATCH_FAILED', 'SBA 批量结果不完整；未重复访问', { addr });
+    }
+    const sbcs = b.op == null && b.sbcs != null && !(b.sbcs & SBCS.SBBUSY)
+      ? b.sbcs : await this._waitSba(deadline, addr);
+    if (sbcs & SBCS.SBERROR) throw this._sbaError('SBA_BUS_ERROR', addr, sbcs, '系统总线错误；未重复访问');
+    return sbcs;
+  }
+
+  async readMem(addr, length, timeoutMs = 2000){
+    const { start, words } = this._validateMemory(addr, length);
+    if (!length) return new Uint8Array(0);
+    // One shared budget includes queueing, retries and cleanup. Large buffers
+    // receive a size-based allowance; a hung single word remains short-bounded.
+    const deadline = now() + Math.max(timeoutMs, words * 4);
+    return this._exclusive('_sbaQueue', () => this._runSba(async () => {
+      const native = new Uint8Array(words * 4), view = new DataView(native.buffer);
+      let i = 0;
+      const config = words > 1 ? sbcsBlock() : sbcsBlock() & ~SBCS.SBREADONDATA;
+      const startRead = async index => {
+        await this.sbaConfig(config, this._remaining(deadline));
+        this._holdAddr = null;
+        await this.dmiWrite(DM.SBADDRESS0, start + index * 4, this._remaining(deadline));
+        await this._checkSbcsAt(start + index * 4, this._remaining(deadline));
+      };
+      await startRead(0);
+      while (i < words){
+        const here = start + i * 4;
+        const count = Math.min(this._burstWords('read'), words - i - 1); // Leave tail out of all bursts.
+        if (!this._burstOff && count >= 2){
+          const b = await this.sbaReadBurst(count, this._remaining(deadline));
+          const sbcs = await this._burstStatus(b, deadline, here, 'read');
+          if (sbcs & SBCS.SBBUSYERROR){
+            // Like OpenOCD: after the pending read finishes, sbaddress is just
+            // past the resident word. Earlier consumed words are valid; fetch
+            // the resident word after disabling automatic reads and clearing.
+            const next = await this.dmiRead(DM.SBADDRESS0, this._remaining(deadline));
+            const resident = (next - start) / 4 - 1;
+            if (!Number.isInteger(resident) || resident <= i || resident > i + count || resident >= words)
+              throw this._sbaError('SBA_PROGRESS', here, sbcs, '系统总线地址进度异常');
+            for (let k = 0; k < resident - i; k++) view.setUint32((i + k) * 4, b.words[k], true);
+            await this._clearSba(deadline, here);
+            view.setUint32(resident * 4, await this.dmiRead(DM.SBDATA0, this._remaining(deadline)), true);
+            i = resident + 1; this._burstMiss++; this._learnDelay('read');
+            if (i < words) await startRead(i);
+          } else {
+            for (let k = 0; k < count; k++) view.setUint32((i + k) * 4, b.words[k], true);
+            i += count;
+          }
           continue;
         }
-        this._burstMiss++;
-        /**
-         * 🚨 撞到"超速"（sbbusyerror）就**立刻**关掉批量：这颗 DM 一旦被判超速，它的 SBA
-         *    引擎会就此卡住（之后每次内存读都失败）。宁可这一段慢（每字一次 USB 往返），
-         *    也不能把链路搞废。拍状态不对（badAt）只是"这批没批动"，容忍 3 次再关。
-         */
-        if (sbcsBad || this._burstMiss >= 3){
-          if (!this._burstOff) this.log('SBA 批量读撞到超速 → 本会话改走逐字慢路径（正确优先）');
-          this._burstOff = true;
+        // Conservative baseline: check each completion before consuming data.
+        await this._checkSbcsAt(here, this._remaining(deadline));
+        if (i === words - 1) await this.sbaConfig(config & ~SBCS.SBREADONDATA, this._remaining(deadline));
+        view.setUint32(i * 4, await this.dmiRead(DM.SBDATA0, this._remaining(deadline)), true);
+        i++;
+        await this._checkSbcsAt(here, this._remaining(deadline));
+      }
+      return native.slice(addr - start, addr - start + length);
+    }, deadline));
+  }
+
+  async writeMem(addr, bytes, timeoutMs = 2000){
+    this._validateMemory(addr, bytes.length, false);
+    if (addr % 4 || bytes.length % 4) throw new Error('SBA 写要求地址和长度 4 字节对齐');
+    if (!bytes.length) return;
+    const deadline = now() + Math.max(timeoutMs, bytes.length);
+    return this._exclusive('_sbaQueue', () => this._runSba(async () => {
+      await this.sbaConfig(sbcsWrite(), this._remaining(deadline)); this._holdAddr = null;
+      await this.dmiWrite(DM.SBADDRESS0, addr, this._remaining(deadline));
+      const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+      let off = 0, misses = 0;
+      while (off < bytes.length){
+        await this._checkSbcsAt(addr + off, this._remaining(deadline));
+        const count = Math.min(this._burstWords('write'), (bytes.length - off) / 4);
+        if (!this._writeBurstOff && count >= 2){
+          const data = Array.from({ length: count }, (_, k) => view.getUint32(off + k * 4, true));
+          const b = await this.dmiWriteBurst(data, this._remaining(deadline));
+          const sbcs = await this._burstStatus(b, deadline, addr + off, 'write');
+          if ((sbcs & SBCS.SBBUSYERROR) || b.op === DMI_STATUS.BUSY){
+            const next = await this.dmiRead(DM.SBADDRESS0, this._remaining(deadline));
+            if (next < addr + off || next > addr + off + count * 4 || (next - addr) % 4)
+              throw this._sbaError('SBA_PROGRESS', addr + off, sbcs, '系统总线写进度异常');
+            if (next === addr + off && ++misses > 8)
+              throw this._sbaError('SBA_PROGRESS', next, sbcs, '系统总线写入没有进展');
+            off = next - addr; this._learnDelay('write');
+            await this._clearSba(deadline, next);
+            await this.sbaConfig(sbcsWrite(), this._remaining(deadline));
+            await this.dmiWrite(DM.SBADDRESS0, next, this._remaining(deadline));
+          } else { off += count * 4; misses = 0; }
+        } else {
+          await this.dmiWrite(DM.SBDATA0, view.getUint32(off, true), this._remaining(deadline));
+          await this._checkSbcsAt(addr + off, this._remaining(deadline));
+          off += 4;
         }
-        await this.dmiWrite(DM.SBADDRESS0, (start + i * 4) >>> 0);
-        slowLeft = BURST;
-        continue;
       }
-      const here = (start + i * 4) >>> 0;
-      let w;
-      try {
-        w = await this.dmiRead(DM.SBDATA0, perWordMs);
-      } catch (e){
-        this.sbaFailed = true;
-        throw new Error(`SBA 读 0x${here.toString(16)} 卡住了（${e.message}）——` +
-          ' 这个地址多半没映射，或所在外设的时钟被门控（片内外设请让内核去读）');
-      }
-      put(i, w);
-      i++;
-      if (slowLeft > 0) slowLeft--;
-      // 逐字路径每 16 个字查一次 sbcs（真机实测：逐字查会把读放大一倍）
-      if (slowLeft <= 0 && (i % 16 === 0 || i === words)) await this._checkSbcsAt(here, perWordMs);
-    }
-    return out;
+      await this._checkSbcsAt(addr + off - 4, this._remaining(deadline));
+    }, deadline));
   }
 
-  /** 块写：addr 必须 4 字节对齐、length 必须是 4 的倍数（flashloader 的 buf 就是这么用的）*/
-  async writeMem(addr, bytes){
-    if (bytes.length % 4) throw new Error(`SBA 写要求 4 字节对齐（长度 ${bytes.length}）`);
-    if ((addr >>> 0) % 4) throw new Error(`SBA 写要求 4 字节对齐（地址 0x${(addr >>> 0).toString(16)}）`);
-    // 🚨 写路径的 sbcs **不能带 sbreadonaddr**：否则写地址会先触发一次读、读完自增 4，
-    //    第一笔数据就落到 addr+4（真机上表现为"blob 整体错位一个字"，接下去 resume 跑垃圾指令）
-    await this.sbaConfig(sbcsWrite());
-    this._holdAddr = null;
-    await this.dmiWrite(DM.SBADDRESS0, addr >>> 0);
-    const dv = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
-    /**
-     * 逐字写是**正确但极慢**的老路径（每字两次 USB 往返）—— 真机对照 OpenOCD 慢 10 倍
-     * （同一份 246 KB 镜像：OpenOCD 4.9 s，我们 42~78 s），"卡在加载 flashloader"就是这么来的。
-     * 现在走 `dmiWriteBurst`：多拍压进一条 `DAP_JTAG_Sequence`，**但仍然是每拍都收状态**
-     * （`WRITE,NOP,WRITE,NOP,…`，DMI 只一级深，丢一拍会静默写错地方）。
-     * 哪一拍不是 SUCCESS 就从那个字起退回逐字写，并把 `sbaddress0` 写回去对齐自增指针。
-     */
-    const BURST = this._burstWords();
-    let off = 0;
-    while (off < bytes.length){
-      const nWords = Math.min(BURST, (bytes.length - off) >> 2);
-      if (nWords >= 2 && !this._writeBurstOff){
-        const words = [];
-        for (let k = 0; k < nWords; k++) words.push(dv.getUint32(off + k * 4, true));
-        const b = await this.dmiWriteBurst(words);
-        if (b.ok){ off += nWords * 4; continue; }
-        // 批尾自检发现"这批不算数"：清掉粘滞错误位，整批从 off 起按字重写（badAt=0 已对齐）
-        if (typeof b.sbcs === 'number' && (b.sbcs & (SBCS.SBBUSYERROR | SBCS.SBERROR)))
-          await this.sbaClearErrors().catch(() => {});
-        this._writeBurstMiss = (this._writeBurstMiss || 0) + 1;
-        if ((typeof b.sbcs === 'number' && (b.sbcs & (SBCS.SBBUSYERROR | SBCS.SBERROR)) !== 0) || this._writeBurstMiss >= 3){
-          this._writeBurstOff = true;
-          this.log('DMI 批量写撞到超速/连撞 3 次 → 本段改走逐字慢路径（正确优先）');
-        }
-        // 自增指针已经推进到出错那一拍：写回地址对齐，再从那里逐字补
-        await this.dmiWrite(DM.SBADDRESS0, ((addr >>> 0) + off + b.badAt * 4) >>> 0);
-        off += b.badAt * 4;
-        continue;
-      }
-      await this.dmiWrite(DM.SBDATA0, dv.getUint32(off, true));
-      off += 4;
-    }
-    // 收尾：读一次 sbcs 确认没有攒着的错误
-    this.lastSbcs = await this.dmiRead(DM.SBCS);
-    if (this.lastSbcs & (SBCS.SBBUSYERROR | SBCS.SBERROR)){
-      this.sbaFailed = true;
-      throw new Error(`SBA 写 0x${(addr >>> 0).toString(16)} 出错（sbcs=0x${this.lastSbcs.toString(16)}）`);
-    }
-  }
-
-  /**
-   * 单字流水读（J-Scope 的单变量快路径同构）：把 SBA 抱在同一个地址上（关自增），
-   * 之后每拍只有一次 DMI 扫描；延迟一拍 —— 第一次的结果要丢掉，最后一个值由调用方补收。
-   */
-  async holdPrepare(addr){
-    const a = (addr >>> 0) & ~3;
-    if (this._holdAddr === a) return;
-    await this.sbaConfig(sbcsHold());
-    await this.dmiWrite(DM.SBADDRESS0, a);
-    this._holdAddr = a;
-    await this.dmiPost(DMI_OP.READ, DM.SBDATA0, 0);      // 投出第一次读（结果下一拍才回来）
-    await this.dmiPost(DMI_OP.NOP, 0, 0);                // 丢掉那一次
-  }
-
+  // The old posted hold path left a bus read in flight across calls. Keep the
+  // API while using the same completed single-word path as ordinary reads.
+  async holdPrepare(addr){ this._validateMemory(addr, 4); this._holdAddr = Math.floor(addr / 4) * 4; }
   async holdRead(){
-    const r = await this.dmiPost(DMI_OP.READ, DM.SBDATA0, 0);
-    if (r.op !== DMI_STATUS.SUCCESS) return null;
-    return r.data;
+    const addr = this._holdAddr;
+    if (addr == null) throw new Error('请先准备单字采样地址');
+    const bytes = await this.readMem(addr, 4);
+    this._holdAddr = addr;
+    return new DataView(bytes.buffer, bytes.byteOffset, 4).getUint32(0, true);
   }
 }

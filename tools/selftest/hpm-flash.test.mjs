@@ -141,7 +141,9 @@ console.log('== 3. DM/SBA 跑在模拟 DTM 上（TAP 状态机真的按位解序
   // 流水线读（J-Scope 的单变量快路径）
   await dm.holdPrepare(0x400);
   const h1 = await dm.holdRead(), h2 = await dm.holdRead();
-  ok(h1 === 0x00030201 || h1 !== h2, `hold 读拿到的是"上一次投出去的读"（延迟一拍语义，h1=0x${(h1 ?? 0).toString(16)} h2=0x${(h2 ?? 0).toString(16)}）`);
+  const holdExpected = new DataView(data.buffer).getUint32(0, true);
+  ok(h1 === holdExpected && h2 === holdExpected && !sim.busPending,
+     'hold 单字采样读取已完成的当前值，不留下预取事务');
   // 地址越界要报错而不是静默
   let threw = false;
   try { await dm.writeMem(0x20000, new Uint8Array(4)); } catch { threw = true; }
@@ -275,24 +277,24 @@ console.log('== 4b. verify 走 XIP 窗口（2026-10 LA 解码 OpenOCD 波形定�
 }
 
 // ------------------------------------------------------------------ 4c
-console.log('== 4c. DMI 进错误态（响应 op=3）→ 写 dtmcs.dmireset 自愈 ==');
+console.log('== 4c. 粘滞 DMI BUSY（响应 op=3）→ 清状态并增加延迟 ==');
 {
   /**
    * 现场（2026-10-01 用户手动烧录）：`DMI 写 0x39 失败（op=3）` —— 0x39 是 sbaddress0，
-   * op=3 是 **DTM 的 DMI 错误态**（规范：此后所有 DMI 操作都不被处理，直到写 dtmcs.dmireset）。
-   * 当时我们直接抛错 → 整轮中止，还停在"第二段已擦除、未写完"。这条钉子钉住"会自愈"。
+   * op=3 是粘滞 BUSY：此后请求不处理，直到 dtmcs.dmireset。
+   * 本例在发请求前注入已有 BUSY，核对未接收的请求能安全重发。
    */
   const sim = new SimTarget({ ramSize: 0x8000 });
   const dm = new RiscvTransport(sim, { idle: 7 });
   await dm.init(); await dm.activate(0); await dm.halt();
   sim.sbaError = false;
-  sim.injectOp3 = 1;                      // 注入一条 op=3
+  sim.dmiSticky = 3; sim.pendingDmi = 3n; // 已有的 BUSY：新请求未接收
   await dm.dmiWrite(0x39, 0x01234567);    // 应该：dmiReset → 重试 → 成功
-  ok(sim.op3Injected === 1 && sim.dmiResets === 1,
-     `遇到 op=3 写了 1 次 dmireset 并重试（注入 ${sim.op3Injected} 次 / dmireset ${sim.dmiResets} 次）`);
+  ok(sim.dmiResets === 1 && dm.dmiBusyDelay > 0,
+     '请求阶段遇到粘滞 BUSY，清状态并增加 DMI 延迟后发送');
   ok(sim.dm.sbaddress === 0x01234567, `重试之后那条写真的落地了（sbaddress0 = 0x${sim.dm.sbaddress.toString(16)}）`);
   // 读路径同理
-  sim.injectOp3 = 1;
+  sim.dmiSticky = 3; sim.pendingDmi = 3n;
   const v = await dm.dmiRead(0x10);
   ok(sim.dmiResets === 2 && typeof v === 'number', `读路径遇到 op=3 也会自愈（dmireset 累计 ${sim.dmiResets} 次）`);
 }
@@ -420,19 +422,19 @@ console.log('== 8. SBA 批量读（一条 DAP 命令塞多拍：USB 往返从"�
   const across = await dm.readMem(0x1000 + 40, 256);        // 从第 10 个字起，跨多个批次
   ok(across.every((b, i) => b === src[40 + i]), '跨多个批次的块读顺序正确');
 
-  // 批不动就退回逐字（这里模拟"每一拍都被拒"）：数据仍必须正确
-  const sim2 = new SimTarget();
+  // A delayed bus must recover using hardware progress, without replaying
+  // already completed accesses or disabling batching for the entire session.
+  const sim2 = new SimTarget({ busDelayCycles: 400 });
   const dm2 = new RiscvTransport(sim2, { idle: 7 });
   await dm2.init();
   await dm2.activate(0);
   await dm2.writeMem(0x2000, src.subarray(0, 256));
-  const origBurst = dm2.sbaReadBurst.bind(dm2);
-  let burstTries = 0;
-  dm2.sbaReadBurst = async (count, ms) => { burstTries++; const r = await origBurst(count, ms); return { ...r, ok: false, badAt: 0 }; };
+  sim2.busAccesses = [];
   const fallback = await dm2.readMem(0x2000, 256);
-  ok(fallback.every((b, i) => b === src[i]), '批量被拒时退回逐字，数据依然逐字节正确');
-  ok(burstTries <= 3, `连撞 ${burstTries} 次之后就不批了（不每批都白花一次往返）`);
-  ok(dm2._burstOff === true, '撞够次数后 _burstOff 置起（后续直接走逐字）');
+  ok(fallback.every((b, i) => b === src[i]), '异步总线延迟下，批量恢复后的数据逐字节正确');
+  ok(sim2.busAccesses.length === 64 && new Set(sim2.busAccesses.map(a => a.addr)).size === 64,
+     '批量冲突后没有重复读取或尾字越界');
+  ok(dm2._burstOff === false && dm2.sbaReadDelay > 64, '学到更长的读取延迟，保持批量能力');
 
   // 单字/两字这种小读也不该被批量拖累
   const one = await dm.readMem(0x1004, 4);

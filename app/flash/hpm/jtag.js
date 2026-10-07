@@ -85,7 +85,8 @@ export function drScan(nbits, tdi, opts = {}){
   const { idle = 0, capture = true } = opts;
   const v = typeof tdi === 'bigint' ? tdi : BigInt(tdi >>> 0);
   const seqs = [];
-  if (idle > 0) seqs.push(buildSequence({ clocks: Math.min(64, idle), tms: false, tdi: new Uint8Array(8).fill(0xff) }));
+  for (let left = Math.ceil(idle); left > 0; left -= 64)
+    seqs.push(buildSequence({ clocks: Math.min(64, left), tms: false, tdi: new Uint8Array(8).fill(0xff) }));
   seqs.push(buildSequence({ clocks: 1, tms: true, tdi: new Uint8Array([1]) }));       // Select-DR
   seqs.push(buildSequence({ clocks: 2, tms: false, tdi: new Uint8Array([0x03]) }));   // Capture-DR, Shift-DR
   const nlow = nbits - 1;
@@ -172,7 +173,7 @@ export const sbcsWrite = () => (SBCS.SBACCESS32 | SBCS.SBAUTOINC) >>> 0;
 export const sbcsHold = () => (SBCS.SBACCESS32 | SBCS.SBREADONADDR | SBCS.SBREADONDATA) >>> 0;
 
 /** DMI 响应里的 op 状态码 */
-export const DMI_STATUS = { SUCCESS: 0, BUSY: 1, ERROR: 2 };
+export const DMI_STATUS = { SUCCESS: 0, BUSY: 3, ERROR: 2 };
 
 /** dmcontrol 位域（只列用到的）*/
 export const DMCONTROL = {

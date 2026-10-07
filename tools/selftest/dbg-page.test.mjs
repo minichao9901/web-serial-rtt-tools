@@ -44,7 +44,9 @@ async function ensureBrowser(){
 
 await ensureBrowser();
 const list = await (await fetch(CDP + '/json/list', { signal: AbortSignal.timeout(5000) })).json();
-const page = list.find(t => t.type === 'page');
+const page = process.env.CDP_PAGE
+  ? list.find(t => t.type === 'page' && t.id === process.env.CDP_PAGE)
+  : list.find(t => t.type === 'page');
 if (!page) throw new Error('CDP 里没有页面目标');
 
 const ws = new WebSocket(page.webSocketDebuggerUrl);
@@ -241,6 +243,22 @@ const outText = () => ev('return document.getElementById("d-out").textContent;')
   let t = await run('h');
   ok(/md <地址>/.test(t) && /b <地址\|符号/.test(t) && /文件:行/.test(t), 'h 打出帮助（含新增的「文件:行」下断点）', t.slice(-140));
 
+  const follow = await ev(`
+    const d = window.__tools.dbg, el = document.getElementById('d-out');
+    const frame = () => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+    const history = () => { el.scrollTop = 0; el.dispatchEvent(new Event('scroll')); };
+    const bottom = () => el.scrollHeight - el.clientHeight - el.scrollTop < 2;
+    await frame(); history();
+    const scrollable = el.scrollHeight > el.clientHeight && !el._stick;
+    d._out('后台日志：翻看历史时保留位置'); await frame();
+    const keptHistory = el.scrollTop === 0;
+    await d.runLine('h'); await frame(); const commandBottom = bottom();
+    history(); await d.runLine('invalid-command'); await frame(); const errorBottom = bottom();
+    history(); await d._act('测试动作', async () => d._out('动作结果')); await frame();
+    return { scrollable, keptHistory, commandBottom, errorBottom, actionBottom: bottom() };`);
+  ok(follow.scrollable && follow.keptHistory, '翻看历史时后台日志保留滚动位置', JSON.stringify(follow));
+  ok(follow.commandBottom && follow.errorBottom && follow.actionBottom, '新命令、报错和按钮动作都回到最新输出', JSON.stringify(follow));
+
   t = await run('r');
   ok(/R0/.test(t) && /XPSR/.test(t) && /CONTROL/.test(t), 'r 打印全部寄存器（含 CFBP 拆出的特殊寄存器）');
 
@@ -393,6 +411,21 @@ console.log('== 9. RTT 同屏（模拟目标里有一个合法的 RTT 控制块�
   ok(r.wired && r.wired.sameProbe === false && r.wired.hasRead && r.wired.hasWrite,
      'RTT 走的是后端自己的内存访问器（不是直接抓 session.probe）', JSON.stringify(r.wired));
   ok(/tick|dbg/.test(r.text), 'RTT 输出窗里真的出现了目标打印的内容', r.text.slice(0, 80));
+
+  const clear = await ev(`
+    const d = window.__tools.dbg, rtt = d.rtt, el = document.getElementById('d-rtt');
+    const before = el.textContent.length;
+    const info = document.getElementById('d-rtt-info').textContent;
+    document.getElementById('d-rtt-clear').click();
+    const empty = el.textContent === '';
+    await d.runLine('c');
+    await new Promise(r => setTimeout(r, 900));
+    await d.runLine('halt');
+    return { before, empty, same: d.rtt === rtt,
+      infoSame: document.getElementById('d-rtt-info').textContent === info,
+      resumed: /tick|dbg/.test(el.textContent) };`);
+  ok(clear.before > 0 && clear.empty, 'RTT 清屏按钮清掉已有显示', JSON.stringify(clear));
+  ok(clear.same && clear.infoSame && clear.resumed, 'RTT 清屏保留连接且后续输出继续显示', JSON.stringify(clear));
 }
 
 // ==================================================================== 10

@@ -19,6 +19,7 @@ import { FileRecorder, recordButtonState } from '../core/recorder.js';
 import { SerialSession } from '../serial/session.js';
 import { DemoPort, demoEnabled } from '../serial/demo.js';
 import { bytes as fBytes, rate as fRate, fileStamp, download, stamp as stampOf } from '../core/format.js';
+import { AnsiDisplay, BurstGuard, terminalBytes } from '../core/display-stream.js';
 
 const portKey = p => {
   try { const i = p.getInfo?.() || {}; return `${i.usbVendorId ?? 0}-${i.usbProductId ?? 0}`; } catch { return 'x'; }
@@ -37,6 +38,7 @@ export class RttCdcStreamView {
     this.suppressed = false;
     this.suppManual = false;
     this._bound = false;
+    this.burst = new BurstGuard();
   }
 
   // 门控阈值与串口助手一致（>100KB/s 停渲染，回落到 <50KB/s 才自动恢复）
@@ -47,7 +49,8 @@ export class RttCdcStreamView {
     if (this._bound) return;
     this._bound = true;
 
-    this.rx = new RxBuffer($('c-rx'), { maxLines: 4000, maxRaw: 2 * 1024 * 1024 });
+    this.rx = new RxBuffer($('c-rx'), { maxLines: 4000, maxRaw: 2 * 1024 * 1024,
+      isVisible: () => $('tab-rttcdc').classList.contains('active') });
     const rxm = store.get('rttcdc.rxmode', 'ascii');
     this.rx.setMode(rxm === 'ansi' ? 'ascii' : rxm);      // RxBuffer 只认 ascii/hex，ansi 走 xterm
     this._seg = seg(document.querySelector('[data-group=crxmode]'), rxm, v => this._setRxMode(v));
@@ -70,7 +73,7 @@ export class RttCdcStreamView {
     $('c-scan').addEventListener('click', () => this.refreshPorts());
     $('c-open').addEventListener('click', () => this.connect());
     $('c-close').addEventListener('click', () => this.s.close());
-    $('c-clear').addEventListener('click', () => { this.rx.clear(); this.term?.clear(); this._lastWasCR = false; });
+    $('c-clear').addEventListener('click', () => { this.rx.clear(); this.ansiDisplay?.clear(); this.term?.clear(); this._lastWasCR = false; });
     $('c-save').addEventListener('click', () => this.save());
     $('c-record').addEventListener('click', () => this._toggleRecord());
     $('c-statclear').addEventListener('click', () => { this.rxc.reset(); this._stats(); });
@@ -115,6 +118,7 @@ export class RttCdcStreamView {
     this.s.on('data', (b, t) => {
       this.rxc.add(b.length);
       this.rec.push(b, t);                 // 先落文件：接收区有 2MB 上限，记录不吃这个限制
+      if (this.burst.add(b.length)) this._highspeedGate(RttCdcStreamView.HS_OFF + 1);
       this.rx.push(b, t);
       if (this.ansiOn && this.term && !this.rx.paused && !this.suppressed) this._ansiFeed(b, t);
     });
@@ -129,6 +133,7 @@ export class RttCdcStreamView {
   }
 
   onShow(){
+    this.rx?.flush(); this.ansiDisplay?.flush();
     if (this.ansiOn){ try { this.fit?.fit(); } catch {} }
     this._stats();
     /**
@@ -323,26 +328,31 @@ export class RttCdcStreamView {
     });
     try { this.fit = new FitAddon.FitAddon(); this.term.loadAddon(this.fit); } catch {}
     this.term.open($('c-term'));
+    this.ansiDisplay = new AnsiDisplay(this.term, {
+      visible: () => this.ansiOn && !this.rx.paused && !this.suppressed && $('tab-rttcdc').classList.contains('active'),
+      format: (b, t) => this._ansiBytes(b, t),
+      onSkip: () => { this._lastWasCR = false; },
+    });
     this.fit?.fit();
     new ResizeObserver(() => { if (this.ansiOn){ try { this.fit?.fit(); } catch {} } }).observe($('c-term'));
     return true;
   }
 
   _ansiFeed(bytes, t){
-    if (!this.term) return;
-    if (this.rx.timestamps) this.term.write(`\x1b[90m[${stampOf(t, this.rx.absolute)}]\x1b[0m `);
-    const out = [];
-    for (let i = 0; i < bytes.length; i++){
-      const b = bytes[i];
-      if (b === 0x0a && !this._lastWasCR) out.push(0x0d);
-      out.push(b);
-      this._lastWasCR = (b === 0x0d);
-    }
-    this.term.write(Uint8Array.from(out));
+    this.ansiDisplay?.push(bytes, t);
+  }
+
+  _ansiBytes(bytes, t){
+    const state = { lastWasCR: this._lastWasCR };
+    const body = terminalBytes(bytes, state); this._lastWasCR = state.lastWasCR;
+    if (!this.rx.timestamps) return body;
+    const head = new TextEncoder().encode(`\x1b[90m[${stampOf(t, this.rx.absolute)}]\x1b[0m `);
+    const out = new Uint8Array(head.length + body.length); out.set(head); out.set(body, head.length); return out;
   }
 
   _ansiRedraw(){
     if (!this.term) return;
+    this.ansiDisplay?.clear();
     this.term.clear();
     this._lastWasCR = false;
     for (const r of this.rx.raw) this._ansiFeed(r.b, r.t);

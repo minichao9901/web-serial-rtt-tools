@@ -524,10 +524,14 @@
       <fieldset>
         <legend>变量（1~8 个）</legend>
         <div class="row btnrow">
-          <button id="sc-elf" title="解析 .elf 的 DWARF：全局/静态变量 + 结构体成员，自动带类型">载入 ELF…</button>
+          <button id="sc-elf" title="解析 .elf 的 DWARF：全局/静态变量、结构体成员，以及按下标添加数组元素">载入 ELF…</button>
           <button id="sc-varclear">清空勾选</button>
         </div>
         <p class="hint" id="sc-elfinfo">未载入（也可以用假探针自带的 8 个通道）</p>
+        <label class="row"><span>数组元素</span><input id="sc-arraypath" list="sc-arrayexamples" placeholder="数组[0] 或 数组[0].成员" autocomplete="off"></label>
+        <datalist id="sc-arrayexamples"></datalist>
+        <div class="row btnrow"><button id="sc-arrayadd">添加元素</button></div>
+        <p class="hint" id="sc-arrayinfo">载入 ELF 后，可按下标添加数组元素；二维数组用 [0][0]。</p>
         <label class="row"><span>搜索</span><input id="sc-search" placeholder="变量名…"></label>
         <div class="varlist" id="sc-vars"></div>
         <p class="hint" id="sc-count">已选 0 / 8</p>
@@ -881,6 +885,7 @@
             <div class="toolrow nw">
               <button id="d-rtt-locate">定位并开始</button>
               <button id="d-rtt-stop">停止</button>
+              <button id="d-rtt-clear">清屏</button>
               <label class="chk"><input type="checkbox" id="d-rtt-on"> 连接后自动开始</label>
             </div>
             <div class="toolrow nw"><span>地址</span><input id="d-rtt-addr" class="mono" placeholder="留空 = 用 _SEGGER_RTT 符号"></div>

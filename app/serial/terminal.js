@@ -11,6 +11,7 @@ import { $, setStatus } from '../ui/dom.js';
 import { store } from '../core/store.js';
 import { toast } from '../ui/toast.js';
 import { fileStamp, download } from '../core/format.js';
+import { AnsiDisplay, terminalBytes } from '../core/display-stream.js';
 
 const EOL_BYTES = { cr: '\r', crlf: '\r\n', lf: '\n' };
 const enc = new TextEncoder();
@@ -49,6 +50,11 @@ export class TerminalView {
       this.term.loadAddon(this.fit);
     } catch (e){ console.warn('FitAddon 不可用', e); }
     this.term.open($('t-term'));
+    this.display = new AnsiDisplay(this.term, {
+      visible: () => $('tab-terminal').classList.contains('active'),
+      format: b => this.nlMode === 'raw' ? b : terminalBytes(b, this),
+      onSkip: () => { this.lastWasCR = false; },
+    });
     this.fit?.fit();
 
     // ---------- 设置 ----------
@@ -66,7 +72,7 @@ export class TerminalView {
     });
 
     // ---------- 按钮 ----------
-    $('t-clear').addEventListener('click', () => this.term.clear());
+    $('t-clear').addEventListener('click', () => { this.display.clear(); this.lastWasCR = false; this.term.clear(); });
     $('t-save').addEventListener('click', () => this.save());
     $('t-paste').addEventListener('click', () => this.pasteSend());
 
@@ -99,20 +105,13 @@ export class TerminalView {
     if (!this.term) return;
     if (!$('tab-terminal').classList.contains('active')) return;
     try { this.fit?.fit(); } catch {}
+    this.display?.flush();
   }
 
   // ---------------- 收 ----------------
   _feed(bytes){
     if (!this.term) return;
-    if (this.nlMode === 'raw'){ this.term.write(bytes); return; }
-    const out = [];
-    for (let i = 0; i < bytes.length; i++){
-      const b = bytes[i];
-      if (b === 0x0a && !this.lastWasCR) out.push(0x0d);
-      out.push(b);
-      this.lastWasCR = (b === 0x0d);
-    }
-    this.term.write(Uint8Array.from(out));
+    this.display.push(bytes);
   }
 
   writeText(s){ this.term?.write(s); }
@@ -155,7 +154,7 @@ export class TerminalView {
       return false;
     }
     if (ev.ctrlKey && ev.shiftKey && k === 'v'){ this.pasteSend(); return false; }
-    if (ev.ctrlKey && ev.shiftKey && k === 'l'){ this.term.clear(); return false; }
+    if (ev.ctrlKey && ev.shiftKey && k === 'l'){ $('t-clear').click(); return false; }
     return true;                                   // 其余（含 Ctrl+C）一律透传给设备
   }
 

@@ -49,53 +49,30 @@ s._badAddrs.get('18874368:8').at-=15001;
 assert.equal((await s.memRead(0x01200000,8))[0],7);
 assert.equal(s._badAddrs.has('18874368:8'),false);
 
-/**
- * 粘死的 SBA（`sbbusyerror` 把 DM 的系统总线引擎卡住）是唯一允许**修一次**的失败：
- * 重新初始化调试模块（`dmcontrol` 0→1 + TAP 复位，**不碰 ndmreset/目标内存**）+ 重读一次，
- * 每会话一次、留一行日志。修不好就如实报错并记冷却，不反复折腾。
- */
-{
-  const S=Object.create(RiscvDebugSession.prototype),log=[];
-  let repairs=0,reads=0,healed=false;
-  Object.assign(S,{sym:null,halted:true,_frames:null,_log:t=>log.push(t),_badAddrs:new Map(),
-    refresh:async()=>{},_ensureHalted:async()=>{},_rearmBpsAfterReset:async()=>{},
-    _repairStuckSba:async()=>{repairs++;healed=true;},
-    dm:{lastSbcs:0x400000,      // 带 sbbusyerror ⇒ 真粘死
-        async readMem(a,n){reads++;if(!healed)throw Error('SBA 读 0x4000b638 出错（sbcs=0x20758407）');return new Uint8Array(n).fill(9);},
-        async sbaClearErrors(){}}});
-  const got=await S.memRead(0x4000b600,60);
-  assert.equal(got[0],9,'修复后重读要拿到数据');assert.equal(got.length,60);
-  assert.equal(repairs,1,'粘死只修一次');assert.equal(reads,2,'修完要重读一次');
+// All SBA failure states must preserve the stopped program and debugger state.
+for(const state of [0x400000,0x200000,0x2000,0x600000]){
+  const session=Object.create(RiscvDebugSession.prototype),log=[];
+  const snapshot={sentinel:true}, regs={a0:123}, bps=[0x80003000];
+  let attempts=0,repairs=0;
+  Object.assign(session,{sym:null,halted:true,pc:0x80003010,regs,bps,_frames:snapshot,_log:t=>log.push(t),
+    _repairStuckSba:async()=>{repairs++;throw Error('implicit recovery forbidden');},
+    dm:{lastSbcs:state,async readMem(){attempts++;throw Error('SBA failed');},
+      async init(){repairs++;throw Error('implicit DM init forbidden');},async sbaClearErrors(){}}});
+  await assert.rejects(session.memRead(0x4000b600,60),/SBA failed/);
+  assert.equal(attempts,1);assert.equal(repairs,0);assert.equal(session.halted,true);
+  assert.equal(session.pc,0x80003010);assert.equal(session._frames,snapshot);
+  assert.equal(session.regs,regs);assert.equal(session.bps,bps);
+  await assert.rejects(session.memRead(0x4000b600,60),/15 秒/);assert.equal(attempts,1);
+  assert.ok(log.some(t=>/未自动复位/.test(t)));
 }
+// RTT failures also cannot reset DM or retry an uncertain bus access.
 {
-  const S=Object.create(RiscvDebugSession.prototype),log=[];
-  let repairs=0;
-  Object.assign(S,{sym:null,halted:true,_frames:null,_log:t=>log.push(t),_badAddrs:new Map(),
-    refresh:async()=>{},_ensureHalted:async()=>{},_rearmBpsAfterReset:async()=>{},
-    _repairStuckSba:async()=>{repairs++;},
-    dm:{lastSbcs:0x400000,
-        async readMem(){throw Error('SBA 读 0x4000b638 出错（sbcs=0x20758407）');},async sbaClearErrors(){}}});
-  await assert.rejects(S.memRead(0x4000b600,60),/sbcs=0x20758407/);
-  assert.equal(repairs,1,'修不好也不能反复动恢复梯子');
-  assert.ok(log.some(t=>/仍未恢复/.test(t)),'修不好要如实说清楚');
-  await assert.rejects(S.memRead(0x4000b600,60),/15 秒/);
-  assert.equal(repairs,1);
-}
-/**
- * **坏地址不许触发恢复梯子**：读一个没映射的地址只会留 `sberror`（换个地址照样能读），
- * 这时动 ndmreset 就是"刷新一下变量把目标重启了"——补丁明令禁止的那种隐式复位。
- */
-{
-  const S=Object.create(RiscvDebugSession.prototype);
-  let repairs=0;
-  Object.assign(S,{sym:null,halted:true,_frames:null,_log(){},_badAddrs:new Map(),
-    refresh:async()=>{},_ensureHalted:async()=>{},
-    _repairStuckSba:async()=>{repairs++;},
-    dm:{lastSbcs:0x2000,       // 只有 sberror（bit13）⇒ 单纯地址不通
-        async readMem(){throw Error('SBA 读 0x8000300 出错（sbcs=0x2015a407）');},async sbaClearErrors(){}}});
-  await assert.rejects(S.memRead(0x8000300,4),/sbcs=/);
-  assert.equal(repairs,0,'坏地址不许动恢复梯子（会隐式复位目标）');
-  assert.equal(S.halted,true);
+  const {RiscvMem}=await import('../../app/rtt/riscv-mem.js');
+  let reads=0,resets=0;
+  const mem=new RiscvMem({dm:{async readMem(){reads++;throw Error('SBA failed');},
+    async init(){resets++;}},log(){}});
+  await assert.rejects(mem.readMem(0x400,4),/SBA failed/);
+  assert.equal(reads,1);assert.equal(resets,0);
 }
 
 // Transport fences the complete aligned span before any hardware command.
@@ -143,96 +120,49 @@ for(const action of ['resetHalt','resetRun']){
 }
 console.log('RISC-V reset: helper return is not proof of halt; running hart blocks re-arm/resume PASS');
 
-/**
- * 批量 SBA 读的**批内自检**：一批字的 DMI 状态可以全是 SUCCESS，而 DM 因为"上一笔还没完就
- * 收到下一次 sbdata0 访问"置了 `sbbusyerror` —— 那一批数据不可信，而且旧实现会把这个错误
- * 直接抛出去、把那一笔事务留在总线上（用户现场：往监视里加个结构体，从此内存读全废）。
- * 新实现把 `READ sbcs` 拼在**同一条扫描的批尾**（0 条额外 USB 命令），发现错误就清粘滞位、
- * 地址写回对齐、这一段按字重读。这个用例把全过程钉死。
- */
-function burstRig({overrunBursts = new Set()} = {}){
-  const mem = new Map(), st = {burst:0, cur:0, sbcsErr:false, cleared:0, scans:0, sbcsReads:0};
-  const t = Object.create(RiscvTransport.prototype);
-  Object.assign(t, {
-    _burstOff: false, _burstMiss: 0, _holdAddr: null, lastSbcs: 0, sbaFailed: false,
-    log(){},                                    // 生产里由构造函数注入；桩里给个空实现
-    _burstWords: () => 4,                       // 小批次：16 字节就是"跨批"了
-    async sbaConfig(){},
-    async sbaClearErrors(){ st.cleared++; st.sbcsErr = false; },
-    async dmiWrite(a, v){
-      if (a === DM.SBADDRESS0) st.cur = v >>> 0;                       // 写地址即（重新）对齐自增指针
-      if (a === DM.SBCS && (v & (SBCS.SBBUSYERROR | SBCS.SBERROR))) st.sbcsErr = false;
-    },
-    async dmiRead(a){
-      if (a === DM.SBCS){ st.sbcsReads++; return st.sbcsErr ? SBCS.SBBUSYERROR : 0; }
-      if (a === DM.SBDATA0){ const w = mem.get(st.cur) ?? 0; st.cur = (st.cur + 4) >>> 0; return w; }
-      throw Error('unexpected dmiRead 0x' + (a >>> 0).toString(16));
-    },
-    async _scanDRMany(reqs){
-      st.scans++;
-      st.burst++;
-      const willOverrun = overrunBursts.has(st.burst);
-      const resps = [];
-      let prev = null;
-      for (let k = 0; k < reqs.length; k++){
-        // DMI 是"一拍请求、下一拍才回来"：第 k 拍的响应对应第 k-1 拍的请求
-        let data = 0;
-        if (prev?.op === DMI_OP.READ && prev.addr === DM.SBDATA0){ data = mem.get(st.cur) ?? 0; st.cur = (st.cur + 4) >>> 0; }
-        else if (prev?.op === DMI_OP.READ && prev.addr === DM.SBCS) data = willOverrun ? SBCS.SBBUSYERROR : (st.sbcsErr ? SBCS.SBBUSYERROR : 0);
-        resps.push(BigInt(DMI_STATUS.SUCCESS) | (BigInt(data) << 2n));
-        prev = { op: Number(BigInt(reqs[k]) & 0x3n), addr: Number((BigInt(reqs[k]) >> 34n) & 0x7fn) };
-      }
-      if (willOverrun) st.sbcsErr = true;        // 批后 DM 留下粘滞错误位，直到有人写 1 清掉
-      return resps;
-    },
-  });
-  for (let i = 0; i < 16; i++) mem.set(0x4000b600 + i * 4, 0x1000 + i);
-  return {t, st, mem};
+// SDK HPM6880 external SDRAM is inaccessible with DDR0 gated after reset.
+{
+ const session=Object.create(RiscvDebugSession.prototype),accesses=[];
+ let group=0,resource=0,mode=0,writes=0;
+ const word=value=>{const b=new Uint8Array(4);new DataView(b.buffer).setUint32(0,value,true);return b;};
+ Object.assign(session,{sym:{find:n=>['_init_ext_ram','init_ddr3l_1333'].includes(n)?{name:n}:null},_log(){},
+  dm:{async readMem(a,n){accesses.push(a);return a===0xf4000800?word(group):a===0xf400041c?word(resource):a===0xf3010004?word(mode):new Uint8Array(n).fill(7);},
+      async writeMem(){writes++;}}});
+ await assert.rejects(session.memRead(0x4000b600,60),e=>e.code==='MEMORY_NOT_READY');
+ assert.deepEqual(accesses,[0xf4000800,0xf400041c],'disabled DDR must not touch DDRCTL or SDRAM');
+ assert.equal(session._badAddrs.size,0,'readiness is not a 15-second bad-address cache');
+ await assert.rejects(session.memWrite(0x4c000000,word(1)),e=>e.code==='MEMORY_NOT_READY');assert.equal(writes,0);
+ group=0x80;
+ for(const blockedResource of [2,3,0x40000000]){
+  resource=blockedResource;accesses.length=0;
+  await assert.rejects(session.memRead(0x4000b600,60),e=>e.code==='MEMORY_NOT_READY');
+  assert.deepEqual(accesses,[0xf4000800,0xf400041c]);
+ }
+ resource=0;mode=0;accesses.length=0;
+ await assert.rejects(session.memRead(0x4000b600,60),e=>e.code==='MEMORY_NOT_READY');
+ assert.deepEqual(accesses,[0xf4000800,0xf400041c,0xf3010004]);
+ mode=1;accesses.length=0;
+ assert.deepEqual(await session.memRead(0x4000b600,60),new Uint8Array(60).fill(7));
+ assert.deepEqual(accesses,[0xf4000800,0xf400041c,0xf3010004,0x4000b600],'ready DDR immediately restores the same read');
+ group=0;resource=1;
+ await session.memWrite(0x4000b600,word(1));assert.equal(writes,1,'always-on resource mode is respected');
 }
+console.log('RISC-V external RAM: gated/transitional DDR never accessed; readiness restores reads/writes without cooldown PASS');
 
-// ① 正常：一批 16 字节 = 1 次扫描，不碰逐字路径
+// Failed and deferred tree reads must invalidate the previously displayed data.
 {
-  const {t, st} = burstRig();
-  const b = await t.readMem(0x4000b600, 16);
-  assert.deepEqual([...b], [0x00,0x10,0,0, 0x01,0x10,0,0, 0x02,0x10,0,0, 0x03,0x10,0,0]);
-  assert.equal(st.scans, 1);assert.equal(st.cleared, 0);
+ const {DbgView}=await import('../../app/dbg/view.js');
+ const view=Object.create(DbgView.prototype);
+ const item={kind:'struct',size:4,addr:0x4000b600,bytes:Uint8Array.of(1,2,3,4),value:{text:'old'}};
+ const error=new Error('SDRAM waiting');error.code='MEMORY_NOT_READY';
+ Object.assign(view,{watch:{length:1,items:[item]},watchBusy:false,renderWatch(){},
+  session:{connected:true,halted:true,async memRead(){throw error;}}});
+ assert.equal(await view._refreshWatchLocked({force:true}),0);
+ assert.equal(item.bytes,null);assert.equal(item.value.cls,'dim');assert.match(item.value.text,/等待初始化/);
+ item.bytes=Uint8Array.of(1,2,3,4);delete error.code;
+ await view._refreshWatchLocked({force:true});assert.equal(item.bytes,null);assert.equal(item.value.cls,'err');
 }
+console.log('Debugger watch: deferred and failed reads discard old struct member bytes PASS');
 
-// ② 第 1 批超速：数据必须靠逐字重读补齐（不能信那批 / 不能抛错 / 粘滞位要清掉）
-{
-  const {t, st} = burstRig({overrunBursts: new Set([1])});
-  const b = await t.readMem(0x4000b600, 16);
-  assert.deepEqual([...b], [0x00,0x10,0,0, 0x01,0x10,0,0, 0x02,0x10,0,0, 0x03,0x10,0,0],
-    '超速那一批要作废并按字重读，不能让残值混进结果');
-  assert.equal(st.cleared, 1, 'sbbusyerror 是写 1 清零的粘滞位，必须清掉');
-  assert.equal(st.sbcsErr, false);
-  assert.equal(t._burstMiss, 1);
-  assert.equal(t._burstOff, true, '撞到一次超速就整会话别再批（真机会把 SBA 引擎搞卡）');
-}
-
-// ③ 关掉批量之后再读：不再走批量路径，数据照样正确
-{
-  const {t, st} = burstRig({overrunBursts: new Set([1])});
-  await t.readMem(0x4000b600, 16);
-  const scans = st.scans;
-  const b = await t.readMem(0x4000b600, 16);
-  assert.deepEqual([...b], [0x00,0x10,0,0, 0x01,0x10,0,0, 0x02,0x10,0,0, 0x03,0x10,0,0]);
-  assert.equal(st.scans, scans, '超速之后整会话不再走批量路径');
-}
-
-// ④ 单独读一次 sbcs 时短暂 sbbusy：先等它落，不许直接判定"卡死"
-{
-  const t = Object.create(RiscvTransport.prototype);
-  let polls = 0;
-  Object.assign(t, {lastSbcs:0, sbaFailed:false, dmiRead: async () => (++polls <= 2 ? SBCS.SBBUSY : 0)});
-  await t._checkSbcsAt(0x4000b600, 100);          // 不抛
-  assert.equal(polls, 3);assert.equal(t.sbaFailed, false);
-}
-// ⑤ sbbusy 真的不落：明确报错并告诉用户怎么恢复
-{
-  const t = Object.create(RiscvTransport.prototype);
-  Object.assign(t, {lastSbcs:0, sbaFailed:false, dmiRead: async () => SBCS.SBBUSY});
-  await assert.rejects(t._checkSbcsAt(0x4000b600, 100), /断开.*重连|断电重上电/);
-  assert.equal(t.sbaFailed, true);
-}
-console.log('RISC-V SBA burst: idle-paced beats, in-scan sbcs fence, overrun burst discarded and re-read word-wise, sticky error cleared, batching disabled on first overrun, transient sbbusy tolerated PASS');
+// Asynchronous SBA and batch recovery use the independent TCK-driven model
+// in riscv-sba-async.test.mjs, rather than immediate address-increment stubs.

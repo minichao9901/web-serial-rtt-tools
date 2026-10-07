@@ -73,6 +73,7 @@ i2c.init();
 analog.init();
 
 initTabs(name => {
+  if (name === 'serial') requestAnimationFrame(() => assistant.onShow());
   if (name === 'terminal') requestAnimationFrame(() => terminal.onShow());
   if (name === 'rtt') requestAnimationFrame(() => rtt.onShow());
   if (name === 'rttcdc') requestAnimationFrame(() => stream.onShow());

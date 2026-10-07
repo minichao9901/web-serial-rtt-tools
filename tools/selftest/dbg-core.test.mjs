@@ -729,6 +729,10 @@ console.log('== 17. 源码级单步（假目标真跑：跳过 / 进入 / 跳出
   ok(s6.bpList().length === 0, '临时比较器收干净了（用户断点 0 个）');
   ok(s6.lastStepMode === 'over', '记下了这一步是"跳过"（lastStepMode=' + s6.lastStepMode + '）');
 
+  const cachedPc = s6.regList().find(r => r.name === 'PC').value;
+  const nFresh = await C.runCmd('n', s6);
+  ok(s6.pc !== cachedPc && nFresh.lines[1].t.includes(F.hex32(s6.pc)), '源码单步命令的 PC 回显跟随本次停止地址', nFresh.lines[1].t);
+
   // 目标行上原本就有用户断点 → 不能把用户的删掉
   const next2 = symtab.lines.nextStmtAddr(s6.pc);
   await s6.bpAdd(next2.addr, 'user.bp');
@@ -846,6 +850,24 @@ console.log('== 17b. 「单步跳出」在非叶子函数里（LR 被本函数�
   ok(s7b.pc === 0x08000050, `「跳出」正确回到调用者（0x${(s7b.pc >>> 0).toString(16)}，帧已弹掉：SP 0x${spMid.toString(16)} → 0x${((await s7b.readReg('SP')) >>> 0).toString(16)}）`, rOut);
   ok(/覆盖/.test(rOut), '人话里说明了"LR 被覆盖，所以是一步步走回来的"：' + rOut);
   ok(s7b.bpList().length === 0, '这条慢路径也不留临时比较器（' + s7b.bpList().length + ' 个）');
+
+  // next 在最后一条行记录处也必须执行 epilogue；LR 仍是内部调用返回地址。
+  await s7b.writeReg('PC', 0x08000240);
+  await s7b.writeReg('LR', 0x08000050);
+  for (let i = 0; i < 4; i++) await s7b.step();
+  await s7b.refreshRegs();
+  s7b.sym.lines = {
+    nextStmtAddr: () => null,
+    at: a => a === 0x08000248 ? { addr: a, end: a + 2, seqEnd: true, isStmt: true } : null,
+  };
+  const nEnd = await C.runCmd('n', s7b);
+  ok(s7b.pc === 0x08000050 && /单步跳出/.test(nEnd.lines[0].t), 'n 在函数最后一行执行收尾并返回调用者', nEnd.lines[0].t);
+  ok(/0x08000050/.test(nEnd.lines[1].t) && !/0x08000248/.test(nEnd.lines[1].t), 'n 的 PC 回显使用本次停止位置，不使用旧寄存器缓存', nEnd.lines[1].t);
+  ok(s7b.bpList().length === 0, '函数末尾 n 不遗留临时比较器');
+
+  let noRow = '';
+  try { await s7b.stepOver(); } catch (e){ noRow = e.message; }
+  ok(/没有行号记录/.test(noRow), '行号空洞仍明确报错，不擅自跳出', noRow);
   await s7b.disconnect();
 }
 

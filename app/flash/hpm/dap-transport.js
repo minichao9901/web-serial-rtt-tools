@@ -104,9 +104,9 @@ export class DapJtagTransport {
   }
 
   /** 一批 JTAG 序列（riscv-dm 的 `sequences()` 直接调它）*/
-  async jtagSequences(seqs){
+  async jtagSequences(seqs, { deadline } = {}){
     if (!this.jtag) throw new Error('还没切到 JTAG（先 connectJtag()）');
-    const body = await this.probe._ctrl(DAP.JTAG_SEQUENCE, packJtagSequences(seqs));
+    const body = await this.probe._ctrl(DAP.JTAG_SEQUENCE, packJtagSequences(seqs), { deadline });
     this.batches++;
     this.bytes += body.length;
     return parseJtagSequenceResponse(body, seqs);

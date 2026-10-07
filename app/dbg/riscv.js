@@ -319,6 +319,35 @@ export class RiscvDebugSession extends DebugSession {
 
   // ---------------------------------------------------------------- 内存（SBA）
 
+  /** HPM6880 DDR is clock-gated after reset, until _init_ext_ram runs.
+   * Reading SDRAM before that hangs the bus, including OpenOCD's sysbus path.
+   * Identify this SDK profile from ELF symbols, read the always-on SYSCTL first,
+   * and only touch DDRCTL STAT after its clock has been enabled and settled.
+   * No clock/controller writes or target state changes are allowed here.
+   */
+  async _checkExternalRam(addr, length){
+    if (!length || addr >= 0x50000000 || addr + length <= 0x40000000 ||
+        !this.sym?.find?.('_init_ext_ram') ||
+        !(this.sym.find('init_ddr3l_1333') || this.sym.find('init_ddr2_800'))) return;
+    const word = async a => {
+      const b = await this.dm.readMem(a, 4, 1500);
+      return new DataView(b.buffer, b.byteOffset, 4).getUint32(0, true);
+    };
+    // SDK: DDR0 resource 263; linkable resources start at 256. GROUP0[0]
+    // bit 7 requests DDR0. RESOURCE mode 1 is always-on, 2 is always-off;
+    // bit 30 marks a clock transition. Addresses are from hpm_sysctl_regs.h.
+    const group = await word(0xf4000800);
+    const resource = await word(0xf400041c);
+    const mode = resource & 3;
+    const clockReady = mode !== 2 && mode !== 3 &&
+      (mode === 1 || (group & 0x80)) && !(resource & 0x40000000);
+    if (!clockReady || ((await word(0xf3010004)) & 7) !== 1){
+      const e = new Error('外部 SDRAM 尚未初始化；继续运行到 main 或初始化完成的位置后可读取');
+      e.code = 'MEMORY_NOT_READY'; e.sbaHandled = true;
+      throw e;
+    }
+  }
+
   /** Read target RAM via SBA; XIP uses only fully covered ELF image bytes.
    * A read failure must never reset DM/hart or restart the debugged program.
    */
@@ -340,6 +369,9 @@ export class RiscvDebugSession extends DebugSession {
       return b;
     }
     if (!this._badAddrs) this._badAddrs = new Map();
+    // Readiness is checked afresh and is not a cached bad-address failure:
+    // after startup completes, the same watch must become readable immediately.
+    await this._checkExternalRam(a, n);
     const key = `${a}:${n}`, bad = this._badAddrs.get(key);
     if (bad && Date.now() - bad.at < 15000)
       throw new Error(bad.msg + '（同一读取范围失败后暂停重试 15 秒）');
@@ -349,37 +381,11 @@ export class RiscvDebugSession extends DebugSession {
       return got;
     } catch (e){
       const msg = String(e?.message || e);
-      /**
-       * 🚨 2026-10 真机定因（用户现场：监视里加个结构体 → 之后**每次**读内存都失败，而断点/
-       *    单步照常）：这颗 DM 一旦在 SBA 上被判"超速/挂住"（`sbbusyerror`），它的系统总线
-       *    引擎会**粘死** —— 清错误位救不回来，之后每一次内存读都失败。
-       *
-       *    判据用 `sbbusyerror`（bit22）而不是错误文本：**纯坏地址**只留 `sberror`
-       *    （读一次失败、换个地址就能读），只有"超速/粘死"才带 `sbbusyerror`。只有后者才值得
-       *    动机重一点的恢复梯子（它会复位目标）。每会话只做一次，并且如实记日志。
-       */
-      const stuck = ((this.dm.lastSbcs || 0) & 0x400000) !== 0;
-      if (stuck && !this._sbaLinkRepaired){
-        this._sbaLinkRepaired = true;
-        try {
-          await this._repairStuckSba();
-          await this.refresh().catch(() => {});
-          if (this.halted) await this._ensureHalted('SBA 恢复后复验').catch(() => {});
-          await this._rearmBpsAfterReset?.('SBA 恢复').catch(() => {});
-          const again = await this.dm.readMem(a, n, 1500);
-          this._badAddrs.delete(key);
-          return again;
-        } catch (e2){
-          try { await this.dm.sbaClearErrors?.(); } catch { /* Preserve original read failure. */ }
-          if (this._badAddrs.size >= 256) this._badAddrs.delete(this._badAddrs.keys().next().value);
-          this._badAddrs.set(key, { msg: String(e2?.message || e2), at: Date.now() });
-          this._log(`读 0x${a.toString(16)}（${n} B）失败：${String(e2?.message || e2)}。SBA 恢复梯子已试过仍未恢复；请给板子断电重上电。`, 'warn');
-          throw e2;
-        }
+      // Transport errors already used their bounded cleanup budget. A plain
+      // backend failure may clear sticky flags, but never initialize/reset DM.
+      if (!e.sbaHandled && !this.dm._wireFault){
+        try { await this.dm.sbaClearErrors?.(); } catch { /* Preserve original failure. */ }
       }
-      // Clearing SBA error bits is link bookkeeping. dm.init()/ndmreset can
-      // release a halted hart or erase hardware triggers and are never implicit.
-      try { await this.dm.sbaClearErrors?.(); } catch { /* Preserve original read failure. */ }
       if (this._badAddrs.size >= 256) this._badAddrs.delete(this._badAddrs.keys().next().value);
       this._badAddrs.set(key, { msg, at: Date.now() });
       this._log(`读 0x${a.toString(16)}（${n} B）失败：${msg}。未自动复位调试模块或目标；若链路持续异常，请显式复位或重新连接。`, 'warn');
@@ -388,6 +394,7 @@ export class RiscvDebugSession extends DebugSession {
   }
 
   async memWrite(addr, bytes){
+    await this._checkExternalRam(addr, bytes.length);
     this.clearFrames();
     return await withTimeout(this.dm.writeMem(addr >>> 0, bytes), Math.max(4000, Math.ceil(bytes.length / 4) * 60), `SBA 写 ${bytes.length} 字节`);
   }
@@ -451,38 +458,6 @@ export class RiscvDebugSession extends DebugSession {
     } catch (e){
       this._log('重新初始化调试模块失败：' + (e?.message || e), 'err');
       return false;
-    }
-  }
-
-  /**
-   * SBA（系统总线）引擎粘死的恢复梯子。
-   *
-   * 2026-10 真机定稿（HPM6800EVK；用户现场"反复 reset→c→reset→c + 监视里挂结构体"必现）：
-   * 一旦 DM 在 SBA 上被判"超速"（`sbbusyerror`），`sbbusy` 会一直挂着 —— 之后**每一次**
-   * 内存读都失败（抽象命令照常，所以断点/单步/源码看着都没坏）。本机粘死状态下逐个试过：
-   *   ✗ `dmcontrol` 0→1（`dm.init()`）单独做，1 次 / 3 次都不行
-   *   ✗ `dmihardreset` 不行
-   *   ✗ 单次长 ndmreset 不行
-   *   ✓ **「按住 ndmreset ~150ms → 放开 → `dm.init()`」重复 3 轮** 能解开
-   *     （实测 `sbcs` 从 `0x20358407` 回到 `0x20158407`，RAM 读恢复）
-   *
-   * ⚠️ 这条路径**会复位目标**（程序从头跑），所以只在"真·粘死"（`sbcs` 带 `sbbusyerror`，
-   *    而不是单纯坏地址的 `sberror`）时调用，每会话一次，并由调用方在日志里说清楚。
-   */
-  async _repairStuckSba(){
-    this._log('SBA 卡死（内存读会全部失败）→ 恢复梯子：重初始化调试模块 + 系统复位阶梯 ×3。⚠ 目标会被复位重启', 'warn');
-    await this._healDm('SBA 卡死').catch(() => {});
-    for (let i = 0; i < 3; i++){
-      try {
-        await this.dm.dmiWrite(0x10, this.dm._ctl(0, 0x2 | 0x80000000));   // ndmreset | haltreq
-        await waitMs(150);
-        await this.dm.dmiWrite(0x10, this.dm._ctl(0, 0x80000000));         // 放开 ndmreset，保持 haltreq
-        await waitMs(80);
-      } catch { /* 链路抖就下一轮再试 */ }
-      await this._healDm('SBA 卡死恢复').catch(() => {});
-      try { await this.dm.dmiWrite(0x10, this.dm._ctl(0, 0x80000000)); } catch { /* 下一轮 */ }
-      await waitMs(80);
-      this._badAddrs?.clear();
     }
   }
 

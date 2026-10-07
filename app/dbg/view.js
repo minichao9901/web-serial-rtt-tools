@@ -131,6 +131,7 @@ export class DbgView {
     on('d-bp-clear', 'click', () => this._act('清空断点', async () => { await this.session.bpClear(); this.renderBps(); this.renderSource(); }));
     on('d-rtt-locate', 'click', () => this.rttStart());
     on('d-rtt-stop', 'click', () => this.rttStop());
+    on('d-rtt-clear', 'click', () => this.rttClear());
     const rttChk = $('d-rtt-on');
     if (rttChk) store.bind(rttChk, 'dbg.rttAuto', 'checked');
     const ra = $('d-rtt-addr');
@@ -520,6 +521,7 @@ export class DbgView {
   /** 一次用户动作的统一包装：忙碌标记 + **独占 SWD** + 错误回显（别让异常静默消失） */
   async _act(name, fn){
     if (this._disconnecting || this._connecting) return false;
+    this._followOut();
     if (this.session.busy){ this._out(`（正在忙，先等上一个动作跑完）`, 'warn'); return false; }
     this._invalidateBacktrace();
     this.session.busy = true;
@@ -535,6 +537,7 @@ export class DbgView {
     } finally {
       this.session.busy = false;
       this._syncButtons();
+      this._followOut();
     }
   }
 
@@ -985,6 +988,7 @@ export class DbgView {
     const line = String(text || '').trim();
     if (!line) return { lines: [] };
     if (this._disconnecting || this._connecting) return { cancelled: true, lines: [] };
+    this._followOut();
     if(!/^(frame|locals|args|info)(\s|$)/i.test(line)) this._invalidateBacktrace();
     this._out('> ' + line, 'cmd');
     if (line !== this.hist[this.hist.length - 1]) this.hist.push(line);
@@ -1003,15 +1007,18 @@ export class DbgView {
         else this._startWatch();
         return result;
       });
+      if (res.clear) this._clearOut();
+      for (const l of res.lines || []) this._out(l.t, l.c || '');
+      return res;
     } catch (e){
       if (e?.cancelled){ this._out('（已中断）', 'warn'); return { cancelled: true, lines: [] }; }
       if(/^栈帧已失效/.test(e?.message||''))this._invalidateBacktrace();
       this._out('✗ ' + (e?.message || e), 'err');
       return { error: String(e?.message || e) };
+    } finally {
+      // 结果批量追加期间的 scroll 事件可能暂停跟随；命令结束后明确显示最终结果。
+      this._followOut();
     }
-    if (res.clear) this._clearOut();
-    for (const l of res.lines || []) this._out(l.t, l.c || '');
-    return res;
   }
 
   _out(text, cls = ''){
@@ -1021,6 +1028,12 @@ export class DbgView {
     appendLogLine(el, text, cls || 'dim', 800);
   }
   _clearOut(){ const el = $('d-out'); if (el) el.textContent = ''; }
+
+  /** 用户主动执行命令/点击动作时回到最新输出；翻看历史时仍可暂停后台日志跟随。 */
+  _followOut(){
+    const el = $('d-out');
+    if (el){ el._stick = true; el.scrollTop = el.scrollHeight; }
+  }
 
   // ================================================================ 目标在跑：轮询等它停下
 
@@ -1432,7 +1445,9 @@ export class DbgView {
           if (f.cls !== 'err') ok++;
         } catch (e){
           it.prev = it.value;
-          it.value = { text: '读失败：' + (e?.message || e), cls: 'err' };
+          it.bytes = null; // Failed reads must not leave old struct members looking current.
+          const waiting = e?.code === 'MEMORY_NOT_READY';
+          it.value = { text: (waiting ? '等待初始化：' : '读失败：') + (e?.message || e), cls: waiting ? 'dim' : 'err' };
         }
       }
     } finally {
@@ -1825,6 +1840,11 @@ export class DbgView {
     if (this.rttTimer){ clearInterval(this.rttTimer); this.rttTimer = null; }
     const info = $('d-rtt-info');
     if (info) info.textContent = '已停止。';
+  }
+
+  rttClear(){
+    const el = $('d-rtt');
+    if (el) el.textContent = '';
   }
 
   async _rttPump(){

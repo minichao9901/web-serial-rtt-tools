@@ -20,6 +20,7 @@ import { store } from '../core/store.js';
 import { AkaLinkHid } from '../hid/probe.js';
 import { Elf } from '../elf/elf.js';
 import { listSampleable } from '../elf/dwarf.js';
+import { arrayElementChannels } from './array-vars.js';
 import * as P from './protocol.js';
 import { SampleStore, Trigger, TRIG, TRIG_NAME, findTrigger, windowFor } from './store.js';
 import { ScopeRenderer, legendRows, fmtTime, fmtVal, fmtHz } from './render.js';
@@ -41,6 +42,9 @@ export class ScopeView {
     this.elf = null;
     this.all = [];          // 所有可采样通道
     this.skipped = [];
+    this.dwarf = null;
+    this.arrayGroups = [];
+    this.ram = null;
     this.selected = [];     // 勾选的（≤8）
     this.hid = null;        // 真：AkaLinkHid；假：MockScopeProbe
     this.transport = null;
@@ -109,6 +113,10 @@ export class ScopeView {
     $('sc-elf').addEventListener('click', () => this.elfInput.click());
     $('sc-varclear').addEventListener('click', () => { this.selected = []; this.renderVars(); this.updatePlan(); });
     $('sc-search').addEventListener('input', () => this.renderVars());
+    $('sc-arrayadd').addEventListener('click', () => this.addArrayElement());
+    $('sc-arraypath').addEventListener('keydown', e => {
+      if (e.key === 'Enter'){ e.preventDefault(); this.addArrayElement(); }
+    });
     $('sc-start').addEventListener('click', () => this.start());
     $('sc-stop').addEventListener('click', () => this.stop().catch(e => this.setStatusText(e.message, 'err')));
     $('sc-target').addEventListener('change', () => this.applyTargetType());
@@ -498,10 +506,24 @@ export class ScopeView {
       this.elf = { name: file.name, source: r.source, versions: r.versions, stats: r.stats, note: r.note || '' };
       this.all = r.sampleable;
       this.skipped = r.skipped;
+      this.dwarf = r.dwarf || null;
+      this.arrayGroups = r.arrays || [];
+      this.ram = r.ram;
+      const examples = $('sc-arrayexamples');
+      examples.replaceChildren();
+      for (const a of this.arrayGroups.slice(0, 512)){
+        const option = document.createElement('option');
+        option.value = `${a.name}[${a.lowerBound}]`;
+        option.label = a.count != null ? `${a.name}（${a.count} 个元素）` : a.name;
+        examples.appendChild(option);
+      }
+      $('sc-arrayinfo').textContent = this.dwarf
+        ? `找到 ${this.arrayGroups.length} 组 RAM 数组；输入下标添加，结构体元素会列出可采成员。`
+        : '需要带 DWARF 类型信息的 ELF 才能确定数组元素地址。';
       this.selected = this.selected.filter(v => this.all.some(a => a.name === v.name && a.addr === v.addr));
       $('sc-elfinfo').textContent =
         `${file.name} · ${r.source === 'dwarf' ? `DWARF ${r.versions.join('/')}` : '符号表（无可用调试信息）'} · ` +
-        `可采样 ${r.sampleable.length} 个 · 采不了 ${r.skipped.length} 个` + (r.note ? `　⚠ ${r.note}` : '');
+        `直接列出 ${r.sampleable.length} 项 · 数组 ${this.arrayGroups.length} 组 · 未直接列出 ${r.skipped.length} 项` + (r.note ? `　⚠ ${r.note}` : '');
       this.renderVars();
       this.updatePlan();
       this.setStatusText(r.note
@@ -510,6 +532,31 @@ export class ScopeView {
     } catch (e){
       $('sc-elfinfo').textContent = '解析失败：' + (e?.message || e);
       this.setStatusText('ELF 解析失败：' + (e?.message || e), 'err');
+    }
+  }
+
+  addArrayElement(){
+    try {
+      if (this.running || this._starting) throw new Error('请先停止采样，再添加数组元素');
+      if (this.usingMock) throw new Error('请关闭假探针后使用 ELF 数组元素');
+      const channels = arrayElementChannels(this.dwarf, $('sc-arraypath').value, { ram: this.ram });
+      for (const v of channels){
+        if (!this.all.some(a => a.name === v.name && a.addr === v.addr)) this.all.push(v);
+      }
+      if (channels.length === 1){
+        const v = channels[0];
+        if (this.selected.length < MAX_VARS && !this.selected.some(s => s.name === v.name && s.addr === v.addr)) this.selected.push(v);
+      }
+      const path = $('sc-arraypath').value.trim();
+      $('sc-search').value = path;
+      this.renderVars(); this.updatePlan();
+      $('sc-arrayinfo').textContent = channels.length === 1
+        ? `已添加 ${channels[0].name} · ${channels[0].scalar} · 0x${channels[0].addr.toString(16)}${this.selected.some(s => s.name === channels[0].name && s.addr === channels[0].addr) ? '（已勾选）' : '；最多同时采样 8 项，请调整勾选。'}`
+        : `已列出 ${channels.length} 个可采成员，请在列表中勾选需要的项。`;
+      this.setStatusText($('sc-arrayinfo').textContent, 'ok');
+    } catch (e){
+      $('sc-arrayinfo').textContent = e?.message || String(e);
+      this.setStatusText($('sc-arrayinfo').textContent, 'err');
     }
   }
 
@@ -545,7 +592,7 @@ export class ScopeView {
       const s = document.createElement('div');
       s.className = 'vsect';
       const g = this.skipped.slice(0, 3).map(x => `${x.name}（${x.reason}）`).join('；');
-      s.textContent = `采不了 ${this.skipped.length} 个，例如：${g}`;
+      s.textContent = `未直接列出 ${this.skipped.length} 项，例如：${g}`;
       box.appendChild(s);
     }
     $('sc-count').textContent = `已选 ${this.selected.length} / ${MAX_VARS}`;

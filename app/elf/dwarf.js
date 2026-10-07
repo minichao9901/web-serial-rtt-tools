@@ -47,12 +47,12 @@ const TAG = {
   rvalue_reference_type: 0x42, atomic_type: 0x47, immutable_type: 0x4b,
 };
 const AT = {
-  location: 0x02, name: 0x03, byte_size: 0x0b, bit_offset: 0x0c, bit_size: 0x0d,
+  location: 0x02, name: 0x03, ordering: 0x09, byte_size: 0x0b, bit_offset: 0x0c, bit_size: 0x0d,
   stmt_list: 0x10, low_pc: 0x11, high_pc: 0x12, language: 0x13, comp_dir: 0x1b,
   const_value: 0x1c, lower_bound: 0x22, producer: 0x25, count: 0x37,
   data_member_location: 0x38, decl_file: 0x3a, decl_line: 0x3b, declaration: 0x3c,
   encoding: 0x3e, external: 0x3f, specification: 0x47, type: 0x49,
-  upper_bound: 0x2f, abstract_origin: 0x31, data_bit_offset: 0x6b,
+  bit_stride: 0x2e, upper_bound: 0x2f, abstract_origin: 0x31, byte_stride: 0x51, data_bit_offset: 0x6b,
 };
 const FORM = {
   addr: 0x01, block2: 0x03, block4: 0x04, data2: 0x05, data4: 0x06, data8: 0x07,
@@ -507,16 +507,25 @@ export class Dwarf {
       }
       case TAG.array_type: {
         const elem = this.type(this.num(rec, AT.type));
-        let count = null;
+        const dims = [];
         for (const d of this.childrenOf(rec)){
           if (d.tag !== TAG.subrange_type) continue;
           const ub = this.num(d, AT.upper_bound), c = this.num(d, AT.count), lb = this.num(d, AT.lower_bound) ?? 0;
-          if (c != null) count = c;
-          else if (ub != null) count = ub - lb + 1;
-          break;
+          dims.push({ count: c ?? (ub != null ? ub - lb + 1 : null), lowerBound: lb });
         }
-        const sz = size() || (count != null ? count * (elem.size || 0) : 0);
-        return { kind: 'array', size: sz, elem, count };
+        // C multidimensional arrays have several subranges on one DIE. Build
+        // the inner dimensions first so a[i][j] uses the complete row stride.
+        let t = elem;
+        for (let i = dims.length - 1; i >= 0; i--){
+          const { count, lowerBound } = dims[i];
+          t = { kind: 'array', elem: t, count, lowerBound,
+                size: count != null ? count * (t.size || 0) : 0 };
+        }
+        if (!dims.length) t = { kind: 'array', elem, count: null, lowerBound: 0, size: 0 };
+        return { ...t, size: size() || t.size,
+                 // Non-contiguous or column-major layouts need a separate
+                 // address calculation. Do not silently apply C row strides.
+                 unsupportedLayout: !!rec.attrs.get(AT.byte_stride) || !!rec.attrs.get(AT.bit_stride) || this.num(rec, AT.ordering) === 1 };
       }
       case TAG.unspecified_type:
         return { kind: 'unknown', size: size(), reason: `unspecified_type（${this.name(rec) || '?'}）` };
@@ -619,7 +628,7 @@ export class Dwarf {
    */
   listVariables({ ram = DEFAULT_RAM, maxDepth = 4 } = {}){
     this.index();
-    const sampleable = [], skipped = [];
+    const sampleable = [], skipped = [], arrays = [];
     const wins = Array.isArray(ram[0]) ? ram : [ram];
     const inRam = a => wins.some(([lo, hi]) => a >= lo && a < hi);
     const winTxt = () => wins.map(([lo, hi]) => `${hex32(lo)}~${hex32(hi)}`).join(' / ');
@@ -630,7 +639,8 @@ export class Dwarf {
       if (type.kind === 'pointer'){ skipped.push({ name, size: type.size, reason: '指针（要指针跟踪才能采，v1 不做）' }); return; }
       if (type.kind === 'array'){
         const c = type.count != null ? `${type.count} 个` : '? 个';
-        skipped.push({ name, size: type.size, reason: `数组（${c}${type.elem?.name || ''}）—— v1 只支持标量与结构体成员` });
+        if (inRam(addr)) arrays.push({ name, addr, count: type.count, lowerBound: type.lowerBound ?? 0 });
+        skipped.push({ name, size: type.size, reason: `数组（${c}${type.elem?.name || ''}）—— 在数组元素栏按下标添加` });
         return;
       }
       if (type.kind === 'struct' || type.kind === 'union'){
@@ -664,7 +674,7 @@ export class Dwarf {
       leaves(nm, fa.addr, this.type(this.num(rec, AT.type)), nm, 0);
     }
     sampleable.sort((a, b) => a.addr - b.addr || a.name.localeCompare(b.name));
-    return { sampleable, skipped, stats: { ...this.stats } };
+    return { sampleable, skipped, arrays, stats: { ...this.stats } };
   }
 }
 

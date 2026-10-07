@@ -1,5 +1,7 @@
 # 自测入口顺序
 
+JScope 数组元素回归：`node tools/selftest/scope-array.test.mjs`，也包含在 `make test-offline` 和 `make test-scope` 中。覆盖真实 DWARF 4/5 的元素地址、多维步长、结构体成员、越界检查、8 MB 数组不全量展开，以及同时采样 8 项的限制。
+
 自测分成离线、页面和真机三层。编号表示推荐顺序，日期记录放在
 [`docs/validation/README.md`](../../docs/validation/README.md)。真机步骤会占用探针，
 同一时间只运行一个页面/脚本。
@@ -24,6 +26,18 @@ make test-offline
 这一步不需要浏览器、探针或目标板。需要定位问题时再使用同组的细分目标：
 `make test-dbg`、`make test-scope`、`make test-hid`、`make test-gen`、`make test-i2c-dsl`。
 
+RISC-V SBA 的异步协议回归已接入 `make test-offline`，也可单独运行
+`node tools/selftest/riscv-sba-async.test.mjs`。它按实际 TCK 推进模拟总线，核对
+尾字访问范围、BUSY/FAILED、完成时错误、忙冲突的实际进度、写入完成和超时后的命令隔离。
+这组测试不会操作真机；板上对照必须强制 OpenOCD 使用 `riscv set_mem_access sysbus`。
+
+HPM6800EVK 运行 SDK 的 `lwip_tcpecho/flash_sdram_xip` 固件时，可使用
+`node tools/selftest/dbg-hw-sba-reset.mjs --rounds=5 --clock=10000` 复现
+连接、载入 ELF、`b main`、展开 `desc`、开启运行中刷新、复位并停和继续的组合。
+需要先启动 8899 页面与 9333 测试浏览器；`--elf=路径` 必须与板上固件一致。
+脚本会复位/停机/继续并设置硬件断点，不烧录固件、不写目标 RAM，结果保存在
+`tmp/sba-reset-hardware.json`。结束时页面停在 `main`，保留展开的观察项供检查。
+
 ## 20. 页面回归
 
 ```powershell
@@ -36,6 +50,12 @@ make test-gen-page
 
 页面测试使用假探针和 CDP 浏览器，不烧录目标板。`make open` 已经启动本地静态服务和
 自动化浏览器；页面端口被占用时先用 `make serve-stop`。
+
+RTT/串口突发流量显示回归：`node tools/selftest/serial-display.test.mjs`（已接入离线测试），
+`node tools/selftest/serial-display-page.test.mjs`（真实浏览器、独立 localhost 页面、假串口/假探针）。
+页面测试覆盖 2 MB 历史恢复、连续立即返回的读取、15 MB 突发、隐藏终端、ANSI 暂停/恢复/清空，
+200 / 512 / 1024 KB/s 持续流量与自动恢复，以及 25 项普通 UI 回归；记录内容逐字节核对，不使用真实串口或目标板。
+需先启动 8899 服务和 9333 CDP 浏览器，可用 APP/CDP 环境变量覆盖。
 
 ## 30. 换板确认
 

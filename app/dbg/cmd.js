@@ -561,7 +561,8 @@ function fmtReg(r, S){
 /** 只取某个寄存器的那一行（`s` 命令回显用） */
 function regLine(S, which){
   const r = S.regList().find(x => normName(x) === which);
-  return r ? fmtReg(r, S) : '';
+  // 源码单步已更新会话 PC，全寄存器缓存可能还停在上一次停止的位置。
+  return r ? fmtReg(which === 'PC' ? { ...r, value: S.pc >>> 0 } : r, S) : '';
 }
 
 function statusLine(S){

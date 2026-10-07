@@ -13,6 +13,7 @@ import { SerialSession } from './session.js';
 import { parseHex, textToBytes, EOL_LABEL } from '../core/hex.js';
 import { bytes as fBytes, rate as fRate, fileStamp, download, stamp as stampOf } from '../core/format.js';
 import { DemoPort, demoEnabled } from './demo.js';
+import { AnsiDisplay, BurstGuard, terminalBytes } from '../core/display-stream.js';
 
 const EOL_BYTES = { none: '', crlf: '\r\n', cr: '\r', lf: '\n' };
 const concat = (a, b) => { const o = new Uint8Array(a.length + b.length); o.set(a); o.set(b, a.length); return o; };
@@ -33,10 +34,12 @@ export class Assistant {
     this._lastWasCR = false;            // 补 \r 用的跨包状态（同 terminal.js）
     this.suppressed = false;            // 高速自动关显示（见 _highspeedGate）
     this.suppManual = false;            // 用户手动恢复过显示：暂不再自动关，速率回落后重新武装
+    this.burst = new BurstGuard();
   }
 
   init(){
-    this.rx = new RxBuffer($('s-rx'), { maxLines: 4000, maxRaw: 2 * 1024 * 1024 });
+    this.rx = new RxBuffer($('s-rx'), { maxLines: 4000, maxRaw: 2 * 1024 * 1024,
+      isVisible: () => $('tab-serial').classList.contains('active') });
     this.demo = demoEnabled();
 
     if (!SerialSession.supported() && !this.demo){
@@ -77,7 +80,7 @@ export class Assistant {
     $('s-open').addEventListener('click', () => this.connect());
     $('s-close').addEventListener('click', () => this.s.close());
     $('s-send').addEventListener('click', () => this.send());
-    $('s-clear').addEventListener('click', () => { this.rx.clear(); this.term?.clear(); this._lastWasCR = false; });
+    $('s-clear').addEventListener('click', () => { this.rx.clear(); this.ansiDisplay?.clear(); this.term?.clear(); this._lastWasCR = false; });
     $('s-save').addEventListener('click', () => this.save());
     store.bind($('s-record-ts'), 'serial.recordTs', 'checked');
     store.bind($('s-record-auto'), 'serial.recordAuto', 'checked');
@@ -130,6 +133,7 @@ export class Assistant {
     this.s.on('data', (b, t) => {
       this.rxc.add(b.length);
       this.rec.push(b, t);             // 落文件在"显示之前"：接收区 2MB 上限丢掉的历史不影响它
+      if (this.burst.add(b.length)) this._highspeedGate(Assistant.HS_OFF + 1);
       this.rx.push(b, t);
       if (this.ansiOn && this.term && !this.rx.paused && !this.suppressed) this._ansiFeed(b, t);
     });
@@ -485,6 +489,11 @@ export class Assistant {
     });
     try { this.fit = new FitAddon.FitAddon(); this.term.loadAddon(this.fit); } catch {}
     this.term.open($('s-term'));
+    this.ansiDisplay = new AnsiDisplay(this.term, {
+      visible: () => this.ansiOn && !this.rx.paused && !this.suppressed && $('tab-serial').classList.contains('active'),
+      format: (b, t) => this._ansiBytes(b, t),
+      onSkip: () => { this._lastWasCR = false; },
+    });
     this.fit?.fit();
     const ro = new ResizeObserver(() => { if (this.ansiOn){ try { this.fit?.fit(); } catch {} } });
     ro.observe($('s-term'));
@@ -492,25 +501,26 @@ export class Assistant {
   }
 
   _ansiFeed(bytes, t){
-    if (!this.term) return;
-    if (this.rx.timestamps) this.term.write(`\x1b[90m[${stampOf(t, this.rx.absolute)}]\x1b[0m `);
+    this.ansiDisplay?.push(bytes, t);
+  }
+
+  _ansiBytes(bytes, t){
     // 很多固件只发 \n 不发 \r，直接塞给 xterm 会变成阶梯状 → 按字节自动补 \r（同 terminal.js）
-    const out = [];
-    for (let i = 0; i < bytes.length; i++){
-      const b = bytes[i];
-      if (b === 0x0a && !this._lastWasCR) out.push(0x0d);
-      out.push(b);
-      this._lastWasCR = (b === 0x0d);
-    }
-    this.term.write(Uint8Array.from(out));
+    const state = { lastWasCR: this._lastWasCR };
+    const body = terminalBytes(bytes, state); this._lastWasCR = state.lastWasCR;
+    if (!this.rx.timestamps) return body;
+    return concat(enc.encode(`\x1b[90m[${stampOf(t, this.rx.absolute)}]\x1b[0m `), body);
   }
 
   _ansiRedraw(){
     if (!this.term) return;
+    this.ansiDisplay?.clear();
     this.term.clear();
     this._lastWasCR = false;
     for (const r of this.rx.raw) this._ansiFeed(r.b, r.t);
   }
+
+  onShow(){ this.rx?.flush(); if (this.ansiOn){ this.fit?.fit(); this.ansiDisplay?.flush(); } }
 
   save(){
     if (this.rx.empty){ toast('接收区没有数据', 'warn'); return; }

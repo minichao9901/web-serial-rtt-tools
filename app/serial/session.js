@@ -5,7 +5,7 @@
  * 事件：open / close / data(Uint8Array, Date) / tx(Uint8Array) / error(Error)
  */
 import { Bus } from '../core/bus.js';
-import { waitMs } from '../core/pace.js';
+import { waitMs, yieldTask } from '../core/pace.js';
 import { isProbeCdcPort } from '../core/cdc-mode.js';
 import { ProbeCancelled } from '../core/probe-manager.js';
 
@@ -131,8 +131,14 @@ export class SerialSession extends Bus {
            */
           while (true){
             const { value, done } = await this.reader.read();
-            if (done) break;                       // 这个流结束：回外层看 readable 还在不在
-            if (value && value.length) this.emit('data', value, new Date());
+            if (done){ await yieldTask(); break; } // 让浏览器发布 readable 更新，关闭流也不能空转微任务
+            if (value && value.length){
+              this.emit('data', value, new Date());
+              // 缓冲已满时 read() 可连续兑现微任务；定期让输入和显示定时器运行。
+              if (performance.now() - (this._readYieldAt || 0) >= 8){
+                this._readYieldAt = performance.now(); await yieldTask();
+              }
+            }
           }
         } catch (e){
           // 非致命错误：报一声继续（readable 已换成新流，外层的 while 会拿到它）

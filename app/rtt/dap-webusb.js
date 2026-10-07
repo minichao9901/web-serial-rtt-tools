@@ -409,7 +409,7 @@ export class WebUsbDapProbe {
     return res.subarray(1);
   }
 
-  async _ctrl(cmd, payload){
+  async _ctrl(cmd, payload, { deadline = Infinity } = {}){
     if (!this._ready || (this._closing && cmd !== CMD.Disconnect)) throw new Error('探针未连接或正在断开');
     const n = 1 + (payload ? payload.length : 0);
     if (n > this.pkt) throw new Error(`CMSIS-DAP 命令太长（${n} > ${this.pkt} 字节/包）`);
@@ -424,16 +424,23 @@ export class WebUsbDapProbe {
     const req = this._framing === 'pad' ? new Uint8Array(this.pkt) : new Uint8Array(n);
     req[0] = cmd;
     if (payload) req.set(payload, 1);
+    const remaining = () => {
+      const left = deadline - (globalThis.performance?.now() ?? Date.now());
+      if (left <= 0) throw new Error('USB 命令时间预算已耗尽');
+      return Math.min(3000, left);
+    };
+    const writeTimeout = remaining();
     try {
-      await withTimeout(this.device.transferOut(this.epOut, req), 3000, 'USB 写');
+      await withTimeout(this.device.transferOut(this.epOut, req), writeTimeout, 'USB 写');
     } catch (e){
       await this._onXferTimeout('USB 写');    // 写超时：底层传输可能还挂着 → 标脏 + 立刻复位救回来
       throw e;
     }
     for (let attempt = 0; attempt < 4; attempt++){
       let r;
+      const readTimeout = remaining();
       try {
-        r = await withTimeout(this.device.transferIn(this.epIn, this.pkt), 3000, 'USB 读');
+        r = await withTimeout(this.device.transferIn(this.epIn, this.pkt), readTimeout, 'USB 读');
       } catch (e){
         await this._onXferTimeout('USB 读');
         throw e;
