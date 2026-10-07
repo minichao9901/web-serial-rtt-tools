@@ -289,28 +289,28 @@ RISC-V/JTAG 侧不套这个模型，直接用**实测分档**（`RISCV_COST`）�
 `type` 编码：`0=u8 1=i8 2=u16 3=i16 4=u32 5=i32 6=f32 7=f64`（够用；`f64` 单独走 8 字节）。
 `flags`：bit0 = 允许 60 MHz；bit1 = 丢弃模式（排障）；bit2 = 触发使能（v2）。
 
-**状态字（12 × u32，草案）**：
+**状态字（12 × u32）**：
 
 | 字 | 位域 |
 |---|---|
-| w0 | bit0 running；bit8-15 **探针算出的 span 数**；bit16 SWD ready；bit24-31 探针收到的变量数 |
+| w0 | bit0 running；bit1 RISC-V；bit2 tick 周期支持；bit3 短批次支持；bit4 完整计数支持；bit8-15 **探针算出的 span 数**；bit16 SWD ready；bit24-31 探针收到的变量数 |
 | w1 | 实际 SWD Hz |
 | w2 | produced 样本数 |
-| w3 | **dropped 样本数** |
-| w4 | 已推字节数低 16 位；高 16 位 usbErr |
-| w5 | 低 16 位 SWD 读错；高 16 位写错 |
+| w3 | **调度跳拍 + USB 无缓冲丢样数** |
+| w4 | 已推字节数低 16 位；高 16 位 USB 无缓冲丢样（截断） |
+| w5 | 低 16 位读取错误；高 16 位 DAP 让路事件 |
 | w6 | 最近一包 seq |
-| w7 | 低 16 位 DAP 让路次数；高 16 位 重扫次数 |
+| w7 | 低 16 位调度跳拍；高 16 位丢弃模式包数（均截断） |
 | w8 | 计划哈希（`addr/size/type` 的简单校验和，防止"配置没生效"） |
 | w9 | 最近一次命令 id / 响应 |
 | w10 | `startRc`（沿用 `-100 = 排队中` 的语义，见 `docs/rtt-cdc.md:63`） |
-| w11 | 配置的 period_us 低 16 位；bit16 丢弃；bit24-31 当前 SWD MHz |
+| w11 | 配置周期低 16 位；bit16 丢弃；bit17 tick 单位；bit24-31 当前 SWD MHz |
 
 ### 7.2 数据面：`0x83` 上的 512 B 包流（§5）
 
 主机侧：
 - 认领 interface 0（与 RTT Viewer 相同的接口），**选 `endpointNumber === 0x83` 的 bulk IN**；
-- 保持 2~4 条 `transferIn(0x83, 4096)` 在飞；
+- 低流量保持 3 × 4096 B 预读；预计 DATA 流量 ≥1 MB/s 时用 6 × 8192 B，按提交顺序消费完成结果；
 - 收尾顺序：**先 HID STOP → 等 100~200 ms → 把在飞的读收干净 → 再 close**（WebUSB 没有取消接口）。
 
 ---
@@ -687,3 +687,7 @@ tools/probe-firmware/  探针固件补丁草稿（scope_sampler.c/.h + patch-not
 | `app/hid/view.js` | 面板状态机与"启动中(-100)"处理方式照抄 |
 | `app/rtt/mock.js`、`app/hid/mock.js` | 假探针的写法照抄 → `app/scope/mock.js`（还要能生成已知波形） |
 | `tools/selftest/*` | 单测/页面测试的框架与 `ui.page.test.mjs`（CDP，记得禁用缓存） |
+
+2026-10-07：高采样率读取耗时模型、完整计数及 STM32F103CB 实测优化见
+[验证报告](validation/2026-10-07-f103cb-hss-optimization.md)。紧凑 STATUS 的计数会截断；
+新固件支持 action 11 时，网页采用原子 u32 完整计数，分开显示调度跳拍、USB 丢样、读取错误和 DAP 让路。

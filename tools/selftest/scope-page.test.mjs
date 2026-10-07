@@ -674,9 +674,9 @@ console.log('== 14. RISC-V/JTAG 目标：显示生效后端、置灰 SWD 控件�
   // 用户 2026-09-30：切到 RISC-V/JTAG 后，那一格的名字不能还叫「SWD 时钟」（它在 JTAG 下是 TCK）
   ok(r.after.clockLabel === 'JTAG 时钟' && r.labelByDropdown === 'JTAG 时钟' && r.labelBackSwd === 'SWD 时钟',
      `时钟那格的名字跟着目标类型走：生效后端 RISC-V →「${r.after.clockLabel}」· 下拉切 RISC-V →「${r.labelByDropdown}」· 切回 SWD →「${r.labelBackSwd}」`);
-  ok(/RISC-V\/JTAG 实测/.test(r.after.plan) && !/周期下限 2 µs/.test(r.after.plan),
+  ok(/RISC-V\/JTAG 粗估/.test(r.after.plan) && /N\+4/.test(r.after.plan) && !/周期下限 2 µs/.test(r.after.plan),
      `计划行改成 JTAG 的说法：${r.after.plan.slice(0, 78)}…`);
-  ok(/1\.5×/.test(r.after.plan), '并给出"零丢建议周期 ≥ 1.5×"的提示');
+  ok(/1\.5×/.test(r.after.plan), '并给出"建议起始周期 1.5×，需实采验证"的提示');
   ok(r.viaStatus === 'riscv', '状态字 0 的 bit1 也能定后端（丢弃模式没有 DEF 包时的唯一来源）');
   ok(r.sent && r.sent.cmd === 0x31 && r.sent.data.join(',') === '10,1',
      `目标类型切换发的是 HID 0x31 action 10（实际 cmd=0x${(r.sent?.cmd ?? 0).toString(16)} data=${r.sent?.data}`)
@@ -717,8 +717,8 @@ console.log('== 15. 用户现场口径：**没连探针**时切目标类型，�
      `未连探针时默认按 SWD 显示（「${r.before.label}」/「${r.before.mhz}」）`);
   ok(r.after.label === 'JTAG 时钟' && r.after.disabled === true,
      `切到 RISC-V/JTAG → 那一格当场改名「${r.after.label}」并置灰（用户要的就是这个）`);
-  ok(/RISC-V\/JTAG 实测/.test(r.after.plan) && !/模型估算/.test(r.after.plan) && /3\.17 µs/.test(r.after.plan),
-     `读计划当场换成 JTAG 的实测数据：${r.after.plan.slice(0, 60)}…`);
+  ok(/RISC-V\/JTAG 粗估/.test(r.after.plan) && /N\+4/.test(r.after.plan),
+     `读计划当场换成 JTAG 的扫描预算：${r.after.plan.slice(0, 60)}…`);
   ok(/未开始/.test(r.after.backendLine) && /RISC-V\/JTAG/.test(r.after.backendLine),
      `「生效后端」仍诚实地说还没开始、并记住你选的是哪条路：「${r.after.backendLine}」`);
   ok(r.back.label === 'SWD 时钟' && r.back.disabled === false && /模型估算/.test(r.back.plan),

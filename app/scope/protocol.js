@@ -35,10 +35,11 @@ export { SCALARS };                    // 页面算帧长/画图都要用，从�
  *
  * **SWD 侧按 akaLinkPro 最新拟合重算**（2026-09-30；那边 README §scope 与 `Custom HID Protocol.md` §16）：
  *   每次 SWD 传输的实测成本 = `36.2 × 指令/bit + 184 周期`，60 MHz 档 = **401 周期 = 1.115 µs**；
- *   一次 span 块读是 **N + 3 次传输**（TAR 写 + prime 读 + N×DRW + RDBUFF 读，N = 字数）
- *   ⇒ 每 span 固定 **3 × 1.115 = 3.35 µs**，每字节 **1.115 / 4 = 0.279 µs**。
+ *   当前 swd_read_block 的稳态是 N+2 次传输（TAR、prime、N-1 次 DRW、RDBUFF）。
+ *   60 MHz 的经验拟合为每块固定 3.35 µs + 每字节 0.279 µs；固定项含软件开销，
+ *   不等于 3 次线上传输。其他时钟按传输模型缩放，软件固定项保留；冷配置另计。
  *   真机锚点（F103 @60 MHz）与这个式子的偏差：单字 4.503 vs 4.47、2 字 5.82 vs 5.58、
- *   4 字 7.96 vs 7.81、6 字 10.30 vs 10.05、8 字 12.65 vs 12.28 —— 全在 +1~4%（模型略保守）。
+ *   4 字 7.96 vs 7.81、6 字 10.30 vs 10.05、8 字 12.65 vs 12.28 —— 全在 +1~4%（模型略乐观）。
  *   `fastWordUs` 是**实测值**（单字流水读快路径，见 planReads 的注释）。
  */
 export const COST = { perBlockUs: 3.35, perByteUs: 0.279, refMhz: 60, fastWordUs: 1.55 };
@@ -56,14 +57,29 @@ export const SPAN_MAX_BYTES = 64;
  *     P1-1 修掉"每 32 拍静默毁一个样本"之后实测 3.17 µs（修之前 4.25 µs）⇒ ≈315 kHz，
  *     已经贴着一次 54 TCK 扫描（≈2.7 µs）的时序下限；
  *   · `pack8Us` = **36.6 µs** —— 8 通道连续 u32（32 B 一个 span，含收尾那 2 次查 SBCS 的扫描）⇒ ≈27.3 kHz；
- *   · `perSpanUs`/`perByteUs` 就按这两个锚点摊出来（块读每个字约一次扫描 ≈2.9 µs，
- *     8 字那份摊到 0.96 µs/B）—— 只用来给"你这套变量在 JTAG 下大概多少"，真值仍以标定为准。
+ *   块读估算按当前固件 N+4 次稳态 DMI 扫描计算，含对齐与地址间隙；
+ *   冷启动、目标总线等待和错误重试会增加耗时，当前计划的成功标定优先。
  */
-export const RISCV_COST = { singleWordUs: 3.17, pack8Us: 36.6, perSpanUs: 5.8, perByteUs: 0.96 };
+// Block reads in the current probe use N+4 steady-state DMI scans (cold setup/retries cost more).
+// The hold-path measurement is only a coarse scan budget; calibrate the actual plan before use.
+export const RISCV_COST = { singleWordUs: 3.17, pack8Us: 36.6, scanUs: 3.17, scansPerSpan: 4 };
 
 /** JTAG 下的每样本耗时估算（µs）。锚点见 RISCV_COST；`plan` 出自 planReads()。 */
-export const riscvPlanUs = plan =>
-  plan.spans.length * RISCV_COST.perSpanUs + plan.frameBytes * RISCV_COST.perByteUs;
+export const alignedSpanBytes = span => Math.ceil(span.end / 4) * 4 - Math.floor(span.start / 4) * 4;
+export const riscvPlanUs = plan => plan.fastPath ? RISCV_COST.singleWordUs :
+  plan.spans.reduce((n, span) => n + alignedSpanBytes(span) / 4 + RISCV_COST.scansPerSpan, 0) * RISCV_COST.scanUs;
+
+export function swdCostAt(mhz = COST.refMhz){
+  const clock = Number.isFinite(mhz) && mhz > 0 ? mhz : COST.refMhz;
+  // Measured instruction + wire cost: (184 + 36.2 * 360 / MHz) / 360 us per transfer.
+  const transfer = 184 / 360 + 36.2 / clock;
+  const reference = 184 / 360 + 36.2 / COST.refMhz;
+  return { perBlockUs: COST.perBlockUs + 2 * (transfer - reference),
+    perByteUs: COST.perByteUs * transfer / reference };
+}
+
+export const recommendedPeriodUs = (us, backend = BACKEND.SWD) =>
+  Number.isFinite(us) && us > 0 ? Math.max(3, Math.ceil(backend === BACKEND.RISCV ? us * 1.5 : us * 1.15 + 1)) : null;
 
 // ---------------------------------------------------------------- 采样计划
 /**
@@ -97,8 +113,14 @@ export function planReads(vars, opts = {}){
       spans.push({ start, end, len: v.size, vars: [v] });
     }
   }
-  const estUs = spans.length * COST.perBlockUs + frameBytes * COST.perByteUs;
-  const naiveUs = list.length * COST.perBlockUs + frameBytes * COST.perByteUs;
+  const cost = swdCostAt(opts.swdMhz);
+  const readBytes = spans.reduce((n, span) => n + alignedSpanBytes(span), 0);
+  const naiveBytes = list.reduce((n, v) => n + alignedSpanBytes({ start: v.addr, end: v.addr + v.size }), 0);
+  const blocksFor = span => 1 + Math.floor((span.end - 1) / 1024) - Math.floor(span.start / 1024);
+  const readBlocks = spans.reduce((n, span) => n + blocksFor(span), 0);
+  const naiveBlocks = list.reduce((n, v) => n + blocksFor({ start: v.addr, end: v.addr + v.size }), 0);
+  const estUs = readBlocks * cost.perBlockUs + readBytes * cost.perByteUs;
+  const naiveUs = naiveBlocks * cost.perBlockUs + naiveBytes * cost.perByteUs;
   /**
    * 固件有条**单字流水读**快路径（`s_pipe_ok`）：只有一个 span、4 字节对齐、整段正好 4 字节、
    * 且变量在内存与帧里都连续时，每拍**只发一次 DRW 读**、拿回来的值是上一拍的结果（AHB-AP 读是 posted 的）。
@@ -113,7 +135,7 @@ export function planReads(vars, opts = {}){
   const fastWordUs = opts.fastWordUs ?? COST.fastWordUs;
   const bestUs = fastPath ? Math.min(fastWordUs, estUs) : estUs;
   return {
-    spans, frameBytes, estUs, naiveUs, fastPath, bestUs,
+    spans, frameBytes, readBytes, readBlocks, estUs, naiveUs, fastPath, bestUs,
     estHz: estUs > 0 ? Math.round(1e6 / estUs) : 0,
     bestHz: bestUs > 0 ? Math.round(1e6 / bestUs) : 0,
     /** 合并省下来的比例（0.7 = 省了 70%）*/
@@ -357,7 +379,7 @@ export function packetTimeUs(pkt, unwrap){
 
 // ---------------------------------------------------------------- HID 0x32（控制面）
 export const HID_CMD = 0x32;
-export const ACT = { STOP: 0, START: 1, STATUS: 2, CLOCK: 3, TRIGGER: 4, CONFIG: 7, BENCH: 8, BENCH_RESULT: 9, CONFIG_TICKS: 10 };
+export const ACT = { STOP: 0, START: 1, STATUS: 2, CLOCK: 3, TRIGGER: 4, CONFIG: 7, BENCH: 8, BENCH_RESULT: 9, CONFIG_TICKS: 10, METRICS: 11 };
 export const ACT_NAME = { 0: '停止', 1: '启动', 2: '查状态', 3: '设 SWD 时钟', 4: '触发配置', 7: '配置', 8: '标定', 9: '取标定结果', 10: '配置 tick 周期' };
 
 /**
@@ -374,11 +396,11 @@ export const BACKEND = { SWD: 'swd', RISCV: 'riscv' };
 export const backendName = b => (b === BACKEND.RISCV ? 'RISC-V/JTAG' : b === BACKEND.SWD ? 'SWD/ARM' : '未知');
 
 /**
- * 每样本耗时的**实测**基线（µs）——数字全部来自 akaLinkPro 的最新真机记录
+ * 每样本耗时的**实测**基线（µs）——历史锚点来自 akaLinkPro 的真机记录
  * （`README.md` §scope / §RISC-V、`docs/代码审查报告.md` 第二轮回归表，2026-09-30）：
  *   · SWD @60 MHz：单字 1.548~1.588（取 1.55）、pack 8 通道 32 B 11.193~11.234（取 11.19）；
  *   · RISC-V/JTAG：单字 3.17（P1-1 修完的复测值，修之前是 4.25）、8 通道 32 B 36.6。
- * 零丢拍的周期建议取 **≥ 1.5×** 这个值（探针侧还有组帧与 USB 的开销）。
+ * 推荐规则见 recommendedPeriodUs；经验余量仅作起点，不保证无跳拍。
  * ⚠️ 换数字时**两边一起改**：`docs/scope-page.md` 与页面文案都引用这里。
  */
 export const BACKEND_COST = {
@@ -464,6 +486,7 @@ export function parseScopeStatus(bytes){
     running: !!(w0 & 1),
     supportsTicks: !!(w0 & 4),
     supportsBatch: !!(w0 & 8),
+    supportsMetrics: !!(w0 & 16),
     riscv: !!(w0 & 2),               // **生效**后端：bit1 = 这次会话真的在走 RISC-V/JTAG
     nspans: (w0 >>> 8) & 0xff,       // 探针自己算出来的 span 数（与本地计划对账用）
     swdReady: !!(w0 & (1 << 16)),
@@ -474,10 +497,10 @@ export function parseScopeStatus(bytes){
     bytes: w4 & 0xffff,
     usbErr: w4 >>> 16,
     swdErr: w5 & 0xffff,
-    wrErr: w5 >>> 16,
+    dapYield: w5 >>> 16,
     lastSeq: w6,
-    dapYield: w7 & 0xffff,
-    rescans: w7 >>> 16,
+    skipped: w7 & 0xffff,
+    discardPackets: w7 >>> 16,
     planHash: w8,
     lastCmd: w9 & 0xff,
     lastResp: (w9 >>> 8) & 0xff,
@@ -486,6 +509,16 @@ export function parseScopeStatus(bytes){
     discarding: !!(w11 & (1 << 16)),
     swdMhz: (w11 >>> 24) & 0xff,
   };
+}
+
+/** Full-width atomic probe snapshot, action 11. */
+export function parseScopeMetrics(bytes){
+  if (bytes.byteLength < 48) throw new Error('采样计数响应不完整');
+  const dv = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+  const w = i => dv.getUint32(i * 4, true);
+  if (w(0) !== 0x31535348 || w(2) !== TIME_HZ) throw new Error('采样计数响应无效');
+  return { tick: w(1), hz: w(2), produced: w(3), skipped: w(4), usb: w(5),
+    errors: w(6), yields: w(7), tx: w(8), bytes: w(9), periodTicks: w(10), flags: w(11) };
 }
 
 /**

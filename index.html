@@ -556,7 +556,7 @@
         </div>
         <div class="row btnrow">
           <button id="sc-bench" title="让探针用当前计划空跑一段，回报真实 µs/样本（M0 标定；假探针会假装一个结果）">标定真实速率</button>
-          <button id="sc-recc" title="按刚才标定出来的「读一次要多久」，把周期填成留 25% 余量的值 —— 这是零丢样本的实用档">用建议周期</button>
+          <button id="sc-recc" title="按当前计划的有效标定：SWD 取读取耗时×1.15+1µs，JTAG 取×1.5，向上取整且不小于3µs；这是起始建议，稳定性以实采计数为准">用建议周期</button>
         </div>
         <details class="helpnote"><summary>读计划与速率估算</summary><p class="hint" id="sc-plan">选好变量后会显示读计划与预计上限</p></details>
         <p class="hint" id="sc-state">未开始</p>
@@ -603,7 +603,7 @@
         <div class="legend" id="sc-legend"></div>
       </div>
       <div class="stats">
-        <span>样本 <b id="sc-samples">0</b> · <b id="sc-rate">0 Hz</b> · 包 <b id="sc-packets">0</b> · 丢：探针 <b id="sc-lost">0</b> / USB <b id="sc-lostusb">0</b> / 缺口 <b id="sc-gap">0</b> / 溢出 <b id="sc-over">0</b> · 缓冲 <b id="sc-buf">0%</b> · 内存 <b id="sc-mem">0 B</b> · <b id="sc-mhz">—</b></span>
+        <span>样本 <b id="sc-samples">0</b> · <b id="sc-rate">0 Hz</b> · 包 <b id="sc-packets">0</b> · 丢：探针 <b id="sc-lost">0</b> / USB <b id="sc-lostusb">0</b> / 缺口 <b id="sc-gap">0</b> / 溢出 <b id="sc-over">0</b> · 读错 <b id="sc-readerr">0</b> / 让路 <b id="sc-yields">0</b> · 缓冲 <b id="sc-buf">0%</b> · 内存 <b id="sc-mem">0 B</b> · <b id="sc-mhz">—</b></span>
         <span class="err" id="sc-err"></span>
         <span class="spacer"></span>
         <span class="flush hint" id="sc-window"></span>

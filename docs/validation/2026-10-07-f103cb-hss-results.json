@@ -1,0 +1,3451 @@
+{
+  "date": "2026-10-07",
+  "kind": "live-hardware-before-after",
+  "target": "STM32F103CB",
+  "probeSwclkMHz": 60,
+  "defaultTargetTestMHz": 96,
+  "ratedTargetTestMHz": 72,
+  "variable": "g_pack.u_hi",
+  "address": "0x20001028",
+  "contract": "value >> 28 == 1",
+  "finalFirmwareCRC32": "F9349E9D",
+  "runs": {
+    "web-baseline-validity.json": {
+      "startedAt": "2026-10-07T10:14:10.165Z",
+      "seconds": 5,
+      "rows": [
+        {
+          "cfg": {
+            "period": 2,
+            "draw": true
+          },
+          "valid": true,
+          "stable": {
+            "dt": 5.0040458333333335,
+            "produced": 2461976,
+            "skipped": 40048,
+            "usb": 0,
+            "errors": 0,
+            "yields": 0,
+            "received": 2461772,
+            "probeHz": 491997.0923527712,
+            "webHz": 491941.1694181286,
+            "dropPercent": 1.6006241347005463,
+            "maxMainThreadLagMs": 4.0999999940395355
+          },
+          "samplesChecked": 2764084,
+          "bad": 0,
+          "firstBad": [],
+          "summary": {
+            "state": "已停止（硬件速率对照）：2764084 个样本 / 5.622 s，零丢包",
+            "mode": "real",
+            "elf": {
+              "name": "f103cb-scope.elf",
+              "source": "dwarf",
+              "versions": [
+                4
+              ],
+              "stats": {
+                "cu": 2,
+                "dies": 127,
+                "vars": 30
+              },
+              "note": ""
+            },
+            "vars": [
+              "g_pack.u_hi:u32@0x20001028"
+            ],
+            "varCount": 1,
+            "plan": {
+              "spans": 1,
+              "frameBytes": 4,
+              "estUs": 4.47,
+              "estHz": 223914
+            },
+            "samples": 2764084,
+            "capacity": 5500064,
+            "packets": 22645,
+            "lost": 46664,
+            "lostProbe": 46664,
+            "lostUsb": 1749,
+            "lostGap": 0,
+            "benchUs": null,
+            "blob": null,
+            "connectErr": null,
+            "rateHz": 491681,
+            "trigger": {
+              "mode": 0,
+              "hit": -1,
+              "hits": 0,
+              "marker": false
+            },
+            "view": {
+              "start": 0,
+              "end": 1
+            },
+            "lod": false,
+            "resyncs": 0,
+            "raw": 0,
+            "running": false,
+            "mockVars": [
+              "mock0.f32",
+              "mock1.f32",
+              "mock2.i32",
+              "mock3.u16",
+              "mock4.i16",
+              "mock5.u8",
+              "mock6.i8",
+              "mock7.f64"
+            ]
+          },
+          "stalePackets": 3,
+          "periodTicks": 48,
+          "flags": 417,
+          "sequenceReordered": 0
+        },
+        {
+          "cfg": {
+            "period": 2,
+            "draw": false
+          },
+          "valid": true,
+          "stable": {
+            "dt": 5.0040452916666665,
+            "produced": 2461970,
+            "skipped": 40055,
+            "usb": 0,
+            "errors": 0,
+            "yields": 0,
+            "received": 2461772,
+            "probeHz": 491995.9465794537,
+            "webHz": 491951.000179706,
+            "dropPercent": 1.6009032683526343,
+            "maxMainThreadLagMs": 2.100000001490116
+          },
+          "samplesChecked": 2765448,
+          "bad": 0,
+          "firstBad": [],
+          "summary": {
+            "state": "已停止（硬件速率对照）：2765448 个样本 / 5.621 s，零丢包",
+            "mode": "real",
+            "elf": {
+              "name": "f103cb-scope.elf",
+              "source": "dwarf",
+              "versions": [
+                4
+              ],
+              "stats": {
+                "cu": 2,
+                "dies": 127,
+                "vars": 30
+              },
+              "note": ""
+            },
+            "vars": [
+              "g_pack.u_hi:u32@0x20001028"
+            ],
+            "varCount": 1,
+            "plan": {
+              "spans": 1,
+              "frameBytes": 4,
+              "estUs": 4.47,
+              "estHz": 223914
+            },
+            "samples": 2765448,
+            "capacity": 5500064,
+            "packets": 22656,
+            "lost": 44921,
+            "lostProbe": 44921,
+            "lostUsb": 0,
+            "lostGap": 0,
+            "benchUs": null,
+            "blob": null,
+            "connectErr": null,
+            "rateHz": 491986,
+            "trigger": {
+              "mode": 0,
+              "hit": -1,
+              "hits": 0,
+              "marker": false
+            },
+            "view": {
+              "start": 0,
+              "end": 1
+            },
+            "lod": false,
+            "resyncs": 0,
+            "raw": 0,
+            "running": false,
+            "mockVars": [
+              "mock0.f32",
+              "mock1.f32",
+              "mock2.i32",
+              "mock3.u16",
+              "mock4.i16",
+              "mock5.u8",
+              "mock6.i8",
+              "mock7.f64"
+            ]
+          },
+          "stalePackets": 8,
+          "periodTicks": 48,
+          "flags": 417,
+          "sequenceReordered": 0
+        },
+        {
+          "cfg": {
+            "period": 2.5,
+            "draw": true
+          },
+          "valid": true,
+          "stable": {
+            "dt": 5.004046375,
+            "produced": 2001511,
+            "skipped": 109,
+            "usb": 0,
+            "errors": 0,
+            "yields": 0,
+            "received": 2000864,
+            "probeHz": 399978.50739342923,
+            "webHz": 399836.9369732999,
+            "dropPercent": 0.005445589072850991,
+            "maxMainThreadLagMs": 2.5
+          },
+          "samplesChecked": 2247872,
+          "bad": 0,
+          "firstBad": [],
+          "summary": {
+            "state": "已停止（硬件速率对照）：2247872 个样本 / 5.620 s，零丢包",
+            "mode": "real",
+            "elf": {
+              "name": "f103cb-scope.elf",
+              "source": "dwarf",
+              "versions": [
+                4
+              ],
+              "stats": {
+                "cu": 2,
+                "dies": 127,
+                "vars": 30
+              },
+              "note": ""
+            },
+            "vars": [
+              "g_pack.u_hi:u32@0x20001028"
+            ],
+            "varCount": 1,
+            "plan": {
+              "spans": 1,
+              "frameBytes": 4,
+              "estUs": 4.47,
+              "estHz": 223914
+            },
+            "samples": 2247872,
+            "capacity": 4400064,
+            "packets": 18416,
+            "lost": 170,
+            "lostProbe": 170,
+            "lostUsb": 0,
+            "lostGap": 0,
+            "benchUs": null,
+            "blob": null,
+            "connectErr": null,
+            "rateHz": 399970,
+            "trigger": {
+              "mode": 0,
+              "hit": -1,
+              "hits": 0,
+              "marker": false
+            },
+            "view": {
+              "start": 0,
+              "end": 1
+            },
+            "lod": false,
+            "resyncs": 0,
+            "raw": 0,
+            "running": false,
+            "mockVars": [
+              "mock0.f32",
+              "mock1.f32",
+              "mock2.i32",
+              "mock3.u16",
+              "mock4.i16",
+              "mock5.u8",
+              "mock6.i8",
+              "mock7.f64"
+            ]
+          },
+          "stalePackets": 8,
+          "periodTicks": 60,
+          "flags": 417,
+          "sequenceReordered": 0
+        },
+        {
+          "cfg": {
+            "period": 2.5,
+            "draw": false
+          },
+          "valid": true,
+          "stable": {
+            "dt": 5.004046,
+            "produced": 2001472,
+            "skipped": 147,
+            "usb": 0,
+            "errors": 0,
+            "yields": 0,
+            "received": 2000864,
+            "probeHz": 399970.74367421883,
+            "webHz": 399836.9369732999,
+            "dropPercent": 0.007344054987487629,
+            "maxMainThreadLagMs": 2.3000000044703484
+          },
+          "samplesChecked": 2247872,
+          "bad": 0,
+          "firstBad": [],
+          "summary": {
+            "state": "已停止（硬件速率对照）：2247872 个样本 / 5.620 s，零丢包",
+            "mode": "real",
+            "elf": {
+              "name": "f103cb-scope.elf",
+              "source": "dwarf",
+              "versions": [
+                4
+              ],
+              "stats": {
+                "cu": 2,
+                "dies": 127,
+                "vars": 30
+              },
+              "note": ""
+            },
+            "vars": [
+              "g_pack.u_hi:u32@0x20001028"
+            ],
+            "varCount": 1,
+            "plan": {
+              "spans": 1,
+              "frameBytes": 4,
+              "estUs": 4.47,
+              "estHz": 223914
+            },
+            "samples": 2247872,
+            "capacity": 4400064,
+            "packets": 18416,
+            "lost": 204,
+            "lostProbe": 204,
+            "lostUsb": 0,
+            "lostGap": 0,
+            "benchUs": null,
+            "blob": null,
+            "connectErr": null,
+            "rateHz": 399964,
+            "trigger": {
+              "mode": 0,
+              "hit": -1,
+              "hits": 0,
+              "marker": false
+            },
+            "view": {
+              "start": 0,
+              "end": 1
+            },
+            "lod": false,
+            "resyncs": 0,
+            "raw": 0,
+            "running": false,
+            "mockVars": [
+              "mock0.f32",
+              "mock1.f32",
+              "mock2.i32",
+              "mock3.u16",
+              "mock4.i16",
+              "mock5.u8",
+              "mock6.i8",
+              "mock7.f64"
+            ]
+          },
+          "stalePackets": 8,
+          "periodTicks": 60,
+          "flags": 417,
+          "sequenceReordered": 0
+        }
+      ]
+    },
+    "web-baseline-repeat.json": {
+      "startedAt": "2026-10-07T10:41:12.354Z",
+      "seconds": 15,
+      "rows": [
+        {
+          "cfg": {
+            "period": 2,
+            "draw": true
+          },
+          "valid": true,
+          "stable": {
+            "dt": 15.004156416666667,
+            "produced": 7375252,
+            "skipped": 119905,
+            "usb": 6923,
+            "errors": 0,
+            "yields": 0,
+            "received": 7375520,
+            "probeHz": 491547.2616512812,
+            "webHz": 491560.4193463076,
+            "dropPercent": 1.6905711482682138,
+            "maxMainThreadLagMs": 14.600000001490116
+          },
+          "samplesChecked": 7679196,
+          "bad": 0,
+          "firstBad": [],
+          "summary": {
+            "state": "已停止（硬件速率对照）：7679196 个样本 / 15.622 s，跳拍 124957 / USB 丢样本 7218 / 读错 0 / 包缺口 0",
+            "mode": "real",
+            "elf": {
+              "name": "f103cb-scope.elf",
+              "source": "dwarf",
+              "versions": [
+                4
+              ],
+              "stats": {
+                "cu": 2,
+                "dies": 127,
+                "vars": 30
+              },
+              "note": ""
+            },
+            "vars": [
+              "g_pack.u_hi:u32@0x20001028"
+            ],
+            "varCount": 1,
+            "plan": {
+              "spans": 1,
+              "frameBytes": 4,
+              "estUs": 4.47,
+              "estHz": 223914
+            },
+            "samples": 7679196,
+            "capacity": 11000064,
+            "packets": 62912,
+            "lost": 132175,
+            "lostProbe": 124957,
+            "lostUsb": 7218,
+            "readErrors": 0,
+            "dapYields": 0,
+            "metricsError": null,
+            "lostGap": 0,
+            "benchUs": null,
+            "blob": null,
+            "connectErr": null,
+            "rateHz": 491561,
+            "trigger": {
+              "mode": 0,
+              "hit": -1,
+              "hits": 0,
+              "marker": false
+            },
+            "view": {
+              "start": 0,
+              "end": 1
+            },
+            "lod": false,
+            "resyncs": 0,
+            "raw": 0,
+            "running": false,
+            "mockVars": [
+              "mock0.f32",
+              "mock1.f32",
+              "mock2.i32",
+              "mock3.u16",
+              "mock4.i16",
+              "mock5.u8",
+              "mock6.i8",
+              "mock7.f64"
+            ]
+          },
+          "stalePackets": 0,
+          "periodTicks": 48,
+          "flags": 417,
+          "sequenceReordered": 0
+        },
+        {
+          "cfg": {
+            "period": 2.25,
+            "draw": true
+          },
+          "valid": true,
+          "stable": {
+            "dt": 15.004155208333334,
+            "produced": 6608298,
+            "skipped": 60217,
+            "usb": 0,
+            "errors": 0,
+            "yields": 0,
+            "received": 6607960,
+            "probeHz": 440431.19444203965,
+            "webHz": 440401.4822319224,
+            "dropPercent": 0.9030046419630157,
+            "maxMainThreadLagMs": 1.9000000059604645
+          },
+          "samplesChecked": 6875428,
+          "bad": 0,
+          "firstBad": [],
+          "summary": {
+            "state": "已停止（硬件速率对照）：6875428 个样本 / 15.611 s，跳拍 62792 / USB 丢样本 404 / 读错 0 / 包缺口 0",
+            "mode": "real",
+            "elf": {
+              "name": "f103cb-scope.elf",
+              "source": "dwarf",
+              "versions": [
+                4
+              ],
+              "stats": {
+                "cu": 2,
+                "dies": 127,
+                "vars": 30
+              },
+              "note": ""
+            },
+            "vars": [
+              "g_pack.u_hi:u32@0x20001028"
+            ],
+            "varCount": 1,
+            "plan": {
+              "spans": 1,
+              "frameBytes": 4,
+              "estUs": 4.47,
+              "estHz": 223914
+            },
+            "samples": 6875428,
+            "capacity": 9777842,
+            "packets": 56328,
+            "lost": 63196,
+            "lostProbe": 62792,
+            "lostUsb": 404,
+            "readErrors": 0,
+            "dapYields": 0,
+            "metricsError": null,
+            "lostGap": 0,
+            "benchUs": null,
+            "blob": null,
+            "connectErr": null,
+            "rateHz": 440424,
+            "trigger": {
+              "mode": 0,
+              "hit": -1,
+              "hits": 0,
+              "marker": false
+            },
+            "view": {
+              "start": 0,
+              "end": 1
+            },
+            "lod": false,
+            "resyncs": 0,
+            "raw": 0,
+            "running": false,
+            "mockVars": [
+              "mock0.f32",
+              "mock1.f32",
+              "mock2.i32",
+              "mock3.u16",
+              "mock4.i16",
+              "mock5.u8",
+              "mock6.i8",
+              "mock7.f64"
+            ]
+          },
+          "stalePackets": 8,
+          "periodTicks": 54,
+          "flags": 417,
+          "sequenceReordered": 0
+        }
+      ]
+    },
+    "web-read-ahead.json": {
+      "startedAt": "2026-10-07T10:44:23.987Z",
+      "seconds": 8,
+      "rows": [
+        {
+          "cfg": {
+            "period": 2,
+            "draw": true,
+            "stallMs": 15,
+            "stallEveryMs": 500
+          },
+          "valid": true,
+          "stable": {
+            "dt": 8.020081041666666,
+            "produced": 3909408,
+            "skipped": 36385,
+            "usb": 64249,
+            "errors": 0,
+            "yields": 0,
+            "received": 3909224,
+            "probeHz": 487452.43092800217,
+            "webHz": 487422.2587963576,
+            "dropPercent": 2.5095497752891367,
+            "maxMainThreadLagMs": 2.1999999955296516
+          },
+          "samplesChecked": 4214760,
+          "bad": 0,
+          "firstBad": [],
+          "summary": {
+            "state": "已停止（硬件速率对照）：4214760 个样本 / 8.637 s，跳拍 39326 / USB 丢样本 65113 / 读错 0 / 包缺口 0",
+            "mode": "real",
+            "elf": {
+              "name": "f103cb-scope.elf",
+              "source": "dwarf",
+              "versions": [
+                4
+              ],
+              "stats": {
+                "cu": 2,
+                "dies": 127,
+                "vars": 30
+              },
+              "note": ""
+            },
+            "vars": [
+              "g_pack.u_hi:u32@0x20001028"
+            ],
+            "varCount": 1,
+            "plan": {
+              "spans": 1,
+              "frameBytes": 4,
+              "estUs": 4.47,
+              "estHz": 223914
+            },
+            "samples": 4214760,
+            "capacity": 7150065,
+            "packets": 34528,
+            "lost": 104439,
+            "lostProbe": 39326,
+            "lostUsb": 65113,
+            "readErrors": 0,
+            "dapYields": 0,
+            "metricsError": null,
+            "lostGap": 0,
+            "benchUs": null,
+            "blob": null,
+            "connectErr": null,
+            "rateHz": 488011,
+            "trigger": {
+              "mode": 0,
+              "hit": -1,
+              "hits": 0,
+              "marker": false
+            },
+            "view": {
+              "start": 0,
+              "end": 1
+            },
+            "lod": false,
+            "resyncs": 0,
+            "raw": 0,
+            "running": false,
+            "mockVars": [
+              "mock0.f32",
+              "mock1.f32",
+              "mock2.i32",
+              "mock3.u16",
+              "mock4.i16",
+              "mock5.u8",
+              "mock6.i8",
+              "mock7.f64"
+            ]
+          },
+          "stalePackets": 0,
+          "periodTicks": 48,
+          "flags": 417,
+          "sequenceReordered": 0
+        },
+        {
+          "cfg": {
+            "period": 2,
+            "draw": true,
+            "depth": 6,
+            "readSize": 8192,
+            "stallMs": 15,
+            "stallEveryMs": 500
+          },
+          "valid": true,
+          "stable": {
+            "dt": 8.020081458333333,
+            "produced": 3972925,
+            "skipped": 37117,
+            "usb": 0,
+            "errors": 0,
+            "yields": 0,
+            "received": 3972464,
+            "probeHz": 495372.1505997796,
+            "webHz": 495301.1732730043,
+            "dropPercent": 0.9256012779916022,
+            "maxMainThreadLagMs": 1.8999999985098839
+          },
+          "samplesChecked": 4278000,
+          "bad": 0,
+          "firstBad": [],
+          "summary": {
+            "state": "已停止（硬件速率对照）：4278000 个样本 / 8.636 s，跳拍 40133 / USB 丢样本 411 / 读错 0 / 包缺口 0",
+            "mode": "real",
+            "elf": {
+              "name": "f103cb-scope.elf",
+              "source": "dwarf",
+              "versions": [
+                4
+              ],
+              "stats": {
+                "cu": 2,
+                "dies": 127,
+                "vars": 30
+              },
+              "note": ""
+            },
+            "vars": [
+              "g_pack.u_hi:u32@0x20001028"
+            ],
+            "varCount": 1,
+            "plan": {
+              "spans": 1,
+              "frameBytes": 4,
+              "estUs": 4.47,
+              "estHz": 223914
+            },
+            "samples": 4278000,
+            "capacity": 7150065,
+            "packets": 35048,
+            "lost": 40544,
+            "lostProbe": 40133,
+            "lostUsb": 411,
+            "readErrors": 0,
+            "dapYields": 0,
+            "metricsError": null,
+            "lostGap": 0,
+            "benchUs": null,
+            "blob": null,
+            "connectErr": null,
+            "rateHz": 495366,
+            "trigger": {
+              "mode": 0,
+              "hit": -1,
+              "hits": 0,
+              "marker": false
+            },
+            "view": {
+              "start": 0,
+              "end": 1
+            },
+            "lod": false,
+            "resyncs": 0,
+            "raw": 0,
+            "running": false,
+            "mockVars": [
+              "mock0.f32",
+              "mock1.f32",
+              "mock2.i32",
+              "mock3.u16",
+              "mock4.i16",
+              "mock5.u8",
+              "mock6.i8",
+              "mock7.f64"
+            ]
+          },
+          "stalePackets": 8,
+          "periodTicks": 48,
+          "flags": 417,
+          "sequenceReordered": 0
+        },
+        {
+          "cfg": {
+            "period": 2,
+            "draw": true,
+            "depth": 6,
+            "readSize": 8192
+          },
+          "valid": true,
+          "stable": {
+            "dt": 8.004081375,
+            "produced": 3965159,
+            "skipped": 36883,
+            "usb": 0,
+            "errors": 0,
+            "yields": 0,
+            "received": 3964652,
+            "probeHz": 495392.13986314577,
+            "webHz": 495315.26804315,
+            "dropPercent": 0.9216045208920847,
+            "maxMainThreadLagMs": 1.8000000044703484
+          },
+          "samplesChecked": 4270188,
+          "bad": 0,
+          "firstBad": [],
+          "summary": {
+            "state": "已停止（硬件速率对照）：4270188 个样本 / 8.620 s，跳拍 39904 / USB 丢样本 454 / 读错 0 / 包缺口 0",
+            "mode": "real",
+            "elf": {
+              "name": "f103cb-scope.elf",
+              "source": "dwarf",
+              "versions": [
+                4
+              ],
+              "stats": {
+                "cu": 2,
+                "dies": 127,
+                "vars": 30
+              },
+              "note": ""
+            },
+            "vars": [
+              "g_pack.u_hi:u32@0x20001028"
+            ],
+            "varCount": 1,
+            "plan": {
+              "spans": 1,
+              "frameBytes": 4,
+              "estUs": 4.47,
+              "estHz": 223914
+            },
+            "samples": 4270188,
+            "capacity": 7150065,
+            "packets": 34984,
+            "lost": 40358,
+            "lostProbe": 39904,
+            "lostUsb": 454,
+            "readErrors": 0,
+            "dapYields": 0,
+            "metricsError": null,
+            "lostGap": 0,
+            "benchUs": null,
+            "blob": null,
+            "connectErr": null,
+            "rateHz": 495384,
+            "trigger": {
+              "mode": 0,
+              "hit": -1,
+              "hits": 0,
+              "marker": false
+            },
+            "view": {
+              "start": 0,
+              "end": 1
+            },
+            "lod": false,
+            "resyncs": 0,
+            "raw": 0,
+            "running": false,
+            "mockVars": [
+              "mock0.f32",
+              "mock1.f32",
+              "mock2.i32",
+              "mock3.u16",
+              "mock4.i16",
+              "mock5.u8",
+              "mock6.i8",
+              "mock7.f64"
+            ]
+          },
+          "stalePackets": 8,
+          "periodTicks": 48,
+          "flags": 417,
+          "sequenceReordered": 0
+        }
+      ]
+    },
+    "web-72mhz-baseline.json": {
+      "startedAt": "2026-10-07T10:55:44.624Z",
+      "elfPath": "tools/target-firmware/stm32f103_scope/build-cb-72mhz/fw.elf",
+      "seconds": 8,
+      "rows": [
+        {
+          "cfg": {
+            "period": 2,
+            "draw": true,
+            "adaptive": true
+          },
+          "valid": true,
+          "stable": {
+            "dt": 8.0040805,
+            "produced": 3937987,
+            "skipped": 64055,
+            "usb": 0,
+            "errors": 0,
+            "yields": 0,
+            "received": 3939108,
+            "probeHz": 491997.42556312366,
+            "webHz": 492130.13168114243,
+            "dropPercent": 1.6005579151842986,
+            "maxMainThreadLagMs": 3.100000001490116
+          },
+          "samplesChecked": 4243776,
+          "bad": 0,
+          "firstBad": [],
+          "summary": {
+            "state": "已停止（硬件速率对照）：4243776 个样本 / 8.626 s，跳拍 69285 / USB 丢样本 1367 / 读错 0 / 包缺口 0",
+            "mode": "real",
+            "elf": {
+              "name": "f103cb-scope.elf",
+              "source": "dwarf",
+              "versions": [
+                4
+              ],
+              "stats": {
+                "cu": 2,
+                "dies": 127,
+                "vars": 30
+              },
+              "note": ""
+            },
+            "vars": [
+              "g_pack.u_hi:u32@0x20001028"
+            ],
+            "varCount": 1,
+            "plan": {
+              "spans": 1,
+              "frameBytes": 4,
+              "estUs": 4.47,
+              "estHz": 223914
+            },
+            "samples": 4243776,
+            "capacity": 7150065,
+            "packets": 34768,
+            "lost": 70652,
+            "lostProbe": 69285,
+            "lostUsb": 1367,
+            "readErrors": 0,
+            "dapYields": 0,
+            "metricsError": null,
+            "lostGap": 0,
+            "benchUs": 1.4639375,
+            "blob": {
+              "offset": 1340,
+              "name": "60M(6 指令/bit)",
+              "delay": 1
+            },
+            "connectErr": null,
+            "rateHz": 491991,
+            "trigger": {
+              "mode": 0,
+              "hit": -1,
+              "hits": 0,
+              "marker": false
+            },
+            "view": {
+              "start": 0,
+              "end": 1
+            },
+            "lod": false,
+            "resyncs": 0,
+            "raw": 0,
+            "running": false,
+            "mockVars": [
+              "mock0.f32",
+              "mock1.f32",
+              "mock2.i32",
+              "mock3.u16",
+              "mock4.i16",
+              "mock5.u8",
+              "mock6.i8",
+              "mock7.f64"
+            ]
+          },
+          "stalePackets": 0,
+          "periodTicks": 48,
+          "flags": 417,
+          "sequenceReordered": 0
+        },
+        {
+          "cfg": {
+            "period": 2.25,
+            "draw": true,
+            "adaptive": true
+          },
+          "valid": true,
+          "stable": {
+            "dt": 8.004081333333334,
+            "produced": 3553297,
+            "skipped": 4074,
+            "usb": 0,
+            "errors": 0,
+            "yields": 0,
+            "received": 3554460,
+            "probeHz": 443935.6438323715,
+            "webHz": 444079.90904653096,
+            "dropPercent": 0.11452277538665492,
+            "maxMainThreadLagMs": 2
+          },
+          "samplesChecked": 3828748,
+          "bad": 0,
+          "firstBad": [],
+          "summary": {
+            "state": "已停止（硬件速率对照）：3828748 个样本 / 8.625 s，跳拍 4472 / USB 丢样本 407 / 读错 0 / 包缺口 0",
+            "mode": "real",
+            "elf": {
+              "name": "f103cb-scope.elf",
+              "source": "dwarf",
+              "versions": [
+                4
+              ],
+              "stats": {
+                "cu": 2,
+                "dies": 127,
+                "vars": 30
+              },
+              "note": ""
+            },
+            "vars": [
+              "g_pack.u_hi:u32@0x20001028"
+            ],
+            "varCount": 1,
+            "plan": {
+              "spans": 1,
+              "frameBytes": 4,
+              "estUs": 4.47,
+              "estHz": 223914
+            },
+            "samples": 3828748,
+            "capacity": 6355620,
+            "packets": 31368,
+            "lost": 4879,
+            "lostProbe": 4472,
+            "lostUsb": 407,
+            "readErrors": 0,
+            "dapYields": 0,
+            "metricsError": null,
+            "lostGap": 0,
+            "benchUs": 1.4639375,
+            "blob": {
+              "offset": 1340,
+              "name": "60M(6 指令/bit)",
+              "delay": 1
+            },
+            "connectErr": null,
+            "rateHz": 443927,
+            "trigger": {
+              "mode": 0,
+              "hit": -1,
+              "hits": 0,
+              "marker": false
+            },
+            "view": {
+              "start": 0,
+              "end": 1
+            },
+            "lod": false,
+            "resyncs": 0,
+            "raw": 0,
+            "running": false,
+            "mockVars": [
+              "mock0.f32",
+              "mock1.f32",
+              "mock2.i32",
+              "mock3.u16",
+              "mock4.i16",
+              "mock5.u8",
+              "mock6.i8",
+              "mock7.f64"
+            ]
+          },
+          "stalePackets": 8,
+          "periodTicks": 54,
+          "flags": 417,
+          "sequenceReordered": 0
+        }
+      ],
+      "calibration": {
+        "readUs": 1.4639375,
+        "recommendedUs": 3,
+        "fresh": true
+      }
+    },
+    "web-72mhz-baseline-repeat.json": {
+      "startedAt": "2026-10-07T11:02:30.673Z",
+      "elfPath": "tools/target-firmware/stm32f103_scope/build-cb-72mhz/fw.elf",
+      "seconds": 5,
+      "rows": [
+        {
+          "cfg": {
+            "period": 2.25,
+            "draw": true,
+            "adaptive": true
+          },
+          "valid": true,
+          "stable": {
+            "dt": 5.004048125,
+            "produced": 2221246,
+            "skipped": 2777,
+            "usb": 0,
+            "errors": 0,
+            "yields": 0,
+            "received": 2222576,
+            "probeHz": 443889.8157079575,
+            "webHz": 444150.9961829976,
+            "dropPercent": 0.12486381660621315,
+            "maxMainThreadLagMs": 4.700000002980232
+          },
+          "samplesChecked": 2496864,
+          "bad": 0,
+          "firstBad": [],
+          "summary": {
+            "state": "已停止（硬件速率对照）：2496864 个样本 / 5.625 s，跳拍 3159 / USB 丢样本 378 / 读错 0 / 包缺口 0",
+            "mode": "real",
+            "elf": {
+              "name": "f103cb-scope.elf",
+              "source": "dwarf",
+              "versions": [
+                4
+              ],
+              "stats": {
+                "cu": 2,
+                "dies": 127,
+                "vars": 30
+              },
+              "note": ""
+            },
+            "vars": [
+              "g_pack.u_hi:u32@0x20001028"
+            ],
+            "varCount": 1,
+            "plan": {
+              "spans": 1,
+              "frameBytes": 4,
+              "estUs": 4.47,
+              "estHz": 223914
+            },
+            "samples": 2496864,
+            "capacity": 4888953,
+            "packets": 20456,
+            "lost": 3537,
+            "lostProbe": 3159,
+            "lostUsb": 378,
+            "readErrors": 0,
+            "dapYields": 0,
+            "metricsError": null,
+            "lostGap": 0,
+            "benchUs": null,
+            "blob": null,
+            "connectErr": null,
+            "rateHz": 443886,
+            "trigger": {
+              "mode": 0,
+              "hit": -1,
+              "hits": 0,
+              "marker": false
+            },
+            "view": {
+              "start": 0,
+              "end": 1
+            },
+            "lod": false,
+            "resyncs": 0,
+            "raw": 0,
+            "running": false,
+            "mockVars": [
+              "mock0.f32",
+              "mock1.f32",
+              "mock2.i32",
+              "mock3.u16",
+              "mock4.i16",
+              "mock5.u8",
+              "mock6.i8",
+              "mock7.f64"
+            ]
+          },
+          "stalePackets": 8,
+          "periodTicks": 54,
+          "flags": 417,
+          "sequenceReordered": 0
+        },
+        {
+          "cfg": {
+            "period": 2.25,
+            "draw": true,
+            "adaptive": true
+          },
+          "valid": true,
+          "stable": {
+            "dt": 5.004048,
+            "produced": 2221248,
+            "skipped": 2775,
+            "usb": 0,
+            "errors": 0,
+            "yields": 0,
+            "received": 2222576,
+            "probeHz": 443890.22647264774,
+            "webHz": 444168.7483763988,
+            "dropPercent": 0.12477388947866096,
+            "maxMainThreadLagMs": 1.8000000044703484
+          },
+          "samplesChecked": 2496864,
+          "bad": 0,
+          "firstBad": [],
+          "summary": {
+            "state": "已停止（硬件速率对照）：2496864 个样本 / 5.625 s，跳拍 3156 / USB 丢样本 386 / 读错 0 / 包缺口 0",
+            "mode": "real",
+            "elf": {
+              "name": "f103cb-scope.elf",
+              "source": "dwarf",
+              "versions": [
+                4
+              ],
+              "stats": {
+                "cu": 2,
+                "dies": 127,
+                "vars": 30
+              },
+              "note": ""
+            },
+            "vars": [
+              "g_pack.u_hi:u32@0x20001028"
+            ],
+            "varCount": 1,
+            "plan": {
+              "spans": 1,
+              "frameBytes": 4,
+              "estUs": 4.47,
+              "estHz": 223914
+            },
+            "samples": 2496864,
+            "capacity": 4888953,
+            "packets": 20456,
+            "lost": 3542,
+            "lostProbe": 3156,
+            "lostUsb": 386,
+            "readErrors": 0,
+            "dapYields": 0,
+            "metricsError": null,
+            "lostGap": 0,
+            "benchUs": null,
+            "blob": null,
+            "connectErr": null,
+            "rateHz": 443886,
+            "trigger": {
+              "mode": 0,
+              "hit": -1,
+              "hits": 0,
+              "marker": false
+            },
+            "view": {
+              "start": 0,
+              "end": 1
+            },
+            "lod": false,
+            "resyncs": 0,
+            "raw": 0,
+            "running": false,
+            "mockVars": [
+              "mock0.f32",
+              "mock1.f32",
+              "mock2.i32",
+              "mock3.u16",
+              "mock4.i16",
+              "mock5.u8",
+              "mock6.i8",
+              "mock7.f64"
+            ]
+          },
+          "stalePackets": 8,
+          "periodTicks": 54,
+          "flags": 417,
+          "sequenceReordered": 0
+        },
+        {
+          "cfg": {
+            "period": 2.25,
+            "draw": true,
+            "adaptive": true
+          },
+          "valid": true,
+          "stable": {
+            "dt": 5.004048583333334,
+            "produced": 2221323,
+            "skipped": 2700,
+            "usb": 0,
+            "errors": 0,
+            "yields": 0,
+            "received": 2222576,
+            "probeHz": 443905.1625914303,
+            "webHz": 444150.9961829976,
+            "dropPercent": 0.12140162219545392,
+            "maxMainThreadLagMs": 1.9000000059604645
+          },
+          "samplesChecked": 2496864,
+          "bad": 0,
+          "firstBad": [],
+          "summary": {
+            "state": "已停止（硬件速率对照）：2496864 个样本 / 5.625 s，跳拍 3106 / USB 丢样本 433 / 读错 0 / 包缺口 0",
+            "mode": "real",
+            "elf": {
+              "name": "f103cb-scope.elf",
+              "source": "dwarf",
+              "versions": [
+                4
+              ],
+              "stats": {
+                "cu": 2,
+                "dies": 127,
+                "vars": 30
+              },
+              "note": ""
+            },
+            "vars": [
+              "g_pack.u_hi:u32@0x20001028"
+            ],
+            "varCount": 1,
+            "plan": {
+              "spans": 1,
+              "frameBytes": 4,
+              "estUs": 4.47,
+              "estHz": 223914
+            },
+            "samples": 2496864,
+            "capacity": 4888953,
+            "packets": 20456,
+            "lost": 3539,
+            "lostProbe": 3106,
+            "lostUsb": 433,
+            "readErrors": 0,
+            "dapYields": 0,
+            "metricsError": null,
+            "lostGap": 0,
+            "benchUs": null,
+            "blob": null,
+            "connectErr": null,
+            "rateHz": 443895,
+            "trigger": {
+              "mode": 0,
+              "hit": -1,
+              "hits": 0,
+              "marker": false
+            },
+            "view": {
+              "start": 0,
+              "end": 1
+            },
+            "lod": false,
+            "resyncs": 0,
+            "raw": 0,
+            "running": false,
+            "mockVars": [
+              "mock0.f32",
+              "mock1.f32",
+              "mock2.i32",
+              "mock3.u16",
+              "mock4.i16",
+              "mock5.u8",
+              "mock6.i8",
+              "mock7.f64"
+            ]
+          },
+          "stalePackets": 8,
+          "periodTicks": 54,
+          "flags": 417,
+          "sequenceReordered": 0
+        },
+        {
+          "cfg": {
+            "period": 2.25,
+            "draw": true,
+            "adaptive": true
+          },
+          "valid": true,
+          "stable": {
+            "dt": 5.00404875,
+            "produced": 2221511,
+            "skipped": 2513,
+            "usb": 0,
+            "errors": 0,
+            "yields": 0,
+            "received": 2222576,
+            "probeHz": 443942.7173845978,
+            "webHz": 444150.9961829976,
+            "dropPercent": 0.11299338496347161,
+            "maxMainThreadLagMs": 1.8000000044703484
+          },
+          "samplesChecked": 2496864,
+          "bad": 0,
+          "firstBad": [],
+          "summary": {
+            "state": "已停止（硬件速率对照）：2496864 个样本 / 5.624 s，跳拍 2912 / USB 丢样本 627 / 读错 0 / 包缺口 0",
+            "mode": "real",
+            "elf": {
+              "name": "f103cb-scope.elf",
+              "source": "dwarf",
+              "versions": [
+                4
+              ],
+              "stats": {
+                "cu": 2,
+                "dies": 127,
+                "vars": 30
+              },
+              "note": ""
+            },
+            "vars": [
+              "g_pack.u_hi:u32@0x20001028"
+            ],
+            "varCount": 1,
+            "plan": {
+              "spans": 1,
+              "frameBytes": 4,
+              "estUs": 4.47,
+              "estHz": 223914
+            },
+            "samples": 2496864,
+            "capacity": 4888953,
+            "packets": 20456,
+            "lost": 3539,
+            "lostProbe": 2912,
+            "lostUsb": 627,
+            "readErrors": 0,
+            "dapYields": 0,
+            "metricsError": null,
+            "lostGap": 0,
+            "benchUs": null,
+            "blob": null,
+            "connectErr": null,
+            "rateHz": 443930,
+            "trigger": {
+              "mode": 0,
+              "hit": -1,
+              "hits": 0,
+              "marker": false
+            },
+            "view": {
+              "start": 0,
+              "end": 1
+            },
+            "lod": false,
+            "resyncs": 0,
+            "raw": 0,
+            "running": false,
+            "mockVars": [
+              "mock0.f32",
+              "mock1.f32",
+              "mock2.i32",
+              "mock3.u16",
+              "mock4.i16",
+              "mock5.u8",
+              "mock6.i8",
+              "mock7.f64"
+            ]
+          },
+          "stalePackets": 8,
+          "periodTicks": 54,
+          "flags": 417,
+          "sequenceReordered": 0
+        }
+      ],
+      "calibration": {
+        "readUs": null,
+        "recommendedUs": null,
+        "fresh": false
+      }
+    },
+    "web-72mhz-optimized.json": {
+      "startedAt": "2026-10-07T10:53:45.694Z",
+      "elfPath": "tools/target-firmware/stm32f103_scope/build-cb-72mhz/fw.elf",
+      "seconds": 8,
+      "rows": [
+        {
+          "cfg": {
+            "period": 2,
+            "draw": true,
+            "adaptive": true
+          },
+          "valid": true,
+          "stable": {
+            "dt": 8.004079416666666,
+            "produced": 3965112,
+            "skipped": 36929,
+            "usb": 0,
+            "errors": 0,
+            "yields": 0,
+            "received": 3964652,
+            "probeHz": 495386.38906350185,
+            "webHz": 495315.2680436111,
+            "dropPercent": 0.9227541646874683,
+            "maxMainThreadLagMs": 1.7999999970197678
+          },
+          "samplesChecked": 4270188,
+          "bad": 0,
+          "firstBad": [],
+          "summary": {
+            "state": "已停止（硬件速率对照）：4270188 个样本 / 8.620 s，跳拍 39948 / USB 丢样本 405 / 读错 0 / 包缺口 0",
+            "mode": "real",
+            "elf": {
+              "name": "f103cb-scope.elf",
+              "source": "dwarf",
+              "versions": [
+                4
+              ],
+              "stats": {
+                "cu": 2,
+                "dies": 127,
+                "vars": 30
+              },
+              "note": ""
+            },
+            "vars": [
+              "g_pack.u_hi:u32@0x20001028"
+            ],
+            "varCount": 1,
+            "plan": {
+              "spans": 1,
+              "frameBytes": 4,
+              "estUs": 4.47,
+              "estHz": 223914
+            },
+            "samples": 4270188,
+            "capacity": 7150065,
+            "packets": 34984,
+            "lost": 40353,
+            "lostProbe": 39948,
+            "lostUsb": 405,
+            "readErrors": 0,
+            "dapYields": 0,
+            "metricsError": null,
+            "lostGap": 0,
+            "benchUs": null,
+            "blob": null,
+            "connectErr": null,
+            "rateHz": 495379,
+            "trigger": {
+              "mode": 0,
+              "hit": -1,
+              "hits": 0,
+              "marker": false
+            },
+            "view": {
+              "start": 0,
+              "end": 1
+            },
+            "lod": false,
+            "resyncs": 0,
+            "raw": 0,
+            "running": false,
+            "mockVars": [
+              "mock0.f32",
+              "mock1.f32",
+              "mock2.i32",
+              "mock3.u16",
+              "mock4.i16",
+              "mock5.u8",
+              "mock6.i8",
+              "mock7.f64"
+            ]
+          },
+          "stalePackets": 8,
+          "periodTicks": 48,
+          "flags": 417,
+          "sequenceReordered": 0
+        },
+        {
+          "cfg": {
+            "period": 2.25,
+            "draw": true,
+            "adaptive": true
+          },
+          "valid": true,
+          "stable": {
+            "dt": 8.00408025,
+            "produced": 3546308,
+            "skipped": 11063,
+            "usb": 0,
+            "errors": 0,
+            "yields": 0,
+            "received": 3546648,
+            "probeHz": 443062.52426692,
+            "webHz": 443098.3733538242,
+            "dropPercent": 0.310988086426746,
+            "maxMainThreadLagMs": 1.7000000029802322
+          },
+          "samplesChecked": 3815108,
+          "bad": 0,
+          "firstBad": [],
+          "summary": {
+            "state": "已停止（硬件速率对照）：3815108 个样本 / 8.611 s，跳拍 11983 / USB 丢样本 468 / 读错 0 / 包缺口 0",
+            "mode": "real",
+            "elf": {
+              "name": "f103cb-scope.elf",
+              "source": "dwarf",
+              "versions": [
+                4
+              ],
+              "stats": {
+                "cu": 2,
+                "dies": 127,
+                "vars": 30
+              },
+              "note": ""
+            },
+            "vars": [
+              "g_pack.u_hi:u32@0x20001028"
+            ],
+            "varCount": 1,
+            "plan": {
+              "spans": 1,
+              "frameBytes": 4,
+              "estUs": 4.47,
+              "estHz": 223914
+            },
+            "samples": 3815108,
+            "capacity": 6355620,
+            "packets": 31256,
+            "lost": 12451,
+            "lostProbe": 11983,
+            "lostUsb": 468,
+            "readErrors": 0,
+            "dapYields": 0,
+            "metricsError": null,
+            "lostGap": 0,
+            "benchUs": null,
+            "blob": null,
+            "connectErr": null,
+            "rateHz": 443058,
+            "trigger": {
+              "mode": 0,
+              "hit": -1,
+              "hits": 0,
+              "marker": false
+            },
+            "view": {
+              "start": 0,
+              "end": 1
+            },
+            "lod": false,
+            "resyncs": 0,
+            "raw": 0,
+            "running": false,
+            "mockVars": [
+              "mock0.f32",
+              "mock1.f32",
+              "mock2.i32",
+              "mock3.u16",
+              "mock4.i16",
+              "mock5.u8",
+              "mock6.i8",
+              "mock7.f64"
+            ]
+          },
+          "stalePackets": 8,
+          "periodTicks": 54,
+          "flags": 417,
+          "sequenceReordered": 0
+        },
+        {
+          "cfg": {
+            "period": 2.5,
+            "draw": true,
+            "adaptive": true
+          },
+          "valid": true,
+          "stable": {
+            "dt": 8.004080291666666,
+            "produced": 3201469,
+            "skipped": 164,
+            "usb": 0,
+            "errors": 0,
+            "yields": 0,
+            "received": 3202920,
+            "probeHz": 399979.62081079616,
+            "webHz": 400164.9175412294,
+            "dropPercent": 0.005122385982403355,
+            "maxMainThreadLagMs": 1.8000000044703484
+          },
+          "samplesChecked": 3449928,
+          "bad": 0,
+          "firstBad": [],
+          "summary": {
+            "state": "已停止（硬件速率对照）：3449928 个样本 / 8.625 s，跳拍 230 / USB 丢样本 543 / 读错 0 / 包缺口 0",
+            "mode": "real",
+            "elf": {
+              "name": "f103cb-scope.elf",
+              "source": "dwarf",
+              "versions": [
+                4
+              ],
+              "stats": {
+                "cu": 2,
+                "dies": 127,
+                "vars": 30
+              },
+              "note": ""
+            },
+            "vars": [
+              "g_pack.u_hi:u32@0x20001028"
+            ],
+            "varCount": 1,
+            "plan": {
+              "spans": 1,
+              "frameBytes": 4,
+              "estUs": 4.47,
+              "estHz": 223914
+            },
+            "samples": 3449928,
+            "capacity": 5720064,
+            "packets": 28264,
+            "lost": 773,
+            "lostProbe": 230,
+            "lostUsb": 543,
+            "readErrors": 0,
+            "dapYields": 0,
+            "metricsError": null,
+            "lostGap": 0,
+            "benchUs": null,
+            "blob": null,
+            "connectErr": null,
+            "rateHz": 399974,
+            "trigger": {
+              "mode": 0,
+              "hit": -1,
+              "hits": 0,
+              "marker": false
+            },
+            "view": {
+              "start": 0,
+              "end": 1
+            },
+            "lod": false,
+            "resyncs": 0,
+            "raw": 0,
+            "running": false,
+            "mockVars": [
+              "mock0.f32",
+              "mock1.f32",
+              "mock2.i32",
+              "mock3.u16",
+              "mock4.i16",
+              "mock5.u8",
+              "mock6.i8",
+              "mock7.f64"
+            ]
+          },
+          "stalePackets": 8,
+          "periodTicks": 60,
+          "flags": 417,
+          "sequenceReordered": 0
+        }
+      ],
+      "calibration": {
+        "readUs": null,
+        "recommendedUs": null,
+        "fresh": false
+      }
+    },
+    "web-72mhz-batch64.json": {
+      "startedAt": "2026-10-07T11:05:09.517Z",
+      "elfPath": "tools/target-firmware/stm32f103_scope/build-cb-72mhz/fw.elf",
+      "seconds": 8,
+      "rows": [
+        {
+          "cfg": {
+            "period": 2,
+            "draw": true,
+            "adaptive": true
+          },
+          "valid": true,
+          "stable": {
+            "dt": 8.004083375,
+            "produced": 3968048,
+            "skipped": 33995,
+            "usb": 0,
+            "errors": 0,
+            "yields": 0,
+            "received": 3968496,
+            "probeHz": 495752.95684622973,
+            "webHz": 495801.7041051601,
+            "dropPercent": 0.8494411479336929,
+            "maxMainThreadLagMs": 2.899999998509884
+          },
+          "samplesChecked": 4277008,
+          "bad": 0,
+          "firstBad": [],
+          "summary": {
+            "state": "已停止（硬件速率对照）：4277008 个样本 / 8.628 s，跳拍 36959 / USB 丢样本 578 / 读错 0 / 包缺口 0",
+            "mode": "real",
+            "elf": {
+              "name": "f103cb-scope.elf",
+              "source": "dwarf",
+              "versions": [
+                4
+              ],
+              "stats": {
+                "cu": 2,
+                "dies": 127,
+                "vars": 30
+              },
+              "note": ""
+            },
+            "vars": [
+              "g_pack.u_hi:u32@0x20001028"
+            ],
+            "varCount": 1,
+            "plan": {
+              "spans": 1,
+              "frameBytes": 4,
+              "estUs": 4.47,
+              "estHz": 223914
+            },
+            "samples": 4277008,
+            "capacity": 7150065,
+            "packets": 35040,
+            "lost": 37537,
+            "lostProbe": 36959,
+            "lostUsb": 578,
+            "readErrors": 0,
+            "dapYields": 0,
+            "metricsError": null,
+            "lostGap": 0,
+            "benchUs": 1.466125,
+            "blob": {
+              "offset": 1340,
+              "name": "60M(6 指令/bit)",
+              "delay": 1
+            },
+            "connectErr": null,
+            "rateHz": 495729,
+            "trigger": {
+              "mode": 0,
+              "hit": -1,
+              "hits": 0,
+              "marker": false
+            },
+            "view": {
+              "start": 0,
+              "end": 1
+            },
+            "lod": false,
+            "resyncs": 0,
+            "raw": 0,
+            "running": false,
+            "mockVars": [
+              "mock0.f32",
+              "mock1.f32",
+              "mock2.i32",
+              "mock3.u16",
+              "mock4.i16",
+              "mock5.u8",
+              "mock6.i8",
+              "mock7.f64"
+            ]
+          },
+          "stalePackets": 0,
+          "periodTicks": 48,
+          "flags": 417,
+          "sequenceReordered": 0
+        },
+        {
+          "cfg": {
+            "period": 2.25,
+            "draw": true,
+            "adaptive": true
+          },
+          "valid": true,
+          "stable": {
+            "dt": 8.004083041666666,
+            "produced": 3554560,
+            "skipped": 2812,
+            "usb": 0,
+            "errors": 0,
+            "yields": 0,
+            "received": 3554460,
+            "probeHz": 444093.3435468012,
+            "webHz": 444074.3609603304,
+            "dropPercent": 0.07904711680420265,
+            "maxMainThreadLagMs": 1.6000000014901161
+          },
+          "samplesChecked": 3828748,
+          "bad": 0,
+          "firstBad": [],
+          "summary": {
+            "state": "已停止（硬件速率对照）：3828748 个样本 / 8.623 s，跳拍 3888 / USB 丢样本 988 / 读错 0 / 包缺口 0",
+            "mode": "real",
+            "elf": {
+              "name": "f103cb-scope.elf",
+              "source": "dwarf",
+              "versions": [
+                4
+              ],
+              "stats": {
+                "cu": 2,
+                "dies": 127,
+                "vars": 30
+              },
+              "note": ""
+            },
+            "vars": [
+              "g_pack.u_hi:u32@0x20001028"
+            ],
+            "varCount": 1,
+            "plan": {
+              "spans": 1,
+              "frameBytes": 4,
+              "estUs": 4.47,
+              "estHz": 223914
+            },
+            "samples": 3828748,
+            "capacity": 6355620,
+            "packets": 31368,
+            "lost": 4876,
+            "lostProbe": 3888,
+            "lostUsb": 988,
+            "readErrors": 0,
+            "dapYields": 0,
+            "metricsError": null,
+            "lostGap": 0,
+            "benchUs": 1.466125,
+            "blob": {
+              "offset": 1340,
+              "name": "60M(6 指令/bit)",
+              "delay": 1
+            },
+            "connectErr": null,
+            "rateHz": 443996,
+            "trigger": {
+              "mode": 0,
+              "hit": -1,
+              "hits": 0,
+              "marker": false
+            },
+            "view": {
+              "start": 0,
+              "end": 1
+            },
+            "lod": false,
+            "resyncs": 0,
+            "raw": 0,
+            "running": false,
+            "mockVars": [
+              "mock0.f32",
+              "mock1.f32",
+              "mock2.i32",
+              "mock3.u16",
+              "mock4.i16",
+              "mock5.u8",
+              "mock6.i8",
+              "mock7.f64"
+            ]
+          },
+          "stalePackets": 8,
+          "periodTicks": 54,
+          "flags": 417,
+          "sequenceReordered": 0
+        },
+        {
+          "cfg": {
+            "period": 2.25,
+            "draw": true,
+            "adaptive": true
+          },
+          "valid": true,
+          "stable": {
+            "dt": 8.004083125,
+            "produced": 3553665,
+            "skipped": 3706,
+            "usb": 0,
+            "errors": 0,
+            "yields": 0,
+            "received": 3554460,
+            "probeHz": 443981.52099401143,
+            "webHz": 444074.3609603304,
+            "dropPercent": 0.10417805733503759,
+            "maxMainThreadLagMs": 2
+          },
+          "samplesChecked": 3828748,
+          "bad": 0,
+          "firstBad": [],
+          "summary": {
+            "state": "已停止（硬件速率对照）：3828748 个样本 / 8.625 s，跳拍 4555 / USB 丢样本 319 / 读错 0 / 包缺口 0",
+            "mode": "real",
+            "elf": {
+              "name": "f103cb-scope.elf",
+              "source": "dwarf",
+              "versions": [
+                4
+              ],
+              "stats": {
+                "cu": 2,
+                "dies": 127,
+                "vars": 30
+              },
+              "note": ""
+            },
+            "vars": [
+              "g_pack.u_hi:u32@0x20001028"
+            ],
+            "varCount": 1,
+            "plan": {
+              "spans": 1,
+              "frameBytes": 4,
+              "estUs": 4.47,
+              "estHz": 223914
+            },
+            "samples": 3828748,
+            "capacity": 6355620,
+            "packets": 31368,
+            "lost": 4874,
+            "lostProbe": 4555,
+            "lostUsb": 319,
+            "readErrors": 0,
+            "dapYields": 0,
+            "metricsError": null,
+            "lostGap": 0,
+            "benchUs": 1.466125,
+            "blob": {
+              "offset": 1340,
+              "name": "60M(6 指令/bit)",
+              "delay": 1
+            },
+            "connectErr": null,
+            "rateHz": 443919,
+            "trigger": {
+              "mode": 0,
+              "hit": -1,
+              "hits": 0,
+              "marker": false
+            },
+            "view": {
+              "start": 0,
+              "end": 1
+            },
+            "lod": false,
+            "resyncs": 0,
+            "raw": 0,
+            "running": false,
+            "mockVars": [
+              "mock0.f32",
+              "mock1.f32",
+              "mock2.i32",
+              "mock3.u16",
+              "mock4.i16",
+              "mock5.u8",
+              "mock6.i8",
+              "mock7.f64"
+            ]
+          },
+          "stalePackets": 8,
+          "periodTicks": 54,
+          "flags": 417,
+          "sequenceReordered": 0
+        },
+        {
+          "cfg": {
+            "period": 2.5,
+            "draw": true,
+            "adaptive": true
+          },
+          "valid": true,
+          "stable": {
+            "dt": 8.004082666666667,
+            "produced": 3197702,
+            "skipped": 3933,
+            "usb": 0,
+            "errors": 0,
+            "yields": 0,
+            "received": 3197092,
+            "probeHz": 399508.86730805045,
+            "webHz": 399436.7816091954,
+            "dropPercent": 0.12284348465705804,
+            "maxMainThreadLagMs": 2.1999999955296516
+          },
+          "samplesChecked": 3444100,
+          "bad": 0,
+          "firstBad": [],
+          "summary": {
+            "state": "已停止（硬件速率对照）：3444100 个样本 / 8.622 s，跳拍 4651 / USB 丢样本 346 / 读错 0 / 包缺口 0",
+            "mode": "real",
+            "elf": {
+              "name": "f103cb-scope.elf",
+              "source": "dwarf",
+              "versions": [
+                4
+              ],
+              "stats": {
+                "cu": 2,
+                "dies": 127,
+                "vars": 30
+              },
+              "note": ""
+            },
+            "vars": [
+              "g_pack.u_hi:u32@0x20001028"
+            ],
+            "varCount": 1,
+            "plan": {
+              "spans": 1,
+              "frameBytes": 4,
+              "estUs": 4.47,
+              "estHz": 223914
+            },
+            "samples": 3444100,
+            "capacity": 5720064,
+            "packets": 28216,
+            "lost": 4997,
+            "lostProbe": 4651,
+            "lostUsb": 346,
+            "readErrors": 0,
+            "dapYields": 0,
+            "metricsError": null,
+            "lostGap": 0,
+            "benchUs": 1.466125,
+            "blob": {
+              "offset": 1340,
+              "name": "60M(6 指令/bit)",
+              "delay": 1
+            },
+            "connectErr": null,
+            "rateHz": 399462,
+            "trigger": {
+              "mode": 0,
+              "hit": -1,
+              "hits": 0,
+              "marker": false
+            },
+            "view": {
+              "start": 0,
+              "end": 1
+            },
+            "lod": false,
+            "resyncs": 0,
+            "raw": 0,
+            "running": false,
+            "mockVars": [
+              "mock0.f32",
+              "mock1.f32",
+              "mock2.i32",
+              "mock3.u16",
+              "mock4.i16",
+              "mock5.u8",
+              "mock6.i8",
+              "mock7.f64"
+            ]
+          },
+          "stalePackets": 8,
+          "periodTicks": 60,
+          "flags": 417,
+          "sequenceReordered": 0
+        }
+      ],
+      "calibration": {
+        "readUs": 1.466125,
+        "recommendedUs": 3,
+        "fresh": true,
+        "status": "标定：读一次 1.466 µs → 上限 ≈682 kHz（模型估 4.47 µs，偏保守 3.0×）（blob 60M(6 指令/bit)），对「g_pack.u_hi @SWD/ARM」有效；建议起始周期 ≥ 3 µs（≈333 kHz，需实采确认稳定性）"
+      }
+    },
+    "web-72mhz-final-repeat.json": {
+      "startedAt": "2026-10-07T11:06:31.047Z",
+      "elfPath": "tools/target-firmware/stm32f103_scope/build-cb-72mhz/fw.elf",
+      "seconds": 5,
+      "rows": [
+        {
+          "cfg": {
+            "period": 2,
+            "draw": true,
+            "adaptive": true
+          },
+          "valid": true,
+          "stable": {
+            "dt": 5.004049583333333,
+            "produced": 2461934,
+            "skipped": 40092,
+            "usb": 0,
+            "errors": 0,
+            "yields": 0,
+            "received": 2462764,
+            "probeHz": 491988.33045136195,
+            "webHz": 492139.40290200233,
+            "dropPercent": 1.602381430089056,
+            "maxMainThreadLagMs": 2.2000000029802322
+          },
+          "samplesChecked": 2760488,
+          "bad": 0,
+          "firstBad": [],
+          "summary": {
+            "state": "已停止（硬件速率对照）：2760488 个样本 / 5.611 s，跳拍 45330 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+            "mode": "real",
+            "elf": {
+              "name": "f103cb-scope.elf",
+              "source": "dwarf",
+              "versions": [
+                4
+              ],
+              "stats": {
+                "cu": 2,
+                "dies": 127,
+                "vars": 30
+              },
+              "note": ""
+            },
+            "vars": [
+              "g_pack.u_hi:u32@0x20001028"
+            ],
+            "varCount": 1,
+            "plan": {
+              "spans": 1,
+              "frameBytes": 4,
+              "estUs": 4.47,
+              "estHz": 223914
+            },
+            "samples": 2760488,
+            "capacity": 5500064,
+            "packets": 22616,
+            "lost": 45330,
+            "lostProbe": 45330,
+            "lostUsb": 0,
+            "readErrors": 0,
+            "dapYields": 0,
+            "metricsError": null,
+            "lostGap": 0,
+            "benchUs": 1.4661666666666668,
+            "blob": {
+              "offset": 1340,
+              "name": "60M(6 指令/bit)",
+              "delay": 1
+            },
+            "connectErr": null,
+            "rateHz": 491958,
+            "trigger": {
+              "mode": 0,
+              "hit": -1,
+              "hits": 0,
+              "marker": false
+            },
+            "view": {
+              "start": 0,
+              "end": 1
+            },
+            "lod": false,
+            "resyncs": 0,
+            "raw": 0,
+            "running": false,
+            "mockVars": [
+              "mock0.f32",
+              "mock1.f32",
+              "mock2.i32",
+              "mock3.u16",
+              "mock4.i16",
+              "mock5.u8",
+              "mock6.i8",
+              "mock7.f64"
+            ]
+          },
+          "stalePackets": 8,
+          "periodTicks": 48,
+          "flags": 417,
+          "sequenceReordered": 0
+        },
+        {
+          "cfg": {
+            "period": 2,
+            "draw": true,
+            "adaptive": true
+          },
+          "valid": true,
+          "stable": {
+            "dt": 5.004050041666667,
+            "produced": 2480720,
+            "skipped": 21307,
+            "usb": 0,
+            "errors": 0,
+            "yields": 0,
+            "received": 2480372,
+            "probeHz": 495742.444488777,
+            "webHz": 495667.95227898355,
+            "dropPercent": 0.8515895312080964,
+            "maxMainThreadLagMs": 2.4000000059604645
+          },
+          "samplesChecked": 2788140,
+          "bad": 0,
+          "firstBad": [],
+          "summary": {
+            "state": "已停止（硬件速率对照）：2788140 个样本 / 5.625 s，跳拍 24286 / USB 丢样本 103 / 读错 0 / 包缺口 0",
+            "mode": "real",
+            "elf": {
+              "name": "f103cb-scope.elf",
+              "source": "dwarf",
+              "versions": [
+                4
+              ],
+              "stats": {
+                "cu": 2,
+                "dies": 127,
+                "vars": 30
+              },
+              "note": ""
+            },
+            "vars": [
+              "g_pack.u_hi:u32@0x20001028"
+            ],
+            "varCount": 1,
+            "plan": {
+              "spans": 1,
+              "frameBytes": 4,
+              "estUs": 4.47,
+              "estHz": 223914
+            },
+            "samples": 2788140,
+            "capacity": 5500064,
+            "packets": 22842,
+            "lost": 24389,
+            "lostProbe": 24286,
+            "lostUsb": 103,
+            "readErrors": 0,
+            "dapYields": 0,
+            "metricsError": null,
+            "lostGap": 0,
+            "benchUs": 1.4661666666666668,
+            "blob": {
+              "offset": 1340,
+              "name": "60M(6 指令/bit)",
+              "delay": 1
+            },
+            "connectErr": null,
+            "rateHz": 495702,
+            "trigger": {
+              "mode": 0,
+              "hit": -1,
+              "hits": 0,
+              "marker": false
+            },
+            "view": {
+              "start": 0,
+              "end": 1
+            },
+            "lod": false,
+            "resyncs": 0,
+            "raw": 0,
+            "running": false,
+            "mockVars": [
+              "mock0.f32",
+              "mock1.f32",
+              "mock2.i32",
+              "mock3.u16",
+              "mock4.i16",
+              "mock5.u8",
+              "mock6.i8",
+              "mock7.f64"
+            ]
+          },
+          "stalePackets": 6,
+          "periodTicks": 48,
+          "flags": 417,
+          "sequenceReordered": 0
+        },
+        {
+          "cfg": {
+            "period": 2,
+            "draw": true,
+            "adaptive": true
+          },
+          "valid": true,
+          "stable": {
+            "dt": 5.004049541666666,
+            "produced": 2480771,
+            "skipped": 21255,
+            "usb": 0,
+            "errors": 0,
+            "yields": 0,
+            "received": 2480372,
+            "probeHz": 495752.6857685237,
+            "webHz": 495658.0472400229,
+            "dropPercent": 0.8495115558351511,
+            "maxMainThreadLagMs": 1.7999999970197678
+          },
+          "samplesChecked": 2785908,
+          "bad": 0,
+          "firstBad": [],
+          "summary": {
+            "state": "已停止（硬件速率对照）：2785908 个样本 / 5.620 s，跳拍 24067 / USB 丢样本 558 / 读错 0 / 包缺口 0",
+            "mode": "real",
+            "elf": {
+              "name": "f103cb-scope.elf",
+              "source": "dwarf",
+              "versions": [
+                4
+              ],
+              "stats": {
+                "cu": 2,
+                "dies": 127,
+                "vars": 30
+              },
+              "note": ""
+            },
+            "vars": [
+              "g_pack.u_hi:u32@0x20001028"
+            ],
+            "varCount": 1,
+            "plan": {
+              "spans": 1,
+              "frameBytes": 4,
+              "estUs": 4.47,
+              "estHz": 223914
+            },
+            "samples": 2785908,
+            "capacity": 5500064,
+            "packets": 22824,
+            "lost": 24625,
+            "lostProbe": 24067,
+            "lostUsb": 558,
+            "readErrors": 0,
+            "dapYields": 0,
+            "metricsError": null,
+            "lostGap": 0,
+            "benchUs": 1.4661666666666668,
+            "blob": {
+              "offset": 1340,
+              "name": "60M(6 指令/bit)",
+              "delay": 1
+            },
+            "connectErr": null,
+            "rateHz": 495738,
+            "trigger": {
+              "mode": 0,
+              "hit": -1,
+              "hits": 0,
+              "marker": false
+            },
+            "view": {
+              "start": 0,
+              "end": 1
+            },
+            "lod": false,
+            "resyncs": 0,
+            "raw": 0,
+            "running": false,
+            "mockVars": [
+              "mock0.f32",
+              "mock1.f32",
+              "mock2.i32",
+              "mock3.u16",
+              "mock4.i16",
+              "mock5.u8",
+              "mock6.i8",
+              "mock7.f64"
+            ]
+          },
+          "stalePackets": 8,
+          "periodTicks": 48,
+          "flags": 417,
+          "sequenceReordered": 0
+        },
+        {
+          "cfg": {
+            "period": 2.5,
+            "draw": true,
+            "adaptive": true
+          },
+          "valid": true,
+          "stable": {
+            "dt": 5.00405125,
+            "produced": 2001471,
+            "skipped": 150,
+            "usb": 0,
+            "errors": 0,
+            "yields": 0,
+            "received": 2001856,
+            "probeHz": 399970.1242068614,
+            "webHz": 400035.17045717366,
+            "dropPercent": 0.0074939261728369155,
+            "maxMainThreadLagMs": 1.8999999985098839
+          },
+          "samplesChecked": 2248864,
+          "bad": 0,
+          "firstBad": [],
+          "summary": {
+            "state": "已停止（硬件速率对照）：2248864 个样本 / 5.623 s，跳拍 254 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+            "mode": "real",
+            "elf": {
+              "name": "f103cb-scope.elf",
+              "source": "dwarf",
+              "versions": [
+                4
+              ],
+              "stats": {
+                "cu": 2,
+                "dies": 127,
+                "vars": 30
+              },
+              "note": ""
+            },
+            "vars": [
+              "g_pack.u_hi:u32@0x20001028"
+            ],
+            "varCount": 1,
+            "plan": {
+              "spans": 1,
+              "frameBytes": 4,
+              "estUs": 4.47,
+              "estHz": 223914
+            },
+            "samples": 2248864,
+            "capacity": 4400064,
+            "packets": 18424,
+            "lost": 254,
+            "lostProbe": 254,
+            "lostUsb": 0,
+            "readErrors": 0,
+            "dapYields": 0,
+            "metricsError": null,
+            "lostGap": 0,
+            "benchUs": 1.4661666666666668,
+            "blob": {
+              "offset": 1340,
+              "name": "60M(6 指令/bit)",
+              "delay": 1
+            },
+            "connectErr": null,
+            "rateHz": 399956,
+            "trigger": {
+              "mode": 0,
+              "hit": -1,
+              "hits": 0,
+              "marker": false
+            },
+            "view": {
+              "start": 0,
+              "end": 1
+            },
+            "lod": false,
+            "resyncs": 0,
+            "raw": 0,
+            "running": false,
+            "mockVars": [
+              "mock0.f32",
+              "mock1.f32",
+              "mock2.i32",
+              "mock3.u16",
+              "mock4.i16",
+              "mock5.u8",
+              "mock6.i8",
+              "mock7.f64"
+            ]
+          },
+          "stalePackets": 8,
+          "periodTicks": 60,
+          "flags": 417,
+          "sequenceReordered": 0
+        }
+      ],
+      "calibration": {
+        "readUs": 1.4661666666666668,
+        "recommendedUs": 3,
+        "fresh": true,
+        "status": "标定：读一次 1.466 µs → 上限 ≈682 kHz（模型估 4.47 µs，偏保守 3.0×）（blob 60M(6 指令/bit)），对「g_pack.u_hi @SWD/ARM」有效；建议起始周期 ≥ 3 µs（≈333 kHz，需实采确认稳定性）"
+      }
+    },
+    "web-final-release.json": {
+      "startedAt": "2026-10-07T11:12:09.778Z",
+      "elfPath": "tools/target-firmware/stm32f103_scope/build-cb-72mhz/fw.elf",
+      "seconds": 8,
+      "rows": [
+        {
+          "cfg": {
+            "period": 2,
+            "draw": true,
+            "adaptive": true
+          },
+          "valid": true,
+          "stable": {
+            "dt": 8.00408375,
+            "produced": 3968828,
+            "skipped": 33215,
+            "usb": 0,
+            "errors": 0,
+            "yields": 0,
+            "received": 3968496,
+            "probeHz": 495850.3838743567,
+            "webHz": 495807.89845195104,
+            "dropPercent": 0.8299511024744112,
+            "maxMainThreadLagMs": 2
+          },
+          "samplesChecked": 4275024,
+          "bad": 0,
+          "firstBad": [],
+          "summary": {
+            "state": "已停止（硬件速率对照）：4275024 个样本 / 8.622 s，跳拍 35855 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+            "mode": "real",
+            "elf": {
+              "name": "f103cb-scope.elf",
+              "source": "dwarf",
+              "versions": [
+                4
+              ],
+              "stats": {
+                "cu": 2,
+                "dies": 127,
+                "vars": 30
+              },
+              "note": ""
+            },
+            "vars": [
+              "g_pack.u_hi:u32@0x20001028"
+            ],
+            "varCount": 1,
+            "plan": {
+              "spans": 1,
+              "frameBytes": 4,
+              "estUs": 4.47,
+              "estHz": 223914
+            },
+            "samples": 4275024,
+            "capacity": 7150065,
+            "packets": 35024,
+            "lost": 35855,
+            "lostProbe": 35855,
+            "lostUsb": 0,
+            "readErrors": 0,
+            "dapYields": 0,
+            "metricsError": null,
+            "lostGap": 0,
+            "benchUs": 1.4688958333333333,
+            "blob": {
+              "offset": 1340,
+              "name": "60M(6 指令/bit)",
+              "delay": 1
+            },
+            "connectErr": null,
+            "rateHz": 495853,
+            "trigger": {
+              "mode": 0,
+              "hit": -1,
+              "hits": 0,
+              "marker": false
+            },
+            "view": {
+              "start": 0,
+              "end": 1
+            },
+            "lod": false,
+            "resyncs": 0,
+            "raw": 0,
+            "running": false,
+            "mockVars": [
+              "mock0.f32",
+              "mock1.f32",
+              "mock2.i32",
+              "mock3.u16",
+              "mock4.i16",
+              "mock5.u8",
+              "mock6.i8",
+              "mock7.f64"
+            ]
+          },
+          "stalePackets": 0,
+          "periodTicks": 48,
+          "flags": 417,
+          "sequenceReordered": 0
+        },
+        {
+          "cfg": {
+            "period": 2,
+            "draw": true,
+            "adaptive": true
+          },
+          "valid": true,
+          "stable": {
+            "dt": 8.004080833333333,
+            "produced": 3969881,
+            "skipped": 32162,
+            "usb": 0,
+            "errors": 0,
+            "yields": 0,
+            "received": 3968496,
+            "probeHz": 495982.1224527447,
+            "webHz": 495807.89845195104,
+            "dropPercent": 0.803639541104381,
+            "maxMainThreadLagMs": 1.9000000059604645
+          },
+          "samplesChecked": 4276512,
+          "bad": 0,
+          "firstBad": [],
+          "summary": {
+            "state": "已停止（硬件速率对照）：4276512 个样本 / 8.623 s，跳拍 34936 / USB 丢样本 1087 / 读错 0 / 包缺口 0",
+            "mode": "real",
+            "elf": {
+              "name": "f103cb-scope.elf",
+              "source": "dwarf",
+              "versions": [
+                4
+              ],
+              "stats": {
+                "cu": 2,
+                "dies": 127,
+                "vars": 30
+              },
+              "note": ""
+            },
+            "vars": [
+              "g_pack.u_hi:u32@0x20001028"
+            ],
+            "varCount": 1,
+            "plan": {
+              "spans": 1,
+              "frameBytes": 4,
+              "estUs": 4.47,
+              "estHz": 223914
+            },
+            "samples": 4276512,
+            "capacity": 7150065,
+            "packets": 35036,
+            "lost": 36023,
+            "lostProbe": 34936,
+            "lostUsb": 1087,
+            "readErrors": 0,
+            "dapYields": 0,
+            "metricsError": null,
+            "lostGap": 0,
+            "benchUs": 1.4688958333333333,
+            "blob": {
+              "offset": 1340,
+              "name": "60M(6 指令/bit)",
+              "delay": 1
+            },
+            "connectErr": null,
+            "rateHz": 495960,
+            "trigger": {
+              "mode": 0,
+              "hit": -1,
+              "hits": 0,
+              "marker": false
+            },
+            "view": {
+              "start": 0,
+              "end": 1
+            },
+            "lod": false,
+            "resyncs": 0,
+            "raw": 0,
+            "running": false,
+            "mockVars": [
+              "mock0.f32",
+              "mock1.f32",
+              "mock2.i32",
+              "mock3.u16",
+              "mock4.i16",
+              "mock5.u8",
+              "mock6.i8",
+              "mock7.f64"
+            ]
+          },
+          "stalePackets": 4,
+          "periodTicks": 48,
+          "flags": 417,
+          "sequenceReordered": 0
+        },
+        {
+          "cfg": {
+            "period": 2.25,
+            "draw": true,
+            "adaptive": true
+          },
+          "valid": true,
+          "stable": {
+            "dt": 8.004080583333334,
+            "produced": 3553344,
+            "skipped": 4027,
+            "usb": 0,
+            "errors": 0,
+            "yields": 0,
+            "received": 3554460,
+            "probeHz": 443941.5574349696,
+            "webHz": 444079.90904653096,
+            "dropPercent": 0.11320157498332335,
+            "maxMainThreadLagMs": 1.8999999985098839
+          },
+          "samplesChecked": 3828748,
+          "bad": 0,
+          "firstBad": [],
+          "summary": {
+            "state": "已停止（硬件速率对照）：3828748 个样本 / 8.625 s，跳拍 4384 / USB 丢样本 486 / 读错 0 / 包缺口 0",
+            "mode": "real",
+            "elf": {
+              "name": "f103cb-scope.elf",
+              "source": "dwarf",
+              "versions": [
+                4
+              ],
+              "stats": {
+                "cu": 2,
+                "dies": 127,
+                "vars": 30
+              },
+              "note": ""
+            },
+            "vars": [
+              "g_pack.u_hi:u32@0x20001028"
+            ],
+            "varCount": 1,
+            "plan": {
+              "spans": 1,
+              "frameBytes": 4,
+              "estUs": 4.47,
+              "estHz": 223914
+            },
+            "samples": 3828748,
+            "capacity": 6355620,
+            "packets": 31368,
+            "lost": 4870,
+            "lostProbe": 4384,
+            "lostUsb": 486,
+            "readErrors": 0,
+            "dapYields": 0,
+            "metricsError": null,
+            "lostGap": 0,
+            "benchUs": 1.4688958333333333,
+            "blob": {
+              "offset": 1340,
+              "name": "60M(6 指令/bit)",
+              "delay": 1
+            },
+            "connectErr": null,
+            "rateHz": 443938,
+            "trigger": {
+              "mode": 0,
+              "hit": -1,
+              "hits": 0,
+              "marker": false
+            },
+            "view": {
+              "start": 0,
+              "end": 1
+            },
+            "lod": false,
+            "resyncs": 0,
+            "raw": 0,
+            "running": false,
+            "mockVars": [
+              "mock0.f32",
+              "mock1.f32",
+              "mock2.i32",
+              "mock3.u16",
+              "mock4.i16",
+              "mock5.u8",
+              "mock6.i8",
+              "mock7.f64"
+            ]
+          },
+          "stalePackets": 8,
+          "periodTicks": 54,
+          "flags": 417,
+          "sequenceReordered": 0
+        },
+        {
+          "cfg": {
+            "period": 2.5,
+            "draw": true,
+            "adaptive": true
+          },
+          "valid": true,
+          "stable": {
+            "dt": 8.004084083333334,
+            "produced": 3201387,
+            "skipped": 247,
+            "usb": 0,
+            "errors": 0,
+            "yields": 0,
+            "received": 3202920,
+            "probeHz": 399969.1865639134,
+            "webHz": 400154.9186675505,
+            "dropPercent": 0.007714810624824699,
+            "maxMainThreadLagMs": 1.8999999985098839
+          },
+          "samplesChecked": 3449928,
+          "bad": 0,
+          "firstBad": [],
+          "summary": {
+            "state": "已停止（硬件速率对照）：3449928 个样本 / 8.626 s，跳拍 326 / USB 丢样本 445 / 读错 0 / 包缺口 0",
+            "mode": "real",
+            "elf": {
+              "name": "f103cb-scope.elf",
+              "source": "dwarf",
+              "versions": [
+                4
+              ],
+              "stats": {
+                "cu": 2,
+                "dies": 127,
+                "vars": 30
+              },
+              "note": ""
+            },
+            "vars": [
+              "g_pack.u_hi:u32@0x20001028"
+            ],
+            "varCount": 1,
+            "plan": {
+              "spans": 1,
+              "frameBytes": 4,
+              "estUs": 4.47,
+              "estHz": 223914
+            },
+            "samples": 3449928,
+            "capacity": 5720064,
+            "packets": 28264,
+            "lost": 771,
+            "lostProbe": 326,
+            "lostUsb": 445,
+            "readErrors": 0,
+            "dapYields": 0,
+            "metricsError": null,
+            "lostGap": 0,
+            "benchUs": 1.4688958333333333,
+            "blob": {
+              "offset": 1340,
+              "name": "60M(6 指令/bit)",
+              "delay": 1
+            },
+            "connectErr": null,
+            "rateHz": 399963,
+            "trigger": {
+              "mode": 0,
+              "hit": -1,
+              "hits": 0,
+              "marker": false
+            },
+            "view": {
+              "start": 0,
+              "end": 1
+            },
+            "lod": false,
+            "resyncs": 0,
+            "raw": 0,
+            "running": false,
+            "mockVars": [
+              "mock0.f32",
+              "mock1.f32",
+              "mock2.i32",
+              "mock3.u16",
+              "mock4.i16",
+              "mock5.u8",
+              "mock6.i8",
+              "mock7.f64"
+            ]
+          },
+          "stalePackets": 8,
+          "periodTicks": 60,
+          "flags": 417,
+          "sequenceReordered": 0
+        },
+        {
+          "cfg": {
+            "period": 2,
+            "draw": true,
+            "stallMs": 15,
+            "stallEveryMs": 500
+          },
+          "valid": true,
+          "stable": {
+            "dt": 8.020084083333334,
+            "produced": 3914121,
+            "skipped": 30948,
+            "usb": 64974,
+            "errors": 0,
+            "yields": 0,
+            "received": 3915052,
+            "probeHz": 488039.8957579507,
+            "webHz": 488155.01053593756,
+            "dropPercent": 2.392044175087399,
+            "maxMainThreadLagMs": 1.7999999970197678
+          },
+          "samplesChecked": 4220588,
+          "bad": 0,
+          "firstBad": [],
+          "summary": {
+            "state": "已停止（硬件速率对照）：4220588 个样本 / 8.638 s，跳拍 33654 / USB 丢样本 64974 / 读错 0 / 包缺口 0",
+            "mode": "real",
+            "elf": {
+              "name": "f103cb-scope.elf",
+              "source": "dwarf",
+              "versions": [
+                4
+              ],
+              "stats": {
+                "cu": 2,
+                "dies": 127,
+                "vars": 30
+              },
+              "note": ""
+            },
+            "vars": [
+              "g_pack.u_hi:u32@0x20001028"
+            ],
+            "varCount": 1,
+            "plan": {
+              "spans": 1,
+              "frameBytes": 4,
+              "estUs": 4.47,
+              "estHz": 223914
+            },
+            "samples": 4220588,
+            "capacity": 7150065,
+            "packets": 34576,
+            "lost": 98628,
+            "lostProbe": 33654,
+            "lostUsb": 64974,
+            "readErrors": 0,
+            "dapYields": 0,
+            "metricsError": null,
+            "lostGap": 0,
+            "benchUs": 1.4688958333333333,
+            "blob": {
+              "offset": 1340,
+              "name": "60M(6 指令/bit)",
+              "delay": 1
+            },
+            "connectErr": null,
+            "rateHz": 488587,
+            "trigger": {
+              "mode": 0,
+              "hit": -1,
+              "hits": 0,
+              "marker": false
+            },
+            "view": {
+              "start": 0,
+              "end": 1
+            },
+            "lod": false,
+            "resyncs": 0,
+            "raw": 0,
+            "running": false,
+            "mockVars": [
+              "mock0.f32",
+              "mock1.f32",
+              "mock2.i32",
+              "mock3.u16",
+              "mock4.i16",
+              "mock5.u8",
+              "mock6.i8",
+              "mock7.f64"
+            ]
+          },
+          "stalePackets": 8,
+          "periodTicks": 48,
+          "flags": 417,
+          "sequenceReordered": 0
+        },
+        {
+          "cfg": {
+            "period": 2,
+            "draw": true,
+            "adaptive": true,
+            "stallMs": 15,
+            "stallEveryMs": 500
+          },
+          "valid": true,
+          "stable": {
+            "dt": 8.020081875,
+            "produced": 3978016,
+            "skipped": 32027,
+            "usb": 0,
+            "errors": 0,
+            "yields": 0,
+            "received": 3978292,
+            "probeHz": 496006.9064132839,
+            "webHz": 496027.8293831251,
+            "dropPercent": 0.7986697399504195,
+            "maxMainThreadLagMs": 6.399999998509884
+          },
+          "samplesChecked": 4283828,
+          "bad": 0,
+          "firstBad": [],
+          "summary": {
+            "state": "已停止（硬件速率对照）：4283828 个样本 / 8.637 s，跳拍 34615 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+            "mode": "real",
+            "elf": {
+              "name": "f103cb-scope.elf",
+              "source": "dwarf",
+              "versions": [
+                4
+              ],
+              "stats": {
+                "cu": 2,
+                "dies": 127,
+                "vars": 30
+              },
+              "note": ""
+            },
+            "vars": [
+              "g_pack.u_hi:u32@0x20001028"
+            ],
+            "varCount": 1,
+            "plan": {
+              "spans": 1,
+              "frameBytes": 4,
+              "estUs": 4.47,
+              "estHz": 223914
+            },
+            "samples": 4283828,
+            "capacity": 7150065,
+            "packets": 35096,
+            "lost": 34615,
+            "lostProbe": 34615,
+            "lostUsb": 0,
+            "readErrors": 0,
+            "dapYields": 0,
+            "metricsError": null,
+            "lostGap": 0,
+            "benchUs": 1.4688958333333333,
+            "blob": {
+              "offset": 1340,
+              "name": "60M(6 指令/bit)",
+              "delay": 1
+            },
+            "connectErr": null,
+            "rateHz": 496002,
+            "trigger": {
+              "mode": 0,
+              "hit": -1,
+              "hits": 0,
+              "marker": false
+            },
+            "view": {
+              "start": 0,
+              "end": 1
+            },
+            "lod": false,
+            "resyncs": 0,
+            "raw": 0,
+            "running": false,
+            "mockVars": [
+              "mock0.f32",
+              "mock1.f32",
+              "mock2.i32",
+              "mock3.u16",
+              "mock4.i16",
+              "mock5.u8",
+              "mock6.i8",
+              "mock7.f64"
+            ]
+          },
+          "stalePackets": 8,
+          "periodTicks": 48,
+          "flags": 417,
+          "sequenceReordered": 0
+        }
+      ],
+      "calibration": {
+        "readUs": 1.4688958333333333,
+        "recommendedUs": 3,
+        "fresh": true,
+        "status": "标定：读一次 1.469 µs → 上限 ≈681 kHz（模型估 4.47 µs，偏保守 3.0×）（blob 60M(6 指令/bit)），对「g_pack.u_hi @SWD/ARM」有效；建议起始周期 ≥ 3 µs（≈333 kHz，需实采确认稳定性）"
+      }
+    },
+    "web-final-values.json": {
+      "startedAt": "2026-10-07T11:19:40.584Z",
+      "elfPath": "tools/target-firmware/stm32f103_scope/build-cb-72mhz/fw.elf",
+      "seconds": 3,
+      "rows": [
+        {
+          "cfg": {
+            "period": 2,
+            "draw": true,
+            "adaptive": true
+          },
+          "valid": true,
+          "stable": {
+            "dt": 3.0040256666666667,
+            "produced": 1489414,
+            "skipped": 12602,
+            "usb": 0,
+            "errors": 0,
+            "yields": 0,
+            "received": 1488248,
+            "probeHz": 495806.0167484144,
+            "webHz": 495356.14432190725,
+            "dropPercent": 0.8390057096595509,
+            "maxMainThreadLagMs": 2
+          },
+          "samplesChecked": 1793908,
+          "bad": 0,
+          "counterBackwards": 0,
+          "maxCounterStep": 1,
+          "firstBad": [],
+          "summary": {
+            "state": "已停止（硬件速率对照）：1793908 个样本 / 3.618 s，跳拍 15392 / USB 丢样本 1223 / 读错 0 / 包缺口 0",
+            "mode": "real",
+            "elf": {
+              "name": "f103cb-scope.elf",
+              "source": "dwarf",
+              "versions": [
+                4
+              ],
+              "stats": {
+                "cu": 2,
+                "dies": 127,
+                "vars": 30
+              },
+              "note": ""
+            },
+            "vars": [
+              "g_pack.u_hi:u32@0x20001028"
+            ],
+            "varCount": 1,
+            "plan": {
+              "spans": 1,
+              "frameBytes": 4,
+              "estUs": 4.47,
+              "estHz": 223914
+            },
+            "samples": 1793908,
+            "capacity": 4400064,
+            "packets": 14697,
+            "lost": 16615,
+            "lostProbe": 15392,
+            "lostUsb": 1223,
+            "readErrors": 0,
+            "dapYields": 0,
+            "metricsError": null,
+            "lostGap": 0,
+            "benchUs": 1.4688958333333333,
+            "blob": {
+              "offset": 1340,
+              "name": "60M(6 指令/bit)",
+              "delay": 1
+            },
+            "connectErr": null,
+            "rateHz": 495780,
+            "trigger": {
+              "mode": 0,
+              "hit": -1,
+              "hits": 0,
+              "marker": false
+            },
+            "view": {
+              "start": 0,
+              "end": 1
+            },
+            "lod": false,
+            "resyncs": 0,
+            "raw": 0,
+            "running": false,
+            "mockVars": [
+              "mock0.f32",
+              "mock1.f32",
+              "mock2.i32",
+              "mock3.u16",
+              "mock4.i16",
+              "mock5.u8",
+              "mock6.i8",
+              "mock7.f64"
+            ]
+          },
+          "stalePackets": 7,
+          "periodTicks": 48,
+          "flags": 417,
+          "sequenceReordered": 0
+        },
+        {
+          "cfg": {
+            "period": 2.25,
+            "draw": true,
+            "adaptive": true
+          },
+          "valid": true,
+          "stable": {
+            "dt": 3.0040277916666667,
+            "produced": 1333737,
+            "skipped": 1388,
+            "usb": 0,
+            "errors": 0,
+            "yields": 0,
+            "received": 1332008,
+            "probeHz": 443982.9097786171,
+            "webHz": 443426.2125905192,
+            "dropPercent": 0.10396030334238367,
+            "maxMainThreadLagMs": 1.6000000014901161
+          },
+          "samplesChecked": 1608280,
+          "bad": 0,
+          "counterBackwards": 0,
+          "maxCounterStep": 1,
+          "firstBad": [],
+          "summary": {
+            "state": "已停止（硬件速率对照）：1608280 个样本 / 3.622 s，跳拍 1713 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+            "mode": "real",
+            "elf": {
+              "name": "f103cb-scope.elf",
+              "source": "dwarf",
+              "versions": [
+                4
+              ],
+              "stats": {
+                "cu": 2,
+                "dies": 127,
+                "vars": 30
+              },
+              "note": ""
+            },
+            "vars": [
+              "g_pack.u_hi:u32@0x20001028"
+            ],
+            "varCount": 1,
+            "plan": {
+              "spans": 1,
+              "frameBytes": 4,
+              "estUs": 4.47,
+              "estHz": 223914
+            },
+            "samples": 1608280,
+            "capacity": 3911176,
+            "packets": 13176,
+            "lost": 1713,
+            "lostProbe": 1713,
+            "lostUsb": 0,
+            "readErrors": 0,
+            "dapYields": 0,
+            "metricsError": null,
+            "lostGap": 0,
+            "benchUs": 1.4688958333333333,
+            "blob": {
+              "offset": 1340,
+              "name": "60M(6 指令/bit)",
+              "delay": 1
+            },
+            "connectErr": null,
+            "rateHz": 443976,
+            "trigger": {
+              "mode": 0,
+              "hit": -1,
+              "hits": 0,
+              "marker": false
+            },
+            "view": {
+              "start": 0,
+              "end": 1
+            },
+            "lod": false,
+            "resyncs": 0,
+            "raw": 0,
+            "running": false,
+            "mockVars": [
+              "mock0.f32",
+              "mock1.f32",
+              "mock2.i32",
+              "mock3.u16",
+              "mock4.i16",
+              "mock5.u8",
+              "mock6.i8",
+              "mock7.f64"
+            ]
+          },
+          "stalePackets": 8,
+          "periodTicks": 54,
+          "flags": 417,
+          "sequenceReordered": 0
+        },
+        {
+          "cfg": {
+            "period": 2.5,
+            "draw": true,
+            "adaptive": true
+          },
+          "valid": true,
+          "stable": {
+            "dt": 3.004027125,
+            "produced": 1201272,
+            "skipped": 341,
+            "usb": 0,
+            "errors": 0,
+            "yields": 0,
+            "received": 1201188,
+            "probeHz": 399887.20141799655,
+            "webHz": 399836.2292796044,
+            "dropPercent": 0.028378521204414402,
+            "maxMainThreadLagMs": 1.7000000029802322
+          },
+          "samplesChecked": 1444600,
+          "bad": 0,
+          "counterBackwards": 0,
+          "maxCounterStep": 1,
+          "firstBad": [],
+          "summary": {
+            "state": "已停止（硬件速率对照）：1444600 个样本 / 3.613 s，跳拍 474 / USB 丢样本 144 / 读错 0 / 包缺口 0",
+            "mode": "real",
+            "elf": {
+              "name": "f103cb-scope.elf",
+              "source": "dwarf",
+              "versions": [
+                4
+              ],
+              "stats": {
+                "cu": 2,
+                "dies": 127,
+                "vars": 30
+              },
+              "note": ""
+            },
+            "vars": [
+              "g_pack.u_hi:u32@0x20001028"
+            ],
+            "varCount": 1,
+            "plan": {
+              "spans": 1,
+              "frameBytes": 4,
+              "estUs": 4.47,
+              "estHz": 223914
+            },
+            "samples": 1444600,
+            "capacity": 3520065,
+            "packets": 11835,
+            "lost": 618,
+            "lostProbe": 474,
+            "lostUsb": 144,
+            "readErrors": 0,
+            "dapYields": 0,
+            "metricsError": null,
+            "lostGap": 0,
+            "benchUs": 1.4688958333333333,
+            "blob": {
+              "offset": 1340,
+              "name": "60M(6 指令/bit)",
+              "delay": 1
+            },
+            "connectErr": null,
+            "rateHz": 399871,
+            "trigger": {
+              "mode": 0,
+              "hit": -1,
+              "hits": 0,
+              "marker": false
+            },
+            "view": {
+              "start": 0,
+              "end": 1
+            },
+            "lod": false,
+            "resyncs": 0,
+            "raw": 0,
+            "running": false,
+            "mockVars": [
+              "mock0.f32",
+              "mock1.f32",
+              "mock2.i32",
+              "mock3.u16",
+              "mock4.i16",
+              "mock5.u8",
+              "mock6.i8",
+              "mock7.f64"
+            ]
+          },
+          "stalePackets": 5,
+          "periodTicks": 60,
+          "flags": 417,
+          "sequenceReordered": 0
+        }
+      ],
+      "calibration": {
+        "readUs": 1.4688958333333333,
+        "recommendedUs": 3,
+        "fresh": true,
+        "status": "标定：读一次 1.469 µs → 上限 ≈681 kHz（模型估 4.47 µs，偏保守 3.0×）（blob 60M(6 指令/bit)），对「g_pack.u_hi @SWD/ARM」有效；建议起始周期 ≥ 3 µs（≈333 kHz，需实采确认稳定性）"
+      }
+    }
+  },
+  "finalPackSHA256": "A9402E9C439E91908C774B809539B260E6FD9116DDF6E9D82389645DF9439048",
+  "originalTargetFlashSHA256": "BBEA37427A05D282BCFAE9EBBE9710F0EA68E0A5990DDFE9698240F7EEB8ABA7",
+  "finalValueContract": "(value & 0xffff0000) == 0x10000000; modulo-16-bit counter nondecreasing",
+  "finalFullValuesChecked": 4846788
+}

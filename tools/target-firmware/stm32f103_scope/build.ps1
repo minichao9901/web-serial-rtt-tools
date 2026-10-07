@@ -1,14 +1,15 @@
 <#
   STM32F103 scope 测试固件编译脚本（不需要 make，也不需要 Keil）
     pwsh -File build.ps1                 # 默认 ZE（512KB flash / 64KB RAM）
-    pwsh -File build.ps1 -Board cb       # F103CB（128KB flash / 20KB RAM）
+    pwsh -File build.ps1 -Board cb       # F103CB（默认 96 MHz）
+    pwsh -File build.ps1 -Board cb -CpuMhz 72 # 额定主频；build-cb-72mhz
     pwsh -File build.ps1 -Board c8       # 中等密度 64KB flash / 20KB RAM
     pwsh -File build.ps1 -Clean
   依赖：arm-none-eabi-gcc 在 PATH 里（本机在 E:\Share\env-windows\tools\gnu_gcc\arm_gcc\mingw\bin）
 
   默认板的产物固定落在 build\ —— check.py / flash.ps1 / 文档都按这个路径找。
 #>
-param([switch]$Clean, [ValidateSet('c8', 'cb', 'ze')][string]$Board = 'ze')
+param([switch]$Clean, [ValidateSet('c8', 'cb', 'ze')][string]$Board = 'ze', [ValidateSet(72,96)][int]$CpuMhz = 96)
 
 $ErrorActionPreference = 'Stop'
 $root = $PSScriptRoot
@@ -20,6 +21,7 @@ $BOARDS = @{
 }
 $b = $BOARDS[$Board]
 $build = Join-Path $root $b.Out
+if ($CpuMhz -ne 96) { $build = "$build-$($CpuMhz)mhz" }
 $ldpath = Join-Path $root ('ld\' + $b.Ld)
 if (-not (Test-Path $ldpath)) { throw "找不到链接脚本 $ldpath" }
 
@@ -49,6 +51,7 @@ $elf = Join-Path $build 'fw.elf'
 # -gdwarf-4 是**故意写死的**：scope 页面第一版的 DWARF 解析器只吃 DWARF 4
 # （本机 GCC 10.3 默认也是 4，但 GCC 11+ 会默认切到 5 —— 显式写死免得工具链一升级就解析不出来）。
 $cflags = @(
+  "-DCPU_HZ=$($CpuMhz * 1000000)u",
   '-mcpu=cortex-m3', '-mthumb', '-Os', '-g3', '-gdwarf-4',
   '-ffunction-sections', '-fdata-sections', '-fno-common',
   '-Wall', '-Wextra', '-Wno-unused-parameter',
@@ -60,6 +63,7 @@ $cflags = @(
 
 & $gcc @cflags @sources -o $elf
 if ($LASTEXITCODE -ne 0) { throw "编译失败 (exit $LASTEXITCODE)" }
+Write-Output ("core    : {0} MHz" -f $CpuMhz)
 Write-Output ("board   : {0}  ({1})" -f $Board, $b.Note)
 
 & $objcopy -O binary $elf (Join-Path $build 'fw.bin')
@@ -67,7 +71,7 @@ Write-Output ("board   : {0}  ({1})" -f $Board, $b.Note)
 & $size $elf
 
 # 根目录只发布 ZE 默认档；CB/C8 必须使用各自 build-* 目录，避免容量档互相覆盖。
-if ($Board -eq 'ze') {
+if ($Board -eq 'ze' -and $CpuMhz -eq 96) {
   Copy-Item -Force $elf (Join-Path $root 'fw.elf')
   Write-Output ("已复制给用户下载： {0}" -f (Join-Path $root 'fw.elf'))
 }

@@ -98,6 +98,7 @@ test: test-stability test-dbg-features test-board-matrix test-random-flow
 	$(NODE) tools/selftest/dwarf.test.mjs
 	$(NODE) tools/selftest/scope-array.test.mjs
 	$(NODE) tools/selftest/scope-proto.test.mjs
+	$(NODE) tools/selftest/scope-rate.test.mjs
 	$(NODE) tools/selftest/scope-transport.test.mjs
 	$(NODE) tools/selftest/scope-store-batch.test.mjs
 	$(NODE) tools/selftest/bridge-origin.test.mjs
@@ -275,6 +276,7 @@ test-dwarf:
 test-scope:
 	$(NODE) tools/selftest/scope-array.test.mjs
 	$(NODE) tools/selftest/scope-proto.test.mjs
+	$(NODE) tools/selftest/scope-rate.test.mjs
 	$(NODE) tools/selftest/scope-transport.test.mjs
 	$(NODE) tools/selftest/scope-store-batch.test.mjs
 

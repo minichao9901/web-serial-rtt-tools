@@ -56,8 +56,10 @@
 #include "stm32f103_regs.h"
 
 #define TICK_HZ      10000u
+#ifndef CPU_HZ
 #define CPU_HZ       96000000u
-#define SYST_RELOAD  (CPU_HZ / TICK_HZ - 1u)      /* 9600 - 1 */
+#endif
+#define SYST_RELOAD  (CPU_HZ / TICK_HZ - 1u)      /* core cycles per 10 kHz tick */
 
 /* ---- 96 MHz 时钟序列：照抄 script_test/stm32f103_rtt_speed/src/main.c ----
  * 三条关键点（那边都实测踩过）：
@@ -193,7 +195,7 @@ void SysTick_Handler(void){
 }
 
 int main(void){
-  clock_init();      /* 先把主频顶到 96 MHz —— SYST_RELOAD 是按 96 MHz 算的，顺序不能反 */
+  clock_init();      /* 先设置 CPU_HZ 对应主频，再设置 SysTick，顺序不能反 */
 
   /* 只开时钟，不碰任何外设（和兄弟例程一样，越小越干净） */
   RCC_APB2ENR |= RCC_APB2ENR_AFIOEN | RCC_APB2ENR_IOPAEN | RCC_APB2ENR_IOPCEN;

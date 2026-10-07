@@ -30,6 +30,7 @@ export class VendorEpTransport {
     this.iface = 0;
     this.chunkBytes = opts.chunkBytes ?? 4096;   // 一次 transferIn 想收多少（会被短包提前结束）
     this.inFlight = opts.inFlight ?? 3;          // 同时在飞的读
+    this._adaptiveReadAhead = opts.inFlight == null && opts.chunkBytes == null;
     this.running = false;
     this.workers = [];
     this._pendingWorkers = pendingByDevice.get(device) || new Set();
@@ -42,6 +43,17 @@ export class VendorEpTransport {
   }
 
   static supported(){ return typeof navigator !== 'undefined' && !!navigator.usb; }
+
+  configureReadAhead(wireBps){
+    if (this.running) throw new Error('先停止采样再改变预读窗口');
+    if (!this._adaptiveReadAhead) return;
+    // 500 kHz/u32 DATA is ~2.06 MB/s. 48 KiB covers ~24 ms of
+    // main-thread pauses; native reads keep draining while JS is occupied.
+    // Slow sessions retain the smaller window to avoid extra buffering delay.
+    const fast = wireBps >= 1e6;
+    this.inFlight = fast ? 6 : 3;
+    this.chunkBytes = fast ? 8192 : 4096;
+  }
 
   /** 已授权过的探针（浏览器记得就不用再弹框）*/
   static async authorized(){
@@ -193,7 +205,10 @@ export class VendorEpTransport {
     this.gen++;                                   // 新一轮的代号：上一轮没收干净的 worker 靠它作废
     this.chunks = 0; this.bytes = 0; this.errors = 0;
     const g = this.gen;
-    this.workers = Array.from({ length: this.inFlight }, () => {
+    // One consumer awaits submission order. Native reads remain concurrent; promise
+    // completion order is not necessarily stream order on Windows under load.
+    this._nativeInFlight = 0;
+    this.workers = Array.from({ length: 1 }, () => {
       const worker = this._worker(onChunk, g);
       this._pendingWorkers.add(worker);
       worker.then(() => this._pendingWorkers.delete(worker), () => this._pendingWorkers.delete(worker));
@@ -214,12 +229,14 @@ export class VendorEpTransport {
     let stalls = 0;
     // Attach rejection handling immediately: a rearmed read can reject while decoding.
     const issue = () => {
+      this._nativeInFlight++;
       try {
         return Promise.resolve(this.device.transferIn(this.ep, this.chunkBytes))
-          .then(result => ({ result }), error => ({ error }));
-      } catch (error){ return Promise.resolve({ error }); }
+          .then(result => { this._nativeInFlight--; return { result }; },
+            error => { this._nativeInFlight--; return { error }; });
+      } catch (error){ this._nativeInFlight--; return Promise.resolve({ error }); }
     };
-    let pending = issue();
+    const queue = Array.from({ length: this.inFlight }, issue);
     try {
     /**
      * 🚨 循环条件要带上**代号** `g`：`stop()` 等在飞的读回来最多 800 ms，超时的那一条会活到
@@ -229,8 +246,8 @@ export class VendorEpTransport {
     while (this.running && g === this.gen){
       let r;
       try {
-        const completed = await pending;
-        pending = null;
+        const completed = await queue[0];
+        queue.shift();
         if (completed.error) throw completed.error;
         r = completed.result;
       } catch (e){
@@ -246,7 +263,7 @@ export class VendorEpTransport {
         stalls = 0;
         this.chunks++; this.bytes += r.data.byteLength;
         // Keep the native USB request queue full before doing synchronous JS work.
-        pending = issue();
+        queue.push(issue());
         try { onChunk(new Uint8Array(r.data.buffer, r.data.byteOffset, r.data.byteLength)); }
         catch (e){ this._fail('数据解析失败：' + (e?.message || String(e))); break; }
       } else if (r.status !== 'ok'){
@@ -266,11 +283,11 @@ export class VendorEpTransport {
           }
         }
       }
-      if (!pending && this.running && g === this.gen) pending = issue();
+      if (queue.length < this.inFlight && this.running && g === this.gen) queue.push(issue());
     }
     } finally {
       // stop/error must track the already rearmed transfer until it settles.
-      if (pending) await pending;
+      await Promise.all(queue);
     }
   }
 
@@ -292,7 +309,7 @@ export class VendorEpTransport {
     await Promise.race([Promise.allSettled(all), sleep(800)]);
     this.workers = [];
     /** 800 ms 还没回来的在飞读有几笔（WebUSB 取消不掉，只能如实记账；页面可据此提示）*/
-    this.stalledInFlight = Math.max(0, all.length - settled);
+    this.stalledInFlight = settled === all.length ? 0 : Math.max(1, this._nativeInFlight || 0);
     if (this.stalledInFlight) dirtyDevices.add(this.device);
   }
 

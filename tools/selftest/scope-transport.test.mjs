@@ -11,6 +11,25 @@ class USB {
   drain(){ for (const p of this.pending.splice(0)) p.resolve(packet(0)); }
 }
 {
+  const t = new VendorEpTransport(new USB());
+  t.configureReadAhead(2.06e6); assert.equal(t.inFlight,6); assert.equal(t.chunkBytes,8192);
+  t.configureReadAhead(1e4); assert.equal(t.inFlight,3); assert.equal(t.chunkBytes,4096);
+  t.running=true; assert.throws(()=>t.configureReadAhead(2e6));
+  const custom=new VendorEpTransport(new USB(),{inFlight:2,chunkBytes:512});
+  custom.configureReadAhead(2e6);assert.equal(custom.inFlight,2);assert.equal(custom.chunkBytes,512);
+}
+{
+  const usb = new USB(), t = new VendorEpTransport(usb, { inFlight: 3 }), seen = [];
+  await t.start(b => seen.push(b[0]));
+  const second = usb.pending.splice(1, 1)[0];
+  second.resolve(packet(2)); await tick();
+  assert.deepEqual(seen, [], 'later native completion cannot overtake the first submitted read');
+  assert.equal(usb.calls, 3, 'a slow head cannot cause an unbounded rearm queue');
+  usb.resolve(packet(1)); await tick();
+  assert.deepEqual(seen, [1, 2], 'callbacks preserve stream order under reversed promise completion');
+  const stop = t.stop(); usb.drain(); await stop;
+}
+{
   const usb = new USB(), t = new VendorEpTransport(usb, { inFlight: 3 });
   const seen = [];
   await t.start(bytes => {
