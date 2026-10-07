@@ -1,0 +1,3743 @@
+{
+  "board": "HPM6800EVK",
+  "probeBeforeCrc": "F9349E9D",
+  "probeAfterCrc": "7B23C592",
+  "probeAfterSha256": "6769E074A16F08A5F3F0078D2991B7C3184A03490462D08BB3598A1FA8A0235F",
+  "fixtureSha256": "E5124CA35A872C2C54F210DF99C5CFC3CA7A0D8F6A64F1CFA29A907AEB9B73A9",
+  "smoothStrictPair": {
+    "startedAt": "2026-10-07T12:55:11.105Z",
+    "elfPath": "tools/target-firmware/hpm6800evk_scope/build/flash_xip/output/demo.elf",
+    "target": "riscv",
+    "contractName": "g_v_hi.tick",
+    "seconds": 8,
+    "rows": [
+      {
+        "cfg": {
+          "period": 2,
+          "draw": true,
+          "adaptive": true
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 2.9602708333333334,
+          "recommendedUs": 5,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.004086291666667,
+          "produced": 2443131,
+          "skipped": 1558913,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 2443172,
+          "probeHz": 305235.4648579475,
+          "webHz": 305175.24794535333,
+          "dropPercent": 38.952920057850434,
+          "maxMainThreadLagMs": 8.5
+        },
+        "samplesChecked": 2634504,
+        "bad": 0,
+        "waveformBad": 0,
+        "tornFrames": 0,
+        "phaseSkewCounts": {},
+        "counterBackwards": 0,
+        "maxCounterStep": 4,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：2634504 个样本 / 8.631 s，跳拍 1690596 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "output-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              5
+            ],
+            "stats": {
+              "cu": 44,
+              "dies": 7988,
+              "vars": 1270
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_v_hi.tick:u32@0x1240020"
+          ],
+          "varCount": 1,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 4,
+            "estUs": 4.47,
+            "estHz": 223914
+          },
+          "samples": 2634504,
+          "capacity": 7150065,
+          "packets": 21584,
+          "lost": 1690596,
+          "lostProbe": 1690596,
+          "lostUsb": 0,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 2.9602708333333334,
+          "blob": {
+            "offset": 1568,
+            "name": "SLOW",
+            "delay": 7
+          },
+          "connectErr": null,
+          "rateHz": 305233,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 2634504
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 0,
+        "readAhead": {
+          "depth": 16,
+          "bytes": 8192
+        },
+        "requestedUs": 2,
+        "effectiveUs": 2,
+        "actualUs": 2,
+        "advice": "建议起始：5 µs（200.00 kHz）；读取耗时上界 ≤337.81 kHz，不代表持续采样能力。依据当前标定。 ⚠️ 超过读取耗时上界；建议 5 µs（200.00 kHz）。继续将保留 2 µs 周期，来不及的拍会跳过，不会自动改为“最大速率”；按真实时间轴显示，实际速率看采样统计。",
+        "periodTicks": 48,
+        "flags": 481,
+        "sequenceReordered": 0
+      },
+      {
+        "cfg": {
+          "period": 20,
+          "draw": true,
+          "adaptive": true,
+          "vars": [
+            "g_v_hi.tick",
+            "g_v_hi.f_sin"
+          ]
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 15.805083333333334,
+          "recommendedUs": 24,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.004087666666667,
+          "produced": 400204,
+          "skipped": 0,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 400334,
+          "probeHz": 49999.952107804245,
+          "webHz": 49986.1404187934,
+          "dropPercent": 0,
+          "maxMainThreadLagMs": 13.300000004470348
+        },
+        "samplesChecked": 431582,
+        "bad": 0,
+        "waveformBad": 2,
+        "tornFrames": 427496,
+        "phaseSkewCounts": {
+          "0": 4084,
+          "1": 422661,
+          "2": 2851,
+          "-1": 1984
+        },
+        "counterBackwards": 0,
+        "maxCounterStep": 7,
+        "firstBad": [
+          {
+            "i": 50397,
+            "bad": true,
+            "torn": false,
+            "name": "g_v_hi.f_sin",
+            "value": -0.35347485542297363,
+            "tick": 221139173
+          },
+          {
+            "i": 150198,
+            "bad": true,
+            "torn": false,
+            "name": "g_v_hi.f_sin",
+            "value": -0.10973431169986725,
+            "tick": 221538390
+          }
+        ],
+        "summary": {
+          "state": "已停止（硬件速率对照）：431582 个样本 / 8.632 s，跳拍 1 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "output-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              5
+            ],
+            "stats": {
+              "cu": 44,
+              "dies": 7988,
+              "vars": 1270
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_v_hi.tick:u32@0x1240020",
+            "g_v_hi.f_sin:f32@0x1240024"
+          ],
+          "varCount": 2,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 8,
+            "estUs": 5.58,
+            "estHz": 179147
+          },
+          "samples": 431582,
+          "capacity": 715064,
+          "packets": 7072,
+          "lost": 1,
+          "lostProbe": 1,
+          "lostUsb": 0,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 15.805083333333334,
+          "blob": {
+            "offset": 1568,
+            "name": "SLOW",
+            "delay": 7
+          },
+          "connectErr": null,
+          "rateHz": 50000,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 431582
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 0,
+        "readAhead": {
+          "depth": 6,
+          "bytes": 8192
+        },
+        "requestedUs": 20,
+        "effectiveUs": 20,
+        "actualUs": 20,
+        "advice": "建议起始：24 µs（41.67 kHz）；读取耗时上界 ≤63.27 kHz，不代表持续采样能力。依据当前标定。 ⚠️ 高于建议起始频率；建议 24 µs（41.67 kHz）。继续将保留 20 µs 周期，来不及的拍会跳过，不会自动改为“最大速率”；按真实时间轴显示，实际速率看采样统计。",
+        "periodTicks": 480,
+        "flags": 481,
+        "sequenceReordered": 0
+      }
+    ],
+    "calibration": {
+      "readUs": 2.9602708333333334,
+      "recommendedUs": 5,
+      "fresh": true,
+      "status": "标定：读一次 2.960 µs（未包含组帧/USB/调度，不代表持续采样上限）（RISC-V/JTAG 路径；blob / clock_delay 是 SWD 专属，这里没有意义），对「g_v_hi.tick @RISC-V/JTAG」有效；建议起始周期 ≥ 5 µs（≈200 kHz，需实采确认稳定性）"
+    }
+  },
+  "final": {
+    "startedAt": "2026-10-07T12:51:02.568Z",
+    "elfPath": "tools/target-firmware/hpm6800evk_scope/build/flash_xip/output/demo.elf",
+    "target": "riscv",
+    "seconds": 8,
+    "rows": [
+      {
+        "cfg": {
+          "period": 3.25,
+          "draw": true,
+          "adaptive": true,
+          "batch": false
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 2.9580208333333333,
+          "recommendedUs": 5,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.008087666666666,
+          "produced": 2309986,
+          "skipped": 154042,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 2310492,
+          "probeHz": 288456.63236370665,
+          "webHz": 288515.77133454336,
+          "dropPercent": 6.251633504164725,
+          "maxMainThreadLagMs": 9.799999997019768
+        },
+        "samplesChecked": 2492028,
+        "bad": 0,
+        "waveformBad": 0,
+        "tornFrames": 0,
+        "counterBackwards": 0,
+        "maxCounterStep": 1,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：2492028 个样本 / 8.639 s，跳拍 167138 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "output-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              5
+            ],
+            "stats": {
+              "cu": 44,
+              "dies": 7988,
+              "vars": 1270
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_v.u_hi:u32@0x1240004"
+          ],
+          "varCount": 1,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 4,
+            "estUs": 4.47,
+            "estHz": 223914
+          },
+          "samples": 2492028,
+          "capacity": 4400064,
+          "packets": 20416,
+          "lost": 167138,
+          "lostProbe": 167138,
+          "lostUsb": 0,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 2.9580208333333333,
+          "blob": {
+            "offset": 1568,
+            "name": "SLOW",
+            "delay": 7
+          },
+          "connectErr": null,
+          "rateHz": 288455,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 2492028
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 0,
+        "requestedUs": 3.25,
+        "effectiveUs": 3.25,
+        "actualUs": 3.25,
+        "advice": "建议起始：5 µs（200.00 kHz）；读取耗时上界 ≤338.06 kHz，不代表持续采样能力。依据当前标定。 ⚠️ 高于建议起始频率；建议 5 µs（200.00 kHz）。继续将保留 3.25 µs 周期，来不及的拍会跳过，不会自动改为“最大速率”；按真实时间轴显示，实际速率看采样统计。",
+        "periodTicks": 78,
+        "flags": 353,
+        "sequenceReordered": 0
+      },
+      {
+        "cfg": {
+          "period": 3.25,
+          "draw": true,
+          "adaptive": true,
+          "batch": true
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 2.9575208333333336,
+          "recommendedUs": 5,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.004083833333333,
+          "produced": 2423319,
+          "skipped": 39478,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 2423704,
+          "probeHz": 302760.3221630425,
+          "webHz": 302800.244868496,
+          "dropPercent": 1.6029741793578602,
+          "maxMainThreadLagMs": 20.5
+        },
+        "samplesChecked": 2617020,
+        "bad": 0,
+        "waveformBad": 0,
+        "tornFrames": 0,
+        "counterBackwards": 0,
+        "maxCounterStep": 1,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：2617020 个样本 / 8.644 s，跳拍 42891 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "output-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              5
+            ],
+            "stats": {
+              "cu": 44,
+              "dies": 7988,
+              "vars": 1270
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_v.u_hi:u32@0x1240004"
+          ],
+          "varCount": 1,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 4,
+            "estUs": 4.47,
+            "estHz": 223914
+          },
+          "samples": 2617020,
+          "capacity": 4400064,
+          "packets": 21440,
+          "lost": 42891,
+          "lostProbe": 42891,
+          "lostUsb": 0,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 2.9575208333333336,
+          "blob": {
+            "offset": 1568,
+            "name": "SLOW",
+            "delay": 7
+          },
+          "connectErr": null,
+          "rateHz": 302757,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 2617020
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 0,
+        "requestedUs": 3.25,
+        "effectiveUs": 3.25,
+        "actualUs": 3.25,
+        "advice": "建议起始：5 µs（200.00 kHz）；读取耗时上界 ≤338.12 kHz，不代表持续采样能力。依据当前标定。 ⚠️ 高于建议起始频率；建议 5 µs（200.00 kHz）。继续将保留 3.25 µs 周期，来不及的拍会跳过，不会自动改为“最大速率”；按真实时间轴显示，实际速率看采样统计。",
+        "periodTicks": 78,
+        "flags": 481,
+        "sequenceReordered": 0
+      },
+      {
+        "cfg": {
+          "period": 40,
+          "draw": true,
+          "adaptive": false,
+          "vars": [
+            "g_v.tick",
+            "g_v.u_hi",
+            "g_v.f_sin",
+            "g_v.f_tri",
+            "g_v.i_sq1k",
+            "g_v.i_sq5k",
+            "g_v.u_ramp",
+            "g_v.lfsr"
+          ],
+          "stallMs": 25
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 31.042708333333334,
+          "recommendedUs": 47,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.032090833333333,
+          "produced": 194846,
+          "skipped": 0,
+          "usb": 5956,
+          "errors": 0,
+          "yields": 0,
+          "received": 194835,
+          "probeHz": 24258.440802410416,
+          "webHz": 24260.06400119085,
+          "dropPercent": 2.9661059152797282,
+          "maxMainThreadLagMs": 22.700000002980232
+        },
+        "samplesChecked": 210540,
+        "bad": 0,
+        "waveformBad": 0,
+        "tornFrames": 37058,
+        "counterBackwards": 0,
+        "maxCounterStep": 296,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：210540 个样本 / 8.651 s，跳拍 0 / USB 丢样本 5956 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "output-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              5
+            ],
+            "stats": {
+              "cu": 44,
+              "dies": 7988,
+              "vars": 1270
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_v.tick:u32@0x1240000",
+            "g_v.u_hi:u32@0x1240004",
+            "g_v.f_sin:f32@0x1240008",
+            "g_v.f_tri:f32@0x124000c",
+            "g_v.i_sq1k:i32@0x1240010",
+            "g_v.i_sq5k:i32@0x1240014",
+            "g_v.u_ramp:u32@0x1240018",
+            "g_v.lfsr:u32@0x124001c"
+          ],
+          "varCount": 8,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 32,
+            "estUs": 12.28,
+            "estHz": 81446
+          },
+          "samples": 210540,
+          "capacity": 357564,
+          "packets": 14256,
+          "lost": 5956,
+          "lostProbe": 0,
+          "lostUsb": 5956,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 31.042708333333334,
+          "blob": {
+            "offset": 1568,
+            "name": "SLOW",
+            "delay": 7
+          },
+          "connectErr": null,
+          "rateHz": 24336,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 210540
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 0,
+        "requestedUs": 40,
+        "effectiveUs": 40,
+        "actualUs": 40,
+        "advice": "建议起始：47 µs（21.28 kHz）；读取耗时上界 ≤32.21 kHz，不代表持续采样能力。依据当前标定。 ⚠️ 高于建议起始频率；建议 47 µs（21.28 kHz）。继续将保留 40 µs 周期，来不及的拍会跳过，不会自动改为“最大速率”；按真实时间轴显示，实际速率看采样统计。",
+        "periodTicks": 960,
+        "flags": 481,
+        "sequenceReordered": 0
+      },
+      {
+        "cfg": {
+          "period": 40,
+          "draw": true,
+          "adaptive": true,
+          "vars": [
+            "g_v.tick",
+            "g_v.u_hi",
+            "g_v.f_sin",
+            "g_v.f_tri",
+            "g_v.i_sq1k",
+            "g_v.i_sq5k",
+            "g_v.u_ramp",
+            "g_v.lfsr"
+          ],
+          "stallMs": 25
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 31.0343125,
+          "recommendedUs": 47,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.044088916666666,
+          "produced": 201102,
+          "skipped": 0,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 201060,
+          "probeHz": 24999.972288139903,
+          "webHz": 24994.716624602228,
+          "dropPercent": 0,
+          "maxMainThreadLagMs": 16.399999998509884
+        },
+        "samplesChecked": 217290,
+        "bad": 0,
+        "waveformBad": 0,
+        "tornFrames": 38441,
+        "counterBackwards": 0,
+        "maxCounterStep": 1,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：217290 个样本 / 8.692 s，跳拍 0 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "output-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              5
+            ],
+            "stats": {
+              "cu": 44,
+              "dies": 7988,
+              "vars": 1270
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_v.tick:u32@0x1240000",
+            "g_v.u_hi:u32@0x1240004",
+            "g_v.f_sin:f32@0x1240008",
+            "g_v.f_tri:f32@0x124000c",
+            "g_v.i_sq1k:i32@0x1240010",
+            "g_v.i_sq5k:i32@0x1240014",
+            "g_v.u_ramp:u32@0x1240018",
+            "g_v.lfsr:u32@0x124001c"
+          ],
+          "varCount": 8,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 32,
+            "estUs": 12.28,
+            "estHz": 81446
+          },
+          "samples": 217290,
+          "capacity": 357564,
+          "packets": 14716,
+          "lost": 0,
+          "lostProbe": 0,
+          "lostUsb": 0,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 31.0343125,
+          "blob": {
+            "offset": 1568,
+            "name": "SLOW",
+            "delay": 7
+          },
+          "connectErr": null,
+          "rateHz": 25000,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 217290
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 4,
+        "requestedUs": 40,
+        "effectiveUs": 40,
+        "actualUs": 40,
+        "advice": "建议起始：47 µs（21.28 kHz）；读取耗时上界 ≤32.22 kHz，不代表持续采样能力。依据当前标定。 ⚠️ 高于建议起始频率；建议 47 µs（21.28 kHz）。继续将保留 40 µs 周期，来不及的拍会跳过，不会自动改为“最大速率”；按真实时间轴显示，实际速率看采样统计。",
+        "periodTicks": 960,
+        "flags": 481,
+        "sequenceReordered": 0
+      },
+      {
+        "cfg": {
+          "period": 40,
+          "draw": true,
+          "adaptive": true,
+          "vars": [
+            "g_v.tick",
+            "g_v.u_hi",
+            "g_v.f_sin",
+            "g_v.f_tri",
+            "g_v.i_sq1k",
+            "g_v.i_sq5k",
+            "g_v.u_ramp",
+            "g_v.lfsr"
+          ]
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 31.0676875,
+          "recommendedUs": 47,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.0040865,
+          "produced": 200102,
+          "skipped": 0,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 200100,
+          "probeHz": 24999.97969787058,
+          "webHz": 24998.750687126736,
+          "dropPercent": 0,
+          "maxMainThreadLagMs": 28.100000001490116
+        },
+        "samplesChecked": 216165,
+        "bad": 0,
+        "waveformBad": 0,
+        "tornFrames": 38285,
+        "counterBackwards": 0,
+        "maxCounterStep": 1,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：216165 个样本 / 8.647 s，跳拍 0 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "output-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              5
+            ],
+            "stats": {
+              "cu": 44,
+              "dies": 7988,
+              "vars": 1270
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_v.tick:u32@0x1240000",
+            "g_v.u_hi:u32@0x1240004",
+            "g_v.f_sin:f32@0x1240008",
+            "g_v.f_tri:f32@0x124000c",
+            "g_v.i_sq1k:i32@0x1240010",
+            "g_v.i_sq5k:i32@0x1240014",
+            "g_v.u_ramp:u32@0x1240018",
+            "g_v.lfsr:u32@0x124001c"
+          ],
+          "varCount": 8,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 32,
+            "estUs": 12.28,
+            "estHz": 81446
+          },
+          "samples": 216165,
+          "capacity": 357564,
+          "packets": 14640,
+          "lost": 0,
+          "lostProbe": 0,
+          "lostUsb": 0,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 31.0676875,
+          "blob": {
+            "offset": 1568,
+            "name": "SLOW",
+            "delay": 7
+          },
+          "connectErr": null,
+          "rateHz": 25000,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 216165
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 0,
+        "requestedUs": 40,
+        "effectiveUs": 40,
+        "actualUs": 40,
+        "advice": "建议起始：47 µs（21.28 kHz）；读取耗时上界 ≤32.19 kHz，不代表持续采样能力。依据当前标定。 ⚠️ 高于建议起始频率；建议 47 µs（21.28 kHz）。继续将保留 40 µs 周期，来不及的拍会跳过，不会自动改为“最大速率”；按真实时间轴显示，实际速率看采样统计。",
+        "periodTicks": 960,
+        "flags": 481,
+        "sequenceReordered": 0
+      },
+      {
+        "cfg": {
+          "period": 47,
+          "draw": true,
+          "adaptive": true,
+          "vars": [
+            "g_v.tick",
+            "g_v.u_hi",
+            "g_v.f_sin",
+            "g_v.f_tri",
+            "g_v.i_sq1k",
+            "g_v.i_sq5k",
+            "g_v.u_ramp",
+            "g_v.lfsr"
+          ]
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 31.034,
+          "recommendedUs": 47,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.0040885,
+          "produced": 170299,
+          "skipped": 0,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 170340,
+          "probeHz": 21276.5013780145,
+          "webHz": 21281.593183509307,
+          "dropPercent": 0,
+          "maxMainThreadLagMs": 26.799999997019768
+        },
+        "samplesChecked": 184980,
+        "bad": 0,
+        "waveformBad": 0,
+        "tornFrames": 32361,
+        "counterBackwards": 0,
+        "maxCounterStep": 1,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：184980 个样本 / 8.694 s，跳拍 0 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "output-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              5
+            ],
+            "stats": {
+              "cu": 44,
+              "dies": 7988,
+              "vars": 1270
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_v.tick:u32@0x1240000",
+            "g_v.u_hi:u32@0x1240004",
+            "g_v.f_sin:f32@0x1240008",
+            "g_v.f_tri:f32@0x124000c",
+            "g_v.i_sq1k:i32@0x1240010",
+            "g_v.i_sq5k:i32@0x1240014",
+            "g_v.u_ramp:u32@0x1240018",
+            "g_v.lfsr:u32@0x124001c"
+          ],
+          "varCount": 8,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 32,
+            "estUs": 12.28,
+            "estHz": 81446
+          },
+          "samples": 184980,
+          "capacity": 304320,
+          "packets": 12528,
+          "lost": 0,
+          "lostProbe": 0,
+          "lostUsb": 0,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 31.034,
+          "blob": {
+            "offset": 1568,
+            "name": "SLOW",
+            "delay": 7
+          },
+          "connectErr": null,
+          "rateHz": 21277,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 184980
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 0,
+        "requestedUs": 47,
+        "effectiveUs": 47,
+        "actualUs": 47,
+        "advice": "建议起始：47 µs（21.28 kHz）；读取耗时上界 ≤32.22 kHz，不代表持续采样能力。依据当前标定。稳定性以实采跳拍/USB计数为准。",
+        "periodTicks": 1128,
+        "flags": 481,
+        "sequenceReordered": 0
+      },
+      {
+        "cfg": {
+          "period": 60,
+          "draw": true,
+          "adaptive": true,
+          "vars": [
+            "g_v.tick",
+            "g_v.u_hi",
+            "g_v.f_sin",
+            "g_v.f_tri",
+            "g_v.i_sq1k",
+            "g_v.i_sq5k",
+            "g_v.u_ramp",
+            "g_v.lfsr"
+          ]
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 31.0279375,
+          "recommendedUs": 47,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.052092166666666,
+          "produced": 134201,
+          "skipped": 0,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 134190,
+          "probeHz": 16666.60008631711,
+          "webHz": 16645.992011316248,
+          "dropPercent": 0,
+          "maxMainThreadLagMs": 48.600000001490116
+        },
+        "samplesChecked": 144585,
+        "bad": 0,
+        "waveformBad": 0,
+        "tornFrames": 25293,
+        "counterBackwards": 0,
+        "maxCounterStep": 1,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：144585 个样本 / 8.675 s，跳拍 0 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "output-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              5
+            ],
+            "stats": {
+              "cu": 44,
+              "dies": 7988,
+              "vars": 1270
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_v.tick:u32@0x1240000",
+            "g_v.u_hi:u32@0x1240004",
+            "g_v.f_sin:f32@0x1240008",
+            "g_v.f_tri:f32@0x124000c",
+            "g_v.i_sq1k:i32@0x1240010",
+            "g_v.i_sq5k:i32@0x1240014",
+            "g_v.u_ramp:u32@0x1240018",
+            "g_v.lfsr:u32@0x124001c"
+          ],
+          "varCount": 8,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 32,
+            "estUs": 12.28,
+            "estHz": 81446
+          },
+          "samples": 144585,
+          "capacity": 238398,
+          "packets": 9792,
+          "lost": 0,
+          "lostProbe": 0,
+          "lostUsb": 0,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 31.0279375,
+          "blob": {
+            "offset": 1568,
+            "name": "SLOW",
+            "delay": 7
+          },
+          "connectErr": null,
+          "rateHz": 16667,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 144585
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 0,
+        "requestedUs": 60,
+        "effectiveUs": 60,
+        "actualUs": 60,
+        "advice": "建议起始：47 µs（21.28 kHz）；读取耗时上界 ≤32.23 kHz，不代表持续采样能力。依据当前标定。稳定性以实采跳拍/USB计数为准。",
+        "periodTicks": 1440,
+        "flags": 481,
+        "sequenceReordered": 0
+      }
+    ],
+    "calibration": {
+      "readUs": 2.9656458333333333,
+      "recommendedUs": 5,
+      "fresh": true,
+      "status": "标定：读一次 2.966 µs（未包含组帧/USB/调度，不代表持续采样上限）（RISC-V/JTAG 路径；blob / clock_delay 是 SWD 专属，这里没有意义），对「g_v.u_hi @RISC-V/JTAG」有效；建议起始周期 ≥ 5 µs（≈200 kHz，需实采确认稳定性）"
+    }
+  },
+  "smooth": {
+    "startedAt": "2026-10-07T12:57:46.794Z",
+    "elfPath": "tools/target-firmware/hpm6800evk_scope/build/flash_xip/output/demo.elf",
+    "target": "riscv",
+    "contractName": "g_v_hi.tick",
+    "seconds": 8,
+    "rows": [
+      {
+        "cfg": {
+          "period": 2,
+          "draw": true,
+          "adaptive": true
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 2.96125,
+          "recommendedUs": 5,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.004083958333334,
+          "produced": 2443165,
+          "skipped": 1558877,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 2443172,
+          "probeHz": 305239.80167103757,
+          "webHz": 305228.62425643153,
+          "dropPercent": 38.95203998358838,
+          "maxMainThreadLagMs": 7.700000002980232
+        },
+        "samplesChecked": 2636488,
+        "bad": 0,
+        "waveformBad": 0,
+        "tornFrames": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 2,
+        "phaseSkewCounts": {},
+        "counterBackwards": 0,
+        "maxCounterStep": 4,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：2636488 个样本 / 8.637 s，跳拍 1691326 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "output-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              5
+            ],
+            "stats": {
+              "cu": 44,
+              "dies": 7988,
+              "vars": 1270
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_v_hi.tick:u32@0x1240020"
+          ],
+          "varCount": 1,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 4,
+            "estUs": 4.47,
+            "estHz": 223914
+          },
+          "samples": 2636488,
+          "capacity": 7150065,
+          "packets": 21600,
+          "lost": 1691326,
+          "lostProbe": 1691326,
+          "lostUsb": 0,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 2.96125,
+          "blob": {
+            "offset": 1568,
+            "name": "SLOW",
+            "delay": 7
+          },
+          "connectErr": null,
+          "rateHz": 305239,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 2636488
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 0,
+        "readAhead": {
+          "depth": 16,
+          "bytes": 8192
+        },
+        "requestedUs": 2,
+        "effectiveUs": 2,
+        "actualUs": 2,
+        "advice": "建议起始：5 µs（200.00 kHz）；读取耗时上界 ≤337.70 kHz，不代表持续采样能力。依据当前标定。 ⚠️ 超过读取耗时上界；建议 5 µs（200.00 kHz）。继续将保留 2 µs 周期，来不及的拍会跳过，不会自动改为“最大速率”；按真实时间轴显示，实际速率看采样统计。",
+        "periodTicks": 48,
+        "flags": 481,
+        "sequenceReordered": 0
+      },
+      {
+        "cfg": {
+          "period": 20,
+          "draw": true,
+          "adaptive": true,
+          "vars": [
+            "g_v_hi.tick",
+            "g_v_hi.f_sin"
+          ]
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 15.803395833333333,
+          "recommendedUs": 24,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.012088625,
+          "produced": 400604,
+          "skipped": 0,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 400334,
+          "probeHz": 49999.94617508365,
+          "webHz": 49964.305326752845,
+          "dropPercent": 0,
+          "maxMainThreadLagMs": 11.100000001490116
+        },
+        "samplesChecked": 431582,
+        "bad": 0,
+        "waveformBad": 0,
+        "tornFrames": 427759,
+        "phaseOutliers": 3,
+        "hiPhaseBudget": 5,
+        "phaseSkewCounts": {
+          "0": 3823,
+          "1": 421555,
+          "2": 4222,
+          "3": 2,
+          "4": 1,
+          "-1": 1979
+        },
+        "counterBackwards": 0,
+        "maxCounterStep": 7,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：431582 个样本 / 8.632 s，跳拍 1 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "output-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              5
+            ],
+            "stats": {
+              "cu": 44,
+              "dies": 7988,
+              "vars": 1270
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_v_hi.tick:u32@0x1240020",
+            "g_v_hi.f_sin:f32@0x1240024"
+          ],
+          "varCount": 2,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 8,
+            "estUs": 5.58,
+            "estHz": 179147
+          },
+          "samples": 431582,
+          "capacity": 715064,
+          "packets": 7072,
+          "lost": 1,
+          "lostProbe": 1,
+          "lostUsb": 0,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 15.803395833333333,
+          "blob": {
+            "offset": 1568,
+            "name": "SLOW",
+            "delay": 7
+          },
+          "connectErr": null,
+          "rateHz": 50000,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 431582
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 0,
+        "readAhead": {
+          "depth": 6,
+          "bytes": 8192
+        },
+        "requestedUs": 20,
+        "effectiveUs": 20,
+        "actualUs": 20,
+        "advice": "建议起始：24 µs（41.67 kHz）；读取耗时上界 ≤63.28 kHz，不代表持续采样能力。依据当前标定。 ⚠️ 高于建议起始频率；建议 24 µs（41.67 kHz）。继续将保留 20 µs 周期，来不及的拍会跳过，不会自动改为“最大速率”；按真实时间轴显示，实际速率看采样统计。",
+        "periodTicks": 480,
+        "flags": 481,
+        "sequenceReordered": 0
+      },
+      {
+        "cfg": {
+          "period": 25,
+          "draw": true,
+          "adaptive": true,
+          "vars": [
+            "g_v_hi.tick",
+            "g_v_hi.f_sin"
+          ]
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 15.783729166666665,
+          "recommendedUs": 24,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.004087458333334,
+          "produced": 320164,
+          "skipped": 0,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 319796,
+          "probeHz": 40000.06267630998,
+          "webHz": 39953.025248906386,
+          "dropPercent": 0,
+          "maxMainThreadLagMs": 10
+        },
+        "samplesChecked": 345154,
+        "bad": 0,
+        "waveformBad": 0,
+        "tornFrames": 341760,
+        "phaseOutliers": 3,
+        "hiPhaseBudget": 5,
+        "phaseSkewCounts": {
+          "0": 3394,
+          "1": 334804,
+          "2": 5421,
+          "3": 1,
+          "4": 2,
+          "-1": 1532
+        },
+        "counterBackwards": 0,
+        "maxCounterStep": 8,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：345154 个样本 / 8.629 s，跳拍 0 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "output-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              5
+            ],
+            "stats": {
+              "cu": 44,
+              "dies": 7988,
+              "vars": 1270
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_v_hi.tick:u32@0x1240020",
+            "g_v_hi.f_sin:f32@0x1240024"
+          ],
+          "varCount": 2,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 8,
+            "estUs": 5.58,
+            "estHz": 179147
+          },
+          "samples": 345154,
+          "capacity": 572064,
+          "packets": 5656,
+          "lost": 0,
+          "lostProbe": 0,
+          "lostUsb": 0,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 15.783729166666665,
+          "blob": {
+            "offset": 1568,
+            "name": "SLOW",
+            "delay": 7
+          },
+          "connectErr": null,
+          "rateHz": 40000,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 345154
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 0,
+        "readAhead": {
+          "depth": 3,
+          "bytes": 4096
+        },
+        "requestedUs": 25,
+        "effectiveUs": 25,
+        "actualUs": 25,
+        "advice": "建议起始：24 µs（41.67 kHz）；读取耗时上界 ≤63.36 kHz，不代表持续采样能力。依据当前标定。稳定性以实采跳拍/USB计数为准。",
+        "periodTicks": 600,
+        "flags": 481,
+        "sequenceReordered": 0
+      }
+    ],
+    "calibration": {
+      "readUs": 2.96125,
+      "recommendedUs": 5,
+      "fresh": true,
+      "status": "标定：读一次 2.961 µs（未包含组帧/USB/调度，不代表持续采样上限）（RISC-V/JTAG 路径；blob / clock_delay 是 SWD 专属，这里没有意义），对「g_v_hi.tick @RISC-V/JTAG」有效；建议起始周期 ≥ 5 µs（≈200 kHz，需实采确认稳定性）"
+    }
+  },
+  "baseline": {
+    "startedAt": "2026-10-07T12:37:34.086Z",
+    "elfPath": "tools/target-firmware/hpm6800evk_scope/build/flash_xip/output/demo.elf",
+    "target": "riscv",
+    "seconds": 5,
+    "rows": [
+      {
+        "cfg": {
+          "period": 2,
+          "draw": true,
+          "adaptive": true
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 2.9659166666666663,
+          "recommendedUs": 5,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 5.0040547916666664,
+          "produced": 1414151,
+          "skipped": 1087877,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 1413972,
+          "probeHz": 282601.0223459201,
+          "webHz": 282387.76162309444,
+          "dropPercent": 43.47980917879416,
+          "maxMainThreadLagMs": 10.899999998509884
+        },
+        "samplesChecked": 1591664,
+        "bad": 0,
+        "counterBackwards": 0,
+        "maxCounterStep": 1,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：1591664 个样本 / 5.632 s，跳拍 1233932 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "output-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              5
+            ],
+            "stats": {
+              "cu": 44,
+              "dies": 7988,
+              "vars": 1270
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_v.u_hi:u32@0x1240004"
+          ],
+          "varCount": 1,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 4,
+            "estUs": 4.47,
+            "estHz": 223914
+          },
+          "samples": 1591664,
+          "capacity": 5500064,
+          "packets": 13040,
+          "lost": 1233932,
+          "lostProbe": 1233932,
+          "lostUsb": 0,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 2.9659166666666663,
+          "blob": {
+            "offset": 1568,
+            "name": "SLOW",
+            "delay": 3
+          },
+          "connectErr": null,
+          "rateHz": 282607,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 1591664
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 0,
+        "requestedUs": 2,
+        "effectiveUs": 2,
+        "actualUs": 2,
+        "advice": "建议起始：5 µs（200.00 kHz）；读取耗时上界 ≤337.16 kHz，不代表持续采样能力。依据当前标定。 ⚠️ 超过读取耗时上界；建议 5 µs（200.00 kHz）。继续将保留 2 µs 周期，来不及的拍会跳过，不会自动改为“最大速率”；按真实时间轴显示，实际速率看采样统计。",
+        "periodTicks": 48,
+        "flags": 481,
+        "sequenceReordered": 0
+      },
+      {
+        "cfg": {
+          "period": 3.25,
+          "draw": true,
+          "adaptive": true
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 2.9659166666666663,
+          "recommendedUs": 5,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 5.004055541666666,
+          "produced": 1428407,
+          "skipped": 111302,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 1427612,
+          "probeHz": 285449.8692323168,
+          "webHz": 284889.94432351686,
+          "dropPercent": 7.228768553018784,
+          "maxMainThreadLagMs": 11
+        },
+        "samplesChecked": 1610388,
+        "bad": 0,
+        "counterBackwards": 0,
+        "maxCounterStep": 1,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：1610388 个样本 / 5.642 s，跳拍 126436 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "output-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              5
+            ],
+            "stats": {
+              "cu": 44,
+              "dies": 7988,
+              "vars": 1270
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_v.u_hi:u32@0x1240004"
+          ],
+          "varCount": 1,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 4,
+            "estUs": 4.47,
+            "estHz": 223914
+          },
+          "samples": 1610388,
+          "capacity": 3384680,
+          "packets": 13194,
+          "lost": 126436,
+          "lostProbe": 126436,
+          "lostUsb": 0,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 2.9659166666666663,
+          "blob": {
+            "offset": 1568,
+            "name": "SLOW",
+            "delay": 3
+          },
+          "connectErr": null,
+          "rateHz": 285449,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 1610388
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 6,
+        "requestedUs": 3.25,
+        "effectiveUs": 3.25,
+        "actualUs": 3.25,
+        "advice": "建议起始：5 µs（200.00 kHz）；读取耗时上界 ≤337.16 kHz，不代表持续采样能力。依据当前标定。 ⚠️ 高于建议起始频率；建议 5 µs（200.00 kHz）。继续将保留 3.25 µs 周期，来不及的拍会跳过，不会自动改为“最大速率”；按真实时间轴显示，实际速率看采样统计。",
+        "periodTicks": 78,
+        "flags": 481,
+        "sequenceReordered": 0
+      },
+      {
+        "cfg": {
+          "period": 4,
+          "draw": true,
+          "adaptive": true
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 2.9659166666666663,
+          "recommendedUs": 5,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 5.004055625,
+          "produced": 1247755,
+          "skipped": 3260,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 1247936,
+          "probeHz": 249348.74699759157,
+          "webHz": 249183.5226931628,
+          "dropPercent": 0.26058840221739943,
+          "maxMainThreadLagMs": 10.700000002980232
+        },
+        "samplesChecked": 1403928,
+        "bad": 0,
+        "counterBackwards": 0,
+        "maxCounterStep": 1,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：1403928 个样本 / 5.630 s，跳拍 3707 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "output-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              5
+            ],
+            "stats": {
+              "cu": 44,
+              "dies": 7988,
+              "vars": 1270
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_v.u_hi:u32@0x1240004"
+          ],
+          "varCount": 1,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 4,
+            "estUs": 4.47,
+            "estHz": 223914
+          },
+          "samples": 1403928,
+          "capacity": 2750064,
+          "packets": 11502,
+          "lost": 3707,
+          "lostProbe": 3707,
+          "lostUsb": 0,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 2.9659166666666663,
+          "blob": {
+            "offset": 1568,
+            "name": "SLOW",
+            "delay": 3
+          },
+          "connectErr": null,
+          "rateHz": 249348,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 1403928
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 2,
+        "requestedUs": 4,
+        "effectiveUs": 4,
+        "actualUs": 4,
+        "advice": "建议起始：5 µs（200.00 kHz）；读取耗时上界 ≤337.16 kHz，不代表持续采样能力。依据当前标定。 ⚠️ 高于建议起始频率；建议 5 µs（200.00 kHz）。继续将保留 4 µs 周期，来不及的拍会跳过，不会自动改为“最大速率”；按真实时间轴显示，实际速率看采样统计。",
+        "periodTicks": 96,
+        "flags": 481,
+        "sequenceReordered": 0
+      },
+      {
+        "cfg": {
+          "period": 5,
+          "draw": true,
+          "adaptive": true
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 2.9659166666666663,
+          "recommendedUs": 5,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 5.00805575,
+          "produced": 1001583,
+          "skipped": 28,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 1001920,
+          "probeHz": 199994.37905618365,
+          "webHz": 200299.8740528381,
+          "dropPercent": 0.0027954964552106554,
+          "maxMainThreadLagMs": 12.899999998509884
+        },
+        "samplesChecked": 1130136,
+        "bad": 0,
+        "counterBackwards": 0,
+        "maxCounterStep": 1,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：1130136 个样本 / 5.651 s，跳拍 45 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "output-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              5
+            ],
+            "stats": {
+              "cu": 44,
+              "dies": 7988,
+              "vars": 1270
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_v.u_hi:u32@0x1240004"
+          ],
+          "varCount": 1,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 4,
+            "estUs": 4.47,
+            "estHz": 223914
+          },
+          "samples": 1130136,
+          "capacity": 2200064,
+          "packets": 9259,
+          "lost": 45,
+          "lostProbe": 45,
+          "lostUsb": 0,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 2.9659166666666663,
+          "blob": {
+            "offset": 1568,
+            "name": "SLOW",
+            "delay": 3
+          },
+          "connectErr": null,
+          "rateHz": 199993,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 1130136
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 5,
+        "requestedUs": 5,
+        "effectiveUs": 5,
+        "actualUs": 5,
+        "advice": "建议起始：5 µs（200.00 kHz）；读取耗时上界 ≤337.16 kHz，不代表持续采样能力。依据当前标定。稳定性以实采跳拍/USB计数为准。",
+        "periodTicks": 120,
+        "flags": 481,
+        "sequenceReordered": 0
+      },
+      {
+        "cfg": {
+          "period": 6,
+          "draw": true,
+          "adaptive": true
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 2.9659166666666663,
+          "recommendedUs": 5,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 5.008055791666667,
+          "produced": 834668,
+          "skipped": 8,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 834892,
+          "probeHz": 166665.0761736472,
+          "webHz": 166851.59278933093,
+          "dropPercent": 0.0009584557361179667,
+          "maxMainThreadLagMs": 8.299999997019768
+        },
+        "samplesChecked": 939796,
+        "bad": 0,
+        "counterBackwards": 0,
+        "maxCounterStep": 1,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：939796 个样本 / 5.639 s，跳拍 13 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "output-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              5
+            ],
+            "stats": {
+              "cu": 44,
+              "dies": 7988,
+              "vars": 1270
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_v.u_hi:u32@0x1240004"
+          ],
+          "varCount": 1,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 4,
+            "estUs": 4.47,
+            "estHz": 223914
+          },
+          "samples": 939796,
+          "capacity": 1833398,
+          "packets": 7700,
+          "lost": 13,
+          "lostProbe": 13,
+          "lostUsb": 0,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 2.9659166666666663,
+          "blob": {
+            "offset": 1568,
+            "name": "SLOW",
+            "delay": 3
+          },
+          "connectErr": null,
+          "rateHz": 166665,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 939796
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 4,
+        "requestedUs": 6,
+        "effectiveUs": 6,
+        "actualUs": 6,
+        "advice": "建议起始：5 µs（200.00 kHz）；读取耗时上界 ≤337.16 kHz，不代表持续采样能力。依据当前标定。稳定性以实采跳拍/USB计数为准。",
+        "periodTicks": 144,
+        "flags": 481,
+        "sequenceReordered": 0
+      },
+      {
+        "cfg": {
+          "period": 10,
+          "draw": true,
+          "adaptive": true
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 2.9659166666666663,
+          "recommendedUs": 5,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 5.004056291666667,
+          "produced": 500406,
+          "skipped": 0,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 499968,
+          "probeHz": 100000.07410654711,
+          "webHz": 99911.67242857878,
+          "dropPercent": 0,
+          "maxMainThreadLagMs": 6.5
+        },
+        "samplesChecked": 562836,
+        "bad": 0,
+        "counterBackwards": 0,
+        "maxCounterStep": 1,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：562836 个样本 / 5.628 s，跳拍 1 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "output-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              5
+            ],
+            "stats": {
+              "cu": 44,
+              "dies": 7988,
+              "vars": 1270
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_v.u_hi:u32@0x1240004"
+          ],
+          "varCount": 1,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 4,
+            "estUs": 4.47,
+            "estHz": 223914
+          },
+          "samples": 562836,
+          "capacity": 1100064,
+          "packets": 4612,
+          "lost": 1,
+          "lostProbe": 1,
+          "lostUsb": 0,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 2.9659166666666663,
+          "blob": {
+            "offset": 1568,
+            "name": "SLOW",
+            "delay": 3
+          },
+          "connectErr": null,
+          "rateHz": 100000,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 562836
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 4,
+        "requestedUs": 10,
+        "effectiveUs": 10,
+        "actualUs": 10,
+        "advice": "建议起始：5 µs（200.00 kHz）；读取耗时上界 ≤337.16 kHz，不代表持续采样能力。依据当前标定。稳定性以实采跳拍/USB计数为准。",
+        "periodTicks": 240,
+        "flags": 481,
+        "sequenceReordered": 0
+      },
+      {
+        "cfg": {
+          "period": 2,
+          "draw": true,
+          "adaptive": true,
+          "vars": [
+            "g_v.tick",
+            "g_v.u_hi",
+            "g_v.f_sin",
+            "g_v.f_tri",
+            "g_v.i_sq1k",
+            "g_v.i_sq5k",
+            "g_v.u_ramp",
+            "g_v.lfsr"
+          ]
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 31.0726875,
+          "recommendedUs": 47,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 5.004055958333334,
+          "produced": 155373,
+          "skipped": 2346669,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 155220,
+          "probeHz": 31049.412974939834,
+          "webHz": 31018.56477687372,
+          "dropPercent": 93.79015220368004,
+          "maxMainThreadLagMs": 19
+        },
+        "samplesChecked": 174570,
+        "bad": 0,
+        "counterBackwards": 0,
+        "maxCounterStep": 1,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：174570 个样本 / 5.625 s，跳拍 2661346 / USB 丢样本 568 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "output-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              5
+            ],
+            "stats": {
+              "cu": 44,
+              "dies": 7988,
+              "vars": 1270
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_v.tick:u32@0x1240000",
+            "g_v.u_hi:u32@0x1240004",
+            "g_v.f_sin:f32@0x1240008",
+            "g_v.f_tri:f32@0x124000c",
+            "g_v.i_sq1k:i32@0x1240010",
+            "g_v.i_sq5k:i32@0x1240014",
+            "g_v.u_ramp:u32@0x1240018",
+            "g_v.lfsr:u32@0x124001c"
+          ],
+          "varCount": 8,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 32,
+            "estUs": 12.28,
+            "estHz": 81446
+          },
+          "samples": 174570,
+          "capacity": 3105374,
+          "packets": 11823,
+          "lost": 2661914,
+          "lostProbe": 2661346,
+          "lostUsb": 568,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 31.0726875,
+          "blob": {
+            "offset": 1568,
+            "name": "SLOW",
+            "delay": 3
+          },
+          "connectErr": null,
+          "rateHz": 31034,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 174570
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 1,
+        "requestedUs": 2,
+        "effectiveUs": 2,
+        "actualUs": 2,
+        "advice": "建议起始：47 µs（21.28 kHz）；读取耗时上界 ≤32.18 kHz，不代表持续采样能力。依据当前标定。 ⚠️ 超过读取耗时上界；建议 47 µs（21.28 kHz）。继续将保留 2 µs 周期，来不及的拍会跳过，不会自动改为“最大速率”；按真实时间轴显示，实际速率看采样统计。",
+        "periodTicks": 48,
+        "flags": 481,
+        "sequenceReordered": 0
+      },
+      {
+        "cfg": {
+          "period": 40,
+          "draw": true,
+          "adaptive": true,
+          "vars": [
+            "g_v.tick",
+            "g_v.u_hi",
+            "g_v.f_sin",
+            "g_v.f_tri",
+            "g_v.i_sq1k",
+            "g_v.i_sq5k",
+            "g_v.u_ramp",
+            "g_v.lfsr"
+          ]
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 31.0671875,
+          "recommendedUs": 47,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 5.004055,
+          "produced": 124112,
+          "skipped": 0,
+          "usb": 989,
+          "errors": 0,
+          "yields": 0,
+          "received": 124095,
+          "probeHz": 24802.285346583918,
+          "webHz": 24798.665094651948,
+          "dropPercent": 0.7905612265289645,
+          "maxMainThreadLagMs": 24.799999997019768
+        },
+        "samplesChecked": 140160,
+        "bad": 0,
+        "counterBackwards": 0,
+        "maxCounterStep": 90,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：140160 个样本 / 5.652 s，跳拍 0 / USB 丢样本 1160 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "output-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              5
+            ],
+            "stats": {
+              "cu": 44,
+              "dies": 7988,
+              "vars": 1270
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_v.tick:u32@0x1240000",
+            "g_v.u_hi:u32@0x1240004",
+            "g_v.f_sin:f32@0x1240008",
+            "g_v.f_tri:f32@0x124000c",
+            "g_v.i_sq1k:i32@0x1240010",
+            "g_v.i_sq5k:i32@0x1240014",
+            "g_v.u_ramp:u32@0x1240018",
+            "g_v.lfsr:u32@0x124001c"
+          ],
+          "varCount": 8,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 32,
+            "estUs": 12.28,
+            "estHz": 81446
+          },
+          "samples": 140160,
+          "capacity": 275064,
+          "packets": 9488,
+          "lost": 1160,
+          "lostProbe": 0,
+          "lostUsb": 1160,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 31.0671875,
+          "blob": {
+            "offset": 1568,
+            "name": "SLOW",
+            "delay": 3
+          },
+          "connectErr": null,
+          "rateHz": 24800,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 140160
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 8,
+        "requestedUs": 40,
+        "effectiveUs": 40,
+        "actualUs": 40,
+        "advice": "建议起始：47 µs（21.28 kHz）；读取耗时上界 ≤32.19 kHz，不代表持续采样能力。依据当前标定。 ⚠️ 高于建议起始频率；建议 47 µs（21.28 kHz）。继续将保留 40 µs 周期，来不及的拍会跳过，不会自动改为“最大速率”；按真实时间轴显示，实际速率看采样统计。",
+        "periodTicks": 960,
+        "flags": 481,
+        "sequenceReordered": 0
+      },
+      {
+        "cfg": {
+          "period": 60,
+          "draw": true,
+          "adaptive": true,
+          "vars": [
+            "g_v.tick",
+            "g_v.u_hi",
+            "g_v.f_sin",
+            "g_v.f_tri",
+            "g_v.i_sq1k",
+            "g_v.i_sq5k",
+            "g_v.u_ramp",
+            "g_v.lfsr"
+          ]
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 31.066895833333334,
+          "recommendedUs": 47,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 5.004055,
+          "produced": 83401,
+          "skipped": 0,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 83400,
+          "probeHz": 16666.683319827618,
+          "webHz": 16666.333606437754,
+          "dropPercent": 0,
+          "maxMainThreadLagMs": 21.5
+        },
+        "samplesChecked": 94020,
+        "bad": 0,
+        "counterBackwards": 0,
+        "maxCounterStep": 1,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：94020 个样本 / 5.641 s，跳拍 0 / USB 丢样本 100 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "output-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              5
+            ],
+            "stats": {
+              "cu": 44,
+              "dies": 7988,
+              "vars": 1270
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_v.tick:u32@0x1240000",
+            "g_v.u_hi:u32@0x1240004",
+            "g_v.f_sin:f32@0x1240008",
+            "g_v.f_tri:f32@0x124000c",
+            "g_v.i_sq1k:i32@0x1240010",
+            "g_v.i_sq5k:i32@0x1240014",
+            "g_v.u_ramp:u32@0x1240018",
+            "g_v.lfsr:u32@0x124001c"
+          ],
+          "varCount": 8,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 32,
+            "estUs": 12.28,
+            "estHz": 81446
+          },
+          "samples": 94020,
+          "capacity": 183398,
+          "packets": 6368,
+          "lost": 100,
+          "lostProbe": 0,
+          "lostUsb": 100,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 31.066895833333334,
+          "blob": {
+            "offset": 1568,
+            "name": "SLOW",
+            "delay": 3
+          },
+          "connectErr": null,
+          "rateHz": 16667,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 94020
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 8,
+        "requestedUs": 60,
+        "effectiveUs": 60,
+        "actualUs": 60,
+        "advice": "建议起始：47 µs（21.28 kHz）；读取耗时上界 ≤32.19 kHz，不代表持续采样能力。依据当前标定。稳定性以实采跳拍/USB计数为准。",
+        "periodTicks": 1440,
+        "flags": 481,
+        "sequenceReordered": 0
+      }
+    ],
+    "calibration": {
+      "readUs": 2.9659166666666663,
+      "recommendedUs": 5,
+      "fresh": true,
+      "status": "标定：读一次 2.966 µs（未包含组帧/USB/调度，不代表持续采样上限）（RISC-V/JTAG 路径；blob / clock_delay 是 SWD 专属，这里没有意义），对「g_v.u_hi @RISC-V/JTAG」有效；建议起始周期 ≥ 5 µs（≈200 kHz，需实采确认稳定性）"
+    }
+  },
+  "intermediate": {
+    "startedAt": "2026-10-07T12:48:21.224Z",
+    "elfPath": "tools/target-firmware/hpm6800evk_scope/build/flash_xip/output/demo.elf",
+    "target": "riscv",
+    "seconds": 8,
+    "rows": [
+      {
+        "cfg": {
+          "period": 2,
+          "draw": true,
+          "adaptive": true
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 2.9648125,
+          "recommendedUs": 5,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.008085791666666,
+          "produced": 2444114,
+          "skipped": 1559929,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 2445156,
+          "probeHz": 305205.7712148116,
+          "webHz": 305449.7757681754,
+          "dropPercent": 38.958847345045996,
+          "maxMainThreadLagMs": 10.399999998509884
+        },
+        "samplesChecked": 2638472,
+        "bad": 0,
+        "counterBackwards": 0,
+        "maxCounterStep": 1,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：2638472 个样本 / 8.647 s，跳拍 1693033 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "output-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              5
+            ],
+            "stats": {
+              "cu": 44,
+              "dies": 7988,
+              "vars": 1270
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_v.u_hi:u32@0x1240004"
+          ],
+          "varCount": 1,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 4,
+            "estUs": 4.47,
+            "estHz": 223914
+          },
+          "samples": 2638472,
+          "capacity": 7150065,
+          "packets": 21616,
+          "lost": 1693033,
+          "lostProbe": 1693033,
+          "lostUsb": 0,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 2.9648125,
+          "blob": {
+            "offset": 1568,
+            "name": "SLOW",
+            "delay": 7
+          },
+          "connectErr": null,
+          "rateHz": 305131,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 2638472
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 0,
+        "requestedUs": 2,
+        "effectiveUs": 2,
+        "actualUs": 2,
+        "advice": "建议起始：5 µs（200.00 kHz）；读取耗时上界 ≤337.29 kHz，不代表持续采样能力。依据当前标定。 ⚠️ 超过读取耗时上界；建议 5 µs（200.00 kHz）。继续将保留 2 µs 周期，来不及的拍会跳过，不会自动改为“最大速率”；按真实时间轴显示，实际速率看采样统计。",
+        "periodTicks": 48,
+        "flags": 481,
+        "sequenceReordered": 0
+      },
+      {
+        "cfg": {
+          "period": 3.25,
+          "draw": true,
+          "adaptive": true
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 2.9648125,
+          "recommendedUs": 5,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.004086791666667,
+          "produced": 2423207,
+          "skipped": 39590,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 2423704,
+          "probeHz": 302746.2174101966,
+          "webHz": 302622.54963166435,
+          "dropPercent": 1.6075218542169736,
+          "maxMainThreadLagMs": 22.5
+        },
+        "samplesChecked": 2614292,
+        "bad": 0,
+        "counterBackwards": 0,
+        "maxCounterStep": 1,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：2614292 个样本 / 8.635 s，跳拍 42925 / USB 丢样本 2157 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "output-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              5
+            ],
+            "stats": {
+              "cu": 44,
+              "dies": 7988,
+              "vars": 1270
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_v.u_hi:u32@0x1240004"
+          ],
+          "varCount": 1,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 4,
+            "estUs": 4.47,
+            "estHz": 223914
+          },
+          "samples": 2614292,
+          "capacity": 4400064,
+          "packets": 21418,
+          "lost": 45082,
+          "lostProbe": 42925,
+          "lostUsb": 2157,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 2.9648125,
+          "blob": {
+            "offset": 1568,
+            "name": "SLOW",
+            "delay": 7
+          },
+          "connectErr": null,
+          "rateHz": 302746,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 2614292
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 6,
+        "requestedUs": 3.25,
+        "effectiveUs": 3.25,
+        "actualUs": 3.25,
+        "advice": "建议起始：5 µs（200.00 kHz）；读取耗时上界 ≤337.29 kHz，不代表持续采样能力。依据当前标定。 ⚠️ 高于建议起始频率；建议 5 µs（200.00 kHz）。继续将保留 3.25 µs 周期，来不及的拍会跳过，不会自动改为“最大速率”；按真实时间轴显示，实际速率看采样统计。",
+        "periodTicks": 78,
+        "flags": 481,
+        "sequenceReordered": 0
+      },
+      {
+        "cfg": {
+          "period": 4,
+          "draw": true,
+          "adaptive": true
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 2.9648125,
+          "recommendedUs": 5,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.004088916666667,
+          "produced": 1997176,
+          "skipped": 3846,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 1996028,
+          "probeHz": 249519.46696161033,
+          "webHz": 249372.57939572434,
+          "dropPercent": 0.19220178488792228,
+          "maxMainThreadLagMs": 10.399999998509884
+        },
+        "samplesChecked": 2153136,
+        "bad": 0,
+        "counterBackwards": 0,
+        "maxCounterStep": 1,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：2153136 个样本 / 8.629 s，跳拍 4184 / USB 丢样本 51 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "output-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              5
+            ],
+            "stats": {
+              "cu": 44,
+              "dies": 7988,
+              "vars": 1270
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_v.u_hi:u32@0x1240004"
+          ],
+          "varCount": 1,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 4,
+            "estUs": 4.47,
+            "estHz": 223914
+          },
+          "samples": 2153136,
+          "capacity": 3575065,
+          "packets": 17640,
+          "lost": 4235,
+          "lostProbe": 4184,
+          "lostUsb": 51,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 2.9648125,
+          "blob": {
+            "offset": 1568,
+            "name": "SLOW",
+            "delay": 7
+          },
+          "connectErr": null,
+          "rateHz": 249519,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 2153136
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 8,
+        "requestedUs": 4,
+        "effectiveUs": 4,
+        "actualUs": 4,
+        "advice": "建议起始：5 µs（200.00 kHz）；读取耗时上界 ≤337.29 kHz，不代表持续采样能力。依据当前标定。 ⚠️ 高于建议起始频率；建议 5 µs（200.00 kHz）。继续将保留 4 µs 周期，来不及的拍会跳过，不会自动改为“最大速率”；按真实时间轴显示，实际速率看采样统计。",
+        "periodTicks": 96,
+        "flags": 481,
+        "sequenceReordered": 0
+      },
+      {
+        "cfg": {
+          "period": 5,
+          "draw": true,
+          "adaptive": true
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 2.9648125,
+          "recommendedUs": 5,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.008087833333333,
+          "produced": 1601574,
+          "skipped": 44,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 1601460,
+          "probeHz": 199994.5596667303,
+          "webHz": 199977.52303899676,
+          "dropPercent": 0.0027472218718820594,
+          "maxMainThreadLagMs": 11.899999998509884
+        },
+        "samplesChecked": 1727320,
+        "bad": 0,
+        "counterBackwards": 0,
+        "maxCounterStep": 1,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：1727320 个样本 / 8.637 s，跳拍 58 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "output-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              5
+            ],
+            "stats": {
+              "cu": 44,
+              "dies": 7988,
+              "vars": 1270
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_v.u_hi:u32@0x1240004"
+          ],
+          "varCount": 1,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 4,
+            "estUs": 4.47,
+            "estHz": 223914
+          },
+          "samples": 1727320,
+          "capacity": 2860064,
+          "packets": 14152,
+          "lost": 58,
+          "lostProbe": 58,
+          "lostUsb": 0,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 2.9648125,
+          "blob": {
+            "offset": 1568,
+            "name": "SLOW",
+            "delay": 7
+          },
+          "connectErr": null,
+          "rateHz": 199994,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 1727320
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 8,
+        "requestedUs": 5,
+        "effectiveUs": 5,
+        "actualUs": 5,
+        "advice": "建议起始：5 µs（200.00 kHz）；读取耗时上界 ≤337.29 kHz，不代表持续采样能力。依据当前标定。稳定性以实采跳拍/USB计数为准。",
+        "periodTicks": 120,
+        "flags": 481,
+        "sequenceReordered": 0
+      },
+      {
+        "cfg": {
+          "period": 6,
+          "draw": true,
+          "adaptive": true
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 2.9648125,
+          "recommendedUs": 5,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.004086708333332,
+          "produced": 1334000,
+          "skipped": 15,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 1335852,
+          "probeHz": 166664.86116537522,
+          "webHz": 166893.88071256375,
+          "dropPercent": 0.0011244251376483771,
+          "maxMainThreadLagMs": 12.399999998509884
+        },
+        "samplesChecked": 1439268,
+        "bad": 0,
+        "counterBackwards": 0,
+        "maxCounterStep": 1,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：1439268 个样本 / 8.636 s，跳拍 23 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "output-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              5
+            ],
+            "stats": {
+              "cu": 44,
+              "dies": 7988,
+              "vars": 1270
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_v.u_hi:u32@0x1240004"
+          ],
+          "varCount": 1,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 4,
+            "estUs": 4.47,
+            "estHz": 223914
+          },
+          "samples": 1439268,
+          "capacity": 2383398,
+          "packets": 11792,
+          "lost": 23,
+          "lostProbe": 23,
+          "lostUsb": 0,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 2.9648125,
+          "blob": {
+            "offset": 1568,
+            "name": "SLOW",
+            "delay": 7
+          },
+          "connectErr": null,
+          "rateHz": 166664,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 1439268
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 0,
+        "requestedUs": 6,
+        "effectiveUs": 6,
+        "actualUs": 6,
+        "advice": "建议起始：5 µs（200.00 kHz）；读取耗时上界 ≤337.29 kHz，不代表持续采样能力。依据当前标定。稳定性以实采跳拍/USB计数为准。",
+        "periodTicks": 144,
+        "flags": 481,
+        "sequenceReordered": 0
+      },
+      {
+        "cfg": {
+          "period": 10,
+          "draw": true,
+          "adaptive": true
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 2.9648125,
+          "recommendedUs": 5,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.004087625,
+          "produced": 800407,
+          "skipped": 2,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 800668,
+          "probeHz": 99999.77980001186,
+          "webHz": 99973.52911800743,
+          "dropPercent": 0.00024987225281075047,
+          "maxMainThreadLagMs": 39.399999998509884
+        },
+        "samplesChecked": 863164,
+        "bad": 0,
+        "counterBackwards": 0,
+        "maxCounterStep": 1,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：863164 个样本 / 8.632 s，跳拍 4 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "output-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              5
+            ],
+            "stats": {
+              "cu": 44,
+              "dies": 7988,
+              "vars": 1270
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_v.u_hi:u32@0x1240004"
+          ],
+          "varCount": 1,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 4,
+            "estUs": 4.47,
+            "estHz": 223914
+          },
+          "samples": 863164,
+          "capacity": 1430064,
+          "packets": 7072,
+          "lost": 4,
+          "lostProbe": 4,
+          "lostUsb": 0,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 2.9648125,
+          "blob": {
+            "offset": 1568,
+            "name": "SLOW",
+            "delay": 7
+          },
+          "connectErr": null,
+          "rateHz": 100000,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 863164
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 0,
+        "requestedUs": 10,
+        "effectiveUs": 10,
+        "actualUs": 10,
+        "advice": "建议起始：5 µs（200.00 kHz）；读取耗时上界 ≤337.29 kHz，不代表持续采样能力。依据当前标定。稳定性以实采跳拍/USB计数为准。",
+        "periodTicks": 240,
+        "flags": 481,
+        "sequenceReordered": 0
+      },
+      {
+        "cfg": {
+          "period": 40,
+          "draw": true,
+          "adaptive": false,
+          "vars": [
+            "g_v.tick",
+            "g_v.u_hi",
+            "g_v.f_sin",
+            "g_v.f_tri",
+            "g_v.i_sq1k",
+            "g_v.i_sq5k",
+            "g_v.u_ramp",
+            "g_v.lfsr"
+          ],
+          "stallMs": 25
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 31.043458333333334,
+          "recommendedUs": 47,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.056088833333334,
+          "produced": 176678,
+          "skipped": 0,
+          "usb": 24724,
+          "errors": 0,
+          "yields": 0,
+          "received": 176490,
+          "probeHz": 21930.989547802277,
+          "webHz": 21925.857827916698,
+          "dropPercent": 12.27594562119542,
+          "maxMainThreadLagMs": 44.399999998509884
+        },
+        "samplesChecked": 187740,
+        "bad": 0,
+        "counterBackwards": 0,
+        "maxCounterStep": 386,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：187740 个样本 / 8.764 s，跳拍 0 / USB 丢样本 31356 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "output-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              5
+            ],
+            "stats": {
+              "cu": 44,
+              "dies": 7988,
+              "vars": 1270
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_v.tick:u32@0x1240000",
+            "g_v.u_hi:u32@0x1240004",
+            "g_v.f_sin:f32@0x1240008",
+            "g_v.f_tri:f32@0x124000c",
+            "g_v.i_sq1k:i32@0x1240010",
+            "g_v.i_sq5k:i32@0x1240014",
+            "g_v.u_ramp:u32@0x1240018",
+            "g_v.lfsr:u32@0x124001c"
+          ],
+          "varCount": 8,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 32,
+            "estUs": 12.28,
+            "estHz": 81446
+          },
+          "samples": 187740,
+          "capacity": 357564,
+          "packets": 12704,
+          "lost": 31356,
+          "lostProbe": 0,
+          "lostUsb": 31356,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 31.043458333333334,
+          "blob": {
+            "offset": 1568,
+            "name": "SLOW",
+            "delay": 7
+          },
+          "connectErr": null,
+          "rateHz": 21422,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 187380
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 0,
+        "requestedUs": 40,
+        "effectiveUs": 40,
+        "actualUs": 40,
+        "advice": "建议起始：47 µs（21.28 kHz）；读取耗时上界 ≤32.21 kHz，不代表持续采样能力。依据当前标定。 ⚠️ 高于建议起始频率；建议 47 µs（21.28 kHz）。继续将保留 40 µs 周期，来不及的拍会跳过，不会自动改为“最大速率”；按真实时间轴显示，实际速率看采样统计。",
+        "periodTicks": 960,
+        "flags": 481,
+        "sequenceReordered": 0
+      },
+      {
+        "cfg": {
+          "period": 40,
+          "draw": true,
+          "adaptive": true,
+          "vars": [
+            "g_v.tick",
+            "g_v.u_hi",
+            "g_v.f_sin",
+            "g_v.f_tri",
+            "g_v.i_sq1k",
+            "g_v.i_sq5k",
+            "g_v.u_ramp",
+            "g_v.lfsr"
+          ],
+          "stallMs": 25
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 31.037,
+          "recommendedUs": 47,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.080087125,
+          "produced": 201730,
+          "skipped": 0,
+          "usb": 272,
+          "errors": 0,
+          "yields": 0,
+          "received": 201510,
+          "probeHz": 24966.314951709137,
+          "webHz": 24930.408640467795,
+          "dropPercent": 0.13465213215710736,
+          "maxMainThreadLagMs": 45.70000000298023
+        },
+        "samplesChecked": 217530,
+        "bad": 0,
+        "counterBackwards": 0,
+        "maxCounterStep": 1,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：217530 个样本 / 8.701 s，跳拍 0 / USB 丢样本 1026 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "output-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              5
+            ],
+            "stats": {
+              "cu": 44,
+              "dies": 7988,
+              "vars": 1270
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_v.tick:u32@0x1240000",
+            "g_v.u_hi:u32@0x1240004",
+            "g_v.f_sin:f32@0x1240008",
+            "g_v.f_tri:f32@0x124000c",
+            "g_v.i_sq1k:i32@0x1240010",
+            "g_v.i_sq5k:i32@0x1240014",
+            "g_v.u_ramp:u32@0x1240018",
+            "g_v.lfsr:u32@0x124001c"
+          ],
+          "varCount": 8,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 32,
+            "estUs": 12.28,
+            "estHz": 81446
+          },
+          "samples": 217530,
+          "capacity": 357564,
+          "packets": 14733,
+          "lost": 1026,
+          "lostProbe": 0,
+          "lostUsb": 1026,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 31.037,
+          "blob": {
+            "offset": 1568,
+            "name": "SLOW",
+            "delay": 7
+          },
+          "connectErr": null,
+          "rateHz": 25000,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 217530
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 3,
+        "requestedUs": 40,
+        "effectiveUs": 40,
+        "actualUs": 40,
+        "advice": "建议起始：47 µs（21.28 kHz）；读取耗时上界 ≤32.22 kHz，不代表持续采样能力。依据当前标定。 ⚠️ 高于建议起始频率；建议 47 µs（21.28 kHz）。继续将保留 40 µs 周期，来不及的拍会跳过，不会自动改为“最大速率”；按真实时间轴显示，实际速率看采样统计。",
+        "periodTicks": 960,
+        "flags": 481,
+        "sequenceReordered": 0
+      },
+      {
+        "cfg": {
+          "period": 40,
+          "draw": true,
+          "adaptive": true,
+          "vars": [
+            "g_v.tick",
+            "g_v.u_hi",
+            "g_v.f_sin",
+            "g_v.f_tri",
+            "g_v.i_sq1k",
+            "g_v.i_sq5k",
+            "g_v.u_ramp",
+            "g_v.lfsr"
+          ]
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 31.0773125,
+          "recommendedUs": 47,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.008087666666666,
+          "produced": 199919,
+          "skipped": 0,
+          "usb": 283,
+          "errors": 0,
+          "yields": 0,
+          "received": 199620,
+          "probeHz": 24964.636792396086,
+          "webHz": 24920.103864980167,
+          "dropPercent": 0.14135722919850952,
+          "maxMainThreadLagMs": 52.100000001490116
+        },
+        "samplesChecked": 216510,
+        "bad": 0,
+        "counterBackwards": 0,
+        "maxCounterStep": 64,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：216510 个样本 / 8.672 s，跳拍 0 / USB 丢样本 946 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "output-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              5
+            ],
+            "stats": {
+              "cu": 44,
+              "dies": 7988,
+              "vars": 1270
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_v.tick:u32@0x1240000",
+            "g_v.u_hi:u32@0x1240004",
+            "g_v.f_sin:f32@0x1240008",
+            "g_v.f_tri:f32@0x124000c",
+            "g_v.i_sq1k:i32@0x1240010",
+            "g_v.i_sq5k:i32@0x1240014",
+            "g_v.u_ramp:u32@0x1240018",
+            "g_v.lfsr:u32@0x124001c"
+          ],
+          "varCount": 8,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 32,
+            "estUs": 12.28,
+            "estHz": 81446
+          },
+          "samples": 216510,
+          "capacity": 357564,
+          "packets": 14664,
+          "lost": 946,
+          "lostProbe": 0,
+          "lostUsb": 946,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 31.0773125,
+          "blob": {
+            "offset": 1568,
+            "name": "SLOW",
+            "delay": 7
+          },
+          "connectErr": null,
+          "rateHz": 24967,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 216510
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 8,
+        "requestedUs": 40,
+        "effectiveUs": 40,
+        "actualUs": 40,
+        "advice": "建议起始：47 µs（21.28 kHz）；读取耗时上界 ≤32.18 kHz，不代表持续采样能力。依据当前标定。 ⚠️ 高于建议起始频率；建议 47 µs（21.28 kHz）。继续将保留 40 µs 周期，来不及的拍会跳过，不会自动改为“最大速率”；按真实时间轴显示，实际速率看采样统计。",
+        "periodTicks": 960,
+        "flags": 481,
+        "sequenceReordered": 0
+      },
+      {
+        "cfg": {
+          "period": 47,
+          "draw": true,
+          "adaptive": true,
+          "vars": [
+            "g_v.tick",
+            "g_v.u_hi",
+            "g_v.f_sin",
+            "g_v.f_tri",
+            "g_v.i_sq1k",
+            "g_v.i_sq5k",
+            "g_v.u_ramp",
+            "g_v.lfsr"
+          ]
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 31.081020833333334,
+          "recommendedUs": 47,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.004087625,
+          "produced": 170300,
+          "skipped": 0,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 170340,
+          "probeHz": 21276.628640106872,
+          "webHz": 21279.99800118619,
+          "dropPercent": 0,
+          "maxMainThreadLagMs": 27.799999997019768
+        },
+        "samplesChecked": 183915,
+        "bad": 0,
+        "counterBackwards": 0,
+        "maxCounterStep": 1,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：183915 个样本 / 8.644 s，跳拍 0 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "output-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              5
+            ],
+            "stats": {
+              "cu": 44,
+              "dies": 7988,
+              "vars": 1270
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_v.tick:u32@0x1240000",
+            "g_v.u_hi:u32@0x1240004",
+            "g_v.f_sin:f32@0x1240008",
+            "g_v.f_tri:f32@0x124000c",
+            "g_v.i_sq1k:i32@0x1240010",
+            "g_v.i_sq5k:i32@0x1240014",
+            "g_v.u_ramp:u32@0x1240018",
+            "g_v.lfsr:u32@0x124001c"
+          ],
+          "varCount": 8,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 32,
+            "estUs": 12.28,
+            "estHz": 81446
+          },
+          "samples": 183915,
+          "capacity": 304320,
+          "packets": 12456,
+          "lost": 0,
+          "lostProbe": 0,
+          "lostUsb": 0,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 31.081020833333334,
+          "blob": {
+            "offset": 1568,
+            "name": "SLOW",
+            "delay": 7
+          },
+          "connectErr": null,
+          "rateHz": 21277,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 183915
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 8,
+        "requestedUs": 47,
+        "effectiveUs": 47,
+        "actualUs": 47,
+        "advice": "建议起始：47 µs（21.28 kHz）；读取耗时上界 ≤32.17 kHz，不代表持续采样能力。依据当前标定。稳定性以实采跳拍/USB计数为准。",
+        "periodTicks": 1128,
+        "flags": 481,
+        "sequenceReordered": 0
+      }
+    ],
+    "calibration": {
+      "readUs": 2.9648125,
+      "recommendedUs": 5,
+      "fresh": true,
+      "status": "标定：读一次 2.965 µs（未包含组帧/USB/调度，不代表持续采样上限）（RISC-V/JTAG 路径；blob / clock_delay 是 SWD 专属，这里没有意义），对「g_v.u_hi @RISC-V/JTAG」有效；建议起始周期 ≥ 5 µs（≈200 kHz，需实采确认稳定性）"
+    }
+  }
+}

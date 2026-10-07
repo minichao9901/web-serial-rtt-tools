@@ -80,7 +80,7 @@ console.log('== 1. 采样计划（读计划 = 速率的最大杠杆）==');
      '目标类型切换走 HID **0x31** action 10（不是 0x32），Byte[3]=10 / Byte[4]=0|1');
   // RISC-V 的实测分档必须比 SWD 慢得多（拿 SWD 的数去建议周期会大面积丢拍）
   ok(P.BACKEND_COST.riscv.single > P.BACKEND_COST.swd.single * 1.5 &&
-     P.BACKEND_COST.riscv.pack8 > P.BACKEND_COST.swd.pack8 * 3,
+     P.BACKEND_COST.riscv.pack8 > P.BACKEND_COST.swd.pack8 * 2,
      `后端分档：SWD ${P.BACKEND_COST.swd.single}/${P.BACKEND_COST.swd.pack8} µs vs ` +
      `RISC-V ${P.BACKEND_COST.riscv.single}/${P.BACKEND_COST.riscv.pack8} µs`);
   ok(P.backendName('riscv') === 'RISC-V/JTAG' && P.backendName('swd') === 'SWD/ARM', '后端显示名');

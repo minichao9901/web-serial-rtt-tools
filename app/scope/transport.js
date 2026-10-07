@@ -47,11 +47,16 @@ export class VendorEpTransport {
   configureReadAhead(wireBps){
     if (this.running) throw new Error('先停止采样再改变预读窗口');
     if (!this._adaptiveReadAhead) return;
-    // 500 kHz/u32 DATA is ~2.06 MB/s. 48 KiB covers ~24 ms of
-    // main-thread pauses; native reads keep draining while JS is occupied.
+    // Provision at least 30 ms of native reads where the small window no
+    // longer covers it. HPM's 8-channel/25 kHz stream is only 0.85 MB/s,
+    // but decoding/drawing can pause JS for 25 ms: the old 1 MB/s cutoff
+    // left just 14 ms of reads and caused USB drops despite zero probe skips.
+    // Reserve ~80 ms when possible, including already completed reads awaiting
+    // JS delivery. Limit native buffering to 16 * 8 KiB (128 KiB). This also
+    // covers observed 52 ms GC/draw pauses at HPM's 25 kHz/8-channel rate.
     // Slow sessions retain the smaller window to avoid extra buffering delay.
-    const fast = wireBps >= 1e6;
-    this.inFlight = fast ? 6 : 3;
+    const fast = Number.isFinite(wireBps) && wireBps * 0.030 > 3 * 4096;
+    this.inFlight = fast ? Math.max(6, Math.min(16, Math.ceil(wireBps * 0.080 / 8192))) : 3;
     this.chunkBytes = fast ? 8192 : 4096;
   }
 

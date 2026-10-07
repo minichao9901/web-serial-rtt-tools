@@ -12,7 +12,12 @@ class USB {
 }
 {
   const t = new VendorEpTransport(new USB());
-  t.configureReadAhead(2.06e6); assert.equal(t.inFlight,6); assert.equal(t.chunkBytes,8192);
+  t.configureReadAhead(2.06e6); assert.equal(t.inFlight,16); assert.equal(t.chunkBytes,8192);
+  t.configureReadAhead(25e3 * 512 / 15); assert.equal(t.inFlight,9); assert.equal(t.chunkBytes,8192);
+  t.configureReadAhead(100e6); assert.equal(t.inFlight,16);
+  t.configureReadAhead(NaN); assert.equal(t.inFlight,3);
+  t.configureReadAhead(409600); assert.equal(t.inFlight,3);
+  t.configureReadAhead(409601); assert.equal(t.inFlight,6);
   t.configureReadAhead(1e4); assert.equal(t.inFlight,3); assert.equal(t.chunkBytes,4096);
   t.running=true; assert.throws(()=>t.configureReadAhead(2e6));
   const custom=new VendorEpTransport(new USB(),{inFlight:2,chunkBytes:512});
