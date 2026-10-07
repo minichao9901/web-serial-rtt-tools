@@ -12,6 +12,8 @@
 param([switch]$Clean, [ValidateSet('c8', 'cb', 'ze')][string]$Board = 'ze', [ValidateSet(72,96)][int]$CpuMhz = 96)
 
 $ErrorActionPreference = 'Stop'
+[Console]::OutputEncoding = [System.Text.UTF8Encoding]::new()
+$OutputEncoding = [Console]::OutputEncoding
 $root = $PSScriptRoot
 
 $BOARDS = @{

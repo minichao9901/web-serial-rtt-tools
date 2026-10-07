@@ -20,6 +20,22 @@ assert.equal(P.recommendedPeriodUs(7.3,P.BACKEND.SWD),10);
 assert.equal(P.recommendedPeriodUs(7.3,P.BACKEND.RISCV),11);
 assert.equal(P.recommendedPeriodUs(1.47),3);
 for(const n of [0,-1,NaN,Infinity])assert.equal(P.recommendedPeriodUs(n),null);
+{
+  const a=P.samplingRateAdvice(2,1.47);
+  assert.equal(a.appliedUs,2,'request faster than recommendation is preserved');
+  assert.equal(a.aboveRecommendation,true);
+  assert.equal(a.aboveReadCeiling,false);
+  assert.equal(a.readCeilingHz,500000,'firmware minimum also bounds read-only ceiling');
+  assert.equal(a.recommendedHz,1e6/3);
+  const slow=P.samplingRateAdvice(2,7.3);
+  assert.equal(slow.aboveReadCeiling,true);
+  assert.equal(slow.appliedUs,2,'multi-span overload must not silently retime to the benchmark');
+  const limit=P.samplingRateAdvice(1,1.47);
+  assert.equal(limit.normalized,true);assert.equal(limit.requestedUs,1);assert.equal(limit.appliedUs,2);
+  assert.equal(P.samplingRateAdvice(2.26,1.47).appliedUs,2.25,'fractional period reports the actual tick grid');
+  assert.equal(P.samplingRateAdvice(2e6,1.47).appliedUs,1e6);
+  for(const n of [0,-2,NaN,Infinity])assert.equal(P.samplingRateAdvice(n,1.47).valid,false);
+}
 
 function view(){
   const s=Object.create(ScopeView.prototype);

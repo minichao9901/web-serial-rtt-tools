@@ -549,7 +549,7 @@
         <p class="hint" id="sc-backend">生效后端：未开始（采样后由探针回报）</p>
         <label class="row" id="sc-clock-row"><span>SWD 时钟</span><select id="sc-clock" title="与 RTT Viewer 同款档位；固件自带失败自动降档"></select></label>
         <label class="chk" title="采样期间自动暂停 CDC/串口桥（HID 0x32 flags bit5）。探针主循环每轮服务那个桥要花几百周期，关掉能多出约 8% 采样带宽；代价是采样时探针的 COM 口不通（停采样自动恢复，只恢复自己关过的那一次）"><input type="checkbox" id="sc-cdcoff" checked> 采样时暂停串口桥（推荐）</label>
-        <label class="chk" title="单字 SWD、周期 ≤3 µs 时每次 poll 连续最多16拍；包边界返回。取消可做 A/B 测试，旧固件自动使用逐拍路径"><input type="checkbox" id="sc-batch" checked> 单字短批次（实验）</label>
+        <label class="chk" title="SWD 单字 span：2µs 档每次最多64拍并可跨包；其他≤3µs 档最多16拍、包边界返回。取消可做 A/B 测试，旧固件按自身能力处理"><input type="checkbox" id="sc-batch" checked> 单字短批次（实验）</label>
         <div class="row btnrow">
           <button id="sc-start" class="primary">开始采样</button>
           <button id="sc-stop" disabled>停止</button>
@@ -558,6 +558,7 @@
           <button id="sc-bench" title="让探针用当前计划空跑一段，回报真实 µs/样本（M0 标定；假探针会假装一个结果）">标定真实速率</button>
           <button id="sc-recc" title="按当前计划的有效标定：SWD 取读取耗时×1.15+1µs，JTAG 取×1.5，向上取整且不小于3µs；这是起始建议，稳定性以实采计数为准">用建议周期</button>
         </div>
+        <p class="hint" id="sc-rate-advice" role="status" aria-live="polite">选好变量后会显示建议起始频率</p>
         <details class="helpnote"><summary>读计划与速率估算</summary><p class="hint" id="sc-plan">选好变量后会显示读计划与预计上限</p></details>
         <p class="hint" id="sc-state">未开始</p>
       </fieldset>

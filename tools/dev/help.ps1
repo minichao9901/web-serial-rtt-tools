@@ -29,6 +29,7 @@ $lines = @(
   '  make spi-partial-hw  屏「局部刷新」真机验收：线上字节逐字节对账（ARGS=--panel=st77916 换档）'
   '  make test-record    记录到文件的落盘语义（.crswap / 积压 / 落盘进度；OPFS 替身，不需硬件）'
   '  make test-hw       真机 WebUSB RTT 验收（探针 + 目标板）'
+  '  make test-hss-rate BOARD=ze  HSS/JScope 高速实测：备份原 Flash、烧录 72 MHz 测试固件、打开真实网页测速（支持 cb）'
   '  make tcpecho       以太网 TCP 回显：PC 当客户端打板子的 lwIP tcpecho（TCP_HOST=ip）'
   '  make tcpecho-server    PC 当 TCP 服务端（回显对照；TCP_PORT=port）'
   '  make tcpecho-selftest  不开硬件，本地 127.0.0.1 自检'

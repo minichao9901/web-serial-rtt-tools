@@ -81,6 +81,19 @@ export function swdCostAt(mhz = COST.refMhz){
 export const recommendedPeriodUs = (us, backend = BACKEND.SWD) =>
   Number.isFinite(us) && us > 0 ? Math.max(3, Math.ceil(backend === BACKEND.RISCV ? us * 1.5 : us * 1.15 + 1)) : null;
 
+/** A read benchmark excludes scheduling/USB costs. It cannot promise a sustained rate. */
+export function samplingRateAdvice(requestedUs, readUs, backend = BACKEND.SWD){
+  const valid = Number.isFinite(requestedUs) && requestedUs > 0;
+  const appliedUs = valid ? Math.min(1e6, Math.max(2, usForTicks(ticksForUs(requestedUs)))) : null;
+  const recommendedUs = recommendedPeriodUs(readUs, backend);
+  return { valid, requestedUs, appliedUs, recommendedUs,
+    recommendedHz: recommendedUs ? 1e6 / recommendedUs : null,
+    readCeilingHz: recommendedUs ? 1e6 / Math.max(2, readUs) : null,
+    normalized: valid && Math.abs(requestedUs - appliedUs) > 1e-9,
+    aboveReadCeiling: valid && recommendedUs != null && appliedUs < readUs,
+    aboveRecommendation: valid && recommendedUs != null && appliedUs < recommendedUs };
+}
+
 // ---------------------------------------------------------------- 采样计划
 /**
  * 把变量列表排成"读计划"：地址排序 → 相邻的合并进同一个 span。

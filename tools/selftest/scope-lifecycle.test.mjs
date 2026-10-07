@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {ScopeView} from '../../app/scope/view.js';
 const gate=()=>{let resolve;const promise=new Promise(r=>resolve=r);return {promise,resolve};};
 const tick=()=>new Promise(r=>setImmediate(r));
-globalThis.document={getElementById:()=>({value:'0'})};
+globalThis.document={getElementById:id=>({value:id==='sc-period'?'100':'0'})};
 for(const fail of [false,true]){
  const cfg=gate(),v=Object.create(ScopeView.prototype),events=[];let calls=0;
  Object.assign(v,{selected:[{addr:0x20000000,scalar:'u32',name:'x',size:4}],usingMock:true,hid:{},running:false,transport:{running:false,start:async function(){calls++;this.running=true;},stop:async function(){events.push('USB-stop');this.running=false;}},renderer:{setStore(){},setTrigger(){},clearMarks(){}},periodUs:()=>100,seconds:()=>1,isReal:()=>false,updatePlan:()=>({}),applyTrigger(){},configureScope:()=>cfg.promise,_startWatchdog(){},_stopWatchdog(){},_absorbeStatusBackend(){},benchFresh:()=>false,setStatusText(){},syncButtons(){},hidXfer:async(cmd,data)=>{events.push(data[0]===0?'HID-stop':'HID-start');return Uint8Array.of(0,0,0);}});

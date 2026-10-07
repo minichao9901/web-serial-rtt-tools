@@ -725,6 +725,32 @@ console.log('== 15. 用户现场口径：**没连探针**时切目标类型，�
      `切回 SWD 也立刻回去（${r.back.label}）`);
 }
 
+console.log('== 16. 超限输入有持续警告，强制继续保留周期，物理下限与非法输入明确处理 ==');
+{
+  const r=await ev(`
+    const sc=window.__tools.scope;
+    await sc.setMock(true);await sc.connectHid(false);
+    sc.selected=[];for(const name of ['mock0.f32','mock3.u16'])sc.toggleVar(sc.mockVars().find(v=>v.name===name),true);
+    await sc.bench();
+    const input=document.getElementById('sc-period');input.value='2';input.dispatchEvent(new Event('input'));
+    const fast={text:document.getElementById('sc-rate-advice').textContent,readUs:sc.benchUs};
+    document.getElementById('sc-seconds').value='1';await sc.start();
+    fast.started=sc.running;fast.period=sc._periodUs;fast.disabled=input.disabled;
+    sc.drawFrame();fast.visible=document.getElementById('sc-rate-advice').textContent;
+    await sc.stop();fast.enabled=!input.disabled;
+    input.value='1';input.dispatchEvent(new Event('input'));const normalized=document.getElementById('sc-rate-advice').textContent;
+    await sc.start();const actual=sc._periodUs;await sc.stop();
+    input.value='0';input.dispatchEvent(new Event('input'));await sc.start();
+    const invalid={running:sc.running,state:sc.state};
+    input.value='100';sc.updatePlan();await sc.setMock(false);
+    return {fast,normalized,actual,invalid};`);
+  ok(r.fast.readUs>2 && /超过读取耗时上界/.test(r.fast.text) && /建议/.test(r.fast.text), '超过读取能力时显示推荐周期和警告');
+  ok(r.fast.started && r.fast.period===2 && /保留 2/.test(r.fast.visible), '强制继续保留 2µs，不把读取耗时当作自动最大速率');
+  ok(r.fast.disabled && r.fast.enabled, '采集中锁定周期，停止后可修改');
+  ok(/填写 1.*采用 2/.test(r.normalized) && r.actual===2, '低于探针物理下限时明示采用 2µs');
+  ok(!r.invalid.running && /必须是大于 0/.test(r.invalid.state), '非法周期阻止启动，不静默采用默认周期');
+}
+
 console.log(`\n${fail ? '❌' : '✅'} scope-page.test: ${pass} 通过 / ${fail} 失败`);
 ws.close();
 process.exit(fail ? 1 : 0);

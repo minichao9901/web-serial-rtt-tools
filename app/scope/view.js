@@ -132,6 +132,8 @@ export class ScopeView {
     store.bind($('sc-target'), 'rtt.target');       // 这一页改 = 改同一个全局开关，落回同一个键
     $('sc-bench').addEventListener('click', () => this.bench());
     $('sc-recc').addEventListener('click', () => this.applyRecPeriod());
+    for (const id of ['sc-period', 'sc-clock', 'sc-batch', 'sc-cdcoff'])
+      $(id).addEventListener(id === 'sc-period' ? 'input' : 'change', () => this.updatePlan());
     $('sc-clear').addEventListener('click', () => this.clear());
     $('sc-fit').addEventListener('click', () => { this.renderer.fitAll(); this.follow = true; this._needDraw = true; });
     $('sc-zin').addEventListener('click', () => { this.renderer.zoomBy(1.6, 0.5); this._needDraw = true; });
@@ -620,7 +622,7 @@ export class ScopeView {
      * 用户一眼就看出自相矛盾：「模型估算 ≈6.7 µs → ≈148 kHz（偏保守：实测 ≈1.6 µs → 600 kHz 量级）」。
      */
     const useFast = plan.fastPath;
-    const headlineUs = plan.bestUs, headlineHz = plan.bestHz;
+    const headlineUs = plan.bestUs;
     // 「按哪条路显示」= uiBackend()：生效后端优先，还没采样就按你刚选的目标类型 ——
     // 否则"切到 RISC-V/JTAG"这一步在读计划那行上看不出任何变化（用户 2026-09-30 现场）。
     const riscv = this.uiBackend() === P.BACKEND.RISCV;
@@ -629,18 +631,23 @@ export class ScopeView {
      * 用户实测就是踩在这里：周期填 5 µs 想要 200 kHz，实得 112.9 kHz，
      * 于是「时长 3 s」按名义速率开出来的缓冲被填满花了 6.6 s。**这是开始采样前就该看见的**。
      */
-    const wantHz = 1e6 / this.periodUs();
     // 🚨 标定值只在"测的就是当前这套变量 + 时钟"时才算数（见 benchFresh）
     const fresh = this.benchFresh();
     const estUs = (fresh && this.benchUs) || this.planEstimateUs(plan);
-    const srcName = (fresh && this.benchUs) ? '标定值' : (useFast ? '单字快路径实测' : '模型估算');
-    const slow = wantHz > 1e6 / estUs
-      ? `　⚠️ 你填的周期 ${this.periodUs()} µs（${(wantHz / 1000).toFixed(0)} kHz）快过这个${srcName}：` +
-        `探针会跳拍，实得约 ${(1e6 / estUs / 1000).toFixed(1)} kHz（时长仍按真实时间轴算，不会拖长）`
-      : '';
+    const advice = this.rateAdvice(plan);
+    const slow = this.rateWarning(advice);
+    const rateHint = $('sc-rate-advice');
+    if (rateHint){
+      const text = advice.valid
+        ? `建议起始：${advice.recommendedUs} µs（${fmtHz(advice.recommendedHz)}）；` +
+          `读取耗时上界 ≤${fmtHz(advice.readCeilingHz)}，不代表持续采样能力。` +
+          (fresh ? '依据当前标定。' : '依据粗估，建议先标定。') + (slow ? ` ${slow}` : '稳定性以实采跳拍/USB计数为准。')
+        : '采样周期必须是大于 0 的有限数值。';
+      setStatus(rateHint, text, !advice.valid ? 'err' : slow ? 'warn' : '');
+    }
     const benchTxt = this.benchUs
       ? (fresh
-            ? ` · <b>已标定：读一次 ${this.benchUs.toFixed(3)} µs</b>（上限 ${Math.round(1e3 / this.benchUs)} kHz，建议周期 ≥ ${this.recPeriodUsFor(estUs)} µs）`
+            ? ` · <b>已标定：读一次 ${this.benchUs.toFixed(3)} µs</b>（读取耗时上界，未包含组帧/USB/调度；建议周期 ≥ ${this.recPeriodUsFor(estUs)} µs）`
             : ` · <s>已标定 ${this.benchUs.toFixed(3)} µs</s> <b>已失效</b>（那是「${(this._benchKey || {}).vars} @${(this._benchKey || {}).clock} kHz」测的，${this.benchKeyWhy()} —— 重新点「标定真实速率」）`)
       : '';
     /**
@@ -654,12 +661,12 @@ export class ScopeView {
     const rvEstHz = rvEstUs > 0 ? 1e6 / rvEstUs : 0;
     const planTxt = riscv
       ? (plan.fastPath
-          ? `单字 span：RISC-V/JTAG 实测 ≈${rv.single} µs/样本 → ≈${Math.round(1e6 / rv.single / 1000)} kHz`
+          ? `单字 span：RISC-V/JTAG 历史读取耗时 ≈${rv.single} µs/样本（未包含完整推流开销）`
           : `RISC-V/JTAG 粗估 ≈${rvEstUs.toFixed(1)} µs/样本 → ≈${(rvEstHz / 1000).toFixed(1)} kHz` +
             `（读 ${plan.readBytes} B；每 span 为 N+4 次稳态 DMI 扫描，冷配置/重试另计）`) +
         '（以当前计划标定为准；建议周期取 1.5× 读取耗时，需实采验证）'
       : (useFast
-          ? `单字 span 走固件流水快路径：实测 ≈${headlineUs.toFixed(2)} µs/样本 → ≈${Math.round(headlineHz / 1000)} kHz` +
+          ? `单字 span 走固件流水快路径：历史读取耗时估算 ≈${headlineUs.toFixed(2)} µs/样本（未包含完整推流开销）` +
             `（保守模型算 ${plan.estUs.toFixed(1)} µs —— 稳态 N+2 次 SWD 传输及软件开销）`
           : `模型估算 ≈${plan.estUs.toFixed(1)} µs/样本 → ≈${khz} kHz` +
             (plan.spans.length === 1 && plan.frameBytes <= 4
@@ -671,7 +678,7 @@ export class ScopeView {
         benchTxt +
         '<br>时长 = 目标侧真实时间，到点自动停（缓冲只是内存上限）' +
         (slow || (riscv
-          ? `（JTAG 下没有"2 µs 下限"那回事：单字实测 ${rv.single} µs，填得比它短就是跳拍丢样本）`
+          ? `（JTAG 单字历史读取耗时 ${rv.single} µs；周期比读取耗时短会跳拍）`
           : '（周期下限 2 µs；周期 < 读一次的耗时就会跳拍丢样本）'))
       : '选好变量后会显示读计划与预计上限';
     // 触发通道下拉跟着变量走
@@ -694,7 +701,18 @@ export class ScopeView {
     return sc.map((s, i) => ({ name: `mock${i}.${s}`, addr: 0x20000000 + i * 4, size: P.SCALARS[s].size, scalar: s }));
   }
 
-  periodUs(){ return Math.min(1e6, Math.max(2, P.usForTicks(P.ticksForUs(Number($('sc-period').value) || 100)))); }   // 固件下限是 2 µs（整数微秒）
+  periodUs(){ return P.samplingRateAdvice(Number($('sc-period').value), 0).appliedUs ?? 100; }
+  rateAdvice(plan = this.plan){
+    const readUs = (this.benchFresh() && this.benchUs) || this.planEstimateUs(plan);
+    return P.samplingRateAdvice(Number($('sc-period').value), readUs, this.uiBackend());
+  }
+  rateWarning(a = this.rateAdvice()){
+    if (!a.valid) return '采样周期必须是大于 0 的有限数值。';
+    const notes = [];
+    if (a.normalized) notes.push(`填写 ${a.requestedUs} µs；按探针支持范围和时钟粒度采用 ${a.appliedUs} µs`);
+    if (a.aboveRecommendation) notes.push(`${a.aboveReadCeiling ? '超过读取耗时上界' : '高于建议起始频率'}；建议 ${a.recommendedUs} µs（${fmtHz(a.recommendedHz)}）。继续将保留 ${a.appliedUs} µs 周期，来不及的拍会跳过，不会自动改为“最大速率”`);
+    return notes.length ? `⚠️ ${notes.join('；')}；按真实时间轴显示，实际速率看采样统计。` : '';
+  }
   seconds(){ return Math.max(0.5, Number($('sc-seconds').value) || 20); }
 
   // ================================================================= 采样
@@ -750,6 +768,11 @@ export class ScopeView {
   }
 
   async _startOnce(g){
+    if (!P.samplingRateAdvice(Number($('sc-period').value), 0).valid){
+      this.setStatusText('采样周期必须是大于 0 的有限数值；请修改后再开始', 'err');
+      this.updatePlan();
+      return;
+    }
     const pick = (this.selected.length ? this.selected : (this.usingMock ? this.mockVars() : []));
     /**
      * 🚨 **必须按地址排序后再建缓冲**：固件把变量按**地址顺序**紧排在帧里（协议规定），
@@ -932,10 +955,7 @@ export class ScopeView {
       this.state = '采样中';
       // 周期比"读一次"还短 ⇒ 必丢拍（固件侧的账），这一条要当面说清楚。
       // 用**新鲜**的标定值；过期的标定值会把一个能跑的周期说成跑不动（见 benchFresh）。
-      const estUs = (this.benchFresh() && this.benchUs) || this.planEstimateUs(this.plan);
-      const tooFast = (estUs && periodUs < estUs)
-        ? `　⚠️ 周期 ${periodUs} µs 小于${this.benchFresh() ? '标定' : '单字快路径实测/模型估算'}的每样本 ${estUs.toFixed(2)} µs，探针会跳拍丢样本（实得约 ${(1e6 / estUs / 1000).toFixed(0)} kHz，时长不受影响）`
-        : '';
+      const tooFast = this.rateWarning();
       this.setStatusText(`采样中：${vars.length} 通道 × ${(1e6 / periodUs / 1000).toFixed(2)} kHz，缓冲 ${capacity} 样本` +
         (this.trigger.mode !== TRIG.NONE ? '（触发已布防）' : '') + tooFast + wireNote + capNote,
       (tooFast || wireNote || capNote) ? 'warn' : 'ok');
@@ -1091,6 +1111,7 @@ export class ScopeView {
         this._reportedClockSelection = Number($('sc-clock').value) || 0;
       }
       this.setBackend((w0 & 2) ? P.BACKEND.RISCV : P.BACKEND.SWD, '状态字 0');
+      this.updatePlan(); // Clock downshift can change advice without changing the backend.
     } catch { /* 回包形状不对就当没看见 */ }
   }
 
@@ -1127,7 +1148,7 @@ export class ScopeView {
     // SWD 专属：SWD 时钟档在 JTAG 下无效（探针忽略），置灰并说明；采样时暂停串口桥那个 checkbox 仍有效
     const clk = $('sc-clock');
     if (clk){
-      clk.disabled = riscv;
+      clk.disabled = riscv || !!(this.running || this._starting || this._stopPromise);
       clk.title = riscv
         ? 'RISC-V/JTAG 下无意义：JTAG 时序由 DMI 汇编旋钮 + delay 决定，探针会忽略这个档位'
         : '与 RTT Viewer 同款档位；固件自带失败自动降档';
@@ -1315,7 +1336,7 @@ export class ScopeView {
       const extra = actualRiscv
         ? `（RISC-V/JTAG 路径；blob / clock_delay 是 SWD 专属，这里没有意义${err ? `，err=${err}` : ''}）`
         : `（blob ${blobName}${err ? `，err=${err}` : ''}）`;
-      this.setStatusText(`标定：读一次 ${usPerSample.toFixed(3)} µs → 上限 ≈${Math.round(1e3 / usPerSample)} kHz${vsModel}` +
+      this.setStatusText(`标定：读一次 ${usPerSample.toFixed(3)} µs（未包含组帧/USB/调度，不代表持续采样上限）${vsModel}` +
         `${extra}，对「${this._benchKey.vars} @${P.backendName(this._benchKey.backend)}」有效；` +
         `建议起始周期 ≥ ${this.recPeriodUs} µs（≈${Math.round(1e3 / this.recPeriodUs)} kHz，需实采确认稳定性）`, 'ok');
       this.updatePlan();
@@ -1434,6 +1455,7 @@ export class ScopeView {
           // **生效**后端（DEF flags bit6）：你下发的 flags 只是请求，后端拉不起来时探针会换一条路重试，
           // 所以界面一律用生效值显示（见 web-handoff-riscv-scope.md）
           this.setBackend(d.riscv ? P.BACKEND.RISCV : P.BACKEND.SWD, 'def');
+          this.updatePlan();
           // 探针回报的 span 数 vs 本地计划：不一致就说明两边的合并规则不一样了（改一边忘了另一边）
           if (d.spans && this.plan && d.spans !== this.plan.spans.length){
             this.planMismatch = `探针算出 ${d.spans} 个 span，本地计划是 ${this.plan.spans.length} 个`;
@@ -1670,6 +1692,9 @@ export class ScopeView {
     $('sc-start').disabled = !!(this.running || this._starting || this._stopPromise || this._releasing);
     $('sc-stop').disabled = !!this._stopPromise || (!this.running && !this._starting);
     const target = $('sc-target'); if (target) target.disabled = !!(this.running || this._starting || this._stopPromise);
+    for (const id of ['sc-period', 'sc-clock', 'sc-batch', 'sc-cdcoff', 'sc-bench', 'sc-recc']){
+      const el = $(id); if (el) el.disabled = !!(this.running || this._starting || this._stopPromise) || (id === 'sc-clock' && this.uiBackend() === P.BACKEND.RISCV);
+    }
   }
 
   _loop(){

@@ -30,8 +30,18 @@ LA       = tools/la/kingst_la.py
 # 以太网回显靶子（HPM6800EVK 跑 lwIP tcpecho 例程时的默认地址）
 TCP_HOST ?= 192.168.100.10
 TCP_PORT ?= 5001
+BOARD       ?= ze
+HSS_SECONDS ?= 8
+HSS_CLOCK   ?= 60
+HSS_CPU     ?= 72
+HSS_PERIODS ?= 2,2.25,2.5,3
 
 .DEFAULT_GOAL := help
+.PHONY: test-hss-rate
+# 真机 HSS/JScope 测速：备份原 Flash，烧录额定主频测试固件，再跑真实网页。
+# make test-hss-rate BOARD=ze；依赖探针、匹配的 F103 板和已授权浏览器。
+test-hss-rate:
+	$(NODE) tools/dev/hss-rate-hw.mjs --board=$(BOARD) --seconds=$(HSS_SECONDS) --clock=$(HSS_CLOCK) --cpu=$(HSS_CPU) --periods=$(HSS_PERIODS) --port=$(PORT) --cdp=$(CDP) $(ARGS)
 .PHONY: help serve serve-dev serve-stop browser open page-prep spi-flash-hw idcode board-check-f103ze board-check-f103cb board-check-h743 board-check-6800evk test test-offline test-board-matrix test-random-flow test-ui test-gen test-gen-page gen-embed samples-anim test-hid test-dwarf test-scope test-scope-page test-scope-render test-spi test-read test-spi-page test-hw test-record test-bridge test-bridge-gate test-hpm test-image test-all test-dbg test-dbg-page test-dbg-hw test-dbg-stress test-dbg-stress-f103ze test-dbg-stress-f103cb flash-dbgstress-f103ze flash-dbgstress-f103cb flash-dbgstress-h743 flash-dbgstress-6800evk test-dbg-riscv test-idcode test-dsl test-flash flash-timing hw-campaign hw-campaign-f103ze hw-campaign-f103cb hw-campaign-h743 hw-campaign-hpm hw-campaign-riscv hw-random-flow-f103cb hw-random-flow-h743 hw-random-flow-6800evk build-f103ze-examples build-f103cb-examples build-h743-examples build-6800evk-examples build-all-examples rebuild-all-examples clean-firmware campaign-summary full_flow_f103ze full_flow_f103cb full_flow_h743 full_flow_6800evk tcpecho tcpecho-server tcpecho-selftest \
         bridge bridge-stop fw-build fw-flash fw-restore fw-h7-build fw-h7-flash \
         algo-check flash-plan la-info la-capture git-status git-log check clean spi-hw spi-flow i2c-hw spi-partial-hw spi-periodic-hw dbg-step-hw probe-diag
