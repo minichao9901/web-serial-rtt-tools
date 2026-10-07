@@ -56,27 +56,46 @@ assert.equal(s._badAddrs.has('18874368:8'),false);
  */
 {
   const S=Object.create(RiscvDebugSession.prototype),log=[];
-  let inits=0,reads=0,healed=false;
+  let repairs=0,reads=0,healed=false;
   Object.assign(S,{sym:null,halted:true,_frames:null,_log:t=>log.push(t),_badAddrs:new Map(),
-    refresh:async()=>{},_ensureHalted:async()=>{},_healDm:async()=>{inits++;healed=true;},
-    dm:{async readMem(a,n){reads++;if(!healed)throw Error('SBA 读 0x4000b638 出错（sbcs=0x20758407）');return new Uint8Array(n).fill(9);},
+    refresh:async()=>{},_ensureHalted:async()=>{},_rearmBpsAfterReset:async()=>{},
+    _repairStuckSba:async()=>{repairs++;healed=true;},
+    dm:{lastSbcs:0x400000,      // 带 sbbusyerror ⇒ 真粘死
+        async readMem(a,n){reads++;if(!healed)throw Error('SBA 读 0x4000b638 出错（sbcs=0x20758407）');return new Uint8Array(n).fill(9);},
         async sbaClearErrors(){}}});
   const got=await S.memRead(0x4000b600,60);
   assert.equal(got[0],9,'修复后重读要拿到数据');assert.equal(got.length,60);
-  assert.equal(inits,1,'粘死只修一次');assert.equal(reads,2,'修完要重读一次');
-  assert.ok(log.some(t=>/重新初始化调试模块/.test(t)),'要如实记一行日志');
+  assert.equal(repairs,1,'粘死只修一次');assert.equal(reads,2,'修完要重读一次');
 }
 {
   const S=Object.create(RiscvDebugSession.prototype),log=[];
-  let inits=0;
+  let repairs=0;
   Object.assign(S,{sym:null,halted:true,_frames:null,_log:t=>log.push(t),_badAddrs:new Map(),
-    refresh:async()=>{},_ensureHalted:async()=>{},_healDm:async()=>{inits++;},
-    dm:{async readMem(){throw Error('SBA 读 0x4000b638 出错（sbcs=0x20758407）');},async sbaClearErrors(){}}});
+    refresh:async()=>{},_ensureHalted:async()=>{},_rearmBpsAfterReset:async()=>{},
+    _repairStuckSba:async()=>{repairs++;},
+    dm:{lastSbcs:0x400000,
+        async readMem(){throw Error('SBA 读 0x4000b638 出错（sbcs=0x20758407）');},async sbaClearErrors(){}}});
   await assert.rejects(S.memRead(0x4000b600,60),/sbcs=0x20758407/);
-  assert.equal(inits,1,'修不好也不能反复初始化 DM');
+  assert.equal(repairs,1,'修不好也不能反复动恢复梯子');
   assert.ok(log.some(t=>/仍未恢复/.test(t)),'修不好要如实说清楚');
   await assert.rejects(S.memRead(0x4000b600,60),/15 秒/);
-  assert.equal(inits,1);
+  assert.equal(repairs,1);
+}
+/**
+ * **坏地址不许触发恢复梯子**：读一个没映射的地址只会留 `sberror`（换个地址照样能读），
+ * 这时动 ndmreset 就是"刷新一下变量把目标重启了"——补丁明令禁止的那种隐式复位。
+ */
+{
+  const S=Object.create(RiscvDebugSession.prototype);
+  let repairs=0;
+  Object.assign(S,{sym:null,halted:true,_frames:null,_log(){},_badAddrs:new Map(),
+    refresh:async()=>{},_ensureHalted:async()=>{},
+    _repairStuckSba:async()=>{repairs++;},
+    dm:{lastSbcs:0x2000,       // 只有 sberror（bit13）⇒ 单纯地址不通
+        async readMem(){throw Error('SBA 读 0x8000300 出错（sbcs=0x2015a407）');},async sbaClearErrors(){}}});
+  await assert.rejects(S.memRead(0x8000300,4),/sbcs=/);
+  assert.equal(repairs,0,'坏地址不许动恢复梯子（会隐式复位目标）');
+  assert.equal(S.halted,true);
 }
 
 // Transport fences the complete aligned span before any hardware command.
