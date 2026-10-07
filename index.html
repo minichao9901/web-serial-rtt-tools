@@ -1966,12 +1966,43 @@
             <label class="row"><span>触发电平 V</span><input id="an-level" type="number" min="0" max="3.3" step="0.01" value="1.65"></label>
             <label class="chk"><input id="an-freeze" type="checkbox">冻结显示（采集继续）</label>
             <details class="helpnote"><summary>触发方式与记录限制</summary><p class="hint">触发为网页软件触发，25% 预触发显示；单次捕获为有限 DMA 记录，不是硬件触发捕获。显示与导出保留最近 65536 点。</p></details>
+            <details class="helpnote" id="an-measure-help"><summary>游标与测量说明</summary>
+              <p class="hint">拖线微调，或点波形移动所选游标；数值框可精确输入，方向键微调（Shift 加速）。Δt = T2 − T1，ΔV = V2 − V1；冻结后仍可测量。</p>
+              <p id="an-measure-note" class="hint">自动测量基于当前显示窗口的原始样本；周期/频率需至少两个完整、稳定的周期。</p>
+            </details>
             <button id="an-adc-export">导出 ADC CSV</button>
           </fieldset>
         </aside>
         <div class="work an-work">
-          <div class="toolbar an-reading"><span id="an-value">— V</span><span id="an-code" class="hint"></span></div>
-          <div class="an-plot"><canvas id="an-adc-canvas" width="1000" height="260" aria-label="ADC 波形、时基和触发电平"></canvas></div>
+          <div class="toolbar an-cursor-toolbar">
+            <span class="an-reading"><span id="an-value">— V</span><span id="an-code" class="hint"></span></span>
+            <span class="spacer"></span>
+            <label class="chk"><input id="an-cursor-x" type="checkbox">时间游标</label>
+            <label class="chk"><input id="an-cursor-y" type="checkbox">电压游标</label>
+            <label>点图移动 <select id="an-cursor-target" aria-label="选择要移动的游标"><option value="x0">T1</option><option value="x1">T2</option><option value="y0">V1</option><option value="y1">V2</option></select></label>
+            <button id="an-cursor-reset" class="mini">复位游标</button><button id="an-cursor-clear" class="mini">清游标</button>
+          </div>
+          <div class="an-plot"><canvas id="an-adc-canvas" width="1000" height="260" tabindex="0" aria-label="ADC 波形、时基、触发电平和可拖动的时间/电压游标"></canvas></div>
+          <div class="an-cursor-values" id="an-cursor-values" hidden>
+            <span class="an-cursor-group" id="an-cursor-time-values" hidden>
+            <label class="an-t1">T1 <input id="an-cursor-t1" type="number" step="any" aria-label="时间游标 T1，微秒" disabled> µs</label>
+            <label class="an-t2">T2 <input id="an-cursor-t2" type="number" step="any" aria-label="时间游标 T2，微秒" disabled> µs</label>
+            <span>Δt <b id="an-cursor-dt">—</b></span><span>1/|Δt| <b id="an-cursor-frequency">—</b></span>
+            </span>
+            <span class="an-cursor-group" id="an-cursor-voltage-values" hidden>
+            <label class="an-v1">V1 <input id="an-cursor-v1" type="number" step="any" aria-label="电压游标 V1，伏" disabled> V</label>
+            <label class="an-v2">V2 <input id="an-cursor-v2" type="number" step="any" aria-label="电压游标 V2，伏" disabled> V</label>
+            <span>ΔV <b id="an-cursor-dv">—</b></span>
+            </span>
+          </div>
+          <div class="an-measurements" aria-label="当前显示窗口的自动测量">
+            <div><span>周期</span><strong id="an-measure-period">—</strong></div>
+            <div><span>频率</span><strong id="an-measure-frequency">—</strong></div>
+            <div><span title="最小值">Ymin</span><strong id="an-measure-min">—</strong></div>
+            <div><span title="最大值">Ymax</span><strong id="an-measure-max">—</strong></div>
+            <div><span title="平均值">Yavg</span><strong id="an-measure-average">—</strong></div>
+            <div><span title="峰峰值">Ypp</span><strong id="an-measure-vpp">—</strong></div>
+          </div>
           <div class="stats" id="an-stats">等待采集</div>
         </div>
       </div>

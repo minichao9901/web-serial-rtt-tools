@@ -920,11 +920,26 @@ fieldset.folded > legend::after{content:' · 已折叠';color:var(--fg2);font-si
 #tab-i2c .scan-key{flex:none;margin:0}
 #tab-analog .an-toolbar>.btnrow{justify-content:flex-start}
 #tab-analog .an-toolbar>.btnrow>button{flex:none;min-width:96px}
-#tab-analog .an-work{overflow:hidden;padding:0}
+#tab-analog .an-work{overflow:auto;padding:0}
 #tab-analog .an-plot{position:relative;flex:1 1 auto;min-height:260px;border:1px solid var(--line);border-radius:var(--radius-card);overflow:hidden;background:#090f17}
 #tab-analog .an-plot canvas{position:absolute;inset:0;width:100%;height:100%}
-#tab-analog .an-reading{align-items:baseline}
-#tab-analog #an-value{font:var(--text-xl)/1.4 var(--mono);color:var(--acc)}
+#tab-analog .an-reading{display:flex;align-items:baseline;gap:8px;white-space:nowrap}
+#tab-analog #an-adc-canvas{touch-action:none;cursor:crosshair}
+#tab-analog .an-cursor-toolbar{flex-wrap:wrap;gap:6px 10px;flex:none;padding:5px 9px}
+#tab-analog .an-cursor-toolbar>label{display:flex;align-items:center;gap:5px}
+#tab-analog .an-cursor-values{display:flex;flex-wrap:wrap;align-items:center;gap:6px 18px;flex:none;font:var(--text-xs)/1.5 var(--mono)}
+#tab-analog .an-cursor-group{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;min-width:0}
+#tab-analog .an-cursor-values[hidden],#tab-analog .an-cursor-group[hidden]{display:none}
+#tab-analog .an-cursor-values label{white-space:nowrap}
+#tab-analog .an-cursor-values input{width:80px;max-width:100px;font-family:var(--mono)}
+#tab-analog .an-cursor-values b{color:var(--fg);font-weight:500;white-space:nowrap}
+#tab-analog .an-t1{color:#63bdff} #tab-analog .an-t2{color:#c591ff}
+#tab-analog .an-v1{color:#51dbb1} #tab-analog .an-v2{color:#ff9b73}
+#tab-analog .an-measurements{display:flex;flex-wrap:wrap;align-items:center;gap:4px 20px;flex:none;padding:4px 10px;border:1px solid var(--line);border-radius:var(--radius-control);background:var(--bg2)}
+#tab-analog .an-measurements>div{display:flex;align-items:baseline;gap:7px;min-width:0;white-space:nowrap}
+#tab-analog .an-measurements span{color:var(--fg2);font-size:var(--text-xs)}
+#tab-analog .an-measurements strong{color:#ffd15c;font:var(--text-sm)/1.4 var(--mono);white-space:nowrap}
+#tab-analog #an-value{font:var(--text-lg)/1.4 var(--mono);color:var(--acc)}
 #tab-analog #an-code{font-family:var(--mono);margin:0}
 #tab-analog .stats{flex:none}
 @media (max-width:860px){

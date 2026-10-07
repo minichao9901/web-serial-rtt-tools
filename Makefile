@@ -97,6 +97,7 @@ test: test-stability test-dbg-features test-board-matrix test-random-flow
 	$(NODE) tools/selftest/pin-map.test.mjs
 	$(NODE) tools/selftest/adc-transport.test.mjs
 	$(NODE) tools/selftest/adc-scope.test.mjs
+	$(NODE) tools/selftest/adc-measure.test.mjs
 	$(NODE) tools/selftest/adc-view.test.mjs
 	$(NODE) tools/selftest/adc-session.test.mjs
 	$(NODE) tools/selftest/dac-protocol.test.mjs
@@ -714,8 +715,19 @@ test-stability: test-probe
 .PHONY: test-analog
 test-analog:
 	$(NODE) tools/selftest/analog.test.mjs
+	$(NODE) tools/selftest/analog-connect.test.mjs
+	$(NODE) tools/selftest/adc-scope.test.mjs
+	$(NODE) tools/selftest/adc-measure.test.mjs
+	$(NODE) tools/selftest/adc-view.test.mjs
+	$(NODE) tools/selftest/adc-session.test.mjs
+	$(NODE) tools/selftest/adc-transport.test.mjs
 	$(NODE) tools/selftest/dac-protocol.test.mjs
 	$(NODE) tools/selftest/dac-generator.test.mjs
+
+# 真页面游标与自动测量验收，使用已知原始样本，不连接 USB。
+.PHONY: test-adc-measure-page
+test-adc-measure-page:
+	$(NODE) tools/selftest/adc-measure-page.test.mjs $(ARGS)
 
 # ADC 真机矩阵：4 种转换位宽 × 多档时基，有限/连续/环回采集与安全收尾。
 # 需要 HPM5301 EVKLite 探针、USB ADC 页面和授权的 Chrome/Edge；生成 tmp/JSON 报告。

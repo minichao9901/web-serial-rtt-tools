@@ -2,9 +2,10 @@ import { $ } from '../ui/dom.js';
 import { AnalogSession } from './session.js';
 import { WAVES, dacTable, signalLevels, waveCsv } from './model.js';
 import { AdcScopeStore, envelope } from './scope-store.js';
+import { measureAdc, cursorDelta, formatMeasure } from './measure.js';
 import { PinMap } from '../ui/pin-map.js';
 export class AnalogView {
-  constructor(){ this.session = new AnalogSession(); this.store = new AdcScopeStore(); this.wave = []; this._raf = null; this.total = 0; this.page='adc'; this.canvasSizes = new Map(); }
+  constructor(){ this.session = new AnalogSession(); this.store = new AdcScopeStore(); this.wave = []; this._raf = null; this.total = 0; this.page='adc'; this.canvasSizes = new Map(); this.adcCursors={x:null,y:null}; }
   init(){
     this.initTabs();
     this.canvasFont = `13px ${getComputedStyle(document.documentElement).getPropertyValue('--mono').trim()}`;
@@ -48,7 +49,8 @@ export class AnalogView {
       catch (e){ this.wave = []; this.plot('an-dac-canvas', []); $('an-generator-summary').textContent='设置无效';$('an-wave-state').textContent = e.message; }
     });
     this.session.onDisconnect = () => {this.updateDacControls();this.status('探针已掉线；采集已请求取消', true);};
-    for(const id of ['an-time','an-volts','an-offset','an-trigger','an-level','an-edge','an-freeze'])$(id).addEventListener('change',()=>this.renderAdc());
+    for(const id of ['an-time','an-volts','an-offset','an-trigger','an-level','an-edge','an-freeze','an-reference'])$(id).addEventListener('change',()=>this.renderAdc());
+    this.initAdcCursors();
     this.updateDacControls(); this.preview(); this.renderAdc();
   }
   initTabs(){
@@ -86,26 +88,44 @@ export class AnalogView {
     const options={bits:Number($('an-bits').value),rate:Number($('an-rate').value),count};
     const reference=Number($('an-reference').value);
     if(!Number.isFinite(reference)||reference<=0||reference>10)throw Error('参考电压需为 0–10 V 范围内的正数');
-    this.store.reset();this.total=0;this.lastFrame=null;$('an-freeze').checked=false;
+    this.store.reset();this.total=0;this.lastFrame=null;this.adcDisplay=null;$('an-freeze').checked=false;
+    this.renderAdc();
     this.status(count?'单次/有限记录采集中…':'连续 DMA 采集中…');
     await this.session.acquire(options,block=>{
       this.store.append(block);this.total=this.store.total;
-      if(this._raf===null)this._raf=requestAnimationFrame(()=>{this._raf=null;this.renderAdc();});
+      if(!$('an-freeze').checked&&this._raf===null)this._raf=requestAnimationFrame(()=>{this._raf=null;this.renderAdc();});
     });
     this.renderAdc();this.status(`采集停止，共 ${this.total} 点；保留最近 ${this.store.length} 点可导出`);
   }
   renderAdc(){
-    if($('an-freeze').checked)return;
     const reference=Number($('an-reference').value),timeDiv=Number($('an-time').value);
     const voltsDiv=Number($('an-volts').value),offset=Number($('an-offset').value),level=Number($('an-level').value);
     if(!Number.isFinite(offset)||!Number.isFinite(level)||!Number.isFinite(reference)||reference<=0||!(timeDiv>0)||!(voltsDiv>0))return;
-    const frame=this.store.frame({timeDiv,reference,trigger:$('an-trigger').value,level,edge:$('an-edge').value});
+    const frozen=$('an-freeze').checked;
+    let frame=frozen?this.lastFrame:this.store.frame({timeDiv,reference,trigger:$('an-trigger').value,level,edge:$('an-edge').value});
+    const waiting=!frozen&&!frame&&$('an-trigger').value==='normal';
     if(frame)this.lastFrame=frame;
-    const last=this.store.length?this.store.code(this.store.total-1):null;
-    $('an-value').textContent=last===null?'— V':`${(last/(2**this.store.bits-1)*reference).toFixed(5)} V`;
+    else frame=this.lastFrame; // Normal trigger holds the last frame and its measurements.
+    const duration=timeDiv*10;
+    if(frame){
+      const visible=Math.min(frame.codes.length,Math.max(1,Math.ceil(duration*frame.rate)));
+      frame={...frame,codes:frame.codes.subarray(0,visible)};
+    }
+    this.adcDisplay={frame,reference,timeDiv,voltsDiv,offset,level,duration};
+    const last=frame?.codes.length?frame.codes.at(-1):null;
+    $('an-value').textContent=last===null?'— V':`${(last/(2**frame.bits-1)*reference).toFixed(5)} V`;
     $('an-code').textContent=last===null?'CH1 · 等待采集':`CH1 · code ${last}`;
-    $('an-stats').textContent=`${this.total} 点 · 硬件时基 ${(this.store.rate/1000).toFixed(3)} kSa/s · 最近 ${this.store.length} 点可导出 · ${frame?.triggered?'已触发':$('an-trigger').value==='normal'?'等待触发':'自动扫描'}${frame?.limited?' · 当前时窗超过记录长度':''}`;
-    if(!frame&&this.lastFrame)return; // Normal trigger holds last complete frame.
+    $('an-stats').textContent=`${this.total} 点 · 硬件时基 ${(this.store.rate/1000).toFixed(3)} kSa/s · 最近 ${this.store.length} 点可导出 · ${frozen?'冻结显示':waiting?'等待触发'+(frame?' · 保持上一帧':''):frame?.triggered?'已触发':'自动扫描'}${frame?.limited?' · 当前时窗超过记录长度':''}`;
+    const measurement=measureAdc(frame?.codes,{rate:frame?.rate,bits:frame?.bits,reference});
+    for(const [id,key,unit] of [['period','period','s'],['frequency','frequency','Hz'],['min','min','V'],['max','max','V'],['average','average','V'],['vpp','peakToPeak','V']])
+      $('an-measure-'+id).textContent=formatMeasure(measurement[key],unit);
+    $('an-measure-note').textContent=`当前显示窗口 · ${frame?.codes.length||0} 个原始样本${frozen?' · 冻结':''} · ${measurement.reason?'周期/频率：'+measurement.reason:'周期/频率为稳定边沿与波形重复性估算'}`;
+    for(const id of ['period','frequency'])$('an-measure-'+id).title=$('an-measure-note').textContent;
+    this.paintAdc();
+  }
+  paintAdc(){
+    if(!this.adcDisplay)return;
+    const {frame,reference,timeDiv,voltsDiv,offset,level,duration}=this.adcDisplay;
     const canvas=$('an-adc-canvas'),ctx=canvas.getContext('2d');if(!ctx)return;
     const {w,h}=this.canvasMetrics(canvas,ctx);ctx.fillStyle='#090f17';ctx.fillRect(0,0,w,h);
     ctx.strokeStyle='#26384a';ctx.lineWidth=1;
@@ -115,15 +135,114 @@ export class AnalogView {
     ctx.setLineDash([5,5]);ctx.strokeStyle='#df9c42';ctx.beginPath();ctx.moveTo(0,y(level));ctx.lineTo(w,y(level));ctx.stroke();ctx.setLineDash([]);
     ctx.fillStyle='#d4e2f1';ctx.font=this.canvasFont;
     ctx.fillText(`CH1 PB14   ${voltsDiv} V/div   ${timeDiv<0.001?(timeDiv*1e6)+' us/div':(timeDiv*1000)+' ms/div'}`,12,20);
-    if(!frame)return;
-    const span=timeDiv*10*frame.rate;
+    if(!frame){this.paintAdcCursors(ctx,w,h);return;}
+    const span=duration*frame.rate;
     const traceWidth=Math.min(w,Math.max(1,Math.ceil(frame.codes.length/span*w)));
     const points=envelope(frame.codes,traceWidth),scale=reference/(2**frame.bits-1);
     ctx.strokeStyle='#ffd15c';ctx.lineWidth=1.2;ctx.beginPath();
     if(frame.codes.length>traceWidth){
       for(const p of points){const x=p.x*frame.codes.length/span*w/points.length;ctx.moveTo(x,y(p.min*scale));ctx.lineTo(x,y(p.max*scale));}
-    }else frame.codes.forEach((code,i)=>{const x=i/span*w;if(i)ctx.lineTo(x,y(code*scale));else ctx.moveTo(x,y(code*scale));});
+    }else if(frame.codes.length===1){ctx.moveTo(0,y(frame.codes[0]*scale));ctx.lineTo(Math.min(3,w),y(frame.codes[0]*scale));}
+    else frame.codes.forEach((code,i)=>{const x=i/span*w;if(i)ctx.lineTo(x,y(code*scale));else ctx.moveTo(x,y(code*scale));});
     ctx.stroke();
+    this.paintAdcCursors(ctx,w,h);
+  }
+  initAdcCursors(){
+    const reset=()=>{
+      const d=this.adcDisplay||{duration:Number($('an-time').value)*10,offset:Number($('an-offset').value),voltsDiv:Number($('an-volts').value)};
+      if($('an-cursor-x').checked)this.adcCursors.x=[d.duration*.25,d.duration*.75];
+      if($('an-cursor-y').checked)this.adcCursors.y=[d.offset+d.voltsDiv*2,d.offset-d.voltsDiv*2];
+    };
+    for(const axis of ['x','y'])$('an-cursor-'+axis).addEventListener('change',()=>{
+      if(!$('an-cursor-'+axis).checked)this.adcCursors[axis]=null;
+      else if(!this.adcCursors[axis]){const keep=this.adcCursors[axis==='x'?'y':'x'];reset();this.adcCursors[axis==='x'?'y':'x']=keep;}
+      this.paintAdc();
+    });
+    $('an-cursor-reset').addEventListener('click',()=>{reset();this.paintAdc();});
+    $('an-cursor-clear').addEventListener('click',()=>{
+      this.adcCursors={x:null,y:null};$('an-cursor-x').checked=$('an-cursor-y').checked=false;this.paintAdc();
+    });
+    for(const [id,axis,index] of [['t1','x',0],['t2','x',1],['v1','y',0],['v2','y',1]]){
+      $('an-cursor-'+id).addEventListener('change',()=>{
+        const value=$('an-cursor-'+id).value.trim(),number=Number(value);
+        if(value!==''&&Number.isFinite(number)&&this.adcCursors[axis]){
+          const d=this.adcDisplay;
+          this.adcCursors[axis][index]=axis==='x'?Math.max(0,Math.min(d.duration,number/1e6)):
+            Math.max(d.offset-4*d.voltsDiv,Math.min(d.offset+4*d.voltsDiv,number));
+        }
+        const accepted=this.adcCursors[axis]?.[index];
+        $('an-cursor-'+id).value=accepted==null?'':String(+(accepted*(axis==='x'?1e6:1)).toPrecision(9));
+        this.paintAdc();
+      });
+    }
+    const canvas=$('an-adc-canvas');
+    const point=e=>{const r=canvas.getBoundingClientRect();return {x:Math.max(0,Math.min(1,(e.clientX-r.left)/r.width)),y:Math.max(0,Math.min(1,(e.clientY-r.top)/r.height)),w:r.width,h:r.height};};
+    const move=(p,target)=>{
+      const axis=target[0],index=Number(target[1]),d=this.adcDisplay;
+      if(!d||!this.adcCursors[axis])return;
+      this.adcCursors[axis][index]=axis==='x'?p.x*d.duration:d.offset+(0.5-p.y)*8*d.voltsDiv;
+      this.paintAdc();
+    };
+    canvas.addEventListener('pointerdown',e=>{
+      if(e.button!==0||!this.adcDisplay)return;
+      const p=point(e),d=this.adcDisplay,candidates=[];
+      for(const axis of ['x','y'])this.adcCursors[axis]?.forEach((value,i)=>{
+        const distance=axis==='x'?Math.abs(p.x-value/d.duration)*p.w:
+          Math.abs(p.y-(.5-(value-d.offset)/(8*d.voltsDiv)))*p.h;
+        if(distance<=12)candidates.push({target:axis+i,distance});
+      });
+      candidates.sort((a,b)=>a.distance-b.distance);
+      const target=candidates[0]?.target||$('an-cursor-target').value;
+      if(!this.adcCursors[target[0]])return;
+      this._cursorDrag={id:e.pointerId,target};$('an-cursor-target').value=target;
+      canvas.focus({preventScroll:true});canvas.setPointerCapture(e.pointerId);e.preventDefault();move(p,target);
+    });
+    canvas.addEventListener('pointermove',e=>{if(this._cursorDrag?.id===e.pointerId)move(point(e),this._cursorDrag.target);});
+    const end=e=>{if(this._cursorDrag?.id===e.pointerId){this._cursorDrag=null;if(canvas.hasPointerCapture(e.pointerId))canvas.releasePointerCapture(e.pointerId);}};
+    for(const event of ['pointerup','pointercancel','lostpointercapture'])canvas.addEventListener(event,end);
+    canvas.addEventListener('keydown',e=>{
+      const target=$('an-cursor-target').value,axis=target[0],index=Number(target[1]),d=this.adcDisplay;
+      if(!d||!this.adcCursors[axis]||!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key))return;
+      e.preventDefault();const amount=e.shiftKey?10:1;
+      if(axis==='x'&&['ArrowLeft','ArrowRight'].includes(e.key)){
+        const step=d.frame?.rate?1/d.frame.rate:d.duration/1000;
+        this.adcCursors.x[index]=Math.max(0,Math.min(d.duration,this.adcCursors.x[index]+(e.key==='ArrowRight'?1:-1)*amount*step));
+      }else if(axis==='y'&&['ArrowUp','ArrowDown'].includes(e.key))
+        this.adcCursors.y[index]=Math.max(d.offset-4*d.voltsDiv,Math.min(d.offset+4*d.voltsDiv,this.adcCursors.y[index]+(e.key==='ArrowUp'?1:-1)*amount*d.voltsDiv/100));
+      this.paintAdc();
+    });
+  }
+  paintAdcCursors(ctx,w,h){
+    const d=this.adcDisplay;
+    const colors={x:['#63bdff','#c591ff'],y:['#51dbb1','#ff9b73']};
+    ctx.font=this.canvasFont;ctx.lineWidth=1;ctx.setLineDash([6,4]);
+    for(const axis of ['x','y'])this.adcCursors[axis]?.forEach((value,i)=>{
+      ctx.strokeStyle=ctx.fillStyle=colors[axis][i];ctx.beginPath();
+      if(axis==='x'){
+        const x=value/d.duration*w;if(x<0||x>w)return;
+        ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke();
+        ctx.fillText(`T${i+1} ${formatMeasure(value,'s')}`,Math.min(Math.max(4,x+5),Math.max(4,w-145)),h-12-i*17);
+      }else{
+        const y=h/2-(value-d.offset)/d.voltsDiv*h/8;if(y<0||y>h)return;
+        ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();
+        ctx.fillText(`V${i+1} ${formatMeasure(value,'V')}`,12,Math.max(40,Math.min(h-50,y-5)));
+      }
+    });
+    ctx.setLineDash([]);
+    for(const [id,axis,index] of [['t1','x',0],['t2','x',1],['v1','y',0],['v2','y',1]]){
+      const input=$('an-cursor-'+id),value=this.adcCursors[axis]?.[index];input.disabled=value==null;
+      if(document.activeElement!==input)input.value=value==null?'':String(+(value*(axis==='x'?1e6:1)).toPrecision(9));
+    }
+    const delta=cursorDelta(this.adcCursors);
+    $('an-cursor-values').hidden=!this.adcCursors.x&&!this.adcCursors.y;
+    $('an-cursor-time-values').hidden=!this.adcCursors.x;
+    $('an-cursor-voltage-values').hidden=!this.adcCursors.y;
+    const target=$('an-cursor-target');
+    for(const option of target.options)option.disabled=!this.adcCursors[option.value[0]];
+    if(!this.adcCursors[target.value[0]])target.value=[...target.options].find(o=>!o.disabled)?.value||'x0';
+    $('an-cursor-dt').textContent=formatMeasure(delta.dt,'s');
+    $('an-cursor-frequency').textContent=formatMeasure(delta.frequency,'Hz');
+    $('an-cursor-dv').textContent=formatMeasure(delta.dv,'V');
   }
   preview(){
     this.wave = [];
