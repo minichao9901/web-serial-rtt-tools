@@ -35,7 +35,7 @@ try {
   await send('Page.navigate',{url:APP+'?demo=serial&hid=mock&ui=layout&t='+Date.now()});
   await ev(`for(let i=0;i<100 && !document.getElementById('build-stamp');i++)await new Promise(r=>setTimeout(r,50));return !!window.__tools;`);
   const tabs=await ev(`return [...document.querySelectorAll('#tabs [data-tab]')].map(e=>e.dataset.tab);`);
-  ok(tabs.length===12,'12 个工具入口保留');
+  ok(tabs.length===13,'13 个工具入口保留（包含 SPI→USB）');
   await ev(`await window.__tools.flash._onFile(new File([Uint8Array.of(0,1,2,3)],'layout.bin'));return true;`);
   // Let the transient file-load toast expire before taking the page snapshots.
   await ev(`for(let i=0;i<100 && document.querySelector('#toasts .toast');i++)await new Promise(r=>setTimeout(r,50));return true;`);

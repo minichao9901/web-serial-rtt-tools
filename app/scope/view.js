@@ -728,7 +728,7 @@ export class ScopeView {
     this.syncButtons();
     this._startPromise = runProbeOperation(this, 'scope', () => this._startOnce(g), {
       mock: this.usingMock, reason: 'J-Scope 要开始采样',
-      resources: this._captureCdcOff ? ['cdc-port'] : [],
+      resources: this._captureCdcOff ? ['cdc-port','cdc-mode'] : [],
       rejectResources: ['cdc-port'],
       conflictMessage: 'CDC 串口正在使用：请先关闭串口，或取消 JScope 的暂停 CDC 选项',
     });

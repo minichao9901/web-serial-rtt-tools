@@ -28,7 +28,7 @@
 | ② | **RTT 轮询下沉进探针**（J-Link 式，主机只读一个串口） | 探针侧 RTT→CDC **2954 KB/s 零丢包** = 主机轮询上限（1140 KB/s）的 **2.6 倍**；本仓库网页端实测 **2.90 MB/s** |
 | ③ | **变量示波比 J-Link 快 3.3 倍** | 探针侧 HSS 直读目标 RAM：单变量 u32 **330 kHz**、8 通道 82 kHz（J-Link PRO 的 J-Scope 同口径 100 kHz）；**目标固件一行都不用改** |
 | ④ | **RISC-V 目标也照样调**（不是只会 ARM） | JTAG + DMI/SBA 引擎：HPM6800EVK SRAM 读 **1504** / 写 **1512 KB/s** = OpenOCD 主机驱动的 **9 倍**；RTT 1385 KB/s 字节级零丢 |
-| ⑤ | **真·零安装**（浏览器直连，不是"免驱"话术） | WebUSB / WebHID / Web Serial 直连探针：**11 个标签页**，授权一次；没有本地程序、没有后台服务、没有插件 |
+| ⑤ | **真·零安装**（浏览器直连，不是"免驱"话术） | WebUSB / WebHID / Web Serial 直连探针：**13 个标签页**，授权一次；没有本地程序、没有后台服务、没有插件 |
 | ⑥ | **一块板当七种仪器** | CMSIS-DAP 调试器 · 串口 · RTT→CDC 桥 · J-Scope 变量示波 · flash 烧录器 · USB→SPI/QSPI 桥（点屏 / 外接 NOR）· USB→I2C 桥 |
 | ⑦ | **全开源、可复现** | 网页纯静态、**零依赖零构建**（`index.html` + `app/*.js`）；每个数字都有验收脚本，`make hw-campaign` 一条命令跑完并**当场判决**（当前 20/20） |
 
@@ -49,8 +49,8 @@
 - **七种仪器的控制面全塞在自定义 HID 里**（协议真源见本仓库 `app/hid/probe.js`、
   `app/spi/protocol.js`、`app/i2c/protocol.js`、`app/scope/protocol.js`）：
   `0x31` RTT→CDC 桥 · `0x32` HSS 采样 + bulk `0x83` · `0x33` RISC-V 引擎 ·
-  `0x34` 采样期让路 · `0x35` SPI/QSPI 桥 + bulk `0x8B/0x0B` · `0x36` I2C 桥。
-- **硬件级的外设相位**：SPI/QSPI 桥自带 cmd / addr / dummy / token 相位与**单 / 双 / 四线**，
+  `0x34` 采样期让路 · `0x35` USB→SPI/QSPI + bulk `0x8B/0x0B` · `0x36` I2C 桥。
+- **硬件级的外设相位**：USB→SPI/QSPI自带 cmd / addr / dummy / token 相位与**单 / 双 / 四线**，
   一次 CS 窗口跑完（回环自检 20/40/60/75 MHz 全过）；I2C 桥 100 k / 400 k / 1 M 三档，
   带总线扫描、引脚自检与总线恢复。
 - **升级不需要烧录器**：长按 USER 键进 DFU，把 `.bin` 拖进虚拟 U 盘 `AKALINKPRO` 就完事
@@ -59,9 +59,9 @@
 
 ### 软件这半边：**本仓库 —— 零安装的网页工作台**
 
-上面那些能力，在浏览器里长成 **11 个标签页**：调试器（源码级断点 + gdb 风格命令行）·
+上面那些能力，在浏览器里长成 **13 个标签页**：调试器（源码级断点 + gdb 风格命令行）·
 烧录器（页内跑 flashloader）· 串口助手 · 终端 · RTT Viewer（SWD/ARM 与 RISC-V/JTAG 都能看）·
-RTT 转发 · J-Scope 波形 · SPI/QSPI 桥 · SPI/QSPI 屏（含**局部刷新**）· USB→I2C · 工程生成。
+RTT 转发 · J-Scope 波形 · USB→SPI/QSPI · SPI/QSPI 屏（含**局部刷新**）· SPI→USB · USB→I2C · USB→ADC/DAC · 工程生成。
 纯静态页面，**没有任何构建步骤**：GitHub Pages 直接托管，也可以下载下来双击打开。
 
 > ⚠️ **发布给 Pages 的话**：那边的 `pages build and deployment` 会用 Jekyll 把**每个 `.md`
@@ -106,8 +106,9 @@ make full_flow_f103cb       # 当前 F103CB：认板 → 基准 → 调试压力
 | **J-Scope 波形** | 类 SEGGER J-Scope 的**变量示波器**：探针自己按固定周期读目标 RAM（HSS，目标固件不用改），数据走 WebUSB 的独立批量端点，网页画多通道波形、带**触发**、导出 CSV、原始包可回放 | **网页侧已可用**：勾「用假探针」或打开 `.jsp` 回放即可体验；真机需要探针固件支持 `HID 0x32`（见 [`docs/scope-page.md`](docs/scope-page.md)） |
 | **烧录器** | .elf/.hex/.bin 写进目标：**零安装 WebUSB**（页面跑 flashloader，擦/写/校验/复位一条龙）或**本地桥 OpenOCD** | 零安装：同上探针；桥：OpenOCD |
 | **调试器** | 网页里的极简调试器，**不装 OpenOCD、不装 gdb**：暂停 / 继续 / **单步** / 复位、寄存器表（回车即改）、内存 hexdump（点字节即改）、**FPB 硬件断点**、按符号名的 gdb 风格命令行、旁边顺手看 RTT。**载入 .elf 后按源码行下断点**，停下来时源码区跟着 PC 走（DWARF 行号表） | 零安装：同上探针（WebUSB）；无硬件可切「后端 → 模拟目标」；设计与五条硬约束见 [`docs/dbg-page.md`](docs/dbg-page.md) |
-| **SPI/QSPI 桥** | 探针当 USB→SPI/QSPI 主站。右列分六个 tab：**命令表**（一行一条 `XFER`）· **寄存器**（按"器件档位"读一段回来——读/写 opcode、地址并入 opcode 还是独立字节、dummy、每寄存器字节数、自增都可配；16 列字节表里每个字节能点开 8 个 bit 改，改完「只写改动 / 整块写回」）· **脚本**（贴 C 表 / 手写帧 DSL，支持 `loop 20ms … end` 定时采集与行尾 `as ax=i16be(0)/16384` 解码，`cmd=0x80\|0x3B` 这种位运算直接写）· **实时值**（`as` 解出来的变量 + 迷你曲线，用于 SPI 接口的 ADC / 传感器连续采集）· **Flash 测试**（外接 NOR：读 ID/SFDP/状态、读测速、擦写校验）· **回环自检**（MOSI↔MISO 跳线）。tab 栏常驻**运行胶囊**与共享「中止」；SCLK、模式、CS 策略、辅助脚与有效电平在左栏配 | akaLinkPro 探针（HID `0x35` 控制面 + bulk 帧流）；接线照上面的 40pin 图；方案见 [`docs/spi-bridge-page.md`](docs/spi-bridge-page.md)、寄存器面板与常见 SPI 器件寄存器约定见 [`docs/spi-register-panel.md`](docs/spi-register-panel.md) |
-| **SPI/QSPI 屏** | 把屏点亮那一页。右列分三个 tab：**刷屏**（内置图案 / 拖入图片 → 预览 → 开窗对齐、492 B 切片刷；**局部刷新**——只发与上一帧不同的包围盒，同内容重刷整帧跳过；**动画/视频** MP4/WebM/GIF 逐帧发，发送当节拍器）· **面板初始化**（贴 C 数组 → 解析成步骤表 → 重放；每个字节可直接改、点开看/改它的 8 个 bit）· **读回**（读寄存器 / 读 GRAM 还原成一帧图 + 存 BMP）。tab 栏常驻**运行胶囊**与共享「中止」，日志常驻底部（高度可拖） | 与「SPI/QSPI 桥」页**共用同一次连接** |
+| **USB→SPI/QSPI** | 探针当 USB→SPI/QSPI 主站。右列分六个 tab：**命令表**（一行一条 `XFER`）· **寄存器**（按"器件档位"读一段回来——读/写 opcode、地址并入 opcode 还是独立字节、dummy、每寄存器字节数、自增都可配；16 列字节表里每个字节能点开 8 个 bit 改，改完「只写改动 / 整块写回」）· **脚本**（贴 C 表 / 手写帧 DSL，支持 `loop 20ms … end` 定时采集与行尾 `as ax=i16be(0)/16384` 解码，`cmd=0x80\|0x3B` 这种位运算直接写）· **实时值**（`as` 解出来的变量 + 迷你曲线，用于 SPI 接口的 ADC / 传感器连续采集）· **Flash 测试**（外接 NOR：读 ID/SFDP/状态、读测速、擦写校验）· **回环自检**（MOSI↔MISO 跳线）。tab 栏常驻**运行胶囊**与共享「中止」；SCLK、模式、CS 策略、辅助脚与有效电平在左栏配 | akaLinkPro 探针（HID `0x35` 控制面 + bulk 帧流）；接线照上面的 40pin 图；方案见 [`docs/spi-bridge-page.md`](docs/spi-bridge-page.md)、寄存器面板与常见 SPI 器件寄存器约定见 [`docs/spi-register-panel.md`](docs/spi-register-panel.md) |
+| **SPI/QSPI 屏** | 把屏点亮那一页。右列分三个 tab：**刷屏**（内置图案 / 拖入图片 → 预览 → 开窗对齐、492 B 切片刷；**局部刷新**——只发与上一帧不同的包围盒，同内容重刷整帧跳过；**动画/视频** MP4/WebM/GIF 逐帧发，发送当节拍器）· **面板初始化**（贴 C 数组 → 解析成步骤表 → 重放；每个字节可直接改、点开看/改它的 8 个 bit）· **读回**（读寄存器 / 读 GRAM 还原成一帧图 + 存 BMP）。tab 栏常驻**运行胶囊**与共享「中止」，日志常驻底部（高度可拖） | 与「USB→SPI/QSPI」页**共用同一次连接** |
+| **SPI→USB** | 外部 SPI 主机 → 探针 SPI 从机循环 DMA → 现有 CDC；模式/位顺序、接收统计、清空/暂停/文件记录。F103ZE 18 MHz 真实网页实收约 **2.250 MB/s**，全量字节/序号检查通过 | 与 RTT 共用接收串口，数据源互斥；[使用与验收](docs/spi-cdc.md) |
 | **USB→I2C** | 探针当 **USB 转 I2C 主机**。右列分五个 tab：**扫描总线**（0x08..0x77）· **命令表**（读/写/探测/延时，一行一次事务）· **寄存器**（读一段，默认 **128 B = 16×8 表**；每个字节点开就是 8 个 bit 的开关板，改完按「只写改动 / 整块写回」发下去 —— 调器件寄存器不用自己把 `0x55` 拆成 8 位再拼回去）· **脚本**（贴 C 表或写脚本，`loop 100ms … end` 就是 while(1) 定时读/写）· **实时值**（`as` 解码把字节变成有名字的量：g / ℃ / V + 迷你曲线）。**长读自动分片**（`rd 0x50 0x00 256` 直接写，内部拆成 5 笔、日志只出一行），长写也分片（EEPROM 页写可给「写分片 / 片间等待」按页写、等 tWR）；tab 栏常驻**运行胶囊**与「停止」，切到哪个 tab 都知道任务还在跑。内置 **AT24C02 / MPU6050 / ADS1115 / Si5351** 四个模块示例，后两个是传感器，示例里直接做成 while(1) 连续采样 | akaLinkPro 探针（HID `0x36`，**只走 HID** 一条通路）；**仅 HPM5301EVKLite** 固件；方案见 [`docs/i2c-page.md`](docs/i2c-page.md) |
 | **工程生成** | 拖进 Keil `.uvprojx` 就能生成调试/下载配套文件：`Makefile.jlink`、`jlink_gdb.script`、`Makefile.pyocd`、`Makefile.openocd`（连带 `rtt_logger.py`）、`test_sram.bin`；右列分三个 tab：**工程文件**（产物实时预览 + 复制/单独下载）· **调试参数**（把左栏填的值逐项列全，长路径看得全、点值即复制）· **本地桥**（安装包 7 个文件的预览 + 一键下载桥包）。**左栏卡片跟着 tab 走**（只显示当组的设置） | 不需要任何硬件/后端（纯前端生成） |
 
@@ -115,7 +116,7 @@ make full_flow_f103cb       # 当前 F103CB：认板 → 基准 → 调试压力
 ## 40pin 引脚定义（HPM5301EVKLite / J3）
 
 探针对外的线**全部走板上的 J3 40pin 排针**。下图是引脚定义（俯视，1 / 2 脚在 USB 那一端），
-标记口径与页面里「SPI/QSPI 桥 → 引脚分配图」**完全一致**；接屏、接 flash、接逻辑分析仪都照它看：
+标记口径与页面里「USB→SPI/QSPI → 引脚分配图」**完全一致**；接屏、接 flash、接逻辑分析仪都照它看：
 
 ![HPM5301EVKLite J3 40pin 引脚定义](docs/shots/40pin-j3.png)
 
@@ -195,9 +196,9 @@ make full_flow_f103cb       # 当前 F103CB：认板 → 基准 → 调试压力
 |---|
 | ![USB→I2C](docs/shots/15-i2c.png) |
 
-| SPI/QSPI 桥（历史截图 · 假探针 · 右列六个 tab：**命令表** / **寄存器** / 脚本 / **实时值** / Flash 测试 / 回环自检；当前命令表默认 3 行，可按需添加，结果列逐行显示读回的字节） |
+| USB→SPI/QSPI（历史截图 · 假探针 · 右列六个 tab：**命令表** / **寄存器** / 脚本 / **实时值** / Flash 测试 / 回环自检；当前命令表默认 3 行，可按需添加，结果列逐行显示读回的字节） |
 |---|
-| ![SPI/QSPI 桥](docs/shots/16-spi.png) |
+| ![USB→SPI/QSPI](docs/shots/16-spi.png) |
 
 | SPI/QSPI 屏（假探针 · 右列三个 tab：**刷屏** / 面板初始化 / 读回 · 刷完一整屏 529 帧 / 253 KB 只用 12 ms；日志与运行胶囊常驻底部） |
 |---|
@@ -223,7 +224,7 @@ make full_flow_f103cb       # 当前 F103CB：认板 → 基准 → 调试压力
 | `make test-dbg-page` 调试器真页面（CDP + 假目标） | **142/142** |
 | `make test-spi` / `test-read` / `test-dsl` / `test-flash` SPI 桥与屏的逻辑层 | **90 / 54 / 126 / 66** |
 | `make test-spi-regs` SPI 寄存器面板与定时采集（档位→帧、假器件端到端、loop/as 采集、DSL 语法） | **97** |
-| `make test-spi-page` SPI/QSPI 桥 + 屏 两页真页面（CDP + 假探针） | **167 + 179** |
+| `make test-spi-page` USB→SPI/QSPI + 屏 两页真页面（CDP + 假探针） | **167 + 179** |
 | `make test-i2c` / `test-i2c-dsl` / `test-i2c-reg` USB→I2C 逻辑层（协议+假器件 / 命令表与脚本 / 寄存器面板与长写分片） | **178 / 265 / 76** |
 | `make test-scope` / `test-dwarf` J-Scope 协议 / DWARF 解析 | **127 / 78** |
 | `make test-rtt` / `test-hid` RTT 协议 / akaLinkPro HID 协议 | **45 / 55** |
@@ -1016,7 +1017,7 @@ node tools\selftest\dbg-core.test.mjs
 # 1f) 调试器页的真页面自测（CDP + 假目标；先 page-prep：8899 服务 + 9333 浏览器）
 node tools\selftest\dbg-page.test.mjs
 
-# 1g) SPI/QSPI 桥 + 屏 + USB→I2C 的逻辑层（纯 Node，不需要浏览器/硬件）
+# 1g) USB→SPI/QSPI + 屏 + USB→I2C 的逻辑层（纯 Node，不需要浏览器/硬件）
 node tools\selftest\spi-proto.test.mjs          # 帧协议 / 打包 / 假探针（make test-spi）
 node tools\selftest\spi-panel-code.test.mjs     # 面板初始化表解析 + 图片→帧（含局部刷新，make test）
 node tools\selftest\spi-read.test.mjs           # 屏的回读：读计划 / 解码 / BMP（make test-read）
@@ -1026,7 +1027,7 @@ node tools\selftest\i2c-proto.test.mjs          # I2C 桥协议（make test-i2c�
 node tools\selftest\i2c-dsl.test.mjs            # I2C 命令表/脚本 DSL（make test-i2c-dsl）
 
 # 1h) 那三页的真页面自测（CDP + 假探针，不需要硬件；先 page-prep）
-node tools\selftest\spi-bus-page.test.mjs       # SPI/QSPI 桥页（make test-spi-page 的第一半）
+node tools\selftest\spi-bus-page.test.mjs       # USB→SPI/QSPI页（make test-spi-page 的第一半）
 node tools\selftest\spi-panel-page.test.mjs     # SPI/QSPI 屏页（含「局部刷新」一节）
 node tools\selftest\i2c-page.test.mjs           # USB→I2C 页（make test-i2c-page）
 node tools\selftest\ui-layout-page.test.mjs     # 全部 12 页，1600/1280 布局与截图（make test-ui-layout）

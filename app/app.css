@@ -232,6 +232,8 @@ dialog form{margin-top:16px;text-align:right}
 
 /* ---------------- RTT 转发页 ---------------- */
 #tab-rttcdc .side .row>span:first-child{width:var(--label-w)}
+#tab-spicdc .side .row>span:first-child{width:var(--label-w)}
+#si-state{white-space:pre-line;font:var(--text-xs)/1.7 var(--mono)}
 
 /* ---------------- J-Scope 波形页 ---------------- */
 #tab-scope .side .row>span:first-child{width:var(--label-w)}

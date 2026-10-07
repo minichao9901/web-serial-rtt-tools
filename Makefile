@@ -688,6 +688,7 @@ test-probe:
 	$(NODE) tools/selftest/usb-device.test.mjs
 	$(NODE) tools/selftest/usb-transports.test.mjs
 	$(NODE) tools/selftest/cdc-mode.test.mjs
+	$(NODE) tools/selftest/spi-cdc.test.mjs
 	$(NODE) tools/selftest/spi-teardown.test.mjs
 
 test-stability: test-probe
@@ -711,6 +712,16 @@ test-stability: test-probe
 	$(NODE) tools/selftest/scope-lifecycle.test.mjs
 	$(NODE) tools/selftest/scope-watchdog.test.mjs
 	$(NODE) tools/selftest/target-switch.test.mjs
+
+.PHONY: test-spi-cdc test-spi-cdc-page spi-cdc-hw
+test-spi-cdc:
+	$(NODE) tools/selftest/spi-cdc.test.mjs
+
+test-spi-cdc-page:
+	$(NODE) tools/selftest/spi-cdc-page.test.mjs
+
+spi-cdc-hw:
+	$(NODE) tools/selftest/spi-cdc-hw.mjs
 
 .PHONY: test-analog
 test-analog:

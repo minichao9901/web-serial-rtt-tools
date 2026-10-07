@@ -22,6 +22,7 @@ import { SpiBusView } from './spi/bus-view.js';
 import { SpiPanelView } from './spi/panel-view.js';
 import { AnalogView } from './analog/view.js';
 import { I2cView } from './i2c/view.js';
+import { SpiCdcView } from './spi-cdc/view.js';
 import { ProbeBus, closeProbeUsbDevices } from './core/probe-bus.js';
 import { toast } from './ui/toast.js';
 import { BUILD } from './core/build.js';
@@ -49,10 +50,11 @@ const panel = new SpiPanelView(spiSession);
 // USB→I2C 转发桥（#i2c）：HID 0x36，只走 HID 一条通路（没有 bulk 端点）
 const i2c = new I2cView();
 const analog = new AnalogView();
+const spiCdc = new SpiCdcView(session);
 
 // Install ownership before init(): automatic reconnect/start paths use the same manager.
 const probeBus = new ProbeBus('page');
-const tools = { session, assistant, terminal, rtt, flash, gen, hid, stream, scope, spi, panel, dbg, i2c, analog, spiSession, probeBus, summary, errors };
+const tools = { session, assistant, terminal, rtt, flash, gen, hid, stream, scope, spi, panel, dbg, i2c, analog, spiCdc, spiSession, probeBus, summary, errors };
 const probeManager = installProbeManager(tools, { bus: probeBus });
 initProbeStatus(tools);
 initEventLogs();
@@ -71,6 +73,7 @@ panel.init();
 dbg.init();
 i2c.init();
 analog.init();
+spiCdc.init();
 
 initTabs(name => {
   if (name === 'serial') requestAnimationFrame(() => assistant.onShow());
@@ -83,6 +86,7 @@ initTabs(name => {
   if (name === 'dbg') requestAnimationFrame(() => dbg.onShow());
   if (name === 'i2c') requestAnimationFrame(() => i2c.onShow());
   if (name === 'analog') requestAnimationFrame(() => analog.onShow());
+  if (name === 'spicdc') requestAnimationFrame(() => spiCdc.onShow());
   if (name === 'gen') requestAnimationFrame(() => gen.onShow());
 });
 
@@ -115,6 +119,7 @@ function summary(){
     genFiles: (gen?.files || []).map(f => f.name),
     hid: hid?.summary?.() || null,
     stream: stream?.summary?.() || null,
+    spiCdc: {connected:spiCdc.session.connected,running:spiCdc.session.running,status:spiCdc.session.last,stream:spiCdc.stream.summary()},
     scope: scope?.summary?.() || null,
     spi: spi?.summary?.() || null,
     panel: panel?.summary?.() || null,

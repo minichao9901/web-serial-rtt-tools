@@ -60,7 +60,7 @@ export class SerialSession extends Bus {
       ? this.probeManager.run('serial', setup, {
         reason: '串口要使用探针 CDC',
         recovery: true,
-        resources: opts.owner === 'rtt' ? [] : ['cdc-mode'],
+        resources: ['rtt','spi-cdc'].includes(opts.owner) ? [] : ['cdc-mode'],
         rejectResources: ['cdc-port'],
         conflictMessage: 'CDC 当前被采样暂停：请先停止采样，或取消 JScope 的暂停 CDC 选项',
       }) : setup();

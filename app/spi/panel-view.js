@@ -1465,7 +1465,7 @@ export class SpiPanelView {
     this.resetPartial('复位并开背光');         // 屏上内容被复位冲掉了
     let did = false;
     if (SpiPanelView.isPadUnused(c.padRst)){
-      s.log('w', `桥里 RST 脚配的是「不用」（pad ${c.padRst}）—— 跳过复位。到「SPI/QSPI 桥」页把 RST 脚配上再试`, this.tag);
+      s.log('w', `桥里 RST 脚配的是「不用」（pad ${c.padRst}）—— 跳过复位。到「USB→SPI/QSPI」页把 RST 脚配上再试`, this.tag);
     } else {
       const low = Math.max(0, +$('pn-rst-low').value || 0);
       const post = Math.max(0, +$('pn-rst-post').value || 0);

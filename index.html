@@ -31,8 +31,9 @@
     <button class="tab" data-tab="scope">J-Scope 波形</button>
     <button class="tab" data-tab="flash">烧录器</button>
     <button class="tab" data-tab="dbg">调试器</button>
-    <button class="tab" data-tab="spi">SPI/QSPI 桥</button>
+    <button class="tab" data-tab="spi">USB→SPI/QSPI</button>
     <button class="tab" data-tab="panel">SPI/QSPI 屏</button>
+    <button class="tab" data-tab="spicdc">SPI→USB</button>
     <button class="tab" data-tab="i2c">USB→I2C</button>
     <button class="tab" data-tab="analog">USB→ADC / DAC</button>
     <button class="tab" data-tab="gen">工程生成</button>
@@ -1225,7 +1226,7 @@
   <div class="ws">
     <aside class="side">
       <fieldset id="pn-conn-card">
-        <legend>探针（与「SPI/QSPI 桥」页共用同一次连接）</legend>
+        <legend>探针（与「USB→SPI/QSPI」页共用同一次连接）</legend>
         <div class="row btnrow">
           <button id="pn-connect" class="" title="授权 HID：配置 / 状态 / 面板档走这条。⚠️ 第一次点会弹出浏览器的设备选择框——那个框就是"授权"，选 akaLinkPro 即可">连接探针（授权）</button>
           <button id="pn-reconnect" title="用浏览器记住的探针直接连（不用再点弹框）">重连</button>
@@ -1283,7 +1284,7 @@
           <button id="pn-enable" class="primary">使能</button>
           <button id="pn-disable">失能</button>
         </div>
-        <p class="hint">基础配置（SCLK / 模式 / CS 策略 / 通用辅助脚 / 回环自检）在「SPI/QSPI 桥」页；这边只做屏相关的事。</p>
+        <p class="hint">基础配置（SCLK / 模式 / CS 策略 / 通用辅助脚 / 回环自检）在「USB→SPI/QSPI」页；这边只做屏相关的事。</p>
       </fieldset>
 
       <fieldset id="pn-power-card">
@@ -1530,6 +1531,67 @@
     <p class="hint" id="pn-bitpop-hint"></p>
   </div>
 </section>
+
+<section class="panel" id="tab-spicdc">
+  <div class="ws">
+    <aside class="side">
+      <fieldset><legend>探针 · SPI 从机 → CDC</legend>
+        <div class="row btnrow"><button id="si-connect" class="primary">连接探针</button><button id="si-reconnect">重连</button><button id="si-disconnect" disabled>断开</button></div>
+        <p class="hint" id="si-info">未连接</p>
+        <label class="row"><span>SPI 模式</span><select id="si-mode"><option value="0">Mode 0 · CPOL 0 / CPHA 0</option><option value="1">Mode 1 · CPOL 0 / CPHA 1</option><option value="2">Mode 2 · CPOL 1 / CPHA 0</option><option value="3">Mode 3 · CPOL 1 / CPHA 1</option></select></label>
+        <label class="row"><span>位顺序</span><select id="si-lsb"><option value="0">MSB first</option><option value="1">LSB first</option></select></label>
+        <div class="row btnrow"><button id="si-start" class="primary" disabled>启动转发</button><button id="si-stop" disabled>停止</button><button id="si-status" disabled>刷新状态</button></div>
+        <p id="si-state" role="status" aria-live="polite">等待连接探针</p>
+        <details class="helpnote"><summary>接线与资源</summary><p class="hint">复用 SPI2：PB10 CS、PB11 SCK、PB13 MOSI；PB12 MISO 可不接。主机与探针共地，CS 低有效，8 位。时钟由外部 SPI 主机提供。</p><p class="hint">SPI 从机与 USB→SPI/QSPI、SPI/QSPI 屏及 ADC 共用缓冲与引脚。CDC 与 UART、RTT 转发共用同一个串口，启动时切换数据源。先打开下方接收串口，再启动外部发送。</p></details>
+      </fieldset>
+      <fieldset>
+        <legend>接收（探针的 CDC 口）</legend>
+        <label class="row"><span>端口</span>
+          <select id="si-rx-port"></select>
+        </label>
+        <div class="row btnrow">
+          <button id="si-rx-pick" title="选择串口（浏览器会弹授权框，第一次必须手动选一次）">选择…</button>
+          <button id="si-rx-scan" title="刷新已授权端口列表">刷新</button>
+        </div>
+        <label class="row"><span>波特率</span>
+          <input id="si-rx-baud" class="num" value="115200" inputmode="numeric" title="CDC 虚拟串口不按波特率跑，填什么都行">
+        </label>
+        <div class="row btnrow">
+          <button id="si-rx-open" class="primary">连接</button>
+          <button id="si-rx-close" disabled>断开</button>
+        </div>
+        <p class="hint" id="si-rx-note">启动转发后点「连接」打开探针那个 CDC 口，数据就会出现在右边。</p>
+      </fieldset>
+    </aside>
+    <section class="main">
+      <div class="toolbar">
+        <div class="seg" data-group="sirxmode">
+          <button data-v="ascii" class="on">ASCII</button><button data-v="ansi" title="按 ANSI 转义码彩色渲染（像 MobaXterm）">ANSI</button><button data-v="hex">HEX</button>
+        </div>
+        <label class="chk"><input type="checkbox" id="si-rx-ts"> 时间戳</label>
+        <label class="chk"><input type="checkbox" id="si-rx-tsabs"> 绝对时间</label>
+        <label class="chk"><input type="checkbox" id="si-rx-autoscroll" checked> 自动滚动</label>
+        <span class="flush hint">纯输出页：没有发送功能</span>
+        <span class="spacer"></span>
+        <button id="si-rx-save" title="把接收区里的数据存成 txt（按当前 ASCII/HEX 与时间戳设置）">保存数据</button>
+        <button id="si-rx-pause">暂停</button>
+        <button id="si-rx-clear">清空</button>
+      </div>
+      <pre class="rx" id="si-rx-rx" tabindex="0"></pre>
+      <div class="termbox" id="si-rx-term" hidden></div>
+      <div class="stats">
+        <span>RX <b id="si-rx-rxbytes">0</b> B / <b id="si-rx-rxframes">0</b> 段 · <b id="si-rx-rxrate">0 B/s</b> · 缓冲 <b id="si-rx-buf">0 B</b></span>
+        <span class="err" id="si-rx-err"></span>
+        <span class="spacer"></span>
+        <button id="si-rx-record" class="mini" title="把收到的字节直接写进本地文件（不走接收区 2MB 上限），高速采集用">● 记录到文件</button>
+        <label class="chk" title="默认开：每段前加一行 [时:分:秒.毫秒]，存 .txt 给人看；关掉则原样写字节存 .bin（二进制安全）"><input type="checkbox" id="si-rx-record-ts" checked> 记录带时间戳</label>
+        <label class="chk" title="连接成功后自动弹一次保存框开始记录。配合高速自动关显示（>100KB/s 停渲染、收数/记录照常），一上来就猛灌的场景全程无感"><input type="checkbox" id="si-rx-record-auto"> 连接自动记录</label>
+        <button id="si-rx-statclear" class="mini">计数清零</button>
+      </div>
+    </section>
+  </div>
+</section>
+
 
 <!-- ============================ USB → I2C 转发桥（HID 0x36） ============================ -->
 <section class="panel" id="tab-i2c">
