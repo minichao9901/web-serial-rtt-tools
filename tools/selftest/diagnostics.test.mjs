@@ -11,7 +11,7 @@ function arm({lr=0xfffffffd,cfsr=0,pc=0x08000100,extended=false,failAt=null}={})
   const memory=new Map([[0xe000edf0,1<<17],[0xe000ed00,0x410fc231],[0xe000ed08,0x08000000],
     [0xe000ed28,cfsr],[0xe000ed2c,1<<30],[0x0800000c,pc|1],[0xe000ed34,0xdeadbeef],[0xe000ed38,0xfeed0000]]);
   const regs={15:pc,14:lr,16:0x01000003,13:0x20000100,17:0x20000100,18:0x20000200};
-  const base=regs[lr&4?18:17]+(extended?72:0);
+  const base=regs[lr&4?18:17];
   [1,2,3,4,12,0x08000201,0x08000180,0x01000200].forEach((v,i)=>memory.set(base+i*4,v));
   const accesses=[];
   const s={arch:ARM_ARCH,connected:true,halted:true,sym:null,
@@ -31,7 +31,7 @@ function arm({lr=0xfffffffd,cfsr=0,pc=0x08000100,extended=false,failAt=null}={})
 }
 {
   const {s,base,memory}=arm({lr:0xffffffed,extended:true});memory.set(0xe000ed00,0x410fc241); const r=await captureFault(s);
-  assert.equal(r.frame.extended,true);assert.equal(r.frame.sp,base+36);
+  assert.equal(r.frame.extended,true);assert.equal(r.frame.sp,base+72+36);
 }
 {
   const {s,accesses}=arm({cfsr:1<<12}), r=await captureFault(s);
@@ -65,7 +65,8 @@ function arm({lr=0xfffffffd,cfsr=0,pc=0x08000100,extended=false,failAt=null}={})
   [1,2,3,4,12,0x08000301,0x08000220,0x01000000].forEach((v,i)=>memory.set(regs[13]+8+i*4,v));
   const r=await captureFault(s);assert.equal(r.error,null);assert.equal(r.frame.validated,true);assert.equal(r.frame.pc,0x08000220);
   assert.equal(r.frame.stack,'MSP');assert.equal(r.frame.unwound,true);assert.equal(r.frames[0].sp,regs[13]+40);assert.match(r.unwindReason,/CANTUNWIND/);
-  assert.deepEqual(r.frames[0].known,[0,1,2,3,12,13,14,15]);
+  assert.ok(r.frames[0].known.includes(4)); // r4 explicitly restored from the handler's saved stack.
+  assert.equal(r.frames[0].regs[4],4);
 }
 {
   const {s,memory,accesses}=arm();memory.set(0xe000ed00,0x410fc201);const r=await captureFault(s);
@@ -120,6 +121,9 @@ assert.ok(!faultData({arch:'arm',at:'test',raw:{CFSR:0,BFAR:0xdead},findings:[],
   s._qualityReplay=true;assert.equal(metric(scopeQuality(s,20000),'探针跳拍').value,null);
   s._qualityReplay=false;s.running=true;s._statAt=20000;s._qualityStat={usbErr:4,swdErr:2};r=scopeQuality(s,20000);
   assert.equal(metric(r,'USB 包缓冲丢样').value,4);assert.equal(metric(r,'探针跳拍').value,null);
+  s.backend='swd';s.swdMhz=45;s._qualityConfig.请求时钟_kHz=60000;
+  assert.ok(scopeQuality(s,20000).findings.some(x=>x.confidence==='已确认'&&/60 MHz 降为 45 MHz/.test(x.text)));
+  s._qualityReplay=true;assert.ok(!scopeQuality(s,20000).findings.some(x=>/降为/.test(x.text)));
 }
 {
   const v={s:{isOpen:true,opts:{owner:'rtt'}},rxc:{total:100,rate:()=>50},rx:{rawBytes:20,truncated:true},suppressed:true,

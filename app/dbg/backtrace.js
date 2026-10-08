@@ -184,20 +184,25 @@ export async function backtrace(s,{depth=16,scan=false,stackBytes=4096,signal,in
         const excReturn=state[pcReg]>>>0;
         // MSP uses the unwound handler SP; PSP is a separate bounded stack region.
         const base=(state[15]&4)?await s.readReg('PSP'):state[13];
-        const offset=(state[15]&16)?0:72;
-        if(base%4||base+offset+36>0x100000000) throw new Error('异常栈地址无效');
+        const fpBytes=(state[15]&16)?0:72;
+        if(base%4||base+fpBytes+36>0x100000000) throw new Error('异常栈地址无效');
         const allowed=(a,n)=>a>=base&&a+n<=base+stackBytes;
-        if(!allowed(base+offset,32)) throw new Error('异常帧超出范围');
-        const b=await s.memRead(base+offset,32); if(b.length!==32) throw new Error('异常帧短读');
+        if(!allowed(base,fpBytes+32)) throw new Error('异常帧超出范围');
+        const b=await s.memRead(base,32); if(b.length!==32) throw new Error('异常帧短读');
         const v=Array.from({length:8},(_,i)=>word(b.subarray(i*4,i*4+4)));
         if(!executable(elf,even(v[6]))) throw new Error('异常帧 PC 不在 ELF 代码段');
         if(!(v[7]&0x01000000)) throw new Error('异常帧 xPSR Thumb 位无效');
         for(let i=0;i<4;i++) state[i]=v[i];
         state[12]=v[4];state[14]=v[5];state[15]=v[6];
-        state[13]=base+offset+32+((v[7]&512)?4:0); kind='exception';
+        state[13]=base+fpBytes+32+((v[7]&512)?4:0); kind='exception';
         // Changing to PSP cannot be safely followed using the original MSP bounds.
-        frames.push({...decorate(s,state[15],state[13],kind),regs:Array.from(state),known:[0,1,2,3,12,13,14,15],
-          exception:{return:excReturn,base,stack:(excReturn&4)?'PSP':'MSP',extended:offset!==0,xpsr:v[7],aligned:!!(v[7]&512)}});
+        // Preserve only r4-r11 proven available by the handler's CFI/EHABI
+        // unwind; hardware restores the volatile registers. This allows a
+        // frame-pointer-based interrupted function to unwind without taking
+        // its r7 from the current (potentially modified) handler register.
+        const interruptedKnown=[0,1,2,3,12,13,14,15,...Array.from({length:8},(_,i)=>i+4).filter(i=>known.has(i))].sort((a,b)=>a-b);
+        frames.push({...decorate(s,state[15],state[13],kind),regs:Array.from(state),known:interruptedKnown,
+          exception:{return:excReturn,base,stack:(excReturn&4)?'PSP':'MSP',extended:fpBytes!==0,xpsr:v[7],aligned:!!(v[7]&512)}});
         reason='已恢复异常硬件帧；跨栈后停止（当前读取边界属于原栈）'; break;
       }
       if(!state[pcReg] || state[pcReg]===0xffffffff) {reason='到达栈末端';break;}

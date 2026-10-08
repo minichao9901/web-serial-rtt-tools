@@ -1,0 +1,3240 @@
+[
+  {
+    "kind": "scope",
+    "repeat": 0,
+    "state": "baseline",
+    "config": {
+      "period": 3,
+      "vars": [
+        "g_pack.u_cnt"
+      ]
+    },
+    "seconds": 8.00729999999702,
+    "rateHz": 160954.8982296969,
+    "samples": 1305840,
+    "packets": 5528,
+    "gap": 0,
+    "decode": 0,
+    "overrun": 0,
+    "metrics": {
+      "tick": 1680540778,
+      "hz": 24000000,
+      "produced": 1311709,
+      "skipped": 1405077,
+      "usb": 0,
+      "errors": 0,
+      "yields": 0,
+      "tx": 50888,
+      "bytes": 2842624,
+      "periodTicks": 72,
+      "flags": 129
+    },
+    "metricsError": null,
+    "invalid": 0,
+    "uiMaxMs": 30.100000008940697,
+    "uiP99Ms": 25,
+    "errors": []
+  },
+  {
+    "kind": "scope",
+    "repeat": 0,
+    "state": "baseline",
+    "config": {
+      "period": 10,
+      "vars": [
+        "g_pack.f_sin",
+        "g_pack.i_tick",
+        "g_pack.i_sq1k"
+      ]
+    },
+    "seconds": 8.02570000000298,
+    "rateHz": 85799.5644087127,
+    "samples": 697662,
+    "packets": 14464,
+    "gap": 0,
+    "decode": 0,
+    "overrun": 0,
+    "metrics": {
+      "tick": 1879358919,
+      "hz": 24000000,
+      "produced": 706499,
+      "skipped": 116937,
+      "usb": 0,
+      "errors": 0,
+      "yields": 0,
+      "tx": 65528,
+      "bytes": 7499264,
+      "periodTicks": 240,
+      "flags": 129
+    },
+    "metricsError": null,
+    "invalid": 0,
+    "uiMaxMs": 37.69999998807907,
+    "uiP99Ms": 30.80000001192093,
+    "errors": []
+  },
+  {
+    "kind": "scope",
+    "repeat": 0,
+    "state": "closed",
+    "config": {
+      "period": 3,
+      "vars": [
+        "g_pack.u_cnt"
+      ]
+    },
+    "seconds": 8.01459999999404,
+    "rateHz": 160936.71022287512,
+    "samples": 1304160,
+    "packets": 5521,
+    "gap": 0,
+    "decode": 0,
+    "overrun": 0,
+    "metrics": {
+      "tick": 2092577239,
+      "hz": 24000000,
+      "produced": 1310917,
+      "skipped": 1404539,
+      "usb": 0,
+      "errors": 0,
+      "yields": 5996,
+      "tx": 71080,
+      "bytes": 2841088,
+      "periodTicks": 72,
+      "flags": 129
+    },
+    "metricsError": null,
+    "invalid": 0,
+    "report": {
+      "schema": "akalink-diagnostics/v1",
+      "kind": "scope",
+      "title": "J-Scope 采集质量报告",
+      "exportedAt": "2026-10-08T09:04:27.587Z",
+      "environment": {
+        "Web版本": "2026-10-08-r2 (ARM/RV32 异常诊断；J-Scope/RTT 采集质量与 JSON/Markdown 报告；分项计数与证据边界)",
+        "浏览器": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36",
+        "页面可见": "visible",
+        "探针": "akaLinkPro CMSIS-DAP",
+        "探针固件": "0.1"
+      },
+      "settings": {
+        "状态": "已停止：1304160 个样本 / 8.104 s，跳拍 1404539 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+        "数据": "真实采集",
+        "时段": "最近一次采集（历史）",
+        "ELF": {
+          "name": "scope.elf",
+          "source": "dwarf",
+          "versions": [
+            4
+          ],
+          "stats": {
+            "cu": 2,
+            "dies": 158,
+            "vars": 36
+          },
+          "note": ""
+        },
+        "请求周期_us": 3,
+        "请求时长_s": 10,
+        "探针": "akaLinkPro CMSIS-DAP",
+        "探针固件": "0.1",
+        "请求时钟_kHz": 60000,
+        "通道": "g_pack.u_cnt:u8@0x24001024",
+        "单字短批次": true,
+        "暂停串口桥": false,
+        "生效后端": "swd",
+        "实际周期_us": 3,
+        "生效SWD时钟_MHz": 60,
+        "探针快照时间": "2026-10-08T09:04:27.586Z",
+        "计数格式": "32 位原子快照"
+      },
+      "metrics": [
+        {
+          "name": "网页保留样本",
+          "value": 1304160,
+          "unit": "样本",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "实测平均采样率",
+          "value": 160936.71022287512,
+          "unit": "Hz",
+          "source": "探针时间戳",
+          "note": "不是 USB 到达速率；段内时间由锚点插值"
+        },
+        {
+          "name": "探针采得样本",
+          "value": 1310917,
+          "unit": "样本",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "探针跳拍",
+          "value": 1404539,
+          "unit": "采样时刻",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "跳拍率",
+          "value": 51.7239,
+          "unit": "%",
+          "source": "探针",
+          "note": "仅无 USB 丢样、无读错时：skipped / (produced + skipped)；回卷后无效"
+        },
+        {
+          "name": "USB 包缓冲丢样",
+          "value": 0,
+          "unit": "样本",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "目标读取失败",
+          "value": 0,
+          "unit": "次",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "给调试让路",
+          "value": 5996,
+          "unit": "次",
+          "source": "探针",
+          "note": "让路不等于丢样"
+        },
+        {
+          "name": "包序号缺口",
+          "value": 0,
+          "unit": "包",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "网页缓冲溢出",
+          "value": 0,
+          "unit": "样本",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "解析／顺序异常",
+          "value": 0,
+          "unit": "次",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "包解析重同步",
+          "value": 0,
+          "unit": "次",
+          "source": "网页",
+          "note": ""
+        }
+      ],
+      "findings": [
+        {
+          "confidence": "已确认",
+          "text": "探针未赶上部分计划采样时刻。",
+          "evidence": "1404539 个跳过的采样时刻"
+        }
+      ],
+      "notes": [
+        "这些计数分属不同阶段，不能相加作为总丢样数，也不能由零值推导零误码率。",
+        "值恒定可能来自程序状态、地址／ELF 不匹配或缓存等；本面板不凭平直波形判定缓存问题。",
+        "记录统计受触发、采集窗口与计数器回卷影响；32 位计数回卷时跳拍率不适用。USB 到达抖动不等于目标采样抖动。"
+      ],
+      "history": {
+        "startedAt": "2026-10-08T09:04:19.385Z",
+        "events": [
+          {
+            "at": "2026-10-08T09:04:19.570Z",
+            "code": "capture-state",
+            "level": "info",
+            "detail": "采集中"
+          },
+          {
+            "at": "2026-10-08T09:04:20.579Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：168604"
+          },
+          {
+            "at": "2026-10-08T09:04:21.571Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：341041"
+          },
+          {
+            "at": "2026-10-08T09:04:22.573Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：513465"
+          },
+          {
+            "at": "2026-10-08T09:04:23.580Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：685939"
+          },
+          {
+            "at": "2026-10-08T09:04:24.570Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：858388"
+          },
+          {
+            "at": "2026-10-08T09:04:25.577Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：1030674"
+          },
+          {
+            "at": "2026-10-08T09:04:26.572Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：1203102"
+          },
+          {
+            "at": "2026-10-08T09:04:27.575Z",
+            "code": "capture-state",
+            "level": "info",
+            "detail": "正在停止…"
+          },
+          {
+            "at": "2026-10-08T09:04:27.575Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：1399015"
+          },
+          {
+            "at": "2026-10-08T09:04:27.587Z",
+            "code": "capture-state",
+            "level": "info",
+            "detail": "已停止：1304160 个样本 / 8.104 s，跳拍 1404539 / USB 丢样本 0 / 读错 0 / 包缺口 0"
+          },
+          {
+            "at": "2026-10-08T09:04:27.587Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：1404539"
+          }
+        ],
+        "omitted": 0
+      }
+    },
+    "uiMaxMs": 36.20000000298023,
+    "uiP99Ms": 31.299999997019768,
+    "errors": []
+  },
+  {
+    "kind": "scope",
+    "repeat": 0,
+    "state": "closed",
+    "config": {
+      "period": 10,
+      "vars": [
+        "g_pack.f_sin",
+        "g_pack.i_tick",
+        "g_pack.i_sq1k"
+      ]
+    },
+    "seconds": 8.0185,
+    "rateHz": 74683.14176685714,
+    "samples": 607159,
+    "packets": 12588,
+    "gap": 0,
+    "decode": 0,
+    "overrun": 0,
+    "metrics": {
+      "tick": 2291683434,
+      "hz": 24000000,
+      "produced": 615749,
+      "skipped": 208723,
+      "usb": 0,
+      "errors": 0,
+      "yields": 0,
+      "tx": 83848,
+      "bytes": 6536192,
+      "periodTicks": 240,
+      "flags": 129
+    },
+    "metricsError": null,
+    "invalid": 0,
+    "report": {
+      "schema": "akalink-diagnostics/v1",
+      "kind": "scope",
+      "title": "J-Scope 采集质量报告",
+      "exportedAt": "2026-10-08T09:04:35.894Z",
+      "environment": {
+        "Web版本": "2026-10-08-r2 (ARM/RV32 异常诊断；J-Scope/RTT 采集质量与 JSON/Markdown 报告；分项计数与证据边界)",
+        "浏览器": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36",
+        "页面可见": "visible",
+        "探针": "akaLinkPro CMSIS-DAP",
+        "探针固件": "0.1"
+      },
+      "settings": {
+        "状态": "已停止：607159 个样本 / 8.130 s，跳拍 208723 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+        "数据": "真实采集",
+        "时段": "最近一次采集（历史）",
+        "ELF": {
+          "name": "scope.elf",
+          "source": "dwarf",
+          "versions": [
+            4
+          ],
+          "stats": {
+            "cu": 2,
+            "dies": 158,
+            "vars": 36
+          },
+          "note": ""
+        },
+        "请求周期_us": 10,
+        "请求时长_s": 10,
+        "探针": "akaLinkPro CMSIS-DAP",
+        "探针固件": "0.1",
+        "请求时钟_kHz": 60000,
+        "通道": "g_pack.f_sin:f32@0x24001014, g_pack.i_tick:i32@0x2400101c, g_pack.i_sq1k:i16@0x24001022",
+        "单字短批次": true,
+        "暂停串口桥": false,
+        "生效后端": "swd",
+        "实际周期_us": 10,
+        "生效SWD时钟_MHz": 45,
+        "探针快照时间": "2026-10-08T09:04:35.883Z",
+        "计数格式": "32 位原子快照"
+      },
+      "metrics": [
+        {
+          "name": "网页保留样本",
+          "value": 607159,
+          "unit": "样本",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "实测平均采样率",
+          "value": 74683.14176685714,
+          "unit": "Hz",
+          "source": "探针时间戳",
+          "note": "不是 USB 到达速率；段内时间由锚点插值"
+        },
+        {
+          "name": "探针采得样本",
+          "value": 615749,
+          "unit": "样本",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "探针跳拍",
+          "value": 208723,
+          "unit": "采样时刻",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "跳拍率",
+          "value": 25.316,
+          "unit": "%",
+          "source": "探针",
+          "note": "仅无 USB 丢样、无读错时：skipped / (produced + skipped)；回卷后无效"
+        },
+        {
+          "name": "USB 包缓冲丢样",
+          "value": 0,
+          "unit": "样本",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "目标读取失败",
+          "value": 0,
+          "unit": "次",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "给调试让路",
+          "value": 0,
+          "unit": "次",
+          "source": "探针",
+          "note": "让路不等于丢样"
+        },
+        {
+          "name": "包序号缺口",
+          "value": 0,
+          "unit": "包",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "网页缓冲溢出",
+          "value": 0,
+          "unit": "样本",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "解析／顺序异常",
+          "value": 0,
+          "unit": "次",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "包解析重同步",
+          "value": 0,
+          "unit": "次",
+          "source": "网页",
+          "note": ""
+        }
+      ],
+      "findings": [
+        {
+          "confidence": "已确认",
+          "text": "探针未赶上部分计划采样时刻。",
+          "evidence": "208723 个跳过的采样时刻"
+        }
+      ],
+      "notes": [
+        "这些计数分属不同阶段，不能相加作为总丢样数，也不能由零值推导零误码率。",
+        "值恒定可能来自程序状态、地址／ELF 不匹配或缓存等；本面板不凭平直波形判定缓存问题。",
+        "记录统计受触发、采集窗口与计数器回卷影响；32 位计数回卷时跳拍率不适用。USB 到达抖动不等于目标采样抖动。"
+      ],
+      "history": {
+        "startedAt": "2026-10-08T09:04:27.592Z",
+        "events": [
+          {
+            "at": "2026-10-08T09:04:28.079Z",
+            "code": "capture-state",
+            "level": "info",
+            "detail": "采集中"
+          },
+          {
+            "at": "2026-10-08T09:04:29.073Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：24825"
+          },
+          {
+            "at": "2026-10-08T09:04:30.070Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：50251"
+          },
+          {
+            "at": "2026-10-08T09:04:31.074Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：75577"
+          },
+          {
+            "at": "2026-10-08T09:04:32.071Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：101092"
+          },
+          {
+            "at": "2026-10-08T09:04:33.076Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：126086"
+          },
+          {
+            "at": "2026-10-08T09:04:34.070Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：151612"
+          },
+          {
+            "at": "2026-10-08T09:04:35.070Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：176921"
+          },
+          {
+            "at": "2026-10-08T09:04:35.894Z",
+            "code": "capture-state",
+            "level": "info",
+            "detail": "已停止：607159 个样本 / 8.130 s，跳拍 208723 / USB 丢样本 0 / 读错 0 / 包缺口 0"
+          },
+          {
+            "at": "2026-10-08T09:04:35.894Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：208723"
+          }
+        ],
+        "omitted": 0
+      }
+    },
+    "uiMaxMs": 33.79999999701977,
+    "uiP99Ms": 31.5,
+    "errors": []
+  },
+  {
+    "kind": "scope",
+    "repeat": 0,
+    "state": "open",
+    "config": {
+      "period": 3,
+      "vars": [
+        "g_pack.u_cnt"
+      ]
+    },
+    "seconds": 8.01270000000298,
+    "rateHz": 160965.07810045817,
+    "samples": 1309200,
+    "packets": 5542,
+    "gap": 0,
+    "decode": 0,
+    "overrun": 0,
+    "metrics": {
+      "tick": 2504037784,
+      "hz": 24000000,
+      "produced": 1316312,
+      "skipped": 1409805,
+      "usb": 0,
+      "errors": 0,
+      "yields": 0,
+      "tx": 89416,
+      "bytes": 2852864,
+      "periodTicks": 72,
+      "flags": 129
+    },
+    "metricsError": null,
+    "invalid": 0,
+    "report": {
+      "schema": "akalink-diagnostics/v1",
+      "kind": "scope",
+      "title": "J-Scope 采集质量报告",
+      "exportedAt": "2026-10-08T09:04:44.731Z",
+      "environment": {
+        "Web版本": "2026-10-08-r2 (ARM/RV32 异常诊断；J-Scope/RTT 采集质量与 JSON/Markdown 报告；分项计数与证据边界)",
+        "浏览器": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36",
+        "页面可见": "visible",
+        "探针": "akaLinkPro CMSIS-DAP",
+        "探针固件": "0.1"
+      },
+      "settings": {
+        "状态": "已停止：1309200 个样本 / 8.133 s，跳拍 1409805 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+        "数据": "真实采集",
+        "时段": "最近一次采集（历史）",
+        "ELF": {
+          "name": "scope.elf",
+          "source": "dwarf",
+          "versions": [
+            4
+          ],
+          "stats": {
+            "cu": 2,
+            "dies": 158,
+            "vars": 36
+          },
+          "note": ""
+        },
+        "请求周期_us": 3,
+        "请求时长_s": 10,
+        "探针": "akaLinkPro CMSIS-DAP",
+        "探针固件": "0.1",
+        "请求时钟_kHz": 60000,
+        "通道": "g_pack.u_cnt:u8@0x24001024",
+        "单字短批次": true,
+        "暂停串口桥": false,
+        "生效后端": "swd",
+        "实际周期_us": 3,
+        "生效SWD时钟_MHz": 60,
+        "探针快照时间": "2026-10-08T09:04:44.731Z",
+        "计数格式": "32 位原子快照"
+      },
+      "metrics": [
+        {
+          "name": "网页保留样本",
+          "value": 1309200,
+          "unit": "样本",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "实测平均采样率",
+          "value": 160965.07810045817,
+          "unit": "Hz",
+          "source": "探针时间戳",
+          "note": "不是 USB 到达速率；段内时间由锚点插值"
+        },
+        {
+          "name": "探针采得样本",
+          "value": 1316312,
+          "unit": "样本",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "探针跳拍",
+          "value": 1409805,
+          "unit": "采样时刻",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "跳拍率",
+          "value": 51.7148,
+          "unit": "%",
+          "source": "探针",
+          "note": "仅无 USB 丢样、无读错时：skipped / (produced + skipped)；回卷后无效"
+        },
+        {
+          "name": "USB 包缓冲丢样",
+          "value": 0,
+          "unit": "样本",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "目标读取失败",
+          "value": 0,
+          "unit": "次",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "给调试让路",
+          "value": 0,
+          "unit": "次",
+          "source": "探针",
+          "note": "让路不等于丢样"
+        },
+        {
+          "name": "包序号缺口",
+          "value": 0,
+          "unit": "包",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "网页缓冲溢出",
+          "value": 0,
+          "unit": "样本",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "解析／顺序异常",
+          "value": 0,
+          "unit": "次",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "包解析重同步",
+          "value": 0,
+          "unit": "次",
+          "source": "网页",
+          "note": ""
+        }
+      ],
+      "findings": [
+        {
+          "confidence": "已确认",
+          "text": "探针未赶上部分计划采样时刻。",
+          "evidence": "1409805 个跳过的采样时刻"
+        }
+      ],
+      "notes": [
+        "这些计数分属不同阶段，不能相加作为总丢样数，也不能由零值推导零误码率。",
+        "值恒定可能来自程序状态、地址／ELF 不匹配或缓存等；本面板不凭平直波形判定缓存问题。",
+        "记录统计受触发、采集窗口与计数器回卷影响；32 位计数回卷时跳拍率不适用。USB 到达抖动不等于目标采样抖动。"
+      ],
+      "history": {
+        "startedAt": "2026-10-08T09:04:36.504Z",
+        "events": [
+          {
+            "at": "2026-10-08T09:04:36.722Z",
+            "code": "capture-state",
+            "level": "info",
+            "detail": "采集中"
+          },
+          {
+            "at": "2026-10-08T09:04:37.732Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：172182"
+          },
+          {
+            "at": "2026-10-08T09:04:38.732Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：343841"
+          },
+          {
+            "at": "2026-10-08T09:04:39.724Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：514986"
+          },
+          {
+            "at": "2026-10-08T09:04:40.726Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：690103"
+          },
+          {
+            "at": "2026-10-08T09:04:41.724Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：861724"
+          },
+          {
+            "at": "2026-10-08T09:04:42.723Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：1035566"
+          },
+          {
+            "at": "2026-10-08T09:04:43.724Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：1206491"
+          },
+          {
+            "at": "2026-10-08T09:04:44.725Z",
+            "code": "capture-state",
+            "level": "info",
+            "detail": "正在停止…"
+          },
+          {
+            "at": "2026-10-08T09:04:44.725Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：1403605"
+          },
+          {
+            "at": "2026-10-08T09:04:44.731Z",
+            "code": "capture-state",
+            "level": "info",
+            "detail": "已停止：1309200 个样本 / 8.133 s，跳拍 1409805 / USB 丢样本 0 / 读错 0 / 包缺口 0"
+          },
+          {
+            "at": "2026-10-08T09:04:44.731Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：1409805"
+          }
+        ],
+        "omitted": 0
+      }
+    },
+    "uiMaxMs": 33.6000000089407,
+    "uiP99Ms": 29.899999991059303,
+    "errors": []
+  },
+  {
+    "kind": "scope",
+    "repeat": 0,
+    "state": "open",
+    "config": {
+      "period": 10,
+      "vars": [
+        "g_pack.f_sin",
+        "g_pack.i_tick",
+        "g_pack.i_sq1k"
+      ]
+    },
+    "seconds": 8.01290000000596,
+    "rateHz": 85867.31629992298,
+    "samples": 698103,
+    "packets": 14474,
+    "gap": 0,
+    "decode": 0,
+    "overrun": 0,
+    "metrics": {
+      "tick": 2702375992,
+      "hz": 24000000,
+      "produced": 706721,
+      "skipped": 116314,
+      "usb": 0,
+      "errors": 0,
+      "yields": 0,
+      "tx": 104072,
+      "bytes": 7501312,
+      "periodTicks": 240,
+      "flags": 129
+    },
+    "metricsError": null,
+    "invalid": 0,
+    "report": {
+      "schema": "akalink-diagnostics/v1",
+      "kind": "scope",
+      "title": "J-Scope 采集质量报告",
+      "exportedAt": "2026-10-08T09:04:53.005Z",
+      "environment": {
+        "Web版本": "2026-10-08-r2 (ARM/RV32 异常诊断；J-Scope/RTT 采集质量与 JSON/Markdown 报告；分项计数与证据边界)",
+        "浏览器": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36",
+        "页面可见": "visible",
+        "探针": "akaLinkPro CMSIS-DAP",
+        "探针固件": "0.1"
+      },
+      "settings": {
+        "状态": "已停止：698103 个样本 / 8.130 s，跳拍 116314 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+        "数据": "真实采集",
+        "时段": "最近一次采集（历史）",
+        "ELF": {
+          "name": "scope.elf",
+          "source": "dwarf",
+          "versions": [
+            4
+          ],
+          "stats": {
+            "cu": 2,
+            "dies": 158,
+            "vars": 36
+          },
+          "note": ""
+        },
+        "请求周期_us": 10,
+        "请求时长_s": 10,
+        "探针": "akaLinkPro CMSIS-DAP",
+        "探针固件": "0.1",
+        "请求时钟_kHz": 60000,
+        "通道": "g_pack.f_sin:f32@0x24001014, g_pack.i_tick:i32@0x2400101c, g_pack.i_sq1k:i16@0x24001022",
+        "单字短批次": true,
+        "暂停串口桥": false,
+        "生效后端": "swd",
+        "实际周期_us": 10,
+        "生效SWD时钟_MHz": 60,
+        "探针快照时间": "2026-10-08T09:04:52.995Z",
+        "计数格式": "32 位原子快照"
+      },
+      "metrics": [
+        {
+          "name": "网页保留样本",
+          "value": 698103,
+          "unit": "样本",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "实测平均采样率",
+          "value": 85867.31629992298,
+          "unit": "Hz",
+          "source": "探针时间戳",
+          "note": "不是 USB 到达速率；段内时间由锚点插值"
+        },
+        {
+          "name": "探针采得样本",
+          "value": 706721,
+          "unit": "样本",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "探针跳拍",
+          "value": 116314,
+          "unit": "采样时刻",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "跳拍率",
+          "value": 14.1323,
+          "unit": "%",
+          "source": "探针",
+          "note": "仅无 USB 丢样、无读错时：skipped / (produced + skipped)；回卷后无效"
+        },
+        {
+          "name": "USB 包缓冲丢样",
+          "value": 0,
+          "unit": "样本",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "目标读取失败",
+          "value": 0,
+          "unit": "次",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "给调试让路",
+          "value": 0,
+          "unit": "次",
+          "source": "探针",
+          "note": "让路不等于丢样"
+        },
+        {
+          "name": "包序号缺口",
+          "value": 0,
+          "unit": "包",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "网页缓冲溢出",
+          "value": 0,
+          "unit": "样本",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "解析／顺序异常",
+          "value": 0,
+          "unit": "次",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "包解析重同步",
+          "value": 0,
+          "unit": "次",
+          "source": "网页",
+          "note": ""
+        }
+      ],
+      "findings": [
+        {
+          "confidence": "已确认",
+          "text": "探针未赶上部分计划采样时刻。",
+          "evidence": "116314 个跳过的采样时刻"
+        }
+      ],
+      "notes": [
+        "这些计数分属不同阶段，不能相加作为总丢样数，也不能由零值推导零误码率。",
+        "值恒定可能来自程序状态、地址／ELF 不匹配或缓存等；本面板不凭平直波形判定缓存问题。",
+        "记录统计受触发、采集窗口与计数器回卷影响；32 位计数回卷时跳拍率不适用。USB 到达抖动不等于目标采样抖动。"
+      ],
+      "history": {
+        "startedAt": "2026-10-08T09:04:44.736Z",
+        "events": [
+          {
+            "at": "2026-10-08T09:04:45.226Z",
+            "code": "capture-state",
+            "level": "info",
+            "detail": "采集中"
+          },
+          {
+            "at": "2026-10-08T09:04:46.230Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：14296"
+          },
+          {
+            "at": "2026-10-08T09:04:47.231Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：28452"
+          },
+          {
+            "at": "2026-10-08T09:04:48.231Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：42598"
+          },
+          {
+            "at": "2026-10-08T09:04:49.231Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：56588"
+          },
+          {
+            "at": "2026-10-08T09:04:50.229Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：70754"
+          },
+          {
+            "at": "2026-10-08T09:04:51.227Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：84812"
+          },
+          {
+            "at": "2026-10-08T09:04:52.226Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：99164"
+          },
+          {
+            "at": "2026-10-08T09:04:53.005Z",
+            "code": "capture-state",
+            "level": "info",
+            "detail": "已停止：698103 个样本 / 8.130 s，跳拍 116314 / USB 丢样本 0 / 读错 0 / 包缺口 0"
+          },
+          {
+            "at": "2026-10-08T09:04:53.005Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：116314"
+          }
+        ],
+        "omitted": 0
+      }
+    },
+    "uiMaxMs": 33.20000000298023,
+    "uiP99Ms": 31.600000008940697,
+    "errors": []
+  },
+  {
+    "kind": "scope",
+    "repeat": 1,
+    "state": "open",
+    "config": {
+      "period": 3,
+      "vars": [
+        "g_pack.u_cnt"
+      ]
+    },
+    "seconds": 8.019800000011921,
+    "rateHz": 141475.05183654942,
+    "samples": 1148880,
+    "packets": 4863,
+    "gap": 0,
+    "decode": 0,
+    "overrun": 0,
+    "metrics": {
+      "tick": 2913866357,
+      "hz": 24000000,
+      "produced": 1154972,
+      "skipped": 1566609,
+      "usb": 0,
+      "errors": 0,
+      "yields": 0,
+      "tx": 108960,
+      "bytes": 2503168,
+      "periodTicks": 72,
+      "flags": 129
+    },
+    "metricsError": null,
+    "invalid": 0,
+    "report": {
+      "schema": "akalink-diagnostics/v1",
+      "kind": "scope",
+      "title": "J-Scope 采集质量报告",
+      "exportedAt": "2026-10-08T09:05:01.808Z",
+      "environment": {
+        "Web版本": "2026-10-08-r2 (ARM/RV32 异常诊断；J-Scope/RTT 采集质量与 JSON/Markdown 报告；分项计数与证据边界)",
+        "浏览器": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36",
+        "页面可见": "visible",
+        "探针": "akaLinkPro CMSIS-DAP",
+        "探针固件": "0.1"
+      },
+      "settings": {
+        "状态": "已停止：1148880 个样本 / 8.121 s，跳拍 1566609 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+        "数据": "真实采集",
+        "时段": "最近一次采集（历史）",
+        "ELF": {
+          "name": "scope.elf",
+          "source": "dwarf",
+          "versions": [
+            4
+          ],
+          "stats": {
+            "cu": 2,
+            "dies": 158,
+            "vars": 36
+          },
+          "note": ""
+        },
+        "请求周期_us": 3,
+        "请求时长_s": 10,
+        "探针": "akaLinkPro CMSIS-DAP",
+        "探针固件": "0.1",
+        "请求时钟_kHz": 60000,
+        "通道": "g_pack.u_cnt:u8@0x24001024",
+        "单字短批次": true,
+        "暂停串口桥": false,
+        "生效后端": "swd",
+        "实际周期_us": 3,
+        "生效SWD时钟_MHz": 45,
+        "探针快照时间": "2026-10-08T09:05:01.807Z",
+        "计数格式": "32 位原子快照"
+      },
+      "metrics": [
+        {
+          "name": "网页保留样本",
+          "value": 1148880,
+          "unit": "样本",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "实测平均采样率",
+          "value": 141475.05183654942,
+          "unit": "Hz",
+          "source": "探针时间戳",
+          "note": "不是 USB 到达速率；段内时间由锚点插值"
+        },
+        {
+          "name": "探针采得样本",
+          "value": 1154972,
+          "unit": "样本",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "探针跳拍",
+          "value": 1566609,
+          "unit": "采样时刻",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "跳拍率",
+          "value": 57.5625,
+          "unit": "%",
+          "source": "探针",
+          "note": "仅无 USB 丢样、无读错时：skipped / (produced + skipped)；回卷后无效"
+        },
+        {
+          "name": "USB 包缓冲丢样",
+          "value": 0,
+          "unit": "样本",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "目标读取失败",
+          "value": 0,
+          "unit": "次",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "给调试让路",
+          "value": 0,
+          "unit": "次",
+          "source": "探针",
+          "note": "让路不等于丢样"
+        },
+        {
+          "name": "包序号缺口",
+          "value": 0,
+          "unit": "包",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "网页缓冲溢出",
+          "value": 0,
+          "unit": "样本",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "解析／顺序异常",
+          "value": 0,
+          "unit": "次",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "包解析重同步",
+          "value": 0,
+          "unit": "次",
+          "source": "网页",
+          "note": ""
+        }
+      ],
+      "findings": [
+        {
+          "confidence": "已确认",
+          "text": "探针未赶上部分计划采样时刻。",
+          "evidence": "1566609 个跳过的采样时刻"
+        }
+      ],
+      "notes": [
+        "这些计数分属不同阶段，不能相加作为总丢样数，也不能由零值推导零误码率。",
+        "值恒定可能来自程序状态、地址／ELF 不匹配或缓存等；本面板不凭平直波形判定缓存问题。",
+        "记录统计受触发、采集窗口与计数器回卷影响；32 位计数回卷时跳拍率不适用。USB 到达抖动不等于目标采样抖动。"
+      ],
+      "history": {
+        "startedAt": "2026-10-08T09:04:53.597Z",
+        "events": [
+          {
+            "at": "2026-10-08T09:04:53.819Z",
+            "code": "capture-state",
+            "level": "info",
+            "detail": "采集中"
+          },
+          {
+            "at": "2026-10-08T09:04:54.818Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：192062"
+          },
+          {
+            "at": "2026-10-08T09:04:55.819Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：380263"
+          },
+          {
+            "at": "2026-10-08T09:04:56.818Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：572167"
+          },
+          {
+            "at": "2026-10-08T09:04:57.815Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：767088"
+          },
+          {
+            "at": "2026-10-08T09:04:58.815Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：956642"
+          },
+          {
+            "at": "2026-10-08T09:04:59.815Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：1151507"
+          },
+          {
+            "at": "2026-10-08T09:05:00.821Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：1340278"
+          },
+          {
+            "at": "2026-10-08T09:05:01.807Z",
+            "code": "capture-state",
+            "level": "info",
+            "detail": "已停止：1148880 个样本 / 8.121 s，跳拍 1566609 / USB 丢样本 0 / 读错 0 / 包缺口 0"
+          },
+          {
+            "at": "2026-10-08T09:05:01.808Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：1566609"
+          }
+        ],
+        "omitted": 0
+      }
+    },
+    "uiMaxMs": 33.900000005960464,
+    "uiP99Ms": 32.20000000298023,
+    "errors": []
+  },
+  {
+    "kind": "scope",
+    "repeat": 1,
+    "state": "open",
+    "config": {
+      "period": 10,
+      "vars": [
+        "g_pack.f_sin",
+        "g_pack.i_tick",
+        "g_pack.i_sq1k"
+      ]
+    },
+    "seconds": 8.01779999999702,
+    "rateHz": 85779.6002046629,
+    "samples": 697564,
+    "packets": 14462,
+    "gap": 0,
+    "decode": 0,
+    "overrun": 0,
+    "metrics": {
+      "tick": 3112396589,
+      "hz": 24000000,
+      "produced": 706351,
+      "skipped": 117083,
+      "usb": 0,
+      "errors": 0,
+      "yields": 0,
+      "tx": 123600,
+      "bytes": 7497728,
+      "periodTicks": 240,
+      "flags": 129
+    },
+    "metricsError": null,
+    "invalid": 0,
+    "report": {
+      "schema": "akalink-diagnostics/v1",
+      "kind": "scope",
+      "title": "J-Scope 采集质量报告",
+      "exportedAt": "2026-10-08T09:05:10.090Z",
+      "environment": {
+        "Web版本": "2026-10-08-r2 (ARM/RV32 异常诊断；J-Scope/RTT 采集质量与 JSON/Markdown 报告；分项计数与证据边界)",
+        "浏览器": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36",
+        "页面可见": "visible",
+        "探针": "akaLinkPro CMSIS-DAP",
+        "探针固件": "0.1"
+      },
+      "settings": {
+        "状态": "已停止：697564 个样本 / 8.132 s，跳拍 117083 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+        "数据": "真实采集",
+        "时段": "最近一次采集（历史）",
+        "ELF": {
+          "name": "scope.elf",
+          "source": "dwarf",
+          "versions": [
+            4
+          ],
+          "stats": {
+            "cu": 2,
+            "dies": 158,
+            "vars": 36
+          },
+          "note": ""
+        },
+        "请求周期_us": 10,
+        "请求时长_s": 10,
+        "探针": "akaLinkPro CMSIS-DAP",
+        "探针固件": "0.1",
+        "请求时钟_kHz": 60000,
+        "通道": "g_pack.f_sin:f32@0x24001014, g_pack.i_tick:i32@0x2400101c, g_pack.i_sq1k:i16@0x24001022",
+        "单字短批次": true,
+        "暂停串口桥": false,
+        "生效后端": "swd",
+        "实际周期_us": 10,
+        "生效SWD时钟_MHz": 60,
+        "探针快照时间": "2026-10-08T09:05:10.080Z",
+        "计数格式": "32 位原子快照"
+      },
+      "metrics": [
+        {
+          "name": "网页保留样本",
+          "value": 697564,
+          "unit": "样本",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "实测平均采样率",
+          "value": 85779.6002046629,
+          "unit": "Hz",
+          "source": "探针时间戳",
+          "note": "不是 USB 到达速率；段内时间由锚点插值"
+        },
+        {
+          "name": "探针采得样本",
+          "value": 706351,
+          "unit": "样本",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "探针跳拍",
+          "value": 117083,
+          "unit": "采样时刻",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "跳拍率",
+          "value": 14.2189,
+          "unit": "%",
+          "source": "探针",
+          "note": "仅无 USB 丢样、无读错时：skipped / (produced + skipped)；回卷后无效"
+        },
+        {
+          "name": "USB 包缓冲丢样",
+          "value": 0,
+          "unit": "样本",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "目标读取失败",
+          "value": 0,
+          "unit": "次",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "给调试让路",
+          "value": 0,
+          "unit": "次",
+          "source": "探针",
+          "note": "让路不等于丢样"
+        },
+        {
+          "name": "包序号缺口",
+          "value": 0,
+          "unit": "包",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "网页缓冲溢出",
+          "value": 0,
+          "unit": "样本",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "解析／顺序异常",
+          "value": 0,
+          "unit": "次",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "包解析重同步",
+          "value": 0,
+          "unit": "次",
+          "source": "网页",
+          "note": ""
+        }
+      ],
+      "findings": [
+        {
+          "confidence": "已确认",
+          "text": "探针未赶上部分计划采样时刻。",
+          "evidence": "117083 个跳过的采样时刻"
+        }
+      ],
+      "notes": [
+        "这些计数分属不同阶段，不能相加作为总丢样数，也不能由零值推导零误码率。",
+        "值恒定可能来自程序状态、地址／ELF 不匹配或缓存等；本面板不凭平直波形判定缓存问题。",
+        "记录统计受触发、采集窗口与计数器回卷影响；32 位计数回卷时跳拍率不适用。USB 到达抖动不等于目标采样抖动。"
+      ],
+      "history": {
+        "startedAt": "2026-10-08T09:05:01.812Z",
+        "events": [
+          {
+            "at": "2026-10-08T09:05:01.815Z",
+            "code": "capture-state",
+            "level": "info",
+            "detail": "启动中"
+          },
+          {
+            "at": "2026-10-08T09:05:02.322Z",
+            "code": "capture-state",
+            "level": "info",
+            "detail": "采集中"
+          },
+          {
+            "at": "2026-10-08T09:05:03.322Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：14312"
+          },
+          {
+            "at": "2026-10-08T09:05:04.324Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：28715"
+          },
+          {
+            "at": "2026-10-08T09:05:05.320Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：42961"
+          },
+          {
+            "at": "2026-10-08T09:05:06.324Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：57080"
+          },
+          {
+            "at": "2026-10-08T09:05:07.319Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：71196"
+          },
+          {
+            "at": "2026-10-08T09:05:08.328Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：85365"
+          },
+          {
+            "at": "2026-10-08T09:05:09.323Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：99586"
+          },
+          {
+            "at": "2026-10-08T09:05:10.090Z",
+            "code": "capture-state",
+            "level": "info",
+            "detail": "已停止：697564 个样本 / 8.132 s，跳拍 117083 / USB 丢样本 0 / 读错 0 / 包缺口 0"
+          },
+          {
+            "at": "2026-10-08T09:05:10.090Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：117083"
+          }
+        ],
+        "omitted": 0
+      }
+    },
+    "uiMaxMs": 32.5,
+    "uiP99Ms": 31.799999997019768,
+    "errors": []
+  },
+  {
+    "kind": "scope",
+    "repeat": 1,
+    "state": "closed",
+    "config": {
+      "period": 3,
+      "vars": [
+        "g_pack.u_cnt"
+      ]
+    },
+    "seconds": 8.02190000000596,
+    "rateHz": 160977.25861021777,
+    "samples": 1308240,
+    "packets": 5538,
+    "gap": 0,
+    "decode": 0,
+    "overrun": 0,
+    "metrics": {
+      "tick": 3324366972,
+      "hz": 24000000,
+      "produced": 1314475,
+      "skipped": 1407646,
+      "usb": 0,
+      "errors": 0,
+      "yields": 0,
+      "tx": 129168,
+      "bytes": 2848256,
+      "periodTicks": 72,
+      "flags": 129
+    },
+    "metricsError": null,
+    "invalid": 0,
+    "report": {
+      "schema": "akalink-diagnostics/v1",
+      "kind": "scope",
+      "title": "J-Scope 采集质量报告",
+      "exportedAt": "2026-10-08T09:05:18.912Z",
+      "environment": {
+        "Web版本": "2026-10-08-r2 (ARM/RV32 异常诊断；J-Scope/RTT 采集质量与 JSON/Markdown 报告；分项计数与证据边界)",
+        "浏览器": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36",
+        "页面可见": "visible",
+        "探针": "akaLinkPro CMSIS-DAP",
+        "探针固件": "0.1"
+      },
+      "settings": {
+        "状态": "已停止：1308240 个样本 / 8.127 s，跳拍 1407646 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+        "数据": "真实采集",
+        "时段": "最近一次采集（历史）",
+        "ELF": {
+          "name": "scope.elf",
+          "source": "dwarf",
+          "versions": [
+            4
+          ],
+          "stats": {
+            "cu": 2,
+            "dies": 158,
+            "vars": 36
+          },
+          "note": ""
+        },
+        "请求周期_us": 3,
+        "请求时长_s": 10,
+        "探针": "akaLinkPro CMSIS-DAP",
+        "探针固件": "0.1",
+        "请求时钟_kHz": 60000,
+        "通道": "g_pack.u_cnt:u8@0x24001024",
+        "单字短批次": true,
+        "暂停串口桥": false,
+        "生效后端": "swd",
+        "实际周期_us": 3,
+        "生效SWD时钟_MHz": 60,
+        "探针快照时间": "2026-10-08T09:05:18.912Z",
+        "计数格式": "32 位原子快照"
+      },
+      "metrics": [
+        {
+          "name": "网页保留样本",
+          "value": 1308240,
+          "unit": "样本",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "实测平均采样率",
+          "value": 160977.25861021777,
+          "unit": "Hz",
+          "source": "探针时间戳",
+          "note": "不是 USB 到达速率；段内时间由锚点插值"
+        },
+        {
+          "name": "探针采得样本",
+          "value": 1314475,
+          "unit": "样本",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "探针跳拍",
+          "value": 1407646,
+          "unit": "采样时刻",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "跳拍率",
+          "value": 51.7114,
+          "unit": "%",
+          "source": "探针",
+          "note": "仅无 USB 丢样、无读错时：skipped / (produced + skipped)；回卷后无效"
+        },
+        {
+          "name": "USB 包缓冲丢样",
+          "value": 0,
+          "unit": "样本",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "目标读取失败",
+          "value": 0,
+          "unit": "次",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "给调试让路",
+          "value": 0,
+          "unit": "次",
+          "source": "探针",
+          "note": "让路不等于丢样"
+        },
+        {
+          "name": "包序号缺口",
+          "value": 0,
+          "unit": "包",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "网页缓冲溢出",
+          "value": 0,
+          "unit": "样本",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "解析／顺序异常",
+          "value": 0,
+          "unit": "次",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "包解析重同步",
+          "value": 0,
+          "unit": "次",
+          "source": "网页",
+          "note": ""
+        }
+      ],
+      "findings": [
+        {
+          "confidence": "已确认",
+          "text": "探针未赶上部分计划采样时刻。",
+          "evidence": "1407646 个跳过的采样时刻"
+        }
+      ],
+      "notes": [
+        "这些计数分属不同阶段，不能相加作为总丢样数，也不能由零值推导零误码率。",
+        "值恒定可能来自程序状态、地址／ELF 不匹配或缓存等；本面板不凭平直波形判定缓存问题。",
+        "记录统计受触发、采集窗口与计数器回卷影响；32 位计数回卷时跳拍率不适用。USB 到达抖动不等于目标采样抖动。"
+      ],
+      "history": {
+        "startedAt": "2026-10-08T09:05:10.710Z",
+        "events": [
+          {
+            "at": "2026-10-08T09:05:10.906Z",
+            "code": "capture-state",
+            "level": "info",
+            "detail": "采集中"
+          },
+          {
+            "at": "2026-10-08T09:05:11.904Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：171450"
+          },
+          {
+            "at": "2026-10-08T09:05:12.904Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：347434"
+          },
+          {
+            "at": "2026-10-08T09:05:13.904Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：519908"
+          },
+          {
+            "at": "2026-10-08T09:05:14.903Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：691504"
+          },
+          {
+            "at": "2026-10-08T09:05:15.907Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：861741"
+          },
+          {
+            "at": "2026-10-08T09:05:16.905Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：1035407"
+          },
+          {
+            "at": "2026-10-08T09:05:17.892Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：1204975"
+          },
+          {
+            "at": "2026-10-08T09:05:18.892Z",
+            "code": "capture-state",
+            "level": "info",
+            "detail": "正在停止…"
+          },
+          {
+            "at": "2026-10-08T09:05:18.892Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：1402820"
+          },
+          {
+            "at": "2026-10-08T09:05:18.912Z",
+            "code": "capture-state",
+            "level": "info",
+            "detail": "已停止：1308240 个样本 / 8.127 s，跳拍 1407646 / USB 丢样本 0 / 读错 0 / 包缺口 0"
+          },
+          {
+            "at": "2026-10-08T09:05:18.912Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：1407646"
+          }
+        ],
+        "omitted": 0
+      }
+    },
+    "uiMaxMs": 33.599999994039536,
+    "uiP99Ms": 30.200000002980232,
+    "errors": []
+  },
+  {
+    "kind": "scope",
+    "repeat": 1,
+    "state": "closed",
+    "config": {
+      "period": 10,
+      "vars": [
+        "g_pack.f_sin",
+        "g_pack.i_tick",
+        "g_pack.i_sq1k"
+      ]
+    },
+    "seconds": 8.0175,
+    "rateHz": 85785.942228143,
+    "samples": 697613,
+    "packets": 14463,
+    "gap": 0,
+    "decode": 0,
+    "overrun": 0,
+    "metrics": {
+      "tick": 3522993210,
+      "hz": 24000000,
+      "produced": 706405,
+      "skipped": 117030,
+      "usb": 0,
+      "errors": 0,
+      "yields": 0,
+      "tx": 143808,
+      "bytes": 7498240,
+      "periodTicks": 240,
+      "flags": 129
+    },
+    "metricsError": null,
+    "invalid": 0,
+    "report": {
+      "schema": "akalink-diagnostics/v1",
+      "kind": "scope",
+      "title": "J-Scope 采集质量报告",
+      "exportedAt": "2026-10-08T09:05:27.198Z",
+      "environment": {
+        "Web版本": "2026-10-08-r2 (ARM/RV32 异常诊断；J-Scope/RTT 采集质量与 JSON/Markdown 报告；分项计数与证据边界)",
+        "浏览器": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36",
+        "页面可见": "visible",
+        "探针": "akaLinkPro CMSIS-DAP",
+        "探针固件": "0.1"
+      },
+      "settings": {
+        "状态": "已停止：697613 个样本 / 8.132 s，跳拍 117030 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+        "数据": "真实采集",
+        "时段": "最近一次采集（历史）",
+        "ELF": {
+          "name": "scope.elf",
+          "source": "dwarf",
+          "versions": [
+            4
+          ],
+          "stats": {
+            "cu": 2,
+            "dies": 158,
+            "vars": 36
+          },
+          "note": ""
+        },
+        "请求周期_us": 10,
+        "请求时长_s": 10,
+        "探针": "akaLinkPro CMSIS-DAP",
+        "探针固件": "0.1",
+        "请求时钟_kHz": 60000,
+        "通道": "g_pack.f_sin:f32@0x24001014, g_pack.i_tick:i32@0x2400101c, g_pack.i_sq1k:i16@0x24001022",
+        "单字短批次": true,
+        "暂停串口桥": false,
+        "生效后端": "swd",
+        "实际周期_us": 10,
+        "生效SWD时钟_MHz": 60,
+        "探针快照时间": "2026-10-08T09:05:27.188Z",
+        "计数格式": "32 位原子快照"
+      },
+      "metrics": [
+        {
+          "name": "网页保留样本",
+          "value": 697613,
+          "unit": "样本",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "实测平均采样率",
+          "value": 85785.942228143,
+          "unit": "Hz",
+          "source": "探针时间戳",
+          "note": "不是 USB 到达速率；段内时间由锚点插值"
+        },
+        {
+          "name": "探针采得样本",
+          "value": 706405,
+          "unit": "样本",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "探针跳拍",
+          "value": 117030,
+          "unit": "采样时刻",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "跳拍率",
+          "value": 14.2124,
+          "unit": "%",
+          "source": "探针",
+          "note": "仅无 USB 丢样、无读错时：skipped / (produced + skipped)；回卷后无效"
+        },
+        {
+          "name": "USB 包缓冲丢样",
+          "value": 0,
+          "unit": "样本",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "目标读取失败",
+          "value": 0,
+          "unit": "次",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "给调试让路",
+          "value": 0,
+          "unit": "次",
+          "source": "探针",
+          "note": "让路不等于丢样"
+        },
+        {
+          "name": "包序号缺口",
+          "value": 0,
+          "unit": "包",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "网页缓冲溢出",
+          "value": 0,
+          "unit": "样本",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "解析／顺序异常",
+          "value": 0,
+          "unit": "次",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "包解析重同步",
+          "value": 0,
+          "unit": "次",
+          "source": "网页",
+          "note": ""
+        }
+      ],
+      "findings": [
+        {
+          "confidence": "已确认",
+          "text": "探针未赶上部分计划采样时刻。",
+          "evidence": "117030 个跳过的采样时刻"
+        }
+      ],
+      "notes": [
+        "这些计数分属不同阶段，不能相加作为总丢样数，也不能由零值推导零误码率。",
+        "值恒定可能来自程序状态、地址／ELF 不匹配或缓存等；本面板不凭平直波形判定缓存问题。",
+        "记录统计受触发、采集窗口与计数器回卷影响；32 位计数回卷时跳拍率不适用。USB 到达抖动不等于目标采样抖动。"
+      ],
+      "history": {
+        "startedAt": "2026-10-08T09:05:18.917Z",
+        "events": [
+          {
+            "at": "2026-10-08T09:05:19.405Z",
+            "code": "capture-state",
+            "level": "info",
+            "detail": "采集中"
+          },
+          {
+            "at": "2026-10-08T09:05:20.407Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：14281"
+          },
+          {
+            "at": "2026-10-08T09:05:21.404Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：28378"
+          },
+          {
+            "at": "2026-10-08T09:05:22.403Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：42537"
+          },
+          {
+            "at": "2026-10-08T09:05:23.413Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：56844"
+          },
+          {
+            "at": "2026-10-08T09:05:24.396Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：71005"
+          },
+          {
+            "at": "2026-10-08T09:05:25.396Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：85146"
+          },
+          {
+            "at": "2026-10-08T09:05:26.409Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：99355"
+          },
+          {
+            "at": "2026-10-08T09:05:27.198Z",
+            "code": "capture-state",
+            "level": "info",
+            "detail": "已停止：697613 个样本 / 8.132 s，跳拍 117030 / USB 丢样本 0 / 读错 0 / 包缺口 0"
+          },
+          {
+            "at": "2026-10-08T09:05:27.198Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：117030"
+          }
+        ],
+        "omitted": 0
+      }
+    },
+    "uiMaxMs": 33.29999999701977,
+    "uiP99Ms": 31,
+    "errors": []
+  },
+  {
+    "kind": "scope",
+    "repeat": 1,
+    "state": "baseline",
+    "config": {
+      "period": 3,
+      "vars": [
+        "g_pack.u_cnt"
+      ]
+    },
+    "seconds": 8.01160000000894,
+    "rateHz": 160985.22184460776,
+    "samples": 1308240,
+    "packets": 5538,
+    "gap": 0,
+    "decode": 0,
+    "overrun": 0,
+    "metrics": {
+      "tick": 3734099588,
+      "hz": 24000000,
+      "produced": 1314540,
+      "skipped": 1407581,
+      "usb": 0,
+      "errors": 0,
+      "yields": 0,
+      "tx": 149376,
+      "bytes": 2848768,
+      "periodTicks": 72,
+      "flags": 129
+    },
+    "metricsError": null,
+    "invalid": 0,
+    "uiMaxMs": 33.400000005960464,
+    "uiP99Ms": 30.099999994039536,
+    "errors": []
+  },
+  {
+    "kind": "scope",
+    "repeat": 1,
+    "state": "baseline",
+    "config": {
+      "period": 10,
+      "vars": [
+        "g_pack.f_sin",
+        "g_pack.i_tick",
+        "g_pack.i_sq1k"
+      ]
+    },
+    "seconds": 8.00779999999702,
+    "rateHz": 85840.95473251276,
+    "samples": 698299,
+    "packets": 14478,
+    "gap": 0,
+    "decode": 0,
+    "overrun": 0,
+    "metrics": {
+      "tick": 3932629836,
+      "hz": 24000000,
+      "produced": 707168,
+      "skipped": 116628,
+      "usb": 42,
+      "errors": 0,
+      "yields": 0,
+      "tx": 164032,
+      "bytes": 7506944,
+      "periodTicks": 240,
+      "flags": 129
+    },
+    "metricsError": null,
+    "invalid": 0,
+    "uiMaxMs": 33.70000000298023,
+    "uiP99Ms": 31.399999991059303,
+    "errors": []
+  },
+  {
+    "kind": "scope",
+    "repeat": 2,
+    "state": "baseline",
+    "config": {
+      "period": 3,
+      "vars": [
+        "g_pack.u_cnt"
+      ]
+    },
+    "seconds": 8.004100000008942,
+    "rateHz": 160947.78300339112,
+    "samples": 1307760,
+    "packets": 5536,
+    "gap": 0,
+    "decode": 0,
+    "overrun": 0,
+    "metrics": {
+      "tick": 4144408228,
+      "hz": 24000000,
+      "produced": 1314241,
+      "skipped": 1407884,
+      "usb": 0,
+      "errors": 0,
+      "yields": 0,
+      "tx": 169600,
+      "bytes": 2848256,
+      "periodTicks": 72,
+      "flags": 129
+    },
+    "metricsError": null,
+    "invalid": 0,
+    "uiMaxMs": 35.900000005960464,
+    "uiP99Ms": 31.399999991059303,
+    "errors": []
+  },
+  {
+    "kind": "scope",
+    "repeat": 2,
+    "state": "baseline",
+    "config": {
+      "period": 10,
+      "vars": [
+        "g_pack.f_sin",
+        "g_pack.i_tick",
+        "g_pack.i_sq1k"
+      ]
+    },
+    "seconds": 8.01129999999702,
+    "rateHz": 85862.7925167484,
+    "samples": 697515,
+    "packets": 14461,
+    "gap": 0,
+    "decode": 0,
+    "overrun": 0,
+    "metrics": {
+      "tick": 47971182,
+      "hz": 24000000,
+      "produced": 706353,
+      "skipped": 116284,
+      "usb": 0,
+      "errors": 0,
+      "yields": 0,
+      "tx": 184240,
+      "bytes": 7497728,
+      "periodTicks": 240,
+      "flags": 129
+    },
+    "metricsError": null,
+    "invalid": 0,
+    "uiMaxMs": 34.599999994039536,
+    "uiP99Ms": 31.599999994039536,
+    "errors": []
+  },
+  {
+    "kind": "scope",
+    "repeat": 2,
+    "state": "closed",
+    "config": {
+      "period": 3,
+      "vars": [
+        "g_pack.u_cnt"
+      ]
+    },
+    "seconds": 8.004,
+    "rateHz": 141572.5667995854,
+    "samples": 1147440,
+    "packets": 4857,
+    "gap": 0,
+    "decode": 0,
+    "overrun": 0,
+    "metrics": {
+      "tick": 260517593,
+      "hz": 24000000,
+      "produced": 1153496,
+      "skipped": 1562743,
+      "usb": 0,
+      "errors": 0,
+      "yields": 0,
+      "tx": 189128,
+      "bytes": 2500096,
+      "periodTicks": 72,
+      "flags": 129
+    },
+    "metricsError": null,
+    "invalid": 0,
+    "report": {
+      "schema": "akalink-diagnostics/v1",
+      "kind": "scope",
+      "title": "J-Scope 采集质量报告",
+      "exportedAt": "2026-10-08T09:06:10.209Z",
+      "environment": {
+        "Web版本": "2026-10-08-r2 (ARM/RV32 异常诊断；J-Scope/RTT 采集质量与 JSON/Markdown 报告；分项计数与证据边界)",
+        "浏览器": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36",
+        "页面可见": "visible",
+        "探针": "akaLinkPro CMSIS-DAP",
+        "探针固件": "0.1"
+      },
+      "settings": {
+        "状态": "已停止：1147440 个样本 / 8.105 s，跳拍 1562743 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+        "数据": "真实采集",
+        "时段": "最近一次采集（历史）",
+        "ELF": {
+          "name": "scope.elf",
+          "source": "dwarf",
+          "versions": [
+            4
+          ],
+          "stats": {
+            "cu": 2,
+            "dies": 158,
+            "vars": 36
+          },
+          "note": ""
+        },
+        "请求周期_us": 3,
+        "请求时长_s": 10,
+        "探针": "akaLinkPro CMSIS-DAP",
+        "探针固件": "0.1",
+        "请求时钟_kHz": 60000,
+        "通道": "g_pack.u_cnt:u8@0x24001024",
+        "单字短批次": true,
+        "暂停串口桥": false,
+        "生效后端": "swd",
+        "实际周期_us": 3,
+        "生效SWD时钟_MHz": 45,
+        "探针快照时间": "2026-10-08T09:06:10.209Z",
+        "计数格式": "32 位原子快照"
+      },
+      "metrics": [
+        {
+          "name": "网页保留样本",
+          "value": 1147440,
+          "unit": "样本",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "实测平均采样率",
+          "value": 141572.5667995854,
+          "unit": "Hz",
+          "source": "探针时间戳",
+          "note": "不是 USB 到达速率；段内时间由锚点插值"
+        },
+        {
+          "name": "探针采得样本",
+          "value": 1153496,
+          "unit": "样本",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "探针跳拍",
+          "value": 1562743,
+          "unit": "采样时刻",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "跳拍率",
+          "value": 57.5333,
+          "unit": "%",
+          "source": "探针",
+          "note": "仅无 USB 丢样、无读错时：skipped / (produced + skipped)；回卷后无效"
+        },
+        {
+          "name": "USB 包缓冲丢样",
+          "value": 0,
+          "unit": "样本",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "目标读取失败",
+          "value": 0,
+          "unit": "次",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "给调试让路",
+          "value": 0,
+          "unit": "次",
+          "source": "探针",
+          "note": "让路不等于丢样"
+        },
+        {
+          "name": "包序号缺口",
+          "value": 0,
+          "unit": "包",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "网页缓冲溢出",
+          "value": 0,
+          "unit": "样本",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "解析／顺序异常",
+          "value": 0,
+          "unit": "次",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "包解析重同步",
+          "value": 0,
+          "unit": "次",
+          "source": "网页",
+          "note": ""
+        }
+      ],
+      "findings": [
+        {
+          "confidence": "已确认",
+          "text": "探针未赶上部分计划采样时刻。",
+          "evidence": "1562743 个跳过的采样时刻"
+        }
+      ],
+      "notes": [
+        "这些计数分属不同阶段，不能相加作为总丢样数，也不能由零值推导零误码率。",
+        "值恒定可能来自程序状态、地址／ELF 不匹配或缓存等；本面板不凭平直波形判定缓存问题。",
+        "记录统计受触发、采集窗口与计数器回卷影响；32 位计数回卷时跳拍率不适用。USB 到达抖动不等于目标采样抖动。"
+      ],
+      "history": {
+        "startedAt": "2026-10-08T09:06:02.011Z",
+        "events": [
+          {
+            "at": "2026-10-08T09:06:02.185Z",
+            "code": "capture-state",
+            "level": "info",
+            "detail": "采集中"
+          },
+          {
+            "at": "2026-10-08T09:06:03.187Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：190445"
+          },
+          {
+            "at": "2026-10-08T09:06:04.196Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：383004"
+          },
+          {
+            "at": "2026-10-08T09:06:05.197Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：573959"
+          },
+          {
+            "at": "2026-10-08T09:06:06.188Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：767178"
+          },
+          {
+            "at": "2026-10-08T09:06:07.197Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：955799"
+          },
+          {
+            "at": "2026-10-08T09:06:08.185Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：1149237"
+          },
+          {
+            "at": "2026-10-08T09:06:09.185Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：1341087"
+          },
+          {
+            "at": "2026-10-08T09:06:10.188Z",
+            "code": "capture-state",
+            "level": "info",
+            "detail": "正在停止…"
+          },
+          {
+            "at": "2026-10-08T09:06:10.188Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：1555837"
+          },
+          {
+            "at": "2026-10-08T09:06:10.209Z",
+            "code": "capture-state",
+            "level": "info",
+            "detail": "已停止：1147440 个样本 / 8.105 s，跳拍 1562743 / USB 丢样本 0 / 读错 0 / 包缺口 0"
+          },
+          {
+            "at": "2026-10-08T09:06:10.209Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：1562743"
+          }
+        ],
+        "omitted": 0
+      }
+    },
+    "uiMaxMs": 31.799999997019768,
+    "uiP99Ms": 30.299999997019768,
+    "errors": []
+  },
+  {
+    "kind": "scope",
+    "repeat": 2,
+    "state": "closed",
+    "config": {
+      "period": 10,
+      "vars": [
+        "g_pack.f_sin",
+        "g_pack.i_tick",
+        "g_pack.i_sq1k"
+      ]
+    },
+    "seconds": 8.0125,
+    "rateHz": 85882.5510514165,
+    "samples": 698299,
+    "packets": 14478,
+    "gap": 0,
+    "decode": 0,
+    "overrun": 0,
+    "metrics": {
+      "tick": 458951847,
+      "hz": 24000000,
+      "produced": 707168,
+      "skipped": 116259,
+      "usb": 8,
+      "errors": 0,
+      "yields": 0,
+      "tx": 203784,
+      "bytes": 7506944,
+      "periodTicks": 240,
+      "flags": 129
+    },
+    "metricsError": null,
+    "invalid": 0,
+    "report": {
+      "schema": "akalink-diagnostics/v1",
+      "kind": "scope",
+      "title": "J-Scope 采集质量报告",
+      "exportedAt": "2026-10-08T09:06:18.490Z",
+      "environment": {
+        "Web版本": "2026-10-08-r2 (ARM/RV32 异常诊断；J-Scope/RTT 采集质量与 JSON/Markdown 报告；分项计数与证据边界)",
+        "浏览器": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36",
+        "页面可见": "visible",
+        "探针": "akaLinkPro CMSIS-DAP",
+        "探针固件": "0.1"
+      },
+      "settings": {
+        "状态": "已停止：698299 个样本 / 8.131 s，跳拍 116259 / USB 丢样本 8 / 读错 0 / 包缺口 0",
+        "数据": "真实采集",
+        "时段": "最近一次采集（历史）",
+        "ELF": {
+          "name": "scope.elf",
+          "source": "dwarf",
+          "versions": [
+            4
+          ],
+          "stats": {
+            "cu": 2,
+            "dies": 158,
+            "vars": 36
+          },
+          "note": ""
+        },
+        "请求周期_us": 10,
+        "请求时长_s": 10,
+        "探针": "akaLinkPro CMSIS-DAP",
+        "探针固件": "0.1",
+        "请求时钟_kHz": 60000,
+        "通道": "g_pack.f_sin:f32@0x24001014, g_pack.i_tick:i32@0x2400101c, g_pack.i_sq1k:i16@0x24001022",
+        "单字短批次": true,
+        "暂停串口桥": false,
+        "生效后端": "swd",
+        "实际周期_us": 10,
+        "生效SWD时钟_MHz": 60,
+        "探针快照时间": "2026-10-08T09:06:18.477Z",
+        "计数格式": "32 位原子快照"
+      },
+      "metrics": [
+        {
+          "name": "网页保留样本",
+          "value": 698299,
+          "unit": "样本",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "实测平均采样率",
+          "value": 85882.5510514165,
+          "unit": "Hz",
+          "source": "探针时间戳",
+          "note": "不是 USB 到达速率；段内时间由锚点插值"
+        },
+        {
+          "name": "探针采得样本",
+          "value": 707168,
+          "unit": "样本",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "探针跳拍",
+          "value": 116259,
+          "unit": "采样时刻",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "跳拍率",
+          "value": null,
+          "unit": "%",
+          "source": "探针",
+          "note": "仅无 USB 丢样、无读错时：skipped / (produced + skipped)；回卷后无效"
+        },
+        {
+          "name": "USB 包缓冲丢样",
+          "value": 8,
+          "unit": "样本",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "目标读取失败",
+          "value": 0,
+          "unit": "次",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "给调试让路",
+          "value": 0,
+          "unit": "次",
+          "source": "探针",
+          "note": "让路不等于丢样"
+        },
+        {
+          "name": "包序号缺口",
+          "value": 0,
+          "unit": "包",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "网页缓冲溢出",
+          "value": 0,
+          "unit": "样本",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "解析／顺序异常",
+          "value": 0,
+          "unit": "次",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "包解析重同步",
+          "value": 0,
+          "unit": "次",
+          "source": "网页",
+          "note": ""
+        }
+      ],
+      "findings": [
+        {
+          "confidence": "已确认",
+          "text": "探针未赶上部分计划采样时刻。",
+          "evidence": "116259 个跳过的采样时刻"
+        },
+        {
+          "confidence": "已确认",
+          "text": "探针 USB 包缓冲不足或提交失败，部分样本未送出。",
+          "evidence": "8 个样本"
+        },
+        {
+          "confidence": "可能原因",
+          "text": "主机排空速度或 USB 调度跟不上；需结合序号缺口和网页状态继续定位。",
+          "evidence": ""
+        }
+      ],
+      "notes": [
+        "这些计数分属不同阶段，不能相加作为总丢样数，也不能由零值推导零误码率。",
+        "值恒定可能来自程序状态、地址／ELF 不匹配或缓存等；本面板不凭平直波形判定缓存问题。",
+        "记录统计受触发、采集窗口与计数器回卷影响；32 位计数回卷时跳拍率不适用。USB 到达抖动不等于目标采样抖动。"
+      ],
+      "history": {
+        "startedAt": "2026-10-08T09:06:10.215Z",
+        "events": [
+          {
+            "at": "2026-10-08T09:06:10.694Z",
+            "code": "capture-state",
+            "level": "info",
+            "detail": "采集中"
+          },
+          {
+            "at": "2026-10-08T09:06:11.692Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：14065"
+          },
+          {
+            "at": "2026-10-08T09:06:12.698Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：28248"
+          },
+          {
+            "at": "2026-10-08T09:06:13.689Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：42367"
+          },
+          {
+            "at": "2026-10-08T09:06:14.689Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：56440"
+          },
+          {
+            "at": "2026-10-08T09:06:15.687Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：70503"
+          },
+          {
+            "at": "2026-10-08T09:06:16.687Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：84648"
+          },
+          {
+            "at": "2026-10-08T09:06:17.686Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：98803"
+          },
+          {
+            "at": "2026-10-08T09:06:18.489Z",
+            "code": "capture-state",
+            "level": "info",
+            "detail": "已停止：698299 个样本 / 8.131 s，跳拍 116259 / USB 丢样本 8 / 读错 0 / 包缺口 0"
+          },
+          {
+            "at": "2026-10-08T09:06:18.489Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：116259"
+          },
+          {
+            "at": "2026-10-08T09:06:18.489Z",
+            "code": "usb",
+            "level": "warn",
+            "detail": "USB 缓冲丢样（样本）：8"
+          }
+        ],
+        "omitted": 0
+      }
+    },
+    "uiMaxMs": 34.20000000298023,
+    "uiP99Ms": 30.399999991059303,
+    "errors": []
+  },
+  {
+    "kind": "scope",
+    "repeat": 2,
+    "state": "open",
+    "config": {
+      "period": 3,
+      "vars": [
+        "g_pack.u_cnt"
+      ]
+    },
+    "seconds": 8.017899999991059,
+    "rateHz": 160982.6478401097,
+    "samples": 1309680,
+    "packets": 5544,
+    "gap": 0,
+    "decode": 0,
+    "overrun": 0,
+    "metrics": {
+      "tick": 673514305,
+      "hz": 24000000,
+      "produced": 1315802,
+      "skipped": 1408986,
+      "usb": 0,
+      "errors": 0,
+      "yields": 0,
+      "tx": 209360,
+      "bytes": 2851840,
+      "periodTicks": 72,
+      "flags": 129
+    },
+    "metricsError": null,
+    "invalid": 0,
+    "report": {
+      "schema": "akalink-diagnostics/v1",
+      "kind": "scope",
+      "title": "J-Scope 采集质量报告",
+      "exportedAt": "2026-10-08T09:06:27.418Z",
+      "environment": {
+        "Web版本": "2026-10-08-r2 (ARM/RV32 异常诊断；J-Scope/RTT 采集质量与 JSON/Markdown 报告；分项计数与证据边界)",
+        "浏览器": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36",
+        "页面可见": "visible",
+        "探针": "akaLinkPro CMSIS-DAP",
+        "探针固件": "0.1"
+      },
+      "settings": {
+        "状态": "已停止：1309680 个样本 / 8.136 s，跳拍 1408986 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+        "数据": "真实采集",
+        "时段": "最近一次采集（历史）",
+        "ELF": {
+          "name": "scope.elf",
+          "source": "dwarf",
+          "versions": [
+            4
+          ],
+          "stats": {
+            "cu": 2,
+            "dies": 158,
+            "vars": 36
+          },
+          "note": ""
+        },
+        "请求周期_us": 3,
+        "请求时长_s": 10,
+        "探针": "akaLinkPro CMSIS-DAP",
+        "探针固件": "0.1",
+        "请求时钟_kHz": 60000,
+        "通道": "g_pack.u_cnt:u8@0x24001024",
+        "单字短批次": true,
+        "暂停串口桥": false,
+        "生效后端": "swd",
+        "实际周期_us": 3,
+        "生效SWD时钟_MHz": 60,
+        "探针快照时间": "2026-10-08T09:06:27.418Z",
+        "计数格式": "32 位原子快照"
+      },
+      "metrics": [
+        {
+          "name": "网页保留样本",
+          "value": 1309680,
+          "unit": "样本",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "实测平均采样率",
+          "value": 160982.6478401097,
+          "unit": "Hz",
+          "source": "探针时间戳",
+          "note": "不是 USB 到达速率；段内时间由锚点插值"
+        },
+        {
+          "name": "探针采得样本",
+          "value": 1315802,
+          "unit": "样本",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "探针跳拍",
+          "value": 1408986,
+          "unit": "采样时刻",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "跳拍率",
+          "value": 51.7099,
+          "unit": "%",
+          "source": "探针",
+          "note": "仅无 USB 丢样、无读错时：skipped / (produced + skipped)；回卷后无效"
+        },
+        {
+          "name": "USB 包缓冲丢样",
+          "value": 0,
+          "unit": "样本",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "目标读取失败",
+          "value": 0,
+          "unit": "次",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "给调试让路",
+          "value": 0,
+          "unit": "次",
+          "source": "探针",
+          "note": "让路不等于丢样"
+        },
+        {
+          "name": "包序号缺口",
+          "value": 0,
+          "unit": "包",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "网页缓冲溢出",
+          "value": 0,
+          "unit": "样本",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "解析／顺序异常",
+          "value": 0,
+          "unit": "次",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "包解析重同步",
+          "value": 0,
+          "unit": "次",
+          "source": "网页",
+          "note": ""
+        }
+      ],
+      "findings": [
+        {
+          "confidence": "已确认",
+          "text": "探针未赶上部分计划采样时刻。",
+          "evidence": "1408986 个跳过的采样时刻"
+        }
+      ],
+      "notes": [
+        "这些计数分属不同阶段，不能相加作为总丢样数，也不能由零值推导零误码率。",
+        "值恒定可能来自程序状态、地址／ELF 不匹配或缓存等；本面板不凭平直波形判定缓存问题。",
+        "记录统计受触发、采集窗口与计数器回卷影响；32 位计数回卷时跳拍率不适用。USB 到达抖动不等于目标采样抖动。"
+      ],
+      "history": {
+        "startedAt": "2026-10-08T09:06:19.207Z",
+        "events": [
+          {
+            "at": "2026-10-08T09:06:19.381Z",
+            "code": "capture-state",
+            "level": "info",
+            "detail": "采集中"
+          },
+          {
+            "at": "2026-10-08T09:06:20.343Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：172131"
+          },
+          {
+            "at": "2026-10-08T09:06:21.365Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：347267"
+          },
+          {
+            "at": "2026-10-08T09:06:22.367Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：516815"
+          },
+          {
+            "at": "2026-10-08T09:06:23.359Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：690569"
+          },
+          {
+            "at": "2026-10-08T09:06:24.347Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：862132"
+          },
+          {
+            "at": "2026-10-08T09:06:25.341Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：1034535"
+          },
+          {
+            "at": "2026-10-08T09:06:26.340Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：1206853"
+          },
+          {
+            "at": "2026-10-08T09:06:27.340Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：1378668"
+          },
+          {
+            "at": "2026-10-08T09:06:27.418Z",
+            "code": "capture-state",
+            "level": "info",
+            "detail": "已停止：1309680 个样本 / 8.136 s，跳拍 1408986 / USB 丢样本 0 / 读错 0 / 包缺口 0"
+          },
+          {
+            "at": "2026-10-08T09:06:27.418Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：1408986"
+          }
+        ],
+        "omitted": 0
+      }
+    },
+    "uiMaxMs": 38.29999999701977,
+    "uiP99Ms": 33,
+    "errors": []
+  },
+  {
+    "kind": "scope",
+    "repeat": 2,
+    "state": "open",
+    "config": {
+      "period": 10,
+      "vars": [
+        "g_pack.f_sin",
+        "g_pack.i_tick",
+        "g_pack.i_sq1k"
+      ]
+    },
+    "seconds": 8.01520000000298,
+    "rateHz": 85873.88010411165,
+    "samples": 700651,
+    "packets": 14526,
+    "gap": 0,
+    "decode": 0,
+    "overrun": 0,
+    "metrics": {
+      "tick": 872716548,
+      "hz": 24000000,
+      "produced": 709515,
+      "skipped": 116722,
+      "usb": 0,
+      "errors": 0,
+      "yields": 0,
+      "tx": 224064,
+      "bytes": 7531008,
+      "periodTicks": 240,
+      "flags": 129
+    },
+    "metricsError": null,
+    "invalid": 0,
+    "report": {
+      "schema": "akalink-diagnostics/v1",
+      "kind": "scope",
+      "title": "J-Scope 采集质量报告",
+      "exportedAt": "2026-10-08T09:06:35.728Z",
+      "environment": {
+        "Web版本": "2026-10-08-r2 (ARM/RV32 异常诊断；J-Scope/RTT 采集质量与 JSON/Markdown 报告；分项计数与证据边界)",
+        "浏览器": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36",
+        "页面可见": "visible",
+        "探针": "akaLinkPro CMSIS-DAP",
+        "探针固件": "0.1"
+      },
+      "settings": {
+        "状态": "已停止：700651 个样本 / 8.159 s，跳拍 116722 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+        "数据": "真实采集",
+        "时段": "最近一次采集（历史）",
+        "ELF": {
+          "name": "scope.elf",
+          "source": "dwarf",
+          "versions": [
+            4
+          ],
+          "stats": {
+            "cu": 2,
+            "dies": 158,
+            "vars": 36
+          },
+          "note": ""
+        },
+        "请求周期_us": 10,
+        "请求时长_s": 10,
+        "探针": "akaLinkPro CMSIS-DAP",
+        "探针固件": "0.1",
+        "请求时钟_kHz": 60000,
+        "通道": "g_pack.f_sin:f32@0x24001014, g_pack.i_tick:i32@0x2400101c, g_pack.i_sq1k:i16@0x24001022",
+        "单字短批次": true,
+        "暂停串口桥": false,
+        "生效后端": "swd",
+        "实际周期_us": 10,
+        "生效SWD时钟_MHz": 60,
+        "探针快照时间": "2026-10-08T09:06:35.718Z",
+        "计数格式": "32 位原子快照"
+      },
+      "metrics": [
+        {
+          "name": "网页保留样本",
+          "value": 700651,
+          "unit": "样本",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "实测平均采样率",
+          "value": 85873.88010411165,
+          "unit": "Hz",
+          "source": "探针时间戳",
+          "note": "不是 USB 到达速率；段内时间由锚点插值"
+        },
+        {
+          "name": "探针采得样本",
+          "value": 709515,
+          "unit": "样本",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "探针跳拍",
+          "value": 116722,
+          "unit": "采样时刻",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "跳拍率",
+          "value": 14.1269,
+          "unit": "%",
+          "source": "探针",
+          "note": "仅无 USB 丢样、无读错时：skipped / (produced + skipped)；回卷后无效"
+        },
+        {
+          "name": "USB 包缓冲丢样",
+          "value": 0,
+          "unit": "样本",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "目标读取失败",
+          "value": 0,
+          "unit": "次",
+          "source": "探针",
+          "note": ""
+        },
+        {
+          "name": "给调试让路",
+          "value": 0,
+          "unit": "次",
+          "source": "探针",
+          "note": "让路不等于丢样"
+        },
+        {
+          "name": "包序号缺口",
+          "value": 0,
+          "unit": "包",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "网页缓冲溢出",
+          "value": 0,
+          "unit": "样本",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "解析／顺序异常",
+          "value": 0,
+          "unit": "次",
+          "source": "网页",
+          "note": ""
+        },
+        {
+          "name": "包解析重同步",
+          "value": 0,
+          "unit": "次",
+          "source": "网页",
+          "note": ""
+        }
+      ],
+      "findings": [
+        {
+          "confidence": "已确认",
+          "text": "探针未赶上部分计划采样时刻。",
+          "evidence": "116722 个跳过的采样时刻"
+        }
+      ],
+      "notes": [
+        "这些计数分属不同阶段，不能相加作为总丢样数，也不能由零值推导零误码率。",
+        "值恒定可能来自程序状态、地址／ELF 不匹配或缓存等；本面板不凭平直波形判定缓存问题。",
+        "记录统计受触发、采集窗口与计数器回卷影响；32 位计数回卷时跳拍率不适用。USB 到达抖动不等于目标采样抖动。"
+      ],
+      "history": {
+        "startedAt": "2026-10-08T09:06:27.425Z",
+        "events": [
+          {
+            "at": "2026-10-08T09:06:27.849Z",
+            "code": "capture-state",
+            "level": "info",
+            "detail": "采集中"
+          },
+          {
+            "at": "2026-10-08T09:06:28.867Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：14192"
+          },
+          {
+            "at": "2026-10-08T09:06:29.846Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：28276"
+          },
+          {
+            "at": "2026-10-08T09:06:30.851Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：42360"
+          },
+          {
+            "at": "2026-10-08T09:06:31.847Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：56612"
+          },
+          {
+            "at": "2026-10-08T09:06:32.845Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：70563"
+          },
+          {
+            "at": "2026-10-08T09:06:33.844Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：84664"
+          },
+          {
+            "at": "2026-10-08T09:06:34.844Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：98747"
+          },
+          {
+            "at": "2026-10-08T09:06:35.728Z",
+            "code": "capture-state",
+            "level": "info",
+            "detail": "已停止：700651 个样本 / 8.159 s，跳拍 116722 / USB 丢样本 0 / 读错 0 / 包缺口 0"
+          },
+          {
+            "at": "2026-10-08T09:06:35.728Z",
+            "code": "skipped",
+            "level": "warn",
+            "detail": "探针跳拍（采样时刻）：116722"
+          }
+        ],
+        "omitted": 0
+      }
+    },
+    "uiMaxMs": 38.400000005960464,
+    "uiP99Ms": 33.599999994039536,
+    "errors": []
+  }
+]

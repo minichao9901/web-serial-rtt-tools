@@ -1233,10 +1233,19 @@ export class WebUsbDapProbe {
    */
   async run(){
     await this._clearMaskintsIfSet();        // 单步残留会让中断再也进不来（见该函数说明）
+    // H743: vector catch can halt again before the first USB status read.
+    // A second resume would silently skip that exception (or an immediate BP).
+    // Compare stop reasons; S_RETIRE_ST also proves execution when the same
+    // sticky BKPT reason was already present, e.g. consecutive flash calls.
+    const beforeDfsr = await this._readWord(0xE000ED30);
     for (let i = 0; i < 3; i++){
       await this._dhcsr(0xA05F0001);                       // C_DEBUGEN=1, C_HALT=0
       const v = await this._readWord(0xE000EDF0);
       if (((v >>> 1) & 1) === 0) return;                   // C_HALT=0：确实在跑
+      if (v & (1 << 17)) {
+        const dfsr = await this._readWord(0xE000ED30);
+        if ((dfsr & 0x0e) && ((dfsr & ~beforeDfsr & 0x0e) || (v & (1 << 24)))) return;
+      }
       await waitMs(10);                                    // 真实 10 ms（后台节流会把 sleep(10) 钳成 1 s）
     }
     console.warn('[dap] 让目标运行的回读一直显示 C_HALT=1（可能是读滞后）——继续，不中断流程');

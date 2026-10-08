@@ -1,0 +1,80 @@
+[
+  {
+    "kind": "dbg",
+    "repeat": 0,
+    "state": "baseline",
+    "cycles": 60,
+    "cycleMs": 180.39166666741173,
+    "maxCycleMs": 238.09999999403954,
+    "faultSnapshot": false,
+    "heals": 0,
+    "recoveries": 0,
+    "uiMaxMs": 136.5,
+    "errors": []
+  },
+  {
+    "kind": "dbg",
+    "repeat": 0,
+    "state": "closed",
+    "cycles": 60,
+    "cycleMs": 174.07833333412808,
+    "maxCycleMs": 227.40000000596046,
+    "faultSnapshot": false,
+    "heals": 0,
+    "recoveries": 0,
+    "uiMaxMs": 111.20000000298023,
+    "errors": []
+  },
+  {
+    "kind": "dbg",
+    "repeat": 1,
+    "state": "closed",
+    "cycles": 60,
+    "cycleMs": 172.24333333199223,
+    "maxCycleMs": 245.70000000298023,
+    "faultSnapshot": false,
+    "heals": 0,
+    "recoveries": 0,
+    "uiMaxMs": 58.1000000089407,
+    "errors": []
+  },
+  {
+    "kind": "dbg",
+    "repeat": 1,
+    "state": "baseline",
+    "cycles": 60,
+    "cycleMs": 164.22166666661698,
+    "maxCycleMs": 196.1000000089407,
+    "faultSnapshot": false,
+    "heals": 0,
+    "recoveries": 0,
+    "uiMaxMs": 93,
+    "errors": []
+  },
+  {
+    "kind": "dbg",
+    "repeat": 2,
+    "state": "baseline",
+    "cycles": 60,
+    "cycleMs": 165.89333333199224,
+    "maxCycleMs": 195,
+    "faultSnapshot": false,
+    "heals": 0,
+    "recoveries": 0,
+    "uiMaxMs": 93.20000000298023,
+    "errors": []
+  },
+  {
+    "kind": "dbg",
+    "repeat": 2,
+    "state": "closed",
+    "cycles": 60,
+    "cycleMs": 167.31166666497788,
+    "maxCycleMs": 200.70000000298023,
+    "faultSnapshot": false,
+    "heals": 0,
+    "recoveries": 0,
+    "uiMaxMs": 86.3999999910593,
+    "errors": []
+  }
+]

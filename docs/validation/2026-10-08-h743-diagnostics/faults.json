@@ -1,0 +1,5680 @@
+[
+  {
+    "case": {
+      "mode": 1,
+      "name": "UDF / MSP",
+      "flag": 16,
+      "label": "fault_udf_pc",
+      "stack": "MSP"
+    },
+    "baseline": {
+      "demcr": 16777216,
+      "heal": 0,
+      "recoveries": 0,
+      "heartbeat": 267059,
+      "clock": 10000000
+    },
+    "report": {
+      "schema": "akalink-diagnostics/v1",
+      "kind": "fault",
+      "title": "异常诊断报告",
+      "exportedAt": "2026-10-08T09:31:55.207Z",
+      "environment": {
+        "Web版本": "2026-10-08-r3 (H743 异常诊断真机验收；保留即时异常停点；修正浮点保存帧与异常调用链；SWD 降档诊断)",
+        "ELF": "stm32h743_fault.elf",
+        "后端": "WebUSB",
+        "数据": "真实目标",
+        "浏览器": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36"
+      },
+      "settings": {
+        "架构": "arm",
+        "现场时间": "2026-10-08T09:31:55.050Z",
+        "时段": "当前停止现场",
+        "恢复栈": "MSP",
+        "帧类型": "基本帧",
+        "帧校验": "已验证",
+        "完整性": "已完成有限读取",
+        "本页启用HardFault捕获": true,
+        "展开停止原因": "到达栈末端"
+      },
+      "metrics": [
+        {
+          "name": "停止 PC",
+          "value": "0x08000058",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "CPUID",
+          "value": "0x411fc271",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "ICSR",
+          "value": "0x00000803",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "VTOR",
+          "value": "0x08000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "SHCSR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "CFSR",
+          "value": "0x00010000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "HFSR",
+          "value": "0x40000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "DFSR",
+          "value": "0x00000008",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "MMFAR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": "MMARVALID 未置位，不能作为故障地址"
+        },
+        {
+          "name": "BFAR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": "BFARVALID 未置位，不能作为故障地址"
+        },
+        {
+          "name": "AFSR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "ABFSR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "LR",
+          "value": "0xfffffff9",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "XPSR",
+          "value": "0x01000003",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": "IPSR=3"
+        },
+        {
+          "name": "SP",
+          "value": "0x2407ffb0",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "MSP",
+          "value": "0x2407ffb0",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "PSP",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "异常保存 PC",
+          "value": "0x08000080",
+          "unit": "",
+          "source": "硬件保存帧",
+          "note": "已校验；非精确错误不保证为致错指令"
+        }
+      ],
+      "findings": [
+        {
+          "confidence": "已确认",
+          "text": "UNDEFINSTR：未定义指令",
+          "evidence": "CFSR bit 16"
+        },
+        {
+          "confidence": "已确认",
+          "text": "FORCED：可配置异常升级为 HardFault。",
+          "evidence": "HFSR bit 30"
+        },
+        {
+          "confidence": "证据不足",
+          "text": "故障标志具有粘性，可能来自更早的异常；本次读取没有清除它们。",
+          "evidence": ""
+        },
+        {
+          "confidence": "已确认",
+          "text": "恢复异常硬件帧，保存 PC=0x08000080。",
+          "evidence": "保存 PC 是被打断的执行位置；非精确错误不能据此定位致错指令"
+        }
+      ],
+      "snapshot": {
+        "arch": "arm",
+        "at": "2026-10-08T09:31:55.050Z",
+        "pc": 134217816,
+        "raw": {
+          "CPUID": 1092600433,
+          "ICSR": 2051,
+          "VTOR": 134217728,
+          "SHCSR": 0,
+          "CFSR": 65536,
+          "HFSR": 1073741824,
+          "DFSR": 8,
+          "MMFAR": 0,
+          "BFAR": 0,
+          "AFSR": 0,
+          "ABFSR": 0,
+          "core": {
+            "PC": 134217816,
+            "LR": 4294967289,
+            "XPSR": 16777219,
+            "SP": 604503984,
+            "MSP": 604503984,
+            "PSP": 0
+          }
+        },
+        "frame": {
+          "pc": 134217856,
+          "sp": 604504020,
+          "regs": [
+            42,
+            603979876,
+            603979888,
+            603979884,
+            1,
+            0,
+            0,
+            604504020,
+            0,
+            0,
+            0,
+            0,
+            0,
+            604504020,
+            134217949,
+            134217856
+          ],
+          "known": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "kind": "exception",
+          "loc": {
+            "addr": 134217856,
+            "end": 134217858,
+            "line": 32,
+            "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+            "isStmt": true,
+            "prologueEnd": false,
+            "seqEnd": false,
+            "seq": 3,
+            "idx": 12
+          },
+          "name": "fault_udf",
+          "base": 604503984,
+          "stack": "MSP",
+          "extended": false,
+          "aligned": true,
+          "xpsr": 16777728,
+          "validated": true
+        },
+        "frames": [
+          {
+            "pc": 134217856,
+            "sp": 604504020,
+            "kind": "current",
+            "lookup": 134217856,
+            "name": "fault_udf+0x4",
+            "loc": {
+              "addr": 134217856,
+              "end": 134217858,
+              "line": 32,
+              "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 3,
+              "idx": 12
+            },
+            "regs": [
+              42,
+              603979876,
+              603979888,
+              603979884,
+              1,
+              0,
+              0,
+              604504020,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504020,
+              134217949,
+              134217856
+            ],
+            "known": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "cfa": 604504024
+          },
+          {
+            "pc": 134217948,
+            "sp": 604504024,
+            "kind": "cfi",
+            "lookup": 134217946,
+            "name": "fault_mid+0x16",
+            "loc": {
+              "addr": 134217944,
+              "end": 134217948,
+              "line": 49,
+              "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+              "isStmt": false,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 7,
+              "idx": 31
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              604504024,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504024,
+              134217949,
+              134217949
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 604504040
+          },
+          {
+            "pc": 134217992,
+            "sp": 604504040,
+            "kind": "cfi",
+            "lookup": 134217990,
+            "name": "fault_outer+0x6",
+            "loc": {
+              "addr": 134217988,
+              "end": 134217992,
+              "line": 53,
+              "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 8,
+              "idx": 45
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              603979884,
+              0,
+              0,
+              0,
+              604504040,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504040,
+              134217993,
+              134217993
+            ],
+            "known": [
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              3,
+              4,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 604504048
+          },
+          {
+            "pc": 134218198,
+            "sp": 604504048,
+            "kind": "cfi",
+            "lookup": 134218196,
+            "name": "main+0x90",
+            "loc": {
+              "addr": 134218194,
+              "end": 134218198,
+              "line": 74,
+              "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 9,
+              "idx": 71
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504048,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504048,
+              134218199,
+              134218199
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 604504056
+          },
+          {
+            "pc": 134218312,
+            "sp": 604504056,
+            "kind": "cfi",
+            "lookup": 134218310,
+            "name": "Reset_Handler+0x56",
+            "loc": {
+              "addr": 134218308,
+              "end": 134218312,
+              "line": 21,
+              "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 10,
+              "idx": 88
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504056,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504056,
+              134218313,
+              134218313
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 604504064
+          }
+        ],
+        "findings": [
+          {
+            "confidence": "已确认",
+            "text": "UNDEFINSTR：未定义指令",
+            "evidence": "CFSR bit 16"
+          },
+          {
+            "confidence": "已确认",
+            "text": "FORCED：可配置异常升级为 HardFault。",
+            "evidence": "HFSR bit 30"
+          },
+          {
+            "confidence": "证据不足",
+            "text": "故障标志具有粘性，可能来自更早的异常；本次读取没有清除它们。",
+            "evidence": ""
+          },
+          {
+            "confidence": "已确认",
+            "text": "恢复异常硬件帧，保存 PC=0x08000080。",
+            "evidence": "保存 PC 是被打断的执行位置；非精确错误不能据此定位致错指令"
+          }
+        ],
+        "error": null,
+        "observedHalted": true,
+        "unwindReason": "到达栈末端",
+        "reads": 41,
+        "catchConfigured": true
+      },
+      "notes": [
+        "支持 Cortex-M3/M4/M7；无效 BFAR/MMFAR、堆栈失败与非精确错误均不输出虚假的准确位置。",
+        "只读诊断不主动暂停、继续、复位目标或清除异常寄存器。读取失败立即停止，保留已取得的证据。",
+        "ELF 必须与板上固件一致。完整调用链取决于有效栈与 CFI/EHABI 展开信息，未保存的 r4–r11 不会从处理器当前值伪造。"
+      ],
+      "history": {
+        "startedAt": "2026-10-08T09:31:53.916Z",
+        "events": [
+          {
+            "at": "2026-10-08T09:31:54.752Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T09:31:55.170Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          }
+        ],
+        "omitted": 0
+      }
+    },
+    "tab": "fault",
+    "halted": true,
+    "pc": 134217816,
+    "expected": 134217856,
+    "heal": 0,
+    "recoveries": 0,
+    "errors": [],
+    "log": "调试器就绪。连上目标后按 h 看命令，Tab 补全、↑↓ 翻历史、Ctrl+C 中断。已载入符号：stm32h743_fault.elf —— 185 个符号（函数 78 · 数据 9），其中 4 个带类型变量（DWARF），行号表 90 条　行号表：1 段 · 90 条记录 · 8 个源文件（DWARF 4）源码目录建议：推荐选 E:/Share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 E:/Share（8，目录更大）源码目录建议：推荐选 E:/Share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 E:/Share（8，目录更大）──── 连接（WebUSB · 10000 kHz）────关掉 1 个残留的探针句柄已连接：akaLinkPro CMSIS-DAP · 512B/包 · SWD 10000kHz　SWD 10000 kHz　IDCODE=0x6BA02477硬件断点：8 个比较器（FPB rev2，CTRL=0x10000081）目标正在运行源码：源码目录「（已选文件夹）」：1 个文件源码目录建议：已选「（已选文件夹）」能解析 1/8 · 推荐选 E:/Share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 E:/Share（8，目录更大）> halt已暂停　状态：已停止（halted）　PC=0x080001bc main+0x78> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x080001bc main+0x78⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)",
+    "readOnly": true,
+    "demcr": 16778240,
+    "sourceShown": true
+  },
+  {
+    "case": {
+      "mode": 2,
+      "name": "divide by zero",
+      "flag": 25,
+      "label": "fault_div_pc",
+      "stack": "MSP"
+    },
+    "baseline": {
+      "demcr": 16777216,
+      "heal": 0,
+      "recoveries": 0,
+      "heartbeat": 265788,
+      "clock": 10000000
+    },
+    "report": {
+      "schema": "akalink-diagnostics/v1",
+      "kind": "fault",
+      "title": "异常诊断报告",
+      "exportedAt": "2026-10-08T09:31:56.281Z",
+      "environment": {
+        "Web版本": "2026-10-08-r3 (H743 异常诊断真机验收；保留即时异常停点；修正浮点保存帧与异常调用链；SWD 降档诊断)",
+        "ELF": "stm32h743_fault.elf",
+        "后端": "WebUSB",
+        "数据": "真实目标",
+        "浏览器": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36"
+      },
+      "settings": {
+        "架构": "arm",
+        "现场时间": "2026-10-08T09:31:56.110Z",
+        "时段": "当前停止现场",
+        "恢复栈": "MSP",
+        "帧类型": "基本帧",
+        "帧校验": "已验证",
+        "完整性": "已完成有限读取",
+        "本页启用HardFault捕获": true,
+        "展开停止原因": "到达栈末端"
+      },
+      "metrics": [
+        {
+          "name": "停止 PC",
+          "value": "0x08000058",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "CPUID",
+          "value": "0x411fc271",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "ICSR",
+          "value": "0x00000803",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "VTOR",
+          "value": "0x08000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "SHCSR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "CFSR",
+          "value": "0x02000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "HFSR",
+          "value": "0x40000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "DFSR",
+          "value": "0x00000008",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "MMFAR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": "MMARVALID 未置位，不能作为故障地址"
+        },
+        {
+          "name": "BFAR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": "BFARVALID 未置位，不能作为故障地址"
+        },
+        {
+          "name": "AFSR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "ABFSR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "LR",
+          "value": "0xfffffff9",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "XPSR",
+          "value": "0x61000003",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": "IPSR=3"
+        },
+        {
+          "name": "SP",
+          "value": "0x2407ffb0",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "MSP",
+          "value": "0x2407ffb0",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "PSP",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "异常保存 PC",
+          "value": "0x08000092",
+          "unit": "",
+          "source": "硬件保存帧",
+          "note": "已校验；非精确错误不保证为致错指令"
+        }
+      ],
+      "findings": [
+        {
+          "confidence": "已确认",
+          "text": "DIVBYZERO：除零",
+          "evidence": "CFSR bit 25"
+        },
+        {
+          "confidence": "已确认",
+          "text": "FORCED：可配置异常升级为 HardFault。",
+          "evidence": "HFSR bit 30"
+        },
+        {
+          "confidence": "证据不足",
+          "text": "故障标志具有粘性，可能来自更早的异常；本次读取没有清除它们。",
+          "evidence": ""
+        },
+        {
+          "confidence": "已确认",
+          "text": "恢复异常硬件帧，保存 PC=0x08000092。",
+          "evidence": "保存 PC 是被打断的执行位置；非精确错误不能据此定位致错指令"
+        }
+      ],
+      "snapshot": {
+        "arch": "arm",
+        "at": "2026-10-08T09:31:56.110Z",
+        "pc": 134217816,
+        "raw": {
+          "CPUID": 1092600433,
+          "ICSR": 2051,
+          "VTOR": 134217728,
+          "SHCSR": 0,
+          "CFSR": 33554432,
+          "HFSR": 1073741824,
+          "DFSR": 8,
+          "MMFAR": 0,
+          "BFAR": 0,
+          "AFSR": 0,
+          "ABFSR": 0,
+          "core": {
+            "PC": 134217816,
+            "LR": 4294967289,
+            "XPSR": 1627389955,
+            "SP": 604503984,
+            "MSP": 604503984,
+            "PSP": 0
+          }
+        },
+        "frame": {
+          "pc": 134217874,
+          "sp": 604504020,
+          "regs": [
+            42,
+            603979876,
+            3758153728,
+            0,
+            2,
+            0,
+            0,
+            604504020,
+            0,
+            0,
+            0,
+            0,
+            0,
+            604504020,
+            134217963,
+            134217874
+          ],
+          "known": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "kind": "exception",
+          "loc": {
+            "addr": 134217872,
+            "end": 134217878,
+            "line": 36,
+            "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+            "isStmt": true,
+            "prologueEnd": false,
+            "seqEnd": false,
+            "seq": 4,
+            "idx": 16
+          },
+          "name": "fault_div",
+          "base": 604503984,
+          "stack": "MSP",
+          "extended": false,
+          "aligned": true,
+          "xpsr": 1627390464,
+          "validated": true
+        },
+        "frames": [
+          {
+            "pc": 134217874,
+            "sp": 604504020,
+            "kind": "current",
+            "lookup": 134217874,
+            "name": "fault_div+0x6",
+            "loc": {
+              "addr": 134217872,
+              "end": 134217878,
+              "line": 36,
+              "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 4,
+              "idx": 16
+            },
+            "regs": [
+              42,
+              603979876,
+              3758153728,
+              0,
+              2,
+              0,
+              0,
+              604504020,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504020,
+              134217963,
+              134217874
+            ],
+            "known": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "cfa": 604504024
+          },
+          {
+            "pc": 134217962,
+            "sp": 604504024,
+            "kind": "cfi",
+            "lookup": 134217960,
+            "name": "fault_mid+0x24",
+            "loc": {
+              "addr": 134217958,
+              "end": 134217962,
+              "line": 48,
+              "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+              "isStmt": false,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 7,
+              "idx": 36
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              2,
+              0,
+              0,
+              604504024,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504024,
+              134217963,
+              134217963
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 604504040
+          },
+          {
+            "pc": 134217992,
+            "sp": 604504040,
+            "kind": "cfi",
+            "lookup": 134217990,
+            "name": "fault_outer+0x6",
+            "loc": {
+              "addr": 134217988,
+              "end": 134217992,
+              "line": 53,
+              "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 8,
+              "idx": 45
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              262672,
+              0,
+              0,
+              0,
+              604504040,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504040,
+              134217993,
+              134217993
+            ],
+            "known": [
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              3,
+              4,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 604504048
+          },
+          {
+            "pc": 134218198,
+            "sp": 604504048,
+            "kind": "cfi",
+            "lookup": 134218196,
+            "name": "main+0x90",
+            "loc": {
+              "addr": 134218194,
+              "end": 134218198,
+              "line": 74,
+              "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 9,
+              "idx": 71
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504048,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504048,
+              134218199,
+              134218199
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 604504056
+          },
+          {
+            "pc": 134218312,
+            "sp": 604504056,
+            "kind": "cfi",
+            "lookup": 134218310,
+            "name": "Reset_Handler+0x56",
+            "loc": {
+              "addr": 134218308,
+              "end": 134218312,
+              "line": 21,
+              "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 10,
+              "idx": 88
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504056,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504056,
+              134218313,
+              134218313
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 604504064
+          }
+        ],
+        "findings": [
+          {
+            "confidence": "已确认",
+            "text": "DIVBYZERO：除零",
+            "evidence": "CFSR bit 25"
+          },
+          {
+            "confidence": "已确认",
+            "text": "FORCED：可配置异常升级为 HardFault。",
+            "evidence": "HFSR bit 30"
+          },
+          {
+            "confidence": "证据不足",
+            "text": "故障标志具有粘性，可能来自更早的异常；本次读取没有清除它们。",
+            "evidence": ""
+          },
+          {
+            "confidence": "已确认",
+            "text": "恢复异常硬件帧，保存 PC=0x08000092。",
+            "evidence": "保存 PC 是被打断的执行位置；非精确错误不能据此定位致错指令"
+          }
+        ],
+        "error": null,
+        "observedHalted": true,
+        "unwindReason": "到达栈末端",
+        "reads": 41,
+        "catchConfigured": true
+      },
+      "notes": [
+        "支持 Cortex-M3/M4/M7；无效 BFAR/MMFAR、堆栈失败与非精确错误均不输出虚假的准确位置。",
+        "只读诊断不主动暂停、继续、复位目标或清除异常寄存器。读取失败立即停止，保留已取得的证据。",
+        "ELF 必须与板上固件一致。完整调用链取决于有效栈与 CFI/EHABI 展开信息，未保存的 r4–r11 不会从处理器当前值伪造。"
+      ],
+      "history": {
+        "startedAt": "2026-10-08T09:31:53.916Z",
+        "events": [
+          {
+            "at": "2026-10-08T09:31:54.752Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T09:31:55.170Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:55.361Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:55.417Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T09:31:55.424Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T09:31:55.826Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T09:31:56.223Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          }
+        ],
+        "omitted": 0
+      }
+    },
+    "tab": "fault",
+    "halted": true,
+    "pc": 134217816,
+    "expected": 134217874,
+    "heal": 0,
+    "recoveries": 0,
+    "errors": [],
+    "log": "调试器就绪。连上目标后按 h 看命令，Tab 补全、↑↓ 翻历史、Ctrl+C 中断。已载入符号：stm32h743_fault.elf —— 185 个符号（函数 78 · 数据 9），其中 4 个带类型变量（DWARF），行号表 90 条　行号表：1 段 · 90 条记录 · 8 个源文件（DWARF 4）源码目录建议：推荐选 E:/Share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 E:/Share（8，目录更大）源码目录建议：推荐选 E:/Share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 E:/Share（8，目录更大）──── 连接（WebUSB · 10000 kHz）────关掉 1 个残留的探针句柄已连接：akaLinkPro CMSIS-DAP · 512B/包 · SWD 10000kHz　SWD 10000 kHz　IDCODE=0x6BA02477硬件断点：8 个比较器（FPB rev2，CTRL=0x10000081）目标正在运行源码：源码目录「（已选文件夹）」：1 个文件源码目录建议：已选「（已选文件夹）」能解析 1/8 · 推荐选 E:/Share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 E:/Share（8，目录更大）> halt已暂停　状态：已停止（halted）　PC=0x080001bc main+0x78> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x080001bc main+0x78⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x080001be main+0x7a> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x080001be main+0x7a⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)",
+    "readOnly": true,
+    "demcr": 16778240,
+    "sourceShown": true
+  },
+  {
+    "case": {
+      "mode": 3,
+      "name": "precise bus fault",
+      "flag": 9,
+      "label": "fault_bus_pc",
+      "stack": "MSP",
+      "address": 1610612736
+    },
+    "baseline": {
+      "demcr": 16777216,
+      "heal": 0,
+      "recoveries": 0,
+      "heartbeat": 256190,
+      "clock": 10000000
+    },
+    "report": {
+      "schema": "akalink-diagnostics/v1",
+      "kind": "fault",
+      "title": "异常诊断报告",
+      "exportedAt": "2026-10-08T09:31:57.357Z",
+      "environment": {
+        "Web版本": "2026-10-08-r3 (H743 异常诊断真机验收；保留即时异常停点；修正浮点保存帧与异常调用链；SWD 降档诊断)",
+        "ELF": "stm32h743_fault.elf",
+        "后端": "WebUSB",
+        "数据": "真实目标",
+        "浏览器": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36"
+      },
+      "settings": {
+        "架构": "arm",
+        "现场时间": "2026-10-08T09:31:57.180Z",
+        "时段": "当前停止现场",
+        "恢复栈": "MSP",
+        "帧类型": "基本帧",
+        "帧校验": "已验证",
+        "完整性": "已完成有限读取",
+        "本页启用HardFault捕获": true,
+        "展开停止原因": "到达栈末端"
+      },
+      "metrics": [
+        {
+          "name": "停止 PC",
+          "value": "0x08000058",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "CPUID",
+          "value": "0x411fc271",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "ICSR",
+          "value": "0x00000803",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "VTOR",
+          "value": "0x08000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "SHCSR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "CFSR",
+          "value": "0x00008200",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "HFSR",
+          "value": "0x40000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "DFSR",
+          "value": "0x00000008",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "MMFAR",
+          "value": "0x60000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": "MMARVALID 未置位，不能作为故障地址"
+        },
+        {
+          "name": "BFAR",
+          "value": "0x60000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "AFSR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "ABFSR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "LR",
+          "value": "0xfffffff9",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "XPSR",
+          "value": "0x21000003",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": "IPSR=3"
+        },
+        {
+          "name": "SP",
+          "value": "0x2407ffb0",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "MSP",
+          "value": "0x2407ffb0",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "PSP",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "异常保存 PC",
+          "value": "0x080000a6",
+          "unit": "",
+          "source": "硬件保存帧",
+          "note": "已校验；非精确错误不保证为致错指令"
+        }
+      ],
+      "findings": [
+        {
+          "confidence": "已确认",
+          "text": "PRECISERR：精确数据总线错误",
+          "evidence": "CFSR bit 9"
+        },
+        {
+          "confidence": "已确认",
+          "text": "FORCED：可配置异常升级为 HardFault。",
+          "evidence": "HFSR bit 30"
+        },
+        {
+          "confidence": "已确认",
+          "text": "有效 BFAR：0x60000000",
+          "evidence": "BFARVALID 已置位"
+        },
+        {
+          "confidence": "证据不足",
+          "text": "故障标志具有粘性，可能来自更早的异常；本次读取没有清除它们。",
+          "evidence": ""
+        },
+        {
+          "confidence": "已确认",
+          "text": "恢复异常硬件帧，保存 PC=0x080000a6。",
+          "evidence": "保存 PC 是被打断的执行位置；非精确错误不能据此定位致错指令"
+        }
+      ],
+      "snapshot": {
+        "arch": "arm",
+        "at": "2026-10-08T09:31:57.180Z",
+        "pc": 134217816,
+        "raw": {
+          "CPUID": 1092600433,
+          "ICSR": 2051,
+          "VTOR": 134217728,
+          "SHCSR": 0,
+          "CFSR": 33280,
+          "HFSR": 1073741824,
+          "DFSR": 8,
+          "MMFAR": 1610612736,
+          "BFAR": 1610612736,
+          "AFSR": 0,
+          "ABFSR": 0,
+          "core": {
+            "PC": 134217816,
+            "LR": 4294967289,
+            "XPSR": 553648131,
+            "SP": 604503984,
+            "MSP": 604503984,
+            "PSP": 0
+          }
+        },
+        "frame": {
+          "pc": 134217894,
+          "sp": 604504020,
+          "regs": [
+            1610612736,
+            603979876,
+            603979888,
+            603979884,
+            3,
+            0,
+            0,
+            604504020,
+            0,
+            0,
+            0,
+            0,
+            0,
+            604504020,
+            134217971,
+            134217894
+          ],
+          "known": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "kind": "exception",
+          "loc": {
+            "addr": 134217894,
+            "end": 134217896,
+            "line": 40,
+            "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+            "isStmt": false,
+            "prologueEnd": false,
+            "seqEnd": false,
+            "seq": 5,
+            "idx": 20
+          },
+          "name": "fault_bus",
+          "base": 604503984,
+          "stack": "MSP",
+          "extended": false,
+          "aligned": true,
+          "xpsr": 553648640,
+          "validated": true
+        },
+        "frames": [
+          {
+            "pc": 134217894,
+            "sp": 604504020,
+            "kind": "current",
+            "lookup": 134217894,
+            "name": "fault_bus+0x8",
+            "loc": {
+              "addr": 134217894,
+              "end": 134217896,
+              "line": 40,
+              "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+              "isStmt": false,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 5,
+              "idx": 20
+            },
+            "regs": [
+              1610612736,
+              603979876,
+              603979888,
+              603979884,
+              3,
+              0,
+              0,
+              604504020,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504020,
+              134217971,
+              134217894
+            ],
+            "known": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "cfa": 604504024
+          },
+          {
+            "pc": 134217970,
+            "sp": 604504024,
+            "kind": "cfi",
+            "lookup": 134217968,
+            "name": "fault_mid+0x2c",
+            "loc": {
+              "addr": 134217966,
+              "end": 134217970,
+              "line": 48,
+              "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+              "isStmt": false,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 7,
+              "idx": 39
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              3,
+              0,
+              0,
+              604504024,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504024,
+              134217971,
+              134217971
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 604504040
+          },
+          {
+            "pc": 134217992,
+            "sp": 604504040,
+            "kind": "cfi",
+            "lookup": 134217990,
+            "name": "fault_outer+0x6",
+            "loc": {
+              "addr": 134217988,
+              "end": 134217992,
+              "line": 53,
+              "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 8,
+              "idx": 45
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              603979884,
+              0,
+              0,
+              0,
+              604504040,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504040,
+              134217993,
+              134217993
+            ],
+            "known": [
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              3,
+              4,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 604504048
+          },
+          {
+            "pc": 134218198,
+            "sp": 604504048,
+            "kind": "cfi",
+            "lookup": 134218196,
+            "name": "main+0x90",
+            "loc": {
+              "addr": 134218194,
+              "end": 134218198,
+              "line": 74,
+              "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 9,
+              "idx": 71
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504048,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504048,
+              134218199,
+              134218199
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 604504056
+          },
+          {
+            "pc": 134218312,
+            "sp": 604504056,
+            "kind": "cfi",
+            "lookup": 134218310,
+            "name": "Reset_Handler+0x56",
+            "loc": {
+              "addr": 134218308,
+              "end": 134218312,
+              "line": 21,
+              "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 10,
+              "idx": 88
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504056,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504056,
+              134218313,
+              134218313
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 604504064
+          }
+        ],
+        "findings": [
+          {
+            "confidence": "已确认",
+            "text": "PRECISERR：精确数据总线错误",
+            "evidence": "CFSR bit 9"
+          },
+          {
+            "confidence": "已确认",
+            "text": "FORCED：可配置异常升级为 HardFault。",
+            "evidence": "HFSR bit 30"
+          },
+          {
+            "confidence": "已确认",
+            "text": "有效 BFAR：0x60000000",
+            "evidence": "BFARVALID 已置位"
+          },
+          {
+            "confidence": "证据不足",
+            "text": "故障标志具有粘性，可能来自更早的异常；本次读取没有清除它们。",
+            "evidence": ""
+          },
+          {
+            "confidence": "已确认",
+            "text": "恢复异常硬件帧，保存 PC=0x080000a6。",
+            "evidence": "保存 PC 是被打断的执行位置；非精确错误不能据此定位致错指令"
+          }
+        ],
+        "error": null,
+        "observedHalted": true,
+        "unwindReason": "到达栈末端",
+        "reads": 41,
+        "catchConfigured": true
+      },
+      "notes": [
+        "支持 Cortex-M3/M4/M7；无效 BFAR/MMFAR、堆栈失败与非精确错误均不输出虚假的准确位置。",
+        "只读诊断不主动暂停、继续、复位目标或清除异常寄存器。读取失败立即停止，保留已取得的证据。",
+        "ELF 必须与板上固件一致。完整调用链取决于有效栈与 CFI/EHABI 展开信息，未保存的 r4–r11 不会从处理器当前值伪造。"
+      ],
+      "history": {
+        "startedAt": "2026-10-08T09:31:53.916Z",
+        "events": [
+          {
+            "at": "2026-10-08T09:31:54.752Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T09:31:55.170Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:55.361Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:55.417Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T09:31:55.424Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T09:31:55.826Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T09:31:56.223Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:56.447Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:56.500Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T09:31:56.505Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T09:31:56.894Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T09:31:57.296Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          }
+        ],
+        "omitted": 0
+      }
+    },
+    "tab": "fault",
+    "halted": true,
+    "pc": 134217816,
+    "expected": 134217894,
+    "heal": 0,
+    "recoveries": 0,
+    "errors": [],
+    "log": "调试器就绪。连上目标后按 h 看命令，Tab 补全、↑↓ 翻历史、Ctrl+C 中断。已载入符号：stm32h743_fault.elf —— 185 个符号（函数 78 · 数据 9），其中 4 个带类型变量（DWARF），行号表 90 条　行号表：1 段 · 90 条记录 · 8 个源文件（DWARF 4）源码目录建议：推荐选 E:/Share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 E:/Share（8，目录更大）源码目录建议：推荐选 E:/Share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 E:/Share（8，目录更大）──── 连接（WebUSB · 10000 kHz）────关掉 1 个残留的探针句柄已连接：akaLinkPro CMSIS-DAP · 512B/包 · SWD 10000kHz　SWD 10000 kHz　IDCODE=0x6BA02477硬件断点：8 个比较器（FPB rev2，CTRL=0x10000081）目标正在运行源码：源码目录「（已选文件夹）」：1 个文件源码目录建议：已选「（已选文件夹）」能解析 1/8 · 推荐选 E:/Share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 E:/Share（8，目录更大）> halt已暂停　状态：已停止（halted）　PC=0x080001bc main+0x78> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x080001bc main+0x78⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x080001be main+0x7a> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x080001be main+0x7a⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x080001b4 main+0x70> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x080001b4 main+0x70⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)",
+    "readOnly": true,
+    "demcr": 16778240,
+    "sourceShown": true
+  },
+  {
+    "case": {
+      "mode": 4,
+      "name": "UDF / PSP",
+      "flag": 16,
+      "label": "fault_udf_pc",
+      "stack": "PSP"
+    },
+    "baseline": {
+      "demcr": 16777216,
+      "heal": 0,
+      "recoveries": 0,
+      "heartbeat": 258432,
+      "clock": 10000000
+    },
+    "report": {
+      "schema": "akalink-diagnostics/v1",
+      "kind": "fault",
+      "title": "异常诊断报告",
+      "exportedAt": "2026-10-08T09:31:58.448Z",
+      "environment": {
+        "Web版本": "2026-10-08-r3 (H743 异常诊断真机验收；保留即时异常停点；修正浮点保存帧与异常调用链；SWD 降档诊断)",
+        "ELF": "stm32h743_fault.elf",
+        "后端": "WebUSB",
+        "数据": "真实目标",
+        "浏览器": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36"
+      },
+      "settings": {
+        "架构": "arm",
+        "现场时间": "2026-10-08T09:31:58.274Z",
+        "时段": "当前停止现场",
+        "恢复栈": "PSP",
+        "帧类型": "基本帧",
+        "帧校验": "已验证",
+        "完整性": "已完成有限读取",
+        "本页启用HardFault捕获": true,
+        "展开停止原因": "回溯没有进展或栈形成循环"
+      },
+      "metrics": [
+        {
+          "name": "停止 PC",
+          "value": "0x08000058",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "CPUID",
+          "value": "0x411fc271",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "ICSR",
+          "value": "0x00000803",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "VTOR",
+          "value": "0x08000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "SHCSR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "CFSR",
+          "value": "0x00010000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "HFSR",
+          "value": "0x40000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "DFSR",
+          "value": "0x00000008",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "MMFAR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": "MMARVALID 未置位，不能作为故障地址"
+        },
+        {
+          "name": "BFAR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": "BFARVALID 未置位，不能作为故障地址"
+        },
+        {
+          "name": "AFSR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "ABFSR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "LR",
+          "value": "0xfffffffd",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "XPSR",
+          "value": "0x01000003",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": "IPSR=3"
+        },
+        {
+          "name": "SP",
+          "value": "0x2407fff0",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "MSP",
+          "value": "0x2407fff0",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "PSP",
+          "value": "0x24000438",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "异常保存 PC",
+          "value": "0x08000080",
+          "unit": "",
+          "source": "硬件保存帧",
+          "note": "已校验；非精确错误不保证为致错指令"
+        }
+      ],
+      "findings": [
+        {
+          "confidence": "已确认",
+          "text": "UNDEFINSTR：未定义指令",
+          "evidence": "CFSR bit 16"
+        },
+        {
+          "confidence": "已确认",
+          "text": "FORCED：可配置异常升级为 HardFault。",
+          "evidence": "HFSR bit 30"
+        },
+        {
+          "confidence": "证据不足",
+          "text": "故障标志具有粘性，可能来自更早的异常；本次读取没有清除它们。",
+          "evidence": ""
+        },
+        {
+          "confidence": "已确认",
+          "text": "恢复异常硬件帧，保存 PC=0x08000080。",
+          "evidence": "保存 PC 是被打断的执行位置；非精确错误不能据此定位致错指令"
+        }
+      ],
+      "snapshot": {
+        "arch": "arm",
+        "at": "2026-10-08T09:31:58.274Z",
+        "pc": 134217816,
+        "raw": {
+          "CPUID": 1092600433,
+          "ICSR": 2051,
+          "VTOR": 134217728,
+          "SHCSR": 0,
+          "CFSR": 65536,
+          "HFSR": 1073741824,
+          "DFSR": 8,
+          "MMFAR": 0,
+          "BFAR": 0,
+          "AFSR": 0,
+          "ABFSR": 0,
+          "core": {
+            "PC": 134217816,
+            "LR": 4294967293,
+            "XPSR": 16777219,
+            "SP": 604504048,
+            "MSP": 604504048,
+            "PSP": 603980856
+          }
+        },
+        "frame": {
+          "pc": 134217856,
+          "sp": 603980892,
+          "regs": [
+            42,
+            603980920,
+            2,
+            603979884,
+            4,
+            0,
+            0,
+            603980892,
+            0,
+            0,
+            0,
+            0,
+            0,
+            603980892,
+            134217949,
+            134217856
+          ],
+          "known": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "kind": "exception",
+          "loc": {
+            "addr": 134217856,
+            "end": 134217858,
+            "line": 32,
+            "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+            "isStmt": true,
+            "prologueEnd": false,
+            "seqEnd": false,
+            "seq": 3,
+            "idx": 12
+          },
+          "name": "fault_udf",
+          "base": 603980856,
+          "stack": "PSP",
+          "extended": false,
+          "aligned": true,
+          "xpsr": 16777728,
+          "validated": true
+        },
+        "frames": [
+          {
+            "pc": 134217856,
+            "sp": 603980892,
+            "kind": "current",
+            "lookup": 134217856,
+            "name": "fault_udf+0x4",
+            "loc": {
+              "addr": 134217856,
+              "end": 134217858,
+              "line": 32,
+              "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 3,
+              "idx": 12
+            },
+            "regs": [
+              42,
+              603980920,
+              2,
+              603979884,
+              4,
+              0,
+              0,
+              603980892,
+              0,
+              0,
+              0,
+              0,
+              0,
+              603980892,
+              134217949,
+              134217856
+            ],
+            "known": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "cfa": 603980896
+          },
+          {
+            "pc": 134217948,
+            "sp": 603980896,
+            "kind": "cfi",
+            "lookup": 134217946,
+            "name": "fault_mid+0x16",
+            "loc": {
+              "addr": 134217944,
+              "end": 134217948,
+              "line": 49,
+              "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+              "isStmt": false,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 7,
+              "idx": 31
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              4,
+              0,
+              0,
+              603980896,
+              0,
+              0,
+              0,
+              0,
+              0,
+              603980896,
+              134217949,
+              134217949
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 603980912
+          },
+          {
+            "pc": 134217992,
+            "sp": 603980912,
+            "kind": "cfi",
+            "lookup": 134217990,
+            "name": "fault_outer+0x6",
+            "loc": {
+              "addr": 134217988,
+              "end": 134217992,
+              "line": 53,
+              "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 8,
+              "idx": 45
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              603979884,
+              0,
+              0,
+              0,
+              603980912,
+              0,
+              0,
+              0,
+              0,
+              0,
+              603980912,
+              134217993,
+              134217993
+            ],
+            "known": [
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              3,
+              4,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 603980920
+          },
+          {
+            "pc": 134218022,
+            "sp": 603980920,
+            "kind": "cfi",
+            "lookup": 134218020,
+            "name": "enter_psp+0x10",
+            "loc": {
+              "addr": 134218004,
+              "end": 134218024,
+              "line": 55,
+              "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 9,
+              "idx": 49
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504048,
+              0,
+              0,
+              0,
+              0,
+              0,
+              603980920,
+              134218023,
+              134218023
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 603980920
+          }
+        ],
+        "findings": [
+          {
+            "confidence": "已确认",
+            "text": "UNDEFINSTR：未定义指令",
+            "evidence": "CFSR bit 16"
+          },
+          {
+            "confidence": "已确认",
+            "text": "FORCED：可配置异常升级为 HardFault。",
+            "evidence": "HFSR bit 30"
+          },
+          {
+            "confidence": "证据不足",
+            "text": "故障标志具有粘性，可能来自更早的异常；本次读取没有清除它们。",
+            "evidence": ""
+          },
+          {
+            "confidence": "已确认",
+            "text": "恢复异常硬件帧，保存 PC=0x08000080。",
+            "evidence": "保存 PC 是被打断的执行位置；非精确错误不能据此定位致错指令"
+          }
+        ],
+        "error": null,
+        "observedHalted": true,
+        "unwindReason": "回溯没有进展或栈形成循环",
+        "reads": 37,
+        "catchConfigured": true
+      },
+      "notes": [
+        "支持 Cortex-M3/M4/M7；无效 BFAR/MMFAR、堆栈失败与非精确错误均不输出虚假的准确位置。",
+        "只读诊断不主动暂停、继续、复位目标或清除异常寄存器。读取失败立即停止，保留已取得的证据。",
+        "ELF 必须与板上固件一致。完整调用链取决于有效栈与 CFI/EHABI 展开信息，未保存的 r4–r11 不会从处理器当前值伪造。"
+      ],
+      "history": {
+        "startedAt": "2026-10-08T09:31:53.916Z",
+        "events": [
+          {
+            "at": "2026-10-08T09:31:54.752Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T09:31:55.170Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:55.361Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:55.417Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T09:31:55.424Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T09:31:55.826Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T09:31:56.223Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:56.447Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:56.500Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T09:31:56.505Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T09:31:56.894Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T09:31:57.296Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:57.504Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:57.561Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T09:31:57.564Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T09:31:57.990Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T09:31:58.379Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          }
+        ],
+        "omitted": 0
+      }
+    },
+    "tab": "fault",
+    "halted": true,
+    "pc": 134217816,
+    "expected": 134217856,
+    "heal": 0,
+    "recoveries": 0,
+    "errors": [],
+    "log": "调试器就绪。连上目标后按 h 看命令，Tab 补全、↑↓ 翻历史、Ctrl+C 中断。已载入符号：stm32h743_fault.elf —— 185 个符号（函数 78 · 数据 9），其中 4 个带类型变量（DWARF），行号表 90 条　行号表：1 段 · 90 条记录 · 8 个源文件（DWARF 4）源码目录建议：推荐选 E:/Share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 E:/Share（8，目录更大）源码目录建议：推荐选 E:/Share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 E:/Share（8，目录更大）──── 连接（WebUSB · 10000 kHz）────关掉 1 个残留的探针句柄已连接：akaLinkPro CMSIS-DAP · 512B/包 · SWD 10000kHz　SWD 10000 kHz　IDCODE=0x6BA02477硬件断点：8 个比较器（FPB rev2，CTRL=0x10000081）目标正在运行源码：源码目录「（已选文件夹）」：1 个文件源码目录建议：已选「（已选文件夹）」能解析 1/8 · 推荐选 E:/Share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 E:/Share（8，目录更大）> halt已暂停　状态：已停止（halted）　PC=0x080001bc main+0x78> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x080001bc main+0x78⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x080001be main+0x7a> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x080001be main+0x7a⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x080001b4 main+0x70> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x080001b4 main+0x70⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x080001bc main+0x78> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x080001bc main+0x78⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)",
+    "readOnly": true,
+    "demcr": 16778240,
+    "sourceShown": true
+  },
+  {
+    "case": {
+      "mode": 5,
+      "name": "UDF / PSP / FP",
+      "flag": 16,
+      "label": "fault_udf_pc",
+      "stack": "PSP",
+      "extended": true
+    },
+    "baseline": {
+      "demcr": 16777216,
+      "heal": 0,
+      "recoveries": 0,
+      "heartbeat": 267323,
+      "clock": 10000000
+    },
+    "report": {
+      "schema": "akalink-diagnostics/v1",
+      "kind": "fault",
+      "title": "异常诊断报告",
+      "exportedAt": "2026-10-08T09:31:59.508Z",
+      "environment": {
+        "Web版本": "2026-10-08-r3 (H743 异常诊断真机验收；保留即时异常停点；修正浮点保存帧与异常调用链；SWD 降档诊断)",
+        "ELF": "stm32h743_fault.elf",
+        "后端": "WebUSB",
+        "数据": "真实目标",
+        "浏览器": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36"
+      },
+      "settings": {
+        "架构": "arm",
+        "现场时间": "2026-10-08T09:31:59.329Z",
+        "时段": "当前停止现场",
+        "恢复栈": "PSP",
+        "帧类型": "浮点扩展帧",
+        "帧校验": "已验证",
+        "完整性": "已完成有限读取",
+        "本页启用HardFault捕获": true,
+        "展开停止原因": "回溯没有进展或栈形成循环"
+      },
+      "metrics": [
+        {
+          "name": "停止 PC",
+          "value": "0x08000058",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "CPUID",
+          "value": "0x411fc271",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "ICSR",
+          "value": "0x00000803",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "VTOR",
+          "value": "0x08000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "SHCSR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "CFSR",
+          "value": "0x00010000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "HFSR",
+          "value": "0x40000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "DFSR",
+          "value": "0x00000008",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "MMFAR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": "MMARVALID 未置位，不能作为故障地址"
+        },
+        {
+          "name": "BFAR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": "BFARVALID 未置位，不能作为故障地址"
+        },
+        {
+          "name": "AFSR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "ABFSR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "LR",
+          "value": "0xffffffed",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "XPSR",
+          "value": "0x01000003",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": "IPSR=3"
+        },
+        {
+          "name": "SP",
+          "value": "0x2407fff0",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "MSP",
+          "value": "0x2407fff0",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "PSP",
+          "value": "0x240003f0",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "异常保存 PC",
+          "value": "0x08000080",
+          "unit": "",
+          "source": "硬件保存帧",
+          "note": "已校验；非精确错误不保证为致错指令"
+        }
+      ],
+      "findings": [
+        {
+          "confidence": "已确认",
+          "text": "UNDEFINSTR：未定义指令",
+          "evidence": "CFSR bit 16"
+        },
+        {
+          "confidence": "已确认",
+          "text": "FORCED：可配置异常升级为 HardFault。",
+          "evidence": "HFSR bit 30"
+        },
+        {
+          "confidence": "证据不足",
+          "text": "故障标志具有粘性，可能来自更早的异常；本次读取没有清除它们。",
+          "evidence": ""
+        },
+        {
+          "confidence": "已确认",
+          "text": "恢复异常硬件帧，保存 PC=0x08000080。",
+          "evidence": "保存 PC 是被打断的执行位置；非精确错误不能据此定位致错指令"
+        }
+      ],
+      "snapshot": {
+        "arch": "arm",
+        "at": "2026-10-08T09:31:59.329Z",
+        "pc": 134217816,
+        "raw": {
+          "CPUID": 1092600433,
+          "ICSR": 2051,
+          "VTOR": 134217728,
+          "SHCSR": 0,
+          "CFSR": 65536,
+          "HFSR": 1073741824,
+          "DFSR": 8,
+          "MMFAR": 0,
+          "BFAR": 0,
+          "AFSR": 0,
+          "ABFSR": 0,
+          "core": {
+            "PC": 134217816,
+            "LR": 4294967277,
+            "XPSR": 16777219,
+            "SP": 604504048,
+            "MSP": 604504048,
+            "PSP": 603980784
+          }
+        },
+        "frame": {
+          "pc": 134217856,
+          "sp": 603980892,
+          "regs": [
+            42,
+            603980920,
+            2,
+            603979884,
+            5,
+            0,
+            0,
+            603980892,
+            0,
+            0,
+            0,
+            0,
+            0,
+            603980892,
+            134217949,
+            134217856
+          ],
+          "known": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "kind": "exception",
+          "loc": {
+            "addr": 134217856,
+            "end": 134217858,
+            "line": 32,
+            "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+            "isStmt": true,
+            "prologueEnd": false,
+            "seqEnd": false,
+            "seq": 3,
+            "idx": 12
+          },
+          "name": "fault_udf",
+          "base": 603980784,
+          "stack": "PSP",
+          "extended": true,
+          "aligned": true,
+          "xpsr": 16777728,
+          "validated": true
+        },
+        "frames": [
+          {
+            "pc": 134217856,
+            "sp": 603980892,
+            "kind": "current",
+            "lookup": 134217856,
+            "name": "fault_udf+0x4",
+            "loc": {
+              "addr": 134217856,
+              "end": 134217858,
+              "line": 32,
+              "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 3,
+              "idx": 12
+            },
+            "regs": [
+              42,
+              603980920,
+              2,
+              603979884,
+              5,
+              0,
+              0,
+              603980892,
+              0,
+              0,
+              0,
+              0,
+              0,
+              603980892,
+              134217949,
+              134217856
+            ],
+            "known": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "cfa": 603980896
+          },
+          {
+            "pc": 134217948,
+            "sp": 603980896,
+            "kind": "cfi",
+            "lookup": 134217946,
+            "name": "fault_mid+0x16",
+            "loc": {
+              "addr": 134217944,
+              "end": 134217948,
+              "line": 49,
+              "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+              "isStmt": false,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 7,
+              "idx": 31
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              5,
+              0,
+              0,
+              603980896,
+              0,
+              0,
+              0,
+              0,
+              0,
+              603980896,
+              134217949,
+              134217949
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 603980912
+          },
+          {
+            "pc": 134217992,
+            "sp": 603980912,
+            "kind": "cfi",
+            "lookup": 134217990,
+            "name": "fault_outer+0x6",
+            "loc": {
+              "addr": 134217988,
+              "end": 134217992,
+              "line": 53,
+              "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 8,
+              "idx": 45
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              603979884,
+              0,
+              0,
+              0,
+              603980912,
+              0,
+              0,
+              0,
+              0,
+              0,
+              603980912,
+              134217993,
+              134217993
+            ],
+            "known": [
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              3,
+              4,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 603980920
+          },
+          {
+            "pc": 134218050,
+            "sp": 603980920,
+            "kind": "cfi",
+            "lookup": 134218048,
+            "name": "enter_psp_fp+0x18",
+            "loc": {
+              "addr": 134218024,
+              "end": 134218052,
+              "line": 58,
+              "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 9,
+              "idx": 50
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504048,
+              0,
+              0,
+              0,
+              0,
+              0,
+              603980920,
+              134218051,
+              134218051
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 603980920
+          }
+        ],
+        "findings": [
+          {
+            "confidence": "已确认",
+            "text": "UNDEFINSTR：未定义指令",
+            "evidence": "CFSR bit 16"
+          },
+          {
+            "confidence": "已确认",
+            "text": "FORCED：可配置异常升级为 HardFault。",
+            "evidence": "HFSR bit 30"
+          },
+          {
+            "confidence": "证据不足",
+            "text": "故障标志具有粘性，可能来自更早的异常；本次读取没有清除它们。",
+            "evidence": ""
+          },
+          {
+            "confidence": "已确认",
+            "text": "恢复异常硬件帧，保存 PC=0x08000080。",
+            "evidence": "保存 PC 是被打断的执行位置；非精确错误不能据此定位致错指令"
+          }
+        ],
+        "error": null,
+        "observedHalted": true,
+        "unwindReason": "回溯没有进展或栈形成循环",
+        "reads": 37,
+        "catchConfigured": true
+      },
+      "notes": [
+        "支持 Cortex-M3/M4/M7；无效 BFAR/MMFAR、堆栈失败与非精确错误均不输出虚假的准确位置。",
+        "只读诊断不主动暂停、继续、复位目标或清除异常寄存器。读取失败立即停止，保留已取得的证据。",
+        "ELF 必须与板上固件一致。完整调用链取决于有效栈与 CFI/EHABI 展开信息，未保存的 r4–r11 不会从处理器当前值伪造。"
+      ],
+      "history": {
+        "startedAt": "2026-10-08T09:31:53.916Z",
+        "events": [
+          {
+            "at": "2026-10-08T09:31:54.752Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T09:31:55.170Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:55.361Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:55.417Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T09:31:55.424Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T09:31:55.826Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T09:31:56.223Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:56.447Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:56.500Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T09:31:56.505Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T09:31:56.894Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T09:31:57.296Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:57.504Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:57.561Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T09:31:57.564Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T09:31:57.990Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T09:31:58.379Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:58.591Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:58.645Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T09:31:58.648Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T09:31:59.050Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T09:31:59.435Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          }
+        ],
+        "omitted": 0
+      }
+    },
+    "tab": "fault",
+    "halted": true,
+    "pc": 134217816,
+    "expected": 134217856,
+    "heal": 0,
+    "recoveries": 0,
+    "errors": [],
+    "log": "调试器就绪。连上目标后按 h 看命令，Tab 补全、↑↓ 翻历史、Ctrl+C 中断。已载入符号：stm32h743_fault.elf —— 185 个符号（函数 78 · 数据 9），其中 4 个带类型变量（DWARF），行号表 90 条　行号表：1 段 · 90 条记录 · 8 个源文件（DWARF 4）源码目录建议：推荐选 E:/Share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 E:/Share（8，目录更大）源码目录建议：推荐选 E:/Share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 E:/Share（8，目录更大）──── 连接（WebUSB · 10000 kHz）────关掉 1 个残留的探针句柄已连接：akaLinkPro CMSIS-DAP · 512B/包 · SWD 10000kHz　SWD 10000 kHz　IDCODE=0x6BA02477硬件断点：8 个比较器（FPB rev2，CTRL=0x10000081）目标正在运行源码：源码目录「（已选文件夹）」：1 个文件源码目录建议：已选「（已选文件夹）」能解析 1/8 · 推荐选 E:/Share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 E:/Share（8，目录更大）> halt已暂停　状态：已停止（halted）　PC=0x080001bc main+0x78> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x080001bc main+0x78⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x080001be main+0x7a> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x080001be main+0x7a⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x080001b4 main+0x70> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x080001b4 main+0x70⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x080001bc main+0x78> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x080001bc main+0x78⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x080001b2 main+0x6e> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x080001b2 main+0x6e⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)",
+    "readOnly": true,
+    "demcr": 16778240,
+    "sourceShown": true
+  },
+  {
+    "case": {
+      "mode": 6,
+      "name": "MPU denied access",
+      "flag": 1,
+      "label": "fault_mpu_pc",
+      "stack": "MSP",
+      "address": 604487680
+    },
+    "baseline": {
+      "demcr": 16777216,
+      "heal": 0,
+      "recoveries": 0,
+      "heartbeat": 245892,
+      "clock": 10000000
+    },
+    "report": {
+      "schema": "akalink-diagnostics/v1",
+      "kind": "fault",
+      "title": "异常诊断报告",
+      "exportedAt": "2026-10-08T09:32:00.693Z",
+      "environment": {
+        "Web版本": "2026-10-08-r3 (H743 异常诊断真机验收；保留即时异常停点；修正浮点保存帧与异常调用链；SWD 降档诊断)",
+        "ELF": "stm32h743_fault.elf",
+        "后端": "WebUSB",
+        "数据": "真实目标",
+        "浏览器": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36"
+      },
+      "settings": {
+        "架构": "arm",
+        "现场时间": "2026-10-08T09:32:00.521Z",
+        "时段": "当前停止现场",
+        "恢复栈": "MSP",
+        "帧类型": "基本帧",
+        "帧校验": "已验证",
+        "完整性": "已完成有限读取",
+        "本页启用HardFault捕获": true,
+        "展开停止原因": "到达栈末端"
+      },
+      "metrics": [
+        {
+          "name": "停止 PC",
+          "value": "0x08000058",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "CPUID",
+          "value": "0x411fc271",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "ICSR",
+          "value": "0x00000803",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "VTOR",
+          "value": "0x08000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "SHCSR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "CFSR",
+          "value": "0x00000082",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "HFSR",
+          "value": "0x40000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "DFSR",
+          "value": "0x00000008",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "MMFAR",
+          "value": "0x2407c000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "BFAR",
+          "value": "0x2407c000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": "BFARVALID 未置位，不能作为故障地址"
+        },
+        {
+          "name": "AFSR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "ABFSR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "LR",
+          "value": "0xfffffff9",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "XPSR",
+          "value": "0x21000003",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": "IPSR=3"
+        },
+        {
+          "name": "SP",
+          "value": "0x2407ffb0",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "MSP",
+          "value": "0x2407ffb0",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "PSP",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "异常保存 PC",
+          "value": "0x080000b6",
+          "unit": "",
+          "source": "硬件保存帧",
+          "note": "已校验；非精确错误不保证为致错指令"
+        }
+      ],
+      "findings": [
+        {
+          "confidence": "已确认",
+          "text": "DACCVIOL：数据访问违反 MPU 保护",
+          "evidence": "CFSR bit 1"
+        },
+        {
+          "confidence": "已确认",
+          "text": "FORCED：可配置异常升级为 HardFault。",
+          "evidence": "HFSR bit 30"
+        },
+        {
+          "confidence": "已确认",
+          "text": "有效 MMFAR：0x2407c000",
+          "evidence": "MMARVALID 已置位"
+        },
+        {
+          "confidence": "证据不足",
+          "text": "故障标志具有粘性，可能来自更早的异常；本次读取没有清除它们。",
+          "evidence": ""
+        },
+        {
+          "confidence": "已确认",
+          "text": "恢复异常硬件帧，保存 PC=0x080000b6。",
+          "evidence": "保存 PC 是被打断的执行位置；非精确错误不能据此定位致错指令"
+        }
+      ],
+      "snapshot": {
+        "arch": "arm",
+        "at": "2026-10-08T09:32:00.521Z",
+        "pc": 134217816,
+        "raw": {
+          "CPUID": 1092600433,
+          "ICSR": 2051,
+          "VTOR": 134217728,
+          "SHCSR": 0,
+          "CFSR": 130,
+          "HFSR": 1073741824,
+          "DFSR": 8,
+          "MMFAR": 604487680,
+          "BFAR": 604487680,
+          "AFSR": 0,
+          "ABFSR": 0,
+          "core": {
+            "PC": 134217816,
+            "LR": 4294967289,
+            "XPSR": 553648131,
+            "SP": 604503984,
+            "MSP": 604503984,
+            "PSP": 0
+          }
+        },
+        "frame": {
+          "pc": 134217910,
+          "sp": 604504020,
+          "regs": [
+            604487680,
+            603979876,
+            5,
+            3758153728,
+            6,
+            0,
+            0,
+            604504020,
+            0,
+            0,
+            0,
+            0,
+            0,
+            604504020,
+            134217979,
+            134217910
+          ],
+          "known": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "kind": "exception",
+          "loc": {
+            "addr": 134217910,
+            "end": 134217912,
+            "line": 44,
+            "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+            "isStmt": false,
+            "prologueEnd": false,
+            "seqEnd": false,
+            "seq": 6,
+            "idx": 24
+          },
+          "name": "fault_mpu",
+          "base": 604503984,
+          "stack": "MSP",
+          "extended": false,
+          "aligned": true,
+          "xpsr": 553648640,
+          "validated": true
+        },
+        "frames": [
+          {
+            "pc": 134217910,
+            "sp": 604504020,
+            "kind": "current",
+            "lookup": 134217910,
+            "name": "fault_mpu+0x6",
+            "loc": {
+              "addr": 134217910,
+              "end": 134217912,
+              "line": 44,
+              "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+              "isStmt": false,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 6,
+              "idx": 24
+            },
+            "regs": [
+              604487680,
+              603979876,
+              5,
+              3758153728,
+              6,
+              0,
+              0,
+              604504020,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504020,
+              134217979,
+              134217910
+            ],
+            "known": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "cfa": 604504024
+          },
+          {
+            "pc": 134217978,
+            "sp": 604504024,
+            "kind": "cfi",
+            "lookup": 134217976,
+            "name": "fault_mid+0x34",
+            "loc": {
+              "addr": 134217974,
+              "end": 134217978,
+              "line": 49,
+              "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+              "isStmt": false,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 7,
+              "idx": 42
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              6,
+              0,
+              0,
+              604504024,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504024,
+              134217979,
+              134217979
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 604504040
+          },
+          {
+            "pc": 134217992,
+            "sp": 604504040,
+            "kind": "cfi",
+            "lookup": 134217990,
+            "name": "fault_outer+0x6",
+            "loc": {
+              "addr": 134217988,
+              "end": 134217992,
+              "line": 53,
+              "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 8,
+              "idx": 45
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              3758153728,
+              0,
+              0,
+              0,
+              604504040,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504040,
+              134217993,
+              134217993
+            ],
+            "known": [
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              3,
+              4,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 604504048
+          },
+          {
+            "pc": 134218198,
+            "sp": 604504048,
+            "kind": "cfi",
+            "lookup": 134218196,
+            "name": "main+0x90",
+            "loc": {
+              "addr": 134218194,
+              "end": 134218198,
+              "line": 74,
+              "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 9,
+              "idx": 71
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504048,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504048,
+              134218199,
+              134218199
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 604504056
+          },
+          {
+            "pc": 134218312,
+            "sp": 604504056,
+            "kind": "cfi",
+            "lookup": 134218310,
+            "name": "Reset_Handler+0x56",
+            "loc": {
+              "addr": 134218308,
+              "end": 134218312,
+              "line": 21,
+              "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 10,
+              "idx": 88
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504056,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504056,
+              134218313,
+              134218313
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 604504064
+          }
+        ],
+        "findings": [
+          {
+            "confidence": "已确认",
+            "text": "DACCVIOL：数据访问违反 MPU 保护",
+            "evidence": "CFSR bit 1"
+          },
+          {
+            "confidence": "已确认",
+            "text": "FORCED：可配置异常升级为 HardFault。",
+            "evidence": "HFSR bit 30"
+          },
+          {
+            "confidence": "已确认",
+            "text": "有效 MMFAR：0x2407c000",
+            "evidence": "MMARVALID 已置位"
+          },
+          {
+            "confidence": "证据不足",
+            "text": "故障标志具有粘性，可能来自更早的异常；本次读取没有清除它们。",
+            "evidence": ""
+          },
+          {
+            "confidence": "已确认",
+            "text": "恢复异常硬件帧，保存 PC=0x080000b6。",
+            "evidence": "保存 PC 是被打断的执行位置；非精确错误不能据此定位致错指令"
+          }
+        ],
+        "error": null,
+        "observedHalted": true,
+        "unwindReason": "到达栈末端",
+        "reads": 41,
+        "catchConfigured": true
+      },
+      "notes": [
+        "支持 Cortex-M3/M4/M7；无效 BFAR/MMFAR、堆栈失败与非精确错误均不输出虚假的准确位置。",
+        "只读诊断不主动暂停、继续、复位目标或清除异常寄存器。读取失败立即停止，保留已取得的证据。",
+        "ELF 必须与板上固件一致。完整调用链取决于有效栈与 CFI/EHABI 展开信息，未保存的 r4–r11 不会从处理器当前值伪造。"
+      ],
+      "history": {
+        "startedAt": "2026-10-08T09:31:53.916Z",
+        "events": [
+          {
+            "at": "2026-10-08T09:31:54.752Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T09:31:55.170Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:55.361Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:55.417Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T09:31:55.424Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T09:31:55.826Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T09:31:56.223Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:56.447Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:56.500Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T09:31:56.505Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T09:31:56.894Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T09:31:57.296Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:57.504Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:57.561Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T09:31:57.564Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T09:31:57.990Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T09:31:58.379Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:58.591Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:58.645Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T09:31:58.648Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T09:31:59.050Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T09:31:59.435Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:59.679Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:59.853Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T09:31:59.855Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T09:32:00.232Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T09:32:00.632Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          }
+        ],
+        "omitted": 0
+      }
+    },
+    "tab": "fault",
+    "halted": true,
+    "pc": 134217816,
+    "expected": 134217910,
+    "heal": 0,
+    "recoveries": 0,
+    "errors": [],
+    "log": "调试器就绪。连上目标后按 h 看命令，Tab 补全、↑↓ 翻历史、Ctrl+C 中断。已载入符号：stm32h743_fault.elf —— 185 个符号（函数 78 · 数据 9），其中 4 个带类型变量（DWARF），行号表 90 条　行号表：1 段 · 90 条记录 · 8 个源文件（DWARF 4）源码目录建议：推荐选 E:/Share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 E:/Share（8，目录更大）源码目录建议：推荐选 E:/Share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 E:/Share（8，目录更大）──── 连接（WebUSB · 10000 kHz）────关掉 1 个残留的探针句柄已连接：akaLinkPro CMSIS-DAP · 512B/包 · SWD 10000kHz　SWD 10000 kHz　IDCODE=0x6BA02477硬件断点：8 个比较器（FPB rev2，CTRL=0x10000081）目标正在运行源码：源码目录「（已选文件夹）」：1 个文件源码目录建议：已选「（已选文件夹）」能解析 1/8 · 推荐选 E:/Share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 E:/Share（8，目录更大）> halt已暂停　状态：已停止（halted）　PC=0x080001bc main+0x78> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x080001bc main+0x78⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x080001be main+0x7a> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x080001be main+0x7a⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x080001b4 main+0x70> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x080001b4 main+0x70⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x080001bc main+0x78> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x080001bc main+0x78⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x080001b2 main+0x6e> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x080001b2 main+0x6e⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x080001be main+0x7a> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x080001be main+0x7a⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)",
+    "readOnly": true,
+    "demcr": 16778240,
+    "sourceShown": true
+  },
+  {
+    "case": {
+      "mode": 1,
+      "name": "handler prologue unwind",
+      "flag": 16,
+      "label": "fault_udf_pc",
+      "stack": "MSP",
+      "catch": false
+    },
+    "baseline": {
+      "demcr": 16777216,
+      "heal": 0,
+      "recoveries": 0,
+      "heartbeat": 261598,
+      "clock": 10000000
+    },
+    "report": {
+      "schema": "akalink-diagnostics/v1",
+      "kind": "fault",
+      "title": "异常诊断报告",
+      "exportedAt": "2026-10-08T09:32:01.902Z",
+      "environment": {
+        "Web版本": "2026-10-08-r3 (H743 异常诊断真机验收；保留即时异常停点；修正浮点保存帧与异常调用链；SWD 降档诊断)",
+        "ELF": "stm32h743_fault.elf",
+        "后端": "WebUSB",
+        "数据": "真实目标",
+        "浏览器": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36"
+      },
+      "settings": {
+        "架构": "arm",
+        "现场时间": "2026-10-08T09:32:01.745Z",
+        "时段": "当前停止现场",
+        "恢复栈": "MSP",
+        "帧类型": "基本帧",
+        "帧校验": "已验证",
+        "完整性": "已完成有限读取",
+        "本页启用HardFault捕获": false,
+        "展开停止原因": "到达栈末端"
+      },
+      "metrics": [
+        {
+          "name": "停止 PC",
+          "value": "0x0800004e",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "CPUID",
+          "value": "0x411fc271",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "ICSR",
+          "value": "0x00000803",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "VTOR",
+          "value": "0x08000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "SHCSR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "CFSR",
+          "value": "0x00010000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "HFSR",
+          "value": "0x40000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "DFSR",
+          "value": "0x00000001",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "MMFAR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": "MMARVALID 未置位，不能作为故障地址"
+        },
+        {
+          "name": "BFAR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": "BFARVALID 未置位，不能作为故障地址"
+        },
+        {
+          "name": "AFSR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "ABFSR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "LR",
+          "value": "0x08000061",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "XPSR",
+          "value": "0x01000003",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": "IPSR=3"
+        },
+        {
+          "name": "SP",
+          "value": "0x2407ffa4",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "MSP",
+          "value": "0x2407ffa4",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "PSP",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "异常保存 PC",
+          "value": "0x08000080",
+          "unit": "",
+          "source": "硬件保存帧",
+          "note": "已校验；非精确错误不保证为致错指令"
+        }
+      ],
+      "findings": [
+        {
+          "confidence": "已确认",
+          "text": "UNDEFINSTR：未定义指令",
+          "evidence": "CFSR bit 16"
+        },
+        {
+          "confidence": "已确认",
+          "text": "FORCED：可配置异常升级为 HardFault。",
+          "evidence": "HFSR bit 30"
+        },
+        {
+          "confidence": "证据不足",
+          "text": "故障标志具有粘性，可能来自更早的异常；本次读取没有清除它们。",
+          "evidence": ""
+        },
+        {
+          "confidence": "已确认",
+          "text": "恢复异常硬件帧，保存 PC=0x08000080。",
+          "evidence": "保存 PC 是被打断的执行位置；非精确错误不能据此定位致错指令"
+        }
+      ],
+      "snapshot": {
+        "arch": "arm",
+        "at": "2026-10-08T09:32:01.745Z",
+        "pc": 134217806,
+        "raw": {
+          "CPUID": 1092600433,
+          "ICSR": 2051,
+          "VTOR": 134217728,
+          "SHCSR": 0,
+          "CFSR": 65536,
+          "HFSR": 1073741824,
+          "DFSR": 1,
+          "MMFAR": 0,
+          "BFAR": 0,
+          "AFSR": 0,
+          "ABFSR": 0,
+          "core": {
+            "PC": 134217806,
+            "LR": 134217825,
+            "XPSR": 16777219,
+            "SP": 604503972,
+            "MSP": 604503972,
+            "PSP": 0
+          }
+        },
+        "frame": {
+          "pc": 134217856,
+          "sp": 604504020,
+          "kind": "exception",
+          "lookup": 134217856,
+          "name": "fault_udf+0x4",
+          "loc": {
+            "addr": 134217856,
+            "end": 134217858,
+            "line": 32,
+            "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+            "isStmt": true,
+            "prologueEnd": false,
+            "seqEnd": false,
+            "seq": 3,
+            "idx": 12
+          },
+          "regs": [
+            42,
+            603979876,
+            603979888,
+            603979884,
+            1,
+            0,
+            0,
+            604504020,
+            0,
+            0,
+            0,
+            0,
+            0,
+            604504020,
+            134217949,
+            134217856
+          ],
+          "known": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "exception": {
+            "return": 4294967289,
+            "base": 604503984,
+            "stack": "MSP",
+            "extended": false,
+            "xpsr": 16777728,
+            "aligned": true
+          },
+          "return": 4294967289,
+          "base": 604503984,
+          "stack": "MSP",
+          "extended": false,
+          "xpsr": 16777728,
+          "aligned": true,
+          "validated": true,
+          "unwound": true
+        },
+        "frames": [
+          {
+            "pc": 134217856,
+            "sp": 604504020,
+            "kind": "current",
+            "lookup": 134217856,
+            "name": "fault_udf+0x4",
+            "loc": {
+              "addr": 134217856,
+              "end": 134217858,
+              "line": 32,
+              "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 3,
+              "idx": 12
+            },
+            "regs": [
+              42,
+              603979876,
+              603979888,
+              603979884,
+              1,
+              0,
+              0,
+              604504020,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504020,
+              134217949,
+              134217856
+            ],
+            "known": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "cfa": 604504024
+          },
+          {
+            "pc": 134217948,
+            "sp": 604504024,
+            "kind": "cfi",
+            "lookup": 134217946,
+            "name": "fault_mid+0x16",
+            "loc": {
+              "addr": 134217944,
+              "end": 134217948,
+              "line": 49,
+              "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+              "isStmt": false,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 7,
+              "idx": 31
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              604504024,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504024,
+              134217949,
+              134217949
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 604504040
+          },
+          {
+            "pc": 134217992,
+            "sp": 604504040,
+            "kind": "cfi",
+            "lookup": 134217990,
+            "name": "fault_outer+0x6",
+            "loc": {
+              "addr": 134217988,
+              "end": 134217992,
+              "line": 53,
+              "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 8,
+              "idx": 45
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              603979884,
+              0,
+              0,
+              0,
+              604504040,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504040,
+              134217993,
+              134217993
+            ],
+            "known": [
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              3,
+              4,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 604504048
+          },
+          {
+            "pc": 134218198,
+            "sp": 604504048,
+            "kind": "cfi",
+            "lookup": 134218196,
+            "name": "main+0x90",
+            "loc": {
+              "addr": 134218194,
+              "end": 134218198,
+              "line": 74,
+              "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 9,
+              "idx": 71
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504048,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504048,
+              134218199,
+              134218199
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 604504056
+          },
+          {
+            "pc": 134218312,
+            "sp": 604504056,
+            "kind": "cfi",
+            "lookup": 134218310,
+            "name": "Reset_Handler+0x56",
+            "loc": {
+              "addr": 134218308,
+              "end": 134218312,
+              "line": 21,
+              "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 10,
+              "idx": 88
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504056,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504056,
+              134218313,
+              134218313
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 604504064
+          }
+        ],
+        "findings": [
+          {
+            "confidence": "已确认",
+            "text": "UNDEFINSTR：未定义指令",
+            "evidence": "CFSR bit 16"
+          },
+          {
+            "confidence": "已确认",
+            "text": "FORCED：可配置异常升级为 HardFault。",
+            "evidence": "HFSR bit 30"
+          },
+          {
+            "confidence": "证据不足",
+            "text": "故障标志具有粘性，可能来自更早的异常；本次读取没有清除它们。",
+            "evidence": ""
+          },
+          {
+            "confidence": "已确认",
+            "text": "恢复异常硬件帧，保存 PC=0x08000080。",
+            "evidence": "保存 PC 是被打断的执行位置；非精确错误不能据此定位致错指令"
+          }
+        ],
+        "error": null,
+        "observedHalted": true,
+        "handlerFrames": [
+          {
+            "pc": 134217806,
+            "sp": 604503972,
+            "kind": "current",
+            "lookup": 134217806,
+            "name": "fault_handler_body+0xe",
+            "loc": {
+              "addr": 134217806,
+              "end": 134217808,
+              "line": 24,
+              "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 0,
+              "idx": 2
+            },
+            "regs": [
+              42,
+              603979876,
+              603979880,
+              1,
+              1,
+              0,
+              0,
+              604503972,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604503972,
+              134217825,
+              134217806
+            ],
+            "known": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "cfa": 604503976
+          },
+          {
+            "pc": 134217824,
+            "sp": 604503976,
+            "kind": "cfi",
+            "lookup": 134217822,
+            "name": "HardFault_Handler+0x6",
+            "loc": {
+              "addr": 134217820,
+              "end": 134217824,
+              "line": 29,
+              "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 1,
+              "idx": 5
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              604503976,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604503976,
+              134217825,
+              134217825
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 604503984
+          },
+          {
+            "pc": 134217856,
+            "sp": 604504020,
+            "kind": "exception",
+            "lookup": 134217856,
+            "name": "fault_udf+0x4",
+            "loc": {
+              "addr": 134217856,
+              "end": 134217858,
+              "line": 32,
+              "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 3,
+              "idx": 12
+            },
+            "regs": [
+              42,
+              603979876,
+              603979888,
+              603979884,
+              1,
+              0,
+              0,
+              604504020,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504020,
+              134217949,
+              134217856
+            ],
+            "known": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "exception": {
+              "return": 4294967289,
+              "base": 604503984,
+              "stack": "MSP",
+              "extended": false,
+              "xpsr": 16777728,
+              "aligned": true
+            }
+          }
+        ],
+        "unwindReason": "到达栈末端",
+        "reads": 48,
+        "catchConfigured": false
+      },
+      "notes": [
+        "支持 Cortex-M3/M4/M7；无效 BFAR/MMFAR、堆栈失败与非精确错误均不输出虚假的准确位置。",
+        "只读诊断不主动暂停、继续、复位目标或清除异常寄存器。读取失败立即停止，保留已取得的证据。",
+        "ELF 必须与板上固件一致。完整调用链取决于有效栈与 CFI/EHABI 展开信息，未保存的 r4–r11 不会从处理器当前值伪造。"
+      ],
+      "history": {
+        "startedAt": "2026-10-08T09:31:53.916Z",
+        "events": [
+          {
+            "at": "2026-10-08T09:31:54.752Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T09:31:55.170Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:55.361Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:55.417Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T09:31:55.424Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T09:31:55.826Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T09:31:56.223Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:56.447Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:56.500Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T09:31:56.505Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T09:31:56.894Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T09:31:57.296Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:57.504Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:57.561Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T09:31:57.564Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T09:31:57.990Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T09:31:58.379Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:58.591Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:58.645Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T09:31:58.648Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T09:31:59.050Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T09:31:59.435Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:59.679Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:59.853Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T09:31:59.855Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T09:32:00.232Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T09:32:00.632Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:32:00.844Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:32:01.016Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T09:32:01.018Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T09:32:01.891Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          }
+        ],
+        "omitted": 0
+      }
+    },
+    "tab": "fault",
+    "halted": true,
+    "pc": 134217806,
+    "expected": 134217856,
+    "heal": 0,
+    "recoveries": 0,
+    "errors": [],
+    "log": "调试器就绪。连上目标后按 h 看命令，Tab 补全、↑↓ 翻历史、Ctrl+C 中断。已载入符号：stm32h743_fault.elf —— 185 个符号（函数 78 · 数据 9），其中 4 个带类型变量（DWARF），行号表 90 条　行号表：1 段 · 90 条记录 · 8 个源文件（DWARF 4）源码目录建议：推荐选 E:/Share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 E:/Share（8，目录更大）源码目录建议：推荐选 E:/Share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 E:/Share（8，目录更大）──── 连接（WebUSB · 10000 kHz）────关掉 1 个残留的探针句柄已连接：akaLinkPro CMSIS-DAP · 512B/包 · SWD 10000kHz　SWD 10000 kHz　IDCODE=0x6BA02477硬件断点：8 个比较器（FPB rev2，CTRL=0x10000081）目标正在运行源码：源码目录「（已选文件夹）」：1 个文件源码目录建议：已选「（已选文件夹）」能解析 1/8 · 推荐选 E:/Share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 E:/Share（8，目录更大）> halt已暂停　状态：已停止（halted）　PC=0x080001bc main+0x78> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x080001bc main+0x78⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x080001be main+0x7a> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x080001be main+0x7a⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x080001b4 main+0x70> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x080001b4 main+0x70⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x080001bc main+0x78> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x080001bc main+0x78⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x080001b2 main+0x6e> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x080001b2 main+0x6e⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x080001be main+0x7a> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x080001be main+0x7a⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x080001b4 main+0x70> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x080001b4 main+0x70> halt已暂停　状态：已停止（halted）　PC=0x0800004e fault_handler_body+0xe",
+    "readOnly": true,
+    "demcr": 16777216,
+    "sourceShown": true
+  },
+  {
+    "case": {
+      "mode": 1,
+      "name": "repeat catch after reset",
+      "flag": 16,
+      "label": "fault_udf_pc",
+      "stack": "MSP"
+    },
+    "baseline": {
+      "demcr": 16777216,
+      "heal": 0,
+      "recoveries": 0,
+      "heartbeat": 258741,
+      "clock": 10000000
+    },
+    "report": {
+      "schema": "akalink-diagnostics/v1",
+      "kind": "fault",
+      "title": "异常诊断报告",
+      "exportedAt": "2026-10-08T09:32:03.002Z",
+      "environment": {
+        "Web版本": "2026-10-08-r3 (H743 异常诊断真机验收；保留即时异常停点；修正浮点保存帧与异常调用链；SWD 降档诊断)",
+        "ELF": "stm32h743_fault.elf",
+        "后端": "WebUSB",
+        "数据": "真实目标",
+        "浏览器": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36"
+      },
+      "settings": {
+        "架构": "arm",
+        "现场时间": "2026-10-08T09:32:02.828Z",
+        "时段": "当前停止现场",
+        "恢复栈": "MSP",
+        "帧类型": "基本帧",
+        "帧校验": "已验证",
+        "完整性": "已完成有限读取",
+        "本页启用HardFault捕获": true,
+        "展开停止原因": "到达栈末端"
+      },
+      "metrics": [
+        {
+          "name": "停止 PC",
+          "value": "0x08000058",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "CPUID",
+          "value": "0x411fc271",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "ICSR",
+          "value": "0x00000803",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "VTOR",
+          "value": "0x08000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "SHCSR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "CFSR",
+          "value": "0x00010000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "HFSR",
+          "value": "0x40000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "DFSR",
+          "value": "0x00000008",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "MMFAR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": "MMARVALID 未置位，不能作为故障地址"
+        },
+        {
+          "name": "BFAR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": "BFARVALID 未置位，不能作为故障地址"
+        },
+        {
+          "name": "AFSR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "ABFSR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "LR",
+          "value": "0xfffffff9",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "XPSR",
+          "value": "0x01000003",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": "IPSR=3"
+        },
+        {
+          "name": "SP",
+          "value": "0x2407ffb0",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "MSP",
+          "value": "0x2407ffb0",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "PSP",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "异常保存 PC",
+          "value": "0x08000080",
+          "unit": "",
+          "source": "硬件保存帧",
+          "note": "已校验；非精确错误不保证为致错指令"
+        }
+      ],
+      "findings": [
+        {
+          "confidence": "已确认",
+          "text": "UNDEFINSTR：未定义指令",
+          "evidence": "CFSR bit 16"
+        },
+        {
+          "confidence": "已确认",
+          "text": "FORCED：可配置异常升级为 HardFault。",
+          "evidence": "HFSR bit 30"
+        },
+        {
+          "confidence": "证据不足",
+          "text": "故障标志具有粘性，可能来自更早的异常；本次读取没有清除它们。",
+          "evidence": ""
+        },
+        {
+          "confidence": "已确认",
+          "text": "恢复异常硬件帧，保存 PC=0x08000080。",
+          "evidence": "保存 PC 是被打断的执行位置；非精确错误不能据此定位致错指令"
+        }
+      ],
+      "snapshot": {
+        "arch": "arm",
+        "at": "2026-10-08T09:32:02.828Z",
+        "pc": 134217816,
+        "raw": {
+          "CPUID": 1092600433,
+          "ICSR": 2051,
+          "VTOR": 134217728,
+          "SHCSR": 0,
+          "CFSR": 65536,
+          "HFSR": 1073741824,
+          "DFSR": 8,
+          "MMFAR": 0,
+          "BFAR": 0,
+          "AFSR": 0,
+          "ABFSR": 0,
+          "core": {
+            "PC": 134217816,
+            "LR": 4294967289,
+            "XPSR": 16777219,
+            "SP": 604503984,
+            "MSP": 604503984,
+            "PSP": 0
+          }
+        },
+        "frame": {
+          "pc": 134217856,
+          "sp": 604504020,
+          "regs": [
+            42,
+            603979876,
+            603979888,
+            603979884,
+            1,
+            0,
+            0,
+            604504020,
+            0,
+            0,
+            0,
+            0,
+            0,
+            604504020,
+            134217949,
+            134217856
+          ],
+          "known": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "kind": "exception",
+          "loc": {
+            "addr": 134217856,
+            "end": 134217858,
+            "line": 32,
+            "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+            "isStmt": true,
+            "prologueEnd": false,
+            "seqEnd": false,
+            "seq": 3,
+            "idx": 12
+          },
+          "name": "fault_udf",
+          "base": 604503984,
+          "stack": "MSP",
+          "extended": false,
+          "aligned": true,
+          "xpsr": 16777728,
+          "validated": true
+        },
+        "frames": [
+          {
+            "pc": 134217856,
+            "sp": 604504020,
+            "kind": "current",
+            "lookup": 134217856,
+            "name": "fault_udf+0x4",
+            "loc": {
+              "addr": 134217856,
+              "end": 134217858,
+              "line": 32,
+              "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 3,
+              "idx": 12
+            },
+            "regs": [
+              42,
+              603979876,
+              603979888,
+              603979884,
+              1,
+              0,
+              0,
+              604504020,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504020,
+              134217949,
+              134217856
+            ],
+            "known": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "cfa": 604504024
+          },
+          {
+            "pc": 134217948,
+            "sp": 604504024,
+            "kind": "cfi",
+            "lookup": 134217946,
+            "name": "fault_mid+0x16",
+            "loc": {
+              "addr": 134217944,
+              "end": 134217948,
+              "line": 49,
+              "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+              "isStmt": false,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 7,
+              "idx": 31
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              604504024,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504024,
+              134217949,
+              134217949
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 604504040
+          },
+          {
+            "pc": 134217992,
+            "sp": 604504040,
+            "kind": "cfi",
+            "lookup": 134217990,
+            "name": "fault_outer+0x6",
+            "loc": {
+              "addr": 134217988,
+              "end": 134217992,
+              "line": 53,
+              "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 8,
+              "idx": 45
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              603979884,
+              0,
+              0,
+              0,
+              604504040,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504040,
+              134217993,
+              134217993
+            ],
+            "known": [
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              3,
+              4,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 604504048
+          },
+          {
+            "pc": 134218198,
+            "sp": 604504048,
+            "kind": "cfi",
+            "lookup": 134218196,
+            "name": "main+0x90",
+            "loc": {
+              "addr": 134218194,
+              "end": 134218198,
+              "line": 74,
+              "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 9,
+              "idx": 71
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504048,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504048,
+              134218199,
+              134218199
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 604504056
+          },
+          {
+            "pc": 134218312,
+            "sp": 604504056,
+            "kind": "cfi",
+            "lookup": 134218310,
+            "name": "Reset_Handler+0x56",
+            "loc": {
+              "addr": 134218308,
+              "end": 134218312,
+              "line": 21,
+              "file": "E:/Share/github/akaLinkPro/script_test/stm32h743_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 10,
+              "idx": 88
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504056,
+              0,
+              0,
+              0,
+              0,
+              0,
+              604504056,
+              134218313,
+              134218313
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 604504064
+          }
+        ],
+        "findings": [
+          {
+            "confidence": "已确认",
+            "text": "UNDEFINSTR：未定义指令",
+            "evidence": "CFSR bit 16"
+          },
+          {
+            "confidence": "已确认",
+            "text": "FORCED：可配置异常升级为 HardFault。",
+            "evidence": "HFSR bit 30"
+          },
+          {
+            "confidence": "证据不足",
+            "text": "故障标志具有粘性，可能来自更早的异常；本次读取没有清除它们。",
+            "evidence": ""
+          },
+          {
+            "confidence": "已确认",
+            "text": "恢复异常硬件帧，保存 PC=0x08000080。",
+            "evidence": "保存 PC 是被打断的执行位置；非精确错误不能据此定位致错指令"
+          }
+        ],
+        "error": null,
+        "observedHalted": true,
+        "unwindReason": "到达栈末端",
+        "reads": 41,
+        "catchConfigured": true
+      },
+      "notes": [
+        "支持 Cortex-M3/M4/M7；无效 BFAR/MMFAR、堆栈失败与非精确错误均不输出虚假的准确位置。",
+        "只读诊断不主动暂停、继续、复位目标或清除异常寄存器。读取失败立即停止，保留已取得的证据。",
+        "ELF 必须与板上固件一致。完整调用链取决于有效栈与 CFI/EHABI 展开信息，未保存的 r4–r11 不会从处理器当前值伪造。"
+      ],
+      "history": {
+        "startedAt": "2026-10-08T09:31:53.916Z",
+        "events": [
+          {
+            "at": "2026-10-08T09:31:54.752Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T09:31:55.170Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:55.361Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:55.417Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T09:31:55.424Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T09:31:55.826Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T09:31:56.223Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:56.447Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:56.500Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T09:31:56.505Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T09:31:56.894Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T09:31:57.296Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:57.504Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:57.561Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T09:31:57.564Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T09:31:57.990Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T09:31:58.379Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:58.591Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:58.645Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T09:31:58.648Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T09:31:59.050Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T09:31:59.435Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:59.679Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:31:59.853Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T09:31:59.855Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T09:32:00.232Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T09:32:00.632Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:32:00.844Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:32:01.016Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T09:32:01.018Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T09:32:01.891Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:32:02.092Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T09:32:02.148Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T09:32:02.541Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T09:32:02.939Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          }
+        ],
+        "omitted": 0
+      }
+    },
+    "tab": "fault",
+    "halted": true,
+    "pc": 134217816,
+    "expected": 134217856,
+    "heal": 0,
+    "recoveries": 0,
+    "errors": [],
+    "log": "调试器就绪。连上目标后按 h 看命令，Tab 补全、↑↓ 翻历史、Ctrl+C 中断。已载入符号：stm32h743_fault.elf —— 185 个符号（函数 78 · 数据 9），其中 4 个带类型变量（DWARF），行号表 90 条　行号表：1 段 · 90 条记录 · 8 个源文件（DWARF 4）源码目录建议：推荐选 E:/Share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 E:/Share（8，目录更大）源码目录建议：推荐选 E:/Share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 E:/Share（8，目录更大）──── 连接（WebUSB · 10000 kHz）────关掉 1 个残留的探针句柄已连接：akaLinkPro CMSIS-DAP · 512B/包 · SWD 10000kHz　SWD 10000 kHz　IDCODE=0x6BA02477硬件断点：8 个比较器（FPB rev2，CTRL=0x10000081）目标正在运行源码：源码目录「（已选文件夹）」：1 个文件源码目录建议：已选「（已选文件夹）」能解析 1/8 · 推荐选 E:/Share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 E:/Share（8，目录更大）> halt已暂停　状态：已停止（halted）　PC=0x080001bc main+0x78> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x080001bc main+0x78⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x080001be main+0x7a> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x080001be main+0x7a⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x080001b4 main+0x70> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x080001b4 main+0x70⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x080001bc main+0x78> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x080001bc main+0x78⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x080001b2 main+0x6e> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x080001b2 main+0x6e⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x080001be main+0x7a> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x080001be main+0x7a⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x080001b4 main+0x70> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x080001b4 main+0x70> halt已暂停　状态：已停止（halted）　PC=0x0800004e fault_handler_body+0xe> halt已暂停　状态：已停止（halted）　PC=0x080001be main+0x7a> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x080001be main+0x7a⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)",
+    "readOnly": true,
+    "demcr": 16778240,
+    "sourceShown": true
+  }
+]

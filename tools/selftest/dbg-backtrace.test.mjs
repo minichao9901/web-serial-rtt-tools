@@ -65,7 +65,7 @@ assert.throws(()=>unwindBytes(elfFor([]),entry),/无效/);
 for(const exc of [0xfffffff9,0xffffffed]){
   const e=session([0x80b0b0b0]); e.regs.LR=exc;
   const base=(exc&4)?e.regs.PSP:sp, offset=(exc&16)?0:72;
-  [1,2,3,4,5,code+0x211,code+0x210,0x01000200].forEach((v,i)=>e.mem.set(base+offset+i*4,v));
+  [1,2,3,4,5,code+0x211,code+0x210,0x01000200].forEach((v,i)=>e.mem.set(base+i*4,v));
   const bt=await backtrace(e);assert.equal(bt.frames[1].kind,'exception');
   assert.equal(bt.frames[1].pc,code+0x210);assert.equal(bt.frames[1].sp,base+offset+36);
 }

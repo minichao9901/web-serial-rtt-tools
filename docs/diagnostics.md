@@ -24,7 +24,8 @@
 - 只有 MMARVALID / BFARVALID 置位，才把 MMFAR / BFAR 标为有效故障地址。其余情况下仍保存寄存器原值，并注明不能按故障地址解释。
 - 只有位于故障处理上下文、栈未报告入栈／出栈错误时，才尝试恢复硬件帧。检查 EXC_RETURN、MSP / PSP、基本／浮点扩展帧、xPSR Thumb 位、返回模式、RAM 范围、对齐和 ELF 代码范围。
 - 向量入口处的有效硬件帧可以直接恢复。离开入口后，先借助现有 CFI / EHABI 展开验证处理函数保存的 EXC_RETURN；仅通过结构校验的帧显示为候选，不伪装成已确认的异常前现场。
-- 恢复异常前调用链时仅使用硬件保存的已知寄存器；未保存的 r4–r11 不从处理函数当前值伪造。没有展开信息、栈损坏或读取越界时停止，并显示原因。
+- 恢复异常前调用链使用硬件保存的寄存器。在向量第一条指令尚未执行时，r4–r11 仍是被打断的值；离开入口后，仅保留 CFI / EHABI 展开规则确认可恢复的值，不把处理函数当前的帧指针直接冒充异常前帧指针。没有展开信息、栈损坏或读取越界时停止，并显示原因。
+- 基本帧和浮点扩展帧的 R0 都位于当前异常栈的起始位置；浮点扩展区增加 72 字节总长度，并不把核心帧起点后移。已用 H743 PSP 浮点异常的真实栈内容对照验证。
 
 非精确总线错误的保存 PC 可能晚于致错指令。即使保存帧有效，也不能将源码落点宣称为准确致错位置。
 异常标志具有粘性，可能来自更早的故障；诊断不会为取得“干净结果”而清除它们。
@@ -92,9 +93,9 @@
 ## 验证与参考
 
 本版已验证逻辑模型与真实浏览器界面：基本／浮点帧、坏栈与有效位、读取失败后停止、RV32 异常与中断、历史状态、捕获位恢复、单位／时效／回卷、JSON/Markdown 导出，以及约 200 KiB/s、2 MiB/s 的浏览器模拟突发接收。
-这些是模型与主机交互验证，**不作为新硬件异常场景的板上验收或真实 RTT 吞吐结果**。现有吞吐证据仍以各功能文档为准。
+模型与主机交互验证不替代板上结果。另已完成 [H743 真机验收及性能对照](validation/2026-10-08-h743-diagnostics.md)：8 个真实异常场景、基本／浮点 MSP/PSP 帧、处理函数序言后的恢复、只读一致性及捕获位恢复；对照开发前标签测量正常调试、J-Scope 和 RTT。相同生效时钟下没有观察到明显吞吐下降，60 MHz 压力下的降档、数据模式不连续及 USB 丢样均单列保留。
 
 复现：`make test-diagnostics`；启动本地服务与 CDP 浏览器后 `make test-diagnostics-page`。页面测试建立独立标签，使用模型，不烧写目标固件。
 
-寄存器语义参考 [ST Cortex-M4 编程手册](https://www.st.com/resource/en/programming_manual/dm00046982-stm32-cortexm4-mcus-and-mpus-programming-manual-stmicroelectronics.pdf)、[Arm CMSIS 核心头文件](https://github.com/ARM-software/CMSIS_5/tree/develop/CMSIS/Core/Include) 与 [RISC-V Machine-Level ISA](https://docs.riscv.org/reference/isa/priv/machine.html)。
+寄存器语义参考 [ST Cortex-M4 编程手册](https://www.st.com/resource/en/programming_manual/dm00046982-stm32-cortexm4-mcus-and-mpus-programming-manual-stmicroelectronics.pdf)、[ST Cortex-M7 编程手册 PM0253（图 11：异常保存帧）](https://www.st.com/resource/en/programming_manual/DM00237416.pdf)、[Arm CMSIS 核心头文件](https://github.com/ARM-software/CMSIS_5/tree/develop/CMSIS/Core/Include) 与 [RISC-V Machine-Level ISA](https://docs.riscv.org/reference/isa/priv/machine.html)。
 探针计数语义依据固件 `scope_sampler.c` 和网页 `scope/protocol.js`、`hid/probe.js`，不套用缺乏证据的吞吐模型。

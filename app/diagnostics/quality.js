@@ -9,6 +9,9 @@ export function scopeQuality(s, now = Date.now()){
   const counter = name => full ? probe[name] : legacy ? ({usb:s._qualityStat.usbErr,errors:s._qualityStat.swdErr,yields:s._qualityStat.dapYield}[name] ?? null) : null;
   const skipped = counter('skipped', s.probeDropped), usb = counter('usb', s.usbDrop), errors = counter('errors', s.readErrors);
   const findings = [];
+  const requestedClock=Number(s._qualityConfig?.请求时钟_kHz), actualClock=Number(s.swdMhz)*1000;
+  if(!s._qualityReplay && s.backend==='swd' && requestedClock>0 && actualClock>0 && actualClock<requestedClock)
+    findings.push(f('已确认', `生效 SWD 时钟已从请求的 ${requestedClock/1000} MHz 降为 ${actualClock/1000} MHz。`, '对照吞吐／跳拍时必须使用相同的生效档位；请求值不能代表实际速度'));
   if (!full) findings.push(f('证据不足', legacy ? 'STAT 提供部分计数，16 位字段可能回卷，不能计算精确跳拍率。'+(s.supportsMetrics && s.running?'可点击「刷新计数」取得完整快照。':'本次缺少完整快照，保留部分计数。') : '探针计数尚未取得、已过期或读取失败，不能据此判断采集正常。', s.metricsError || '未取得有效的完整计数'));
   if (skipped > 0) findings.push(f('已确认', '探针未赶上部分计划采样时刻。', `${skipped} 个跳过的采样时刻`));
   if (usb > 0) findings.push(f('已确认', '探针 USB 包缓冲不足或提交失败，部分样本未送出。', full?`${usb} 个样本`:`STAT 字段值 ${usb}（16 位，可能回卷）`), f('可能原因', '主机排空速度或 USB 调度跟不上；需结合序号缺口和网页状态继续定位。'));

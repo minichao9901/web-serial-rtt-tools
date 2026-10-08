@@ -1,0 +1,16 @@
+{
+  "cpuid": 1092600433,
+  "id": 537093200,
+  "flashKb": 2048,
+  "dhcsr": 16842753,
+  "demcr": 16777216,
+  "faultHeals": 0,
+  "recoveries": 0,
+  "bytes": 2097152,
+  "sha256": "5d8599dea0b6d2eda69da30d63861bb85f18d1e0acd7930064262e27592dd1da",
+  "originalSha256": "5d8599dea0b6d2eda69da30d63861bb85f18d1e0acd7930064262e27592dd1da",
+  "fullFlashMatch": true,
+  "running": true,
+  "hardFaultCatch": false,
+  "at": "2026-10-08T09:33:18.469Z"
+}

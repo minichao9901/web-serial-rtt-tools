@@ -84,14 +84,16 @@ export async function captureFault(s){
       else if(!(result.raw.CFSR & STACK_BAD)){
         let candidate=null;
         if(RETURN.has(regs.LR) && ((regs.LR&16) || ((result.raw.CPUID>>>4)&0xfff)!==0xc23)){
-          const base=(regs.LR&4)?regs.PSP:regs.MSP, offset=(regs.LR&16)?0:72;
-          if(!validRam(s,base,offset+32)) result.findings.push(f('证据不足', '异常栈地址未通过 RAM 范围／对齐验证，未读取。'));
+          const base=(regs.LR&4)?regs.PSP:regs.MSP, fpBytes=(regs.LR&16)?0:72;
+          if(!validRam(s,base,fpBytes+32)) result.findings.push(f('证据不足', '异常栈地址未通过 RAM 范围／对齐验证，未读取。'));
           else {
-            const b=await read(base+offset,32); if(b.length!==32)throw new Error('异常帧短读');
+            // Core registers start at SP in both frame types. FP storage is
+            // above the 32-byte core frame, not below it (ST PM0253 fig. 11).
+            const b=await read(base,32); if(b.length!==32)throw new Error('异常帧短读');
             const v=Array.from({length:8},(_,i)=>new DataView(b.buffer,b.byteOffset,32).getUint32(i*4,true));
             const thread=!!(regs.LR&8), stackedIpsr=v[7]&511;
-            if((v[7]&0x01000000) && validRam(s,base,offset+32+((v[7]&512)?4:0)) && (v[6]&1)===0 && v[6]!==0 && ((thread&&stackedIpsr===0)||(!thread&&stackedIpsr!==0)) && (!s.sym || executable(s,v[6]))){
-              const r=new Array(16).fill(0); for(let i=0;i<4;i++)r[i]=v[i];r[12]=v[4];r[14]=v[5];r[15]=v[6];r[13]=base+offset+32+((v[7]&512)?4:0);
+            if((v[7]&0x01000000) && validRam(s,base,fpBytes+32+((v[7]&512)?4:0)) && (v[6]&1)===0 && v[6]!==0 && ((thread&&stackedIpsr===0)||(!thread&&stackedIpsr!==0)) && (!s.sym || executable(s,v[6]))){
+              const r=new Array(16).fill(0); for(let i=0;i<4;i++)r[i]=v[i];r[12]=v[4];r[14]=v[5];r[15]=v[6];r[13]=base+fpBytes+32+((v[7]&512)?4:0);
               const vector=result.raw.VTOR+ipsr*4;
               const vectorValid=result.raw.VTOR%128===0 && vector+4<=0xa0000000 && !(vector>=0x40000000 && vector<0x60000000);
               const handler=vectorValid ? await word(vector) : 0;
@@ -110,7 +112,14 @@ export async function captureFault(s){
             if(sel==null)throw new Error('异常展开所需寄存器不可用');
             return cache[key]=(await guard(()=>s.probe.regReadDiagnostic(sel)))>>>0;},
           memRead:async(a,n)=>{if(!validRam(s,a,n))throw new Error('展开超出允许 RAM 范围');return read(a,n);}};
-        if(s.sym){
+        if(result.frame?.validated){
+          // At the vector's first instruction the handler has not modified
+          // r4-r11. These live values are still the interrupted context.
+          for(let i=4;i<=11;i++)candidate.regs[i]=await safeSession.readReg('R'+i);
+          candidate.known=Array.from({length:16},(_,i)=>i);
+          result.frame={...result.frame,regs:candidate.regs,known:candidate.known};
+        }
+        if(s.sym && !result.frame?.validated){
           const trace=await backtrace(safeSession,{depth:8,stackBytes:512});
           result.handlerFrames=trace.frames; result.unwindReason=trace.reason;
           const restored=trace.frames.find(frame=>frame.kind==='exception');
