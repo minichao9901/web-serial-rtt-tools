@@ -432,6 +432,9 @@ export class MockTarget {
   async run(){ this._writeDhcsr(0xa05f0001); }
   async halt(){ this._writeDhcsr(0xa05f0003); }
   async isHalted(){ return !this.running; }
+  async readMemDiagnostic(addr,len){ return this.readMem(addr,len); }
+  async regReadDiagnostic(sel){ if(this.running)throw new Error('目标在运行'); return this.regRead(sel); }
+  async setHardFaultCatch(on){ const v=this.ppb.get(0xe000edfc)||0;this.ppb.set(0xe000edfc,on?v|(1<<10):v&~(1<<10));return !!(v&(1<<10)); }
   /** 真探针有 SWJ_Clock（0x11）；假目标只改个数字，够上层判断"实际用的是哪个档" */
   async setClock(hz){ this.clockHz = hz >>> 0; return true; }
   async _readWord(addr){

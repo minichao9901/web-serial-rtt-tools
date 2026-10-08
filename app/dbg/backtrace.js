@@ -89,12 +89,13 @@ function decorate(s,pc,sp,kind,returned=false){
   return {pc:address,sp:sp>>>0,kind,lookup,name:s.sym?.nameOf?.(lookup)||'',loc:s.sym?.at?.(lookup)||null};
 }
 function executable(elf,pc){ return elf?.sections().some(sec=>(sec.flags&4)&&pc>=sec.addr&&pc<sec.addr+sec.size); }
-export async function backtrace(s,{depth=16,scan=false,stackBytes=4096,signal}={}){
+export async function backtrace(s,{depth=16,scan=false,stackBytes=4096,signal,initial}={}){
   if(!Number.isInteger(depth)||depth<1||depth>64) throw new Error('bt 深度须为 1..64');
   if(!Number.isInteger(stackBytes)||stackBytes<32||stackBytes>65536||stackBytes%4) throw new Error('栈读取范围须为 32..65536 字节且按4字节对齐');
   const cancel=()=>{if(signal?.()){const e=new Error('栈回溯已中断'); e.cancelled=true; throw e;}};
-  await s.refresh(); if(!s.halted) throw new Error('先暂停目标再回溯（不自动停止正在运行的程序）');
-  const sp=await s.readReg(s.arch.SP), pc=await s.readReg(s.arch.PC);
+  if(initial && (s.arch.name!=='arm' || scan || initial.regs?.length!==16 || ![13,14,15].every(i=>initial.known?.includes(i))))throw new Error('异常恢复寄存器集无效');
+  if(!initial)await s.refresh(); if(!s.halted) throw new Error('先暂停目标再回溯（不自动停止正在运行的程序）');
+  const sp=initial?initial.regs[13]:await s.readReg(s.arch.SP), pc=initial?initial.regs[15]:await s.readReg(s.arch.PC);
   if(sp%4 || sp+stackBytes>0x100000000) throw new Error('SP 未对齐或读取范围跨 u32 边界');
   const frames=[decorate(s,pc,sp,'current')], elf=s.sym?.elf;
   let reason='达到回溯深度上限';
@@ -141,14 +142,16 @@ export async function backtrace(s,{depth=16,scan=false,stackBytes=4096,signal}={
   const riscv=s.arch.name==='riscv',registerCount=riscv?33:16,pcReg=riscv?32:15,spReg=riscv?2:13;
   const preservedRegisters=riscv?[8,9,...Array.from({length:10},(_,i)=>i+18)]:Array.from({length:8},(_,i)=>i+4);
   const r=new Uint32Array(registerCount);
-  if(riscv){
+  if(initial){
+    r.set(initial.regs);
+  }else if(riscv){
     for(let i=0;i<32;i++){cancel();r[i]=i===0?0:await s.readReg('x'+i);}
   }else{
     for(let i=0;i<13;i++){cancel();r[i]=await s.readReg('R'+i);}
     r[14]=await s.readReg('LR');
   }
   r[spReg]=sp;r[pcReg]=pc;
-  let state=r, returned=false, known=new Set(Array.from({length:registerCount},(_,i)=>i));
+  let state=r, returned=false, known=new Set(initial ? initial.known : Array.from({length:registerCount},(_,i)=>i));
   frames[0].regs=Array.from(r);frames[0].known=[...known];
   const seen=new Set([`${pc}:${sp}`]);
   try {
@@ -178,6 +181,7 @@ export async function backtrace(s,{depth=16,scan=false,stackBytes=4096,signal}={
       if(frames.length>=depth)break;
       if(state[spReg]<previousSp) throw new Error('调用者 SP 倒退，栈或展开信息不一致');
       if(!riscv&&exceptionReturn(state[pcReg])){
+        const excReturn=state[pcReg]>>>0;
         // MSP uses the unwound handler SP; PSP is a separate bounded stack region.
         const base=(state[15]&4)?await s.readReg('PSP'):state[13];
         const offset=(state[15]&16)?0:72;
@@ -192,7 +196,8 @@ export async function backtrace(s,{depth=16,scan=false,stackBytes=4096,signal}={
         state[12]=v[4];state[14]=v[5];state[15]=v[6];
         state[13]=base+offset+32+((v[7]&512)?4:0); kind='exception';
         // Changing to PSP cannot be safely followed using the original MSP bounds.
-        frames.push({...decorate(s,state[15],state[13],kind),regs:Array.from(state),known:[0,1,2,3,12,13,14,15]});
+        frames.push({...decorate(s,state[15],state[13],kind),regs:Array.from(state),known:[0,1,2,3,12,13,14,15],
+          exception:{return:excReturn,base,stack:(excReturn&4)?'PSP':'MSP',extended:offset!==0,xpsr:v[7],aligned:!!(v[7]&512)}});
         reason='已恢复异常硬件帧；跨栈后停止（当前读取边界属于原栈）'; break;
       }
       if(!state[pcReg] || state[pcReg]===0xffffffff) {reason='到达栈末端';break;}

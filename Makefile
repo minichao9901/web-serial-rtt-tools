@@ -174,7 +174,15 @@ test-dbg: test-dbg-features
 	$(NODE) tools/selftest/dbg-core.test.mjs
 
 .PHONY: test-dbg-features
+.PHONY: test-diagnostics test-diagnostics-page
+test-diagnostics:
+	$(NODE) tools/selftest/diagnostics.test.mjs
+
+test-diagnostics-page: page-prep
+	$(NODE) tools/selftest/diagnostics-page.test.mjs
+
 test-dbg-features:
+	$(NODE) tools/selftest/diagnostics.test.mjs
 	$(NODE) tools/selftest/dbg-dwt.test.mjs
 	$(NODE) tools/selftest/dbg-backtrace.test.mjs
 	$(NODE) tools/selftest/dbg-frame-locals.test.mjs

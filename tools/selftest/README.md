@@ -1,5 +1,7 @@
 # 自测入口顺序
 
+异常诊断与采集质量：`make test-diagnostics` 验证只读现场、坏栈／时效／单位和报告；`make test-diagnostics-page` 在独立浏览器标签中验证模型故障、捕获位恢复、导出、抽屉高度和高流量接收。前者已纳入离线回归；页面测试不烧写目标，模拟速率不作为硬件吞吐验收。
+
 JScope 数组元素回归：`node tools/selftest/scope-array.test.mjs`，也包含在 `make test-offline` 和 `make test-scope` 中。覆盖真实 DWARF 4/5 的元素地址、多维步长、结构体成员、越界检查、8 MB 数组不全量展开，以及同时采样 8 项的限制。
 
 自测分成离线、页面和真机三层。编号表示推荐顺序，日期记录放在

@@ -1069,3 +1069,23 @@ fieldset.folded > legend::after{content:' · 已折叠';color:var(--fg2);font-si
 #tab-dbg #d-locals{max-height:240px;overflow-wrap:anywhere;white-space:normal}
 #tab-dbg #d-locals>div,#tab-dbg #d-locals>details{padding:3px 0}
 #tab-dbg #d-locals summary{cursor:pointer}
+
+/* Fault diagnostics / acquisition quality drawer preserve waveform height. */
+.diag-drawer { position: fixed; z-index: 90; right: 12px; top: 110px; bottom: 12px; width: min(520px, calc(100vw - 24px)); background: #10161d; border: 1px solid #405063; border-radius: 10px; box-shadow: 0 8px 36px #0009; display: flex; flex-direction: column; }
+.diag-drawer[hidden] { display: none; }
+.diag-head { display: flex; align-items: center; gap: 8px; padding: 12px; border-bottom: 1px solid #354151; }
+.diag-head b { flex: 1; }
+.diag-body { overflow: auto; min-height: 0; padding: 10px; }
+.dockpage[data-dock="fault"] { overflow: auto; }
+.diag-findings p { margin: 0 0 8px; padding: 9px 10px; background: #1a2430; border-left: 3px solid #519dff; border-radius: 4px; font-size: 13px; line-height: 1.5; }
+.diag-findings small, .diag-table small { display: block; color: #a2adbb; margin-top: 3px; }
+.diag-settings { display: grid; grid-template-columns: minmax(100px, 35%) 1fr; gap: 6px 12px; font-size: 12px; margin: 12px 0; }
+.diag-settings dt { color: #a2adbb; }
+.diag-settings dd { margin: 0; overflow-wrap: anywhere; }
+.diag-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.diag-table td, .diag-table th { padding: 7px 4px; border-bottom: 1px solid #303944; text-align: left; vertical-align: top; overflow-wrap: anywhere; }
+.diag-table td:nth-child(2) { font-family: monospace; white-space: nowrap; }
+.diag-body details { margin-top: 12px; font-size: 13px; }
+.diag-body details summary { cursor: pointer; color: #a2adbb; }
+.diag-frame { width: 100%; max-width: 100%; overflow: hidden; text-overflow: ellipsis; text-align: left; margin: 3px 0; font: 12px monospace; }
+@media (max-width: 700px) { .diag-drawer { top: 12px; } }

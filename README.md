@@ -23,11 +23,11 @@
 | 串口助手 | ASCII / HEX / ANSI 收发、时间戳、定时与快捷发送、文件记录 |
 | 终端 | xterm.js 交互终端、ANSI 显示、本地回显、按键映射和粘贴发送 |
 | RTT Viewer | RTT 通道查看与下行输入；CMSIS-DAP 直连、可选本地桥及模拟目标 |
-| RTT 转发 | 探针读取目标 RTT 并转成 CDC 字节流；网页作为高速串口接收端 |
+| RTT 转发 | 探针读取目标 RTT 并转成 CDC 字节流；高速接收、显示保护与采集质量报告 |
 | SPI转发 | 外部 SPI 主机数据经探针从机 DMA 转为 CDC；附引脚分配图 |
-| J-Scope 波形 | 1–8 通道变量采集、速率标定、触发、游标、CSV 导出与原始包回放 |
+| J-Scope 波形 | 1–8 通道变量采集、速率标定、触发、游标、CSV / 原始包与分项质量报告 |
 | 烧录器 | ELF / HEX / BIN 的擦除、编程、校验和复位；按支持的目标算法工作 |
-| 调试器 | 源码断点、逐行与指令单步、寄存器、内存、变量监视、调用栈、局部变量和 RTT 同屏 |
+| 调试器 | 源码断点、单步、变量、调用栈与 RTT；ARM / RV32 异常诊断及现场报告 |
 | USB→SPI/QSPI | 单/双/四线事务、命令表、寄存器、脚本、实时值、NOR Flash 与回环测试 |
 | SPI/QSPI 屏 | 初始化表解析与重放、图案 / 图片 / 动画 / 视频、局部刷新及支持的读回模式 |
 | USB→I2C | 总线扫描、寄存器编辑、命令表、周期脚本和数据解码 |
@@ -153,6 +153,7 @@ node tools/dev/serve-nocache.mjs 8899
 | 2026-10-06 | ARM / RISC-V 栈帧验证与 ADC 1 / 2 MSa/s 持续采集测试完成 |
 | 2026-10-07 | HSS 标定与预读优化、数组元素采样及高流量日志修复；建立双仓库标签 [`milestone-2026-10-07`](https://github.com/minichao9901/web-serial-rtt-tools/tree/milestone-2026-10-07) |
 | 2026-10-08 | SPI转发页面、引脚图与 H743 高速接收验证，配合探针统一 240 MHz 模块时钟 |
+| 2026-10-08 | 加入异常诊断和 J-Scope / RTT 质量报告；开发前双仓库基线标签 [`milestone-2026-10-08-pre-diagnostics`](https://github.com/minichao9901/web-serial-rtt-tools/tree/milestone-2026-10-08-pre-diagnostics) |
 
 ## 文档与贡献入口
 
@@ -160,6 +161,7 @@ node tools/dev/serve-nocache.mjs 8899
 | --- | --- |
 | [后端与授权](docs/backends.md) | 直连与本地桥、连接流程和故障定位 |
 | [调试器](docs/dbg-page.md) / [栈帧与局部变量](docs/debug-frame-locals.md) | 调试功能和信息恢复范围 |
+| [异常诊断与采集质量](docs/diagnostics.md) | ARM / RV32 现场、分项计数、证据等级和 JSON / Markdown 报告 |
 | [J-Scope](docs/scope-page.md) / [HSS 性能](docs/hss-performance.md) | 变量采集、标定和性能口径 |
 | [RTT 转发](docs/rtt-cdc.md) / [SPI转发](docs/spi-cdc.md) | 高速接收、共享串口和记录 |
 | [SPI/QSPI](docs/spi-bridge-page.md) / [I2C](docs/i2c-page.md) / [ADC / DAC](docs/usb-analog-page.md) | 外设工具与接线 |

@@ -361,7 +361,7 @@ export class ScopeView {
       }
       this.hid = hid;
       let info = '';
-      try { const i = await hid.info(); info = `${i.model || 'akaLinkPro'}${i.fw ? ' · FW ' + i.fw : ''}`; }
+      try { const i = await hid.info(); this._probeInfo=i; info = `${i.model || 'akaLinkPro'}${i.fw ? ' · FW ' + i.fw : ''}`; }
       catch {
         // 连上了但问不出型号 —— 十有八九选错了设备（触摸板/键盘也有 0xFF00 的 collection）
         info = hid.label || '未知 HID 设备';
@@ -872,6 +872,14 @@ export class ScopeView {
     this.applyTrigger(true);
     this.packets = 0; this.lost = 0; this.decodeErr = 0; this.probeDropped = 0; this.raw = [];
     this.usbDrop = 0; this.probeYield = 0; this.readErrors = 0; this.probeMetrics = null; this.metricsError = null;
+    this._metricsAt = 0; this._statAt = 0; this._qualityCounterRolled = false; this.periodActualUs = 0;
+    this._qualityReplay = false; this._qualityStat = null;
+    this.qualityHistory?.reset();
+    this._qualityConfig = { ELF: this.elf || '未加载', 请求周期_us: periodUs, 请求时长_s: Number($('sc-seconds')?.value) || null,
+      探针: this.usingMock ? '模拟探针' : this.hid?.label || '未知',
+      探针固件: this.usingMock ? '模拟' : this._probeInfo?.fw || '未知',
+      请求时钟_kHz: Number($('sc-clock').value) || '自动', 通道: vars.map(v => `${v.name}:${v.scalar}@0x${v.addr.toString(16)}`).join(', '),
+      单字短批次: !!$('sc-batch')?.checked, 暂停串口桥: !!this._captureCdcOff };
     this.rawBytes = 0;
 
     try {
@@ -1396,6 +1404,7 @@ export class ScopeView {
       if (generation !== this._captureGen) return;
       const m = P.parseScopeMetrics(res.subarray(3));
       this.probeMetrics = m; this.probeDropped = m.skipped; this.usbDrop = m.usb;
+      this._metricsAt = Date.now();
       this.probeYield = m.yields; this.readErrors = m.errors;
       this.metricsError = null;
       return m;
@@ -1534,6 +1543,9 @@ export class ScopeView {
         }
         case P.KIND.STAT: {
           const s = P.parseStat(pkt.payload, pkt.version);
+          this._statAt = Date.now();
+          this._qualityStat = s;
+          if (!this.supportsMetrics) this._metricsAt = this._statAt;
           if (!this.probeMetrics) {
             this.probeDropped = Math.max(0, s.dropped - s.usbErr);
             this.usbDrop = s.usbErr;
@@ -1658,6 +1670,8 @@ export class ScopeView {
   /** 回放 .jsp：把当时的字节流重新喂一遍（不连硬件也能看波形 / 调触发）*/
   async replayFile(file){
     try {
+      this._qualityReplay = true; this._qualityConfig = { 文件: file.name || '原始包回放' };
+      this.qualityHistory?.reset(); this.qualityHistory?.note('replay','从文件回放，不引用当前探针计数');
       const buf = new Uint8Array(await file.arrayBuffer());
       const vars = [...(this.selected.length ? this.selected : this.mockVars())].sort((a, b) => a.addr - b.addr);
       const periodUs = this.periodUs();
@@ -1670,6 +1684,7 @@ export class ScopeView {
       this.seqT = new P.SeqTracker();
       this.timeU = new P.TimeUnwrap();
       this.packets = 0; this.lost = 0; this.defVars = null;
+      this.decodeErr = 0; this._qualityStat = null; this._statAt = 0; this._metricsAt = 0; this.probeMetrics = null;
       const chunk = 64 * 1024;
       for (let o = 0; o < buf.length; o += chunk) this.onChunk(buf.subarray(o, o + chunk));
       this.renderer.fitAll();

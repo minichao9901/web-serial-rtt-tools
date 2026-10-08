@@ -21,6 +21,7 @@ import { SpiSession } from './spi/session.js';
 import { SpiBusView } from './spi/bus-view.js';
 import { SpiPanelView } from './spi/panel-view.js';
 import { AnalogView } from './analog/view.js';
+import { installAcquisitionDiagnostics } from './diagnostics/acquisition.js';
 import { I2cView } from './i2c/view.js';
 import { SpiCdcView } from './spi-cdc/view.js';
 import { ProbeBus, closeProbeUsbDevices } from './core/probe-bus.js';
@@ -74,6 +75,7 @@ dbg.init();
 i2c.init();
 analog.init();
 spiCdc.init();
+installAcquisitionDiagnostics(tools);
 
 initTabs(name => {
   if (name === 'serial') requestAnimationFrame(() => assistant.onShow());

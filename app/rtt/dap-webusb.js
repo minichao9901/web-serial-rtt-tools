@@ -986,6 +986,50 @@ export class WebUsbDapProbe {
     return await this._withLock(() => this._readMemLocked(addr, len, apIndex));
   }
 
+  /** Fault diagnostics must preserve the scene: never initialize/heal the target transport. */
+  async readMemDiagnostic(addr, len){
+    if (this._faulted || this._recovering) throw new Error('调试口已有 FAULT／正在恢复；诊断未重新初始化目标');
+    return this._withLock(() => {
+      if (this._faulted || this._recovering) throw new Error('调试口已有 FAULT／正在恢复；诊断未重新初始化目标');
+      return this._readMemLocked(addr, len, 0);
+    });
+  }
+
+  async regReadDiagnostic(regsel){
+    if (this._faulted || this._recovering) throw new Error('调试口已有 FAULT／正在恢复；诊断未重新初始化目标');
+    return this._withLock(async () => {
+      if (this._faulted || this._recovering) throw new Error('调试口已有 FAULT／正在恢复；诊断未重新初始化目标');
+      const read = a => this._readMemLocked(a, 4, 0);
+      if (!((await read(0xe000edf0))[2] & 2)) throw new Error('目标已运行；诊断未暂停内核');
+      // DCRSR selects a register for reading; no DHCSR execution control or register write.
+      await this._writeMemLocked(0xe000edf4, new Uint8Array([regsel & 0x1f, 0, 0, 0]), 0);
+      for(let i=0;i<50;i++){
+        if((await read(0xe000edf0))[2] & 1){
+          const b=await read(0xe000edf8); if(b.length!==4)throw new Error('诊断寄存器短读');
+          return new DataView(b.buffer,b.byteOffset,4).getUint32(0,true);
+        }
+        await waitMs(2);
+      }
+      throw new Error('诊断寄存器读取超时');
+    });
+  }
+
+  /** Explicit opt-in vector catch; preserve every other DEMCR bit. */
+  async setHardFaultCatch(enabled){
+    if(this._faulted || this._recovering)throw new Error('调试口异常，未配置 HardFault 捕获');
+    return this._withLock(async()=>{
+      if(this._faulted || this._recovering)throw new Error('调试口异常，未配置 HardFault 捕获');
+      const read=async()=>{const b=await this._readMemLocked(0xe000edfc,4,0);return new DataView(b.buffer,b.byteOffset,4).getUint32(0,true);};
+      const before=await read(), original=!!(before & (1<<10));
+      try{
+        const after=enabled ? before|(1<<10) : before&~(1<<10);
+        if((after>>>0) !== before)await this._writeMemLocked(0xe000edfc,u32leBytes(after>>>0),0);
+        if(!!((await read())&(1<<10))!==!!enabled)throw new Error('HardFault 捕获位写入未得到确认');
+        return original;
+      }catch(e){e.originalCatch=original;throw e;}
+    });
+  }
+
   /**
    * 读目标内存（按数据量分级决定"要不要防一手"）。
    *

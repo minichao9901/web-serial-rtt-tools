@@ -108,7 +108,8 @@ export class RttCdcView {
       this.render();
       toast(`已连接：${this.dev.label}${this.info.fw ? ' · FW ' + this.info.fw : ''}`, 'ok');
     } catch (e){
-      this.render({ error: e?.message || String(e) });
+      this._statusError = e?.message || String(e);
+      this.render({ error: this._statusError });
       toast('连接探针失败：' + (e?.message || e), 'err');
     }
   }
@@ -129,7 +130,7 @@ export class RttCdcView {
       try {
         const r = await this.dev.status();
         this._noteProgress(r.status);
-        this.last = r.status;
+        this._acceptStatus(r.status);
         this.render();
         if (r.status?.running){
           toast('探针侧的 RTT 桥仍在运行（上一次没停）：它会一直读目标内存占着 RTT 环。' +
@@ -358,7 +359,8 @@ export class RttCdcView {
     } catch (e){
       if (g !== this._engineGen) return;
       if (this._bridgeRequested) this.probeManager?.fail('hid', e);
-      this.render({ error: e?.message || String(e) });
+      this._statusError = e?.message || String(e);
+      this.render({ error: this._statusError });
       toast('启动转发失败：' + (e?.message || e), 'err');
     }
   }
@@ -395,12 +397,12 @@ export class RttCdcView {
     try {
       const r = await this.dev.stop();
       if (r?.rc < 0 && r.rc !== START_PENDING) throw new Error(startRcText(r.rc, this.isRiscv));
-      this.last = r.status;
+      this._acceptStatus(r.status);
       const deadline = Date.now() + 3000;
       while (this.last?.running || this.last?.startRc === START_PENDING){
         if (Date.now() >= deadline) throw new Error('停止 RTT 转发超时（探针还在运行）');
         await waitMs(40);
-        this.last = (await this.dev.status()).status;
+        this._acceptStatus((await this.dev.status()).status);
       }
       this._stall = 0; this._lastMoved = null;
       this._bridgeRequested = false;
@@ -420,21 +422,30 @@ export class RttCdcView {
           '点 RTT 转发页里那个「停止记录」才会把 .crswap 改名成正式文件', 'warn', 10000);
       }
     } catch (e){
-      this.render({ error: e?.message || String(e) });
+      this._statusError = e?.message || String(e);
+      this.render({ error: this._statusError });
       if (this.probeManager?.leases.has('hid')) this.probeManager.fail('hid', e);
       throw e;
     }
   }
 
+  _acceptStatus(status){
+    this.last = status; this._statusAt = Date.now(); this._statusError = null;
+    this._statusSource = { dev: this.dev, device: this.dev.device, generation: this._engineGen };
+  }
+
   async refresh(){
     if (this._starting || this._stopPromise || this.dev._pending) return;
     try {
+      const dev = this.dev, device = dev.device, generation = this._engineGen;
       const r = await this.dev.status();
+      if (this.dev !== dev || dev.device !== device || generation !== this._engineGen) return;
       this._noteProgress(r.status);
-      this.last = r.status;
+      this._acceptStatus(r.status);
       this.render();
     } catch (e){
-      this.render({ error: e?.message || String(e) });
+      this._statusError = e?.message || String(e);
+      this.render({ error: this._statusError });
     }
   }
 
@@ -471,7 +482,7 @@ export class RttCdcView {
       const r = await this.dev.status();
       if (generation !== undefined && generation !== this._engineGen) return;
       this._noteProgress(r.status);
-      this.last = r.status;
+      this._acceptStatus(r.status);
       this.render();
       const st = r.status;
       if (st.running && st.cbAddr) break;

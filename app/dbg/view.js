@@ -45,6 +45,7 @@ import { SourceStore, sourceRootSuggestions } from './source.js';
 import { hex32, parseBytes } from './fmt.js';
 import { Rtt } from '../rtt/protocol.js';
 import { parseSvdXml, decodeSvdRegister, svdSummary } from './svd.js';
+import { FaultPanel } from './fault-panel.js';
 
 const on = (id, ev, fn) => { const el = $(id); if (el) el.addEventListener(ev, fn); return el; };
 const baseName = p => String(p || '').replace(/\\/g, '/').split('/').pop();
@@ -77,6 +78,7 @@ export class DbgView {
     this.svd = null;                       // 当前 SVD 模型（用户选择或内置 F103）
     this.svdName = '';
     this.svdRaw = null;
+    this.faultPanel = new FaultPanel(this);
   }
 
   /** 把 session 的日志接到命令行（换后端时会换 session 对象，所以要能重复调用）*/
@@ -88,6 +90,7 @@ export class DbgView {
 
   init(){
     this._bindSessionLog();
+    this.faultPanel.init();
     this.session.sym = null;
 
     // ---- 侧栏 ----
@@ -398,6 +401,7 @@ export class DbgView {
   }
 
   _syncButtons(connected, halted){
+    this.faultPanel?.sync();
     if(!this.session.connected || !this.session.halted || (this._btSnapshotValid && this.session.pc!==this._btSnapshotPc)) this._invalidateBacktrace();
     const c = connected ?? this.session.connected;
     const h = halted ?? this.session.halted;
@@ -508,7 +512,7 @@ export class DbgView {
     this._stopWatch();
     this.rttStop();
     if (this._connectionTask) await this._connectionTask.catch(() => {});
-    await this.session.exclusive(() => this.session.disconnect());
+    await this.session.exclusive(async () => { await this.faultPanel?.restoreCatchLocked(); await this.session.disconnect(); });
     // 符号表**故意留着**：断开往往只是为了让别的页签用探针，重连后还得接着看变量
     this.mem = new Uint8Array(0);
     this.renderRegs(); this.renderMem(); this.renderBps();
@@ -524,6 +528,7 @@ export class DbgView {
     this._followOut();
     if (this.session.busy){ this._out(`（正在忙，先等上一个动作跑完）`, 'warn'); return false; }
     this._invalidateBacktrace();
+    if (/继续|暂停|复位|单步|跳过|进入|跳出|运行到|^写/.test(name)) this.faultPanel?.invalidate('目标控制或写入操作，现场转为历史记录');
     this.session.busy = true;
     try {
       // 🚨 整段动作要独占 SWD：观察循环/ RTT 泵随时可能在读，交错一次就读出垃圾（真机实测 18%）
@@ -546,21 +551,25 @@ export class DbgView {
   async refreshAll(){
     await this.session.refresh();
     if (this.session.halted) await this.session.refreshRegs();
+    const diagnosis = this.session.halted ? await this.faultPanel?.afterStopLocked() : null;
     this.renderRegs();
-    await this._readMemLocked({ silent: true, auto: true });
+    if (!diagnosis?.error) await this._readMemLocked({ silent: true, auto: true });
     this.renderBps();
     this._syncButtons(true);
     const cap = $('d-bp-cap');
     if (cap) cap.textContent = this.session.bpCapacity
       ? `硬件断点上限 ${this.session.bpCapacity} 个（FPB rev${this.session.caps.rev}）—— 命令 b <地址|符号> 添加，点列表里的 × 删除`
       : '这颗内核没报告可用的 FPB 比较器（读 FP_CTRL 说 0 个）';
-    if (this.session.halted) await this.afterStop();
+    if (this.session.halted && !diagnosis?.error) await this.afterStop();
+    else this._updatePcStrip();
     return true;
   }
 
   /** 目标停下来之后要刷新的东西：PC 落点、源码行、监视值（三处一起，别漏） */
   async afterStop(){
+    const diagnosis = await this.faultPanel?.afterStopLocked();
     this._updatePcStrip();
+    if (diagnosis?.error) return;
     await this._refreshWatchLocked();
     await this.renderSource();
   }
@@ -990,6 +999,8 @@ export class DbgView {
     if (this._disconnecting || this._connecting) return { cancelled: true, lines: [] };
     this._followOut();
     if(!/^(frame|locals|args|info)(\s|$)/i.test(line)) this._invalidateBacktrace();
+    if (/^(c|cont|continue|g|s|step|n|next|si|fin|finish|out|rc|runto|halt|stop|pause|reset|mw|ms)(\s|$)/i.test(line) || /^(r|reg|regs)\s+\S+\s+\S+/i.test(line))
+      this.faultPanel?.invalidate('目标控制或写入命令，现场转为历史记录');
     this._out('> ' + line, 'cmd');
     if (line !== this.hist[this.hist.length - 1]) this.hist.push(line);
     this.histIdx = -1;
@@ -1043,6 +1054,7 @@ export class DbgView {
    *    150 ms 的观察间隔变成 1 s，用户看到的是"点了继续半天不更新"。
    */
   _startWatch(){
+    this.faultPanel?.invalidate('目标继续运行，现场转为历史记录');
     this._invalidateBacktrace();
     if (this.watching) return;
     this.watching = true;
@@ -1077,6 +1089,8 @@ export class DbgView {
         await this.session.tryExclusive(async () => {
           await this.session.refreshRegs();
           this.renderRegs();
+          const diagnosis = await this.faultPanel?.afterStopLocked();
+          if (diagnosis?.error){ this._updatePcStrip(); return; }
           const pc = this.session.pc >>> 0;
           const f = this.sym?.funcAt?.(pc & 0xfffffffe);
           const atBp = this.session.bps.some(b => (b & 0xfffffffe) === (pc & 0xfffffffe));
@@ -1115,6 +1129,7 @@ export class DbgView {
       this.sym = st;
       this.session.sym = st;
       this.elfName = name;
+      this.faultPanel?.invalidate('ELF 已变更，源码关联保留为历史记录');
       this._retireStaleMemAddr(st);
       /**
        * 把 ELF 的路径列表交给源码仓：如果已经选过目录，就**按这份列表按需索引**

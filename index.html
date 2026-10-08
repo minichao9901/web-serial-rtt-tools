@@ -499,6 +499,7 @@
         <label class="chk" title="默认开：每段前加一行 [时:分:秒.毫秒]，存 .txt 给人看；关掉则原样写字节存 .bin（二进制安全）"><input type="checkbox" id="c-record-ts" checked> 记录带时间戳</label>
         <label class="chk" title="连接成功后自动弹一次保存框开始记录。配合高速自动关显示（>100KB/s 停渲染、收数/记录照常），一上来就猛灌的场景全程无感"><input type="checkbox" id="c-record-auto"> 连接自动记录</label>
         <button id="c-statclear" class="mini">计数清零</button>
+        <button id="c-quality" class="mini">质量</button>
       </div>
     </section>
   </div>
@@ -610,6 +611,7 @@
         <span class="spacer"></span>
         <span class="flush hint" id="sc-window"></span>
         <span class="flush hint" id="sc-markhint" title="点波形放游标 A，Shift+点放游标 B（两条线之间就是被测间隔）；抓住线可以拖动微调，Esc 或「清游标」清除">点波形放 A · Shift+点放 B · 拖线微调 · Esc 清除</span>
+        <button id="sc-quality" class="mini">质量</button>
       </div>
     </section>
   </div>
@@ -823,6 +825,7 @@
               <button data-dock="var">变量</button>
               <button data-dock="svd">SVD</button>
               <button data-dock="rtt">RTT</button>
+              <button data-dock="fault">异常</button>
             </span>
           </legend>
 
@@ -832,6 +835,17 @@
               <span class="hint">回车即写入（只读位会黄字提醒）</span>
             </div>
             <div id="d-regs" class="reglist"></div>
+          </div>
+
+          <div class="dockpage" data-dock="fault">
+            <div class="toolrow">
+              <button id="d-fault-read" class="mini">读取现场</button>
+              <button id="d-fault-json" class="mini" disabled>JSON</button>
+              <button id="d-fault-md" class="mini" disabled>报告</button>
+              <label class="chk" title="ARM：设置 DEMCR.VC_HARDERR；关闭或断开时恢复原位。RISC-V 不支持这个开关。"><input id="d-fault-catch" type="checkbox" disabled> 捕获 HardFault</label>
+            </div>
+            <p class="hint">目标停止后只读诊断；不自动暂停、复位或清除异常。Cortex-M3/M4/M7 与 RV32。</p>
+            <div id="d-fault-result" class="diag-body"><p class="hint">尚未读取异常现场。载入匹配的 ELF 可解析源码和调用栈。</p></div>
           </div>
 
           <div class="dockpage" data-dock="mem">
