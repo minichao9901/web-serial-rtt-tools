@@ -1,0 +1,32 @@
+{
+  "description": "内置模拟 HID 转发控制与 DemoPort 日志接收；不是实际 RTT 吞吐验收。",
+  "capturedAt": "2026-10-08T04:58:15.429Z",
+  "url": "http://127.0.0.1:8899/index.html?hid=mock&demo=serial&readme-showcase=rttcdc#rttcdc",
+  "viewport": {
+    "width": 1600,
+    "height": 1000
+  },
+  "verification": {
+    "mode": "mock",
+    "bridge": {
+      "supported": true,
+      "mock": true,
+      "connected": true,
+      "label": "akaLinkPro (mock) · MOCK-0001",
+      "running": true,
+      "cbAddr": "0x1240000",
+      "moved": 4096,
+      "startRc": 0,
+      "dapYield": 0,
+      "rescans": 0,
+      "rdErr": 0,
+      "swdMhz": 45,
+      "stall": 1,
+      "state": "运行中 · 控制块 0x1240000 · 上行缓冲 0x1240018 · 通道 0 · 已搬运 4.0 KB（12 次）· 轮询 37 · 读错 0 / RdOff 错 0 · 档位 45 MHz",
+      "info": "已连接：akaLinkPro (mock) · MOCK-0001"
+    },
+    "receivedBytes": 1564,
+    "port": "DemoPort"
+  },
+  "errors": []
+}

@@ -1,0 +1,38 @@
+{
+  "description": "虚拟 1 kHz 正弦，1.65 V 偏置、1.8 Vpp、16 位量化、200 kSa/s；注入页面数据层，不连接硬件 ADC。",
+  "capturedAt": "2026-10-08T04:58:37.374Z",
+  "url": "http://127.0.0.1:8899/index.html?hid=mock&demo=serial&readme-showcase=adc#analog",
+  "viewport": {
+    "width": 1600,
+    "height": 1000
+  },
+  "verification": {
+    "mode": "synthetic",
+    "rate": 200000,
+    "frequency": 1000,
+    "bits": 16,
+    "reference": 3.3,
+    "total": 16000,
+    "visible": 1000,
+    "measurements": {
+      "min": 0.7499839780270084,
+      "max": 2.5500160219729913,
+      "average": 1.65,
+      "peakToPeak": 1.800032043945983,
+      "period": 0.001,
+      "frequency": 1000,
+      "reason": ""
+    },
+    "cursors": {
+      "x": [
+        0.00125,
+        0.00225
+      ],
+      "y": [
+        0.75,
+        2.55
+      ]
+    }
+  },
+  "errors": []
+}

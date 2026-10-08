@@ -1,0 +1,21 @@
+{
+  "description": "真实 ELF 的离线载入与地址解析；尚未连接目标或执行烧录。",
+  "capturedAt": "2026-10-08T04:56:18.849Z",
+  "url": "http://127.0.0.1:8899/index.html?hid=mock&demo=serial&readme-showcase=flash#flash",
+  "viewport": {
+    "width": 1600,
+    "height": 1000
+  },
+  "verification": {
+    "file": "stm32f103_scope.elf",
+    "fileBytes": 160140,
+    "regions": [
+      {
+        "address": 134217728,
+        "bytes": 3192
+      }
+    ],
+    "flashed": false
+  },
+  "errors": []
+}

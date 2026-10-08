@@ -34,9 +34,58 @@
 | USB→ADC / DAC | ADC 示波器、时间 / 电压游标与自动测量；DAC 波形预览和导出 |
 | 工程生成 | 从 Keil `.uvprojx` 生成调试 Makefile、脚本及可选本地桥包 |
 
-**界面示例：J-Scope 三通道波形。** 下图来自当前页面内置模拟数据，展示正弦、斜坡、方波的分道显示与时间游标；截图前已检查采样数据及时间轴连续性。真实硬件性能见下方实测报告；更多页面见 [UI 评审记录](docs/validation/2026-10-06-ui-review.md)。
+## 界面预览
+
+**J-Scope：三通道波形与时间游标。** 下图来自当前页面内置模拟数据，展示正弦、斜坡、方波的分道显示；截图前已检查采样数据及时间轴连续性。
 
 ![J-Scope 内置模拟数据：三通道分道显示与时间游标](docs/shots/readme-scope-demo.png)
+
+展开查看其他工作流。截图中的模拟目标与虚拟信号用于展示界面，真实性能见下方实测报告；采集方式与复现入口见 [截图说明](docs/shots/README.md)。
+
+<details>
+<summary><strong>烧录器 · ELF 载入与烧录准备</strong></summary>
+
+载入真实 STM32 ELF，离线解析写入地址与有效载荷，选择校验及复位选项。本图尚未连接目标或执行烧录。
+
+![烧录器：真实 ELF 已载入，显示离线解析结果，尚未烧录](docs/shots/readme-flash.png)
+
+</details>
+
+<details>
+<summary><strong>RTT 转发 · 日志接收与统计</strong></summary>
+
+转发控制、日志接收、显示模式和记录入口同屏。使用内置模拟 HID 与演示串口，日志由页面生成。
+
+![RTT 转发：内置模拟探针与演示串口的日志接收界面](docs/shots/readme-rttcdc.png)
+
+</details>
+
+<details>
+<summary><strong>调试器 · 源码、断点、结构体监视与调用栈</strong></summary>
+
+真实 ELF 及其匹配源码，配合内置 Cortex-M 模型展示 `main` 断点、变量与结构体成员、单帧回溯。模型数据用于界面演示。
+
+![调试器：模拟目标停在 main，显示匹配源码、断点与结构体监视](docs/shots/readme-dbg.png)
+
+</details>
+
+<details>
+<summary><strong>SPI/QSPI 发图 · 屏幕配置、图案预览与发送</strong></summary>
+
+ST77916 的四线协议配置与 360×360 色条图案，完整发送到内置模拟屏幕 GRAM；图中耗时与速率来自模型，不代表硬件性能或实屏效果。
+
+![SPI/QSPI 发图：模拟探针完成 ST77916 色条图案发送](docs/shots/readme-panel.png)
+
+</details>
+
+<details>
+<summary><strong>ADC 示波器 · 波形、自动测量与时间 / 电压游标</strong></summary>
+
+向页面数据层注入虚拟正弦：**1 kHz、1.8 Vpp、1.65 V 偏置**，按 16 位、200 kSa/s 量化。自动测量与游标读数已核对；本图未接硬件信号源。
+
+![ADC 示波器：虚拟 1 kHz 正弦波，显示频率、电压及游标测量](docs/shots/readme-adc.png)
+
+</details>
 
 ## 实测性能
 

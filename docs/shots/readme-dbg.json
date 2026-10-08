@@ -1,0 +1,69 @@
+{
+  "description": "内置 Cortex-M 模型，配合仓库真实 ELF / 源码展示断点、监视变量与单帧回溯；不模拟完整指令执行。",
+  "capturedAt": "2026-10-08T05:02:58.048Z",
+  "url": "http://127.0.0.1:8899/index.html?hid=mock&demo=serial&readme-showcase=dbg#dbg",
+  "viewport": {
+    "width": 1600,
+    "height": 1000
+  },
+  "verification": {
+    "mode": "mock",
+    "connected": true,
+    "backend": "模拟目标",
+    "halted": true,
+    "pc": 134218080,
+    "clockKhz": 10000,
+    "regs": 23,
+    "bps": [
+      "0x08000160"
+    ],
+    "lastStepMode": null,
+    "bpCap": 8,
+    "elf": {
+      "name": "stm32f103_scope.elf",
+      "symbols": 99,
+      "vars": 19,
+      "source": "dwarf",
+      "lines": 90,
+      "files": 11,
+      "rtt": null
+    },
+    "rtt": null,
+    "watch": [
+      {
+        "expr": "g_tick",
+        "addr": 536875076,
+        "error": null,
+        "value": "12345"
+      },
+      {
+        "expr": "g_far_cnt",
+        "addr": 536870920,
+        "error": null,
+        "value": "12345"
+      },
+      {
+        "expr": "g_pack",
+        "addr": 536875028,
+        "error": null,
+        "value": "{f_sin=0.588000, f_tri=-0.200000, i_tick=12345, u_ramp=345, …}"
+      }
+    ],
+    "src": {
+      "ready": true,
+      "files": 2,
+      "cur": {
+        "file": "E:/web-serial-rtt-tools/tools/target-firmware/stm32f103_scope/src/main.c",
+        "line": 132
+      },
+      "shown": 34
+    },
+    "symRows": 65,
+    "memAddr": "0x20000000",
+    "memLen": 128,
+    "watching": false,
+    "outLines": 35,
+    "sourceText": "120  g_pulse  = (uint8_t)(((t % 2000u) < 100u) ? 1u : 0u);121  g_pair_a = (uint16_t)t;122  g_pair_b = (uint16_t)~t;                 /* a ^ b == 0xFFFF 才算\"同一 tick 内读到\" */123  g_far_sq100 = (int16_t)((("
+  },
+  "errors": []
+}
