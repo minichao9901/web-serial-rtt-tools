@@ -1182,10 +1182,13 @@
             <button id="sp-fl-write" disabled title="按页编程 + 页间自动等 tPP + 写完自动回读校验">写 + 校验</button>
             <button id="sp-fl-writebench" disabled title="擦掉目标区 → 按页写满 → 计速 → 回读校验">写测速</button>
           </div>
-          <label class="row datarow"><span>写数据</span><textarea id="sp-fl-data" class="tx" spellcheck="false" placeholder="十六进制，如 00 01 02 …（一次最多 4 KB；留空 = 用递增图案）"></textarea></label>
-          <div class="row btnrow">
-            <button id="sp-fl-fill" class="mini">填递增图案</button>
-            <label class="row" style="margin-left:auto"><span class="label-auto">页间等 tPP</span><input id="sp-fl-tpp" class="num" value="3" inputmode="numeric"><span>ms</span></label>
+          <div class="row datarow">
+            <span>写数据</span>
+            <textarea id="sp-fl-data" class="tx" spellcheck="false" placeholder="十六进制，如 00 01 02 …（一次最多 4 KB；留空 = 用递增图案）"></textarea>
+            <div class="fl-write-tools">
+              <button id="sp-fl-fill" class="mini">填递增图案</button>
+              <label class="row"><span class="label-auto">页间等 tPP</span><input id="sp-fl-tpp" class="num" value="3" inputmode="numeric"><span>ms</span></label>
+            </div>
           </div>
           <p class="hint">外接 flash 接在 J3：<code>CS=J3[26]</code> <code>SCLK=J3[13]</code> <code>IO0=J3[28]</code> <code>IO1=J3[27]</code>，四线再加 <code>IO2=J3[10]</code> <code>IO3=J3[8]</code>。板上那颗 NOR 在 XPI0 的 PX 专用脚上，桥够不着。</p>
         </div>
@@ -1432,7 +1435,7 @@
                 <th title="索引：从 0 开始，重放 / 导出都按这个顺序">#</th>
                 <th>源行</th>
                 <th title="命令字节（DCS 命令）—— 可以直接敲十六进制">命令</th>
-                <th title="每个格子一个参数字节：直接敲十六进制改值；点一下开「位开关板」逐位改">参数（每格一个字节，可直接改）<div class="ruler" id="pn-code-ruler"></div></th>
+                <th title="每格一个参数字节：直接敲十六进制改值；点一下开「位开关板」逐位改">参数<div class="ruler" id="pn-code-ruler"></div></th>
                 <th>延时</th>
                 <th></th>
               </tr></thead>
