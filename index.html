@@ -80,6 +80,7 @@
             <option>9600</option><option>19200</option><option>38400</option><option>57600</option>
             <option>115200</option><option>230400</option><option>460800</option><option>921600</option>
             <option>1000000</option><option>1500000</option><option>2000000</option>
+            <option>4000000</option><option>8000000</option><option>10000000</option><option>20000000</option><option>25000000</option>
           </datalist>
         </label>
         <label class="row"><span>数据位</span>
@@ -2137,13 +2138,19 @@
       <fieldset><legend>记录 SWO</legend>
         <p class="hint">目标 SWO → 探针 VCOM RX，NRZ / 8N1。通过 SWD 配置 STM32F103，不暂停程序。</p>
         <div class="row"><span>VCOM 串口</span><select id="sw-port" aria-label="SWO VCOM 串口"></select><button id="sw-pick">选择…</button></div>
+        <div class="row btnrow"><button id="sw-detect">识别目标与主频</button></div>
+        <p id="sw-target" class="hint" role="status">尚未识别目标 · 支持 STM32F103 / Cortex-M3</p>
+        <label class="chk"><input id="sw-auto-clock" type="checkbox" checked>从目标 RCC 自动读取主频</label>
+        <div class="row"><span>HSE MHz</span><input id="sw-hse" type="number" min="1" max="25" step="0.1" placeholder="使用外部时钟时填写"></div>
         <div class="row"><span>核心频率 MHz</span><input id="sw-core" type="number" min="1" max="72" value="8"></div>
-        <div class="row"><span>SWO 波特率</span><select id="sw-baud"><option value="1000000">1,000,000</option><option value="2000000">2,000,000</option><option value="4000000">4,000,000</option><option value="500000">500,000</option></select></div>
+        <div class="row"><span>SWO 波特率</span><select id="sw-baud"><option value="1000000">1,000,000</option><option value="2000000">2,000,000</option><option value="4000000">4,000,000</option><option value="8000000">8,000,000</option><option value="10000000">10,000,000</option><option value="20000000">20,000,000</option><option value="24000000">24,000,000</option><option value="25000000">25,000,000</option><option value="500000">500,000</option></select></div>
         <div class="row"><span>PC 间隔</span><select id="sw-period"><option value="256">256 周期</option><option value="512">512 周期</option><option value="1024">1024 周期</option><option value="2048">2048 周期</option><option value="4096" selected>4096 周期</option><option value="8192">8192 周期</option><option value="16384">16384 周期</option></select></div>
         <div class="row"><span>记录秒数</span><input id="sw-seconds" type="number" min="0.1" max="120" step="0.1" value="5"></div>
         <label class="chk"><input id="sw-exceptions" type="checkbox">同时记录异常进入/退出（增加带宽及溢出风险）</label>
         <label class="chk"><input id="sw-itm" type="checkbox">同时开启 ITM 软件事件（若程序有输出）</label>
+        <label class="chk"><input id="sw-baud-round" type="checkbox">允许目标波特率近似（偏差 ≤ 5%，例如 48 MHz 核心请求 25 Mbps 实际输出 24 Mbps）</label>
         <p id="sw-plan" class="hint"></p>
+        <p class="hint">开始记录会通过 SWD 启用目标 SWO / DWT PC 采样并设置 PB3 与波特率；停止时还原目标 trace 寄存器。探针默认 UART 200 MHz，最高接收配置 25 Mbps。</p>
         <div class="row btnrow"><button id="sw-start" class="primary">开始记录</button><button id="sw-stop" disabled>停止并分析</button></div>
         <p id="sw-status" role="status" class="hint">尚未记录</p>
       </fieldset>
@@ -2158,6 +2165,9 @@
         <input id="sw-source-files" type="file" webkitdirectory multiple hidden>
         <p id="sw-files" class="hint">ELF 与源码均未载入</p>
         <div class="row btnrow"><button id="sw-analyze" disabled>重新分析</button><button id="sw-csv" disabled>导出区间 CSV</button></div>
+        <div class="row btnrow"><button id="sw-export-c" disabled>导出完整轨迹 .c</button><button id="sw-export-txt" disabled>导出完整轨迹 .txt</button></div>
+        <p class="hint">完整导出按原始记录逐条重新解码，不受页面展开上限或区间筛选影响。.c 保留原始源码行和事件注释，供阅读，不用于编译。</p>
+        <p id="sw-export-status" class="hint" role="status"></p>
         <p id="sw-warning" class="hint" role="alert"></p>
       </fieldset>
       <fieldset><legend>函数热点 · PC 样本占比</legend><div id="sw-hot" class="sw-hot"><span class="dim">载入记录后显示</span></div></fieldset>
@@ -2195,7 +2205,7 @@
     <li>⚠️ <b>独占</b>：SSCOM / 串口监视器 / idf.py monitor 开着同一个口时，这里打不开。</li>
   </ol>
   <h3>SWO 执行轨迹</h3>
-  <p>更多功能 → SWO 执行轨迹。接好 SWO → VCOM RX、SWD 与共地，填写实际核心频率，载入匹配 ELF 和源码后记录。停止后可离线回放，也可直接载入 F103CB 实测示例。PC 采样展示收到的离散落点，无法恢复 ETM 的逐指令分支流。</p>
+  <p>更多功能 → SWO 执行轨迹。接好 SWO → VCOM RX、SWD 与共地，识别目标主频（HSE 需填写板上频率），选择波特率，载入匹配 ELF 和源码后记录。停止后可离线回放，也可直接载入 F103CB 实测示例。PC 采样展示收到的离散落点，无法恢复 ETM 的逐指令分支流。</p>
   <h3>RTT 为什么分三种后端</h3>
   <ul>
     <li><b>WebUSB · CMSIS-DAP</b>：零安装，页面上直接读目标 RAM 拿 RTT。只认 CMSIS-DAP 类探针（DAPLink、cherrydap…），<b>不认 J-Link</b>。</li>

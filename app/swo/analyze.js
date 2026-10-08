@@ -7,7 +7,7 @@ export function symbolIndex(buffer){
   const cache=new Map();
   function lookup(pc){if(cache.has(pc))return cache.get(pc);const addr=(pc&~1)>>>0;let lo=0,hi=funcs.length-1,i=-1;while(lo<=hi){const m=(lo+hi)>>1;if(funcs[m].addr<=addr){i=m;lo=m+1;}else hi=m-1;}
     const f=funcs[i],exact=!!f&&f.size>0&&addr<f.addr+f.size;
-    const location=lines?.at(addr)||null,r={pc,fn:exact?f.name:'未知位置',funcAddr:exact?f.addr:null,location,exact};cache.set(pc,r);return r;}
+    const location=lines?.at(addr)||null,r={pc,fn:exact?f.name:'未知位置',funcAddr:exact?f.addr:null,location,exact};if(cache.size>=100000)cache.clear();cache.set(pc,r);return r;}
   return {lookup,elf,paths:lines?.paths||[],functionCount:funcs.length,note};
 }
 export function analyzeTrace(raw,metadata={},elfBuffer=null,{maxEvents=250000}={}){

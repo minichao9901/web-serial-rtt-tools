@@ -1,0 +1,23 @@
+import assert from 'node:assert/strict';
+import {traceTextChunks} from '../../app/swo/export.js';
+import {stm32f1Info} from '../../app/swo/target.js';
+import {tracePlan} from '../../app/swo/capture.js';
+const base={cpuid:0x411fc231,device:0x20036410,cr:0x03000083,cfgr:0,autoClock:true};
+assert.equal(stm32f1Info(base).coreHz,8000000);
+assert.equal(stm32f1Info({...base,cfgr:0x34040a}).coreHz,60000000);
+assert.throws(()=>stm32f1Info({...base,cfgr:0x1d000a,cr:0x03020000}),/外部 HSE/);
+assert.equal(stm32f1Info({...base,cfgr:0x1d000a,cr:0x03020000,hseHz:8000000}).coreHz,72000000);
+assert.throws(()=>stm32f1Info({...base,cr:0}),/读回无效/);
+assert.throws(()=>stm32f1Info({...base,dwt:1<<25}),/未实现/);
+assert.throws(()=>stm32f1Info({...base,cpuid:0x411fc271}),/尚未适配/);
+assert.equal(tracePlan({coreHz:50000000,baudRate:25000000}).acpr,1);
+const rounded=tracePlan({coreHz:48000000,baudRate:25000000,allowBaudRounding:true});assert.equal(rounded.baudRate,24000000);assert.equal(rounded.requestedBaudRate,25000000);
+assert.throws(()=>tracePlan({coreHz:8000000,baudRate:25000000,allowBaudRounding:true}),/整除/);
+assert.throws(()=>tracePlan({coreHz:48000000,baudRate:20000000,allowBaudRounding:true}),/偏差/);
+assert.throws(()=>tracePlan({coreHz:72000000,baudRate:26000000}),/25 Mbps/);
+const pc=[0x17,0x40,0,0,8];let raw=Uint8Array.from([...pc,0x70,...pc]);
+const text=[...traceTextChunks(raw,{startAligned:true},null)].join('');assert.match(text,/GAP/);assert.match(text,/PC#1/);assert.match(text,/segment=1/);assert.match(text,/未知|无源码|未载入/);
+raw=new Uint8Array(260000*pc.length);for(let i=0;i<260000;i++)raw.set(pc,i*pc.length);
+let tail='',pcs=0,largest=0;for(const chunk of traceTextChunks(raw,{startAligned:true},null,{format:'txt'})){pcs+=(chunk.match(/PC#/g)||[]).length;tail=chunk;largest=Math.max(largest,chunk.length);}
+assert.equal(pcs,260000,'full export exceeds UI expansion limit without dropping events');assert.match(tail,/PC=260000/);assert.ok(largest<3e6,'bounded export chunks');
+console.log('SWO target/complete export: HSI/HSE, unsupported cores, baud rounding, explicit gaps, >250k full events PASS');

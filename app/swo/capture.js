@@ -1,14 +1,19 @@
 import {WebUsbDapProbe} from '../rtt/dap-webusb.js';
 import {SerialSession} from '../serial/session.js';
 import {MAX_RAW} from './recording.js';
+import {stm32f1Info} from './target.js';
 const R={demcr:0xe000edfc,dwt:0xe0001000,cyccnt:0xe0001004,itm:0xe0000e80,ter:0xe0000e00,tpr:0xe0000e40,acpr:0xe0040010,sppr:0xe00400f0,ffcr:0xe0040304,dbg:0xe0042004};
-export function tracePlan({coreHz,baudRate,periodCycles=4096,seconds=5,itm=false,exceptions=false}={}){
+export function tracePlan({coreHz,baudRate,periodCycles=4096,seconds=5,itm=false,exceptions=false,allowBaudRounding=false}={}){
   for(const [name,v] of Object.entries({coreHz,baudRate,periodCycles,seconds}))if(!Number.isFinite(v)||v<=0)throw Error(name+' 必须为正数');
   if(coreHz>72000000||coreHz<1000000||seconds>120)throw Error('F103 核心频率须为 1–72 MHz，时长至多 120 秒');
   let tap=periodCycles<=1024&&periodCycles%64===0?0:1,unit=tap?1024:64,n=periodCycles/unit;
   if(!Number.isInteger(n)||n<1||n>16)throw Error('采样间隔必须为 64 或 1024 周期的 1–16 倍');
-  const divider=coreHz/baudRate;if(!Number.isInteger(divider)||divider<1||divider>8192)throw Error('核心时钟必须能整除 SWO 波特率（分频 1–8192）');
-  return {coreHz,baudRate,periodCycles,seconds,itm:!!itm,exceptions:!!exceptions,tap,post:n-1,acpr:divider-1,samplesHz:coreHz/periodCycles,estimatedBytes:9*coreHz/periodCycles,wireBytes:baudRate/10};
+  if(baudRate>25000000)throw Error('SWO 波特率最高为 25 Mbps');
+  const requestedBaudRate=baudRate,exactDivider=coreHz/baudRate,divider=allowBaudRounding?Math.round(exactDivider):exactDivider;
+  if(!Number.isInteger(divider)||divider<1||divider>8192)throw Error('核心时钟必须能整除 SWO 波特率（分频 1–8192）');
+  baudRate=coreHz/divider;const baudError=(baudRate-requestedBaudRate)/requestedBaudRate;
+  if(Math.abs(baudError)>.05)throw Error('目标 SWO 与请求波特率偏差超过 5%，请降低波特率或调整目标主频');
+  return {coreHz,baudRate,requestedBaudRate,baudError,periodCycles,seconds,itm:!!itm,exceptions:!!exceptions,tap,post:n-1,acpr:divider-1,samplesHz:coreHz/periodCycles,estimatedBytes:9*coreHz/periodCycles,wireBytes:baudRate/10};
 }
 export class SwoCapture {
   constructor(){this.serial=new SerialSession();this.probe=null;this.running=false;this.busy=false;this.saved=null;this.chunks=[];this.bytes=0;this.metadata={};this.onChange=()=>{};this.collecting=false;this._epoch=0;
@@ -19,21 +24,50 @@ export class SwoCapture {
   get active(){return this.busy||this.running||!!this.probe||this.serial.isOpen;}
   async read(a){const b=await this.probe.readMemDiagnostic(a,4);return new DataView(b.buffer,b.byteOffset,4).getUint32(0,true);}
   async write(a,v){const b=new Uint8Array(4);new DataView(b.buffer).setUint32(0,v,true);await this.probe.writeMem(a,b);}
+  async readClockConfig(){
+    // Probe handoff can yield a stale peripheral read. Confirm the fixed RCC config
+    // before deriving a core clock; unstable clocks must never enable trace.
+    let previous=null,same=0;
+    for(let i=0;i<6;i++){const value=await this.read(0x40021004);same=value===previous?same+1:1;previous=value;if(same===3)return value;}
+    throw Error('RCC 时钟配置读回不稳定，请停止其他调试连接后重试');
+  }
+  async openProbe(){
+    const devices=await WebUsbDapProbe.authorized();
+    this.probe=devices.length===1?await WebUsbDapProbe.open(devices[0],{clockKhz:1000,skipClearHalt:true}):await WebUsbDapProbe.request(false,{clockKhz:1000,skipClearHalt:true});
+  }
+  async targetInfo(options={}){
+    const cpuid=await this.read(0xe000ed00),device=await this.read(0xe0042000),cfgr=await this.readClockConfig(),cr=await this.read(0x40021000),dwt=await this.read(R.dwt);
+    return stm32f1Info({cpuid,device,cfgr,cr,dwt,hseHz:options.hseHz??null,coreHz:options.coreHz,autoClock:!!options.autoClock});
+  }
+  async identifyTarget(options,alive=()=>{}){
+    for(let attempt=1;attempt<=3;attempt++){
+      alive();try{return {...await this.targetInfo(options),detectionAttempts:attempt};}
+      catch(e){
+        if(attempt===3||!/RCC 时钟.*(无效|不稳定)/.test(e.message))throw e;
+        // Retry a read-only transport handoff; never halt/reset or modify target clocks.
+        await this.probe.disconnect();this.probe=null;alive();await this.openProbe();alive();
+      }
+    }
+  }
+  async inspect(options={}){
+    if(this.active||this._startTask||this._stopTask)throw Error('请先停止记录再识别目标');
+    this.busy=true;this.onChange();
+    const setup=async lease=>{try{await this.openProbe();lease?.assert();return await this.identifyTarget({...options,autoClock:false,coreHz:null},()=>lease?.assert());}finally{if(this.probe){await this.probe.disconnect();this.probe=null;}this.busy=false;this.onChange();}};
+    this._startTask=this.probeManager?this.probeManager.run('swo',setup,{reason:'识别 SWO 目标',recovery:true}):setup();
+    try{return await this._startTask;}finally{this._startTask=null;this.busy=false;this.onChange();}
+  }
   async start(options){
     if(this.active||this._startTask||this._stopTask)throw Error('采样连接正在使用或切换中');
-    const plan=tracePlan(options);if(!options.port)throw Error('请先选择 VCOM 串口');
+    let plan;if(!options.autoClock)plan=tracePlan(options);if(!options.port)throw Error('请先选择 VCOM 串口');
     const token=++this._epoch;this.busy=true;this._startTime=null;this.onChange();
     const setup=async lease=>{const alive=()=>{lease?.assert();if(token!==this._epoch)throw Error('记录启动已取消');};
       try{
-        alive();const devices=await WebUsbDapProbe.authorized();alive();
-        this.probe=devices.length===1?await WebUsbDapProbe.open(devices[0],{clockKhz:1000,skipClearHalt:true}):await WebUsbDapProbe.request(false,{clockKhz:1000,skipClearHalt:true});alive();
-        const cpuid=await this.read(0xe000ed00);if(((cpuid>>>4)&4095)!==0xc23)throw Error('本版目标配置支持 STM32F103 Cortex-M3');
-        const device=await this.read(0xe0042000);if(![0x410,0x414,0x430].includes(device&4095))throw Error('目标不是已支持的 STM32F103');
+        alive();await this.openProbe();alive();
+        const target=await this.identifyTarget(options,alive),{cpuid,device}=target;
+        if(options.autoClock)plan=tracePlan({...options,coreHz:target.coreHz});
         if(await this.probe.isHalted())throw Error('目标处于暂停状态，请先继续运行再记录');
-        const cfgr=await this.read(0x40021004),sws=(cfgr>>>2)&3,hpre=(cfgr>>>4)&15,divs=[1,1,1,1,1,1,1,1,2,4,8,16,64,128,256,512];
-        let knownHz=sws===0?8000000:sws===2&&!(cfgr&(1<<16))?4000000*Math.min(16,((cfgr>>>18)&15)+2):null;if(knownHz)knownHz/=divs[hpre];
-        if(knownHz&&knownHz!==plan.coreHz)throw Error('核心频率与 RCC 配置不符：实读 '+knownHz/1e6+' MHz');
-        this.clockCheck={cfgr,knownHz};
+        this.clockCheck={cfgr:target.cfgr,knownHz:target.knownHz};
+        options.onTarget?.(target);
         if(options.verifyElf)await options.verifyElf(this.probe);alive();
         const saved={};for(const [name,addr] of Object.entries(R))saved[name]=await this.read(addr);
         this.wasLocked=!!((await this.read(0xe0000fb4))&2);this.saved=saved;
@@ -42,8 +76,8 @@ export class SwoCapture {
         await this.write(R.dbg,(this.saved.dbg&~0xc0)|32);await this.write(R.acpr,plan.acpr);await this.write(R.sppr,2);await this.write(R.ffcr,0x100);
         await this.write(R.ter,plan.itm?0xffffffff:0);await this.write(R.tpr,0);
         // Receiver opens after the pin is quiet, and drains old UART bytes before enabling ITM.
-        await this.serial.open(options.port,{baudRate:plan.baudRate,owner:'swo'});alive();await new Promise(r=>setTimeout(r,60));alive();
-        this.chunks=[];this.bytes=0;this.metadata={format:'swo-pc-v1',startAligned:true,plan,startedAt:new Date().toISOString(),clockCheck:this.clockCheck,target:{cpuid,device,probe:this.probe.device?.serialNumber||''},elfSha256:options.elfSha256||null,transportGaps:[]};
+        await this.serial.open(options.port,{baudRate:plan.requestedBaudRate,owner:'swo'});alive();await new Promise(r=>setTimeout(r,60));alive();
+        this.chunks=[];this.bytes=0;this.metadata={format:'swo-pc-v1',startAligned:true,plan,startedAt:new Date().toISOString(),clockCheck:this.clockCheck,target:{...target,probe:this.probe.device?.serialNumber||''},elfSha256:options.elfSha256||null,transportGaps:[]};
         this.collecting=true;
         const mask=0x007f1fff;await this.write(R.itm,0x1000f);await this.write(R.dwt,(this.saved.dwt&~mask)|1|(plan.post<<1)|(plan.post<<5)|(plan.tap<<9)|(1<<10)|(1<<12)|(plan.exceptions?(1<<16):0));
         alive();

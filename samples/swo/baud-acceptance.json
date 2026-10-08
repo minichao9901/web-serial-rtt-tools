@@ -1,0 +1,3306 @@
+{
+  "date": "2026-10-09",
+  "path": "F103CB PB3 SWO → probe PB07 VCOM RX → Chrome Web Serial",
+  "fixtureElf": "tools/target-firmware/stm32f103cb_swo/fw.elf",
+  "fixtureSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+  "scope": "现有探针固件；未更改或烧录探针。测得的最高通过档位不代表芯片额定或超频极限。",
+  "highestPassingBaud": 10000000,
+  "datasheetUartInputMaxHz": 100000000,
+  "datasheet": "https://www.hpmicro.com/Public/Uploads/uploadfile/files/20250205/HPM5300DSV011.pdf",
+  "localFirmwareDefaultInputHz": 80000000,
+  "localFirmwareClampBaud": 10000000,
+  "minimumSdkOversample": 8,
+  "theoreticalBaudAtDatasheetMax": 12500000,
+  "attempts": 60,
+  "setupRejected": 9,
+  "runs": [
+    {
+      "run": "sweep1",
+      "startedAt": "2026-10-08T22:54:18.176Z",
+      "frontend": false,
+      "restore": {
+        "passed": true,
+        "sha256": "5c54ac4301861d8827a31bbaf2d995f6fd2e2b58a845e706a4d367d352adce40",
+        "bytes": 131072
+      }
+    },
+    {
+      "run": "boundary2",
+      "startedAt": "2026-10-08T22:58:40.831Z",
+      "frontend": false,
+      "restore": {
+        "passed": true,
+        "sha256": "5c54ac4301861d8827a31bbaf2d995f6fd2e2b58a845e706a4d367d352adce40",
+        "bytes": 131072
+      }
+    },
+    {
+      "run": "final3",
+      "startedAt": "2026-10-08T23:00:20.455Z",
+      "frontend": false,
+      "restore": {
+        "passed": true,
+        "sha256": "5c54ac4301861d8827a31bbaf2d995f6fd2e2b58a845e706a4d367d352adce40",
+        "bytes": 131072
+      }
+    },
+    {
+      "run": "ui4",
+      "startedAt": "2026-10-08T23:02:23.897Z",
+      "frontend": true,
+      "restore": {
+        "passed": true,
+        "sha256": "5c54ac4301861d8827a31bbaf2d995f6fd2e2b58a845e706a4d367d352adce40",
+        "bytes": 131072
+      }
+    },
+    {
+      "run": "ui5",
+      "startedAt": "2026-10-08T23:03:49.171Z",
+      "frontend": true,
+      "restore": {
+        "passed": true,
+        "sha256": "5c54ac4301861d8827a31bbaf2d995f6fd2e2b58a845e706a4d367d352adce40",
+        "bytes": 131072
+      }
+    },
+    {
+      "run": "ui6",
+      "startedAt": "2026-10-08T23:06:53.367Z",
+      "frontend": true,
+      "restore": {
+        "passed": true,
+        "sha256": "5c54ac4301861d8827a31bbaf2d995f6fd2e2b58a845e706a4d367d352adce40",
+        "bytes": 131072
+      }
+    }
+  ],
+  "rows": [
+    {
+      "run": "sweep1",
+      "label": "step-00",
+      "coreHz": 60000000,
+      "requestedBaud": 1000000,
+      "periodCycles": 8192,
+      "seconds": 2,
+      "passed": true,
+      "status": "passed",
+      "bytes": 111493,
+      "elapsedMs": 2000.2999999821186,
+      "bytesPerSecond": 55738.1392796064,
+      "sampleCoverage": 1.0058410666666666,
+      "stats": {
+        "bytes": 111493,
+        "packets": 29584,
+        "pc": 12439,
+        "sleep": 2295,
+        "itm": 58,
+        "exceptions": 0,
+        "sync": 7,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 12439,
+        "analyzedSamples": 12439,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 58,
+        "valid": 58,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "uniquePcs": 176,
+        "checked": 176,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 12286,
+        "matched": 12286,
+        "accuracy": 1,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [],
+      "clockCheck": {
+        "cfgr": 3408906,
+        "knownHz": 60000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": []
+    },
+    {
+      "run": "sweep1",
+      "label": "step-01",
+      "coreHz": 60000000,
+      "requestedBaud": 2000000,
+      "periodCycles": 8192,
+      "seconds": 2,
+      "passed": true,
+      "status": "passed",
+      "bytes": 111870,
+      "elapsedMs": 2000.4000000059605,
+      "bytesPerSecond": 55923.81523678597,
+      "sampleCoverage": 1.0040661333333334,
+      "stats": {
+        "bytes": 111870,
+        "packets": 29532,
+        "pc": 12609,
+        "sleep": 2099,
+        "itm": 58,
+        "exceptions": 0,
+        "sync": 7,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 12609,
+        "analyzedSamples": 12609,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 58,
+        "valid": 58,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "uniquePcs": 173,
+        "checked": 173,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 12519,
+        "matched": 12519,
+        "accuracy": 1,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [],
+      "clockCheck": {
+        "cfgr": 3408906,
+        "knownHz": 60000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": []
+    },
+    {
+      "run": "sweep1",
+      "label": "step-02",
+      "coreHz": 60000000,
+      "requestedBaud": 3000000,
+      "periodCycles": 8192,
+      "seconds": 2,
+      "passed": true,
+      "status": "passed",
+      "bytes": 111293,
+      "elapsedMs": 2000.1000000238419,
+      "bytesPerSecond": 55643.717813446,
+      "sampleCoverage": 1.0041344,
+      "stats": {
+        "bytes": 111293,
+        "packets": 29534,
+        "pc": 12415,
+        "sleep": 2294,
+        "itm": 58,
+        "exceptions": 0,
+        "sync": 7,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 12415,
+        "analyzedSamples": 12415,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 58,
+        "valid": 58,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "uniquePcs": 173,
+        "checked": 173,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 12270,
+        "matched": 12270,
+        "accuracy": 1,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [],
+      "clockCheck": {
+        "cfgr": 3408906,
+        "knownHz": 60000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": []
+    },
+    {
+      "run": "sweep1",
+      "label": "step-03",
+      "coreHz": 60000000,
+      "requestedBaud": 4000000,
+      "periodCycles": 8192,
+      "seconds": 2,
+      "passed": true,
+      "status": "passed",
+      "bytes": 111286,
+      "elapsedMs": 2000,
+      "bytesPerSecond": 55643,
+      "sampleCoverage": 1.0034517333333333,
+      "stats": {
+        "bytes": 111286,
+        "packets": 29514,
+        "pc": 12428,
+        "sleep": 2271,
+        "itm": 58,
+        "exceptions": 0,
+        "sync": 7,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 12428,
+        "analyzedSamples": 12428,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 58,
+        "valid": 58,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "uniquePcs": 176,
+        "checked": 176,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 12234,
+        "matched": 12234,
+        "accuracy": 1,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [],
+      "clockCheck": {
+        "cfgr": 3408906,
+        "knownHz": 60000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": []
+    },
+    {
+      "run": "sweep1",
+      "label": "step-04",
+      "coreHz": 60000000,
+      "requestedBaud": 5000000,
+      "periodCycles": 8192,
+      "seconds": 2,
+      "passed": true,
+      "status": "passed",
+      "bytes": 111745,
+      "elapsedMs": 2000,
+      "bytesPerSecond": 55872.5,
+      "sampleCoverage": 1.004544,
+      "stats": {
+        "bytes": 111745,
+        "packets": 29544,
+        "pc": 12557,
+        "sleep": 2158,
+        "itm": 57,
+        "exceptions": 0,
+        "sync": 7,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 12557,
+        "analyzedSamples": 12557,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 57,
+        "valid": 57,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "uniquePcs": 169,
+        "checked": 169,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 12473,
+        "matched": 12473,
+        "accuracy": 1,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [],
+      "clockCheck": {
+        "cfgr": 3408906,
+        "knownHz": 60000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": []
+    },
+    {
+      "run": "sweep1",
+      "label": "step-05",
+      "coreHz": 60000000,
+      "requestedBaud": 6000000,
+      "periodCycles": 8192,
+      "seconds": 2,
+      "passed": false,
+      "status": "data-failed",
+      "bytes": 84245,
+      "elapsedMs": 2000.199999988079,
+      "bytesPerSecond": 42118.288171433895,
+      "sampleCoverage": 6.826666666666667e-05,
+      "stats": {
+        "bytes": 84245,
+        "packets": 3,
+        "pc": 1,
+        "sleep": 0,
+        "itm": 0,
+        "exceptions": 0,
+        "sync": 0,
+        "overflow": 0,
+        "malformed": 1,
+        "skippedBytes": 84229,
+        "truncated": 0,
+        "mapped": 0,
+        "analyzedSamples": 1,
+        "droppedEvents": 0,
+        "unmapped": 1
+      },
+      "markers": {
+        "total": 0,
+        "valid": 0,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "uniquePcs": 1,
+        "checked": 0,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 0,
+        "matched": 0,
+        "accuracy": null,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [
+        "malformed 1",
+        "unmapped PCs 1",
+        "sample coverage 0.0%",
+        "stage marker loss/corruption",
+        "GNU source mismatch/insufficient valid PCs"
+      ],
+      "clockCheck": {
+        "cfgr": 3408906,
+        "knownHz": 60000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": []
+    },
+    {
+      "run": "sweep1",
+      "label": "step-06",
+      "coreHz": 60000000,
+      "requestedBaud": 7500000,
+      "periodCycles": 8192,
+      "seconds": 2,
+      "passed": false,
+      "status": "data-failed",
+      "bytes": 111978,
+      "elapsedMs": 2000.199999988079,
+      "bytesPerSecond": 55983.40166016766,
+      "sampleCoverage": 0.0600064,
+      "stats": {
+        "bytes": 111978,
+        "packets": 1772,
+        "pc": 822,
+        "sleep": 57,
+        "itm": 6,
+        "exceptions": 0,
+        "sync": 2,
+        "overflow": 0,
+        "malformed": 3,
+        "skippedBytes": 105061,
+        "truncated": 0,
+        "mapped": 822,
+        "analyzedSamples": 822,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 6,
+        "valid": 1,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "uniquePcs": 102,
+        "checked": 102,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 0,
+        "matched": 0,
+        "accuracy": null,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [
+        "malformed 3",
+        "sample coverage 6.0%",
+        "stage marker loss/corruption"
+      ],
+      "clockCheck": {
+        "cfgr": 3408906,
+        "knownHz": 60000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": []
+    },
+    {
+      "run": "sweep1",
+      "label": "step-07",
+      "coreHz": 64000000,
+      "requestedBaud": 8000000,
+      "periodCycles": 8192,
+      "seconds": 2,
+      "passed": true,
+      "status": "passed",
+      "bytes": 119552,
+      "elapsedMs": 2000,
+      "bytesPerSecond": 59776,
+      "sampleCoverage": 1.004352,
+      "stats": {
+        "bytes": 119552,
+        "packets": 31502,
+        "pc": 13527,
+        "sleep": 2166,
+        "itm": 58,
+        "exceptions": 0,
+        "sync": 7,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 13527,
+        "analyzedSamples": 13527,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 58,
+        "valid": 58,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "uniquePcs": 171,
+        "checked": 171,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 13333,
+        "matched": 13333,
+        "accuracy": 1,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [],
+      "clockCheck": {
+        "cfgr": 3671050,
+        "knownHz": 64000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": []
+    },
+    {
+      "run": "sweep1",
+      "label": "step-08",
+      "coreHz": 36000000,
+      "requestedBaud": 9000000,
+      "periodCycles": 8192,
+      "seconds": 2,
+      "passed": false,
+      "status": "data-failed",
+      "bytes": 67361,
+      "elapsedMs": 2000.0999999940395,
+      "bytesPerSecond": 33678.8160592974,
+      "sampleCoverage": 0,
+      "stats": {
+        "bytes": 67361,
+        "packets": 1,
+        "pc": 0,
+        "sleep": 0,
+        "itm": 0,
+        "exceptions": 0,
+        "sync": 0,
+        "overflow": 0,
+        "malformed": 1,
+        "skippedBytes": 67355,
+        "truncated": 0,
+        "mapped": 0,
+        "analyzedSamples": 0,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 0,
+        "valid": 0,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "checked": 0,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 0,
+        "matched": 0,
+        "accuracy": null,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [
+        "malformed 1",
+        "sample coverage 0.0%",
+        "stage marker loss/corruption",
+        "GNU source mismatch/insufficient valid PCs"
+      ],
+      "clockCheck": {
+        "cfgr": 1836042,
+        "knownHz": 36000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": []
+    },
+    {
+      "run": "sweep1",
+      "label": "step-09",
+      "coreHz": 60000000,
+      "requestedBaud": 10000000,
+      "periodCycles": 8192,
+      "seconds": 2,
+      "passed": true,
+      "status": "passed",
+      "bytes": 111317,
+      "elapsedMs": 2000.0999999940395,
+      "bytesPerSecond": 55655.71721430515,
+      "sampleCoverage": 1.0037930666666666,
+      "stats": {
+        "bytes": 111317,
+        "packets": 29524,
+        "pc": 12431,
+        "sleep": 2273,
+        "itm": 58,
+        "exceptions": 0,
+        "sync": 7,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 12431,
+        "analyzedSamples": 12431,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 58,
+        "valid": 58,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "uniquePcs": 180,
+        "checked": 180,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 12343,
+        "matched": 12343,
+        "accuracy": 1,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [],
+      "clockCheck": {
+        "cfgr": 3408906,
+        "knownHz": 60000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": []
+    },
+    {
+      "run": "sweep1",
+      "label": "step-10",
+      "coreHz": 60000000,
+      "requestedBaud": 12000000,
+      "periodCycles": 8192,
+      "seconds": 2,
+      "passed": false,
+      "status": "data-failed",
+      "bytes": 82437,
+      "elapsedMs": 2000.0999999940395,
+      "bytesPerSecond": 41216.43917816392,
+      "sampleCoverage": 0,
+      "stats": {
+        "bytes": 82437,
+        "packets": 2,
+        "pc": 0,
+        "sleep": 0,
+        "itm": 2,
+        "exceptions": 0,
+        "sync": 0,
+        "overflow": 0,
+        "malformed": 1,
+        "skippedBytes": 82426,
+        "truncated": 0,
+        "mapped": 0,
+        "analyzedSamples": 0,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 0,
+        "valid": 0,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "checked": 0,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 0,
+        "matched": 0,
+        "accuracy": null,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [
+        "malformed 1",
+        "sample coverage 0.0%",
+        "stage marker loss/corruption",
+        "GNU source mismatch/insufficient valid PCs"
+      ],
+      "clockCheck": {
+        "cfgr": 3408906,
+        "knownHz": 60000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": []
+    },
+    {
+      "run": "sweep1",
+      "label": "step-11",
+      "coreHz": 60000000,
+      "requestedBaud": 15000000,
+      "periodCycles": 8192,
+      "seconds": 2,
+      "passed": false,
+      "status": "data-failed",
+      "bytes": 72316,
+      "elapsedMs": 2000.199999988079,
+      "bytesPerSecond": 36154.38456175932,
+      "sampleCoverage": 0,
+      "stats": {
+        "bytes": 72316,
+        "packets": 14,
+        "pc": 0,
+        "sleep": 0,
+        "itm": 2,
+        "exceptions": 0,
+        "sync": 0,
+        "overflow": 0,
+        "malformed": 1,
+        "skippedBytes": 72250,
+        "truncated": 0,
+        "mapped": 0,
+        "analyzedSamples": 0,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 0,
+        "valid": 0,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "checked": 0,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 0,
+        "matched": 0,
+        "accuracy": null,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [
+        "malformed 1",
+        "sample coverage 0.0%",
+        "stage marker loss/corruption",
+        "GNU source mismatch/insufficient valid PCs"
+      ],
+      "clockCheck": {
+        "cfgr": 3408906,
+        "knownHz": 60000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": []
+    },
+    {
+      "run": "sweep1",
+      "label": "step-12",
+      "coreHz": 36000000,
+      "requestedBaud": 18000000,
+      "periodCycles": 8192,
+      "seconds": 2,
+      "passed": false,
+      "status": "data-failed",
+      "bytes": 33793,
+      "elapsedMs": 2000,
+      "bytesPerSecond": 16896.5,
+      "sampleCoverage": 0,
+      "stats": {
+        "bytes": 33793,
+        "packets": 2,
+        "pc": 0,
+        "sleep": 0,
+        "itm": 1,
+        "exceptions": 0,
+        "sync": 0,
+        "overflow": 0,
+        "malformed": 1,
+        "skippedBytes": 33787,
+        "truncated": 0,
+        "mapped": 0,
+        "analyzedSamples": 0,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 0,
+        "valid": 0,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "checked": 0,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 0,
+        "matched": 0,
+        "accuracy": null,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [
+        "malformed 1",
+        "sample coverage 0.0%",
+        "stage marker loss/corruption",
+        "GNU source mismatch/insufficient valid PCs"
+      ],
+      "clockCheck": {
+        "cfgr": 1836042,
+        "knownHz": 36000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": []
+    },
+    {
+      "run": "sweep1",
+      "label": "step-13",
+      "coreHz": 40000000,
+      "requestedBaud": 20000000,
+      "periodCycles": 8192,
+      "seconds": 2,
+      "passed": false,
+      "status": "setup-rejected",
+      "error": "Error: 页面异常：Error: 核心频率与 RCC 配置不符：实读 8 MHz"
+    },
+    {
+      "run": "sweep1",
+      "label": "step-14",
+      "coreHz": 44000000,
+      "requestedBaud": 22000000,
+      "periodCycles": 8192,
+      "seconds": 2,
+      "passed": false,
+      "status": "data-failed",
+      "bytes": 31007,
+      "elapsedMs": 2000.0999999940395,
+      "bytesPerSecond": 15502.72486380301,
+      "sampleCoverage": 0,
+      "stats": {
+        "bytes": 31007,
+        "packets": 12,
+        "pc": 0,
+        "sleep": 0,
+        "itm": 11,
+        "exceptions": 0,
+        "sync": 0,
+        "overflow": 0,
+        "malformed": 1,
+        "skippedBytes": 30981,
+        "truncated": 0,
+        "mapped": 0,
+        "analyzedSamples": 0,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 0,
+        "valid": 0,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "checked": 0,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 0,
+        "matched": 0,
+        "accuracy": null,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [
+        "malformed 1",
+        "sample coverage 0.0%",
+        "stage marker loss/corruption",
+        "GNU source mismatch/insufficient valid PCs"
+      ],
+      "clockCheck": {
+        "cfgr": 2360330,
+        "knownHz": 44000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": []
+    },
+    {
+      "run": "sweep1",
+      "label": "step-15",
+      "coreHz": 48000000,
+      "requestedBaud": 24000000,
+      "periodCycles": 8192,
+      "seconds": 2,
+      "passed": false,
+      "status": "data-failed",
+      "bytes": 33814,
+      "elapsedMs": 2000.0999999940395,
+      "bytesPerSecond": 16906.15469231577,
+      "sampleCoverage": 8.533333333333334e-05,
+      "stats": {
+        "bytes": 33814,
+        "packets": 10712,
+        "pc": 1,
+        "sleep": 0,
+        "itm": 1725,
+        "exceptions": 0,
+        "sync": 0,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 1,
+        "mapped": 0,
+        "analyzedSamples": 1,
+        "droppedEvents": 0,
+        "unmapped": 1
+      },
+      "markers": {
+        "total": 0,
+        "valid": 0,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "uniquePcs": 1,
+        "checked": 0,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 0,
+        "matched": 0,
+        "accuracy": null,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [
+        "truncated 1",
+        "unmapped PCs 1",
+        "sample coverage 0.0%",
+        "stage marker loss/corruption",
+        "GNU source mismatch/insufficient valid PCs"
+      ],
+      "clockCheck": {
+        "cfgr": 2622474,
+        "knownHz": 48000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": []
+    },
+    {
+      "run": "sweep1",
+      "label": "step-16",
+      "coreHz": 60000000,
+      "requestedBaud": 30000000,
+      "periodCycles": 8192,
+      "seconds": 2,
+      "passed": false,
+      "status": "data-failed",
+      "bytes": 42163,
+      "elapsedMs": 2000,
+      "bytesPerSecond": 21081.5,
+      "sampleCoverage": 0,
+      "stats": {
+        "bytes": 42163,
+        "packets": 59,
+        "pc": 0,
+        "sleep": 0,
+        "itm": 32,
+        "exceptions": 27,
+        "sync": 0,
+        "overflow": 0,
+        "malformed": 1,
+        "skippedBytes": 41982,
+        "truncated": 0,
+        "mapped": 0,
+        "analyzedSamples": 0,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 5,
+        "valid": 0,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "checked": 0,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 0,
+        "matched": 0,
+        "accuracy": null,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [
+        "malformed 1",
+        "sample coverage 0.0%",
+        "stage marker loss/corruption",
+        "GNU source mismatch/insufficient valid PCs"
+      ],
+      "clockCheck": {
+        "cfgr": 3408906,
+        "knownHz": 60000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": []
+    },
+    {
+      "run": "sweep1",
+      "label": "step-17",
+      "coreHz": 64000000,
+      "requestedBaud": 32000000,
+      "periodCycles": 8192,
+      "seconds": 2,
+      "passed": false,
+      "status": "setup-rejected",
+      "error": "Error: 页面异常：Error: 核心频率与 RCC 配置不符：实读 8 MHz"
+    },
+    {
+      "run": "sweep1",
+      "label": "step-09",
+      "coreHz": 60000000,
+      "requestedBaud": 10000000,
+      "periodCycles": 8192,
+      "seconds": 5,
+      "passed": true,
+      "status": "passed",
+      "bytes": 278933,
+      "elapsedMs": 5000.0999999940395,
+      "bytesPerSecond": 55785.4842903807,
+      "sampleCoverage": 1.0010350933333334,
+      "stats": {
+        "bytes": 278933,
+        "packets": 73604,
+        "pc": 31466,
+        "sleep": 5193,
+        "itm": 143,
+        "exceptions": 0,
+        "sync": 17,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 31466,
+        "analyzedSamples": 31466,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 143,
+        "valid": 143,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "uniquePcs": 196,
+        "checked": 196,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 31219,
+        "matched": 31219,
+        "accuracy": 1,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [],
+      "clockCheck": {
+        "cfgr": 3408906,
+        "knownHz": 60000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": []
+    },
+    {
+      "run": "sweep1",
+      "label": "step-09",
+      "coreHz": 60000000,
+      "requestedBaud": 10000000,
+      "periodCycles": 8192,
+      "seconds": 5,
+      "passed": false,
+      "status": "setup-rejected",
+      "error": "Error: 页面异常：Error: 目标代码与 ELF 不符：.text 0x08000130"
+    },
+    {
+      "run": "sweep1",
+      "label": "step-09",
+      "coreHz": 60000000,
+      "requestedBaud": 10000000,
+      "periodCycles": 8192,
+      "seconds": 5,
+      "passed": true,
+      "status": "passed",
+      "bytes": 278371,
+      "elapsedMs": 5000.0999999940395,
+      "bytesPerSecond": 55673.08653833561,
+      "sampleCoverage": 1.00073472,
+      "stats": {
+        "bytes": 278371,
+        "packets": 73582,
+        "pc": 31296,
+        "sleep": 5352,
+        "itm": 143,
+        "exceptions": 0,
+        "sync": 17,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 31296,
+        "analyzedSamples": 31296,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 143,
+        "valid": 143,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "uniquePcs": 204,
+        "checked": 204,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 31063,
+        "matched": 31063,
+        "accuracy": 1,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [],
+      "clockCheck": {
+        "cfgr": 3408906,
+        "knownHz": 60000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": []
+    },
+    {
+      "run": "sweep1",
+      "label": "step-09",
+      "coreHz": 60000000,
+      "requestedBaud": 10000000,
+      "periodCycles": 832,
+      "seconds": 3,
+      "passed": true,
+      "status": "passed",
+      "bytes": 1648713,
+      "elapsedMs": 3000.2000000178814,
+      "bytesPerSecond": 549534.364372433,
+      "sampleCoverage": 1.0043210666666667,
+      "stats": {
+        "bytes": 1648713,
+        "packets": 434736,
+        "pc": 187193,
+        "sleep": 30088,
+        "itm": 87,
+        "exceptions": 0,
+        "sync": 10,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 187193,
+        "analyzedSamples": 187193,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 87,
+        "valid": 87,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "uniquePcs": 243,
+        "checked": 243,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 185686,
+        "matched": 185686,
+        "accuracy": 1,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [],
+      "clockCheck": {
+        "cfgr": 3408906,
+        "knownHz": 60000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": []
+    },
+    {
+      "run": "sweep1",
+      "label": "step-09",
+      "coreHz": 60000000,
+      "requestedBaud": 10000000,
+      "periodCycles": 832,
+      "seconds": 3,
+      "passed": false,
+      "status": "setup-rejected",
+      "error": "Error: 页面异常：Error: 核心频率与 RCC 配置不符：实读 8 MHz"
+    },
+    {
+      "run": "sweep1",
+      "label": "step-09",
+      "coreHz": 60000000,
+      "requestedBaud": 10000000,
+      "periodCycles": 832,
+      "seconds": 3,
+      "passed": true,
+      "status": "passed",
+      "bytes": 1638636,
+      "elapsedMs": 3000.0999999940395,
+      "bytesPerSecond": 546193.7935413005,
+      "sampleCoverage": 1.0028743111111111,
+      "stats": {
+        "bytes": 1638636,
+        "packets": 434107,
+        "pc": 184360,
+        "sleep": 32608,
+        "itm": 86,
+        "exceptions": 0,
+        "sync": 10,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 184360,
+        "analyzedSamples": 184360,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 86,
+        "valid": 86,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "uniquePcs": 237,
+        "checked": 237,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 182461,
+        "matched": 182461,
+        "accuracy": 1,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [],
+      "clockCheck": {
+        "cfgr": 3408906,
+        "knownHz": 60000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": []
+    },
+    {
+      "run": "sweep1",
+      "label": "recovery-1m",
+      "coreHz": 60000000,
+      "requestedBaud": 1000000,
+      "periodCycles": 8192,
+      "seconds": 2,
+      "passed": true,
+      "status": "passed",
+      "bytes": 112149,
+      "elapsedMs": 2000.0999999940395,
+      "bytesPerSecond": 56071.696415346334,
+      "sampleCoverage": 1.0049536,
+      "stats": {
+        "bytes": 112149,
+        "packets": 29556,
+        "pc": 12682,
+        "sleep": 2039,
+        "itm": 57,
+        "exceptions": 0,
+        "sync": 7,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 12682,
+        "analyzedSamples": 12682,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 57,
+        "valid": 57,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "uniquePcs": 172,
+        "checked": 172,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 12448,
+        "matched": 12448,
+        "accuracy": 1,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [],
+      "clockCheck": {
+        "cfgr": 3408906,
+        "knownHz": 60000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": []
+    },
+    {
+      "run": "boundary2",
+      "label": "step-00",
+      "coreHz": 60000000,
+      "requestedBaud": 10000000,
+      "periodCycles": 8192,
+      "seconds": 5,
+      "passed": true,
+      "status": "passed",
+      "bytes": 278670,
+      "elapsedMs": 5000.0999999940395,
+      "bytesPerSecond": 55732.885342359594,
+      "sampleCoverage": 1.0008439466666668,
+      "stats": {
+        "bytes": 278670,
+        "packets": 73590,
+        "pc": 31389,
+        "sleep": 5263,
+        "itm": 143,
+        "exceptions": 0,
+        "sync": 17,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 31389,
+        "analyzedSamples": 31389,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 143,
+        "valid": 143,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "uniquePcs": 204,
+        "checked": 204,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 31162,
+        "matched": 31162,
+        "accuracy": 1,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [],
+      "clockCheck": {
+        "cfgr": 3408906,
+        "knownHz": 60000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": []
+    },
+    {
+      "run": "boundary2",
+      "label": "step-01",
+      "coreHz": 60000000,
+      "requestedBaud": 12000000,
+      "periodCycles": 8192,
+      "seconds": 3,
+      "passed": false,
+      "status": "data-failed",
+      "bytes": 123374,
+      "elapsedMs": 3000.0999999940395,
+      "bytesPerSecond": 41123.295890218695,
+      "sampleCoverage": 0,
+      "stats": {
+        "bytes": 123374,
+        "packets": 3,
+        "pc": 0,
+        "sleep": 0,
+        "itm": 1,
+        "exceptions": 0,
+        "sync": 0,
+        "overflow": 0,
+        "malformed": 1,
+        "skippedBytes": 123358,
+        "truncated": 0,
+        "mapped": 0,
+        "analyzedSamples": 0,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 0,
+        "valid": 0,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "checked": 0,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 0,
+        "matched": 0,
+        "accuracy": null,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [
+        "malformed 1",
+        "sample coverage 0.0%",
+        "stage marker loss/corruption",
+        "GNU source mismatch/insufficient valid PCs"
+      ],
+      "clockCheck": {
+        "cfgr": 3408906,
+        "knownHz": 60000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": []
+    },
+    {
+      "run": "boundary2",
+      "label": "step-02",
+      "coreHz": 60000000,
+      "requestedBaud": 10000000,
+      "periodCycles": 8192,
+      "seconds": 5,
+      "passed": true,
+      "status": "passed",
+      "bytes": 278902,
+      "elapsedMs": 5000.299999982119,
+      "bytesPerSecond": 55777.05337699685,
+      "sampleCoverage": 1.0012535466666668,
+      "stats": {
+        "bytes": 278902,
+        "packets": 73620,
+        "pc": 31441,
+        "sleep": 5226,
+        "itm": 143,
+        "exceptions": 0,
+        "sync": 17,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 31441,
+        "analyzedSamples": 31441,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 143,
+        "valid": 143,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "uniquePcs": 199,
+        "checked": 199,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 31089,
+        "matched": 31089,
+        "accuracy": 1,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [],
+      "clockCheck": {
+        "cfgr": 3408906,
+        "knownHz": 60000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": []
+    },
+    {
+      "run": "boundary2",
+      "label": "step-03",
+      "coreHz": 60000000,
+      "requestedBaud": 15000000,
+      "periodCycles": 8192,
+      "seconds": 3,
+      "passed": false,
+      "status": "setup-rejected",
+      "error": "Error: 页面异常：Error: 核心频率与 RCC 配置不符：实读 8 MHz"
+    },
+    {
+      "run": "boundary2",
+      "label": "step-04",
+      "coreHz": 60000000,
+      "requestedBaud": 10000000,
+      "periodCycles": 8192,
+      "seconds": 5,
+      "passed": true,
+      "status": "passed",
+      "bytes": 279472,
+      "elapsedMs": 5002.5,
+      "bytesPerSecond": 55866.466766616686,
+      "sampleCoverage": 1.0018816,
+      "stats": {
+        "bytes": 279472,
+        "packets": 73666,
+        "pc": 31593,
+        "sleep": 5097,
+        "itm": 143,
+        "exceptions": 0,
+        "sync": 17,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 31593,
+        "analyzedSamples": 31593,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 143,
+        "valid": 143,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "uniquePcs": 200,
+        "checked": 200,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 31271,
+        "matched": 31271,
+        "accuracy": 1,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [],
+      "clockCheck": {
+        "cfgr": 3408906,
+        "knownHz": 60000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": []
+    },
+    {
+      "run": "boundary2",
+      "label": "step-05",
+      "coreHz": 64000000,
+      "requestedBaud": 8000000,
+      "periodCycles": 8192,
+      "seconds": 5,
+      "passed": true,
+      "status": "passed",
+      "bytes": 297959,
+      "elapsedMs": 5000.0999999940395,
+      "bytesPerSecond": 59590.60818790728,
+      "sampleCoverage": 1.0014464,
+      "stats": {
+        "bytes": 297959,
+        "packets": 78523,
+        "pc": 33704,
+        "sleep": 5415,
+        "itm": 143,
+        "exceptions": 0,
+        "sync": 19,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 33704,
+        "analyzedSamples": 33704,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 143,
+        "valid": 143,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "uniquePcs": 195,
+        "checked": 195,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 33171,
+        "matched": 33171,
+        "accuracy": 1,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [],
+      "clockCheck": {
+        "cfgr": 3671050,
+        "knownHz": 64000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": []
+    },
+    {
+      "run": "boundary2",
+      "label": "step-06",
+      "coreHz": 40000000,
+      "requestedBaud": 20000000,
+      "periodCycles": 8192,
+      "seconds": 3,
+      "passed": false,
+      "status": "data-failed",
+      "bytes": 53407,
+      "elapsedMs": 3000.0999999940395,
+      "bytesPerSecond": 17801.7399420373,
+      "sampleCoverage": 0,
+      "stats": {
+        "bytes": 53407,
+        "packets": 7,
+        "pc": 0,
+        "sleep": 0,
+        "itm": 2,
+        "exceptions": 0,
+        "sync": 0,
+        "overflow": 0,
+        "malformed": 1,
+        "skippedBytes": 53385,
+        "truncated": 0,
+        "mapped": 0,
+        "analyzedSamples": 0,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 0,
+        "valid": 0,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "checked": 0,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 0,
+        "matched": 0,
+        "accuracy": null,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [
+        "malformed 1",
+        "sample coverage 0.0%",
+        "stage marker loss/corruption",
+        "GNU source mismatch/insufficient valid PCs"
+      ],
+      "clockCheck": {
+        "cfgr": 2098186,
+        "knownHz": 40000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": []
+    },
+    {
+      "run": "boundary2",
+      "label": "step-07",
+      "coreHz": 64000000,
+      "requestedBaud": 32000000,
+      "periodCycles": 8192,
+      "seconds": 3,
+      "passed": false,
+      "status": "data-failed",
+      "bytes": 67742,
+      "elapsedMs": 3000.100000023842,
+      "bytesPerSecond": 22579.91400268713,
+      "sampleCoverage": 0,
+      "stats": {
+        "bytes": 67742,
+        "packets": 2,
+        "pc": 0,
+        "sleep": 0,
+        "itm": 1,
+        "exceptions": 0,
+        "sync": 0,
+        "overflow": 0,
+        "malformed": 1,
+        "skippedBytes": 67730,
+        "truncated": 0,
+        "mapped": 0,
+        "analyzedSamples": 0,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 0,
+        "valid": 0,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "checked": 0,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 0,
+        "matched": 0,
+        "accuracy": null,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [
+        "malformed 1",
+        "sample coverage 0.0%",
+        "stage marker loss/corruption",
+        "GNU source mismatch/insufficient valid PCs"
+      ],
+      "clockCheck": {
+        "cfgr": 3671050,
+        "knownHz": 64000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": []
+    },
+    {
+      "run": "boundary2",
+      "label": "step-08",
+      "coreHz": 60000000,
+      "requestedBaud": 10000000,
+      "periodCycles": 640,
+      "seconds": 3,
+      "passed": true,
+      "status": "passed",
+      "bytes": 2143642,
+      "elapsedMs": 3000.2999999821186,
+      "bytesPerSecond": 714475.8857490171,
+      "sampleCoverage": 1.004512,
+      "stats": {
+        "bytes": 2143642,
+        "packets": 565212,
+        "pc": 243442,
+        "sleep": 39077,
+        "itm": 87,
+        "exceptions": 0,
+        "sync": 10,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 243442,
+        "analyzedSamples": 243442,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 87,
+        "valid": 87,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "uniquePcs": 238,
+        "checked": 238,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 241855,
+        "matched": 241855,
+        "accuracy": 1,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [],
+      "clockCheck": {
+        "cfgr": 3408906,
+        "knownHz": 60000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": []
+    },
+    {
+      "run": "boundary2",
+      "label": "step-09",
+      "coreHz": 60000000,
+      "requestedBaud": 10000000,
+      "periodCycles": 512,
+      "seconds": 3,
+      "passed": true,
+      "status": "passed",
+      "bytes": 2691151,
+      "elapsedMs": 3004.2000000178814,
+      "bytesPerSecond": 895796.2186219234,
+      "sampleCoverage": 1.0087708444444445,
+      "stats": {
+        "bytes": 2691151,
+        "packets": 709464,
+        "pc": 305739,
+        "sleep": 48907,
+        "itm": 86,
+        "exceptions": 0,
+        "sync": 10,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 305739,
+        "analyzedSamples": 305739,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 86,
+        "valid": 86,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "uniquePcs": 254,
+        "checked": 254,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 300376,
+        "matched": 300376,
+        "accuracy": 1,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [],
+      "clockCheck": {
+        "cfgr": 3408906,
+        "knownHz": 60000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": []
+    },
+    {
+      "run": "boundary2",
+      "label": "step-10",
+      "coreHz": 60000000,
+      "requestedBaud": 10000000,
+      "periodCycles": 448,
+      "seconds": 3,
+      "passed": false,
+      "status": "data-failed",
+      "bytes": 2872822,
+      "elapsedMs": 3000.0999999940395,
+      "bytesPerSecond": 957575.414154764,
+      "sampleCoverage": 1.0033084444444444,
+      "stats": {
+        "bytes": 2872822,
+        "packets": 744648,
+        "pc": 347238,
+        "sleep": 55877,
+        "itm": 86,
+        "exceptions": 0,
+        "sync": 10,
+        "overflow": 52,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 347238,
+        "analyzedSamples": 347238,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 86,
+        "valid": 86,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "uniquePcs": 237,
+        "checked": 237,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 141450,
+        "matched": 141450,
+        "accuracy": 1,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [
+        "ITM overflow 52"
+      ],
+      "clockCheck": {
+        "cfgr": 3408906,
+        "knownHz": 60000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": []
+    },
+    {
+      "run": "boundary2",
+      "label": "step-11",
+      "coreHz": 60000000,
+      "requestedBaud": 10000000,
+      "periodCycles": 512,
+      "seconds": 3,
+      "passed": true,
+      "status": "passed",
+      "bytes": 2676546,
+      "elapsedMs": 2999.9000000059605,
+      "bytesPerSecond": 892211.7403895737,
+      "sampleCoverage": 1.0035626666666666,
+      "stats": {
+        "bytes": 2676546,
+        "packets": 705801,
+        "pc": 303921,
+        "sleep": 48894,
+        "itm": 86,
+        "exceptions": 0,
+        "sync": 10,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 303921,
+        "analyzedSamples": 303921,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 86,
+        "valid": 86,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "uniquePcs": 258,
+        "checked": 258,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 299170,
+        "matched": 299170,
+        "accuracy": 1,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [],
+      "clockCheck": {
+        "cfgr": 3408906,
+        "knownHz": 60000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": []
+    },
+    {
+      "run": "boundary2",
+      "label": "step-12",
+      "coreHz": 60000000,
+      "requestedBaud": 1000000,
+      "periodCycles": 8192,
+      "seconds": 3,
+      "passed": true,
+      "status": "passed",
+      "bytes": 167218,
+      "elapsedMs": 3000.0999999940395,
+      "bytesPerSecond": 55737.47541759682,
+      "sampleCoverage": 1.0029738666666668,
+      "stats": {
+        "bytes": 167218,
+        "packets": 44248,
+        "pc": 18761,
+        "sleep": 3277,
+        "itm": 86,
+        "exceptions": 0,
+        "sync": 10,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 18761,
+        "analyzedSamples": 18761,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 86,
+        "valid": 86,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "uniquePcs": 193,
+        "checked": 193,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 18615,
+        "matched": 18615,
+        "accuracy": 1,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [],
+      "clockCheck": {
+        "cfgr": 3408906,
+        "knownHz": 60000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": []
+    },
+    {
+      "run": "final3",
+      "label": "step-00",
+      "coreHz": 44000000,
+      "requestedBaud": 11000000,
+      "periodCycles": 8192,
+      "seconds": 3,
+      "passed": false,
+      "status": "data-failed",
+      "bytes": 90086,
+      "elapsedMs": 3000.199999988079,
+      "bytesPerSecond": 30026.664889126703,
+      "sampleCoverage": 0,
+      "stats": {
+        "bytes": 90086,
+        "packets": 2,
+        "pc": 0,
+        "sleep": 0,
+        "itm": 0,
+        "exceptions": 0,
+        "sync": 0,
+        "overflow": 0,
+        "malformed": 1,
+        "skippedBytes": 90077,
+        "truncated": 0,
+        "mapped": 0,
+        "analyzedSamples": 0,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 0,
+        "valid": 0,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "checked": 0,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 0,
+        "matched": 0,
+        "accuracy": null,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [
+        "malformed 1",
+        "sample coverage 0.0%",
+        "stage marker loss/corruption",
+        "GNU source mismatch/insufficient valid PCs"
+      ],
+      "clockCheck": {
+        "cfgr": 2360330,
+        "knownHz": 44000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": []
+    },
+    {
+      "run": "final3",
+      "label": "step-01",
+      "coreHz": 60000000,
+      "requestedBaud": 15000000,
+      "periodCycles": 8192,
+      "seconds": 3,
+      "passed": false,
+      "status": "data-failed",
+      "bytes": 108645,
+      "elapsedMs": 3000.100000023842,
+      "bytesPerSecond": 36213.792873283084,
+      "sampleCoverage": 0,
+      "stats": {
+        "bytes": 108645,
+        "packets": 12,
+        "pc": 0,
+        "sleep": 0,
+        "itm": 1,
+        "exceptions": 0,
+        "sync": 0,
+        "overflow": 0,
+        "malformed": 1,
+        "skippedBytes": 108589,
+        "truncated": 0,
+        "mapped": 0,
+        "analyzedSamples": 0,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 0,
+        "valid": 0,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "checked": 0,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 0,
+        "matched": 0,
+        "accuracy": null,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [
+        "malformed 1",
+        "sample coverage 0.0%",
+        "stage marker loss/corruption",
+        "GNU source mismatch/insufficient valid PCs"
+      ],
+      "clockCheck": {
+        "cfgr": 3408906,
+        "knownHz": 60000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": []
+    },
+    {
+      "run": "final3",
+      "label": "step-02",
+      "coreHz": 60000000,
+      "requestedBaud": 10000000,
+      "periodCycles": 512,
+      "seconds": 6,
+      "passed": false,
+      "status": "setup-rejected",
+      "error": "Error: 页面异常：Error: 核心频率与 RCC 配置不符：实读 8 MHz"
+    },
+    {
+      "run": "final3",
+      "label": "step-03",
+      "coreHz": 44000000,
+      "requestedBaud": 11000000,
+      "periodCycles": 8192,
+      "seconds": 3,
+      "passed": false,
+      "status": "data-failed",
+      "bytes": 90605,
+      "elapsedMs": 3000.2000000178814,
+      "bytesPerSecond": 30199.653356262912,
+      "sampleCoverage": 0,
+      "stats": {
+        "bytes": 90605,
+        "packets": 6,
+        "pc": 0,
+        "sleep": 0,
+        "itm": 2,
+        "exceptions": 0,
+        "sync": 0,
+        "overflow": 0,
+        "malformed": 1,
+        "skippedBytes": 90578,
+        "truncated": 0,
+        "mapped": 0,
+        "analyzedSamples": 0,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 1,
+        "valid": 0,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "checked": 0,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 0,
+        "matched": 0,
+        "accuracy": null,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [
+        "malformed 1",
+        "sample coverage 0.0%",
+        "stage marker loss/corruption",
+        "GNU source mismatch/insufficient valid PCs"
+      ],
+      "clockCheck": {
+        "cfgr": 2360330,
+        "knownHz": 44000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": []
+    },
+    {
+      "run": "final3",
+      "label": "step-04",
+      "coreHz": 60000000,
+      "requestedBaud": 10000000,
+      "periodCycles": 512,
+      "seconds": 6,
+      "passed": true,
+      "status": "passed",
+      "bytes": 5345877,
+      "elapsedMs": 6000.199999988079,
+      "bytesPerSecond": 890949.8016750476,
+      "sampleCoverage": 1.0022940444444444,
+      "stats": {
+        "bytes": 5345877,
+        "packets": 1409819,
+        "pc": 606921,
+        "sleep": 97817,
+        "itm": 172,
+        "exceptions": 0,
+        "sync": 21,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 606921,
+        "analyzedSamples": 606921,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 172,
+        "valid": 172,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "uniquePcs": 266,
+        "checked": 266,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 600215,
+        "matched": 600215,
+        "accuracy": 1,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [],
+      "clockCheck": {
+        "cfgr": 3408906,
+        "knownHz": 60000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": []
+    },
+    {
+      "run": "final3",
+      "label": "step-05",
+      "coreHz": 60000000,
+      "requestedBaud": 15000000,
+      "periodCycles": 8192,
+      "seconds": 3,
+      "passed": false,
+      "status": "data-failed",
+      "bytes": 107922,
+      "elapsedMs": 3000.0999999940395,
+      "bytesPerSecond": 35972.80090670791,
+      "sampleCoverage": 0,
+      "stats": {
+        "bytes": 107922,
+        "packets": 169,
+        "pc": 0,
+        "sleep": 0,
+        "itm": 0,
+        "exceptions": 0,
+        "sync": 0,
+        "overflow": 0,
+        "malformed": 1,
+        "skippedBytes": 107416,
+        "truncated": 0,
+        "mapped": 0,
+        "analyzedSamples": 0,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 0,
+        "valid": 0,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "checked": 0,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 0,
+        "matched": 0,
+        "accuracy": null,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [
+        "malformed 1",
+        "sample coverage 0.0%",
+        "stage marker loss/corruption",
+        "GNU source mismatch/insufficient valid PCs"
+      ],
+      "clockCheck": {
+        "cfgr": 3408906,
+        "knownHz": 60000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": []
+    },
+    {
+      "run": "final3",
+      "label": "step-06",
+      "coreHz": 44000000,
+      "requestedBaud": 11000000,
+      "periodCycles": 8192,
+      "seconds": 3,
+      "passed": false,
+      "status": "data-failed",
+      "bytes": 90705,
+      "elapsedMs": 3000.0999999940395,
+      "bytesPerSecond": 30233.99220032006,
+      "sampleCoverage": 0,
+      "stats": {
+        "bytes": 90705,
+        "packets": 4,
+        "pc": 0,
+        "sleep": 0,
+        "itm": 0,
+        "exceptions": 0,
+        "sync": 0,
+        "overflow": 0,
+        "malformed": 1,
+        "skippedBytes": 90689,
+        "truncated": 0,
+        "mapped": 0,
+        "analyzedSamples": 0,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 0,
+        "valid": 0,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "checked": 0,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 0,
+        "matched": 0,
+        "accuracy": null,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [
+        "malformed 1",
+        "sample coverage 0.0%",
+        "stage marker loss/corruption",
+        "GNU source mismatch/insufficient valid PCs"
+      ],
+      "clockCheck": {
+        "cfgr": 2360330,
+        "knownHz": 44000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": []
+    },
+    {
+      "run": "final3",
+      "label": "step-07",
+      "coreHz": 60000000,
+      "requestedBaud": 10000000,
+      "periodCycles": 512,
+      "seconds": 6,
+      "passed": true,
+      "status": "passed",
+      "bytes": 5337353,
+      "elapsedMs": 6000.0999999940395,
+      "bytesPerSecond": 889544.0076007571,
+      "sampleCoverage": 1.0029397333333334,
+      "stats": {
+        "bytes": 5337353,
+        "packets": 1410727,
+        "pc": 603327,
+        "sleep": 101865,
+        "itm": 172,
+        "exceptions": 0,
+        "sync": 21,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 603327,
+        "analyzedSamples": 603327,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 172,
+        "valid": 172,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "uniquePcs": 272,
+        "checked": 272,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 595984,
+        "matched": 595984,
+        "accuracy": 1,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [],
+      "clockCheck": {
+        "cfgr": 3408906,
+        "knownHz": 60000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": []
+    },
+    {
+      "run": "final3",
+      "label": "step-08",
+      "coreHz": 64000000,
+      "requestedBaud": 8000000,
+      "periodCycles": 1024,
+      "seconds": 3,
+      "passed": true,
+      "status": "passed",
+      "bytes": 1429591,
+      "elapsedMs": 3001.100000023842,
+      "bytesPerSecond": 476355.6695840334,
+      "sampleCoverage": 1.0089013333333334,
+      "stats": {
+        "bytes": 1429591,
+        "packets": 378510,
+        "pc": 161008,
+        "sleep": 28161,
+        "itm": 86,
+        "exceptions": 0,
+        "sync": 11,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 161008,
+        "analyzedSamples": 161008,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 86,
+        "valid": 86,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "uniquePcs": 226,
+        "checked": 226,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 157321,
+        "matched": 157321,
+        "accuracy": 1,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [],
+      "clockCheck": {
+        "cfgr": 3671050,
+        "knownHz": 64000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": []
+    },
+    {
+      "run": "final3",
+      "label": "step-09",
+      "coreHz": 60000000,
+      "requestedBaud": 1000000,
+      "periodCycles": 8192,
+      "seconds": 3,
+      "passed": true,
+      "status": "passed",
+      "bytes": 168907,
+      "elapsedMs": 3000.100000023842,
+      "bytesPerSecond": 56300.45665099753,
+      "sampleCoverage": 1.0088448,
+      "stats": {
+        "bytes": 168907,
+        "packets": 44506,
+        "pc": 19109,
+        "sleep": 3058,
+        "itm": 86,
+        "exceptions": 0,
+        "sync": 10,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 19109,
+        "analyzedSamples": 19109,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 86,
+        "valid": 86,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "uniquePcs": 187,
+        "checked": 187,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 18761,
+        "matched": 18761,
+        "accuracy": 1,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [],
+      "clockCheck": {
+        "cfgr": 3408906,
+        "knownHz": 60000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": []
+    },
+    {
+      "run": "ui4",
+      "label": "step-00",
+      "coreHz": 60000000,
+      "requestedBaud": 10000000,
+      "periodCycles": 512,
+      "seconds": 1,
+      "passed": true,
+      "status": "passed",
+      "bytes": 896986,
+      "elapsedMs": 1000.1999999880791,
+      "bytesPerSecond": 896806.6386829541,
+      "sampleCoverage": 1.0136405333333334,
+      "stats": {
+        "bytes": 896986,
+        "packets": 237630,
+        "pc": 100941,
+        "sleep": 17845,
+        "itm": 29,
+        "exceptions": 0,
+        "sync": 3,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 100941,
+        "analyzedSamples": 100941,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 29,
+        "valid": 29,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "uniquePcs": 232,
+        "checked": 232,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 97815,
+        "matched": 97815,
+        "accuracy": 1,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [],
+      "clockCheck": {
+        "cfgr": 3408906,
+        "knownHz": 60000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": [],
+      "web": {
+        "stats": {
+          "bytes": 896986,
+          "packets": 237630,
+          "pc": 100941,
+          "sleep": 17845,
+          "itm": 29,
+          "exceptions": 0,
+          "sync": 3,
+          "overflow": 0,
+          "malformed": 0,
+          "skippedBytes": 0,
+          "truncated": 0,
+          "mapped": 100941,
+          "analyzedSamples": 100941,
+          "droppedEvents": 0,
+          "unmapped": 0
+        },
+        "errors": [],
+        "warning": ""
+      }
+    },
+    {
+      "run": "ui4",
+      "label": "step-01",
+      "coreHz": 64000000,
+      "requestedBaud": 8000000,
+      "periodCycles": 1024,
+      "seconds": 1,
+      "passed": false,
+      "status": "setup-rejected",
+      "error": "Error: 页面异常：Error: 核心频率与 RCC 配置不符：实读 8 MHz"
+    },
+    {
+      "run": "ui5",
+      "label": "step-00",
+      "coreHz": 64000000,
+      "requestedBaud": 8000000,
+      "periodCycles": 1024,
+      "seconds": 1,
+      "passed": true,
+      "status": "passed",
+      "bytes": 480064,
+      "elapsedMs": 1000.0999999940395,
+      "bytesPerSecond": 480015.9984030208,
+      "sampleCoverage": 1.024608,
+      "stats": {
+        "bytes": 480064,
+        "packets": 128136,
+        "pc": 53207,
+        "sleep": 10831,
+        "itm": 30,
+        "exceptions": 0,
+        "sync": 3,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 53207,
+        "analyzedSamples": 53207,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 30,
+        "valid": 30,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "uniquePcs": 196,
+        "checked": 196,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 52419,
+        "matched": 52419,
+        "accuracy": 1,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [],
+      "clockCheck": {
+        "cfgr": 3671050,
+        "knownHz": 64000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": [],
+      "web": {
+        "stats": {
+          "bytes": 480064,
+          "packets": 128136,
+          "pc": 53207,
+          "sleep": 10831,
+          "itm": 30,
+          "exceptions": 0,
+          "sync": 3,
+          "overflow": 0,
+          "malformed": 0,
+          "skippedBytes": 0,
+          "truncated": 0,
+          "mapped": 53207,
+          "analyzedSamples": 53207,
+          "droppedEvents": 0,
+          "unmapped": 0
+        },
+        "errors": [],
+        "warning": ""
+      }
+    },
+    {
+      "run": "ui5",
+      "label": "step-01",
+      "coreHz": 60000000,
+      "requestedBaud": 10000000,
+      "periodCycles": 512,
+      "seconds": 1,
+      "passed": false,
+      "status": "setup-rejected",
+      "error": "Error: 页面异常：Error: 核心频率与 RCC 配置不符：实读 8 MHz",
+      "setupDiagnostic": {
+        "cfgr": 3408906,
+        "note": "verify_image 日志有未暂停错误；不将该次命令视为独立 ELF 校验。RCC 读回有效。"
+      }
+    },
+    {
+      "run": "ui5",
+      "label": "step-02",
+      "coreHz": 64000000,
+      "requestedBaud": 8000000,
+      "periodCycles": 1024,
+      "seconds": 1,
+      "passed": true,
+      "status": "passed",
+      "bytes": 477777,
+      "elapsedMs": 1000.0999999940395,
+      "bytesPerSecond": 477729.22708013945,
+      "sampleCoverage": 1.015984,
+      "stats": {
+        "bytes": 477777,
+        "packets": 127056,
+        "pc": 53347,
+        "sleep": 10152,
+        "itm": 29,
+        "exceptions": 0,
+        "sync": 3,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 53347,
+        "analyzedSamples": 53347,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 29,
+        "valid": 29,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "uniquePcs": 208,
+        "checked": 208,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 52671,
+        "matched": 52671,
+        "accuracy": 1,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [],
+      "clockCheck": {
+        "cfgr": 3671050,
+        "knownHz": 64000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": [],
+      "web": {
+        "stats": {
+          "bytes": 477777,
+          "packets": 127056,
+          "pc": 53347,
+          "sleep": 10152,
+          "itm": 29,
+          "exceptions": 0,
+          "sync": 3,
+          "overflow": 0,
+          "malformed": 0,
+          "skippedBytes": 0,
+          "truncated": 0,
+          "mapped": 53347,
+          "analyzedSamples": 53347,
+          "droppedEvents": 0,
+          "unmapped": 0
+        },
+        "errors": [],
+        "warning": ""
+      }
+    },
+    {
+      "run": "ui5",
+      "label": "step-03",
+      "coreHz": 60000000,
+      "requestedBaud": 10000000,
+      "periodCycles": 512,
+      "seconds": 1,
+      "passed": true,
+      "status": "passed",
+      "bytes": 900254,
+      "elapsedMs": 1000.1999999880791,
+      "bytesPerSecond": 900073.985213687,
+      "sampleCoverage": 1.0121984,
+      "stats": {
+        "bytes": 900254,
+        "packets": 237292,
+        "pc": 102311,
+        "sleep": 16306,
+        "itm": 29,
+        "exceptions": 0,
+        "sync": 3,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 102311,
+        "analyzedSamples": 102311,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 29,
+        "valid": 29,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "uniquePcs": 229,
+        "checked": 229,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 100847,
+        "matched": 100847,
+        "accuracy": 1,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [],
+      "clockCheck": {
+        "cfgr": 3408906,
+        "knownHz": 60000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": [],
+      "web": {
+        "stats": {
+          "bytes": 900254,
+          "packets": 237292,
+          "pc": 102311,
+          "sleep": 16306,
+          "itm": 29,
+          "exceptions": 0,
+          "sync": 3,
+          "overflow": 0,
+          "malformed": 0,
+          "skippedBytes": 0,
+          "truncated": 0,
+          "mapped": 102311,
+          "analyzedSamples": 102311,
+          "droppedEvents": 0,
+          "unmapped": 0
+        },
+        "errors": [],
+        "warning": ""
+      }
+    },
+    {
+      "run": "ui6",
+      "label": "step-00",
+      "coreHz": 60000000,
+      "requestedBaud": 10000000,
+      "periodCycles": 512,
+      "seconds": 1,
+      "passed": true,
+      "status": "passed",
+      "bytes": 895632,
+      "elapsedMs": 1002,
+      "bytesPerSecond": 893844.3113772455,
+      "sampleCoverage": 1.0124885333333333,
+      "stats": {
+        "bytes": 895632,
+        "packets": 237360,
+        "pc": 100713,
+        "sleep": 17938,
+        "itm": 29,
+        "exceptions": 0,
+        "sync": 3,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 100713,
+        "analyzedSamples": 100713,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 29,
+        "valid": 29,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "uniquePcs": 234,
+        "checked": 234,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 99952,
+        "matched": 99952,
+        "accuracy": 1,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [],
+      "clockCheck": {
+        "cfgr": 3408906,
+        "knownHz": 60000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": [],
+      "web": {
+        "stats": {
+          "bytes": 895632,
+          "packets": 237360,
+          "pc": 100713,
+          "sleep": 17938,
+          "itm": 29,
+          "exceptions": 0,
+          "sync": 3,
+          "overflow": 0,
+          "malformed": 0,
+          "skippedBytes": 0,
+          "truncated": 0,
+          "mapped": 100713,
+          "analyzedSamples": 100713,
+          "droppedEvents": 0,
+          "unmapped": 0
+        },
+        "errors": [],
+        "warning": ""
+      }
+    },
+    {
+      "run": "ui6",
+      "label": "step-01",
+      "coreHz": 64000000,
+      "requestedBaud": 8000000,
+      "periodCycles": 1024,
+      "seconds": 1,
+      "passed": true,
+      "status": "passed",
+      "bytes": 483491,
+      "elapsedMs": 1000,
+      "bytesPerSecond": 483491,
+      "sampleCoverage": 1.018448,
+      "stats": {
+        "bytes": 483491,
+        "packets": 127366,
+        "pc": 54993,
+        "sleep": 8660,
+        "itm": 30,
+        "exceptions": 0,
+        "sync": 3,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 54993,
+        "analyzedSamples": 54993,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 30,
+        "valid": 30,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "uniquePcs": 204,
+        "checked": 204,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 54104,
+        "matched": 54104,
+        "accuracy": 1,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [],
+      "clockCheck": {
+        "cfgr": 3671050,
+        "knownHz": 64000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": [],
+      "web": {
+        "stats": {
+          "bytes": 483491,
+          "packets": 127366,
+          "pc": 54993,
+          "sleep": 8660,
+          "itm": 30,
+          "exceptions": 0,
+          "sync": 3,
+          "overflow": 0,
+          "malformed": 0,
+          "skippedBytes": 0,
+          "truncated": 0,
+          "mapped": 54993,
+          "analyzedSamples": 54993,
+          "droppedEvents": 0,
+          "unmapped": 0
+        },
+        "errors": [],
+        "warning": ""
+      }
+    },
+    {
+      "run": "ui6",
+      "label": "step-02",
+      "coreHz": 60000000,
+      "requestedBaud": 10000000,
+      "periodCycles": 512,
+      "seconds": 1,
+      "passed": true,
+      "status": "passed",
+      "bytes": 903869,
+      "elapsedMs": 1000.0999999940395,
+      "bytesPerSecond": 903778.6221431725,
+      "sampleCoverage": 1.0160384,
+      "stats": {
+        "bytes": 903869,
+        "packets": 238190,
+        "pc": 102768,
+        "sleep": 16299,
+        "itm": 29,
+        "exceptions": 0,
+        "sync": 3,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 102768,
+        "analyzedSamples": 102768,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 29,
+        "valid": 29,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "uniquePcs": 234,
+        "checked": 234,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 100203,
+        "matched": 100203,
+        "accuracy": 1,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [],
+      "clockCheck": {
+        "cfgr": 3408906,
+        "knownHz": 60000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": [],
+      "web": {
+        "stats": {
+          "bytes": 903869,
+          "packets": 238190,
+          "pc": 102768,
+          "sleep": 16299,
+          "itm": 29,
+          "exceptions": 0,
+          "sync": 3,
+          "overflow": 0,
+          "malformed": 0,
+          "skippedBytes": 0,
+          "truncated": 0,
+          "mapped": 102768,
+          "analyzedSamples": 102768,
+          "droppedEvents": 0,
+          "unmapped": 0
+        },
+        "errors": [],
+        "warning": ""
+      }
+    },
+    {
+      "run": "ui6",
+      "label": "step-03",
+      "coreHz": 64000000,
+      "requestedBaud": 8000000,
+      "periodCycles": 1024,
+      "seconds": 1,
+      "passed": true,
+      "status": "passed",
+      "bytes": 491296,
+      "elapsedMs": 1021.6999999880791,
+      "bytesPerSecond": 480861.3095876796,
+      "sampleCoverage": 1.03408,
+      "stats": {
+        "bytes": 491296,
+        "packets": 129320,
+        "pc": 55965,
+        "sleep": 8665,
+        "itm": 30,
+        "exceptions": 0,
+        "sync": 3,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 55965,
+        "analyzedSamples": 55965,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 30,
+        "valid": 30,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "uniquePcs": 204,
+        "checked": 204,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 54815,
+        "matched": 54815,
+        "accuracy": 1,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [],
+      "clockCheck": {
+        "cfgr": 3671050,
+        "knownHz": 64000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": [],
+      "web": {
+        "stats": {
+          "bytes": 491296,
+          "packets": 129320,
+          "pc": 55965,
+          "sleep": 8665,
+          "itm": 30,
+          "exceptions": 0,
+          "sync": 3,
+          "overflow": 0,
+          "malformed": 0,
+          "skippedBytes": 0,
+          "truncated": 0,
+          "mapped": 55965,
+          "analyzedSamples": 55965,
+          "droppedEvents": 0,
+          "unmapped": 0
+        },
+        "errors": [],
+        "warning": ""
+      }
+    },
+    {
+      "run": "ui6",
+      "label": "step-04",
+      "coreHz": 60000000,
+      "requestedBaud": 10000000,
+      "periodCycles": 512,
+      "seconds": 1,
+      "passed": false,
+      "status": "setup-rejected",
+      "error": "Error: 页面异常：Error: 核心频率与 RCC 配置不符：实读 8 MHz",
+      "setupDiagnostic": {
+        "cfgr": 3408906,
+        "fixtureBytesMatch": true
+      }
+    },
+    {
+      "run": "ui6",
+      "label": "step-05",
+      "coreHz": 64000000,
+      "requestedBaud": 8000000,
+      "periodCycles": 1024,
+      "seconds": 1,
+      "passed": true,
+      "status": "passed",
+      "bytes": 474877,
+      "elapsedMs": 1000.0999999940395,
+      "bytesPerSecond": 474829.51705112506,
+      "sampleCoverage": 1.013552,
+      "stats": {
+        "bytes": 474877,
+        "packets": 126754,
+        "pc": 52629,
+        "sleep": 10718,
+        "itm": 30,
+        "exceptions": 0,
+        "sync": 3,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 52629,
+        "analyzedSamples": 52629,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "markers": {
+        "total": 30,
+        "valid": 30,
+        "sequenceJumps": 0
+      },
+      "sourceOracle": {
+        "uniquePcs": 203,
+        "checked": 203,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 52382,
+        "matched": 52382,
+        "accuracy": 1,
+        "mismatchCount": 0,
+        "ambiguousCount": 0
+      },
+      "reasons": [],
+      "clockCheck": {
+        "cfgr": 3671050,
+        "knownHz": 64000000
+      },
+      "registersRestored": true,
+      "serialErrors": [],
+      "transportGaps": [],
+      "web": {
+        "stats": {
+          "bytes": 474877,
+          "packets": 126754,
+          "pc": 52629,
+          "sleep": 10718,
+          "itm": 30,
+          "exceptions": 0,
+          "sync": 3,
+          "overflow": 0,
+          "malformed": 0,
+          "skippedBytes": 0,
+          "truncated": 0,
+          "mapped": 52629,
+          "analyzedSamples": 52629,
+          "droppedEvents": 0,
+          "unmapped": 0
+        },
+        "errors": [],
+        "warning": ""
+      }
+    }
+  ]
+}

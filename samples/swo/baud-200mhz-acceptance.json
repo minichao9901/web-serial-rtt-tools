@@ -1,0 +1,4417 @@
+{
+  "date": "2026-10-09",
+  "scope": "PLL1CLK0 800MHz / 4; fixed UART clock 200MHz; single HPM5301 probe + F103CB SWO source",
+  "datasheetMaxUartClockHz": 100000000,
+  "configuredMaxBaud": 25000000,
+  "highestTestedSourceBaud": 24000000,
+  "exact25MbaudSourceTested": false,
+  "internalClockDutyMeasured": false,
+  "experimentalAttempts": 27,
+  "passed": 19,
+  "setupRejected": 4,
+  "probeBackupAndRestore": {
+    "serial": "B4444F2110DDDAFE44800BBB0AE800E0",
+    "bytes": 909312,
+    "sha256": "4aa1f2e9d9e848fb0f9c8f646834a35e9be3a461528311f1b97a629e67f95ef7",
+    "packBytes": 189840,
+    "packSha256": "73ef1e268804882e61f144ab4f36b351a04f617adfb4f5952d4794e7d17ea839",
+    "buildTime": "2026/10/08 10:02:33",
+    "twoReadsIdentical": true,
+    "fullRestoreReadback": true,
+    "originalAppRunning": true
+  },
+  "runs": [
+    {
+      "name": "pll1-200-sweep1",
+      "startedAt": "2026-10-08T23:30:30.660Z",
+      "board": "STM32F103CB",
+      "fixture": "tools/target-firmware/stm32f103cb_swo/fw.elf",
+      "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+      "frontend": false,
+      "rows": [
+        {
+          "label": "step-00",
+          "core": 60,
+          "baud": 10000000,
+          "period": 8192,
+          "seconds": 2,
+          "startedAt": "2026-10-08T23:30:35.885Z",
+          "clockCfgr": "0x34040a",
+          "metadata": {
+            "format": "swo-pc-v1",
+            "startAligned": true,
+            "plan": {
+              "coreHz": 60000000,
+              "baudRate": 10000000,
+              "periodCycles": 8192,
+              "seconds": 2,
+              "itm": true,
+              "exceptions": false,
+              "tap": 1,
+              "post": 7,
+              "acpr": 5,
+              "samplesHz": 7324.21875,
+              "estimatedBytes": 65917.96875,
+              "wireBytes": 1000000
+            },
+            "startedAt": "2026-10-08T23:30:36.726Z",
+            "clockCheck": {
+              "cfgr": 3408906,
+              "knownHz": 60000000
+            },
+            "target": {
+              "cpuid": 1092600369,
+              "device": 537093136,
+              "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+            },
+            "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+            "transportGaps": [],
+            "configReadback": {
+              "dwt": 1073747695,
+              "itm": 65551,
+              "acpr": 5,
+              "sppr": 2,
+              "dbg": 807
+            },
+            "elapsedMs": 2000.199999988079,
+            "restored": true
+          },
+          "errors": [],
+          "bytes": 111418,
+          "stats": {
+            "bytes": 111418,
+            "packets": 29564,
+            "pc": 12431,
+            "sleep": 2293,
+            "itm": 58,
+            "exceptions": 0,
+            "sync": 7,
+            "overflow": 0,
+            "malformed": 0,
+            "skippedBytes": 0,
+            "truncated": 0,
+            "mapped": 12431,
+            "analyzedSamples": 12431,
+            "droppedEvents": 0,
+            "unmapped": 0
+          },
+          "sourceOracle": {
+            "uniquePcs": 175,
+            "checked": 175,
+            "mismatches": 0
+          },
+          "stageOracle": {
+            "checked": 12263,
+            "matched": 12263,
+            "accuracy": 1,
+            "counts": {
+              "1": 2020,
+              "2": 2038,
+              "3": 2039,
+              "5": 2031,
+              "6": 2029,
+              "7": 2106
+            },
+            "mismatches": [],
+            "mismatchCount": 0,
+            "ambiguousCount": 0,
+            "ambiguous": []
+          },
+          "markers": {
+            "total": 58,
+            "valid": 58,
+            "sequenceJumps": 0
+          },
+          "nominalSamples": 14648.4375,
+          "sampleRatio": 1.0051584,
+          "sampleHz": 7361.26387365651,
+          "bytesPerSecond": 55703.42965736627,
+          "wireUtilization": 0.055703429657366264,
+          "receiver": {
+            "version": 1,
+            "clockHz": 200000000,
+            "requestedBaud": 10000000,
+            "appliedBaud": 10000000,
+            "osr": 10,
+            "maxBaud": 25000000,
+            "initStatus": 0,
+            "clockRegister": 152044547
+          },
+          "passed": true,
+          "reasons": []
+        },
+        {
+          "label": "step-01",
+          "core": 56,
+          "baud": 14000000,
+          "period": 8192,
+          "seconds": 2,
+          "startedAt": "2026-10-08T23:30:39.061Z",
+          "clockCfgr": "0x30040a",
+          "passed": false,
+          "error": "Error: 页面异常：Error: 核心频率与 RCC 配置不符：实读 8 MHz\n    at setup (http://127.0.0.1:8911/app/swo/capture.js:42:49)\n    at async execute (http://127.0.0.1:8911/app/core/probe-manager.js:89:20)\n    at Cdp.eval (file:///E:/web-serial-rtt-tools-swo-trace/tools/selftest/cdp-lib.mjs:82:35)\n    at async record (file:///E:/web-serial-rtt-tools-swo-trace/tools/selftest/swo-baud-hw.mjs:42:4)\n    at async file:///E:/web-serial-rtt-tools-swo-trace/tools/selftest/swo-baud-hw.mjs:81:33",
+          "setupRejected": true,
+          "setupDiagnostic": {
+            "cfgr": 3146762,
+            "fixtureBytesMatch": true
+          }
+        },
+        {
+          "label": "step-02",
+          "core": 64,
+          "baud": 16000000,
+          "period": 8192,
+          "seconds": 2,
+          "startedAt": "2026-10-08T23:30:39.965Z",
+          "clockCfgr": "0x38040a",
+          "metadata": {
+            "format": "swo-pc-v1",
+            "startAligned": true,
+            "plan": {
+              "coreHz": 64000000,
+              "baudRate": 16000000,
+              "periodCycles": 8192,
+              "seconds": 2,
+              "itm": true,
+              "exceptions": false,
+              "tap": 1,
+              "post": 7,
+              "acpr": 3,
+              "samplesHz": 7812.5,
+              "estimatedBytes": 70312.5,
+              "wireBytes": 1600000
+            },
+            "startedAt": "2026-10-08T23:30:40.830Z",
+            "clockCheck": {
+              "cfgr": 3671050,
+              "knownHz": 64000000
+            },
+            "target": {
+              "cpuid": 1092600369,
+              "device": 537093136,
+              "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+            },
+            "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+            "transportGaps": [],
+            "configReadback": {
+              "dwt": 1073747695,
+              "itm": 65551,
+              "acpr": 3,
+              "sppr": 2,
+              "dbg": 807
+            },
+            "elapsedMs": 2000.0999999940395,
+            "restored": true
+          },
+          "errors": [],
+          "bytes": 119807,
+          "stats": {
+            "bytes": 119807,
+            "packets": 31578,
+            "pc": 13549,
+            "sleep": 2182,
+            "itm": 58,
+            "exceptions": 0,
+            "sync": 7,
+            "overflow": 0,
+            "malformed": 0,
+            "skippedBytes": 0,
+            "truncated": 0,
+            "mapped": 13549,
+            "analyzedSamples": 13549,
+            "droppedEvents": 0,
+            "unmapped": 0
+          },
+          "sourceOracle": {
+            "uniquePcs": 172,
+            "checked": 172,
+            "mismatches": 0
+          },
+          "stageOracle": {
+            "checked": 13353,
+            "matched": 13353,
+            "accuracy": 1,
+            "counts": {
+              "1": 2437,
+              "2": 2190,
+              "3": 2173,
+              "5": 2184,
+              "6": 2173,
+              "7": 2196
+            },
+            "mismatches": [],
+            "mismatchCount": 0,
+            "ambiguousCount": 0,
+            "ambiguous": []
+          },
+          "markers": {
+            "total": 58,
+            "valid": 58,
+            "sequenceJumps": 0
+          },
+          "nominalSamples": 15625,
+          "sampleRatio": 1.006784,
+          "sampleHz": 7865.106744686205,
+          "bytesPerSecond": 59900.50497492977,
+          "wireUtilization": 0.037437815609331106,
+          "receiver": {
+            "version": 1,
+            "clockHz": 200000000,
+            "requestedBaud": 16000000,
+            "appliedBaud": 16666666,
+            "osr": 12,
+            "maxBaud": 25000000,
+            "initStatus": 0,
+            "clockRegister": 152044547
+          },
+          "passed": true,
+          "reasons": []
+        },
+        {
+          "label": "step-03",
+          "core": 40,
+          "baud": 20000000,
+          "period": 8192,
+          "seconds": 3,
+          "startedAt": "2026-10-08T23:30:43.229Z",
+          "clockCfgr": "0x20040a",
+          "metadata": {
+            "format": "swo-pc-v1",
+            "startAligned": true,
+            "plan": {
+              "coreHz": 40000000,
+              "baudRate": 20000000,
+              "periodCycles": 8192,
+              "seconds": 3,
+              "itm": true,
+              "exceptions": false,
+              "tap": 1,
+              "post": 7,
+              "acpr": 1,
+              "samplesHz": 4882.8125,
+              "estimatedBytes": 43945.3125,
+              "wireBytes": 2000000
+            },
+            "startedAt": "2026-10-08T23:30:44.075Z",
+            "clockCheck": {
+              "cfgr": 2098186,
+              "knownHz": 40000000
+            },
+            "target": {
+              "cpuid": 1092600369,
+              "device": 537093136,
+              "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+            },
+            "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+            "transportGaps": [],
+            "configReadback": {
+              "dwt": 1073747695,
+              "itm": 65551,
+              "acpr": 1,
+              "sppr": 2,
+              "dbg": 807
+            },
+            "elapsedMs": 3000.4000000059605,
+            "restored": true
+          },
+          "errors": [],
+          "bytes": 112145,
+          "stats": {
+            "bytes": 112145,
+            "packets": 29546,
+            "pc": 12661,
+            "sleep": 2026,
+            "itm": 86,
+            "exceptions": 0,
+            "sync": 7,
+            "overflow": 0,
+            "malformed": 0,
+            "skippedBytes": 0,
+            "truncated": 0,
+            "mapped": 12661,
+            "analyzedSamples": 12661,
+            "droppedEvents": 0,
+            "unmapped": 0
+          },
+          "sourceOracle": {
+            "uniquePcs": 185,
+            "checked": 185,
+            "mismatches": 0
+          },
+          "stageOracle": {
+            "checked": 12401,
+            "matched": 12401,
+            "accuracy": 1,
+            "counts": {
+              "1": 2173,
+              "2": 2066,
+              "3": 2022,
+              "5": 2038,
+              "6": 2021,
+              "7": 2078,
+              "8": 3
+            },
+            "mismatches": [],
+            "mismatchCount": 0,
+            "ambiguousCount": 0,
+            "ambiguous": []
+          },
+          "markers": {
+            "total": 86,
+            "valid": 86,
+            "sequenceJumps": 0
+          },
+          "nominalSamples": 14648.4375,
+          "sampleRatio": 1.0026325333333332,
+          "sampleHz": 4895.013998123858,
+          "bytesPerSecond": 37376.68310884456,
+          "wireUtilization": 0.01868834155442228,
+          "receiver": {
+            "version": 1,
+            "clockHz": 200000000,
+            "requestedBaud": 20000000,
+            "appliedBaud": 20000000,
+            "osr": 10,
+            "maxBaud": 25000000,
+            "initStatus": 0,
+            "clockRegister": 152044547
+          },
+          "passed": true,
+          "reasons": []
+        },
+        {
+          "label": "step-04",
+          "core": 44,
+          "baud": 22000000,
+          "period": 8192,
+          "seconds": 2,
+          "startedAt": "2026-10-08T23:30:47.464Z",
+          "clockCfgr": "0x24040a",
+          "metadata": {
+            "format": "swo-pc-v1",
+            "startAligned": true,
+            "plan": {
+              "coreHz": 44000000,
+              "baudRate": 22000000,
+              "periodCycles": 8192,
+              "seconds": 2,
+              "itm": true,
+              "exceptions": false,
+              "tap": 1,
+              "post": 7,
+              "acpr": 1,
+              "samplesHz": 5371.09375,
+              "estimatedBytes": 48339.84375,
+              "wireBytes": 2200000
+            },
+            "startedAt": "2026-10-08T23:30:48.355Z",
+            "clockCheck": {
+              "cfgr": 2360330,
+              "knownHz": 44000000
+            },
+            "target": {
+              "cpuid": 1092600369,
+              "device": 537093136,
+              "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+            },
+            "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+            "transportGaps": [],
+            "configReadback": {
+              "dwt": 1073747695,
+              "itm": 65551,
+              "acpr": 1,
+              "sppr": 2,
+              "dbg": 807
+            },
+            "elapsedMs": 2000.199999988079,
+            "restored": true
+          },
+          "errors": [],
+          "bytes": 60777,
+          "stats": {
+            "bytes": 60777,
+            "packets": 5,
+            "pc": 0,
+            "sleep": 0,
+            "itm": 2,
+            "exceptions": 0,
+            "sync": 0,
+            "overflow": 0,
+            "malformed": 1,
+            "skippedBytes": 60755,
+            "truncated": 0,
+            "mapped": 0,
+            "analyzedSamples": 0,
+            "droppedEvents": 0,
+            "unmapped": 0
+          },
+          "sourceOracle": {
+            "checked": 0,
+            "mismatches": 0
+          },
+          "stageOracle": {
+            "checked": 0,
+            "matched": 0,
+            "accuracy": null,
+            "counts": {},
+            "mismatches": [],
+            "mismatchCount": 0,
+            "ambiguousCount": 0,
+            "ambiguous": []
+          },
+          "markers": {
+            "total": 0,
+            "valid": 0,
+            "sequenceJumps": 0
+          },
+          "nominalSamples": 10742.1875,
+          "sampleRatio": 0,
+          "sampleHz": 0,
+          "bytesPerSecond": 30385.461454035703,
+          "wireUtilization": 0.013811573388198047,
+          "receiver": {
+            "version": 1,
+            "clockHz": 200000000,
+            "requestedBaud": 22000000,
+            "appliedBaud": 20000000,
+            "osr": 10,
+            "maxBaud": 25000000,
+            "initStatus": 0,
+            "clockRegister": 152044547
+          },
+          "passed": false,
+          "reasons": [
+            "malformed 1",
+            "sample coverage 0.0%",
+            "stage marker loss/corruption",
+            "GNU source mismatch/insufficient valid PCs"
+          ]
+        },
+        {
+          "label": "step-05",
+          "core": 48,
+          "baud": 24000000,
+          "period": 8192,
+          "seconds": 2,
+          "startedAt": "2026-10-08T23:30:50.746Z",
+          "clockCfgr": "0x28040a",
+          "metadata": {
+            "format": "swo-pc-v1",
+            "startAligned": true,
+            "plan": {
+              "coreHz": 48000000,
+              "baudRate": 24000000,
+              "periodCycles": 8192,
+              "seconds": 2,
+              "itm": true,
+              "exceptions": false,
+              "tap": 1,
+              "post": 7,
+              "acpr": 1,
+              "samplesHz": 5859.375,
+              "estimatedBytes": 52734.375,
+              "wireBytes": 2400000
+            },
+            "startedAt": "2026-10-08T23:30:51.650Z",
+            "clockCheck": {
+              "cfgr": 2622474,
+              "knownHz": 48000000
+            },
+            "target": {
+              "cpuid": 1092600369,
+              "device": 537093136,
+              "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+            },
+            "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+            "transportGaps": [],
+            "configReadback": {
+              "dwt": 1073747695,
+              "itm": 65551,
+              "acpr": 1,
+              "sppr": 2,
+              "dbg": 807
+            },
+            "elapsedMs": 2000.0999999940395,
+            "restored": true
+          },
+          "errors": [],
+          "bytes": 89873,
+          "stats": {
+            "bytes": 89873,
+            "packets": 23680,
+            "pc": 10156,
+            "sleep": 1626,
+            "itm": 58,
+            "exceptions": 0,
+            "sync": 5,
+            "overflow": 0,
+            "malformed": 0,
+            "skippedBytes": 0,
+            "truncated": 0,
+            "mapped": 10156,
+            "analyzedSamples": 10156,
+            "droppedEvents": 0,
+            "unmapped": 0
+          },
+          "sourceOracle": {
+            "uniquePcs": 168,
+            "checked": 168,
+            "mismatches": 0
+          },
+          "stageOracle": {
+            "checked": 10084,
+            "matched": 10084,
+            "accuracy": 1,
+            "counts": {
+              "1": 1635,
+              "2": 1634,
+              "3": 1817,
+              "5": 1740,
+              "6": 1619,
+              "7": 1639
+            },
+            "mismatches": [],
+            "mismatchCount": 0,
+            "ambiguousCount": 0,
+            "ambiguous": []
+          },
+          "markers": {
+            "total": 58,
+            "valid": 58,
+            "sequenceJumps": 0
+          },
+          "nominalSamples": 11718.75,
+          "sampleRatio": 1.0053973333333333,
+          "sampleHz": 5890.705464744318,
+          "bytesPerSecond": 44934.25328746954,
+          "wireUtilization": 0.01872260553644564,
+          "receiver": {
+            "version": 1,
+            "clockHz": 200000000,
+            "requestedBaud": 24000000,
+            "appliedBaud": 25000000,
+            "osr": 8,
+            "maxBaud": 25000000,
+            "initStatus": 0,
+            "clockRegister": 152044547
+          },
+          "passed": true,
+          "reasons": []
+        },
+        {
+          "label": "step-06",
+          "core": 56,
+          "baud": 28000000,
+          "period": 8192,
+          "seconds": 2,
+          "startedAt": "2026-10-08T23:30:54.024Z",
+          "clockCfgr": "0x30040a",
+          "metadata": {
+            "format": "swo-pc-v1",
+            "startAligned": true,
+            "plan": {
+              "coreHz": 56000000,
+              "baudRate": 28000000,
+              "periodCycles": 8192,
+              "seconds": 2,
+              "itm": true,
+              "exceptions": false,
+              "tap": 1,
+              "post": 7,
+              "acpr": 1,
+              "samplesHz": 6835.9375,
+              "estimatedBytes": 61523.4375,
+              "wireBytes": 2800000
+            },
+            "startedAt": "2026-10-08T23:30:54.863Z",
+            "clockCheck": {
+              "cfgr": 3146762,
+              "knownHz": 56000000
+            },
+            "target": {
+              "cpuid": 1092600369,
+              "device": 537093136,
+              "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+            },
+            "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+            "transportGaps": [],
+            "configReadback": {
+              "dwt": 1073747695,
+              "itm": 65551,
+              "acpr": 1,
+              "sppr": 2,
+              "dbg": 807
+            },
+            "elapsedMs": 2000.0999999940395,
+            "restored": true
+          },
+          "errors": [],
+          "bytes": 77044,
+          "stats": {
+            "bytes": 77044,
+            "packets": 1,
+            "pc": 0,
+            "sleep": 0,
+            "itm": 1,
+            "exceptions": 0,
+            "sync": 0,
+            "overflow": 0,
+            "malformed": 1,
+            "skippedBytes": 77038,
+            "truncated": 0,
+            "mapped": 0,
+            "analyzedSamples": 0,
+            "droppedEvents": 0,
+            "unmapped": 0
+          },
+          "sourceOracle": {
+            "checked": 0,
+            "mismatches": 0
+          },
+          "stageOracle": {
+            "checked": 0,
+            "matched": 0,
+            "accuracy": null,
+            "counts": {},
+            "mismatches": [],
+            "mismatchCount": 0,
+            "ambiguousCount": 0,
+            "ambiguous": []
+          },
+          "markers": {
+            "total": 0,
+            "valid": 0,
+            "sequenceJumps": 0
+          },
+          "nominalSamples": 13671.875,
+          "sampleRatio": 0,
+          "sampleHz": 0,
+          "bytesPerSecond": 38520.073996414976,
+          "wireUtilization": 0.01375716928443392,
+          "receiver": {
+            "version": 1,
+            "clockHz": 200000000,
+            "requestedBaud": 28000000,
+            "appliedBaud": 25000000,
+            "osr": 8,
+            "maxBaud": 25000000,
+            "initStatus": 0,
+            "clockRegister": 152044547
+          },
+          "passed": false,
+          "reasons": [
+            "malformed 1",
+            "sample coverage 0.0%",
+            "stage marker loss/corruption",
+            "GNU source mismatch/insufficient valid PCs"
+          ]
+        },
+        {
+          "label": "step-07",
+          "core": 64,
+          "baud": 32000000,
+          "period": 8192,
+          "seconds": 2,
+          "startedAt": "2026-10-08T23:30:57.202Z",
+          "clockCfgr": "0x38040a",
+          "metadata": {
+            "format": "swo-pc-v1",
+            "startAligned": true,
+            "plan": {
+              "coreHz": 64000000,
+              "baudRate": 32000000,
+              "periodCycles": 8192,
+              "seconds": 2,
+              "itm": true,
+              "exceptions": false,
+              "tap": 1,
+              "post": 7,
+              "acpr": 1,
+              "samplesHz": 7812.5,
+              "estimatedBytes": 70312.5,
+              "wireBytes": 3200000
+            },
+            "startedAt": "2026-10-08T23:30:58.036Z",
+            "clockCheck": {
+              "cfgr": 3671050,
+              "knownHz": 64000000
+            },
+            "target": {
+              "cpuid": 1092600369,
+              "device": 537093136,
+              "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+            },
+            "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+            "transportGaps": [],
+            "configReadback": {
+              "dwt": 1073747695,
+              "itm": 65551,
+              "acpr": 1,
+              "sppr": 2,
+              "dbg": 807
+            },
+            "elapsedMs": 2000.199999988079,
+            "restored": true
+          },
+          "errors": [],
+          "bytes": 86959,
+          "stats": {
+            "bytes": 86959,
+            "packets": 1,
+            "pc": 0,
+            "sleep": 0,
+            "itm": 1,
+            "exceptions": 0,
+            "sync": 0,
+            "overflow": 0,
+            "malformed": 1,
+            "skippedBytes": 86955,
+            "truncated": 0,
+            "mapped": 0,
+            "analyzedSamples": 0,
+            "droppedEvents": 0,
+            "unmapped": 0
+          },
+          "sourceOracle": {
+            "checked": 0,
+            "mismatches": 0
+          },
+          "stageOracle": {
+            "checked": 0,
+            "matched": 0,
+            "accuracy": null,
+            "counts": {},
+            "mismatches": [],
+            "mismatchCount": 0,
+            "ambiguousCount": 0,
+            "ambiguous": []
+          },
+          "markers": {
+            "total": 0,
+            "valid": 0,
+            "sequenceJumps": 0
+          },
+          "nominalSamples": 15625,
+          "sampleRatio": 0,
+          "sampleHz": 0,
+          "bytesPerSecond": 43475.15248501063,
+          "wireUtilization": 0.01358598515156582,
+          "receiver": {
+            "version": 1,
+            "clockHz": 200000000,
+            "requestedBaud": 32000000,
+            "appliedBaud": 25000000,
+            "osr": 8,
+            "maxBaud": 25000000,
+            "initStatus": 0,
+            "clockRegister": 152044547
+          },
+          "passed": false,
+          "reasons": [
+            "malformed 1",
+            "sample coverage 0.0%",
+            "stage marker loss/corruption",
+            "GNU source mismatch/insufficient valid PCs"
+          ]
+        }
+      ],
+      "devices": {
+        "usb": [
+          {
+            "vid": 3368,
+            "pid": 516,
+            "product": "akaLinkPro CMSIS-DAP",
+            "serial": "B4444F2110DDDAFE44800BBB0AE800E0"
+          }
+        ],
+        "ports": [
+          {
+            "usbProductId": 516,
+            "usbVendorId": 3368
+          }
+        ]
+      },
+      "originalSha256": "5c54ac4301861d8827a31bbaf2d995f6fd2e2b58a845e706a4d367d352adce40",
+      "originalDemcr": 16777216,
+      "completed": true,
+      "restore": {
+        "passed": true,
+        "sha256": "5c54ac4301861d8827a31bbaf2d995f6fd2e2b58a845e706a4d367d352adce40",
+        "bytes": 131072
+      }
+    },
+    {
+      "name": "pll1-200-repeat2",
+      "startedAt": "2026-10-08T23:31:50.137Z",
+      "board": "STM32F103CB",
+      "fixture": "tools/target-firmware/stm32f103cb_swo/fw.elf",
+      "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+      "frontend": false,
+      "rows": [
+        {
+          "label": "step-00",
+          "core": 56,
+          "baud": 14000000,
+          "period": 8192,
+          "seconds": 2,
+          "startedAt": "2026-10-08T23:31:55.234Z",
+          "clockCfgr": "0x30040a",
+          "metadata": {
+            "format": "swo-pc-v1",
+            "startAligned": true,
+            "plan": {
+              "coreHz": 56000000,
+              "baudRate": 14000000,
+              "periodCycles": 8192,
+              "seconds": 2,
+              "itm": true,
+              "exceptions": false,
+              "tap": 1,
+              "post": 7,
+              "acpr": 3,
+              "samplesHz": 6835.9375,
+              "estimatedBytes": 61523.4375,
+              "wireBytes": 1400000
+            },
+            "startedAt": "2026-10-08T23:31:56.084Z",
+            "clockCheck": {
+              "cfgr": 3146762,
+              "knownHz": 56000000
+            },
+            "target": {
+              "cpuid": 1092600369,
+              "device": 537093136,
+              "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+            },
+            "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+            "transportGaps": [],
+            "configReadback": {
+              "dwt": 1073747695,
+              "itm": 65551,
+              "acpr": 3,
+              "sppr": 2,
+              "dbg": 807
+            },
+            "elapsedMs": 2000.199999988079,
+            "restored": true
+          },
+          "errors": [],
+          "bytes": 104018,
+          "stats": {
+            "bytes": 104018,
+            "packets": 27566,
+            "pc": 11632,
+            "sleep": 2094,
+            "itm": 57,
+            "exceptions": 0,
+            "sync": 6,
+            "overflow": 0,
+            "malformed": 0,
+            "skippedBytes": 0,
+            "truncated": 0,
+            "mapped": 11632,
+            "analyzedSamples": 11632,
+            "droppedEvents": 0,
+            "unmapped": 0
+          },
+          "sourceOracle": {
+            "uniquePcs": 170,
+            "checked": 170,
+            "mismatches": 0
+          },
+          "stageOracle": {
+            "checked": 11550,
+            "matched": 11550,
+            "accuracy": 1,
+            "counts": {
+              "1": 1903,
+              "2": 1906,
+              "3": 1899,
+              "5": 1905,
+              "6": 1892,
+              "7": 2042,
+              "8": 3
+            },
+            "mismatches": [],
+            "mismatchCount": 0,
+            "ambiguousCount": 0,
+            "ambiguous": []
+          },
+          "markers": {
+            "total": 57,
+            "valid": 57,
+            "sequenceJumps": 0
+          },
+          "nominalSamples": 13671.875,
+          "sampleRatio": 1.003958857142857,
+          "sampleHz": 6862.313768664036,
+          "bytesPerSecond": 52003.79962034793,
+          "wireUtilization": 0.03714557115739137,
+          "receiver": {
+            "version": 1,
+            "clockHz": 200000000,
+            "requestedBaud": 14000000,
+            "appliedBaud": 14285714,
+            "osr": 14,
+            "maxBaud": 25000000,
+            "initStatus": 0,
+            "clockRegister": 152044547
+          },
+          "passed": true,
+          "reasons": []
+        },
+        {
+          "label": "step-01",
+          "core": 48,
+          "baud": 24000000,
+          "period": 8192,
+          "seconds": 5,
+          "startedAt": "2026-10-08T23:31:58.388Z",
+          "clockCfgr": "0x28040a",
+          "passed": false,
+          "error": "Error: 页面异常：Error: 核心频率与 RCC 配置不符：实读 8 MHz\n    at setup (http://127.0.0.1:8911/app/swo/capture.js:42:49)\n    at async execute (http://127.0.0.1:8911/app/core/probe-manager.js:89:20)\n    at Cdp.eval (file:///E:/web-serial-rtt-tools-swo-trace/tools/selftest/cdp-lib.mjs:82:35)\n    at async record (file:///E:/web-serial-rtt-tools-swo-trace/tools/selftest/swo-baud-hw.mjs:42:4)\n    at async file:///E:/web-serial-rtt-tools-swo-trace/tools/selftest/swo-baud-hw.mjs:81:33",
+          "setupRejected": true,
+          "setupDiagnostic": {
+            "cfgr": 2622474,
+            "fixtureBytesMatch": true
+          }
+        },
+        {
+          "label": "step-02",
+          "core": 48,
+          "baud": 24000000,
+          "period": 8192,
+          "seconds": 5,
+          "startedAt": "2026-10-08T23:31:59.295Z",
+          "clockCfgr": "0x28040a",
+          "metadata": {
+            "format": "swo-pc-v1",
+            "startAligned": true,
+            "plan": {
+              "coreHz": 48000000,
+              "baudRate": 24000000,
+              "periodCycles": 8192,
+              "seconds": 5,
+              "itm": true,
+              "exceptions": false,
+              "tap": 1,
+              "post": 7,
+              "acpr": 1,
+              "samplesHz": 5859.375,
+              "estimatedBytes": 52734.375,
+              "wireBytes": 2400000
+            },
+            "startedAt": "2026-10-08T23:32:00.159Z",
+            "clockCheck": {
+              "cfgr": 2622474,
+              "knownHz": 48000000
+            },
+            "target": {
+              "cpuid": 1092600369,
+              "device": 537093136,
+              "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+            },
+            "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+            "transportGaps": [],
+            "configReadback": {
+              "dwt": 1073747695,
+              "itm": 65551,
+              "acpr": 1,
+              "sppr": 2,
+              "dbg": 807
+            },
+            "elapsedMs": 5004.5,
+            "restored": true
+          },
+          "errors": [],
+          "bytes": 224798,
+          "stats": {
+            "bytes": 224798,
+            "packets": 59232,
+            "pc": 25401,
+            "sleep": 4070,
+            "itm": 145,
+            "exceptions": 0,
+            "sync": 14,
+            "overflow": 0,
+            "malformed": 0,
+            "skippedBytes": 0,
+            "truncated": 0,
+            "mapped": 25401,
+            "analyzedSamples": 25401,
+            "droppedEvents": 0,
+            "unmapped": 0
+          },
+          "sourceOracle": {
+            "uniquePcs": 198,
+            "checked": 198,
+            "mismatches": 0
+          },
+          "stageOracle": {
+            "checked": 25165,
+            "matched": 25165,
+            "accuracy": 1,
+            "counts": {
+              "1": 4280,
+              "2": 4278,
+              "3": 4203,
+              "5": 4077,
+              "6": 4046,
+              "7": 4281
+            },
+            "mismatches": [],
+            "mismatchCount": 0,
+            "ambiguousCount": 0,
+            "ambiguous": []
+          },
+          "markers": {
+            "total": 145,
+            "valid": 145,
+            "sequenceJumps": 0
+          },
+          "nominalSamples": 29296.875,
+          "sampleRatio": 1.0059434666666667,
+          "sampleHz": 5888.899990008992,
+          "bytesPerSecond": 44919.17274452992,
+          "wireUtilization": 0.018716321976887464,
+          "receiver": {
+            "version": 1,
+            "clockHz": 200000000,
+            "requestedBaud": 24000000,
+            "appliedBaud": 25000000,
+            "osr": 8,
+            "maxBaud": 25000000,
+            "initStatus": 0,
+            "clockRegister": 152044547
+          },
+          "passed": true,
+          "reasons": []
+        },
+        {
+          "label": "step-03",
+          "core": 48,
+          "baud": 24000000,
+          "period": 8192,
+          "seconds": 5,
+          "startedAt": "2026-10-08T23:32:05.536Z",
+          "clockCfgr": "0x28040a",
+          "metadata": {
+            "format": "swo-pc-v1",
+            "startAligned": true,
+            "plan": {
+              "coreHz": 48000000,
+              "baudRate": 24000000,
+              "periodCycles": 8192,
+              "seconds": 5,
+              "itm": true,
+              "exceptions": false,
+              "tap": 1,
+              "post": 7,
+              "acpr": 1,
+              "samplesHz": 5859.375,
+              "estimatedBytes": 52734.375,
+              "wireBytes": 2400000
+            },
+            "startedAt": "2026-10-08T23:32:06.376Z",
+            "clockCheck": {
+              "cfgr": 2622474,
+              "knownHz": 48000000
+            },
+            "target": {
+              "cpuid": 1092600369,
+              "device": 537093136,
+              "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+            },
+            "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+            "transportGaps": [],
+            "configReadback": {
+              "dwt": 1073747695,
+              "itm": 65551,
+              "acpr": 1,
+              "sppr": 2,
+              "dbg": 807
+            },
+            "elapsedMs": 5000.0999999940395,
+            "restored": true
+          },
+          "errors": [],
+          "bytes": 223624,
+          "stats": {
+            "bytes": 223624,
+            "packets": 58938,
+            "pc": 25256,
+            "sleep": 4070,
+            "itm": 143,
+            "exceptions": 0,
+            "sync": 14,
+            "overflow": 0,
+            "malformed": 0,
+            "skippedBytes": 0,
+            "truncated": 0,
+            "mapped": 25256,
+            "analyzedSamples": 25256,
+            "droppedEvents": 0,
+            "unmapped": 0
+          },
+          "sourceOracle": {
+            "uniquePcs": 186,
+            "checked": 186,
+            "mismatches": 0
+          },
+          "stageOracle": {
+            "checked": 24965,
+            "matched": 24965,
+            "accuracy": 1,
+            "counts": {
+              "1": 4283,
+              "2": 4277,
+              "3": 4203,
+              "5": 4079,
+              "6": 4047,
+              "7": 4076
+            },
+            "mismatches": [],
+            "mismatchCount": 0,
+            "ambiguousCount": 0,
+            "ambiguous": []
+          },
+          "markers": {
+            "total": 143,
+            "valid": 143,
+            "sequenceJumps": 0
+          },
+          "nominalSamples": 29296.875,
+          "sampleRatio": 1.0009941333333334,
+          "sampleHz": 5865.082698353025,
+          "bytesPerSecond": 44723.90552194288,
+          "wireUtilization": 0.018634960634142866,
+          "receiver": {
+            "version": 1,
+            "clockHz": 200000000,
+            "requestedBaud": 24000000,
+            "appliedBaud": 25000000,
+            "osr": 8,
+            "maxBaud": 25000000,
+            "initStatus": 0,
+            "clockRegister": 152044547
+          },
+          "passed": true,
+          "reasons": []
+        },
+        {
+          "label": "step-04",
+          "core": 40,
+          "baud": 20000000,
+          "period": 256,
+          "seconds": 3,
+          "startedAt": "2026-10-08T23:32:11.752Z",
+          "clockCfgr": "0x20040a",
+          "metadata": {
+            "format": "swo-pc-v1",
+            "startAligned": true,
+            "plan": {
+              "coreHz": 40000000,
+              "baudRate": 20000000,
+              "periodCycles": 256,
+              "seconds": 3,
+              "itm": true,
+              "exceptions": false,
+              "tap": 0,
+              "post": 3,
+              "acpr": 1,
+              "samplesHz": 156250,
+              "estimatedBytes": 1406250,
+              "wireBytes": 2000000
+            },
+            "startedAt": "2026-10-08T23:32:12.601Z",
+            "clockCheck": {
+              "cfgr": 2098186,
+              "knownHz": 40000000
+            },
+            "target": {
+              "cpuid": 1092600369,
+              "device": 537093136,
+              "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+            },
+            "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+            "transportGaps": [],
+            "configReadback": {
+              "dwt": 1073747047,
+              "itm": 65551,
+              "acpr": 1,
+              "sppr": 2,
+              "dbg": 807
+            },
+            "elapsedMs": 3000,
+            "restored": true
+          },
+          "errors": [],
+          "bytes": 3569723,
+          "stats": {
+            "bytes": 3569723,
+            "packets": 941194,
+            "pc": 405508,
+            "sleep": 65003,
+            "itm": 86,
+            "exceptions": 0,
+            "sync": 7,
+            "overflow": 0,
+            "malformed": 0,
+            "skippedBytes": 0,
+            "truncated": 0,
+            "mapped": 405508,
+            "analyzedSamples": 405508,
+            "droppedEvents": 0,
+            "unmapped": 0
+          },
+          "sourceOracle": {
+            "uniquePcs": 255,
+            "checked": 255,
+            "mismatches": 0
+          },
+          "stageOracle": {
+            "checked": 399148,
+            "matched": 399148,
+            "accuracy": 1,
+            "counts": {
+              "1": 64100,
+              "2": 70461,
+              "3": 68267,
+              "5": 65191,
+              "6": 64672,
+              "7": 66457
+            },
+            "mismatches": [],
+            "mismatchCount": 0,
+            "ambiguousCount": 0,
+            "ambiguous": []
+          },
+          "markers": {
+            "total": 86,
+            "valid": 86,
+            "sequenceJumps": 0
+          },
+          "nominalSamples": 468750,
+          "sampleRatio": 1.0037568,
+          "sampleHz": 156837,
+          "bytesPerSecond": 1189907.6666666667,
+          "wireUtilization": 0.5949538333333334,
+          "receiver": {
+            "version": 1,
+            "clockHz": 200000000,
+            "requestedBaud": 20000000,
+            "appliedBaud": 20000000,
+            "osr": 10,
+            "maxBaud": 25000000,
+            "initStatus": 0,
+            "clockRegister": 152044547
+          },
+          "passed": true,
+          "reasons": []
+        },
+        {
+          "label": "step-05",
+          "core": 40,
+          "baud": 20000000,
+          "period": 256,
+          "seconds": 3,
+          "startedAt": "2026-10-08T23:32:16.727Z",
+          "clockCfgr": "0x20040a",
+          "metadata": {
+            "format": "swo-pc-v1",
+            "startAligned": true,
+            "plan": {
+              "coreHz": 40000000,
+              "baudRate": 20000000,
+              "periodCycles": 256,
+              "seconds": 3,
+              "itm": true,
+              "exceptions": false,
+              "tap": 0,
+              "post": 3,
+              "acpr": 1,
+              "samplesHz": 156250,
+              "estimatedBytes": 1406250,
+              "wireBytes": 2000000
+            },
+            "startedAt": "2026-10-08T23:32:17.567Z",
+            "clockCheck": {
+              "cfgr": 2098186,
+              "knownHz": 40000000
+            },
+            "target": {
+              "cpuid": 1092600369,
+              "device": 537093136,
+              "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+            },
+            "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+            "transportGaps": [],
+            "configReadback": {
+              "dwt": 1073747047,
+              "itm": 65551,
+              "acpr": 1,
+              "sppr": 2,
+              "dbg": 807
+            },
+            "elapsedMs": 3002.699999988079,
+            "restored": true
+          },
+          "errors": [],
+          "bytes": 3596534,
+          "stats": {
+            "bytes": 3596534,
+            "packets": 947858,
+            "pc": 408891,
+            "sleep": 64951,
+            "itm": 87,
+            "exceptions": 0,
+            "sync": 7,
+            "overflow": 0,
+            "malformed": 0,
+            "skippedBytes": 0,
+            "truncated": 0,
+            "mapped": 408891,
+            "analyzedSamples": 408891,
+            "droppedEvents": 0,
+            "unmapped": 0
+          },
+          "sourceOracle": {
+            "uniquePcs": 257,
+            "checked": 257,
+            "mismatches": 0
+          },
+          "stageOracle": {
+            "checked": 403300,
+            "matched": 403300,
+            "accuracy": 1,
+            "counts": {
+              "1": 64211,
+              "2": 70424,
+              "3": 70420,
+              "5": 66851,
+              "6": 64832,
+              "7": 66562
+            },
+            "mismatches": [],
+            "mismatchCount": 0,
+            "ambiguousCount": 0,
+            "ambiguous": []
+          },
+          "markers": {
+            "total": 87,
+            "valid": 87,
+            "sequenceJumps": 0
+          },
+          "nominalSamples": 468750,
+          "sampleRatio": 1.0108629333333334,
+          "sampleHz": 157805.30855625976,
+          "bytesPerSecond": 1197766.67666243,
+          "wireUtilization": 0.598883338331215,
+          "receiver": {
+            "version": 1,
+            "clockHz": 200000000,
+            "requestedBaud": 20000000,
+            "appliedBaud": 20000000,
+            "osr": 10,
+            "maxBaud": 25000000,
+            "initStatus": 0,
+            "clockRegister": 152044547
+          },
+          "passed": true,
+          "reasons": []
+        },
+        {
+          "label": "step-06",
+          "core": 40,
+          "baud": 20000000,
+          "period": 256,
+          "seconds": 3,
+          "startedAt": "2026-10-08T23:32:21.760Z",
+          "clockCfgr": "0x20040a",
+          "metadata": {
+            "format": "swo-pc-v1",
+            "startAligned": true,
+            "plan": {
+              "coreHz": 40000000,
+              "baudRate": 20000000,
+              "periodCycles": 256,
+              "seconds": 3,
+              "itm": true,
+              "exceptions": false,
+              "tap": 0,
+              "post": 3,
+              "acpr": 1,
+              "samplesHz": 156250,
+              "estimatedBytes": 1406250,
+              "wireBytes": 2000000
+            },
+            "startedAt": "2026-10-08T23:32:22.627Z",
+            "clockCheck": {
+              "cfgr": 2098186,
+              "knownHz": 40000000
+            },
+            "target": {
+              "cpuid": 1092600369,
+              "device": 537093136,
+              "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+            },
+            "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+            "transportGaps": [],
+            "configReadback": {
+              "dwt": 1073747047,
+              "itm": 65551,
+              "acpr": 1,
+              "sppr": 2,
+              "dbg": 807
+            },
+            "elapsedMs": 3002,
+            "restored": true
+          },
+          "errors": [],
+          "bytes": 3566575,
+          "stats": {
+            "bytes": 3566575,
+            "packets": 942456,
+            "pc": 403407,
+            "sleep": 67735,
+            "itm": 86,
+            "exceptions": 0,
+            "sync": 7,
+            "overflow": 0,
+            "malformed": 0,
+            "skippedBytes": 0,
+            "truncated": 0,
+            "mapped": 403407,
+            "analyzedSamples": 403407,
+            "droppedEvents": 0,
+            "unmapped": 0
+          },
+          "sourceOracle": {
+            "uniquePcs": 254,
+            "checked": 254,
+            "mismatches": 0
+          },
+          "stageOracle": {
+            "checked": 395812,
+            "matched": 395812,
+            "accuracy": 1,
+            "counts": {
+              "1": 64124,
+              "2": 64891,
+              "3": 64944,
+              "5": 65215,
+              "6": 70156,
+              "7": 66482
+            },
+            "mismatches": [],
+            "mismatchCount": 0,
+            "ambiguousCount": 0,
+            "ambiguous": []
+          },
+          "markers": {
+            "total": 86,
+            "valid": 86,
+            "sequenceJumps": 0
+          },
+          "nominalSamples": 468750,
+          "sampleRatio": 1.0051029333333332,
+          "sampleHz": 156942.70486342438,
+          "bytesPerSecond": 1188066.289140573,
+          "wireUtilization": 0.5940331445702864,
+          "receiver": {
+            "version": 1,
+            "clockHz": 200000000,
+            "requestedBaud": 20000000,
+            "appliedBaud": 20000000,
+            "osr": 10,
+            "maxBaud": 25000000,
+            "initStatus": 0,
+            "clockRegister": 152044547
+          },
+          "passed": true,
+          "reasons": []
+        },
+        {
+          "label": "step-07",
+          "core": 48,
+          "baud": 24000000,
+          "period": 256,
+          "seconds": 3,
+          "startedAt": "2026-10-08T23:32:26.733Z",
+          "clockCfgr": "0x28040a",
+          "metadata": {
+            "format": "swo-pc-v1",
+            "startAligned": true,
+            "plan": {
+              "coreHz": 48000000,
+              "baudRate": 24000000,
+              "periodCycles": 256,
+              "seconds": 3,
+              "itm": true,
+              "exceptions": false,
+              "tap": 0,
+              "post": 3,
+              "acpr": 1,
+              "samplesHz": 187500,
+              "estimatedBytes": 1687500,
+              "wireBytes": 2400000
+            },
+            "startedAt": "2026-10-08T23:32:27.574Z",
+            "clockCheck": {
+              "cfgr": 2622474,
+              "knownHz": 48000000
+            },
+            "target": {
+              "cpuid": 1092600369,
+              "device": 537093136,
+              "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+            },
+            "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+            "transportGaps": [],
+            "configReadback": {
+              "dwt": 1073747047,
+              "itm": 65551,
+              "acpr": 1,
+              "sppr": 2,
+              "dbg": 807
+            },
+            "elapsedMs": 3000.100000023842,
+            "restored": true
+          },
+          "errors": [],
+          "bytes": 4296729,
+          "stats": {
+            "bytes": 4296729,
+            "packets": 1134071,
+            "pc": 487110,
+            "sleep": 79839,
+            "itm": 87,
+            "exceptions": 0,
+            "sync": 8,
+            "overflow": 0,
+            "malformed": 0,
+            "skippedBytes": 0,
+            "truncated": 0,
+            "mapped": 487110,
+            "analyzedSamples": 487110,
+            "droppedEvents": 0,
+            "unmapped": 0
+          },
+          "sourceOracle": {
+            "uniquePcs": 254,
+            "checked": 254,
+            "mismatches": 0
+          },
+          "stageOracle": {
+            "checked": 483181,
+            "matched": 483181,
+            "accuracy": 1,
+            "counts": {
+              "1": 78560,
+              "2": 78293,
+              "3": 78148,
+              "5": 85095,
+              "6": 84393,
+              "7": 78482,
+              "8": 210
+            },
+            "mismatches": [],
+            "mismatchCount": 0,
+            "ambiguousCount": 0,
+            "ambiguous": []
+          },
+          "markers": {
+            "total": 87,
+            "valid": 87,
+            "sequenceJumps": 0
+          },
+          "nominalSamples": 562500,
+          "sampleRatio": 1.0079093333333333,
+          "sampleHz": 188976.70077513898,
+          "bytesPerSecond": 1432195.260146613,
+          "wireUtilization": 0.5967480250610888,
+          "receiver": {
+            "version": 1,
+            "clockHz": 200000000,
+            "requestedBaud": 24000000,
+            "appliedBaud": 25000000,
+            "osr": 8,
+            "maxBaud": 25000000,
+            "initStatus": 0,
+            "clockRegister": 152044547
+          },
+          "passed": true,
+          "reasons": []
+        },
+        {
+          "label": "step-08",
+          "core": 48,
+          "baud": 24000000,
+          "period": 256,
+          "seconds": 3,
+          "startedAt": "2026-10-08T23:32:32.204Z",
+          "clockCfgr": "0x28040a",
+          "metadata": {
+            "format": "swo-pc-v1",
+            "startAligned": true,
+            "plan": {
+              "coreHz": 48000000,
+              "baudRate": 24000000,
+              "periodCycles": 256,
+              "seconds": 3,
+              "itm": true,
+              "exceptions": false,
+              "tap": 0,
+              "post": 3,
+              "acpr": 1,
+              "samplesHz": 187500,
+              "estimatedBytes": 1687500,
+              "wireBytes": 2400000
+            },
+            "startedAt": "2026-10-08T23:32:33.088Z",
+            "clockCheck": {
+              "cfgr": 2622474,
+              "knownHz": 48000000
+            },
+            "target": {
+              "cpuid": 1092600369,
+              "device": 537093136,
+              "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+            },
+            "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+            "transportGaps": [],
+            "configReadback": {
+              "dwt": 1073747047,
+              "itm": 65551,
+              "acpr": 1,
+              "sppr": 2,
+              "dbg": 807
+            },
+            "elapsedMs": 3000.100000023842,
+            "restored": true
+          },
+          "errors": [],
+          "bytes": 4286808,
+          "stats": {
+            "bytes": 4286808,
+            "packets": 1135220,
+            "pc": 482845,
+            "sleep": 84678,
+            "itm": 87,
+            "exceptions": 0,
+            "sync": 8,
+            "overflow": 0,
+            "malformed": 0,
+            "skippedBytes": 0,
+            "truncated": 0,
+            "mapped": 482845,
+            "analyzedSamples": 482845,
+            "droppedEvents": 0,
+            "unmapped": 0
+          },
+          "sourceOracle": {
+            "uniquePcs": 254,
+            "checked": 254,
+            "mismatches": 0
+          },
+          "stageOracle": {
+            "checked": 475113,
+            "matched": 475113,
+            "accuracy": 1,
+            "counts": {
+              "1": 78347,
+              "2": 78082,
+              "3": 77978,
+              "5": 78216,
+              "6": 77775,
+              "7": 84715
+            },
+            "mismatches": [],
+            "mismatchCount": 0,
+            "ambiguousCount": 0,
+            "ambiguous": []
+          },
+          "markers": {
+            "total": 87,
+            "valid": 87,
+            "sequenceJumps": 0
+          },
+          "nominalSamples": 562500,
+          "sampleRatio": 1.0089297777777777,
+          "sampleHz": 189168.0277309056,
+          "bytesPerSecond": 1428888.3703762982,
+          "wireUtilization": 0.5953701543234576,
+          "receiver": {
+            "version": 1,
+            "clockHz": 200000000,
+            "requestedBaud": 24000000,
+            "appliedBaud": 25000000,
+            "osr": 8,
+            "maxBaud": 25000000,
+            "initStatus": 0,
+            "clockRegister": 152044547
+          },
+          "passed": true,
+          "reasons": []
+        },
+        {
+          "label": "step-09",
+          "core": 48,
+          "baud": 24000000,
+          "period": 256,
+          "seconds": 3,
+          "startedAt": "2026-10-08T23:32:37.691Z",
+          "clockCfgr": "0x28040a",
+          "metadata": {
+            "format": "swo-pc-v1",
+            "startAligned": true,
+            "plan": {
+              "coreHz": 48000000,
+              "baudRate": 24000000,
+              "periodCycles": 256,
+              "seconds": 3,
+              "itm": true,
+              "exceptions": false,
+              "tap": 0,
+              "post": 3,
+              "acpr": 1,
+              "samplesHz": 187500,
+              "estimatedBytes": 1687500,
+              "wireBytes": 2400000
+            },
+            "startedAt": "2026-10-08T23:32:38.634Z",
+            "clockCheck": {
+              "cfgr": 2622474,
+              "knownHz": 48000000
+            },
+            "target": {
+              "cpuid": 1092600369,
+              "device": 537093136,
+              "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+            },
+            "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+            "transportGaps": [],
+            "configReadback": {
+              "dwt": 1073747047,
+              "itm": 65551,
+              "acpr": 1,
+              "sppr": 2,
+              "dbg": 807
+            },
+            "elapsedMs": 3000.199999988079,
+            "restored": true
+          },
+          "errors": [],
+          "bytes": 4317093,
+          "stats": {
+            "bytes": 4317093,
+            "packets": 1137931,
+            "pc": 490682,
+            "sleep": 78197,
+            "itm": 87,
+            "exceptions": 0,
+            "sync": 8,
+            "overflow": 0,
+            "malformed": 0,
+            "skippedBytes": 0,
+            "truncated": 0,
+            "mapped": 490682,
+            "analyzedSamples": 490682,
+            "droppedEvents": 0,
+            "unmapped": 0
+          },
+          "sourceOracle": {
+            "uniquePcs": 251,
+            "checked": 251,
+            "mismatches": 0
+          },
+          "stageOracle": {
+            "checked": 485394,
+            "matched": 485394,
+            "accuracy": 1,
+            "counts": {
+              "1": 84899,
+              "2": 84645,
+              "3": 81627,
+              "5": 78336,
+              "6": 77599,
+              "7": 78287,
+              "8": 1
+            },
+            "mismatches": [],
+            "mismatchCount": 0,
+            "ambiguousCount": 0,
+            "ambiguous": []
+          },
+          "markers": {
+            "total": 87,
+            "valid": 87,
+            "sequenceJumps": 0
+          },
+          "nominalSamples": 562500,
+          "sampleRatio": 1.0113404444444445,
+          "sampleHz": 189613.6924212587,
+          "bytesPerSecond": 1438935.0710009844,
+          "wireUtilization": 0.5995562795837435,
+          "receiver": {
+            "version": 1,
+            "clockHz": 200000000,
+            "requestedBaud": 24000000,
+            "appliedBaud": 25000000,
+            "osr": 8,
+            "maxBaud": 25000000,
+            "initStatus": 0,
+            "clockRegister": 152044547
+          },
+          "passed": true,
+          "reasons": []
+        },
+        {
+          "label": "step-10",
+          "core": 48,
+          "baud": 24000000,
+          "period": 192,
+          "seconds": 2,
+          "startedAt": "2026-10-08T23:32:43.989Z",
+          "clockCfgr": "0x28040a",
+          "passed": false,
+          "error": "Error: 页面异常：Error: 核心频率与 RCC 配置不符：实读 8 MHz\n    at setup (http://127.0.0.1:8911/app/swo/capture.js:42:49)\n    at async execute (http://127.0.0.1:8911/app/core/probe-manager.js:89:20)\n    at Cdp.eval (file:///E:/web-serial-rtt-tools-swo-trace/tools/selftest/cdp-lib.mjs:82:35)\n    at async record (file:///E:/web-serial-rtt-tools-swo-trace/tools/selftest/swo-baud-hw.mjs:42:4)\n    at async file:///E:/web-serial-rtt-tools-swo-trace/tools/selftest/swo-baud-hw.mjs:81:33",
+          "setupRejected": true,
+          "setupDiagnostic": {
+            "cfgr": 2622474,
+            "fixtureBytesMatch": true
+          }
+        },
+        {
+          "label": "step-11",
+          "core": 60,
+          "baud": 1000000,
+          "period": 8192,
+          "seconds": 2,
+          "startedAt": "2026-10-08T23:32:45.033Z",
+          "clockCfgr": "0x34040a",
+          "metadata": {
+            "format": "swo-pc-v1",
+            "startAligned": true,
+            "plan": {
+              "coreHz": 60000000,
+              "baudRate": 1000000,
+              "periodCycles": 8192,
+              "seconds": 2,
+              "itm": true,
+              "exceptions": false,
+              "tap": 1,
+              "post": 7,
+              "acpr": 59,
+              "samplesHz": 7324.21875,
+              "estimatedBytes": 65917.96875,
+              "wireBytes": 100000
+            },
+            "startedAt": "2026-10-08T23:32:45.943Z",
+            "clockCheck": {
+              "cfgr": 3408906,
+              "knownHz": 60000000
+            },
+            "target": {
+              "cpuid": 1092600369,
+              "device": 537093136,
+              "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+            },
+            "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+            "transportGaps": [],
+            "configReadback": {
+              "dwt": 1073747695,
+              "itm": 8454159,
+              "acpr": 59,
+              "sppr": 2,
+              "dbg": 807
+            },
+            "elapsedMs": 2000.0999999940395,
+            "restored": true
+          },
+          "errors": [],
+          "bytes": 113475,
+          "stats": {
+            "bytes": 113475,
+            "packets": 29886,
+            "pc": 12848,
+            "sleep": 2037,
+            "itm": 58,
+            "exceptions": 0,
+            "sync": 7,
+            "overflow": 0,
+            "malformed": 0,
+            "skippedBytes": 0,
+            "truncated": 0,
+            "mapped": 12848,
+            "analyzedSamples": 12848,
+            "droppedEvents": 0,
+            "unmapped": 0
+          },
+          "sourceOracle": {
+            "uniquePcs": 178,
+            "checked": 178,
+            "mismatches": 0
+          },
+          "stageOracle": {
+            "checked": 12686,
+            "matched": 12686,
+            "accuracy": 1,
+            "counts": {
+              "1": 2019,
+              "2": 2034,
+              "3": 2288,
+              "5": 2247,
+              "6": 2031,
+              "7": 2067
+            },
+            "mismatches": [],
+            "mismatchCount": 0,
+            "ambiguousCount": 0,
+            "ambiguous": []
+          },
+          "markers": {
+            "total": 58,
+            "valid": 58,
+            "sequenceJumps": 0
+          },
+          "nominalSamples": 14648.4375,
+          "sampleRatio": 1.0161493333333333,
+          "sampleHz": 7442.1278936274975,
+          "bytesPerSecond": 56734.66326700573,
+          "wireUtilization": 0.5673466326700572,
+          "receiver": {
+            "version": 1,
+            "clockHz": 200000000,
+            "requestedBaud": 1000000,
+            "appliedBaud": 1000000,
+            "osr": 8,
+            "maxBaud": 25000000,
+            "initStatus": 0,
+            "clockRegister": 152044547
+          },
+          "passed": true,
+          "reasons": []
+        }
+      ],
+      "devices": {
+        "usb": [
+          {
+            "vid": 3368,
+            "pid": 516,
+            "product": "akaLinkPro CMSIS-DAP",
+            "serial": "B4444F2110DDDAFE44800BBB0AE800E0"
+          }
+        ],
+        "ports": [
+          {
+            "usbProductId": 516,
+            "usbVendorId": 3368
+          }
+        ]
+      },
+      "originalSha256": "5c54ac4301861d8827a31bbaf2d995f6fd2e2b58a845e706a4d367d352adce40",
+      "originalDemcr": 16777216,
+      "completed": true,
+      "restore": {
+        "passed": true,
+        "sha256": "5c54ac4301861d8827a31bbaf2d995f6fd2e2b58a845e706a4d367d352adce40",
+        "bytes": 131072
+      }
+    },
+    {
+      "name": "pll1-200-load3",
+      "startedAt": "2026-10-08T23:33:27.912Z",
+      "board": "STM32F103CB",
+      "fixture": "tools/target-firmware/stm32f103cb_swo/fw.elf",
+      "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+      "frontend": false,
+      "rows": [
+        {
+          "label": "step-00",
+          "core": 48,
+          "baud": 24000000,
+          "period": 8192,
+          "seconds": 5,
+          "startedAt": "2026-10-08T23:33:32.934Z",
+          "clockCfgr": "0x28040a",
+          "metadata": {
+            "format": "swo-pc-v1",
+            "startAligned": true,
+            "plan": {
+              "coreHz": 48000000,
+              "baudRate": 24000000,
+              "periodCycles": 8192,
+              "seconds": 5,
+              "itm": true,
+              "exceptions": false,
+              "tap": 1,
+              "post": 7,
+              "acpr": 1,
+              "samplesHz": 5859.375,
+              "estimatedBytes": 52734.375,
+              "wireBytes": 2400000
+            },
+            "startedAt": "2026-10-08T23:33:33.772Z",
+            "clockCheck": {
+              "cfgr": 2622474,
+              "knownHz": 48000000
+            },
+            "target": {
+              "cpuid": 1092600369,
+              "device": 537093136,
+              "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+            },
+            "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+            "transportGaps": [],
+            "configReadback": {
+              "dwt": 1073747695,
+              "itm": 65551,
+              "acpr": 1,
+              "sppr": 2,
+              "dbg": 807
+            },
+            "elapsedMs": 5002.700000017881,
+            "restored": true
+          },
+          "errors": [],
+          "bytes": 223399,
+          "stats": {
+            "bytes": 223399,
+            "packets": 59036,
+            "pc": 25099,
+            "sleep": 4275,
+            "itm": 144,
+            "exceptions": 0,
+            "sync": 14,
+            "overflow": 0,
+            "malformed": 0,
+            "skippedBytes": 0,
+            "truncated": 0,
+            "mapped": 25099,
+            "analyzedSamples": 25099,
+            "droppedEvents": 0,
+            "unmapped": 0
+          },
+          "sourceOracle": {
+            "uniquePcs": 193,
+            "checked": 193,
+            "mismatches": 0
+          },
+          "stageOracle": {
+            "checked": 24849,
+            "matched": 24849,
+            "accuracy": 1,
+            "counts": {
+              "1": 4237,
+              "2": 4081,
+              "3": 4079,
+              "5": 4093,
+              "6": 4053,
+              "7": 4293,
+              "8": 13
+            },
+            "mismatches": [],
+            "mismatchCount": 0,
+            "ambiguousCount": 0,
+            "ambiguous": []
+          },
+          "markers": {
+            "total": 144,
+            "valid": 144,
+            "sequenceJumps": 0
+          },
+          "nominalSamples": 29296.875,
+          "sampleRatio": 1.0026325333333332,
+          "sampleHz": 5871.629320146122,
+          "bytesPerSecond": 44655.6859294384,
+          "wireUtilization": 0.018606535803932664,
+          "receiver": {
+            "version": 1,
+            "clockHz": 200000000,
+            "requestedBaud": 24000000,
+            "appliedBaud": 25000000,
+            "osr": 8,
+            "maxBaud": 25000000,
+            "initStatus": 0,
+            "clockRegister": 152044547
+          },
+          "passed": true,
+          "reasons": []
+        },
+        {
+          "label": "step-01",
+          "core": 48,
+          "baud": 24000000,
+          "period": 192,
+          "seconds": 2,
+          "startedAt": "2026-10-08T23:33:39.166Z",
+          "clockCfgr": "0x28040a",
+          "metadata": {
+            "format": "swo-pc-v1",
+            "startAligned": true,
+            "plan": {
+              "coreHz": 48000000,
+              "baudRate": 24000000,
+              "periodCycles": 192,
+              "seconds": 2,
+              "itm": true,
+              "exceptions": false,
+              "tap": 0,
+              "post": 2,
+              "acpr": 1,
+              "samplesHz": 250000,
+              "estimatedBytes": 2250000,
+              "wireBytes": 2400000
+            },
+            "startedAt": "2026-10-08T23:33:40.000Z",
+            "clockCheck": {
+              "cfgr": 2622474,
+              "knownHz": 48000000
+            },
+            "target": {
+              "cpuid": 1092600369,
+              "device": 537093136,
+              "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+            },
+            "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+            "transportGaps": [],
+            "configReadback": {
+              "dwt": 1073747013,
+              "itm": 65551,
+              "acpr": 1,
+              "sppr": 2,
+              "dbg": 807
+            },
+            "elapsedMs": 2000.2000000178814,
+            "restored": true
+          },
+          "errors": [],
+          "bytes": 3810569,
+          "stats": {
+            "bytes": 3810569,
+            "packets": 1007506,
+            "pc": 430562,
+            "sleep": 73133,
+            "itm": 58,
+            "exceptions": 0,
+            "sync": 5,
+            "overflow": 0,
+            "malformed": 0,
+            "skippedBytes": 0,
+            "truncated": 0,
+            "mapped": 430562,
+            "analyzedSamples": 430562,
+            "droppedEvents": 0,
+            "unmapped": 0
+          },
+          "sourceOracle": {
+            "uniquePcs": 257,
+            "checked": 257,
+            "mismatches": 0
+          },
+          "stageOracle": {
+            "checked": 427249,
+            "matched": 427249,
+            "accuracy": 1,
+            "counts": {
+              "1": 71119,
+              "2": 69456,
+              "3": 69518,
+              "5": 69618,
+              "6": 69142,
+              "7": 78394,
+              "8": 2
+            },
+            "mismatches": [],
+            "mismatchCount": 0,
+            "ambiguousCount": 0,
+            "ambiguous": []
+          },
+          "markers": {
+            "total": 58,
+            "valid": 58,
+            "sequenceJumps": 0
+          },
+          "nominalSamples": 500000,
+          "sampleRatio": 1.00739,
+          "sampleHz": 251822.31776597197,
+          "bytesPerSecond": 1905093.990583909,
+          "wireUtilization": 0.7937891627432954,
+          "receiver": {
+            "version": 1,
+            "clockHz": 200000000,
+            "requestedBaud": 24000000,
+            "appliedBaud": 25000000,
+            "osr": 8,
+            "maxBaud": 25000000,
+            "initStatus": 0,
+            "clockRegister": 152044547
+          },
+          "passed": true,
+          "reasons": []
+        },
+        {
+          "label": "step-02",
+          "core": 48,
+          "baud": 24000000,
+          "period": 192,
+          "seconds": 2,
+          "startedAt": "2026-10-08T23:33:43.185Z",
+          "clockCfgr": "0x28040a",
+          "metadata": {
+            "format": "swo-pc-v1",
+            "startAligned": true,
+            "plan": {
+              "coreHz": 48000000,
+              "baudRate": 24000000,
+              "periodCycles": 192,
+              "seconds": 2,
+              "itm": true,
+              "exceptions": false,
+              "tap": 0,
+              "post": 2,
+              "acpr": 1,
+              "samplesHz": 250000,
+              "estimatedBytes": 2250000,
+              "wireBytes": 2400000
+            },
+            "startedAt": "2026-10-08T23:33:44.020Z",
+            "clockCheck": {
+              "cfgr": 2622474,
+              "knownHz": 48000000
+            },
+            "target": {
+              "cpuid": 1092600369,
+              "device": 537093136,
+              "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+            },
+            "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+            "transportGaps": [],
+            "configReadback": {
+              "dwt": 1073747013,
+              "itm": 8454159,
+              "acpr": 1,
+              "sppr": 2,
+              "dbg": 807
+            },
+            "elapsedMs": 2000.199999988079,
+            "restored": true
+          },
+          "errors": [],
+          "bytes": 3829786,
+          "stats": {
+            "bytes": 3829786,
+            "packets": 1009658,
+            "pc": 435169,
+            "sleep": 69602,
+            "itm": 58,
+            "exceptions": 0,
+            "sync": 5,
+            "overflow": 0,
+            "malformed": 0,
+            "skippedBytes": 0,
+            "truncated": 0,
+            "mapped": 435169,
+            "analyzedSamples": 435169,
+            "droppedEvents": 0,
+            "unmapped": 0
+          },
+          "sourceOracle": {
+            "uniquePcs": 242,
+            "checked": 242,
+            "mismatches": 0
+          },
+          "stageOracle": {
+            "checked": 428267,
+            "matched": 428267,
+            "accuracy": 1,
+            "counts": {
+              "1": 78465,
+              "2": 72047,
+              "3": 69239,
+              "5": 69703,
+              "6": 69129,
+              "7": 69684
+            },
+            "mismatches": [],
+            "mismatchCount": 0,
+            "ambiguousCount": 0,
+            "ambiguous": []
+          },
+          "markers": {
+            "total": 58,
+            "valid": 58,
+            "sequenceJumps": 0
+          },
+          "nominalSamples": 500000,
+          "sampleRatio": 1.009542,
+          "sampleHz": 252360.26397510665,
+          "bytesPerSecond": 1914701.5298584264,
+          "wireUtilization": 0.7977923041076777,
+          "receiver": {
+            "version": 1,
+            "clockHz": 200000000,
+            "requestedBaud": 24000000,
+            "appliedBaud": 25000000,
+            "osr": 8,
+            "maxBaud": 25000000,
+            "initStatus": 0,
+            "clockRegister": 152044547
+          },
+          "passed": true,
+          "reasons": []
+        },
+        {
+          "label": "step-03",
+          "core": 48,
+          "baud": 24000000,
+          "period": 192,
+          "seconds": 2,
+          "startedAt": "2026-10-08T23:33:47.171Z",
+          "clockCfgr": "0x28040a",
+          "metadata": {
+            "format": "swo-pc-v1",
+            "startAligned": true,
+            "plan": {
+              "coreHz": 48000000,
+              "baudRate": 24000000,
+              "periodCycles": 192,
+              "seconds": 2,
+              "itm": true,
+              "exceptions": false,
+              "tap": 0,
+              "post": 2,
+              "acpr": 1,
+              "samplesHz": 250000,
+              "estimatedBytes": 2250000,
+              "wireBytes": 2400000
+            },
+            "startedAt": "2026-10-08T23:33:48.072Z",
+            "clockCheck": {
+              "cfgr": 2622474,
+              "knownHz": 48000000
+            },
+            "target": {
+              "cpuid": 1092600369,
+              "device": 537093136,
+              "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+            },
+            "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+            "transportGaps": [],
+            "configReadback": {
+              "dwt": 1073747013,
+              "itm": 8454159,
+              "acpr": 1,
+              "sppr": 2,
+              "dbg": 807
+            },
+            "elapsedMs": 2000,
+            "restored": true
+          },
+          "errors": [],
+          "bytes": 3836948,
+          "stats": {
+            "bytes": 3836948,
+            "packets": 1011245,
+            "pc": 436235,
+            "sleep": 69330,
+            "itm": 58,
+            "exceptions": 0,
+            "sync": 5,
+            "overflow": 0,
+            "malformed": 0,
+            "skippedBytes": 0,
+            "truncated": 0,
+            "mapped": 436235,
+            "analyzedSamples": 436235,
+            "droppedEvents": 0,
+            "unmapped": 0
+          },
+          "sourceOracle": {
+            "uniquePcs": 250,
+            "checked": 250,
+            "mismatches": 0
+          },
+          "stageOracle": {
+            "checked": 426862,
+            "matched": 426862,
+            "accuracy": 1,
+            "counts": {
+              "1": 69452,
+              "2": 69236,
+              "3": 77772,
+              "5": 72154,
+              "6": 68856,
+              "7": 69392
+            },
+            "mismatches": [],
+            "mismatchCount": 0,
+            "ambiguousCount": 0,
+            "ambiguous": []
+          },
+          "markers": {
+            "total": 58,
+            "valid": 58,
+            "sequenceJumps": 0
+          },
+          "nominalSamples": 500000,
+          "sampleRatio": 1.01113,
+          "sampleHz": 252782.5,
+          "bytesPerSecond": 1918474,
+          "wireUtilization": 0.7993641666666667,
+          "receiver": {
+            "version": 1,
+            "clockHz": 200000000,
+            "requestedBaud": 24000000,
+            "appliedBaud": 25000000,
+            "osr": 8,
+            "maxBaud": 25000000,
+            "initStatus": 0,
+            "clockRegister": 152044547
+          },
+          "passed": true,
+          "reasons": []
+        },
+        {
+          "label": "step-04",
+          "core": 48,
+          "baud": 24000000,
+          "period": 128,
+          "seconds": 1,
+          "startedAt": "2026-10-08T23:33:51.179Z",
+          "clockCfgr": "0x28040a",
+          "metadata": {
+            "format": "swo-pc-v1",
+            "startAligned": true,
+            "plan": {
+              "coreHz": 48000000,
+              "baudRate": 24000000,
+              "periodCycles": 128,
+              "seconds": 1,
+              "itm": true,
+              "exceptions": false,
+              "tap": 0,
+              "post": 1,
+              "acpr": 1,
+              "samplesHz": 375000,
+              "estimatedBytes": 3375000,
+              "wireBytes": 2400000
+            },
+            "startedAt": "2026-10-08T23:33:52.021Z",
+            "clockCheck": {
+              "cfgr": 2622474,
+              "knownHz": 48000000
+            },
+            "target": {
+              "cpuid": 1092600369,
+              "device": 537093136,
+              "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+            },
+            "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+            "transportGaps": [],
+            "configReadback": {
+              "dwt": 1073746979,
+              "itm": 8454159,
+              "acpr": 1,
+              "sppr": 2,
+              "dbg": 807
+            },
+            "elapsedMs": 1000.0999999940395,
+            "restored": true
+          },
+          "errors": [],
+          "bytes": 2307084,
+          "stats": {
+            "bytes": 2307084,
+            "packets": 585229,
+            "pc": 327876,
+            "sleep": 52075,
+            "itm": 29,
+            "exceptions": 0,
+            "sync": 2,
+            "overflow": 22,
+            "malformed": 0,
+            "skippedBytes": 0,
+            "truncated": 0,
+            "mapped": 327876,
+            "analyzedSamples": 327876,
+            "droppedEvents": 0,
+            "unmapped": 0
+          },
+          "sourceOracle": {
+            "uniquePcs": 236,
+            "checked": 236,
+            "mismatches": 0
+          },
+          "stageOracle": {
+            "checked": 84967,
+            "matched": 84967,
+            "accuracy": 1,
+            "counts": {
+              "1": 13055,
+              "5": 6789,
+              "6": 12952,
+              "7": 52171
+            },
+            "mismatches": [],
+            "mismatchCount": 0,
+            "ambiguousCount": 0,
+            "ambiguous": []
+          },
+          "markers": {
+            "total": 29,
+            "valid": 29,
+            "sequenceJumps": 0
+          },
+          "nominalSamples": 375000,
+          "sampleRatio": 1.0132026666666667,
+          "sampleHz": 379913.00870139425,
+          "bytesPerSecond": 2306853.3146822816,
+          "wireUtilization": 0.9611888811176174,
+          "receiver": {
+            "version": 1,
+            "clockHz": 200000000,
+            "requestedBaud": 24000000,
+            "appliedBaud": 25000000,
+            "osr": 8,
+            "maxBaud": 25000000,
+            "initStatus": 0,
+            "clockRegister": 152044547
+          },
+          "passed": false,
+          "reasons": [
+            "ITM overflow 22"
+          ]
+        },
+        {
+          "label": "step-05",
+          "core": 40,
+          "baud": 20000000,
+          "period": 192,
+          "seconds": 2,
+          "startedAt": "2026-10-08T23:33:53.968Z",
+          "clockCfgr": "0x20040a",
+          "passed": false,
+          "error": "Error: 页面异常：Error: 核心频率与 RCC 配置不符：实读 8 MHz\n    at setup (http://127.0.0.1:8911/app/swo/capture.js:42:49)\n    at async execute (http://127.0.0.1:8911/app/core/probe-manager.js:89:20)\n    at Cdp.eval (file:///E:/web-serial-rtt-tools-swo-trace/tools/selftest/cdp-lib.mjs:82:35)\n    at async record (file:///E:/web-serial-rtt-tools-swo-trace/tools/selftest/swo-baud-hw.mjs:42:4)\n    at async file:///E:/web-serial-rtt-tools-swo-trace/tools/selftest/swo-baud-hw.mjs:81:33",
+          "setupRejected": true,
+          "setupDiagnostic": {
+            "cfgr": 2098186,
+            "fixtureBytesMatch": true
+          }
+        },
+        {
+          "label": "step-06",
+          "core": 60,
+          "baud": 1000000,
+          "period": 8192,
+          "seconds": 2,
+          "startedAt": "2026-10-08T23:33:54.923Z",
+          "clockCfgr": "0x34040a",
+          "metadata": {
+            "format": "swo-pc-v1",
+            "startAligned": true,
+            "plan": {
+              "coreHz": 60000000,
+              "baudRate": 1000000,
+              "periodCycles": 8192,
+              "seconds": 2,
+              "itm": true,
+              "exceptions": false,
+              "tap": 1,
+              "post": 7,
+              "acpr": 59,
+              "samplesHz": 7324.21875,
+              "estimatedBytes": 65917.96875,
+              "wireBytes": 100000
+            },
+            "startedAt": "2026-10-08T23:33:55.817Z",
+            "clockCheck": {
+              "cfgr": 3408906,
+              "knownHz": 60000000
+            },
+            "target": {
+              "cpuid": 1092600369,
+              "device": 537093136,
+              "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+            },
+            "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+            "transportGaps": [],
+            "configReadback": {
+              "dwt": 1073747695,
+              "itm": 65551,
+              "acpr": 59,
+              "sppr": 2,
+              "dbg": 807
+            },
+            "elapsedMs": 2000.0999999940395,
+            "restored": true
+          },
+          "errors": [],
+          "bytes": 113318,
+          "stats": {
+            "bytes": 113318,
+            "packets": 29846,
+            "pc": 12830,
+            "sleep": 2035,
+            "itm": 58,
+            "exceptions": 0,
+            "sync": 7,
+            "overflow": 0,
+            "malformed": 0,
+            "skippedBytes": 0,
+            "truncated": 0,
+            "mapped": 12830,
+            "analyzedSamples": 12830,
+            "droppedEvents": 0,
+            "unmapped": 0
+          },
+          "sourceOracle": {
+            "uniquePcs": 176,
+            "checked": 176,
+            "mismatches": 0
+          },
+          "stageOracle": {
+            "checked": 12578,
+            "matched": 12578,
+            "accuracy": 1,
+            "counts": {
+              "1": 2019,
+              "2": 2296,
+              "3": 2122,
+              "5": 2043,
+              "6": 2033,
+              "7": 2063,
+              "8": 2
+            },
+            "mismatches": [],
+            "mismatchCount": 0,
+            "ambiguousCount": 0,
+            "ambiguous": []
+          },
+          "markers": {
+            "total": 58,
+            "valid": 58,
+            "sequenceJumps": 0
+          },
+          "nominalSamples": 14648.4375,
+          "sampleRatio": 1.014784,
+          "sampleHz": 7432.128393602469,
+          "bytesPerSecond": 56656.167191809254,
+          "wireUtilization": 0.5665616719180925,
+          "receiver": {
+            "version": 1,
+            "clockHz": 200000000,
+            "requestedBaud": 1000000,
+            "appliedBaud": 1000000,
+            "osr": 8,
+            "maxBaud": 25000000,
+            "initStatus": 0,
+            "clockRegister": 152044547
+          },
+          "passed": true,
+          "reasons": []
+        }
+      ],
+      "devices": {
+        "usb": [
+          {
+            "vid": 3368,
+            "pid": 516,
+            "product": "akaLinkPro CMSIS-DAP",
+            "serial": "B4444F2110DDDAFE44800BBB0AE800E0"
+          }
+        ],
+        "ports": [
+          {
+            "usbProductId": 516,
+            "usbVendorId": 3368
+          }
+        ]
+      },
+      "originalSha256": "5c54ac4301861d8827a31bbaf2d995f6fd2e2b58a845e706a4d367d352adce40",
+      "originalDemcr": 16777216,
+      "completed": true,
+      "restore": {
+        "passed": true,
+        "sha256": "5c54ac4301861d8827a31bbaf2d995f6fd2e2b58a845e706a4d367d352adce40",
+        "bytes": 131072
+      }
+    },
+    {
+      "name": "restored-baseline4",
+      "startedAt": "2026-10-08T23:35:43.380Z",
+      "board": "STM32F103CB",
+      "fixture": "tools/target-firmware/stm32f103cb_swo/fw.elf",
+      "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+      "frontend": false,
+      "rows": [
+        {
+          "label": "step-00",
+          "core": 60,
+          "baud": 1000000,
+          "period": 8192,
+          "seconds": 2,
+          "startedAt": "2026-10-08T23:35:48.369Z",
+          "clockCfgr": "0x34040a",
+          "metadata": {
+            "format": "swo-pc-v1",
+            "startAligned": true,
+            "plan": {
+              "coreHz": 60000000,
+              "baudRate": 1000000,
+              "periodCycles": 8192,
+              "seconds": 2,
+              "itm": true,
+              "exceptions": false,
+              "tap": 1,
+              "post": 7,
+              "acpr": 59,
+              "samplesHz": 7324.21875,
+              "estimatedBytes": 65917.96875,
+              "wireBytes": 100000
+            },
+            "startedAt": "2026-10-08T23:35:49.225Z",
+            "clockCheck": {
+              "cfgr": 3408906,
+              "knownHz": 60000000
+            },
+            "target": {
+              "cpuid": 1092600369,
+              "device": 537093136,
+              "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+            },
+            "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+            "transportGaps": [],
+            "configReadback": {
+              "dwt": 1073747695,
+              "itm": 65551,
+              "acpr": 59,
+              "sppr": 2,
+              "dbg": 807
+            },
+            "elapsedMs": 2000.199999988079,
+            "restored": true
+          },
+          "errors": [],
+          "bytes": 111647,
+          "stats": {
+            "bytes": 111647,
+            "packets": 29618,
+            "pc": 12463,
+            "sleep": 2288,
+            "itm": 58,
+            "exceptions": 0,
+            "sync": 7,
+            "overflow": 0,
+            "malformed": 0,
+            "skippedBytes": 0,
+            "truncated": 0,
+            "mapped": 12463,
+            "analyzedSamples": 12463,
+            "droppedEvents": 0,
+            "unmapped": 0
+          },
+          "sourceOracle": {
+            "uniquePcs": 181,
+            "checked": 181,
+            "mismatches": 0
+          },
+          "stageOracle": {
+            "checked": 12341,
+            "matched": 12341,
+            "accuracy": 1,
+            "counts": {
+              "1": 2021,
+              "2": 2036,
+              "3": 2040,
+              "5": 2036,
+              "6": 2024,
+              "7": 2181,
+              "8": 3
+            },
+            "mismatches": [],
+            "mismatchCount": 0,
+            "ambiguousCount": 0,
+            "ambiguous": []
+          },
+          "markers": {
+            "total": 58,
+            "valid": 58,
+            "sequenceJumps": 0
+          },
+          "nominalSamples": 14648.4375,
+          "sampleRatio": 1.0070016,
+          "sampleHz": 7374.762523791577,
+          "bytesPerSecond": 55817.918208511845,
+          "wireUtilization": 0.5581791820851185,
+          "passed": true,
+          "reasons": []
+        },
+        {
+          "label": "step-01",
+          "core": 60,
+          "baud": 10000000,
+          "period": 512,
+          "seconds": 3,
+          "startedAt": "2026-10-08T23:35:51.532Z",
+          "clockCfgr": "0x34040a",
+          "passed": false,
+          "error": "Error: 页面异常：Error: 目标代码与 ELF 不符或读回不稳定：.text 0x08000130\n    at SwoView.verifyElf (http://127.0.0.1:8911/app/swo/view.js:60:408)\n    at async setup (http://127.0.0.1:8911/app/swo/capture.js:44:30)\n    at async execute (http://127.0.0.1:8911/app/core/probe-manager.js:89:20)\n    at Cdp.eval (file:///E:/web-serial-rtt-tools-swo-trace/tools/selftest/cdp-lib.mjs:82:35)\n    at async record (file:///E:/web-serial-rtt-tools-swo-trace/tools/selftest/swo-baud-hw.mjs:42:4)\n    at async file:///E:/web-serial-rtt-tools-swo-trace/tools/selftest/swo-baud-hw.mjs:81:33",
+          "setupRejected": true,
+          "setupDiagnostic": {
+            "cfgr": 3408906,
+            "fixtureBytesMatch": true
+          }
+        }
+      ],
+      "devices": {
+        "usb": [
+          {
+            "vid": 3368,
+            "pid": 516,
+            "product": "akaLinkPro CMSIS-DAP",
+            "serial": "B4444F2110DDDAFE44800BBB0AE800E0"
+          }
+        ],
+        "ports": [
+          {
+            "usbProductId": 516,
+            "usbVendorId": 3368
+          }
+        ]
+      },
+      "originalSha256": "5c54ac4301861d8827a31bbaf2d995f6fd2e2b58a845e706a4d367d352adce40",
+      "originalDemcr": 16777216,
+      "completed": true,
+      "restore": {
+        "passed": true,
+        "sha256": "5c54ac4301861d8827a31bbaf2d995f6fd2e2b58a845e706a4d367d352adce40",
+        "bytes": 131072
+      }
+    },
+    {
+      "name": "restored-baseline5",
+      "startedAt": "2026-10-08T23:36:06.697Z",
+      "board": "STM32F103CB",
+      "fixture": "tools/target-firmware/stm32f103cb_swo/fw.elf",
+      "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+      "frontend": false,
+      "rows": [
+        {
+          "label": "step-00",
+          "core": 60,
+          "baud": 10000000,
+          "period": 512,
+          "seconds": 2,
+          "startedAt": "2026-10-08T23:36:11.697Z",
+          "clockCfgr": "0x34040a",
+          "metadata": {
+            "format": "swo-pc-v1",
+            "startAligned": true,
+            "plan": {
+              "coreHz": 60000000,
+              "baudRate": 10000000,
+              "periodCycles": 512,
+              "seconds": 2,
+              "itm": true,
+              "exceptions": false,
+              "tap": 0,
+              "post": 7,
+              "acpr": 5,
+              "samplesHz": 117187.5,
+              "estimatedBytes": 1054687.5,
+              "wireBytes": 1000000
+            },
+            "startedAt": "2026-10-08T23:36:12.547Z",
+            "clockCheck": {
+              "cfgr": 3408906,
+              "knownHz": 60000000
+            },
+            "target": {
+              "cpuid": 1092600369,
+              "device": 537093136,
+              "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+            },
+            "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+            "transportGaps": [],
+            "configReadback": {
+              "dwt": 1073747183,
+              "itm": 65551,
+              "acpr": 5,
+              "sppr": 2,
+              "dbg": 807
+            },
+            "elapsedMs": 2000.699999988079,
+            "restored": true
+          },
+          "errors": [],
+          "bytes": 1786135,
+          "stats": {
+            "bytes": 1786135,
+            "packets": 474040,
+            "pc": 200283,
+            "sleep": 36680,
+            "itm": 58,
+            "exceptions": 0,
+            "sync": 7,
+            "overflow": 0,
+            "malformed": 0,
+            "skippedBytes": 0,
+            "truncated": 0,
+            "mapped": 200283,
+            "analyzedSamples": 200283,
+            "droppedEvents": 0,
+            "unmapped": 0
+          },
+          "sourceOracle": {
+            "uniquePcs": 248,
+            "checked": 248,
+            "mismatches": 0
+          },
+          "stageOracle": {
+            "checked": 198196,
+            "matched": 198196,
+            "accuracy": 1,
+            "counts": {
+              "1": 32319,
+              "2": 32611,
+              "3": 32573,
+              "5": 32620,
+              "6": 32458,
+              "7": 35594,
+              "8": 21
+            },
+            "mismatches": [],
+            "mismatchCount": 0,
+            "ambiguousCount": 0,
+            "ambiguous": []
+          },
+          "markers": {
+            "total": 58,
+            "valid": 58,
+            "sequenceJumps": 0
+          },
+          "nominalSamples": 234375,
+          "sampleRatio": 1.0110421333333333,
+          "sampleHz": 118440.04598461135,
+          "bytesPerSecond": 892755.0357428113,
+          "wireUtilization": 0.8927550357428113,
+          "passed": true,
+          "reasons": []
+        },
+        {
+          "label": "step-01",
+          "core": 60,
+          "baud": 10000000,
+          "period": 512,
+          "seconds": 2,
+          "startedAt": "2026-10-08T23:36:15.237Z",
+          "clockCfgr": "0x34040a",
+          "metadata": {
+            "format": "swo-pc-v1",
+            "startAligned": true,
+            "plan": {
+              "coreHz": 60000000,
+              "baudRate": 10000000,
+              "periodCycles": 512,
+              "seconds": 2,
+              "itm": true,
+              "exceptions": false,
+              "tap": 0,
+              "post": 7,
+              "acpr": 5,
+              "samplesHz": 117187.5,
+              "estimatedBytes": 1054687.5,
+              "wireBytes": 1000000
+            },
+            "startedAt": "2026-10-08T23:36:16.060Z",
+            "clockCheck": {
+              "cfgr": 3408906,
+              "knownHz": 60000000
+            },
+            "target": {
+              "cpuid": 1092600369,
+              "device": 537093136,
+              "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+            },
+            "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+            "transportGaps": [],
+            "configReadback": {
+              "dwt": 1073747183,
+              "itm": 65551,
+              "acpr": 5,
+              "sppr": 2,
+              "dbg": 807
+            },
+            "elapsedMs": 2000.1000000238419,
+            "restored": true
+          },
+          "errors": [],
+          "bytes": 1784915,
+          "stats": {
+            "bytes": 1784915,
+            "packets": 472440,
+            "pc": 201209,
+            "sleep": 34953,
+            "itm": 58,
+            "exceptions": 0,
+            "sync": 7,
+            "overflow": 0,
+            "malformed": 0,
+            "skippedBytes": 0,
+            "truncated": 0,
+            "mapped": 201209,
+            "analyzedSamples": 201209,
+            "droppedEvents": 0,
+            "unmapped": 0
+          },
+          "sourceOracle": {
+            "uniquePcs": 249,
+            "checked": 249,
+            "mismatches": 0
+          },
+          "stageOracle": {
+            "checked": 199670,
+            "matched": 199670,
+            "accuracy": 1,
+            "counts": {
+              "1": 32303,
+              "2": 32625,
+              "3": 32570,
+              "5": 32589,
+              "6": 32479,
+              "7": 37104
+            },
+            "mismatches": [],
+            "mismatchCount": 0,
+            "ambiguousCount": 0,
+            "ambiguous": []
+          },
+          "markers": {
+            "total": 58,
+            "valid": 58,
+            "sequenceJumps": 0
+          },
+          "nominalSamples": 234375,
+          "sampleRatio": 1.0076245333333333,
+          "sampleHz": 118075.09624378024,
+          "bytesPerSecond": 892412.8793453943,
+          "wireUtilization": 0.8924128793453943,
+          "passed": true,
+          "reasons": []
+        },
+        {
+          "label": "step-02",
+          "core": 60,
+          "baud": 10000000,
+          "period": 512,
+          "seconds": 2,
+          "startedAt": "2026-10-08T23:36:18.741Z",
+          "clockCfgr": "0x34040a",
+          "metadata": {
+            "format": "swo-pc-v1",
+            "startAligned": true,
+            "plan": {
+              "coreHz": 60000000,
+              "baudRate": 10000000,
+              "periodCycles": 512,
+              "seconds": 2,
+              "itm": true,
+              "exceptions": false,
+              "tap": 0,
+              "post": 7,
+              "acpr": 5,
+              "samplesHz": 117187.5,
+              "estimatedBytes": 1054687.5,
+              "wireBytes": 1000000
+            },
+            "startedAt": "2026-10-08T23:36:19.574Z",
+            "clockCheck": {
+              "cfgr": 3408906,
+              "knownHz": 60000000
+            },
+            "target": {
+              "cpuid": 1092600369,
+              "device": 537093136,
+              "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+            },
+            "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+            "transportGaps": [],
+            "configReadback": {
+              "dwt": 1073747183,
+              "itm": 65551,
+              "acpr": 5,
+              "sppr": 2,
+              "dbg": 807
+            },
+            "elapsedMs": 2000.199999988079,
+            "restored": true
+          },
+          "errors": [],
+          "bytes": 1791258,
+          "stats": {
+            "bytes": 1791258,
+            "packets": 472450,
+            "pc": 203317,
+            "sleep": 32850,
+            "itm": 58,
+            "exceptions": 0,
+            "sync": 7,
+            "overflow": 0,
+            "malformed": 0,
+            "skippedBytes": 0,
+            "truncated": 0,
+            "mapped": 203317,
+            "analyzedSamples": 203317,
+            "droppedEvents": 0,
+            "unmapped": 0
+          },
+          "sourceOracle": {
+            "uniquePcs": 253,
+            "checked": 253,
+            "mismatches": 0
+          },
+          "stageOracle": {
+            "checked": 201788,
+            "matched": 201788,
+            "accuracy": 1,
+            "counts": {
+              "1": 34386,
+              "2": 32640,
+              "3": 32524,
+              "5": 32679,
+              "6": 32421,
+              "7": 37120,
+              "8": 18
+            },
+            "mismatches": [],
+            "mismatchCount": 0,
+            "ambiguousCount": 0,
+            "ambiguous": []
+          },
+          "markers": {
+            "total": 58,
+            "valid": 58,
+            "sequenceJumps": 0
+          },
+          "nominalSamples": 234375,
+          "sampleRatio": 1.0076458666666666,
+          "sampleHz": 118071.6928314206,
+          "bytesPerSecond": 895539.4460607317,
+          "wireUtilization": 0.8955394460607317,
+          "passed": true,
+          "reasons": []
+        }
+      ],
+      "devices": {
+        "usb": [
+          {
+            "vid": 3368,
+            "pid": 516,
+            "product": "akaLinkPro CMSIS-DAP",
+            "serial": "B4444F2110DDDAFE44800BBB0AE800E0"
+          }
+        ],
+        "ports": [
+          {
+            "usbProductId": 516,
+            "usbVendorId": 3368
+          }
+        ]
+      },
+      "originalSha256": "5c54ac4301861d8827a31bbaf2d995f6fd2e2b58a845e706a4d367d352adce40",
+      "originalDemcr": 16777216,
+      "completed": true,
+      "restore": {
+        "passed": true,
+        "sha256": "5c54ac4301861d8827a31bbaf2d995f6fd2e2b58a845e706a4d367d352adce40",
+        "bytes": 131072
+      }
+    }
+  ],
+  "frontendOfflineCheck": {
+    "run": "pll1-200-load3/step-00",
+    "bytes": 223399,
+    "pc": 25099,
+    "sleep": 4275,
+    "itm": 144,
+    "overflow": 0,
+    "malformed": 0,
+    "truncated": 0,
+    "unmapped": 0,
+    "pageErrors": []
+  },
+  "modeAfterUserSteering": {
+    "defaultUartClockHz": 200000000,
+    "maxBaud": 25000000,
+    "firmwareBuildTime": "2026/10/09 07:46:41",
+    "probeRestoredAfterSteering": false,
+    "probeRetainedAt200MHz": true,
+    "note": "Earlier restore evidence is historical; user then explicitly requested retaining the 200 MHz default."
+  },
+  "default200UiRuns": [
+    {
+      "name": "default200-ui25",
+      "startedAt": "2026-10-08T23:52:44.841Z",
+      "board": "STM32F103CB",
+      "fixture": "tools/target-firmware/stm32f103cb_swo/fw.elf",
+      "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+      "frontend": true,
+      "rows": [
+        {
+          "label": "step-00",
+          "core": 48,
+          "baud": 24000000,
+          "period": 1024,
+          "seconds": 1,
+          "requestedBaud": 25000000,
+          "autoClock": true,
+          "round": true,
+          "startedAt": "2026-10-08T23:52:49.831Z",
+          "clockCfgr": "0x28040a",
+          "web": {
+            "stats": {
+              "bytes": 358672,
+              "packets": 95266,
+              "pc": 40137,
+              "sleep": 7467,
+              "itm": 29,
+              "exceptions": 0,
+              "sync": 2,
+              "overflow": 0,
+              "malformed": 0,
+              "skippedBytes": 0,
+              "truncated": 0,
+              "mapped": 40137,
+              "analyzedSamples": 40137,
+              "droppedEvents": 0,
+              "unmapped": 0
+            },
+            "errors": [],
+            "warning": ""
+          },
+          "metadata": {
+            "format": "swo-pc-v1",
+            "startAligned": true,
+            "plan": {
+              "coreHz": 48000000,
+              "baudRate": 24000000,
+              "requestedBaudRate": 25000000,
+              "baudError": -0.04,
+              "periodCycles": 1024,
+              "seconds": 1,
+              "itm": true,
+              "exceptions": false,
+              "tap": 0,
+              "post": 15,
+              "acpr": 1,
+              "samplesHz": 46875,
+              "estimatedBytes": 421875,
+              "wireBytes": 2400000
+            },
+            "startedAt": "2026-10-08T23:52:50.698Z",
+            "clockCheck": {
+              "cfgr": 2622474,
+              "knownHz": 48000000
+            },
+            "target": {
+              "profile": "stm32f1",
+              "name": "STM32F1 (DEV 0x410)",
+              "core": "Cortex-M3",
+              "cpuid": 1092600369,
+              "device": 537093136,
+              "cfgr": 2622474,
+              "cr": 50354563,
+              "dwt": 1073741824,
+              "source": "HSI/2 → PLL",
+              "external": false,
+              "hseHz": null,
+              "knownHz": 48000000,
+              "coreHz": 48000000,
+              "frequencyBasis": "RCC + nominal HSI",
+              "swoPin": "PB3",
+              "protocol": "NRZ / 8N1",
+              "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+            },
+            "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+            "transportGaps": [],
+            "configReadback": {
+              "dwt": 1073747455,
+              "itm": 65551,
+              "acpr": 1,
+              "sppr": 2,
+              "dbg": 807
+            },
+            "elapsedMs": 1000.2999999821186,
+            "restored": true
+          },
+          "errors": [],
+          "bytes": 358672,
+          "stats": {
+            "bytes": 358672,
+            "packets": 95266,
+            "pc": 40137,
+            "sleep": 7467,
+            "itm": 29,
+            "exceptions": 0,
+            "sync": 2,
+            "overflow": 0,
+            "malformed": 0,
+            "skippedBytes": 0,
+            "truncated": 0,
+            "mapped": 40137,
+            "analyzedSamples": 40137,
+            "droppedEvents": 0,
+            "unmapped": 0
+          },
+          "sourceOracle": {
+            "uniquePcs": 203,
+            "checked": 203,
+            "mismatches": 0
+          },
+          "stageOracle": {
+            "checked": 39850,
+            "matched": 39850,
+            "accuracy": 1,
+            "counts": {
+              "1": 6550,
+              "2": 6525,
+              "3": 6490,
+              "5": 6552,
+              "6": 6485,
+              "7": 7231,
+              "8": 17
+            },
+            "mismatches": [],
+            "mismatchCount": 0,
+            "ambiguousCount": 0,
+            "ambiguous": []
+          },
+          "markers": {
+            "total": 29,
+            "valid": 29,
+            "sequenceJumps": 0
+          },
+          "nominalSamples": 46875,
+          "sampleRatio": 1.015552,
+          "sampleHz": 47589.72308392579,
+          "bytesPerSecond": 358564.4306772084,
+          "wireUtilization": 0.1494018461155035,
+          "receiver": {
+            "version": 1,
+            "clockHz": 200000000,
+            "requestedBaud": 25000000,
+            "appliedBaud": 25000000,
+            "osr": 8,
+            "maxBaud": 25000000,
+            "initStatus": 0,
+            "clockRegister": 152044547
+          },
+          "passed": true,
+          "reasons": []
+        },
+        {
+          "label": "step-01",
+          "core": 48,
+          "baud": 24000000,
+          "period": 1024,
+          "seconds": 1,
+          "requestedBaud": 25000000,
+          "autoClock": true,
+          "round": true,
+          "startedAt": "2026-10-08T23:52:52.324Z",
+          "clockCfgr": "0x28040a",
+          "web": {
+            "stats": {
+              "bytes": 361641,
+              "packets": 95296,
+              "pc": 41103,
+              "sleep": 6516,
+              "itm": 29,
+              "exceptions": 0,
+              "sync": 2,
+              "overflow": 0,
+              "malformed": 0,
+              "skippedBytes": 0,
+              "truncated": 0,
+              "mapped": 41103,
+              "analyzedSamples": 41103,
+              "droppedEvents": 0,
+              "unmapped": 0
+            },
+            "errors": [],
+            "warning": ""
+          },
+          "metadata": {
+            "format": "swo-pc-v1",
+            "startAligned": true,
+            "plan": {
+              "coreHz": 48000000,
+              "baudRate": 24000000,
+              "requestedBaudRate": 25000000,
+              "baudError": -0.04,
+              "periodCycles": 1024,
+              "seconds": 1,
+              "itm": true,
+              "exceptions": false,
+              "tap": 0,
+              "post": 15,
+              "acpr": 1,
+              "samplesHz": 46875,
+              "estimatedBytes": 421875,
+              "wireBytes": 2400000
+            },
+            "startedAt": "2026-10-08T23:52:53.155Z",
+            "clockCheck": {
+              "cfgr": 2622474,
+              "knownHz": 48000000
+            },
+            "target": {
+              "profile": "stm32f1",
+              "name": "STM32F1 (DEV 0x410)",
+              "core": "Cortex-M3",
+              "cpuid": 1092600369,
+              "device": 537093136,
+              "cfgr": 2622474,
+              "cr": 50354563,
+              "dwt": 1073741824,
+              "source": "HSI/2 → PLL",
+              "external": false,
+              "hseHz": null,
+              "knownHz": 48000000,
+              "coreHz": 48000000,
+              "frequencyBasis": "RCC + nominal HSI",
+              "swoPin": "PB3",
+              "protocol": "NRZ / 8N1",
+              "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+            },
+            "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+            "transportGaps": [],
+            "configReadback": {
+              "dwt": 1073747455,
+              "itm": 65551,
+              "acpr": 1,
+              "sppr": 2,
+              "dbg": 807
+            },
+            "elapsedMs": 1000,
+            "restored": true
+          },
+          "errors": [],
+          "bytes": 361641,
+          "stats": {
+            "bytes": 361641,
+            "packets": 95296,
+            "pc": 41103,
+            "sleep": 6516,
+            "itm": 29,
+            "exceptions": 0,
+            "sync": 2,
+            "overflow": 0,
+            "malformed": 0,
+            "skippedBytes": 0,
+            "truncated": 0,
+            "mapped": 41103,
+            "analyzedSamples": 41103,
+            "droppedEvents": 0,
+            "unmapped": 0
+          },
+          "sourceOracle": {
+            "uniquePcs": 206,
+            "checked": 206,
+            "mismatches": 0
+          },
+          "stageOracle": {
+            "checked": 40299,
+            "matched": 40299,
+            "accuracy": 1,
+            "counts": {
+              "1": 6527,
+              "2": 6518,
+              "3": 6473,
+              "5": 6529,
+              "6": 7729,
+              "7": 6523
+            },
+            "mismatches": [],
+            "mismatchCount": 0,
+            "ambiguousCount": 0,
+            "ambiguous": []
+          },
+          "markers": {
+            "total": 29,
+            "valid": 29,
+            "sequenceJumps": 0
+          },
+          "nominalSamples": 46875,
+          "sampleRatio": 1.015872,
+          "sampleHz": 47619,
+          "bytesPerSecond": 361641,
+          "wireUtilization": 0.15068375,
+          "receiver": {
+            "version": 1,
+            "clockHz": 200000000,
+            "requestedBaud": 25000000,
+            "appliedBaud": 25000000,
+            "osr": 8,
+            "maxBaud": 25000000,
+            "initStatus": 0,
+            "clockRegister": 152044547
+          },
+          "passed": true,
+          "reasons": []
+        },
+        {
+          "label": "step-02",
+          "core": 40,
+          "baud": 20000000,
+          "period": 1024,
+          "seconds": 1,
+          "requestedBaud": 20000000,
+          "autoClock": true,
+          "round": false,
+          "startedAt": "2026-10-08T23:52:54.756Z",
+          "clockCfgr": "0x20040a",
+          "passed": false,
+          "error": "Error: 页面异常：Error: RCC 时钟读回无效或尚未稳定，请重新识别目标\n    at stm32f1Info (http://127.0.0.1:8911/app/swo/target.js:7:131)\n    at SwoCapture.targetInfo (http://127.0.0.1:8911/app/swo/capture.js:40:12)\n    at async setup (http://127.0.0.1:8911/app/swo/capture.js:56:22)\n    at async execute (http://127.0.0.1:8911/app/core/probe-manager.js:89:20)\n    at Cdp.eval (file:///E:/web-serial-rtt-tools-swo-trace/tools/selftest/cdp-lib.mjs:82:35)\n    at async record (file:///E:/web-serial-rtt-tools-swo-trace/tools/selftest/swo-baud-hw.mjs:39:4)\n    at async file:///E:/web-serial-rtt-tools-swo-trace/tools/selftest/swo-baud-hw.mjs:81:33",
+          "setupRejected": true,
+          "setupDiagnostic": {
+            "cfgr": 2098186,
+            "fixtureBytesMatch": true
+          }
+        },
+        {
+          "label": "step-03",
+          "core": 40,
+          "baud": 20000000,
+          "period": 1024,
+          "seconds": 1,
+          "requestedBaud": 20000000,
+          "autoClock": true,
+          "round": false,
+          "startedAt": "2026-10-08T23:52:55.680Z",
+          "clockCfgr": "0x20040a",
+          "web": {
+            "stats": {
+              "bytes": 296883,
+              "packets": 79205,
+              "pc": 32925,
+              "sleep": 6649,
+              "itm": 29,
+              "exceptions": 0,
+              "sync": 2,
+              "overflow": 0,
+              "malformed": 0,
+              "skippedBytes": 0,
+              "truncated": 0,
+              "mapped": 32925,
+              "analyzedSamples": 32925,
+              "droppedEvents": 0,
+              "unmapped": 0
+            },
+            "errors": [],
+            "warning": ""
+          },
+          "metadata": {
+            "format": "swo-pc-v1",
+            "startAligned": true,
+            "plan": {
+              "coreHz": 40000000,
+              "baudRate": 20000000,
+              "requestedBaudRate": 20000000,
+              "baudError": 0,
+              "periodCycles": 1024,
+              "seconds": 1,
+              "itm": true,
+              "exceptions": false,
+              "tap": 0,
+              "post": 15,
+              "acpr": 1,
+              "samplesHz": 39062.5,
+              "estimatedBytes": 351562.5,
+              "wireBytes": 2000000
+            },
+            "startedAt": "2026-10-08T23:52:56.508Z",
+            "clockCheck": {
+              "cfgr": 2098186,
+              "knownHz": 40000000
+            },
+            "target": {
+              "profile": "stm32f1",
+              "name": "STM32F1 (DEV 0x410)",
+              "core": "Cortex-M3",
+              "cpuid": 1092600369,
+              "device": 537093136,
+              "cfgr": 2098186,
+              "cr": 50354563,
+              "dwt": 1073741824,
+              "source": "HSI/2 → PLL",
+              "external": false,
+              "hseHz": null,
+              "knownHz": 40000000,
+              "coreHz": 40000000,
+              "frequencyBasis": "RCC + nominal HSI",
+              "swoPin": "PB3",
+              "protocol": "NRZ / 8N1",
+              "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+            },
+            "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+            "transportGaps": [],
+            "configReadback": {
+              "dwt": 1073747455,
+              "itm": 65551,
+              "acpr": 1,
+              "sppr": 2,
+              "dbg": 807
+            },
+            "elapsedMs": 1000.0999999940395,
+            "restored": true
+          },
+          "errors": [],
+          "bytes": 296883,
+          "stats": {
+            "bytes": 296883,
+            "packets": 79205,
+            "pc": 32925,
+            "sleep": 6649,
+            "itm": 29,
+            "exceptions": 0,
+            "sync": 2,
+            "overflow": 0,
+            "malformed": 0,
+            "skippedBytes": 0,
+            "truncated": 0,
+            "mapped": 32925,
+            "analyzedSamples": 32925,
+            "droppedEvents": 0,
+            "unmapped": 0
+          },
+          "sourceOracle": {
+            "uniquePcs": 209,
+            "checked": 209,
+            "mismatches": 0
+          },
+          "stageOracle": {
+            "checked": 32582,
+            "matched": 32582,
+            "accuracy": 1,
+            "counts": {
+              "1": 5351,
+              "2": 5429,
+              "3": 5410,
+              "5": 5442,
+              "6": 5399,
+              "7": 5541,
+              "8": 10
+            },
+            "mismatches": [],
+            "mismatchCount": 0,
+            "ambiguousCount": 0,
+            "ambiguous": []
+          },
+          "markers": {
+            "total": 29,
+            "valid": 29,
+            "sequenceJumps": 0
+          },
+          "nominalSamples": 39062.5,
+          "sampleRatio": 1.0130944,
+          "sampleHz": 39570.04299593626,
+          "bytesPerSecond": 296853.3146703023,
+          "wireUtilization": 0.14842665733515117,
+          "receiver": {
+            "version": 1,
+            "clockHz": 200000000,
+            "requestedBaud": 20000000,
+            "appliedBaud": 20000000,
+            "osr": 10,
+            "maxBaud": 25000000,
+            "initStatus": 0,
+            "clockRegister": 152044547
+          },
+          "passed": true,
+          "reasons": []
+        }
+      ],
+      "devices": {
+        "usb": [
+          {
+            "vid": 3368,
+            "pid": 516,
+            "product": "akaLinkPro CMSIS-DAP",
+            "serial": "B4444F2110DDDAFE44800BBB0AE800E0"
+          }
+        ],
+        "ports": [
+          {
+            "usbProductId": 516,
+            "usbVendorId": 3368
+          }
+        ]
+      },
+      "originalSha256": "5c54ac4301861d8827a31bbaf2d995f6fd2e2b58a845e706a4d367d352adce40",
+      "originalDemcr": 16777216,
+      "completed": true,
+      "restore": {
+        "passed": true,
+        "sha256": "5c54ac4301861d8827a31bbaf2d995f6fd2e2b58a845e706a4d367d352adce40",
+        "bytes": 131072
+      }
+    },
+    {
+      "name": "default200-ui-retry",
+      "startedAt": "2026-10-08T23:53:57.082Z",
+      "board": "STM32F103CB",
+      "fixture": "tools/target-firmware/stm32f103cb_swo/fw.elf",
+      "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+      "frontend": true,
+      "rows": [
+        {
+          "label": "step-00",
+          "core": 48,
+          "baud": 24000000,
+          "period": 1024,
+          "seconds": 1,
+          "requestedBaud": 25000000,
+          "autoClock": true,
+          "round": true,
+          "startedAt": "2026-10-08T23:54:02.088Z",
+          "clockCfgr": "0x28040a",
+          "web": {
+            "stats": {
+              "bytes": 359137,
+              "packets": 95872,
+              "pc": 39787,
+              "sleep": 8119,
+              "itm": 30,
+              "exceptions": 0,
+              "sync": 2,
+              "overflow": 0,
+              "malformed": 0,
+              "skippedBytes": 0,
+              "truncated": 0,
+              "mapped": 39787,
+              "analyzedSamples": 39787,
+              "droppedEvents": 0,
+              "unmapped": 0
+            },
+            "errors": [],
+            "warning": ""
+          },
+          "metadata": {
+            "format": "swo-pc-v1",
+            "startAligned": true,
+            "plan": {
+              "coreHz": 48000000,
+              "baudRate": 24000000,
+              "requestedBaudRate": 25000000,
+              "baudError": -0.04,
+              "periodCycles": 1024,
+              "seconds": 1,
+              "itm": true,
+              "exceptions": false,
+              "tap": 0,
+              "post": 15,
+              "acpr": 1,
+              "samplesHz": 46875,
+              "estimatedBytes": 421875,
+              "wireBytes": 2400000
+            },
+            "startedAt": "2026-10-08T23:54:02.938Z",
+            "clockCheck": {
+              "cfgr": 2622474,
+              "knownHz": 48000000
+            },
+            "target": {
+              "profile": "stm32f1",
+              "name": "STM32F1 (DEV 0x410)",
+              "core": "Cortex-M3",
+              "cpuid": 1092600369,
+              "device": 537093136,
+              "cfgr": 2622474,
+              "cr": 50354563,
+              "dwt": 1073741824,
+              "source": "HSI/2 → PLL",
+              "external": false,
+              "hseHz": null,
+              "knownHz": 48000000,
+              "coreHz": 48000000,
+              "frequencyBasis": "RCC + nominal HSI",
+              "swoPin": "PB3",
+              "protocol": "NRZ / 8N1",
+              "detectionAttempts": 1,
+              "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+            },
+            "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+            "transportGaps": [],
+            "configReadback": {
+              "dwt": 1073747455,
+              "itm": 65551,
+              "acpr": 1,
+              "sppr": 2,
+              "dbg": 807
+            },
+            "elapsedMs": 1000.3000000119209,
+            "restored": true
+          },
+          "errors": [],
+          "bytes": 359137,
+          "stats": {
+            "bytes": 359137,
+            "packets": 95872,
+            "pc": 39787,
+            "sleep": 8119,
+            "itm": 30,
+            "exceptions": 0,
+            "sync": 2,
+            "overflow": 0,
+            "malformed": 0,
+            "skippedBytes": 0,
+            "truncated": 0,
+            "mapped": 39787,
+            "analyzedSamples": 39787,
+            "droppedEvents": 0,
+            "unmapped": 0
+          },
+          "sourceOracle": {
+            "uniquePcs": 214,
+            "checked": 214,
+            "mismatches": 0
+          },
+          "stageOracle": {
+            "checked": 39202,
+            "matched": 39202,
+            "accuracy": 1,
+            "counts": {
+              "1": 6533,
+              "2": 6507,
+              "3": 6504,
+              "5": 6535,
+              "6": 6478,
+              "7": 6645
+            },
+            "mismatches": [],
+            "mismatchCount": 0,
+            "ambiguousCount": 0,
+            "ambiguous": []
+          },
+          "markers": {
+            "total": 30,
+            "valid": 30,
+            "sequenceJumps": 0
+          },
+          "nominalSamples": 46875,
+          "sampleRatio": 1.0219946666666666,
+          "sampleHz": 47891.63250967619,
+          "bytesPerSecond": 359029.29120835755,
+          "wireUtilization": 0.14959553800348233,
+          "receiver": {
+            "version": 1,
+            "clockHz": 200000000,
+            "requestedBaud": 25000000,
+            "appliedBaud": 25000000,
+            "osr": 8,
+            "maxBaud": 25000000,
+            "initStatus": 0,
+            "clockRegister": 152044547
+          },
+          "passed": true,
+          "reasons": []
+        },
+        {
+          "label": "step-01",
+          "core": 40,
+          "baud": 20000000,
+          "period": 1024,
+          "seconds": 1,
+          "requestedBaud": 20000000,
+          "autoClock": true,
+          "round": false,
+          "startedAt": "2026-10-08T23:54:04.569Z",
+          "clockCfgr": "0x20040a",
+          "web": {
+            "stats": {
+              "bytes": 302817,
+              "packets": 79768,
+              "pc": 34434,
+              "sleep": 5421,
+              "itm": 29,
+              "exceptions": 0,
+              "sync": 2,
+              "overflow": 0,
+              "malformed": 0,
+              "skippedBytes": 0,
+              "truncated": 0,
+              "mapped": 34434,
+              "analyzedSamples": 34434,
+              "droppedEvents": 0,
+              "unmapped": 0
+            },
+            "errors": [],
+            "warning": ""
+          },
+          "metadata": {
+            "format": "swo-pc-v1",
+            "startAligned": true,
+            "plan": {
+              "coreHz": 40000000,
+              "baudRate": 20000000,
+              "requestedBaudRate": 20000000,
+              "baudError": 0,
+              "periodCycles": 1024,
+              "seconds": 1,
+              "itm": true,
+              "exceptions": false,
+              "tap": 0,
+              "post": 15,
+              "acpr": 1,
+              "samplesHz": 39062.5,
+              "estimatedBytes": 351562.5,
+              "wireBytes": 2000000
+            },
+            "startedAt": "2026-10-08T23:54:05.408Z",
+            "clockCheck": {
+              "cfgr": 2098186,
+              "knownHz": 40000000
+            },
+            "target": {
+              "profile": "stm32f1",
+              "name": "STM32F1 (DEV 0x410)",
+              "core": "Cortex-M3",
+              "cpuid": 1092600369,
+              "device": 537093136,
+              "cfgr": 2098186,
+              "cr": 50354563,
+              "dwt": 1073741824,
+              "source": "HSI/2 → PLL",
+              "external": false,
+              "hseHz": null,
+              "knownHz": 40000000,
+              "coreHz": 40000000,
+              "frequencyBasis": "RCC + nominal HSI",
+              "swoPin": "PB3",
+              "protocol": "NRZ / 8N1",
+              "detectionAttempts": 1,
+              "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+            },
+            "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+            "transportGaps": [],
+            "configReadback": {
+              "dwt": 1073747455,
+              "itm": 65551,
+              "acpr": 1,
+              "sppr": 2,
+              "dbg": 807
+            },
+            "elapsedMs": 1000,
+            "restored": true
+          },
+          "errors": [],
+          "bytes": 302817,
+          "stats": {
+            "bytes": 302817,
+            "packets": 79768,
+            "pc": 34434,
+            "sleep": 5421,
+            "itm": 29,
+            "exceptions": 0,
+            "sync": 2,
+            "overflow": 0,
+            "malformed": 0,
+            "skippedBytes": 0,
+            "truncated": 0,
+            "mapped": 34434,
+            "analyzedSamples": 34434,
+            "droppedEvents": 0,
+            "unmapped": 0
+          },
+          "sourceOracle": {
+            "uniquePcs": 202,
+            "checked": 202,
+            "mismatches": 0
+          },
+          "stageOracle": {
+            "checked": 33536,
+            "matched": 33536,
+            "accuracy": 1,
+            "counts": {
+              "1": 5342,
+              "2": 5408,
+              "3": 5409,
+              "5": 5435,
+              "6": 6407,
+              "7": 5535
+            },
+            "mismatches": [],
+            "mismatchCount": 0,
+            "ambiguousCount": 0,
+            "ambiguous": []
+          },
+          "markers": {
+            "total": 29,
+            "valid": 29,
+            "sequenceJumps": 0
+          },
+          "nominalSamples": 39062.5,
+          "sampleRatio": 1.020288,
+          "sampleHz": 39855,
+          "bytesPerSecond": 302817,
+          "wireUtilization": 0.1514085,
+          "receiver": {
+            "version": 1,
+            "clockHz": 200000000,
+            "requestedBaud": 20000000,
+            "appliedBaud": 20000000,
+            "osr": 10,
+            "maxBaud": 25000000,
+            "initStatus": 0,
+            "clockRegister": 152044547
+          },
+          "passed": true,
+          "reasons": []
+        },
+        {
+          "label": "step-02",
+          "core": 48,
+          "baud": 24000000,
+          "period": 1024,
+          "seconds": 1,
+          "requestedBaud": 25000000,
+          "autoClock": true,
+          "round": true,
+          "startedAt": "2026-10-08T23:54:06.973Z",
+          "clockCfgr": "0x28040a",
+          "web": {
+            "stats": {
+              "bytes": 360695,
+              "packets": 95048,
+              "pc": 40995,
+              "sleep": 6500,
+              "itm": 29,
+              "exceptions": 0,
+              "sync": 2,
+              "overflow": 0,
+              "malformed": 0,
+              "skippedBytes": 0,
+              "truncated": 0,
+              "mapped": 40995,
+              "analyzedSamples": 40995,
+              "droppedEvents": 0,
+              "unmapped": 0
+            },
+            "errors": [],
+            "warning": ""
+          },
+          "metadata": {
+            "format": "swo-pc-v1",
+            "startAligned": true,
+            "plan": {
+              "coreHz": 48000000,
+              "baudRate": 24000000,
+              "requestedBaudRate": 25000000,
+              "baudError": -0.04,
+              "periodCycles": 1024,
+              "seconds": 1,
+              "itm": true,
+              "exceptions": false,
+              "tap": 0,
+              "post": 15,
+              "acpr": 1,
+              "samplesHz": 46875,
+              "estimatedBytes": 421875,
+              "wireBytes": 2400000
+            },
+            "startedAt": "2026-10-08T23:54:07.812Z",
+            "clockCheck": {
+              "cfgr": 2622474,
+              "knownHz": 48000000
+            },
+            "target": {
+              "profile": "stm32f1",
+              "name": "STM32F1 (DEV 0x410)",
+              "core": "Cortex-M3",
+              "cpuid": 1092600369,
+              "device": 537093136,
+              "cfgr": 2622474,
+              "cr": 50354563,
+              "dwt": 1073741824,
+              "source": "HSI/2 → PLL",
+              "external": false,
+              "hseHz": null,
+              "knownHz": 48000000,
+              "coreHz": 48000000,
+              "frequencyBasis": "RCC + nominal HSI",
+              "swoPin": "PB3",
+              "protocol": "NRZ / 8N1",
+              "detectionAttempts": 1,
+              "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+            },
+            "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+            "transportGaps": [],
+            "configReadback": {
+              "dwt": 1073747455,
+              "itm": 65551,
+              "acpr": 1,
+              "sppr": 2,
+              "dbg": 807
+            },
+            "elapsedMs": 1000.1000000238419,
+            "restored": true
+          },
+          "errors": [],
+          "bytes": 360695,
+          "stats": {
+            "bytes": 360695,
+            "packets": 95048,
+            "pc": 40995,
+            "sleep": 6500,
+            "itm": 29,
+            "exceptions": 0,
+            "sync": 2,
+            "overflow": 0,
+            "malformed": 0,
+            "skippedBytes": 0,
+            "truncated": 0,
+            "mapped": 40995,
+            "analyzedSamples": 40995,
+            "droppedEvents": 0,
+            "unmapped": 0
+          },
+          "sourceOracle": {
+            "uniquePcs": 204,
+            "checked": 204,
+            "mismatches": 0
+          },
+          "stageOracle": {
+            "checked": 39880,
+            "matched": 39880,
+            "accuracy": 1,
+            "counts": {
+              "1": 6550,
+              "2": 7231,
+              "3": 6512,
+              "5": 6541,
+              "6": 6488,
+              "7": 6540,
+              "8": 18
+            },
+            "mismatches": [],
+            "mismatchCount": 0,
+            "ambiguousCount": 0,
+            "ambiguous": []
+          },
+          "markers": {
+            "total": 29,
+            "valid": 29,
+            "sequenceJumps": 0
+          },
+          "nominalSamples": 46875,
+          "sampleRatio": 1.0132266666666667,
+          "sampleHz": 47490.25097377037,
+          "bytesPerSecond": 360658.93409799144,
+          "wireUtilization": 0.15027455587416308,
+          "receiver": {
+            "version": 1,
+            "clockHz": 200000000,
+            "requestedBaud": 25000000,
+            "appliedBaud": 25000000,
+            "osr": 8,
+            "maxBaud": 25000000,
+            "initStatus": 0,
+            "clockRegister": 152044547
+          },
+          "passed": true,
+          "reasons": []
+        },
+        {
+          "label": "step-03",
+          "core": 40,
+          "baud": 20000000,
+          "period": 1024,
+          "seconds": 1,
+          "requestedBaud": 20000000,
+          "autoClock": true,
+          "round": false,
+          "startedAt": "2026-10-08T23:54:09.450Z",
+          "clockCfgr": "0x20040a",
+          "web": {
+            "stats": {
+              "bytes": 300779,
+              "packets": 79249,
+              "pc": 34188,
+              "sleep": 5408,
+              "itm": 29,
+              "exceptions": 0,
+              "sync": 2,
+              "overflow": 0,
+              "malformed": 0,
+              "skippedBytes": 0,
+              "truncated": 0,
+              "mapped": 34188,
+              "analyzedSamples": 34188,
+              "droppedEvents": 0,
+              "unmapped": 0
+            },
+            "errors": [],
+            "warning": ""
+          },
+          "metadata": {
+            "format": "swo-pc-v1",
+            "startAligned": true,
+            "plan": {
+              "coreHz": 40000000,
+              "baudRate": 20000000,
+              "requestedBaudRate": 20000000,
+              "baudError": 0,
+              "periodCycles": 1024,
+              "seconds": 1,
+              "itm": true,
+              "exceptions": false,
+              "tap": 0,
+              "post": 15,
+              "acpr": 1,
+              "samplesHz": 39062.5,
+              "estimatedBytes": 351562.5,
+              "wireBytes": 2000000
+            },
+            "startedAt": "2026-10-08T23:54:10.290Z",
+            "clockCheck": {
+              "cfgr": 2098186,
+              "knownHz": 40000000
+            },
+            "target": {
+              "profile": "stm32f1",
+              "name": "STM32F1 (DEV 0x410)",
+              "core": "Cortex-M3",
+              "cpuid": 1092600369,
+              "device": 537093136,
+              "cfgr": 2098186,
+              "cr": 50354563,
+              "dwt": 1073741824,
+              "source": "HSI/2 → PLL",
+              "external": false,
+              "hseHz": null,
+              "knownHz": 40000000,
+              "coreHz": 40000000,
+              "frequencyBasis": "RCC + nominal HSI",
+              "swoPin": "PB3",
+              "protocol": "NRZ / 8N1",
+              "detectionAttempts": 1,
+              "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+            },
+            "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+            "transportGaps": [],
+            "configReadback": {
+              "dwt": 1073747455,
+              "itm": 65551,
+              "acpr": 1,
+              "sppr": 2,
+              "dbg": 807
+            },
+            "elapsedMs": 1000.0999999940395,
+            "restored": true
+          },
+          "errors": [],
+          "bytes": 300779,
+          "stats": {
+            "bytes": 300779,
+            "packets": 79249,
+            "pc": 34188,
+            "sleep": 5408,
+            "itm": 29,
+            "exceptions": 0,
+            "sync": 2,
+            "overflow": 0,
+            "malformed": 0,
+            "skippedBytes": 0,
+            "truncated": 0,
+            "mapped": 34188,
+            "analyzedSamples": 34188,
+            "droppedEvents": 0,
+            "unmapped": 0
+          },
+          "sourceOracle": {
+            "uniquePcs": 208,
+            "checked": 208,
+            "mismatches": 0
+          },
+          "stageOracle": {
+            "checked": 33171,
+            "matched": 33171,
+            "accuracy": 1,
+            "counts": {
+              "1": 5954,
+              "2": 5421,
+              "3": 5402,
+              "5": 5444,
+              "6": 5393,
+              "7": 5548,
+              "8": 9
+            },
+            "mismatches": [],
+            "mismatchCount": 0,
+            "ambiguousCount": 0,
+            "ambiguous": []
+          },
+          "markers": {
+            "total": 29,
+            "valid": 29,
+            "sequenceJumps": 0
+          },
+          "nominalSamples": 39062.5,
+          "sampleRatio": 1.0136576,
+          "sampleHz": 39592.04079615637,
+          "bytesPerSecond": 300748.92510928167,
+          "wireUtilization": 0.15037446255464085,
+          "receiver": {
+            "version": 1,
+            "clockHz": 200000000,
+            "requestedBaud": 20000000,
+            "appliedBaud": 20000000,
+            "osr": 10,
+            "maxBaud": 25000000,
+            "initStatus": 0,
+            "clockRegister": 152044547
+          },
+          "passed": true,
+          "reasons": []
+        }
+      ],
+      "devices": {
+        "usb": [
+          {
+            "vid": 3368,
+            "pid": 516,
+            "product": "akaLinkPro CMSIS-DAP",
+            "serial": "B4444F2110DDDAFE44800BBB0AE800E0"
+          }
+        ],
+        "ports": [
+          {
+            "usbProductId": 516,
+            "usbVendorId": 3368
+          }
+        ]
+      },
+      "originalSha256": "5c54ac4301861d8827a31bbaf2d995f6fd2e2b58a845e706a4d367d352adce40",
+      "originalDemcr": 16777216,
+      "completed": true,
+      "restore": {
+        "passed": true,
+        "sha256": "5c54ac4301861d8827a31bbaf2d995f6fd2e2b58a845e706a4d367d352adce40",
+        "bytes": 131072
+      }
+    }
+  ],
+  "exportValidation": {
+    "allRawEventsExported": true,
+    "syntheticPcSamples": 260000,
+    "pageChecks": 22,
+    "supports": [
+      "c",
+      "txt"
+    ],
+    "nativeFileWriteBackpressure": true
+  }
+}

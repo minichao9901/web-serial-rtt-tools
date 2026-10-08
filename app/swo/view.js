@@ -14,12 +14,12 @@ export class SwoView {
   init(){
     const bind=(id,fn)=>$(id).addEventListener('click',()=>this.action(fn));
     bind('sw-pick',async()=>{const port=await SerialSession.requestPort();await this.refreshPorts();$('sw-port').value=String(this.ports.indexOf(port));});
-    bind('sw-start',()=>this.start());bind('sw-stop',()=>this.capture.stop());
+    bind('sw-detect',()=>this.detectTarget());bind('sw-export-c',()=>this.exportText('c'));bind('sw-export-txt',()=>this.exportText('txt'));bind('sw-start',()=>this.start());bind('sw-stop',()=>this.capture.stop());
     bind('sw-import',()=>$('sw-file').click());bind('sw-elf-pick',()=>$('sw-elf-file').click());
     bind('sw-source-pick',()=>{$('sw-source-files').click();});
     bind('sw-save',()=>{if(this.recording)download(packRecording(this.recording.raw,this.recording.metadata),'swo-'+Date.now()+'.swopc');});
     bind('sw-demo',()=>this.loadDemo());bind('sw-analyze',()=>this.analyze());bind('sw-csv',()=>this.exportCsv());
-    for(const id of ['sw-core','sw-baud','sw-period','sw-seconds','sw-itm','sw-exceptions'])$(id).addEventListener('change',()=>this.renderPlan());
+    for(const id of ['sw-core','sw-baud','sw-period','sw-seconds','sw-itm','sw-exceptions','sw-auto-clock','sw-hse','sw-baud-round'])$(id).addEventListener('change',()=>this.renderPlan());
     $('sw-file').addEventListener('change',()=>this.action(async()=>{const f=$('sw-file').files[0];if(!f)return;if(f.size>MAX_RAW+MAX_META+12)throw Error('记录文件超过大小限制');this.recording=unpackRecording(await f.arrayBuffer());if(this.recording.metadata.format==='raw')this.recording.metadata.startAligned=$('sw-aligned').checked;await this.analyze();}));
     $('sw-elf-file').addEventListener('change',()=>this.action(async()=>{const f=$('sw-elf-file').files[0];if(f)await this.loadElf(await f.arrayBuffer(),f.name);}));
     $('sw-source-files').addEventListener('change',()=>this.action(async()=>{this.sources.indexFileList($('sw-source-files').files);this.renderFiles();if(this.result)await this.selectSample(this.cursor);}));
@@ -39,8 +39,8 @@ export class SwoView {
   }
   async action(fn){try{return await fn();}catch(e){this.error(e);}}
   error(e){$('sw-warning').textContent=e.message||String(e);$('sw-warning').classList.add('bad');}
-  options(){return {coreHz:Number($('sw-core').value)*1e6,baudRate:Number($('sw-baud').value),periodCycles:Number($('sw-period').value),seconds:Number($('sw-seconds').value),itm:$('sw-itm').checked,exceptions:$('sw-exceptions').checked};}
-  renderPlan(){try{const p=tracePlan(this.options());$('sw-plan').textContent=`约 ${p.samplesHz.toFixed(0)} PC 样本/s · 预计 ${(p.estimatedBytes/1000).toFixed(1)} KB/s / 线路 ${(p.wireBytes/1000).toFixed(0)} KB/s`+(p.estimatedBytes>p.wireBytes*.8?' · 带宽偏紧，建议增大 PC 间隔':'');}catch(e){$('sw-plan').textContent=e.message;}}
+  options(){return {coreHz:Number($('sw-core').value)*1e6,baudRate:Number($('sw-baud').value),periodCycles:Number($('sw-period').value),seconds:Number($('sw-seconds').value),itm:$('sw-itm').checked,exceptions:$('sw-exceptions').checked,autoClock:$('sw-auto-clock').checked,hseHz:$('sw-hse').value?Number($('sw-hse').value)*1e6:null,allowBaudRounding:$('sw-baud-round').checked};}
+  renderPlan(){$('sw-core').disabled=this.capture.active||$('sw-auto-clock').checked;try{const p=tracePlan(this.options());$('sw-plan').textContent=`约 ${p.samplesHz.toFixed(0)} PC 样本/s · 预计 ${(p.estimatedBytes/1000).toFixed(1)} KB/s / 线路 ${(p.wireBytes/1000).toFixed(0)} KB/s`+(p.baudError?` · 目标实际 ${(p.baudRate/1e6).toFixed(3)} Mbps / 请求 ${(p.requestedBaudRate/1e6).toFixed(3)} Mbps · 偏差 ${(p.baudError*100).toFixed(2)}%`:'')+(p.estimatedBytes>p.wireBytes*.8?' · 带宽偏紧，建议增大 PC 间隔':'');}catch(e){$('sw-plan').textContent=e.message;}}
   async refreshPorts(){const current=this.ports[Number($('sw-port').value)];this.ports=(await SerialSession.listPorts()).filter(p=>{const i=p.getInfo();return i.usbVendorId===0x0d28&&i.usbProductId===0x0204;});$('sw-port').replaceChildren();this.ports.forEach((p,i)=>{const o=document.createElement('option');o.value=i;o.textContent=`VCOM ${i+1} · ${SerialSession.describe(p)}`;$('sw-port').append(o);});if(current&&this.ports.includes(current))$('sw-port').value=this.ports.indexOf(current);}
   async loadElf(buffer,name='firmware.elf'){
     if(this.capture.active)throw Error('记录期间不能切换 ELF');if(buffer.byteLength>128*1024*1024)throw Error('ELF 超过 128 MiB');
@@ -57,18 +57,23 @@ export class SwoView {
     if(!this.elf)return;const elf=this.elf.elf;
     const sections=elf.sections().filter(s=>(s.flags&2)&&(s.flags&4)&&s.size).slice(0,32);
     if(!sections.length)throw Error('ELF 没有可校验的执行段');
-    for(const s of sections){for(const offset of [...new Set([0,Math.max(0,s.size-64)])]){const n=Math.min(64,s.size-offset),expected=elf.bytesAt(s.addr+offset,n,{ro:true});if(!expected)continue;const actual=await probe.readMem(s.addr+offset,n);if(actual.length!==n||actual.some((v,i)=>v!==expected[i]))throw Error('目标代码与 ELF 不符：'+s.name+' '+hex(s.addr+offset));}}
+    for(const s of sections){for(const offset of [...new Set([0,Math.max(0,s.size-64)])]){const n=Math.min(64,s.size-offset),expected=elf.bytesAt(s.addr+offset,n,{ro:true});if(!expected)continue;let confirmed=0;for(let i=0;i<4&&confirmed<2;i++){const actual=await probe.readMemDiagnostic(s.addr+offset,n);confirmed=actual.length===n&&!actual.some((v,i)=>v!==expected[i])?confirmed+1:0;}if(confirmed<2)throw Error('目标代码与 ELF 不符或读回不稳定：'+s.name+' '+hex(s.addr+offset));}}
   }
+  showTarget(target){
+    this.target=target;if($('sw-auto-clock').checked&&target.knownHz!==null)$('sw-core').value=target.knownHz/1e6;
+    $('sw-target').textContent=`${target.name} · ${target.core} · ${target.source} · ${target.knownHz===null?'主频需要填写 HSE':target.knownHz/1e6+' MHz'} · SWO ${target.swoPin}`;this.renderPlan();
+  }
+  async detectTarget(){this.capture.probeManager=this.probeManager;this.showTarget(await this.capture.inspect(this.options()));}
   async start(){
     this.pause();$('sw-warning').textContent='';$('sw-warning').classList.remove('bad');await this.refreshPorts();
-    const options={...this.options(),port:this.ports[Number($('sw-port').value)],elfSha256:this.elf?.sha256,verifyElf:p=>this.verifyElf(p)};
+    const options={...this.options(),port:this.ports[Number($('sw-port').value)],elfSha256:this.elf?.sha256,verifyElf:p=>this.verifyElf(p),onTarget:t=>this.showTarget(t)};
     this.capture.probeManager=this.probeManager;await this.capture.start(options);
   }
-  renderCapture(){const c=this.capture,active=c.active;
-    $('sw-start').disabled=active||!!this.analyzing;$('sw-stop').disabled=!active;
-    for(const id of ['sw-port','sw-pick','sw-core','sw-baud','sw-period','sw-seconds','sw-itm','sw-exceptions','sw-elf-pick','sw-demo','sw-import','sw-aligned'])$(id).disabled=active;
+  renderCapture(){const c=this.capture,active=c.active||!!this.exporting;
+    $('sw-start').disabled=active||!!this.analyzing;$('sw-stop').disabled=!c.active;
+    for(const id of ['sw-port','sw-pick','sw-core','sw-baud','sw-period','sw-seconds','sw-itm','sw-exceptions','sw-elf-pick','sw-demo','sw-import','sw-aligned','sw-detect','sw-auto-clock','sw-hse','sw-baud-round','sw-source-pick'])$(id).disabled=active;
     $('sw-status').textContent=c.running?`记录中 · ${(c.bytes/1024).toFixed(1)} KiB${this.result?" · 图表为上次分析结果":""}`:(c.busy?'正在连接并配置 SWO…':c.probe?'正在恢复 trace 配置…':c.bytes?`记录结束 · ${(c.bytes/1024).toFixed(1)} KiB · ${c.metadata.restored?'配置已恢复':'恢复未确认'}`:'尚未记录');
-    $('sw-save').disabled=!this.recording||active;$('sw-analyze').disabled=!this.recording||active||this.analyzing;$('sw-csv').disabled=!this.result||active||this.analyzing;
+    $('sw-save').disabled=!this.recording||active;$('sw-analyze').disabled=!this.recording||active||this.analyzing;$('sw-csv').disabled=!this.result||active||this.analyzing;for(const id of ['sw-export-c','sw-export-txt'])$(id).disabled=!this.recording||active||this.analyzing;this.renderPlan();
   }
   renderFiles(){$('sw-files').textContent=(this.elf?`${this.elf.name} · ELF SHA256 ${this.elf.sha256.slice(0,12)}`:'未载入 ELF')+' · '+this.sources.summary();}
   pause(){clearInterval(this.player);this.player=null;$('sw-play').textContent='逐样本回放';}
@@ -108,6 +113,36 @@ export class SwoView {
     const id=++this._sourceId;$('sw-source-title').textContent=`${e.fn} · ${hex(e.pc)}`+(e.location?` · ${e.location.file}:${e.location.line}`:' · 无源码位置');
     if(!e.location?.line){$('sw-source').textContent='该 PC 没有可用的 DWARF 源码行；原始地址仍保留。';return;}
     try{const text=await this.sources.read(e.location.file);if(id!==this._sourceId)return;const lines=text.split(/\r?\n/),lo=Math.max(0,e.location.line-11),hi=Math.min(lines.length,e.location.line+12);$('sw-source').replaceChildren();for(let i=lo;i<hi;i++){const line=document.createElement('span');line.className=i+1===e.location.line?'sw-current-line':'';line.textContent=String(i+1).padStart(5)+'  '+lines[i]+'\n';$('sw-source').append(line);}}catch(error){if(id===this._sourceId)$('sw-source').textContent=error.message;}
+  }
+  async exportText(format){
+    if(!this.recording||this.capture.active||this.exporting)return;
+    // Start the picker synchronously within the click's user gesture.
+    let handle;try{if(window.showSaveFilePicker)handle=await window.showSaveFilePicker({suggestedName:'swo-execution.'+format,types:[{description:'完整 SWO 采样轨迹',accept:{'text/plain':['.'+format]}}]});}catch(e){if(e.name==='AbortError')return;throw e;}
+    this.exporting=true;this.renderCapture();let stream,worker,bytes=0,chunks=[];
+    const status=text=>$('sw-export-status').textContent=text;
+    try{
+      if(handle)stream=await handle.createWritable();
+      worker=new Worker(new URL('./export-worker.js',import.meta.url),{type:'module'});
+      await new Promise((resolve,reject)=>{
+        worker.onerror=e=>reject(Error(e.message));
+        worker.onmessage=async({data})=>{try{
+          if(data.kind==='error')throw Error(data.error);
+          if(data.kind==='sources'){
+            status('正在读取轨迹涉及的源码…');const sources={};let sourceBytes=0,missing=0;
+            for(const path of data.paths){try{const text=await this.sources.read(path);if(sourceBytes+text.length*2>32*1024*1024){missing++;continue;}sourceBytes+=text.length*2;sources[path]=text;}catch{missing++;}}
+            this._exportMissing=missing;worker.postMessage({kind:'export',format,sources});
+          }else if(data.kind==='chunk'){
+            const part=new TextEncoder().encode(data.text);bytes+=part.length;
+            if(stream)await stream.write(part);else{if(bytes>128*1024*1024)throw Error('浏览器下载缓存超过 128 MiB；请使用支持直接保存文件的 Chrome/Edge 导出完整记录');chunks.push(part);}
+            status(`正在导出完整轨迹 · ${(bytes/1048576).toFixed(1)} MiB`);worker.postMessage({kind:'ack'});
+          }else if(data.kind==='done')resolve();
+        }catch(e){reject(e);}};
+        worker.postMessage({kind:'prepare',raw:this.recording.raw,metadata:this.recording.metadata,elf:this.elf?.buffer||null});
+      });
+      if(stream)await stream.close();else download(new Blob(chunks),'swo-execution.'+format,'text/plain;charset=utf-8');
+      status(`完整轨迹已导出 · ${(bytes/1048576).toFixed(1)} MiB`+(this._exportMissing?` · ${this._exportMissing} 个源文件未提供，保留 PC/位置`:''));
+    }catch(e){if(stream)await stream.abort().catch(()=>{});status('导出未完成：'+e.message);throw e;}
+    finally{worker?.terminate();this.exporting=false;this.renderCapture();}
   }
   exportCsv(){if(!this.selection)return;const cell=v=>'"'+String(v??'').replaceAll('"','""')+'"';const out=[['event','sample','segment','cycles','time_quality','pc','function','file','line','detail'].map(cell).join(',')];for(const e of this.selection.rows)out.push([e.kind,e.sample,e.segment,e.cycles,e.timeQuality,e.pc==null?'':hex(e.pc),e.fn,e.location?.file,e.location?.line,e.reason|| (e.kind==='itm'?`port ${e.port}: ${hex(e.value)}`:e.kind==='exception'?`exception ${e.exception} ${e.action}`:'')].map(cell).join(','));download('\ufeff'+out.join('\r\n'),'swo-range.csv','text/csv;charset=utf-8');}
   onShow(){this.refreshPorts().catch(e=>this.error(e));this.draw();}
