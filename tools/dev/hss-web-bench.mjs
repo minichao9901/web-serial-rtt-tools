@@ -52,7 +52,11 @@ try {
       if(!r||r.length<51)throw Error('No full-width probe metrics');
       const d=new DataView(r.buffer,r.byteOffset,r.byteLength),w=Array.from({length:12},(_,i)=>d.getUint32(3+i*4,true));
       if(w[0]!==0x31535348||w[2]!==24000000)throw Error('Bad metrics');
-      return {w,count:s.store.count,bytes:s.transport.bytes,host:performance.now()};
+      const status=await s.hidXfer(0x32,Uint8Array.of(2));
+      if(!status||status.length<51)throw Error('No full-width capture status');
+      const statusView=new DataView(status.buffer,status.byteOffset+3,status.byteLength-3);
+      const statusWords=Array.from({length:12},(_,i)=>statusView.getUint32(i*4,true));
+      return {w,statusWords,swdHz:statusWords[1],count:s.store.count,bytes:s.transport.bytes,host:performance.now()};
     };
     return true;
   `, true);
@@ -111,7 +115,7 @@ try {
           if(checked.bad&&firstBad.length<8)firstBad.push({i,...checked});
         }
       }
-      return {cfg,valid,calibration,stable,loadWindow:loadA?{before:loadA,after:loadB}:undefined,samplesChecked:count,bad,waveformBad,tornFrames,phaseOutliers,hiPhaseBudget,phaseSkewCounts,counterBackwards,maxCounterStep,firstBad,summary:s.summary(),stalePackets:s.stalePackets,
+      return {cfg,valid,calibration,stable,requestedClockKhz:${clockKhz},clockBeforeHz:a.swdHz,clockAfterHz:b.swdHz,probeBefore:a,probeAfter:b,loadWindow:loadA?{before:loadA,after:loadB}:undefined,samplesChecked:count,bad,waveformBad,tornFrames,phaseOutliers,hiPhaseBudget,phaseSkewCounts,counterBackwards,maxCounterStep,firstBad,summary:s.summary(),stalePackets:s.stalePackets,
         readAhead:{depth:s.transport.inFlight,bytes:s.transport.chunkBytes},
         requestedUs:cfg.period,effectiveUs:s._periodUs,actualUs:s.periodActualUs,
         advice:document.getElementById('sc-rate-advice')?.textContent,

@@ -1,0 +1,5136 @@
+{
+  "date": "2026-10-09",
+  "conclusion": "No observable throughput regression within these F103ZE loads and finite windows; one short RTT pattern mismatch is retained as an unresolved quality observation.",
+  "summaries": [
+    {
+      "label": "rtt/45MHz",
+      "unit": "MB/s",
+      "baseline": {
+        "rounds": 3,
+        "mean": 2.5358065473137574,
+        "min": 2.535637070938162,
+        "max": 2.5360103045178817,
+        "uiMaxMs": 23.099999994039536,
+        "patternMismatches": 0,
+        "readErrors": 0,
+        "writeErrors": 0,
+        "usbDrops": 0,
+        "skipped": 0,
+        "checked": 0
+      },
+      "current": {
+        "rounds": 3,
+        "mean": 2.53529003996777,
+        "min": 2.5348317607783484,
+        "max": 2.5356531289820805,
+        "uiMaxMs": 22.900000005960464,
+        "patternMismatches": 17,
+        "readErrors": 0,
+        "writeErrors": 0,
+        "usbDrops": 0,
+        "skipped": 0,
+        "checked": 0
+      },
+      "deltaPercent": -0.02036856267821463
+    },
+    {
+      "label": "rtt/60MHz",
+      "unit": "MB/s",
+      "baseline": {
+        "rounds": 3,
+        "mean": 2.535465389314068,
+        "min": 2.535452910770238,
+        "max": 2.5354719193576334,
+        "uiMaxMs": 26.299999982118607,
+        "patternMismatches": 0,
+        "readErrors": 0,
+        "writeErrors": 0,
+        "usbDrops": 0,
+        "skipped": 0,
+        "checked": 0
+      },
+      "current": {
+        "rounds": 3,
+        "mean": 2.5349200005844956,
+        "min": 2.533864067488243,
+        "max": 2.5354528994536847,
+        "uiMaxMs": 30.19999998807907,
+        "patternMismatches": 0,
+        "readErrors": 0,
+        "writeErrors": 0,
+        "usbDrops": 0,
+        "skipped": 0,
+        "checked": 0
+      },
+      "deltaPercent": -0.021510399308581896
+    },
+    {
+      "label": "spi/18MHz",
+      "unit": "MB/s",
+      "baseline": {
+        "rounds": 3,
+        "mean": 2.2500847536566706,
+        "min": 2.2500637825170267,
+        "max": 2.2501254493742286,
+        "uiMaxMs": 44.400000005960464,
+        "patternMismatches": 0,
+        "readErrors": 0,
+        "writeErrors": 0,
+        "usbDrops": 0,
+        "skipped": 0,
+        "checked": 0
+      },
+      "current": {
+        "rounds": 3,
+        "mean": 2.2493680371975544,
+        "min": 2.2488224072945147,
+        "max": 2.2500944114892287,
+        "uiMaxMs": 41.30000001192093,
+        "patternMismatches": 0,
+        "readErrors": 0,
+        "writeErrors": 0,
+        "usbDrops": 0,
+        "skipped": 0,
+        "checked": 0
+      },
+      "deltaPercent": -0.03185286500659856
+    },
+    {
+      "label": "rtt-long/45MHz",
+      "unit": "MB/s",
+      "baseline": {
+        "rounds": 2,
+        "mean": 2.5354388619190154,
+        "min": 2.535371740523028,
+        "max": 2.5355059833150033,
+        "uiMaxMs": 24.5,
+        "patternMismatches": 0,
+        "readErrors": 0,
+        "writeErrors": 0,
+        "usbDrops": 0,
+        "skipped": 0,
+        "checked": 0
+      },
+      "current": {
+        "rounds": 2,
+        "mean": 2.5354038952955547,
+        "min": 2.5353714089590764,
+        "max": 2.5354363816320333,
+        "uiMaxMs": 24.299999982118607,
+        "patternMismatches": 0,
+        "readErrors": 0,
+        "writeErrors": 0,
+        "usbDrops": 0,
+        "skipped": 0,
+        "checked": 0
+      },
+      "deltaPercent": -0.0013791152287581099
+    },
+    {
+      "label": "scope/2.5us/60MHz",
+      "unit": "Hz",
+      "baseline": {
+        "rounds": 2,
+        "mean": 399982.2523420609,
+        "min": 399981.20443846023,
+        "max": 399983.30024566164,
+        "uiMaxMs": 26.799999982118607,
+        "patternMismatches": 0,
+        "readErrors": 0,
+        "writeErrors": 0,
+        "usbDrops": 0,
+        "skipped": 288,
+        "checked": 6902956
+      },
+      "current": {
+        "rounds": 2,
+        "mean": 399981.99910272274,
+        "min": 399980.9621312827,
+        "max": 399983.0360741627,
+        "uiMaxMs": 29.5,
+        "patternMismatches": 0,
+        "readErrors": 0,
+        "writeErrors": 0,
+        "usbDrops": 0,
+        "skipped": 290,
+        "checked": 6908908
+      },
+      "deltaPercent": -0.0000633126436753173
+    },
+    {
+      "label": "scope/20us/45MHz",
+      "unit": "Hz",
+      "baseline": {
+        "rounds": 1,
+        "mean": 49999.87992913137,
+        "min": 49999.87992913137,
+        "max": 49999.87992913137,
+        "uiMaxMs": 27.099999994039536,
+        "patternMismatches": 0,
+        "readErrors": 0,
+        "writeErrors": 0,
+        "usbDrops": 0,
+        "skipped": 1,
+        "checked": 431730
+      },
+      "current": {
+        "rounds": 0,
+        "mean": null,
+        "min": null,
+        "max": null,
+        "uiMaxMs": null,
+        "patternMismatches": 0,
+        "readErrors": 0,
+        "writeErrors": 0,
+        "usbDrops": 0,
+        "skipped": 0,
+        "checked": 0
+      },
+      "deltaPercent": null
+    },
+    {
+      "label": "scope/20us/60MHz",
+      "unit": "Hz",
+      "baseline": {
+        "rounds": 1,
+        "mean": 49999.99921992987,
+        "min": 49999.99921992987,
+        "max": 49999.99921992987,
+        "uiMaxMs": 27.69999998807907,
+        "patternMismatches": 0,
+        "readErrors": 0,
+        "writeErrors": 0,
+        "usbDrops": 0,
+        "skipped": 1,
+        "checked": 431648
+      },
+      "current": {
+        "rounds": 2,
+        "mean": 49999.93083379547,
+        "min": 49999.86426782461,
+        "max": 49999.997399766326,
+        "uiMaxMs": 28.400000005960464,
+        "patternMismatches": 0,
+        "readErrors": 0,
+        "writeErrors": 0,
+        "usbDrops": 0,
+        "skipped": 2,
+        "checked": 863952
+      },
+      "deltaPercent": -0.00013677227093467081
+    }
+  ],
+  "initial": {
+    "date": "2026-10-09",
+    "baseline": "f7b97e6",
+    "current": "643eae4",
+    "seconds": 8,
+    "repeats": 3,
+    "cpuMHz": 72,
+    "rows": [
+      {
+        "kind": "rtt",
+        "repeat": 0,
+        "state": "baseline",
+        "requestedMhz": 45,
+        "seconds": 8.01590000000596,
+        "MBps": 2.5360103045178817,
+        "bad": 0,
+        "gaps": 0,
+        "reversed": 0,
+        "uiMaxMs": 22.700000017881393,
+        "before": {
+          "time": 1764.699999988079,
+          "bytes": 2064384,
+          "bad": 0,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 0,
+          "uiMaxMs": 21.19999998807907,
+          "beats": 40,
+          "status": {
+            "running": true,
+            "channel": 0,
+            "swdReady": true,
+            "clockDelay": 1,
+            "cbAddr": 536870924,
+            "upAddr": 536870948,
+            "moved": 2099200,
+            "polls": 8206,
+            "transfers": 1038,
+            "rdErr": 0,
+            "wrErr": 0,
+            "lastChunk": 2048,
+            "emptyRing": 0,
+            "dapYield": 52033,
+            "rescans": 0,
+            "lastCmdId": 17,
+            "lastResp": 17,
+            "startRc": 0,
+            "chunkBytes": 2048,
+            "discard": false,
+            "swdMhz": 45
+          },
+          "errors": []
+        },
+        "after": {
+          "time": 9780.59999999404,
+          "bytes": 22392789,
+          "bad": 0,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 0,
+          "uiMaxMs": 22.700000017881393,
+          "beats": 401,
+          "status": {
+            "running": true,
+            "channel": 0,
+            "swdReady": true,
+            "clockDelay": 1,
+            "cbAddr": 536870924,
+            "upAddr": 536870948,
+            "moved": 22425557,
+            "polls": 18532,
+            "transfers": 11364,
+            "rdErr": 0,
+            "wrErr": 0,
+            "lastChunk": 2005,
+            "emptyRing": 0,
+            "dapYield": 52033,
+            "rescans": 0,
+            "lastCmdId": 17,
+            "lastResp": 17,
+            "startRc": 0,
+            "chunkBytes": 2048,
+            "discard": false,
+            "swdMhz": 45
+          },
+          "errors": []
+        },
+        "target": null
+      },
+      {
+        "kind": "rtt",
+        "repeat": 0,
+        "state": "baseline",
+        "requestedMhz": 60,
+        "seconds": 8.016200000017882,
+        "MBps": 2.5354719193576334,
+        "bad": 0,
+        "gaps": 0,
+        "reversed": 0,
+        "uiMaxMs": 23.900000005960464,
+        "before": {
+          "time": 1460.2999999821186,
+          "bytes": 2080164,
+          "bad": 0,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 0,
+          "uiMaxMs": 23.099999994039536,
+          "beats": 40,
+          "status": {
+            "running": true,
+            "channel": 0,
+            "swdReady": true,
+            "clockDelay": 1,
+            "cbAddr": 536870924,
+            "upAddr": 536870948,
+            "moved": 2112933,
+            "polls": 12411,
+            "transfers": 3522,
+            "rdErr": 0,
+            "wrErr": 0,
+            "lastChunk": 585,
+            "emptyRing": 0,
+            "dapYield": 36468,
+            "rescans": 0,
+            "lastCmdId": 17,
+            "lastResp": 17,
+            "startRc": 0,
+            "chunkBytes": 2048,
+            "discard": false,
+            "swdMhz": 60
+          },
+          "errors": []
+        },
+        "after": {
+          "time": 9476.5,
+          "bytes": 22405014,
+          "bad": 0,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 0,
+          "uiMaxMs": 23.900000005960464,
+          "beats": 401,
+          "status": {
+            "running": true,
+            "channel": 0,
+            "swdReady": true,
+            "clockDelay": 1,
+            "cbAddr": 536870924,
+            "upAddr": 536870948,
+            "moved": 22437783,
+            "polls": 49004,
+            "transfers": 40115,
+            "rdErr": 0,
+            "wrErr": 0,
+            "lastChunk": 585,
+            "emptyRing": 0,
+            "dapYield": 36468,
+            "rescans": 0,
+            "lastCmdId": 17,
+            "lastResp": 17,
+            "startRc": 0,
+            "chunkBytes": 2048,
+            "discard": false,
+            "swdMhz": 60
+          },
+          "errors": []
+        },
+        "target": null
+      },
+      {
+        "kind": "rtt",
+        "repeat": 0,
+        "state": "current",
+        "requestedMhz": 45,
+        "seconds": 8.00819999998808,
+        "MBps": 2.5353852301428814,
+        "bad": 0,
+        "gaps": 0,
+        "reversed": 0,
+        "uiMaxMs": 22.900000005960464,
+        "before": {
+          "time": 1624.6000000238419,
+          "bytes": 2097152,
+          "bad": 0,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 0,
+          "uiMaxMs": 24.5,
+          "beats": 40,
+          "status": {
+            "running": true,
+            "channel": 0,
+            "swdReady": true,
+            "clockDelay": 1,
+            "cbAddr": 536870924,
+            "upAddr": 536870948,
+            "moved": 2136124,
+            "polls": 7966,
+            "transfers": 1051,
+            "rdErr": 0,
+            "wrErr": 0,
+            "lastChunk": 146,
+            "emptyRing": 0,
+            "dapYield": 36466,
+            "rescans": 0,
+            "lastCmdId": 17,
+            "lastResp": 17,
+            "startRc": 0,
+            "chunkBytes": 2048,
+            "discard": false,
+            "swdMhz": 45
+          },
+          "errors": []
+        },
+        "after": {
+          "time": 9632.800000011921,
+          "bytes": 22401024,
+          "bad": 0,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 0,
+          "uiMaxMs": 22.900000005960464,
+          "beats": 401,
+          "status": {
+            "running": true,
+            "channel": 0,
+            "swdReady": true,
+            "clockDelay": 1,
+            "cbAddr": 536870924,
+            "upAddr": 536870948,
+            "moved": 22442044,
+            "polls": 18279,
+            "transfers": 11364,
+            "rdErr": 0,
+            "wrErr": 0,
+            "lastChunk": 2048,
+            "emptyRing": 0,
+            "dapYield": 36466,
+            "rescans": 0,
+            "lastCmdId": 17,
+            "lastResp": 17,
+            "startRc": 0,
+            "chunkBytes": 2048,
+            "discard": false,
+            "swdMhz": 45
+          },
+          "errors": []
+        },
+        "target": null
+      },
+      {
+        "kind": "rtt",
+        "repeat": 0,
+        "state": "current",
+        "requestedMhz": 60,
+        "seconds": 8.012800000011921,
+        "MBps": 2.533864067488243,
+        "bad": 0,
+        "gaps": 0,
+        "reversed": 0,
+        "uiMaxMs": 23.69999998807907,
+        "before": {
+          "time": 1601.5999999940395,
+          "bytes": 2105870,
+          "bad": 0,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 0,
+          "uiMaxMs": 24.30000001192093,
+          "beats": 40,
+          "status": {
+            "running": true,
+            "channel": 0,
+            "swdReady": true,
+            "clockDelay": 1,
+            "cbAddr": 536870924,
+            "upAddr": 536870948,
+            "moved": 2136078,
+            "polls": 12350,
+            "transfers": 3569,
+            "rdErr": 0,
+            "wrErr": 0,
+            "lastChunk": 572,
+            "emptyRing": 0,
+            "dapYield": 36465,
+            "rescans": 0,
+            "lastCmdId": 17,
+            "lastResp": 17,
+            "startRc": 0,
+            "chunkBytes": 2048,
+            "discard": false,
+            "swdMhz": 60
+          },
+          "errors": []
+        },
+        "after": {
+          "time": 9614.40000000596,
+          "bytes": 22409216,
+          "bad": 0,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 0,
+          "uiMaxMs": 23.69999998807907,
+          "beats": 401,
+          "status": {
+            "running": true,
+            "channel": 0,
+            "swdReady": true,
+            "clockDelay": 1,
+            "cbAddr": 536870924,
+            "upAddr": 536870948,
+            "moved": 22440700,
+            "polls": 48978,
+            "transfers": 40196,
+            "rdErr": 0,
+            "wrErr": 0,
+            "lastChunk": 637,
+            "emptyRing": 0,
+            "dapYield": 36465,
+            "rescans": 0,
+            "lastCmdId": 17,
+            "lastResp": 17,
+            "startRc": 0,
+            "chunkBytes": 2048,
+            "discard": false,
+            "swdMhz": 60
+          },
+          "errors": []
+        },
+        "target": null
+      },
+      {
+        "kind": "rtt",
+        "repeat": 1,
+        "state": "current",
+        "requestedMhz": 45,
+        "seconds": 8.012399999976157,
+        "MBps": 2.5348317607783484,
+        "bad": 17,
+        "gaps": 0,
+        "reversed": 0,
+        "uiMaxMs": 21.5,
+        "before": {
+          "time": 1603.1000000238419,
+          "bytes": 2081723,
+          "bad": 0,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 0,
+          "uiMaxMs": 26.5,
+          "beats": 40,
+          "status": {
+            "running": true,
+            "channel": 0,
+            "swdReady": true,
+            "clockDelay": 1,
+            "cbAddr": 536870924,
+            "upAddr": 536870948,
+            "moved": 2106299,
+            "polls": 7932,
+            "transfers": 1036,
+            "rdErr": 0,
+            "wrErr": 0,
+            "lastChunk": 2002,
+            "emptyRing": 0,
+            "dapYield": 36469,
+            "rescans": 0,
+            "lastCmdId": 17,
+            "lastResp": 17,
+            "startRc": 0,
+            "chunkBytes": 2048,
+            "discard": false,
+            "swdMhz": 45
+          },
+          "errors": []
+        },
+        "after": {
+          "time": 9615.5,
+          "bytes": 22391809,
+          "bad": 17,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 0,
+          "uiMaxMs": 21.5,
+          "beats": 400,
+          "status": {
+            "running": true,
+            "channel": 0,
+            "swdReady": true,
+            "clockDelay": 1,
+            "cbAddr": 536870924,
+            "upAddr": 536870948,
+            "moved": 22420481,
+            "polls": 18323,
+            "transfers": 11361,
+            "rdErr": 0,
+            "wrErr": 0,
+            "lastChunk": 2048,
+            "emptyRing": 0,
+            "dapYield": 36469,
+            "rescans": 0,
+            "lastCmdId": 17,
+            "lastResp": 17,
+            "startRc": 0,
+            "chunkBytes": 2048,
+            "discard": false,
+            "swdMhz": 45
+          },
+          "errors": []
+        },
+        "target": null
+      },
+      {
+        "kind": "rtt",
+        "repeat": 1,
+        "state": "current",
+        "requestedMhz": 60,
+        "seconds": 8.00840000000596,
+        "MBps": 2.5354430348115593,
+        "bad": 0,
+        "gaps": 0,
+        "reversed": 0,
+        "uiMaxMs": 30.19999998807907,
+        "before": {
+          "time": 1547.4000000059605,
+          "bytes": 2090868,
+          "bad": 0,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 0,
+          "uiMaxMs": 20.5,
+          "beats": 40,
+          "status": {
+            "running": true,
+            "channel": 0,
+            "swdReady": true,
+            "clockDelay": 1,
+            "cbAddr": 536870924,
+            "upAddr": 536870948,
+            "moved": 2114897,
+            "polls": 11589,
+            "transfers": 3523,
+            "rdErr": 0,
+            "wrErr": 0,
+            "lastChunk": 546,
+            "emptyRing": 0,
+            "dapYield": 36464,
+            "rescans": 0,
+            "lastCmdId": 17,
+            "lastResp": 17,
+            "startRc": 0,
+            "chunkBytes": 2048,
+            "discard": false,
+            "swdMhz": 60
+          },
+          "errors": []
+        },
+        "after": {
+          "time": 9555.800000011921,
+          "bytes": 22395710,
+          "bad": 0,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 0,
+          "uiMaxMs": 30.19999998807907,
+          "beats": 400,
+          "status": {
+            "running": true,
+            "channel": 0,
+            "swdReady": true,
+            "clockDelay": 1,
+            "cbAddr": 536870924,
+            "upAddr": 536870948,
+            "moved": 22419766,
+            "polls": 48137,
+            "transfers": 40071,
+            "rdErr": 0,
+            "wrErr": 0,
+            "lastChunk": 507,
+            "emptyRing": 0,
+            "dapYield": 36464,
+            "rescans": 0,
+            "lastCmdId": 17,
+            "lastResp": 17,
+            "startRc": 0,
+            "chunkBytes": 2048,
+            "discard": false,
+            "swdMhz": 60
+          },
+          "errors": []
+        },
+        "target": null
+      },
+      {
+        "kind": "rtt",
+        "repeat": 1,
+        "state": "baseline",
+        "requestedMhz": 45,
+        "seconds": 8.019900000005961,
+        "MBps": 2.5357722664852287,
+        "bad": 0,
+        "gaps": 0,
+        "reversed": 0,
+        "uiMaxMs": 23.099999994039536,
+        "before": {
+          "time": 1509,
+          "bytes": 2110485,
+          "bad": 0,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 0,
+          "uiMaxMs": 23.19999998807907,
+          "beats": 40,
+          "status": {
+            "running": true,
+            "channel": 0,
+            "swdReady": true,
+            "clockDelay": 1,
+            "cbAddr": 536870924,
+            "upAddr": 536870948,
+            "moved": 2143253,
+            "polls": 7758,
+            "transfers": 1057,
+            "rdErr": 0,
+            "wrErr": 0,
+            "lastChunk": 2048,
+            "emptyRing": 0,
+            "dapYield": 36468,
+            "rescans": 0,
+            "lastCmdId": 17,
+            "lastResp": 17,
+            "startRc": 0,
+            "chunkBytes": 2048,
+            "discard": false,
+            "swdMhz": 45
+          },
+          "errors": []
+        },
+        "after": {
+          "time": 9528.90000000596,
+          "bytes": 22447125,
+          "bad": 0,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 0,
+          "uiMaxMs": 23.099999994039536,
+          "beats": 400,
+          "status": {
+            "running": true,
+            "channel": 0,
+            "swdReady": true,
+            "clockDelay": 1,
+            "cbAddr": 536870924,
+            "upAddr": 536870948,
+            "moved": 22479875,
+            "polls": 18112,
+            "transfers": 11411,
+            "rdErr": 0,
+            "wrErr": 0,
+            "lastChunk": 2048,
+            "emptyRing": 0,
+            "dapYield": 36468,
+            "rescans": 0,
+            "lastCmdId": 17,
+            "lastResp": 17,
+            "startRc": 0,
+            "chunkBytes": 2048,
+            "discard": false,
+            "swdMhz": 45
+          },
+          "errors": []
+        },
+        "target": null
+      },
+      {
+        "kind": "rtt",
+        "repeat": 1,
+        "state": "baseline",
+        "requestedMhz": 60,
+        "seconds": 8.01230000001192,
+        "MBps": 2.5354713378143323,
+        "bad": 0,
+        "gaps": 0,
+        "reversed": 0,
+        "uiMaxMs": 24.899999976158142,
+        "before": {
+          "time": 1571.199999988079,
+          "bytes": 2114050,
+          "bad": 0,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 0,
+          "uiMaxMs": 23.5,
+          "beats": 40,
+          "status": {
+            "running": true,
+            "channel": 0,
+            "swdReady": true,
+            "clockDelay": 1,
+            "cbAddr": 536870924,
+            "upAddr": 536870948,
+            "moved": 2142722,
+            "polls": 12447,
+            "transfers": 3555,
+            "rdErr": 0,
+            "wrErr": 0,
+            "lastChunk": 585,
+            "emptyRing": 0,
+            "dapYield": 36467,
+            "rescans": 0,
+            "lastCmdId": 17,
+            "lastResp": 17,
+            "startRc": 0,
+            "chunkBytes": 2048,
+            "discard": false,
+            "swdMhz": 60
+          },
+          "errors": []
+        },
+        "after": {
+          "time": 9583.5,
+          "bytes": 22429007,
+          "bad": 0,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 0,
+          "uiMaxMs": 24.899999976158142,
+          "beats": 401,
+          "status": {
+            "running": true,
+            "channel": 0,
+            "swdReady": true,
+            "clockDelay": 1,
+            "cbAddr": 536870924,
+            "upAddr": 536870948,
+            "moved": 22457133,
+            "polls": 49148,
+            "transfers": 40255,
+            "rdErr": 0,
+            "wrErr": 0,
+            "lastChunk": 546,
+            "emptyRing": 0,
+            "dapYield": 36467,
+            "rescans": 0,
+            "lastCmdId": 17,
+            "lastResp": 17,
+            "startRc": 0,
+            "chunkBytes": 2048,
+            "discard": false,
+            "swdMhz": 60
+          },
+          "errors": []
+        },
+        "target": null
+      },
+      {
+        "kind": "rtt",
+        "repeat": 2,
+        "state": "baseline",
+        "requestedMhz": 45,
+        "seconds": 8.020299999982118,
+        "MBps": 2.535637070938162,
+        "bad": 0,
+        "gaps": 0,
+        "reversed": 0,
+        "uiMaxMs": 21.099999994039536,
+        "before": {
+          "time": 1513.7000000178814,
+          "bytes": 2081661,
+          "bad": 0,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 0,
+          "uiMaxMs": 24.69999998807907,
+          "beats": 40,
+          "status": {
+            "running": true,
+            "channel": 0,
+            "swdReady": true,
+            "clockDelay": 1,
+            "cbAddr": 536870924,
+            "upAddr": 536870948,
+            "moved": 2124669,
+            "polls": 7743,
+            "transfers": 1051,
+            "rdErr": 0,
+            "wrErr": 0,
+            "lastChunk": 2048,
+            "emptyRing": 0,
+            "dapYield": 36468,
+            "rescans": 0,
+            "lastCmdId": 17,
+            "lastResp": 17,
+            "startRc": 0,
+            "chunkBytes": 2048,
+            "discard": false,
+            "swdMhz": 45
+          },
+          "errors": []
+        },
+        "after": {
+          "time": 9534,
+          "bytes": 22418231,
+          "bad": 0,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 0,
+          "uiMaxMs": 21.099999994039536,
+          "beats": 401,
+          "status": {
+            "running": true,
+            "channel": 0,
+            "swdReady": true,
+            "clockDelay": 1,
+            "cbAddr": 536870924,
+            "upAddr": 536870948,
+            "moved": 22459191,
+            "polls": 18080,
+            "transfers": 11388,
+            "rdErr": 0,
+            "wrErr": 0,
+            "lastChunk": 2048,
+            "emptyRing": 0,
+            "dapYield": 36468,
+            "rescans": 0,
+            "lastCmdId": 17,
+            "lastResp": 17,
+            "startRc": 0,
+            "chunkBytes": 2048,
+            "discard": false,
+            "swdMhz": 45
+          },
+          "errors": []
+        },
+        "target": null
+      },
+      {
+        "kind": "rtt",
+        "repeat": 2,
+        "state": "baseline",
+        "requestedMhz": 60,
+        "seconds": 8.00819999998808,
+        "MBps": 2.535452910770238,
+        "bad": 0,
+        "gaps": 0,
+        "reversed": 0,
+        "uiMaxMs": 26.299999982118607,
+        "before": {
+          "time": 1460.5999999940395,
+          "bytes": 2112841,
+          "bad": 0,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 0,
+          "uiMaxMs": 22.19999998807907,
+          "beats": 40,
+          "status": {
+            "running": true,
+            "channel": 0,
+            "swdReady": true,
+            "clockDelay": 1,
+            "cbAddr": 536870924,
+            "upAddr": 536870948,
+            "moved": 2136923,
+            "polls": 11591,
+            "transfers": 3594,
+            "rdErr": 0,
+            "wrErr": 0,
+            "lastChunk": 468,
+            "emptyRing": 0,
+            "dapYield": 36466,
+            "rescans": 0,
+            "lastCmdId": 17,
+            "lastResp": 17,
+            "startRc": 0,
+            "chunkBytes": 2048,
+            "discard": false,
+            "swdMhz": 60
+          },
+          "errors": []
+        },
+        "after": {
+          "time": 9468.799999982119,
+          "bytes": 22417255,
+          "bad": 0,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 0,
+          "uiMaxMs": 26.299999982118607,
+          "beats": 401,
+          "status": {
+            "running": true,
+            "channel": 0,
+            "swdReady": true,
+            "clockDelay": 1,
+            "cbAddr": 536870924,
+            "upAddr": 536870948,
+            "moved": 22441831,
+            "polls": 48305,
+            "transfers": 40308,
+            "rdErr": 0,
+            "wrErr": 0,
+            "lastChunk": 559,
+            "emptyRing": 0,
+            "dapYield": 36466,
+            "rescans": 0,
+            "lastCmdId": 17,
+            "lastResp": 17,
+            "startRc": 0,
+            "chunkBytes": 2048,
+            "discard": false,
+            "swdMhz": 60
+          },
+          "errors": []
+        },
+        "target": null
+      },
+      {
+        "kind": "rtt",
+        "repeat": 2,
+        "state": "current",
+        "requestedMhz": 45,
+        "seconds": 8.012199999988079,
+        "MBps": 2.5356531289820805,
+        "bad": 0,
+        "gaps": 0,
+        "reversed": 0,
+        "uiMaxMs": 22.899999976158142,
+        "before": {
+          "time": 1645.4000000059605,
+          "bytes": 2119834,
+          "bad": 0,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 0,
+          "uiMaxMs": 25.799999982118607,
+          "beats": 40,
+          "status": {
+            "running": true,
+            "channel": 0,
+            "swdReady": true,
+            "clockDelay": 1,
+            "cbAddr": 536870924,
+            "upAddr": 536870948,
+            "moved": 2123930,
+            "polls": 7700,
+            "transfers": 1044,
+            "rdErr": 0,
+            "wrErr": 0,
+            "lastChunk": 2048,
+            "emptyRing": 0,
+            "dapYield": 36469,
+            "rescans": 0,
+            "lastCmdId": 17,
+            "lastResp": 17,
+            "startRc": 0,
+            "chunkBytes": 2048,
+            "discard": false,
+            "swdMhz": 45
+          },
+          "errors": []
+        },
+        "after": {
+          "time": 9657.59999999404,
+          "bytes": 22435994,
+          "bad": 0,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 0,
+          "uiMaxMs": 22.899999976158142,
+          "beats": 400,
+          "status": {
+            "running": true,
+            "channel": 0,
+            "swdReady": true,
+            "clockDelay": 1,
+            "cbAddr": 536870924,
+            "upAddr": 536870948,
+            "moved": 22440090,
+            "polls": 18004,
+            "transfers": 11348,
+            "rdErr": 0,
+            "wrErr": 0,
+            "lastChunk": 2048,
+            "emptyRing": 0,
+            "dapYield": 36469,
+            "rescans": 0,
+            "lastCmdId": 17,
+            "lastResp": 17,
+            "startRc": 0,
+            "chunkBytes": 2048,
+            "discard": false,
+            "swdMhz": 45
+          },
+          "errors": []
+        },
+        "target": null
+      },
+      {
+        "kind": "rtt",
+        "repeat": 2,
+        "state": "current",
+        "requestedMhz": 60,
+        "seconds": 8.00840000000596,
+        "MBps": 2.5354528994536847,
+        "bad": 0,
+        "gaps": 0,
+        "reversed": 0,
+        "uiMaxMs": 21.900000005960464,
+        "before": {
+          "time": 1606,
+          "bytes": 2119578,
+          "bad": 0,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 0,
+          "uiMaxMs": 22.299999982118607,
+          "beats": 40,
+          "status": {
+            "running": true,
+            "channel": 0,
+            "swdReady": true,
+            "clockDelay": 1,
+            "cbAddr": 536870924,
+            "upAddr": 536870948,
+            "moved": 2148250,
+            "polls": 11577,
+            "transfers": 3588,
+            "rdErr": 0,
+            "wrErr": 0,
+            "lastChunk": 546,
+            "emptyRing": 0,
+            "dapYield": 36468,
+            "rescans": 0,
+            "lastCmdId": 17,
+            "lastResp": 17,
+            "startRc": 0,
+            "chunkBytes": 2048,
+            "discard": false,
+            "swdMhz": 60
+          },
+          "errors": []
+        },
+        "after": {
+          "time": 9614.40000000596,
+          "bytes": 22424499,
+          "bad": 0,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 0,
+          "uiMaxMs": 21.900000005960464,
+          "beats": 401,
+          "status": {
+            "running": true,
+            "channel": 0,
+            "swdReady": true,
+            "clockDelay": 1,
+            "cbAddr": 536870924,
+            "upAddr": 536870948,
+            "moved": 22452638,
+            "polls": 48191,
+            "transfers": 40202,
+            "rdErr": 0,
+            "wrErr": 0,
+            "lastChunk": 546,
+            "emptyRing": 0,
+            "dapYield": 36468,
+            "rescans": 0,
+            "lastCmdId": 17,
+            "lastResp": 17,
+            "startRc": 0,
+            "chunkBytes": 2048,
+            "discard": false,
+            "swdMhz": 60
+          },
+          "errors": []
+        },
+        "target": null
+      },
+      {
+        "kind": "scope",
+        "repeat": 0,
+        "state": "baseline",
+        "actualMhz": 45,
+        "cfg": {
+          "period": 2.5,
+          "draw": true,
+          "adaptive": true
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 1.4828333333333332,
+          "recommendedUs": 3,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.004093083333334,
+          "produced": 3201476,
+          "skipped": 162,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 3200936,
+          "probeHz": 399979.8561396457,
+          "webHz": 399907.04879997595,
+          "dropPercent": 0.005059909958589947,
+          "maxMainThreadLagMs": 8.700000017881393
+        },
+        "samplesChecked": 3446952,
+        "bad": 0,
+        "waveformBad": 0,
+        "tornFrames": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 2,
+        "phaseSkewCounts": {},
+        "counterBackwards": 0,
+        "maxCounterStep": 1,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：3446952 个样本 / 8.618 s，跳拍 235 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "build-72mhz-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              4
+            ],
+            "stats": {
+              "cu": 2,
+              "dies": 127,
+              "vars": 30
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_pack.u_hi:u32@0x20001028"
+          ],
+          "varCount": 1,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 4,
+            "estUs": 4.47,
+            "estHz": 223914
+          },
+          "samples": 3446952,
+          "capacity": 5720064,
+          "packets": 28240,
+          "lost": 235,
+          "lostProbe": 235,
+          "lostUsb": 0,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 1.4828333333333332,
+          "blob": {
+            "offset": 1340,
+            "name": "60M(6 指令/bit)",
+            "delay": 1
+          },
+          "connectErr": null,
+          "rateHz": 399973,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 3446952
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 0,
+        "readAhead": {
+          "depth": 16,
+          "bytes": 8192
+        },
+        "requestedUs": 2.5,
+        "effectiveUs": 2.5,
+        "actualUs": 2.5,
+        "advice": "建议起始：3 µs（333.33 kHz）；读取耗时上界 ≤500.00 kHz，不代表持续采样能力。依据当前标定。 ⚠️ 高于建议起始频率；建议 3 µs（333.33 kHz）。继续将保留 2.5 µs 周期，来不及的拍会跳过，不会自动改为“最大速率”；按真实时间轴显示，实际速率看采样统计。",
+        "periodTicks": 60,
+        "flags": 417,
+        "sequenceReordered": 0
+      },
+      {
+        "kind": "scope",
+        "repeat": 0,
+        "state": "baseline",
+        "actualMhz": 45,
+        "cfg": {
+          "period": 20,
+          "draw": true,
+          "adaptive": true,
+          "vars": [
+            "g_pack.u_hi",
+            "g_pack.f_sin",
+            "g_pack.i_tick"
+          ]
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 10.694708333333335,
+          "recommendedUs": 14,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.008093958333333,
+          "produced": 400404,
+          "skipped": 1,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 400365,
+          "probeHz": 49999.91284859165,
+          "webHz": 49994.38075960965,
+          "dropPercent": 0.0002497471310298323,
+          "maxMainThreadLagMs": 27.599999994039536
+        },
+        "samplesChecked": 431074,
+        "bad": 0,
+        "waveformBad": 0,
+        "tornFrames": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 4,
+        "phaseSkewCounts": {},
+        "counterBackwards": 0,
+        "maxCounterStep": 1,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：431074 个样本 / 8.622 s，跳拍 4 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "build-72mhz-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              4
+            ],
+            "stats": {
+              "cu": 2,
+              "dies": 127,
+              "vars": 30
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_pack.u_hi:u32@0x20001028",
+            "g_pack.f_sin:f32@0x20001014",
+            "g_pack.i_tick:i32@0x2000101c"
+          ],
+          "varCount": 3,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 12,
+            "estUs": 11.66,
+            "estHz": 85789
+          },
+          "samples": 431074,
+          "capacity": 715064,
+          "packets": 10681,
+          "lost": 4,
+          "lostProbe": 4,
+          "lostUsb": 0,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 10.694708333333335,
+          "blob": {
+            "offset": 1340,
+            "name": "60M(6 指令/bit)",
+            "delay": 1
+          },
+          "connectErr": null,
+          "rateHz": 50000,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 431074
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 7,
+        "readAhead": {
+          "depth": 7,
+          "bytes": 8192
+        },
+        "requestedUs": 20,
+        "effectiveUs": 20,
+        "actualUs": 20,
+        "advice": "建议起始：15 µs（66.67 kHz）；读取耗时上界 ≤85.79 kHz，不代表持续采样能力。依据粗估，建议先标定。稳定性以实采跳拍/USB计数为准。",
+        "periodTicks": 480,
+        "flags": 417,
+        "sequenceReordered": 0
+      },
+      {
+        "kind": "scope",
+        "repeat": 0,
+        "state": "current",
+        "actualMhz": 60,
+        "cfg": {
+          "period": 2.5,
+          "draw": true,
+          "adaptive": true
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 1.4809583333333332,
+          "recommendedUs": 3,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.008092458333333,
+          "produced": 3202548,
+          "skipped": 690,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 3202920,
+          "probeHz": 399913.9641135616,
+          "webHz": 399955.04607836565,
+          "dropPercent": 0.021540703500645283,
+          "maxMainThreadLagMs": 10.599999994039536
+        },
+        "samplesChecked": 3448812,
+        "bad": 0,
+        "waveformBad": 0,
+        "tornFrames": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 2,
+        "phaseSkewCounts": {},
+        "counterBackwards": 0,
+        "maxCounterStep": 1,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：3448812 个样本 / 8.624 s，跳拍 805 / USB 丢样本 68 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "build-72mhz-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              4
+            ],
+            "stats": {
+              "cu": 2,
+              "dies": 127,
+              "vars": 30
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_pack.u_hi:u32@0x20001028"
+          ],
+          "varCount": 1,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 4,
+            "estUs": 5.07,
+            "estHz": 197254
+          },
+          "samples": 3448812,
+          "capacity": 5720064,
+          "packets": 28255,
+          "lost": 873,
+          "lostProbe": 805,
+          "lostUsb": 68,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 1.4809583333333332,
+          "blob": {
+            "offset": 1340,
+            "name": "60M(6 指令/bit)",
+            "delay": 1
+          },
+          "connectErr": null,
+          "rateHz": 399908,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 3448812
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 1,
+        "readAhead": {
+          "depth": 16,
+          "bytes": 8192
+        },
+        "requestedUs": 2.5,
+        "effectiveUs": 2.5,
+        "actualUs": 2.5,
+        "advice": "建议起始：4 µs（250.00 kHz）；读取耗时上界 ≤500.00 kHz，不代表持续采样能力。依据粗估，建议先标定。 ⚠️ 高于建议起始频率；建议 4 µs（250.00 kHz）。继续将保留 2.5 µs 周期，来不及的拍会跳过，不会自动改为“最大速率”；按真实时间轴显示，实际速率看采样统计。",
+        "periodTicks": 60,
+        "flags": 417,
+        "sequenceReordered": 0
+      },
+      {
+        "kind": "scope",
+        "repeat": 0,
+        "state": "current",
+        "actualMhz": 60,
+        "cfg": {
+          "period": 20,
+          "draw": true,
+          "adaptive": true,
+          "vars": [
+            "g_pack.u_hi",
+            "g_pack.f_sin",
+            "g_pack.i_tick"
+          ]
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 10.701458333333333,
+          "recommendedUs": 14,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.008092458333333,
+          "produced": 400404,
+          "skipped": 1,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 400365,
+          "probeHz": 49999.922214101556,
+          "webHz": 49993.132211141055,
+          "dropPercent": 0.0002497471310298323,
+          "maxMainThreadLagMs": 12.699999988079071
+        },
+        "samplesChecked": 431648,
+        "bad": 0,
+        "waveformBad": 0,
+        "tornFrames": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 4,
+        "phaseSkewCounts": {},
+        "counterBackwards": 0,
+        "maxCounterStep": 1,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：431648 个样本 / 8.633 s，跳拍 4 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "build-72mhz-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              4
+            ],
+            "stats": {
+              "cu": 2,
+              "dies": 127,
+              "vars": 30
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_pack.u_hi:u32@0x20001028",
+            "g_pack.f_sin:f32@0x20001014",
+            "g_pack.i_tick:i32@0x2000101c"
+          ],
+          "varCount": 3,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 12,
+            "estUs": 10.05,
+            "estHz": 99542
+          },
+          "samples": 431648,
+          "capacity": 715064,
+          "packets": 10696,
+          "lost": 4,
+          "lostProbe": 4,
+          "lostUsb": 0,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 10.701458333333333,
+          "blob": {
+            "offset": 1340,
+            "name": "60M(6 指令/bit)",
+            "delay": 1
+          },
+          "connectErr": null,
+          "rateHz": 50000,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 431648
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 8,
+        "readAhead": {
+          "depth": 7,
+          "bytes": 8192
+        },
+        "requestedUs": 20,
+        "effectiveUs": 20,
+        "actualUs": 20,
+        "advice": "建议起始：14 µs（71.43 kHz）；读取耗时上界 ≤93.45 kHz，不代表持续采样能力。依据当前标定。稳定性以实采跳拍/USB计数为准。",
+        "periodTicks": 480,
+        "flags": 417,
+        "sequenceReordered": 0
+      },
+      {
+        "kind": "scope",
+        "repeat": 1,
+        "state": "current",
+        "actualMhz": 60,
+        "cfg": {
+          "period": 2.5,
+          "draw": true,
+          "adaptive": true
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 1.4809375,
+          "recommendedUs": 3,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.004092041666667,
+          "produced": 3201476,
+          "skipped": 162,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 3202920,
+          "probeHz": 399979.9081937302,
+          "webHz": 400159.91804230143,
+          "dropPercent": 0.005059909958589947,
+          "maxMainThreadLagMs": 38.69999998807907
+        },
+        "samplesChecked": 3456500,
+        "bad": 0,
+        "waveformBad": 0,
+        "tornFrames": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 2,
+        "phaseSkewCounts": {},
+        "counterBackwards": 0,
+        "maxCounterStep": 1,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：3456500 个样本 / 8.642 s，跳拍 229 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "build-72mhz-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              4
+            ],
+            "stats": {
+              "cu": 2,
+              "dies": 127,
+              "vars": 30
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_pack.u_hi:u32@0x20001028"
+          ],
+          "varCount": 1,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 4,
+            "estUs": 4.47,
+            "estHz": 223914
+          },
+          "samples": 3456500,
+          "capacity": 5720064,
+          "packets": 28318,
+          "lost": 229,
+          "lostProbe": 229,
+          "lostUsb": 0,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 1.4809375,
+          "blob": {
+            "offset": 1340,
+            "name": "60M(6 指令/bit)",
+            "delay": 1
+          },
+          "connectErr": null,
+          "rateHz": 399974,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 3456500
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 2,
+        "readAhead": {
+          "depth": 16,
+          "bytes": 8192
+        },
+        "requestedUs": 2.5,
+        "effectiveUs": 2.5,
+        "actualUs": 2.5,
+        "advice": "建议起始：3 µs（333.33 kHz）；读取耗时上界 ≤500.00 kHz，不代表持续采样能力。依据当前标定。 ⚠️ 高于建议起始频率；建议 3 µs（333.33 kHz）。继续将保留 2.5 µs 周期，来不及的拍会跳过，不会自动改为“最大速率”；按真实时间轴显示，实际速率看采样统计。",
+        "periodTicks": 60,
+        "flags": 417,
+        "sequenceReordered": 0
+      },
+      {
+        "kind": "scope",
+        "repeat": 1,
+        "state": "current",
+        "actualMhz": 60,
+        "cfg": {
+          "period": 20,
+          "draw": true,
+          "adaptive": true,
+          "vars": [
+            "g_pack.u_hi",
+            "g_pack.f_sin",
+            "g_pack.i_tick"
+          ]
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 10.711791666666667,
+          "recommendedUs": 14,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.008093,
+          "produced": 400404,
+          "skipped": 1,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 400365,
+          "probeHz": 49999.91883211146,
+          "webHz": 49994.38075960965,
+          "dropPercent": 0.0002497471310298323,
+          "maxMainThreadLagMs": 9.900000005960464
+        },
+        "samplesChecked": 431648,
+        "bad": 0,
+        "waveformBad": 0,
+        "tornFrames": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 4,
+        "phaseSkewCounts": {},
+        "counterBackwards": 0,
+        "maxCounterStep": 1,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：431648 个样本 / 8.633 s，跳拍 4 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "build-72mhz-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              4
+            ],
+            "stats": {
+              "cu": 2,
+              "dies": 127,
+              "vars": 30
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_pack.u_hi:u32@0x20001028",
+            "g_pack.f_sin:f32@0x20001014",
+            "g_pack.i_tick:i32@0x2000101c"
+          ],
+          "varCount": 3,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 12,
+            "estUs": 10.05,
+            "estHz": 99542
+          },
+          "samples": 431648,
+          "capacity": 715064,
+          "packets": 10696,
+          "lost": 4,
+          "lostProbe": 4,
+          "lostUsb": 0,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 10.711791666666667,
+          "blob": {
+            "offset": 1340,
+            "name": "60M(6 指令/bit)",
+            "delay": 1
+          },
+          "connectErr": null,
+          "rateHz": 50000,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 431648
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 8,
+        "readAhead": {
+          "depth": 7,
+          "bytes": 8192
+        },
+        "requestedUs": 20,
+        "effectiveUs": 20,
+        "actualUs": 20,
+        "advice": "建议起始：14 µs（71.43 kHz）；读取耗时上界 ≤93.36 kHz，不代表持续采样能力。依据当前标定。稳定性以实采跳拍/USB计数为准。",
+        "periodTicks": 480,
+        "flags": 417,
+        "sequenceReordered": 0
+      },
+      {
+        "kind": "scope",
+        "repeat": 1,
+        "state": "baseline",
+        "actualMhz": 60,
+        "cfg": {
+          "period": 2.5,
+          "draw": true,
+          "adaptive": true
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 1.7036666666666667,
+          "recommendedUs": 3,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.004090833333333,
+          "produced": 3201487,
+          "skipped": 151,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 3200936,
+          "probeHz": 399981.3428737326,
+          "webHz": 399907.04879997595,
+          "dropPercent": 0.0047163358255992716,
+          "maxMainThreadLagMs": 11
+        },
+        "samplesChecked": 3450672,
+        "bad": 0,
+        "waveformBad": 0,
+        "tornFrames": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 2,
+        "phaseSkewCounts": {},
+        "counterBackwards": 0,
+        "maxCounterStep": 1,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：3450672 个样本 / 8.627 s，跳拍 213 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "build-72mhz-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              4
+            ],
+            "stats": {
+              "cu": 2,
+              "dies": 127,
+              "vars": 30
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_pack.u_hi:u32@0x20001028"
+          ],
+          "varCount": 1,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 4,
+            "estUs": 4.47,
+            "estHz": 223914
+          },
+          "samples": 3450672,
+          "capacity": 5720064,
+          "packets": 28270,
+          "lost": 213,
+          "lostProbe": 213,
+          "lostUsb": 0,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 1.7036666666666667,
+          "blob": {
+            "offset": 1548,
+            "name": "45M(8)",
+            "delay": 1
+          },
+          "connectErr": null,
+          "rateHz": 399976,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 3450672
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 2,
+        "readAhead": {
+          "depth": 16,
+          "bytes": 8192
+        },
+        "requestedUs": 2.5,
+        "effectiveUs": 2.5,
+        "actualUs": 2.5,
+        "advice": "建议起始：3 µs（333.33 kHz）；读取耗时上界 ≤500.00 kHz，不代表持续采样能力。依据粗估，建议先标定。 ⚠️ 高于建议起始频率；建议 3 µs（333.33 kHz）。继续将保留 2.5 µs 周期，来不及的拍会跳过，不会自动改为“最大速率”；按真实时间轴显示，实际速率看采样统计。",
+        "periodTicks": 60,
+        "flags": 417,
+        "sequenceReordered": 0
+      },
+      {
+        "kind": "scope",
+        "repeat": 1,
+        "state": "baseline",
+        "actualMhz": 60,
+        "cfg": {
+          "period": 20,
+          "draw": true,
+          "adaptive": true,
+          "vars": [
+            "g_pack.u_hi",
+            "g_pack.f_sin",
+            "g_pack.i_tick"
+          ]
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 10.693770833333334,
+          "recommendedUs": 14,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.008092416666667,
+          "produced": 400404,
+          "skipped": 1,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 400365,
+          "probeHz": 49999.92247425466,
+          "webHz": 49995.62937062937,
+          "dropPercent": 0.0002497471310298323,
+          "maxMainThreadLagMs": 7.4000000059604645
+        },
+        "samplesChecked": 431853,
+        "bad": 0,
+        "waveformBad": 0,
+        "tornFrames": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 4,
+        "phaseSkewCounts": {},
+        "counterBackwards": 0,
+        "maxCounterStep": 1,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：431853 个样本 / 8.637 s，跳拍 4 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "build-72mhz-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              4
+            ],
+            "stats": {
+              "cu": 2,
+              "dies": 127,
+              "vars": 30
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_pack.u_hi:u32@0x20001028",
+            "g_pack.f_sin:f32@0x20001014",
+            "g_pack.i_tick:i32@0x2000101c"
+          ],
+          "varCount": 3,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 12,
+            "estUs": 10.05,
+            "estHz": 99542
+          },
+          "samples": 431853,
+          "capacity": 715064,
+          "packets": 10701,
+          "lost": 4,
+          "lostProbe": 4,
+          "lostUsb": 0,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 10.693770833333334,
+          "blob": {
+            "offset": 1340,
+            "name": "60M(6 指令/bit)",
+            "delay": 1
+          },
+          "connectErr": null,
+          "rateHz": 50000,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 431853
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 3,
+        "readAhead": {
+          "depth": 7,
+          "bytes": 8192
+        },
+        "requestedUs": 20,
+        "effectiveUs": 20,
+        "actualUs": 20,
+        "advice": "建议起始：14 µs（71.43 kHz）；读取耗时上界 ≤93.51 kHz，不代表持续采样能力。依据当前标定。稳定性以实采跳拍/USB计数为准。",
+        "periodTicks": 480,
+        "flags": 417,
+        "sequenceReordered": 0
+      },
+      {
+        "kind": "scope",
+        "repeat": 2,
+        "state": "baseline",
+        "actualMhz": 60,
+        "cfg": {
+          "period": 2.5,
+          "draw": true,
+          "adaptive": true
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 1.4809166666666667,
+          "recommendedUs": 3,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.0080905,
+          "produced": 3203088,
+          "skipped": 150,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 3202920,
+          "probeHz": 399981.4937156367,
+          "webHz": 400094.9359179573,
+          "dropPercent": 0.0046827616305750615,
+          "maxMainThreadLagMs": 6.300000011920929
+        },
+        "samplesChecked": 3448688,
+        "bad": 0,
+        "waveformBad": 0,
+        "tornFrames": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 2,
+        "phaseSkewCounts": {},
+        "counterBackwards": 0,
+        "maxCounterStep": 1,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：3448688 个样本 / 8.622 s，跳拍 220 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "build-72mhz-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              4
+            ],
+            "stats": {
+              "cu": 2,
+              "dies": 127,
+              "vars": 30
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_pack.u_hi:u32@0x20001028"
+          ],
+          "varCount": 1,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 4,
+            "estUs": 4.47,
+            "estHz": 223914
+          },
+          "samples": 3448688,
+          "capacity": 5720064,
+          "packets": 28254,
+          "lost": 220,
+          "lostProbe": 220,
+          "lostUsb": 0,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 1.4809166666666667,
+          "blob": {
+            "offset": 1340,
+            "name": "60M(6 指令/bit)",
+            "delay": 1
+          },
+          "connectErr": null,
+          "rateHz": 399975,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 3448688
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 2,
+        "readAhead": {
+          "depth": 16,
+          "bytes": 8192
+        },
+        "requestedUs": 2.5,
+        "effectiveUs": 2.5,
+        "actualUs": 2.5,
+        "advice": "建议起始：3 µs（333.33 kHz）；读取耗时上界 ≤500.00 kHz，不代表持续采样能力。依据当前标定。 ⚠️ 高于建议起始频率；建议 3 µs（333.33 kHz）。继续将保留 2.5 µs 周期，来不及的拍会跳过，不会自动改为“最大速率”；按真实时间轴显示，实际速率看采样统计。",
+        "periodTicks": 60,
+        "flags": 417,
+        "sequenceReordered": 0
+      },
+      {
+        "kind": "scope",
+        "repeat": 2,
+        "state": "baseline",
+        "actualMhz": 60,
+        "cfg": {
+          "period": 20,
+          "draw": true,
+          "adaptive": true,
+          "vars": [
+            "g_pack.u_hi",
+            "g_pack.f_sin",
+            "g_pack.i_tick"
+          ]
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 10.693625,
+          "recommendedUs": 14,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.004091041666667,
+          "produced": 400205,
+          "skipped": 0,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 400365,
+          "probeHz": 50000.055960966,
+          "webHz": 50018.73992721459,
+          "dropPercent": 0,
+          "maxMainThreadLagMs": 6.700000017881393
+        },
+        "samplesChecked": 431115,
+        "bad": 0,
+        "waveformBad": 0,
+        "tornFrames": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 4,
+        "phaseSkewCounts": {},
+        "counterBackwards": 0,
+        "maxCounterStep": 1,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：431115 个样本 / 8.622 s，跳拍 3 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "build-72mhz-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              4
+            ],
+            "stats": {
+              "cu": 2,
+              "dies": 127,
+              "vars": 30
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_pack.u_hi:u32@0x20001028",
+            "g_pack.f_sin:f32@0x20001014",
+            "g_pack.i_tick:i32@0x2000101c"
+          ],
+          "varCount": 3,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 12,
+            "estUs": 10.05,
+            "estHz": 99542
+          },
+          "samples": 431115,
+          "capacity": 715064,
+          "packets": 10682,
+          "lost": 3,
+          "lostProbe": 3,
+          "lostUsb": 0,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 10.693625,
+          "blob": {
+            "offset": 1340,
+            "name": "60M(6 指令/bit)",
+            "delay": 1
+          },
+          "connectErr": null,
+          "rateHz": 50000,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 431115
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 6,
+        "readAhead": {
+          "depth": 7,
+          "bytes": 8192
+        },
+        "requestedUs": 20,
+        "effectiveUs": 20,
+        "actualUs": 20,
+        "advice": "建议起始：14 µs（71.43 kHz）；读取耗时上界 ≤93.51 kHz，不代表持续采样能力。依据当前标定。稳定性以实采跳拍/USB计数为准。",
+        "periodTicks": 480,
+        "flags": 417,
+        "sequenceReordered": 0
+      },
+      {
+        "kind": "scope",
+        "repeat": 2,
+        "state": "current",
+        "actualMhz": 60,
+        "cfg": {
+          "period": 2.5,
+          "draw": true,
+          "adaptive": true
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 1.4832291666666668,
+          "recommendedUs": 3,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.004090916666666,
+          "produced": 3201500,
+          "skipped": 138,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 3200936,
+          "probeHz": 399982.9628788471,
+          "webHz": 399907.04879997595,
+          "dropPercent": 0.004310293668428473,
+          "maxMainThreadLagMs": 12.599999994039536
+        },
+        "samplesChecked": 3448688,
+        "bad": 0,
+        "waveformBad": 0,
+        "tornFrames": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 2,
+        "phaseSkewCounts": {},
+        "counterBackwards": 0,
+        "maxCounterStep": 1,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：3448688 个样本 / 8.622 s，跳拍 207 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "build-72mhz-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              4
+            ],
+            "stats": {
+              "cu": 2,
+              "dies": 127,
+              "vars": 30
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_pack.u_hi:u32@0x20001028"
+          ],
+          "varCount": 1,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 4,
+            "estUs": 4.47,
+            "estHz": 223914
+          },
+          "samples": 3448688,
+          "capacity": 5720064,
+          "packets": 28254,
+          "lost": 207,
+          "lostProbe": 207,
+          "lostUsb": 0,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 1.4832291666666668,
+          "blob": {
+            "offset": 1340,
+            "name": "60M(6 指令/bit)",
+            "delay": 1
+          },
+          "connectErr": null,
+          "rateHz": 399976,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 3448688
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 2,
+        "readAhead": {
+          "depth": 16,
+          "bytes": 8192
+        },
+        "requestedUs": 2.5,
+        "effectiveUs": 2.5,
+        "actualUs": 2.5,
+        "advice": "建议起始：3 µs（333.33 kHz）；读取耗时上界 ≤500.00 kHz，不代表持续采样能力。依据当前标定。 ⚠️ 高于建议起始频率；建议 3 µs（333.33 kHz）。继续将保留 2.5 µs 周期，来不及的拍会跳过，不会自动改为“最大速率”；按真实时间轴显示，实际速率看采样统计。",
+        "periodTicks": 60,
+        "flags": 417,
+        "sequenceReordered": 0
+      },
+      {
+        "kind": "scope",
+        "repeat": 2,
+        "state": "current",
+        "actualMhz": 60,
+        "cfg": {
+          "period": 20,
+          "draw": true,
+          "adaptive": true,
+          "vars": [
+            "g_pack.u_hi",
+            "g_pack.f_sin",
+            "g_pack.i_tick"
+          ]
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 10.688979166666666,
+          "recommendedUs": 14,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.008092083333333,
+          "produced": 400405,
+          "skipped": 0,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 400365,
+          "probeHz": 50000.04942916855,
+          "webHz": 49981.89808002245,
+          "dropPercent": 0,
+          "maxMainThreadLagMs": 7.700000017881393
+        },
+        "samplesChecked": 431730,
+        "bad": 0,
+        "waveformBad": 0,
+        "tornFrames": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 4,
+        "phaseSkewCounts": {},
+        "counterBackwards": 0,
+        "maxCounterStep": 1,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：431730 个样本 / 8.635 s，跳拍 3 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "build-72mhz-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              4
+            ],
+            "stats": {
+              "cu": 2,
+              "dies": 127,
+              "vars": 30
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_pack.u_hi:u32@0x20001028",
+            "g_pack.f_sin:f32@0x20001014",
+            "g_pack.i_tick:i32@0x2000101c"
+          ],
+          "varCount": 3,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 12,
+            "estUs": 10.05,
+            "estHz": 99542
+          },
+          "samples": 431730,
+          "capacity": 715064,
+          "packets": 10698,
+          "lost": 3,
+          "lostProbe": 3,
+          "lostUsb": 0,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 10.688979166666666,
+          "blob": {
+            "offset": 1340,
+            "name": "60M(6 指令/bit)",
+            "delay": 1
+          },
+          "connectErr": null,
+          "rateHz": 50000,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 431730
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 6,
+        "readAhead": {
+          "depth": 7,
+          "bytes": 8192
+        },
+        "requestedUs": 20,
+        "effectiveUs": 20,
+        "actualUs": 20,
+        "advice": "建议起始：14 µs（71.43 kHz）；读取耗时上界 ≤93.55 kHz，不代表持续采样能力。依据当前标定。稳定性以实采跳拍/USB计数为准。",
+        "periodTicks": 480,
+        "flags": 417,
+        "sequenceReordered": 0
+      },
+      {
+        "kind": "spi",
+        "repeat": 0,
+        "state": "baseline",
+        "requestedMhz": 18,
+        "seconds": 8.01119999998808,
+        "MBps": 2.2501254493742286,
+        "bad": 0,
+        "gaps": 0,
+        "reversed": 0,
+        "uiMaxMs": 38.099999994039536,
+        "before": {
+          "time": 1772.300000011921,
+          "bytes": 1867367,
+          "bad": 0,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 29177,
+          "uiMaxMs": 29.299999982118607,
+          "beats": 48,
+          "status": {
+            "supported": true,
+            "running": true,
+            "pending": false,
+            "rc": 0,
+            "mode": 0,
+            "lsb": false,
+            "bufferBytes": 16384,
+            "received": 1874388,
+            "forwarded": 1874388,
+            "dropped": 0,
+            "fifoOverflows": 0,
+            "pendingBytes": 0,
+            "cdcQueued": 176,
+            "generation": 1,
+            "dmaErrors": 0
+          },
+          "errors": []
+        },
+        "after": {
+          "time": 9783.5,
+          "bytes": 19893572,
+          "bad": 0,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 310837,
+          "uiMaxMs": 38.099999994039536,
+          "beats": 401,
+          "status": {
+            "supported": true,
+            "running": true,
+            "pending": false,
+            "rc": 0,
+            "mode": 0,
+            "lsb": false,
+            "bufferBytes": 16384,
+            "received": 19902451,
+            "forwarded": 19902451,
+            "dropped": 0,
+            "fifoOverflows": 0,
+            "pendingBytes": 0,
+            "cdcQueued": 118,
+            "generation": 1,
+            "dmaErrors": 0
+          },
+          "errors": []
+        },
+        "target": {
+          "g_core_hz": 72000000,
+          "g_spi_hz": 18000000,
+          "g_refill_late": 0
+        },
+        "targetAfter": {
+          "g_core_hz": 72000000,
+          "g_spi_hz": 18000000,
+          "g_refill_late": 0
+        }
+      },
+      {
+        "kind": "spi",
+        "repeat": 0,
+        "state": "current",
+        "requestedMhz": 18,
+        "seconds": 8.023799999982119,
+        "MBps": 2.2491872928089207,
+        "bad": 0,
+        "gaps": 0,
+        "reversed": 0,
+        "uiMaxMs": 30.5,
+        "before": {
+          "time": 1837.2000000178814,
+          "bytes": 1887285,
+          "bad": 0,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 29488,
+          "uiMaxMs": 27.599999994039536,
+          "beats": 48,
+          "status": {
+            "supported": true,
+            "running": true,
+            "pending": false,
+            "rc": 0,
+            "mode": 0,
+            "lsb": false,
+            "bufferBytes": 16384,
+            "received": 1893735,
+            "forwarded": 1893735,
+            "dropped": 0,
+            "fifoOverflows": 0,
+            "pendingBytes": 0,
+            "cdcQueued": 184,
+            "generation": 2,
+            "dmaErrors": 0
+          },
+          "errors": []
+        },
+        "after": {
+          "time": 9861,
+          "bytes": 19934314,
+          "bad": 0,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 311473,
+          "uiMaxMs": 30.5,
+          "beats": 401,
+          "status": {
+            "supported": true,
+            "running": true,
+            "pending": false,
+            "rc": 0,
+            "mode": 0,
+            "lsb": false,
+            "bufferBytes": 16384,
+            "received": 19948799,
+            "forwarded": 19948799,
+            "dropped": 0,
+            "fifoOverflows": 0,
+            "pendingBytes": 0,
+            "cdcQueued": 126,
+            "generation": 2,
+            "dmaErrors": 0
+          },
+          "errors": []
+        },
+        "target": {
+          "g_core_hz": 72000000,
+          "g_spi_hz": 18000000,
+          "g_refill_late": 0
+        },
+        "targetAfter": {
+          "g_core_hz": 72000000,
+          "g_spi_hz": 18000000,
+          "g_refill_late": 0
+        }
+      },
+      {
+        "kind": "spi",
+        "repeat": 1,
+        "state": "current",
+        "requestedMhz": 18,
+        "seconds": 8.0075,
+        "MBps": 2.2500944114892287,
+        "bad": 0,
+        "gaps": 0,
+        "reversed": 0,
+        "uiMaxMs": 40.19999998807907,
+        "before": {
+          "time": 1834.5,
+          "bytes": 1884160,
+          "bad": 0,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 29440,
+          "uiMaxMs": 34.900000005960464,
+          "beats": 48,
+          "status": {
+            "supported": true,
+            "running": true,
+            "pending": false,
+            "rc": 0,
+            "mode": 0,
+            "lsb": false,
+            "bufferBytes": 16384,
+            "received": 1887510,
+            "forwarded": 1887506,
+            "dropped": 0,
+            "fifoOverflows": 0,
+            "pendingBytes": 4,
+            "cdcQueued": 160,
+            "generation": 3,
+            "dmaErrors": 0
+          },
+          "errors": []
+        },
+        "after": {
+          "time": 9842,
+          "bytes": 19901791,
+          "bad": 0,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 310965,
+          "uiMaxMs": 40.19999998807907,
+          "beats": 399,
+          "status": {
+            "supported": true,
+            "running": true,
+            "pending": false,
+            "rc": 0,
+            "mode": 0,
+            "lsb": false,
+            "bufferBytes": 16384,
+            "received": 19906571,
+            "forwarded": 19906560,
+            "dropped": 0,
+            "fifoOverflows": 0,
+            "pendingBytes": 11,
+            "cdcQueued": 105,
+            "generation": 3,
+            "dmaErrors": 0
+          },
+          "errors": []
+        },
+        "target": {
+          "g_core_hz": 72000000,
+          "g_spi_hz": 18000000,
+          "g_refill_late": 0
+        },
+        "targetAfter": {
+          "g_core_hz": 72000000,
+          "g_spi_hz": 18000000,
+          "g_refill_late": 0
+        }
+      },
+      {
+        "kind": "spi",
+        "repeat": 1,
+        "state": "baseline",
+        "requestedMhz": 18,
+        "seconds": 8.01180000001192,
+        "MBps": 2.250065029078756,
+        "bad": 0,
+        "gaps": 0,
+        "reversed": 0,
+        "uiMaxMs": 28.900000005960464,
+        "before": {
+          "time": 1833.699999988079,
+          "bytes": 1892352,
+          "bad": 0,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 29568,
+          "uiMaxMs": 47.69999998807907,
+          "beats": 47,
+          "status": {
+            "supported": true,
+            "running": true,
+            "pending": false,
+            "rc": 0,
+            "mode": 0,
+            "lsb": false,
+            "bufferBytes": 16384,
+            "received": 1902457,
+            "forwarded": 1902457,
+            "dropped": 0,
+            "fifoOverflows": 0,
+            "pendingBytes": 0,
+            "cdcQueued": 99,
+            "generation": 4,
+            "dmaErrors": 0
+          },
+          "errors": []
+        },
+        "after": {
+          "time": 9845.5,
+          "bytes": 19919423,
+          "bad": 0,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 311240,
+          "uiMaxMs": 28.900000005960464,
+          "beats": 401,
+          "status": {
+            "supported": true,
+            "running": true,
+            "pending": false,
+            "rc": 0,
+            "mode": 0,
+            "lsb": false,
+            "bufferBytes": 16384,
+            "received": 19930523,
+            "forwarded": 19930519,
+            "dropped": 0,
+            "fifoOverflows": 0,
+            "pendingBytes": 4,
+            "cdcQueued": 122,
+            "generation": 4,
+            "dmaErrors": 0
+          },
+          "errors": []
+        },
+        "target": {
+          "g_core_hz": 72000000,
+          "g_spi_hz": 18000000,
+          "g_refill_late": 0
+        },
+        "targetAfter": {
+          "g_core_hz": 72000000,
+          "g_spi_hz": 18000000,
+          "g_refill_late": 0
+        }
+      },
+      {
+        "kind": "spi",
+        "repeat": 2,
+        "state": "baseline",
+        "requestedMhz": 18,
+        "seconds": 8.01159999999404,
+        "MBps": 2.2500637825170267,
+        "bad": 0,
+        "gaps": 0,
+        "reversed": 0,
+        "uiMaxMs": 44.400000005960464,
+        "before": {
+          "time": 1846.0999999940395,
+          "bytes": 1888026,
+          "bad": 0,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 29500,
+          "uiMaxMs": 33.70000001788139,
+          "beats": 48,
+          "status": {
+            "supported": true,
+            "running": true,
+            "pending": false,
+            "rc": 0,
+            "mode": 0,
+            "lsb": false,
+            "bufferBytes": 16384,
+            "received": 1893222,
+            "forwarded": 1893218,
+            "dropped": 0,
+            "fifoOverflows": 0,
+            "pendingBytes": 4,
+            "cdcQueued": 148,
+            "generation": 5,
+            "dmaErrors": 0
+          },
+          "errors": []
+        },
+        "after": {
+          "time": 9857.699999988079,
+          "bytes": 19914637,
+          "bad": 0,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 311166,
+          "uiMaxMs": 44.400000005960464,
+          "beats": 398,
+          "status": {
+            "supported": true,
+            "running": true,
+            "pending": false,
+            "rc": 0,
+            "mode": 0,
+            "lsb": false,
+            "bufferBytes": 16384,
+            "received": 19921286,
+            "forwarded": 19921286,
+            "dropped": 0,
+            "fifoOverflows": 0,
+            "pendingBytes": 0,
+            "cdcQueued": 110,
+            "generation": 5,
+            "dmaErrors": 0
+          },
+          "errors": []
+        },
+        "target": {
+          "g_core_hz": 72000000,
+          "g_spi_hz": 18000000,
+          "g_refill_late": 0
+        },
+        "targetAfter": {
+          "g_core_hz": 72000000,
+          "g_spi_hz": 18000000,
+          "g_refill_late": 0
+        }
+      },
+      {
+        "kind": "spi",
+        "repeat": 2,
+        "state": "current",
+        "requestedMhz": 18,
+        "seconds": 8.020600000023842,
+        "MBps": 2.2488224072945147,
+        "bad": 0,
+        "gaps": 0,
+        "reversed": 0,
+        "uiMaxMs": 41.30000001192093,
+        "before": {
+          "time": 1855.7999999821186,
+          "bytes": 1877847,
+          "bad": 0,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 29341,
+          "uiMaxMs": 27,
+          "beats": 48,
+          "status": {
+            "supported": true,
+            "running": true,
+            "pending": false,
+            "rc": 0,
+            "mode": 0,
+            "lsb": false,
+            "bufferBytes": 16384,
+            "received": 1887827,
+            "forwarded": 1887823,
+            "dropped": 0,
+            "fifoOverflows": 0,
+            "pendingBytes": 4,
+            "cdcQueued": 156,
+            "generation": 6,
+            "dmaErrors": 0
+          },
+          "errors": []
+        },
+        "after": {
+          "time": 9876.40000000596,
+          "bytes": 19914752,
+          "bad": 0,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 311168,
+          "uiMaxMs": 41.30000001192093,
+          "beats": 400,
+          "status": {
+            "supported": true,
+            "running": true,
+            "pending": false,
+            "rc": 0,
+            "mode": 0,
+            "lsb": false,
+            "bufferBytes": 16384,
+            "received": 19933892,
+            "forwarded": 19933892,
+            "dropped": 0,
+            "fifoOverflows": 0,
+            "pendingBytes": 0,
+            "cdcQueued": 171,
+            "generation": 6,
+            "dmaErrors": 0
+          },
+          "errors": []
+        },
+        "target": {
+          "g_core_hz": 72000000,
+          "g_spi_hz": 18000000,
+          "g_refill_late": 0
+        },
+        "targetAfter": {
+          "g_core_hz": 72000000,
+          "g_spi_hz": 18000000,
+          "g_refill_late": 0
+        }
+      }
+    ],
+    "probeSerial": "B4444F2110DDDAFE44800BBB0AE800E0",
+    "fixtures": {
+      "scope": {
+        "path": "tools/target-firmware/stm32f103_scope/build-72mhz/fw.elf",
+        "sha256": "2b798370b8e2315d0d6e250fc546574968d568205dc37def99b63b942ce46e2c",
+        "bytes": 3388
+      },
+      "rtt": {
+        "path": "tmp/transfer-perf-20261009/rtt-72.elf",
+        "sha256": "216e2193f58c761ad917b414f160d710d2e748868f3061afb9b6c8761191e593",
+        "bytes": 1052
+      },
+      "spi": {
+        "path": "tmp/transfer-perf-20261009/spi.elf",
+        "sha256": "9d8beec01e09dcca0b4a1e063c4bb489ecd536da8318713075eb79f8a1efbc0a",
+        "bytes": 1136
+      }
+    },
+    "restoreBytes": 4096,
+    "originalSHA256": "c2ed64c452949005c057cb0d0e58c1dde508e7296962022d4f88aabd56faba98",
+    "originalDemcr": 16777216,
+    "completed": true,
+    "restore": {
+      "passed": true,
+      "bytes": 524288,
+      "sha256": "c2ed64c452949005c057cb0d0e58c1dde508e7296962022d4f88aabd56faba98",
+      "demcr": 16777216,
+      "pages": 2
+    },
+    "scopeClockNote": "Initial actualMhz was collected AFTER stop. It is not evidence of the capture clock and is excluded from same-clock comparisons; use confirmation probeBefore/probeAfter statusWords."
+  },
+  "confirmation": {
+    "date": "2026-10-09",
+    "baseline": "f7b97e6",
+    "current": "643eae4",
+    "seconds": 30,
+    "repeats": 2,
+    "cpuMHz": 72,
+    "rows": [
+      {
+        "kind": "rtt",
+        "repeat": 0,
+        "state": "baseline",
+        "requestedMhz": 45,
+        "seconds": 30.00479999998212,
+        "MBps": 2.535371740523028,
+        "bad": 0,
+        "gaps": 0,
+        "reversed": 0,
+        "uiMaxMs": 24.5,
+        "before": {
+          "time": 1497,
+          "bytes": 2107028,
+          "bad": 0,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 0,
+          "mismatches": [],
+          "uiMaxMs": 23.400000005960464,
+          "beats": 40,
+          "status": {
+            "running": true,
+            "channel": 0,
+            "swdReady": true,
+            "clockDelay": 1,
+            "cbAddr": 536870924,
+            "upAddr": 536870948,
+            "moved": 2147988,
+            "polls": 7984,
+            "transfers": 1054,
+            "rdErr": 0,
+            "wrErr": 0,
+            "lastChunk": 2002,
+            "emptyRing": 0,
+            "dapYield": 36466,
+            "rescans": 0,
+            "lastCmdId": 17,
+            "lastResp": 17,
+            "startRc": 0,
+            "chunkBytes": 2048,
+            "discard": false,
+            "swdMhz": 45
+          },
+          "errors": []
+        },
+        "after": {
+          "time": 31501.79999998212,
+          "bytes": 78180350,
+          "bad": 0,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 0,
+          "mismatches": [],
+          "uiMaxMs": 24.5,
+          "beats": 1501,
+          "status": {
+            "running": true,
+            "channel": 0,
+            "swdReady": true,
+            "clockDelay": 1,
+            "cbAddr": 536870924,
+            "upAddr": 536870948,
+            "moved": 78223358,
+            "polls": 46628,
+            "transfers": 39698,
+            "rdErr": 0,
+            "wrErr": 0,
+            "lastChunk": 2048,
+            "emptyRing": 0,
+            "dapYield": 36466,
+            "rescans": 0,
+            "lastCmdId": 17,
+            "lastResp": 17,
+            "startRc": 0,
+            "chunkBytes": 2048,
+            "discard": false,
+            "swdMhz": 45
+          },
+          "errors": []
+        },
+        "target": null
+      },
+      {
+        "kind": "rtt",
+        "repeat": 0,
+        "state": "current",
+        "requestedMhz": 45,
+        "seconds": 30.00470000001788,
+        "MBps": 2.5354363816320333,
+        "bad": 0,
+        "gaps": 0,
+        "reversed": 0,
+        "uiMaxMs": 22.200000017881393,
+        "before": {
+          "time": 1660.0999999940395,
+          "bytes": 2095106,
+          "bad": 0,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 0,
+          "mismatches": [],
+          "uiMaxMs": 22.099999994039536,
+          "beats": 40,
+          "status": {
+            "running": true,
+            "channel": 0,
+            "swdReady": true,
+            "clockDelay": 1,
+            "cbAddr": 536870924,
+            "upAddr": 536870948,
+            "moved": 2123778,
+            "polls": 7730,
+            "transfers": 1050,
+            "rdErr": 0,
+            "wrErr": 0,
+            "lastChunk": 2048,
+            "emptyRing": 0,
+            "dapYield": 36466,
+            "rescans": 0,
+            "lastCmdId": 17,
+            "lastResp": 17,
+            "startRc": 0,
+            "chunkBytes": 2048,
+            "discard": false,
+            "swdMhz": 45
+          },
+          "errors": []
+        },
+        "after": {
+          "time": 31664.80000001192,
+          "bytes": 78170114,
+          "bad": 0,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 0,
+          "mismatches": [],
+          "uiMaxMs": 22.200000017881393,
+          "beats": 1500,
+          "status": {
+            "running": true,
+            "channel": 0,
+            "swdReady": true,
+            "clockDelay": 1,
+            "cbAddr": 536870924,
+            "upAddr": 536870948,
+            "moved": 78198786,
+            "polls": 46386,
+            "transfers": 39706,
+            "rdErr": 0,
+            "wrErr": 0,
+            "lastChunk": 14,
+            "emptyRing": 0,
+            "dapYield": 36466,
+            "rescans": 0,
+            "lastCmdId": 17,
+            "lastResp": 17,
+            "startRc": 0,
+            "chunkBytes": 2048,
+            "discard": false,
+            "swdMhz": 45
+          },
+          "errors": []
+        },
+        "target": null
+      },
+      {
+        "kind": "rtt",
+        "repeat": 1,
+        "state": "current",
+        "requestedMhz": 45,
+        "seconds": 30.008699999988078,
+        "MBps": 2.5353714089590764,
+        "bad": 0,
+        "gaps": 0,
+        "reversed": 0,
+        "uiMaxMs": 24.299999982118607,
+        "before": {
+          "time": 1642.5,
+          "bytes": 2105344,
+          "bad": 0,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 0,
+          "mismatches": [],
+          "uiMaxMs": 22,
+          "beats": 40,
+          "status": {
+            "running": true,
+            "channel": 0,
+            "swdReady": true,
+            "clockDelay": 1,
+            "cbAddr": 536870924,
+            "upAddr": 536870948,
+            "moved": 2125824,
+            "polls": 7713,
+            "transfers": 1042,
+            "rdErr": 0,
+            "wrErr": 0,
+            "lastChunk": 2048,
+            "emptyRing": 0,
+            "dapYield": 36465,
+            "rescans": 0,
+            "lastCmdId": 17,
+            "lastResp": 17,
+            "startRc": 0,
+            "chunkBytes": 2048,
+            "discard": false,
+            "swdMhz": 45
+          },
+          "errors": []
+        },
+        "after": {
+          "time": 31651.19999998808,
+          "bytes": 78188544,
+          "bad": 0,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 0,
+          "mismatches": [],
+          "uiMaxMs": 24.299999982118607,
+          "beats": 1500,
+          "status": {
+            "running": true,
+            "channel": 0,
+            "swdReady": true,
+            "clockDelay": 1,
+            "cbAddr": 536870924,
+            "upAddr": 536870948,
+            "moved": 78211072,
+            "polls": 46352,
+            "transfers": 39681,
+            "rdErr": 0,
+            "wrErr": 0,
+            "lastChunk": 2048,
+            "emptyRing": 0,
+            "dapYield": 36465,
+            "rescans": 0,
+            "lastCmdId": 17,
+            "lastResp": 17,
+            "startRc": 0,
+            "chunkBytes": 2048,
+            "discard": false,
+            "swdMhz": 45
+          },
+          "errors": []
+        },
+        "target": null
+      },
+      {
+        "kind": "rtt",
+        "repeat": 1,
+        "state": "baseline",
+        "requestedMhz": 45,
+        "seconds": 30.01680000001192,
+        "MBps": 2.5355059833150033,
+        "bad": 0,
+        "gaps": 0,
+        "reversed": 0,
+        "uiMaxMs": 23.599999994039536,
+        "before": {
+          "time": 1469.5999999940395,
+          "bytes": 2082817,
+          "bad": 0,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 0,
+          "mismatches": [],
+          "uiMaxMs": 23.5,
+          "beats": 40,
+          "status": {
+            "running": true,
+            "channel": 0,
+            "swdReady": true,
+            "clockDelay": 1,
+            "cbAddr": 536870924,
+            "upAddr": 536870948,
+            "moved": 2113537,
+            "polls": 7686,
+            "transfers": 1040,
+            "rdErr": 0,
+            "wrErr": 0,
+            "lastChunk": 2048,
+            "emptyRing": 0,
+            "dapYield": 36463,
+            "rescans": 0,
+            "lastCmdId": 17,
+            "lastResp": 17,
+            "startRc": 0,
+            "chunkBytes": 2048,
+            "discard": false,
+            "swdMhz": 45
+          },
+          "errors": []
+        },
+        "after": {
+          "time": 31486.40000000596,
+          "bytes": 78190593,
+          "bad": 0,
+          "gaps": 0,
+          "reversed": 0,
+          "frames": 0,
+          "mismatches": [],
+          "uiMaxMs": 23.599999994039536,
+          "beats": 1501,
+          "status": {
+            "running": true,
+            "channel": 0,
+            "swdReady": true,
+            "clockDelay": 1,
+            "cbAddr": 536870924,
+            "upAddr": 536870948,
+            "moved": 78221313,
+            "polls": 46342,
+            "transfers": 39696,
+            "rdErr": 0,
+            "wrErr": 0,
+            "lastChunk": 2048,
+            "emptyRing": 0,
+            "dapYield": 36463,
+            "rescans": 0,
+            "lastCmdId": 17,
+            "lastResp": 17,
+            "startRc": 0,
+            "chunkBytes": 2048,
+            "discard": false,
+            "swdMhz": 45
+          },
+          "errors": []
+        },
+        "target": null
+      },
+      {
+        "kind": "scope",
+        "repeat": 0,
+        "state": "baseline",
+        "actualMhz": 45,
+        "cfg": {
+          "period": 2.5,
+          "draw": true,
+          "adaptive": true
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 1.4809791666666667,
+          "recommendedUs": 3,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.008096291666666,
+          "produced": 3203088,
+          "skipped": 153,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 3202920,
+          "probeHz": 399981.20443846023,
+          "webHz": 399950.0518206401,
+          "dropPercent": 0.004776412389826429,
+          "maxMainThreadLagMs": 6.4000000059604645
+        },
+        "requestedClockKhz": 60000,
+        "clockBeforeHz": 60000000,
+        "clockAfterHz": 60000000,
+        "probeBefore": {
+          "w": [
+            827544392,
+            2509333420,
+            24000000,
+            247264,
+            64,
+            0,
+            0,
+            0,
+            238030,
+            1037312,
+            60,
+            417
+          ],
+          "statusWords": [
+            16843037,
+            60000000,
+            248860,
+            68,
+            60416,
+            0,
+            2038,
+            68,
+            3409858653,
+            2715484167,
+            0,
+            1006764092
+          ],
+          "swdHz": 60000000,
+          "count": 247380,
+          "bytes": 1040384,
+          "host": 1481.699999988079
+        },
+        "probeAfter": {
+          "w": [
+            827544392,
+            2701527731,
+            24000000,
+            3450352,
+            217,
+            0,
+            0,
+            0,
+            264272,
+            14472704,
+            60,
+            417
+          ],
+          "statusWords": [
+            16843037,
+            60000000,
+            3451951,
+            218,
+            61440,
+            0,
+            28280,
+            218,
+            3409858653,
+            140312583,
+            0,
+            1006764092
+          ],
+          "swdHz": 60000000,
+          "count": 3450300,
+          "bytes": 14475264,
+          "host": 9490
+        },
+        "samplesChecked": 3450300,
+        "bad": 0,
+        "waveformBad": 0,
+        "tornFrames": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 2,
+        "phaseSkewCounts": {},
+        "counterBackwards": 0,
+        "maxCounterStep": 1,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：3450300 个样本 / 8.626 s，跳拍 222 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "build-72mhz-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              4
+            ],
+            "stats": {
+              "cu": 2,
+              "dies": 127,
+              "vars": 30
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_pack.u_hi:u32@0x20001028"
+          ],
+          "varCount": 1,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 4,
+            "estUs": 4.47,
+            "estHz": 223914
+          },
+          "samples": 3450300,
+          "capacity": 5720064,
+          "packets": 28267,
+          "lost": 222,
+          "lostProbe": 222,
+          "lostUsb": 0,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 1.4809791666666667,
+          "blob": {
+            "offset": 1340,
+            "name": "60M(6 指令/bit)",
+            "delay": 1
+          },
+          "connectErr": null,
+          "rateHz": 399975,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 3450300
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 5,
+        "readAhead": {
+          "depth": 16,
+          "bytes": 8192
+        },
+        "requestedUs": 2.5,
+        "effectiveUs": 2.5,
+        "actualUs": 2.5,
+        "advice": "建议起始：3 µs（333.33 kHz）；读取耗时上界 ≤500.00 kHz，不代表持续采样能力。依据当前标定。 ⚠️ 高于建议起始频率；建议 3 µs（333.33 kHz）。继续将保留 2.5 µs 周期，来不及的拍会跳过，不会自动改为“最大速率”；按真实时间轴显示，实际速率看采样统计。",
+        "periodTicks": 60,
+        "flags": 417,
+        "sequenceReordered": 0
+      },
+      {
+        "kind": "scope",
+        "repeat": 0,
+        "state": "baseline",
+        "actualMhz": 45,
+        "cfg": {
+          "period": 20,
+          "draw": true,
+          "adaptive": true,
+          "vars": [
+            "g_pack.u_hi",
+            "g_pack.f_sin",
+            "g_pack.i_tick"
+          ]
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 10.6983125,
+          "recommendedUs": 14,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.01609925,
+          "produced": 400804,
+          "skipped": 1,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 400365,
+          "probeHz": 49999.87992913137,
+          "webHz": 49995.005057416616,
+          "dropPercent": 0.00024949788550542035,
+          "maxMainThreadLagMs": 7.0999999940395355
+        },
+        "requestedClockKhz": 60000,
+        "clockBeforeHz": 45000000,
+        "clockAfterHz": 45000000,
+        "probeBefore": {
+          "w": [
+            827544392,
+            2735800244,
+            24000000,
+            30832,
+            3,
+            0,
+            0,
+            0,
+            265297,
+            391168,
+            480,
+            417
+          ],
+          "statusWords": [
+            50397469,
+            45000000,
+            31432,
+            3,
+            5632,
+            0,
+            779,
+            3,
+            2288227748,
+            207683591,
+            0,
+            754974740
+          ],
+          "swdHz": 45000000,
+          "count": 31365,
+          "bytes": 401408,
+          "host": 10926.09999999404
+        },
+        "probeAfter": {
+          "w": [
+            827544392,
+            2928186626,
+            24000000,
+            431636,
+            4,
+            0,
+            0,
+            0,
+            275229,
+            5475840,
+            480,
+            417
+          ],
+          "statusWords": [
+            50397469,
+            45000000,
+            431836,
+            4,
+            38912,
+            0,
+            10700,
+            4,
+            2288227748,
+            857866247,
+            0,
+            754974740
+          ],
+          "swdHz": 45000000,
+          "count": 431730,
+          "bytes": 5480448,
+          "host": 18934.19999998808
+        },
+        "samplesChecked": 431730,
+        "bad": 0,
+        "waveformBad": 0,
+        "tornFrames": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 4,
+        "phaseSkewCounts": {},
+        "counterBackwards": 0,
+        "maxCounterStep": 1,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：431730 个样本 / 8.635 s，跳拍 4 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "build-72mhz-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              4
+            ],
+            "stats": {
+              "cu": 2,
+              "dies": 127,
+              "vars": 30
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_pack.u_hi:u32@0x20001028",
+            "g_pack.f_sin:f32@0x20001014",
+            "g_pack.i_tick:i32@0x2000101c"
+          ],
+          "varCount": 3,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 12,
+            "estUs": 11.66,
+            "estHz": 85789
+          },
+          "samples": 431730,
+          "capacity": 715064,
+          "packets": 10698,
+          "lost": 4,
+          "lostProbe": 4,
+          "lostUsb": 0,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 10.6983125,
+          "blob": {
+            "offset": 1340,
+            "name": "60M(6 指令/bit)",
+            "delay": 1
+          },
+          "connectErr": null,
+          "rateHz": 50000,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 431730
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 6,
+        "readAhead": {
+          "depth": 7,
+          "bytes": 8192
+        },
+        "requestedUs": 20,
+        "effectiveUs": 20,
+        "actualUs": 20,
+        "advice": "建议起始：15 µs（66.67 kHz）；读取耗时上界 ≤85.79 kHz，不代表持续采样能力。依据粗估，建议先标定。稳定性以实采跳拍/USB计数为准。",
+        "periodTicks": 480,
+        "flags": 417,
+        "sequenceReordered": 0
+      },
+      {
+        "kind": "scope",
+        "repeat": 0,
+        "state": "current",
+        "actualMhz": 60,
+        "cfg": {
+          "period": 2.5,
+          "draw": true,
+          "adaptive": true
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 1.4828333333333332,
+          "recommendedUs": 3,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.012099791666667,
+          "produced": 3204704,
+          "skipped": 137,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 3204780,
+          "probeHz": 399983.0360741627,
+          "webHz": 399987.5190340691,
+          "dropPercent": 0.004274783054759972,
+          "maxMainThreadLagMs": 6.200000017881393
+        },
+        "requestedClockKhz": 60000,
+        "clockBeforeHz": 60000000,
+        "clockAfterHz": 60000000,
+        "probeBefore": {
+          "w": [
+            827544392,
+            2981083403,
+            24000000,
+            248850,
+            81,
+            0,
+            0,
+            0,
+            277385,
+            1043456,
+            60,
+            417
+          ],
+          "statusWords": [
+            16843037,
+            60000000,
+            250446,
+            85,
+            2048,
+            0,
+            2052,
+            85,
+            3409858653,
+            999751687,
+            0,
+            1006764092
+          ],
+          "swdHz": 60000000,
+          "count": 249612,
+          "bytes": 1048576,
+          "host": 1446.4000000059605
+        },
+        "probeAfter": {
+          "w": [
+            827544392,
+            3173373798,
+            24000000,
+            3453554,
+            218,
+            0,
+            0,
+            0,
+            303641,
+            14486528,
+            60,
+            417
+          ],
+          "statusWords": [
+            16843037,
+            60000000,
+            3455153,
+            219,
+            9728,
+            0,
+            28307,
+            219,
+            3409858653,
+            2720399367,
+            0,
+            1006764092
+          ],
+          "swdHz": 60000000,
+          "count": 3454392,
+          "bytes": 14491648,
+          "host": 9458.59999999404
+        },
+        "samplesChecked": 3454392,
+        "bad": 0,
+        "waveformBad": 0,
+        "tornFrames": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 2,
+        "phaseSkewCounts": {},
+        "counterBackwards": 0,
+        "maxCounterStep": 1,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：3454392 个样本 / 8.637 s，跳拍 225 / USB 丢样本 516 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "build-72mhz-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              4
+            ],
+            "stats": {
+              "cu": 2,
+              "dies": 127,
+              "vars": 30
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_pack.u_hi:u32@0x20001028"
+          ],
+          "varCount": 1,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 4,
+            "estUs": 4.47,
+            "estHz": 223914
+          },
+          "samples": 3454392,
+          "capacity": 5720064,
+          "packets": 28301,
+          "lost": 741,
+          "lostProbe": 225,
+          "lostUsb": 516,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 1.4828333333333332,
+          "blob": {
+            "offset": 1340,
+            "name": "60M(6 指令/bit)",
+            "delay": 1
+          },
+          "connectErr": null,
+          "rateHz": 399975,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 3454392
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 3,
+        "readAhead": {
+          "depth": 16,
+          "bytes": 8192
+        },
+        "requestedUs": 2.5,
+        "effectiveUs": 2.5,
+        "actualUs": 2.5,
+        "advice": "建议起始：3 µs（333.33 kHz）；读取耗时上界 ≤500.00 kHz，不代表持续采样能力。依据当前标定。 ⚠️ 高于建议起始频率；建议 3 µs（333.33 kHz）。继续将保留 2.5 µs 周期，来不及的拍会跳过，不会自动改为“最大速率”；按真实时间轴显示，实际速率看采样统计。",
+        "periodTicks": 60,
+        "flags": 417,
+        "sequenceReordered": 0
+      },
+      {
+        "kind": "scope",
+        "repeat": 0,
+        "state": "current",
+        "actualMhz": 60,
+        "cfg": {
+          "period": 20,
+          "draw": true,
+          "adaptive": true,
+          "vars": [
+            "g_pack.u_hi",
+            "g_pack.f_sin",
+            "g_pack.i_tick"
+          ]
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 10.687770833333333,
+          "recommendedUs": 14,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.012100416666666,
+          "produced": 400605,
+          "skipped": 1,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 400365,
+          "probeHz": 49999.997399766326,
+          "webHz": 49969.42163208553,
+          "dropPercent": 0.0002496218229382486,
+          "maxMainThreadLagMs": 6.300000011920929
+        },
+        "requestedClockKhz": 60000,
+        "clockBeforeHz": 60000000,
+        "clockAfterHz": 60000000,
+        "probeBefore": {
+          "w": [
+            827544392,
+            3207934298,
+            24000000,
+            31312,
+            3,
+            0,
+            0,
+            0,
+            304688,
+            397312,
+            480,
+            417
+          ],
+          "statusWords": [
+            50397469,
+            60000000,
+            31512,
+            3,
+            6656,
+            0,
+            781,
+            3,
+            2288227748,
+            2788491271,
+            0,
+            1006632980
+          ],
+          "swdHz": 60000000,
+          "count": 31283,
+          "bytes": 401408,
+          "host": 10895.700000017881
+        },
+        "probeAfter": {
+          "w": [
+            827544392,
+            3400224708,
+            24000000,
+            431917,
+            4,
+            0,
+            0,
+            0,
+            314614,
+            5479424,
+            480,
+            417
+          ],
+          "statusWords": [
+            50397469,
+            60000000,
+            432117,
+            4,
+            42496,
+            0,
+            10707,
+            4,
+            2288227748,
+            3439001607,
+            0,
+            1006632980
+          ],
+          "swdHz": 60000000,
+          "count": 431648,
+          "bytes": 5480448,
+          "host": 18907.90000000596
+        },
+        "samplesChecked": 431648,
+        "bad": 0,
+        "waveformBad": 0,
+        "tornFrames": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 4,
+        "phaseSkewCounts": {},
+        "counterBackwards": 0,
+        "maxCounterStep": 1,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：431648 个样本 / 8.633 s，跳拍 4 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "build-72mhz-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              4
+            ],
+            "stats": {
+              "cu": 2,
+              "dies": 127,
+              "vars": 30
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_pack.u_hi:u32@0x20001028",
+            "g_pack.f_sin:f32@0x20001014",
+            "g_pack.i_tick:i32@0x2000101c"
+          ],
+          "varCount": 3,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 12,
+            "estUs": 10.05,
+            "estHz": 99542
+          },
+          "samples": 431648,
+          "capacity": 715064,
+          "packets": 10696,
+          "lost": 4,
+          "lostProbe": 4,
+          "lostUsb": 0,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 10.687770833333333,
+          "blob": {
+            "offset": 1340,
+            "name": "60M(6 指令/bit)",
+            "delay": 1
+          },
+          "connectErr": null,
+          "rateHz": 50000,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 431648
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 8,
+        "readAhead": {
+          "depth": 7,
+          "bytes": 8192
+        },
+        "requestedUs": 20,
+        "effectiveUs": 20,
+        "actualUs": 20,
+        "advice": "建议起始：14 µs（71.43 kHz）；读取耗时上界 ≤93.56 kHz，不代表持续采样能力。依据当前标定。稳定性以实采跳拍/USB计数为准。",
+        "periodTicks": 480,
+        "flags": 417,
+        "sequenceReordered": 0
+      },
+      {
+        "kind": "scope",
+        "repeat": 1,
+        "state": "current",
+        "actualMhz": 60,
+        "cfg": {
+          "period": 2.5,
+          "draw": true,
+          "adaptive": true
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 1.4828333333333332,
+          "recommendedUs": 3,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.012101333333334,
+          "produced": 3204688,
+          "skipped": 153,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 3204780,
+          "probeHz": 399980.9621312827,
+          "webHz": 399997.50374438346,
+          "dropPercent": 0.004774027791082303,
+          "maxMainThreadLagMs": 9.5
+        },
+        "requestedClockKhz": 60000,
+        "clockBeforeHz": 60000000,
+        "clockAfterHz": 60000000,
+        "probeBefore": {
+          "w": [
+            827544392,
+            3455713524,
+            24000000,
+            248862,
+            64,
+            0,
+            0,
+            0,
+            316760,
+            1043456,
+            60,
+            417
+          ],
+          "statusWords": [
+            16843037,
+            60000000,
+            250459,
+            67,
+            2048,
+            0,
+            2052,
+            67,
+            3409858653,
+            3580231687,
+            0,
+            1006764092
+          ],
+          "swdHz": 60000000,
+          "count": 249736,
+          "bytes": 1048576,
+          "host": 1511.800000011921
+        },
+        "probeAfter": {
+          "w": [
+            827544392,
+            3648003956,
+            24000000,
+            3453550,
+            217,
+            0,
+            0,
+            0,
+            343016,
+            14486528,
+            60,
+            417
+          ],
+          "statusWords": [
+            16843037,
+            60000000,
+            3455149,
+            218,
+            9728,
+            0,
+            28307,
+            218,
+            3409858653,
+            1005912071,
+            0,
+            1006764092
+          ],
+          "swdHz": 60000000,
+          "count": 3454516,
+          "bytes": 14491648,
+          "host": 9523.800000011921
+        },
+        "samplesChecked": 3454516,
+        "bad": 0,
+        "waveformBad": 0,
+        "tornFrames": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 2,
+        "phaseSkewCounts": {},
+        "counterBackwards": 0,
+        "maxCounterStep": 1,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：3454516 个样本 / 8.637 s，跳拍 223 / USB 丢样本 389 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "build-72mhz-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              4
+            ],
+            "stats": {
+              "cu": 2,
+              "dies": 127,
+              "vars": 30
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_pack.u_hi:u32@0x20001028"
+          ],
+          "varCount": 1,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 4,
+            "estUs": 4.47,
+            "estHz": 223914
+          },
+          "samples": 3454516,
+          "capacity": 5720064,
+          "packets": 28302,
+          "lost": 612,
+          "lostProbe": 223,
+          "lostUsb": 389,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 1.4828333333333332,
+          "blob": {
+            "offset": 1340,
+            "name": "60M(6 指令/bit)",
+            "delay": 1
+          },
+          "connectErr": null,
+          "rateHz": 399975,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 3454516
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 2,
+        "readAhead": {
+          "depth": 16,
+          "bytes": 8192
+        },
+        "requestedUs": 2.5,
+        "effectiveUs": 2.5,
+        "actualUs": 2.5,
+        "advice": "建议起始：3 µs（333.33 kHz）；读取耗时上界 ≤500.00 kHz，不代表持续采样能力。依据当前标定。 ⚠️ 高于建议起始频率；建议 3 µs（333.33 kHz）。继续将保留 2.5 µs 周期，来不及的拍会跳过，不会自动改为“最大速率”；按真实时间轴显示，实际速率看采样统计。",
+        "periodTicks": 60,
+        "flags": 417,
+        "sequenceReordered": 0
+      },
+      {
+        "kind": "scope",
+        "repeat": 1,
+        "state": "current",
+        "actualMhz": 60,
+        "cfg": {
+          "period": 20,
+          "draw": true,
+          "adaptive": true,
+          "vars": [
+            "g_pack.u_hi",
+            "g_pack.f_sin",
+            "g_pack.i_tick"
+          ]
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 10.689979166666665,
+          "recommendedUs": 14,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.01210175,
+          "produced": 400604,
+          "skipped": 1,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 401021,
+          "probeHz": 49999.86426782461,
+          "webHz": 50051.29677249653,
+          "dropPercent": 0.00024962244605034885,
+          "maxMainThreadLagMs": 8.400000005960464
+        },
+        "requestedClockKhz": 60000,
+        "clockBeforeHz": 60000000,
+        "clockAfterHz": 60000000,
+        "probeBefore": {
+          "w": [
+            827544392,
+            3682372443,
+            24000000,
+            31512,
+            3,
+            0,
+            0,
+            0,
+            344069,
+            399872,
+            480,
+            417
+          ],
+          "statusWords": [
+            50397469,
+            60000000,
+            31712,
+            3,
+            9216,
+            0,
+            786,
+            3,
+            2288227748,
+            1074397191,
+            0,
+            1006632980
+          ],
+          "swdHz": 60000000,
+          "count": 31283,
+          "bytes": 401408,
+          "host": 10955.90000000596
+        },
+        "probeAfter": {
+          "w": [
+            827544392,
+            3874662885,
+            24000000,
+            432116,
+            4,
+            0,
+            0,
+            0,
+            353995,
+            5481984,
+            480,
+            417
+          ],
+          "statusWords": [
+            50397469,
+            60000000,
+            432316,
+            4,
+            45056,
+            0,
+            10712,
+            4,
+            2288227748,
+            1724907527,
+            0,
+            1006632980
+          ],
+          "swdHz": 60000000,
+          "count": 432304,
+          "bytes": 5488640,
+          "host": 18968.09999999404
+        },
+        "samplesChecked": 432304,
+        "bad": 0,
+        "waveformBad": 0,
+        "tornFrames": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 4,
+        "phaseSkewCounts": {},
+        "counterBackwards": 0,
+        "maxCounterStep": 1,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：432304 个样本 / 8.646 s，跳拍 4 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "build-72mhz-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              4
+            ],
+            "stats": {
+              "cu": 2,
+              "dies": 127,
+              "vars": 30
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_pack.u_hi:u32@0x20001028",
+            "g_pack.f_sin:f32@0x20001014",
+            "g_pack.i_tick:i32@0x2000101c"
+          ],
+          "varCount": 3,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 12,
+            "estUs": 10.05,
+            "estHz": 99542
+          },
+          "samples": 432304,
+          "capacity": 715064,
+          "packets": 10712,
+          "lost": 4,
+          "lostProbe": 4,
+          "lostUsb": 0,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 10.689979166666665,
+          "blob": {
+            "offset": 1340,
+            "name": "60M(6 指令/bit)",
+            "delay": 1
+          },
+          "connectErr": null,
+          "rateHz": 50000,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 432304
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 8,
+        "readAhead": {
+          "depth": 7,
+          "bytes": 8192
+        },
+        "requestedUs": 20,
+        "effectiveUs": 20,
+        "actualUs": 20,
+        "advice": "建议起始：14 µs（71.43 kHz）；读取耗时上界 ≤93.55 kHz，不代表持续采样能力。依据当前标定。稳定性以实采跳拍/USB计数为准。",
+        "periodTicks": 480,
+        "flags": 417,
+        "sequenceReordered": 0
+      },
+      {
+        "kind": "scope",
+        "repeat": 1,
+        "state": "baseline",
+        "actualMhz": 60,
+        "cfg": {
+          "period": 2.5,
+          "draw": true,
+          "adaptive": true
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 1.4809583333333332,
+          "recommendedUs": 3,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.008101833333333,
+          "produced": 3203107,
+          "skipped": 135,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 3202920,
+          "probeHz": 399983.30024566164,
+          "webHz": 399875.15293705626,
+          "dropPercent": 0.004214480204742571,
+          "maxMainThreadLagMs": 6.799999982118607
+        },
+        "requestedClockKhz": 60000,
+        "clockBeforeHz": 60000000,
+        "clockAfterHz": 60000000,
+        "probeBefore": {
+          "w": [
+            827544392,
+            3927175645,
+            24000000,
+            248863,
+            65,
+            0,
+            0,
+            0,
+            356152,
+            1043456,
+            60,
+            417
+          ],
+          "statusWords": [
+            16843037,
+            60000000,
+            250459,
+            69,
+            2048,
+            0,
+            2052,
+            69,
+            3409858653,
+            1866858503,
+            0,
+            1006764092
+          ],
+          "swdHz": 60000000,
+          "count": 249736,
+          "bytes": 1048576,
+          "host": 1436.800000011921
+        },
+        "probeAfter": {
+          "w": [
+            827544392,
+            4119370089,
+            24000000,
+            3451970,
+            200,
+            0,
+            0,
+            0,
+            382394,
+            14479360,
+            60,
+            417
+          ],
+          "statusWords": [
+            16843037,
+            60000000,
+            3453569,
+            201,
+            3072,
+            0,
+            28294,
+            201,
+            3409858653,
+            3586654215,
+            0,
+            1006764092
+          ],
+          "swdHz": 60000000,
+          "count": 3452656,
+          "bytes": 14483456,
+          "host": 9446.600000023842
+        },
+        "samplesChecked": 3452656,
+        "bad": 0,
+        "waveformBad": 0,
+        "tornFrames": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 2,
+        "phaseSkewCounts": {},
+        "counterBackwards": 0,
+        "maxCounterStep": 1,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：3452656 个样本 / 8.632 s，跳拍 208 / USB 丢样本 791 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "build-72mhz-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              4
+            ],
+            "stats": {
+              "cu": 2,
+              "dies": 127,
+              "vars": 30
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_pack.u_hi:u32@0x20001028"
+          ],
+          "varCount": 1,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 4,
+            "estUs": 4.47,
+            "estHz": 223914
+          },
+          "samples": 3452656,
+          "capacity": 5720064,
+          "packets": 28286,
+          "lost": 999,
+          "lostProbe": 208,
+          "lostUsb": 791,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 1.4809583333333332,
+          "blob": {
+            "offset": 1340,
+            "name": "60M(6 指令/bit)",
+            "delay": 1
+          },
+          "connectErr": null,
+          "rateHz": 399977,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 3452656
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 2,
+        "readAhead": {
+          "depth": 16,
+          "bytes": 8192
+        },
+        "requestedUs": 2.5,
+        "effectiveUs": 2.5,
+        "actualUs": 2.5,
+        "advice": "建议起始：3 µs（333.33 kHz）；读取耗时上界 ≤500.00 kHz，不代表持续采样能力。依据当前标定。 ⚠️ 高于建议起始频率；建议 3 µs（333.33 kHz）。继续将保留 2.5 µs 周期，来不及的拍会跳过，不会自动改为“最大速率”；按真实时间轴显示，实际速率看采样统计。",
+        "periodTicks": 60,
+        "flags": 417,
+        "sequenceReordered": 0
+      },
+      {
+        "kind": "scope",
+        "repeat": 1,
+        "state": "baseline",
+        "actualMhz": 60,
+        "cfg": {
+          "period": 20,
+          "draw": true,
+          "adaptive": true,
+          "vars": [
+            "g_pack.u_hi",
+            "g_pack.f_sin",
+            "g_pack.i_tick"
+          ]
+        },
+        "valid": true,
+        "calibration": {
+          "readUs": 10.699541666666667,
+          "recommendedUs": 14,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.012100125,
+          "produced": 400605,
+          "skipped": 1,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 400365,
+          "probeHz": 49999.99921992987,
+          "webHz": 49969.42163208553,
+          "dropPercent": 0.0002496218229382486,
+          "maxMainThreadLagMs": 7.699999988079071
+        },
+        "requestedClockKhz": 60000,
+        "clockBeforeHz": 60000000,
+        "clockAfterHz": 60000000,
+        "probeBefore": {
+          "w": [
+            827544392,
+            4152778576,
+            24000000,
+            31112,
+            3,
+            0,
+            0,
+            0,
+            383435,
+            394752,
+            480,
+            417
+          ],
+          "statusWords": [
+            50397469,
+            60000000,
+            31312,
+            3,
+            4096,
+            0,
+            776,
+            3,
+            2288227748,
+            3654287367,
+            0,
+            1006632980
+          ],
+          "swdHz": 60000000,
+          "count": 31283,
+          "bytes": 401408,
+          "host": 10836.200000017881
+        },
+        "probeAfter": {
+          "w": [
+            827544392,
+            50101683,
+            24000000,
+            431717,
+            4,
+            0,
+            0,
+            0,
+            393361,
+            5476864,
+            480,
+            417
+          ],
+          "statusWords": [
+            50397469,
+            60000000,
+            431917,
+            4,
+            39936,
+            0,
+            10702,
+            4,
+            2288227748,
+            9830407,
+            0,
+            1006632980
+          ],
+          "swdHz": 60000000,
+          "count": 431648,
+          "bytes": 5480448,
+          "host": 18848.40000000596
+        },
+        "samplesChecked": 431648,
+        "bad": 0,
+        "waveformBad": 0,
+        "tornFrames": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 4,
+        "phaseSkewCounts": {},
+        "counterBackwards": 0,
+        "maxCounterStep": 1,
+        "firstBad": [],
+        "summary": {
+          "state": "已停止（硬件速率对照）：431648 个样本 / 8.633 s，跳拍 4 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+          "mode": "real",
+          "elf": {
+            "name": "build-72mhz-scope.elf",
+            "source": "dwarf",
+            "versions": [
+              4
+            ],
+            "stats": {
+              "cu": 2,
+              "dies": 127,
+              "vars": 30
+            },
+            "note": ""
+          },
+          "vars": [
+            "g_pack.u_hi:u32@0x20001028",
+            "g_pack.f_sin:f32@0x20001014",
+            "g_pack.i_tick:i32@0x2000101c"
+          ],
+          "varCount": 3,
+          "plan": {
+            "spans": 1,
+            "frameBytes": 12,
+            "estUs": 10.05,
+            "estHz": 99542
+          },
+          "samples": 431648,
+          "capacity": 715064,
+          "packets": 10696,
+          "lost": 4,
+          "lostProbe": 4,
+          "lostUsb": 0,
+          "readErrors": 0,
+          "dapYields": 0,
+          "metricsError": null,
+          "lostGap": 0,
+          "benchUs": 10.699541666666667,
+          "blob": {
+            "offset": 1340,
+            "name": "60M(6 指令/bit)",
+            "delay": 1
+          },
+          "connectErr": null,
+          "rateHz": 50000,
+          "trigger": {
+            "mode": 0,
+            "hit": -1,
+            "hits": 0,
+            "marker": false
+          },
+          "view": {
+            "start": 0,
+            "end": 431648
+          },
+          "lod": true,
+          "resyncs": 0,
+          "raw": 0,
+          "running": false,
+          "mockVars": [
+            "mock0.f32",
+            "mock1.f32",
+            "mock2.i32",
+            "mock3.u16",
+            "mock4.i16",
+            "mock5.u8",
+            "mock6.i8",
+            "mock7.f64"
+          ]
+        },
+        "stalePackets": 8,
+        "readAhead": {
+          "depth": 7,
+          "bytes": 8192
+        },
+        "requestedUs": 20,
+        "effectiveUs": 20,
+        "actualUs": 20,
+        "advice": "建议起始：14 µs（71.43 kHz）；读取耗时上界 ≤93.46 kHz，不代表持续采样能力。依据当前标定。稳定性以实采跳拍/USB计数为准。",
+        "periodTicks": 480,
+        "flags": 417,
+        "sequenceReordered": 0
+      }
+    ],
+    "probeSerial": "B4444F2110DDDAFE44800BBB0AE800E0",
+    "fixtures": {
+      "scope": {
+        "path": "tools/target-firmware/stm32f103_scope/build-72mhz/fw.elf",
+        "sha256": "2b798370b8e2315d0d6e250fc546574968d568205dc37def99b63b942ce46e2c",
+        "bytes": 3388
+      },
+      "rtt": {
+        "path": "tmp/transfer-perf-rtt-followup-20261009/rtt-72.elf",
+        "sha256": "216e2193f58c761ad917b414f160d710d2e748868f3061afb9b6c8761191e593",
+        "bytes": 1052
+      },
+      "spi": {
+        "path": "tmp/transfer-perf-rtt-followup-20261009/spi.elf",
+        "sha256": "9d8beec01e09dcca0b4a1e063c4bb489ecd536da8318713075eb79f8a1efbc0a",
+        "bytes": 1136
+      }
+    },
+    "restoreBytes": 4096,
+    "originalSHA256": "c2ed64c452949005c057cb0d0e58c1dde508e7296962022d4f88aabd56faba98",
+    "originalDemcr": 16777216,
+    "completed": true,
+    "restore": {
+      "passed": true,
+      "bytes": 524288,
+      "sha256": "c2ed64c452949005c057cb0d0e58c1dde508e7296962022d4f88aabd56faba98",
+      "demcr": 16777216,
+      "pages": 2
+    },
+    "secondsByKind": {
+      "rtt": 30,
+      "scope": 8
+    }
+  }
+}
