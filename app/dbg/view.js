@@ -23,6 +23,7 @@ import { runProbeOperation } from '../core/probe-manager.js';
 import { $, setFlag, appendLogLine, ensureSelectOption } from '../ui/dom.js';
 import { toast } from '../ui/toast.js';
 import { store } from '../core/store.js';
+import { InspectorTable, flashValue } from '../ui/inspector-table.js';
 import { waitMs } from '../core/pace.js';
 import { DebugSession, DEFAULT_CLOCK_KHZ } from './session.js';
 import { RiscvDebugSession } from './riscv.js';
@@ -596,12 +597,27 @@ export class DbgView {
     if (leg) leg.textContent = lineTag ? `${lineTag}${f ? ` · ${f.name}+0x${f.off.toString(16)}` : ''}` : (this.sym ? '（PC 不在有行号信息的代码里）' : '—');
   }
 
+  _inspector(kind){
+    this._inspectors ||= {};
+    if(this._inspectors[kind])return this._inspectors[kind];
+    const specs={
+      regs:{id:'d-regs',label:'核心寄存器',columns:[{label:'寄存器',width:64,min:48,fixed:true},{label:'值',width:112,min:96,fixed:true},{label:'说明',width:180,min:116}]},
+      syms:{id:'d-sym-list',label:'ELF 符号',columns:[{label:'名称',width:180,min:110},{label:'类型',width:80,min:54},{label:'地址',width:100,min:90,fixed:true}]},
+      watch:{id:'d-watch-list',label:'监视变量',columns:[{label:'名称',width:150,min:84},{label:'值',width:144,min:88},{label:'类型',width:80,min:56},{label:'地址',width:96,min:90,fixed:true},{label:'',width:20,min:20,fixed:true,resize:false}]},
+    };
+    const spec=specs[kind],root=$(spec.id);
+    if(!root)return null;
+    return this._inspectors[kind]=new InspectorTable(root,spec.columns,spec.label);
+  }
+
   renderRegs(){
-    const box = $('d-regs');
-    if (!box) return;
+    const table=this._inspector('regs');
+    if(!table)return;
+    const box=table.body;
     const list = this.session.regList();
     if (!list.length){
       box.textContent = '';
+      delete box.dataset.built;
       const d = document.createElement('div');
       d.className = 'hint';
       d.textContent = this.session.connected ? '（还没有读到寄存器）' : '（未连接）';
@@ -609,20 +625,25 @@ export class DbgView {
       return;
     }
     // 行数固定 = 21：复用已有节点，避免每次刷新重建 DOM（也保住用户正在编辑的输入框）
-    if (box.children.length !== list.length || box.dataset.built !== '1'){
+    const signature=list.map(r=>r.name).join('|');
+    if (box.children.length !== list.length || box.dataset.built !== signature){
       box.textContent = '';
-      box.dataset.built = '1';
+      box.dataset.built = signature;
       for (const r of list){
         const row = document.createElement('div');
         row.className = 'regrow';
+        table.row(row);
         const nm = document.createElement('span'); nm.className = 'rn'; nm.textContent = r.name;
         const inp = document.createElement('input'); inp.className = 'rv mono'; inp.spellcheck = false;
+        inp.setAttribute('aria-label',`${r.name} 寄存器值`);
         inp.addEventListener('keydown', e => {
           if (e.key === 'Enter'){ e.preventDefault(); this._writeRegInput(r.name, inp); }
           else if (e.key === 'Escape'){ e.preventDefault(); inp.value = this._regText(r.name); inp.blur(); }
         });
         const note = document.createElement('span'); note.className = 'note';
-        row.append(nm, inp, note);
+        const value=document.createElement('span');value.className='cell-value';value.append(inp);
+        [nm,value,note].forEach(el=>table.cell(el));
+        row.append(nm, value, note);
         box.appendChild(row);
       }
     }
@@ -631,7 +652,10 @@ export class DbgView {
       if (!row) return;
       const inp = row.querySelector('input');
       const note = row.querySelector('.note');
-      if (inp && document.activeElement !== inp) inp.value = hex32(r.value);
+      const next=hex32(r.value);
+      if(inp?.dataset.value&&inp.dataset.value!==next&&r.changed)flashValue(inp);
+      if(inp)inp.dataset.value=next;
+      if (inp && document.activeElement !== inp) inp.value = next;
       row.classList.toggle('chg', !!r.changed);
       if (note){
         let extra = '';
@@ -644,6 +668,7 @@ export class DbgView {
         else if (r.kind === 'cfbp' && r.name === 'CONTROL') extra = (r.value & 1) ? '非特权' : '特权';
         else if (r.kind === 'cfbp' && r.name === 'BASEPRI' && r.value) extra = `≥${r.value >> 4}`;
         note.textContent = extra;
+        note.title=extra;
       }
       row.title = r.note || '';
     });
@@ -1317,8 +1342,9 @@ export class DbgView {
 
   /** 侧栏符号列表（载入 ELF 后一眼看到全局变量） */
   renderSyms(){
-    const box = $('d-sym-list');
-    if (!box) return;
+    const table=this._inspector('syms');
+    if(!table)return;
+    const box=table.body;
     if (!this.sym){
       box.textContent = '';
       const d = document.createElement('div');
@@ -1343,6 +1369,7 @@ export class DbgView {
     r.rows.forEach((row) => {
       const el = document.createElement('div');
       el.className = 'symrow';
+      table.row(el);
       el.dataset.name = row.name;
       el.title = `${row.name} @ ${hex32(row.addr)}${row.size ? `（${row.size} 字节）` : ''}${row.typeName ? ' : ' + row.typeName : ''}\n点名字 → 填 p ${row.name}；点 ＋ → 加进监视`;
       const add = document.createElement('button');
@@ -1360,7 +1387,10 @@ export class DbgView {
       const ty = document.createElement('span');
       ty.className = 'ty';
       ty.textContent = row.scalar || row.typeName || (row.kind === 'func' ? 'fn' : '');
-      el.append(add, nm, ad, ty);
+      const name=document.createElement('span');name.className='cell-name';name.append(add,nm);
+      nm.title=row.name;ty.title=ty.textContent;ad.title=ad.textContent;
+      [name,ty,ad].forEach(cell=>table.cell(cell));
+      el.append(name, ty, ad);
       frag.appendChild(el);
     });
     if (r.truncated){
@@ -1473,8 +1503,10 @@ export class DbgView {
   }
 
   renderWatch(){
-    const box = $('d-watch-list');
-    if (!box) return;
+    const table=this._inspector('watch');
+    if(!table)return;
+    const box=table.body;
+    this._watchPaint ||= new WeakMap();
     box.textContent = '';
     if (!this.watch.length){
       const d = document.createElement('div');
@@ -1487,17 +1519,19 @@ export class DbgView {
       const expandable = !it.error && (it.kind === 'struct' || it.kind === 'union' || it.kind === 'array');
       const row = document.createElement('div');
       row.className = 'wrow' + (it.error ? ' bad' : '');
+      table.row(row);
+      const name=document.createElement('span');name.className='cell-name';
       if (expandable){
         const ex = document.createElement('button');
         ex.className = 'mini exp';
         ex.textContent = it.expanded ? '▾' : '▸';
         ex.dataset.exp = String(i);
         ex.title = it.expanded ? '收起这棵树' : `展开成树（${it.typeName || '结构体'}：成员/数组元素按 DWARF 偏移解析）`;
-        row.appendChild(ex);
+        name.appendChild(ex);
       } else {
         const sp = document.createElement('span');
         sp.className = 'exsp';
-        row.appendChild(sp);
+        name.appendChild(sp);
       }
       const nm = document.createElement('span');
       nm.className = 'nm';
@@ -1506,19 +1540,28 @@ export class DbgView {
       const vl = document.createElement('span');
       vl.className = 'vl';
       const v = it.value;
-      vl.textContent = it.error ? it.error : (v ? (v.hex && !String(v.text).includes(v.hex) ? `${v.text}  ${v.hex}` : String(v.text)) : '—');
-      if (v && it.prev && v.text !== it.prev.text) row.classList.add('chg');
+      vl.textContent = it.error ? it.error : (v ? String(v.text) : '—');
+      vl.title=!it.error&&v?.hex?`${v.text}\n原始值：${v.hex}`:vl.textContent;
+      if(v?.cls)vl.classList.add(v.cls);
+      const previous=this._watchPaint.get(it);
+      const fingerprint=JSON.stringify([it.error||'',v?.text,v?.hex,v?.cls]);
+      if(previous&&previous.fingerprint!==fingerprint){row.classList.add('chg');flashValue(vl);}
       const ty = document.createElement('span');
       ty.className = 'ty';
       ty.textContent = it.error ? '' : (v?.type || it.typeName || '');
+      ty.title=ty.textContent;
+      const ad=document.createElement('span');ad.className='ad';ad.textContent=it.addr!=null?hex32(it.addr):'—';ad.title=ad.textContent;
       const x = document.createElement('button');
       x.className = 'mini x';
       x.textContent = '×';
       // WatchList.remove shares the command-line's one-based numbering.
       x.dataset.del = String(i + 1);
       x.title = '删掉这一项';
-      row.append(nm, vl, ty, x);
+      x.setAttribute('aria-label',`删除监视 ${it.expr}`);
+      name.append(nm);[name,vl,ty,ad,x].forEach(cell=>table.cell(cell));
+      row.append(name, vl, ty, ad, x);
       box.appendChild(row);
+      const memberValues=new Map();
 
       // 展开的树：成员 / 数组元素 / 位域（一次读回的字节里解出来的，已按偏移排好）
       if (expandable && it.expanded){
@@ -1533,21 +1576,33 @@ export class DbgView {
         for (const k of kids){
           const kr = document.createElement('div');
           kr.className = 'wkid' + (k.cls === 'dim' ? ' dim' : '') + (k.bitfield ? ' bf' : '');
-          kr.style.paddingLeft = `${8 + (k.depth || 0) * 13}px`;
+          table.row(kr);
+          const childName=document.createElement('span');childName.className='cell-name';
+          childName.style.paddingLeft=`${17+(k.depth||0)*12}px`;
           const kn = document.createElement('span');
           kn.className = 'nm';
           kn.textContent = k.name;
-          kn.title = `偏移 +${k.off}${k.size ? ` · ${k.size} 字节` : ''}${k.bitfield ? ' · 位域' : ''}`;
+          kn.title = `${k.name}\n偏移 +${k.off}${k.size ? ` · ${k.size} 字节` : ''}${k.bitfield ? ' · 位域' : ''}`;
           const kv = document.createElement('span');
           kv.className = 'vl';
-          kv.textContent = String(k.text ?? '') + (k.hex && !String(k.text).includes(k.hex) ? `  ${k.hex}` : '');
+          if(k.cls==='dim')kv.classList.add('dim');
+          kv.textContent = String(k.text ?? '');
+          kv.title=k.hex?`${kv.textContent}\n原始值：${k.hex}`:kv.textContent;
+          const key=`${k.off}:${k.name}`,member=JSON.stringify([k.text,k.hex]);
+          memberValues.set(key,member);
+          if(previous?.members.has(key)&&previous.members.get(key)!==member)flashValue(kv);
           const kt = document.createElement('span');
           kt.className = 'ty';
           kt.textContent = k.type || '';
-          kr.append(kn, kv, kt);
+          kt.title=kt.textContent;
+          const ka=document.createElement('span');ka.className='ad';ka.textContent=it.addr!=null&&Number.isFinite(k.off)?hex32((it.addr+k.off)>>>0):'—';ka.title=ka.textContent;
+          const empty=document.createElement('span');
+          childName.append(kn);[childName,kv,kt,ka,empty].forEach(cell=>table.cell(cell));
+          kr.append(childName, kv, kt,ka,empty);
           box.appendChild(kr);
         }
       }
+      this._watchPaint.set(it,{fingerprint,members:memberValues});
     });
   }
 

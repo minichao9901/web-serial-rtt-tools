@@ -65,6 +65,7 @@ export function initWorkspaces(){
     if(p){p.focusWorkspace(null);e.preventDefault();e.stopPropagation();}
   });
   const more=document.getElementById('app-more');
+  more?.addEventListener('toggle',()=>{if(more.open){const tools=document.getElementById('tool-switch');if(tools)tools.open=false;}});
   document.addEventListener('click',e=>{if(more&&!more.contains(e.target))more.open=false;});
   more?.addEventListener('keydown',e=>{if(e.key==='Escape'){more.open=false;more.querySelector('summary').focus();e.preventDefault();}});
   return { sync };

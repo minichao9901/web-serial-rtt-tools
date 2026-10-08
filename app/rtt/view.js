@@ -728,8 +728,16 @@ export class RttView {
     if (!bytes?.length) return;
     this.stats.bytes += bytes.length;
     this.rec.push(bytes, t);            // 落文件在"显示之前"：暂停/丢历史都不影响它
-    if (this.suppressed){ this.suppBytes += bytes.length; return; }
+    if (this.suppressed){
+      if (this.records.length === 0 && this.mode === 'term'){
+        const hint = $('r-empty');
+        if (hint) hint.hidden = true;
+      }
+      this.suppBytes += bytes.length;
+      return;
+    }
     this.records.push({ t, b: bytes });
+    if (this.records.length === 1) this._updateEmptyHint();
     this.recBytes += bytes.length;
     while (this.recBytes > MAX_RAW && this.records.length > 1){
       this.recBytes -= this.records.shift().b.length;
@@ -761,7 +769,7 @@ export class RttView {
       fontFamily: '"Cascadia Mono","JetBrains Mono",Consolas,monospace',
       fontSize: Number(store.get('rtt.font', 13)) || 13,
       lineHeight: 1.15, cursorBlink: true, scrollback: 3000,
-      theme: { background: '#010409', foreground: '#e6edf3', cursor: '#58a6ff', selectionBackground: '#264f78' },
+      theme: { background: '#0a0f15', foreground: '#e6edf3', cursor: '#58a6ff', selectionBackground: '#264f78' },
     });
     try { this.fit = new FitAddon.FitAddon(); this.term.loadAddon(this.fit); } catch {}
     this._termStale = !$('tab-rtt').classList.contains('active');   // 在隐藏状态下创建的话，第一次显示时要重放
@@ -798,8 +806,14 @@ export class RttView {
     this.mode = m;
     $('r-term').hidden = m !== 'term';
     $('r-rx').hidden = m === 'term';
+    this._updateEmptyHint();
     if (m === 'term'){ this._ensureTerm(); this._redrawAll(); try { this.fit?.fit(); } catch {} }
     else { this.tx.setMode(m === 'hex' ? 'hex' : 'ascii'); this._redrawAll(); }
+  }
+
+  _updateEmptyHint(){
+    const hint = $('r-empty');
+    if (hint) hint.hidden = this.mode !== 'term' || this.records.length > 0;
   }
 
   _redrawAll(){
@@ -824,6 +838,7 @@ export class RttView {
     this.records = []; this.recBytes = 0; this.truncated = false;
     this.tx.clear();
     this.term?.clear();
+    this._updateEmptyHint();
   }
 
   // ================= 下行 =================

@@ -22,27 +22,34 @@
 </div>
 
 <header class="topbar">
-  <div class="brand"><span class="logo">&gt;_</span> 串口 / RTT 工具箱</div>
-  <nav class="tabs" id="tabs">
-    <button class="tab active" data-tab="serial">串口助手</button>
-    <button class="tab" data-tab="terminal">终端</button>
-    <button class="tab" data-tab="rtt">RTT Viewer</button>
-    <button class="tab" data-tab="rttcdc">RTT 转发</button>
-    <button class="tab" data-tab="spicdc">SPI转发</button>
-    <button class="tab" data-tab="scope">J-Scope 波形</button>
-    <button class="tab" data-tab="flash">烧录器</button>
-    <button class="tab" data-tab="dbg">调试器</button>
-    <button class="tab" data-tab="spi">USB→SPI/QSPI</button>
-    <button class="tab" data-tab="panel">SPI/QSPI 屏</button>
-    <button class="tab" data-tab="i2c">USB→I2C</button>
-    <button class="tab" data-tab="analog">USB→ADC / DAC</button>
-    <button class="tab" data-tab="gen">工程生成</button>
+  <div class="brand" title="串口 / RTT 工具箱"><span class="brand-title">串口 / RTT 工具箱</span></div>
+  <nav class="tabs" id="tabs" aria-label="工具切换">
+    <div class="primary-tabs">
+      <button class="tab active" data-tab="serial">串口助手</button>
+      <button class="tab" data-tab="terminal">终端</button>
+      <button class="tab" data-tab="rtt">RTT Viewer</button>
+      <button class="tab" data-tab="rttcdc">RTT 转发</button>
+      <button class="tab" data-tab="scope">J-Scope 波形</button>
+      <button class="tab" data-tab="flash">烧录器</button>
+      <button class="tab" data-tab="dbg">调试器</button>
+    </div>
+    <details class="tool-switch" id="tool-switch">
+      <summary>更多功能 <span aria-hidden="true">▾</span></summary>
+      <div class="tool-menu" aria-label="更多功能">
+        <button class="tab" data-tab="spi">USB→SPI/QSPI</button>
+        <button class="tab" data-tab="panel">SPI/QSPI屏</button>
+        <button class="tab" data-tab="spicdc">SPI转发</button>
+        <button class="tab" data-tab="i2c">USB→I2C</button>
+        <button class="tab" data-tab="analog">USB→ADC/DAC</button>
+        <button class="tab" data-tab="gen">工程生成</button>
+      </div>
+    </details>
   </nav>
   <div class="topright">
     <span id="conn-flag" class="flag flag-off">串口：未连接</span>
     <span id="probe-flag" class="flag flag-off" role="status">探针：未使用</span>
     <details class="app-more" id="app-more">
-      <summary>更多</summary>
+      <summary>帮助</summary>
       <div class="more-menu">
         <button class="ghost" id="btn-help">帮助与快捷键</button>
         <a class="ghost" id="lnk-github" href="https://github.com/minichao9901/web-serial-rtt-tools" target="_blank" rel="noopener">GitHub</a>
@@ -388,6 +395,7 @@
       </div>
       <div class="rttbox">
         <div class="termbox" id="r-term" hidden></div>
+        <div class="rtt-empty" id="r-empty" hidden>等待 RTT 输出…<br>连接探针并选择 RTT 通道后，目标输出会显示在这里。</div>
         <pre class="rx" data-empty="连接探针并选择 RTT 通道后，这里显示目标输出。" id="r-rx"></pre>
       </div>
       <div class="stats">
@@ -1157,7 +1165,7 @@
             <button id="sp-fl-sfdp" class="mini" title="读 SFDP（0x5A）：只出原始 256 B（JESD216 规定 SFDP 是 256 B 只读区），解读请查 JESD216 表；dummy 不对会读不出签名，会自动试 0~4">读 SFDP</button>
             <button id="sp-fl-sr" class="mini" title="读状态寄存器 SR1(0x05) + SR2(0x35)：BUSY / WEL / QE">读状态</button>
             <span class="spacer"></span>
-            <button id="sp-fl-wiring" class="mini" title="显示外接 flash 的接线">接线</button>
+            <button id="sp-fl-wiring" class="mini" title="查看外接 SPI NOR 的 J3 接线与板载 NOR 的访问限制">接线</button>
           </div>
           <div class="framegrid">
             <label class="row"><span>读模式</span><select id="sp-fl-mode"></select></label>
@@ -1190,7 +1198,6 @@
               <label class="row"><span class="label-auto">页间等 tPP</span><input id="sp-fl-tpp" class="num" value="3" inputmode="numeric"><span>ms</span></label>
             </div>
           </div>
-          <p class="hint">外接 flash 接在 J3：<code>CS=J3[26]</code> <code>SCLK=J3[13]</code> <code>IO0=J3[28]</code> <code>IO1=J3[27]</code>，四线再加 <code>IO2=J3[10]</code> <code>IO3=J3[8]</code>。板上那颗 NOR 在 XPI0 的 PX 专用脚上，桥够不着。</p>
         </div>
 
         <div class="dockpage" data-dock="loop" id="sp-loop-card">
@@ -1424,6 +1431,7 @@
           <div class="toolrow nw">
             <span class="flush hint" id="pn-code-sum">把代码贴进来 → 点「解析并预览」</span>
             <span class="spacer"></span>
+            <button class="mini" title="参数格每格一个字节：可直接改十六进制，也可点格子逐位修改。重放和导出使用表格当前值；上方源码保持原文，重新解析会重建步骤表。">说明</button>
             <button id="pn-code-c" class="mini" title="导出成能贴回 C 头文件的片段">导出 C</button>
             <button id="pn-code-json" class="mini">导出 JSON</button>
             <button id="pn-code-text-out" class="mini">导出文本</button>
@@ -1442,11 +1450,9 @@
               <tbody id="pn-code-body"></tbody>
             </table>
           </div>
-          <p class="hint" id="pn-code-bithint" style="margin:5px 0 0">参数<b>每个格子就是一个字节</b>：直接敲十六进制改它，或者<b>点一下</b>弹出位开关板逐位点。
-            改的是<b>这份步骤表</b>，「重放 / 导出」用的就是改后的值（改了行尾会给「改回」）—— 上面的文本框保持你贴进来的原文不动（点「解析并预览」会按原文重建）。</p>
           <div class="row btnrow">
-            <button id="pn-code-play" class="primary" title="按当前面板档把整表编成 STEP 帧发出（档 1：同一 CS 窗口内「命令→翻 DC→参数」；档 2：0x02 + 24 bit 地址 + 参数）。行尾的「单发 / 从此重放」可以只跑其中一段">重放全部</button>
-            <button id="pn-code-stop">中止</button>
+            <button id="pn-code-play" class="primary mini" title="按当前面板档把整表编成 STEP 帧发出（档 1：同一 CS 窗口内「命令→翻 DC→参数」；档 2：0x02 + 24 bit 地址 + 参数）。行尾的「单发 / 从此重放」可以只跑其中一段">重放全部</button>
+            <button id="pn-code-stop" class="mini">中止</button>
             <span class="flush hint" id="pn-code-prog"></span>
           </div>
       </div><!-- /dockpage 面板初始化 -->

@@ -1,9 +1,9 @@
 :root{
   --bg:#0d1117; --bg2:#161b22; --bg3:#1c232c; --bg4:#232c38;
-  --fg:#e6edf3; --fg2:#8b949e; --line:#30363d;
+  --fg:#e6edf3; --fg2:#9aa4af; --line:#28313b;
   --acc:#58a6ff; --ok:#3fb950; --warn:#d29922; --err:#f85149;
   --text-xs:12px; --text-sm:13px; --text-md:14px; --text-lg:16px; --text-xl:20px;
-  --radius-sm:4px; --radius-control:6px; --radius-card:10px; --label-w:88px;
+  --radius-sm:3px; --radius-control:5px; --radius-card:8px; --label-w:88px;
   --space-sm:6px; --space-md:10px;
   --mono:"Cascadia Mono","JetBrains Mono",Consolas,"DejaVu Sans Mono","Courier New",monospace;
   --ui:-apple-system,"Segoe UI","Microsoft YaHei","PingFang SC","Noto Sans SC",Roboto,"Helvetica Neue",Arial,sans-serif;
@@ -31,7 +31,7 @@ button{
   background:var(--bg3);border:1px solid var(--line);border-radius:var(--radius-control);
   padding:4px 10px;cursor:pointer;white-space:nowrap;
 }
-button:hover{background:var(--bg4);border-color:#4a5563}
+button:hover{background:var(--bg4);border-color:#3d4855}
 button:active{transform:translateY(1px)}
 button:disabled{opacity:.45;cursor:not-allowed}
 button.primary{background:#1f6feb;border-color:#2b7cf5;color:#fff}
@@ -50,7 +50,6 @@ code{font-family:var(--mono);background:var(--bg3);padding:0 4px;border-radius:v
   background:var(--bg2);border-bottom:1px solid var(--line);flex:none;
 }
 .brand{font-weight:600;letter-spacing:.2px}
-.logo{font-family:var(--mono);color:var(--acc)}
 /* 页签独占一行；窄窗口横向滚动，保留全部工具的直接入口。 */
 .tabs{grid-column:1/-1;grid-row:2;display:flex;gap:2px;min-width:0;overflow-x:auto;scrollbar-width:thin;padding-bottom:0}
 .tabs .tab{flex:none}
@@ -162,8 +161,10 @@ legend{font-size:var(--text-xs);color:var(--fg2);padding:0 5px;letter-spacing:.4
 .termbox{flex:1;min-height:0;background:#010409;border:1px solid var(--line);border-radius:var(--radius-card);padding:5px 4px 4px 7px}
 .termbox .xterm{height:100%}
 .termbox .xterm-viewport::-webkit-scrollbar{width:10px}
-.rttbox{flex:1;min-height:0;display:flex}
-.rttbox>*{flex:1;min-width:0}
+.rttbox{position:relative;flex:1;min-height:0;display:flex}
+.rttbox>.termbox,.rttbox>.rx{flex:1;min-width:0}
+.rtt-empty{position:absolute;inset:0;display:grid;place-content:center;gap:4px;text-align:center;color:var(--fg2);font:13px/1.6 var(--ui);pointer-events:none}
+.rtt-empty[hidden]{display:none}
 
 /* ---------------- 快捷发送 ---------------- */
 .qrow{display:flex;align-items:center;gap:4px;margin:4px 0}
@@ -194,7 +195,8 @@ dialog ul,dialog ol{margin:4px 0;padding-left:20px}
 dialog form{margin-top:16px;text-align:right}
 
 ::-webkit-scrollbar{width:10px;height:10px}
-::-webkit-scrollbar-thumb{background:#39414d;border-radius:var(--radius-control)}
+::-webkit-scrollbar-thumb{background:#2b3541;border-radius:var(--radius-control)}
+::-webkit-scrollbar-thumb:hover{background:#3a4653}
 ::-webkit-scrollbar-track{background:transparent}
 
 /* 烧录器进度条 */
@@ -313,9 +315,9 @@ dialog form{margin-top:16px;text-align:right}
    每块**吃满整块高度**；日志与运行胶囊仍然常驻（tab 化不该把过程视图藏起来）。
    🚨 下面**没有任何 max-height 限高**：高度由 `.dockpage{flex:1}` 分配。 */
 #tab-spi .spdock{display:flex;flex-direction:column;min-width:0;min-height:0;overflow:hidden;flex:1 1 auto}
+#tab-spi .main{gap:4px}
 #tab-spi .docktabs{margin-left:2px;vertical-align:middle}
 #tab-spi .docktabs button{font-size:var(--text-xs);padding:2px 10px}
-#tab-spi .main{gap:4px}
 #tab-spi .dockpage{display:none;flex:1 1 auto;min-height:0;flex-direction:column;gap:6px}
 #tab-spi .dockpage.on{display:flex}
 #tab-spi .dockpage .toolrow{margin:0}
@@ -393,7 +395,7 @@ dialog form{margin-top:16px;text-align:right}
 #sp-flash-card .row.btnrow>button,#sp-flash-card .row.btnrow>select{flex:0 0 auto}
 #sp-flash-card .row.btnrow>select{max-width:240px}
 /* 🚨 行距/tab 间隙压紧**不是抠像素**：这一卡的控件行最多（工具行 / 参数行 / 提示 / 读行 /
-   擦写行 / 写数据行 / 填图案行 / 提示），每一处省几像素攒起来才是两个数据窗口的高度 ——
+   擦写行 / 写数据行 / 填图案行），接线说明通过上方「接线」按钮查看，避免在编辑区下方重复占行 ——
    用户 2026-10 的原话是"写数据框高度还可以高出一行字来"。实测：把"我确认要擦写"并进擦除行
    （省 24px）、行距 3→2（省 ~14px）、tab 间隙 6→4（省 ~20px）之后，820 高的窗口下
    两个数据窗口从 110px 长到 ~139px —— 正好一行多。
@@ -423,13 +425,13 @@ dialog form{margin-top:16px;text-align:right}
 }
 #tab-spi #sp-flash-card #sp-fl-data{flex:1 1 auto;height:auto;min-height:0}
 #sp-flash-card .datarow>span{padding-top:4px}
-#sp-flash-card .framegrid .row>span:first-child{width:56px}
-/* 语法速查：折叠块里是**预排文本**（等宽 + 保留换行），别被挤成一坨 */
 #tab-spi #sp-flash-card .fl-write-tools{display:flex;flex:0 0 140px;flex-direction:column;justify-content:center;gap:6px;min-width:0}
 #tab-spi #sp-flash-card .fl-write-tools>button{flex:0 0 auto}
 #tab-spi #sp-flash-card .fl-write-tools>.row{flex:none;flex-wrap:nowrap;gap:3px;margin:0}
 #tab-spi #sp-flash-card .fl-write-tools .num{width:48px;min-width:48px;flex:0 0 48px!important}
 #tab-spi #sp-flash-card .fl-write-tools .label-auto{width:auto!important}
+#sp-flash-card .framegrid .row>span:first-child{width:56px}
+/* 语法速查：折叠块里是**预排文本**（等宽 + 保留换行），别被挤成一坨 */
 #tab-spi .dslhelp{margin-top:0;flex:none}
 #tab-spi .dslhelp summary{color:var(--fg2);font-size:var(--text-xs);cursor:pointer}
 #tab-spi .dslhelp .hint{white-space:pre-wrap;font-family:var(--mono);font-size:var(--text-xs);line-height:1.5;margin:5px 0 0;max-height:240px;overflow:auto}
@@ -547,7 +549,9 @@ fieldset[disabled] legend::after{content:' · 未实现';color:var(--warn)}
    压紧后省下来的高度全给文本框和表格（用户："初始化部分被压缩得太厉害了"）。 */
 #tab-panel #pn-code-card .toolrow{margin:0 0 4px}
 #tab-panel #pn-code-card .row{margin:3px 0}
-#tab-panel #pn-code-card>.row.btnrow button{padding:3px 9px}
+#tab-panel #pn-code-card>.row.btnrow{margin:0;gap:6px}
+#tab-panel #pn-code-card>.row.btnrow button{flex:0 0 auto;padding:2px 8px}
+#tab-panel #pn-code-card>.row.btnrow #pn-code-prog{flex:1;min-width:0;text-align:right}
 /* 摘要 + 导出按钮挤一行（折行会白吃 28px 高度，那点高度留给文本框和表格） */
 #tab-panel .toolrow.nw{flex-wrap:nowrap;overflow:hidden}
 #tab-panel .toolrow.nw #pn-code-sum{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -1133,6 +1137,65 @@ body.workspace-focused>.topbar{display:none}
   .panel[data-workspace] .main{min-height:400px}
 }
 
+/* 单行工具入口与共享分隔线，减少工作台的容器层次。 */
+.topbar{grid-template-columns:auto minmax(0,1fr) auto;gap:8px;padding:4px 10px;position:relative;z-index:30}
+.topbar>.brand{grid-column:1;grid-row:1;white-space:nowrap;letter-spacing:0}
+.topbar>#tabs{grid-column:2;grid-row:1;display:flex;align-items:center;gap:6px;overflow:visible;scrollbar-width:none;padding:0}
+.primary-tabs{display:flex;align-items:center;gap:1px;flex:1 1 auto;overflow-x:auto;scrollbar-width:thin;min-width:0}
+.primary-tabs>.tab{padding:4px 7px}
+.topbar>.topright{grid-column:3;grid-row:1;flex-wrap:nowrap;gap:6px}
+.tool-switch{position:relative;flex:none;min-width:0;font-size:var(--text-xs)}
+.tool-switch>summary{display:block;list-style:none;cursor:pointer;padding:4px 7px;border:1px solid transparent;border-radius:var(--radius-control);color:var(--fg2);white-space:nowrap}
+.tool-switch>summary::-webkit-details-marker{display:none}
+.tool-switch>summary:hover,.tool-switch[open]>summary{color:var(--fg);background:var(--bg3)}
+.tool-switch.has-current>summary{color:var(--acc)}
+.tool-menu{position:absolute;top:calc(100% + 5px);right:0;z-index:60;width:220px;max-width:calc(100vw - 24px);max-height:calc(100vh - 55px);overflow:auto;display:flex;flex-direction:column;gap:1px;padding:5px;background:var(--bg2);border:1px solid var(--line);border-radius:4px;box-shadow:0 8px 24px #0008}
+.tool-switch:not([open])>.tool-menu{display:none}
+.tool-menu>.tab{text-align:left;padding:4px 9px;border-radius:3px;font-weight:400}
+.tool-menu>.tab.active{background:var(--bg3);border-color:transparent;color:var(--acc);font-weight:600}
+.side>fieldset{border:0;border-bottom:1px solid var(--line);border-radius:0;background:transparent;padding:4px 2px 8px}
+.side>fieldset:last-child{border-bottom:0}
+.side>fieldset>legend{padding:0;font-weight:600;color:var(--fg)}
+#tab-spi #sp-box-dock{border:0;border-radius:0;background:transparent;padding:0}
+#tab-spi .dockhead{padding-bottom:4px;margin-bottom:4px}
+.toolbar,.panel[data-workspace] .toolbar{border:0;border-bottom:1px solid var(--line);border-radius:0;background:transparent;padding:4px 2px}
+.stats{border:0;border-top:1px solid var(--line);border-radius:0;background:transparent}
+.rx{border:0;border-radius:0}
+#tab-dbg .dbgbox{border:0;border-radius:0;background:transparent;padding:0}
+#tab-dbg .dbgbox>legend{padding:0;min-height:24px;border-bottom:1px solid var(--line)}
+#tab-dbg .dbgbox .srclist,#tab-dbg #d-out{border-radius:0;background:var(--bg)}
+#tab-dbg .grip-h::after{left:0;right:0;height:1px}
+#tab-dbg .grip-v::after{top:0;bottom:0;width:1px}
+#tab-dbg .docktabs{border:0;border-radius:0;background:transparent}
+#tab-dbg .docktabs>button{padding:2px 7px;border-bottom:2px solid transparent}
+#tab-dbg .docktabs>button.on{background:transparent;color:var(--acc);border-bottom-color:var(--acc)}
+#sc-canvas{border-radius:0}
+@media(max-width:640px){.topbar{gap:5px;padding:4px 6px}.primary-tabs>.tab{padding:4px 5px}.tool-switch>summary{padding:4px 5px}.topbar>.topright{gap:3px}}
+@media(max-width:540px){.topbar{grid-template-columns:auto minmax(0,1fr)}.topbar>.brand{grid-column:1;grid-row:1}.topbar>#tabs{grid-column:2;grid-row:1}.topbar>.topright{grid-column:1/-1;grid-row:2}}
+
+/* 表头与所有成员行共享列宽；窄面板横向滚动，标题在纵向滚动时固定。 */
+#tab-dbg .inspector-table{padding:0;border:0;border-radius:0;overflow:auto;background:transparent;position:relative}
+#tab-dbg .inspector-table .table-row{display:grid;grid-template-columns:var(--table-cols);gap:4px;align-items:center;min-width:var(--table-min);width:max(100%,var(--table-min));padding:1px 4px;border-radius:0;line-height:1.5}
+#tab-dbg .inspector-table .table-head{position:sticky;top:0;z-index:2;background:var(--bg2);color:var(--fg2);border-bottom:1px solid var(--line);font-family:var(--ui);user-select:none}
+#tab-dbg .table-col{position:relative;min-width:0;white-space:nowrap;overflow:visible;padding:2px 0}
+#tab-dbg .column-grip{position:absolute;top:0;bottom:0;right:-4px;width:8px;cursor:col-resize;touch-action:none}
+#tab-dbg .column-grip::after{content:'';position:absolute;left:3px;top:4px;bottom:4px;width:1px;background:var(--line)}
+#tab-dbg .column-grip:hover::after,#tab-dbg .column-grip:focus::after{background:var(--acc)}
+#tab-dbg .inspector-table .cell-name{display:flex;align-items:center;gap:3px;min-width:0;overflow:hidden}
+#tab-dbg .inspector-table .cell-value{min-width:0}
+#tab-dbg .inspector-table .nm,#tab-dbg .inspector-table .rn,#tab-dbg .inspector-table .ty,#tab-dbg .inspector-table .ad,#tab-dbg .inspector-table .note{min-width:0;max-width:none;width:auto;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#tab-dbg .inspector-table .nm{flex:1}
+#tab-dbg .inspector-table .vl{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right;color:var(--ok)}
+#tab-dbg .inspector-table .vl.err,#tab-dbg .inspector-table .wrow.bad .vl{color:var(--err)}
+#tab-dbg .inspector-table .vl.dim{color:var(--fg2)}
+#tab-dbg .inspector-table .ty,#tab-dbg .inspector-table .ad{color:var(--fg2)}
+#tab-dbg .inspector-table .ad{text-align:right}
+#tab-dbg .inspector-table .regrow input.rv{width:100%;text-align:right;color:var(--fg);border-radius:2px}
+#tab-dbg .inspector-table .regrow.chg input.rv{color:var(--fg)}
+#tab-dbg .inspector-table .regrow.chg{background:transparent}
+#tab-dbg .inspector-table .regrow:hover,#tab-dbg .inspector-table .wrow:hover,#tab-dbg .inspector-table .wkid:hover,#tab-dbg .inspector-table .symrow:hover{background:var(--bg3)}
+#tab-dbg .inspector-table .hint,#tab-dbg .inspector-table .symmore{padding:4px;white-space:normal}
+
 /* Fault diagnostics / acquisition quality drawer preserve waveform height. */
 .diag-drawer { position: fixed; z-index: 90; right: 12px; top: 110px; bottom: 12px; width: min(520px, calc(100vw - 24px)); background: #10161d; border: 1px solid #405063; border-radius: 10px; box-shadow: 0 8px 36px #0009; display: flex; flex-direction: column; }
 .diag-drawer[hidden] { display: none; }
@@ -1152,3 +1215,33 @@ body.workspace-focused>.topbar{display:none}
 .diag-body details summary { cursor: pointer; color: #a2adbb; }
 .diag-frame { width: 100%; max-width: 100%; overflow: hidden; text-overflow: ellipsis; text-align: left; margin: 3px 0; font: 12px monospace; }
 @media (max-width: 700px) { .diag-drawer { top: 12px; } }
+
+/* 视觉收敛：保持技术数据密度，降低层叠边框、分隔条和空状态的视觉噪声。 */
+.topbar{border-bottom-color:#222a33}
+.app-more>summary{color:var(--fg2)}
+.app-more[open]>.more-menu{border-color:#303a46;box-shadow:0 8px 22px #0006}
+.tool-menu{border-color:#303a46;box-shadow:0 8px 22px #0006;border-radius:6px}
+fieldset,.toolbar,.sendbar,.stats,.an-measurements,.an-plot,
+#tab-spi .scroll,#tab-panel .scroll,#tab-i2c .scroll,#tab-gen .dockpage>.scroll,
+#tab-dbg .symlist,#tab-dbg .watchlist{border-color:var(--line)}
+.hint,.workspace-help{font-size:12.5px;line-height:1.6;color:var(--fg2)}
+.rx,.termbox{background:#0a0f15}
+.rx:empty,.log[data-empty]:empty{position:relative}
+.rx:empty::before,.log[data-empty]:empty::before{
+  position:absolute;inset:50% 16px auto;transform:translateY(-50%);display:block;
+  max-width:calc(100% - 32px);margin:0 auto;text-align:center;color:#89939e;
+  font:13px/1.6 var(--ui);pointer-events:none
+}
+#tab-spi .grip::after,#tab-panel .grip::after,#tab-i2c .grip::after,#tab-dbg .grip::after{
+  background:#35404d;opacity:.55
+}
+#tab-spi .grip:hover::after,#tab-panel .grip:hover::after,#tab-i2c .grip:hover::after,#tab-dbg .grip:hover::after{
+  background:var(--acc);opacity:.9
+}
+#tab-spi .grip-h::after,#tab-panel .grip-h::after,#tab-i2c .grip-h::after,#tab-dbg .grip-h::after{
+  left:44%;right:44%;top:4px;height:1px
+}
+#tab-dbg .grip-v::after{top:44%;bottom:44%;left:5px;width:1px}
+.diag-drawer{border-color:#303a46;border-radius:8px;box-shadow:0 8px 28px #0007}
+.diag-head{border-bottom-color:#2a3440}
+.diag-findings p{border-left-width:2px}
