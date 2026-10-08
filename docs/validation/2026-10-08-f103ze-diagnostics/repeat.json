@@ -1,0 +1,94 @@
+{
+  "passed": 8,
+  "total": 8,
+  "cases": [
+    {
+      "case": "UDF / MSP",
+      "savedPc": 134217856,
+      "stack": "MSP",
+      "aligned": true,
+      "validated": true,
+      "readOnly": true,
+      "sourceShown": true,
+      "faultHeals": 0,
+      "recoveries": 0
+    },
+    {
+      "case": "divide by zero",
+      "savedPc": 134217872,
+      "stack": "MSP",
+      "aligned": true,
+      "validated": true,
+      "readOnly": true,
+      "sourceShown": true,
+      "faultHeals": 0,
+      "recoveries": 0
+    },
+    {
+      "case": "precise bus fault",
+      "savedPc": 134217890,
+      "stack": "MSP",
+      "aligned": true,
+      "validated": true,
+      "readOnly": true,
+      "sourceShown": true,
+      "faultHeals": 0,
+      "recoveries": 0
+    },
+    {
+      "case": "UDF / PSP / alignment padding",
+      "savedPc": 134217856,
+      "stack": "PSP",
+      "aligned": true,
+      "validated": true,
+      "readOnly": true,
+      "sourceShown": true,
+      "faultHeals": 0,
+      "recoveries": 0
+    },
+    {
+      "case": "unaligned access",
+      "savedPc": 134217910,
+      "stack": "MSP",
+      "aligned": true,
+      "validated": true,
+      "readOnly": true,
+      "sourceShown": true,
+      "faultHeals": 0,
+      "recoveries": 0
+    },
+    {
+      "case": "UDF / PSP / no alignment padding",
+      "savedPc": 134217856,
+      "stack": "PSP",
+      "aligned": false,
+      "validated": true,
+      "readOnly": true,
+      "sourceShown": true,
+      "faultHeals": 0,
+      "recoveries": 0
+    },
+    {
+      "case": "handler prologue unwind",
+      "savedPc": 134217856,
+      "stack": "MSP",
+      "aligned": true,
+      "validated": true,
+      "readOnly": true,
+      "sourceShown": true,
+      "faultHeals": 0,
+      "recoveries": 0
+    },
+    {
+      "case": "repeat catch after reset",
+      "savedPc": 134217856,
+      "stack": "MSP",
+      "aligned": true,
+      "validated": true,
+      "readOnly": true,
+      "sourceShown": true,
+      "faultHeals": 0,
+      "recoveries": 0
+    }
+  ]
+}

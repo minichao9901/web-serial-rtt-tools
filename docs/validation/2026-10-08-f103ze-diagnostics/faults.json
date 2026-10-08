@@ -1,0 +1,6446 @@
+[
+  {
+    "case": {
+      "mode": 1,
+      "name": "UDF / MSP",
+      "flag": 16,
+      "label": "fault_udf_pc",
+      "stack": "MSP"
+    },
+    "baseline": {
+      "demcr": 16777216,
+      "heal": 0,
+      "recoveries": 0,
+      "heartbeat": 98236,
+      "clock": 10000000,
+      "wake": {
+        "romPc": 134218172,
+        "woken": false
+      }
+    },
+    "injection": {
+      "request": 1,
+      "demcr": 16778240,
+      "dhcsr": 196611
+    },
+    "report": {
+      "schema": "akalink-diagnostics/v1",
+      "kind": "fault",
+      "title": "异常诊断报告",
+      "exportedAt": "2026-10-08T12:40:07.941Z",
+      "environment": {
+        "Web版本": "2026-10-08-r3 (H743 异常诊断真机验收；保留即时异常停点；修正浮点保存帧与异常调用链；SWD 降档诊断)",
+        "ELF": "f103ze_fault.elf",
+        "后端": "WebUSB",
+        "数据": "真实目标",
+        "浏览器": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36"
+      },
+      "settings": {
+        "架构": "arm",
+        "现场时间": "2026-10-08T12:40:07.731Z",
+        "时段": "当前停止现场",
+        "恢复栈": "MSP",
+        "帧类型": "基本帧",
+        "帧校验": "已验证",
+        "完整性": "已完成有限读取",
+        "本页启用HardFault捕获": true,
+        "展开停止原因": "到达栈末端"
+      },
+      "metrics": [
+        {
+          "name": "停止 PC",
+          "value": "0x08000058",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "CPUID",
+          "value": "0x411fc231",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "ICSR",
+          "value": "0x00000803",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "VTOR",
+          "value": "0x08000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "SHCSR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "CFSR",
+          "value": "0x00010000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "HFSR",
+          "value": "0x40000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "DFSR",
+          "value": "0x00000008",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "MMFAR",
+          "value": "0xe000edf8",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": "MMARVALID 未置位，不能作为故障地址"
+        },
+        {
+          "name": "BFAR",
+          "value": "0xe000edf8",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": "BFARVALID 未置位，不能作为故障地址"
+        },
+        {
+          "name": "AFSR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "LR",
+          "value": "0xfffffff9",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "XPSR",
+          "value": "0x01000003",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": "IPSR=3"
+        },
+        {
+          "name": "SP",
+          "value": "0x2000ffb0",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "MSP",
+          "value": "0x2000ffb0",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "PSP",
+          "value": "0x20000438",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "异常保存 PC",
+          "value": "0x08000080",
+          "unit": "",
+          "source": "硬件保存帧",
+          "note": "已校验；非精确错误不保证为致错指令"
+        }
+      ],
+      "findings": [
+        {
+          "confidence": "已确认",
+          "text": "UNDEFINSTR：未定义指令",
+          "evidence": "CFSR bit 16"
+        },
+        {
+          "confidence": "已确认",
+          "text": "FORCED：可配置异常升级为 HardFault。",
+          "evidence": "HFSR bit 30"
+        },
+        {
+          "confidence": "证据不足",
+          "text": "故障标志具有粘性，可能来自更早的异常；本次读取没有清除它们。",
+          "evidence": ""
+        },
+        {
+          "confidence": "已确认",
+          "text": "恢复异常硬件帧，保存 PC=0x08000080。",
+          "evidence": "保存 PC 是被打断的执行位置；非精确错误不能据此定位致错指令"
+        }
+      ],
+      "snapshot": {
+        "arch": "arm",
+        "at": "2026-10-08T12:40:07.731Z",
+        "pc": 134217816,
+        "raw": {
+          "CPUID": 1092600369,
+          "ICSR": 2051,
+          "VTOR": 134217728,
+          "SHCSR": 0,
+          "CFSR": 65536,
+          "HFSR": 1073741824,
+          "DFSR": 8,
+          "MMFAR": 3758157304,
+          "BFAR": 3758157304,
+          "AFSR": 0,
+          "core": {
+            "PC": 134217816,
+            "LR": 4294967289,
+            "XPSR": 16777219,
+            "SP": 536936368,
+            "MSP": 536936368,
+            "PSP": 536871992
+          }
+        },
+        "frame": {
+          "pc": 134217856,
+          "sp": 536936404,
+          "regs": [
+            42,
+            536871012,
+            536871024,
+            536871020,
+            1,
+            8,
+            79764919,
+            536936404,
+            1,
+            0,
+            0,
+            536875036,
+            4294896959,
+            536936404,
+            134217949,
+            134217856
+          ],
+          "known": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "kind": "exception",
+          "loc": {
+            "addr": 134217856,
+            "end": 134217858,
+            "line": 32,
+            "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+            "isStmt": true,
+            "prologueEnd": false,
+            "seqEnd": false,
+            "seq": 3,
+            "idx": 12
+          },
+          "name": "fault_udf",
+          "base": 536936368,
+          "stack": "MSP",
+          "extended": false,
+          "aligned": true,
+          "xpsr": 16777728,
+          "validated": true
+        },
+        "frames": [
+          {
+            "pc": 134217856,
+            "sp": 536936404,
+            "kind": "current",
+            "lookup": 134217856,
+            "name": "fault_udf+0x4",
+            "loc": {
+              "addr": 134217856,
+              "end": 134217858,
+              "line": 32,
+              "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 3,
+              "idx": 12
+            },
+            "regs": [
+              42,
+              536871012,
+              536871024,
+              536871020,
+              1,
+              8,
+              79764919,
+              536936404,
+              1,
+              0,
+              0,
+              536875036,
+              4294896959,
+              536936404,
+              134217949,
+              134217856
+            ],
+            "known": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "cfa": 536936408
+          },
+          {
+            "pc": 134217948,
+            "sp": 536936408,
+            "kind": "cfi",
+            "lookup": 134217946,
+            "name": "fault_mid+0x16",
+            "loc": {
+              "addr": 134217944,
+              "end": 134217948,
+              "line": 49,
+              "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+              "isStmt": false,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 7,
+              "idx": 31
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              1,
+              8,
+              79764919,
+              536936408,
+              1,
+              0,
+              0,
+              536875036,
+              0,
+              536936408,
+              134217949,
+              134217949
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 536936424
+          },
+          {
+            "pc": 134217992,
+            "sp": 536936424,
+            "kind": "cfi",
+            "lookup": 134217990,
+            "name": "fault_outer+0x6",
+            "loc": {
+              "addr": 134217988,
+              "end": 134217992,
+              "line": 53,
+              "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 8,
+              "idx": 45
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              536871020,
+              1,
+              8,
+              79764919,
+              536936424,
+              1,
+              0,
+              0,
+              536875036,
+              0,
+              536936424,
+              134217993,
+              134217993
+            ],
+            "known": [
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              3,
+              4,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 536936432
+          },
+          {
+            "pc": 134218144,
+            "sp": 536936432,
+            "kind": "cfi",
+            "lookup": 134218142,
+            "name": "main+0x76",
+            "loc": {
+              "addr": 134218140,
+              "end": 134218144,
+              "line": 67,
+              "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 9,
+              "idx": 65
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              1,
+              8,
+              79764919,
+              536936432,
+              1,
+              0,
+              0,
+              536875036,
+              0,
+              536936432,
+              134218145,
+              134218145
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 536936440
+          },
+          {
+            "pc": 134218236,
+            "sp": 536936440,
+            "kind": "cfi",
+            "lookup": 134218234,
+            "name": "Reset_Handler+0x3e",
+            "loc": {
+              "addr": 134218232,
+              "end": 134218236,
+              "line": 21,
+              "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 10,
+              "idx": 80
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              1,
+              8,
+              79764919,
+              536936440,
+              1,
+              0,
+              0,
+              536875036,
+              0,
+              536936440,
+              134218237,
+              134218237
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 536936448
+          }
+        ],
+        "findings": [
+          {
+            "confidence": "已确认",
+            "text": "UNDEFINSTR：未定义指令",
+            "evidence": "CFSR bit 16"
+          },
+          {
+            "confidence": "已确认",
+            "text": "FORCED：可配置异常升级为 HardFault。",
+            "evidence": "HFSR bit 30"
+          },
+          {
+            "confidence": "证据不足",
+            "text": "故障标志具有粘性，可能来自更早的异常；本次读取没有清除它们。",
+            "evidence": ""
+          },
+          {
+            "confidence": "已确认",
+            "text": "恢复异常硬件帧，保存 PC=0x08000080。",
+            "evidence": "保存 PC 是被打断的执行位置；非精确错误不能据此定位致错指令"
+          }
+        ],
+        "error": null,
+        "observedHalted": true,
+        "unwindReason": "到达栈末端",
+        "reads": 40,
+        "catchConfigured": true
+      },
+      "notes": [
+        "支持 Cortex-M3/M4/M7；无效 BFAR/MMFAR、堆栈失败与非精确错误均不输出虚假的准确位置。",
+        "只读诊断不主动暂停、继续、复位目标或清除异常寄存器。读取失败立即停止，保留已取得的证据。",
+        "ELF 必须与板上固件一致。完整调用链取决于有效栈与 CFI/EHABI 展开信息，未保存的 r4–r11 不会从处理器当前值伪造。"
+      ],
+      "history": {
+        "startedAt": "2026-10-08T12:40:05.811Z",
+        "events": [
+          {
+            "at": "2026-10-08T12:40:06.636Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:06.673Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T12:40:07.344Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T12:40:07.920Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          }
+        ],
+        "omitted": 0
+      }
+    },
+    "tab": "fault",
+    "halted": true,
+    "pc": 134217816,
+    "expected": 134217856,
+    "heal": 0,
+    "recoveries": 0,
+    "errors": [],
+    "log": "调试器就绪。连上目标后按 h 看命令，Tab 补全、↑↓ 翻历史、Ctrl+C 中断。已载入符号：f103ze_fault.elf —— 183 个符号（函数 77 · 数据 9），其中 4 个带类型变量（DWARF），行号表 82 条　行号表：1 段 · 82 条记录 · 8 个源文件（DWARF 4）源码目录建议：推荐选 e:/share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 e:/share（7，目录更大） · E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src（1）源码目录建议：推荐选 e:/share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 e:/share（7，目录更大） · E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src（1）──── 连接（WebUSB · 10000 kHz）────关掉 1 个残留的探针句柄已连接：akaLinkPro CMSIS-DAP · 512B/包 · SWD 10000kHz　SWD 10000 kHz　IDCODE=0x1BA01477硬件断点：6 个比较器（FPB rev1，CTRL=0x261）目标处于停止状态源码：源码目录「（已选文件夹）」：1 个文件源码目录建议：已选「（已选文件夹）」能解析 1/8 · 推荐选 e:/share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 e:/share（7，目录更大） · E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src（1）> halt已暂停　状态：已停止（halted）　PC=0x0800017e main+0x56> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x0800017e main+0x56⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)",
+    "readOnlyEvidence": {
+      "before": {
+        "regs": [
+          134217816,
+          4294967289,
+          16777219,
+          536936368,
+          536936368,
+          536871992
+        ],
+        "scb": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          64,
+          8,
+          0,
+          0,
+          0,
+          248,
+          237,
+          0,
+          224,
+          248,
+          237,
+          0,
+          224,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "after": {
+        "regs": [
+          134217816,
+          4294967289,
+          16777219,
+          536936368,
+          536936368,
+          536871992
+        ],
+        "scb": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          64,
+          8,
+          0,
+          0,
+          0,
+          248,
+          237,
+          0,
+          224,
+          248,
+          237,
+          0,
+          224,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "demcr": 16778240
+    },
+    "readOnly": true,
+    "demcr": 16778240,
+    "sourceShown": true,
+    "restoredDemcr": 16777216
+  },
+  {
+    "case": {
+      "mode": 2,
+      "name": "divide by zero",
+      "flag": 25,
+      "label": "fault_div_pc",
+      "stack": "MSP"
+    },
+    "baseline": {
+      "demcr": 16777216,
+      "heal": 0,
+      "recoveries": 0,
+      "heartbeat": 96278,
+      "clock": 10000000,
+      "wake": {
+        "romPc": 134218172,
+        "woken": false
+      }
+    },
+    "injection": {
+      "request": 2,
+      "demcr": 16778240,
+      "dhcsr": 196611
+    },
+    "report": {
+      "schema": "akalink-diagnostics/v1",
+      "kind": "fault",
+      "title": "异常诊断报告",
+      "exportedAt": "2026-10-08T12:40:09.589Z",
+      "environment": {
+        "Web版本": "2026-10-08-r3 (H743 异常诊断真机验收；保留即时异常停点；修正浮点保存帧与异常调用链；SWD 降档诊断)",
+        "ELF": "f103ze_fault.elf",
+        "后端": "WebUSB",
+        "数据": "真实目标",
+        "浏览器": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36"
+      },
+      "settings": {
+        "架构": "arm",
+        "现场时间": "2026-10-08T12:40:09.378Z",
+        "时段": "当前停止现场",
+        "恢复栈": "MSP",
+        "帧类型": "基本帧",
+        "帧校验": "已验证",
+        "完整性": "已完成有限读取",
+        "本页启用HardFault捕获": true,
+        "展开停止原因": "到达栈末端"
+      },
+      "metrics": [
+        {
+          "name": "停止 PC",
+          "value": "0x08000058",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "CPUID",
+          "value": "0x411fc231",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "ICSR",
+          "value": "0x00000803",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "VTOR",
+          "value": "0x08000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "SHCSR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "CFSR",
+          "value": "0x02000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "HFSR",
+          "value": "0x40000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "DFSR",
+          "value": "0x00000008",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "MMFAR",
+          "value": "0xe000edf8",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": "MMARVALID 未置位，不能作为故障地址"
+        },
+        {
+          "name": "BFAR",
+          "value": "0xe000edf8",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": "BFARVALID 未置位，不能作为故障地址"
+        },
+        {
+          "name": "AFSR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "LR",
+          "value": "0xfffffff9",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "XPSR",
+          "value": "0x61000003",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": "IPSR=3"
+        },
+        {
+          "name": "SP",
+          "value": "0x2000ffb0",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "MSP",
+          "value": "0x2000ffb0",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "PSP",
+          "value": "0x20000438",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "异常保存 PC",
+          "value": "0x08000090",
+          "unit": "",
+          "source": "硬件保存帧",
+          "note": "已校验；非精确错误不保证为致错指令"
+        }
+      ],
+      "findings": [
+        {
+          "confidence": "已确认",
+          "text": "DIVBYZERO：除零",
+          "evidence": "CFSR bit 25"
+        },
+        {
+          "confidence": "已确认",
+          "text": "FORCED：可配置异常升级为 HardFault。",
+          "evidence": "HFSR bit 30"
+        },
+        {
+          "confidence": "证据不足",
+          "text": "故障标志具有粘性，可能来自更早的异常；本次读取没有清除它们。",
+          "evidence": ""
+        },
+        {
+          "confidence": "已确认",
+          "text": "恢复异常硬件帧，保存 PC=0x08000090。",
+          "evidence": "保存 PC 是被打断的执行位置；非精确错误不能据此定位致错指令"
+        }
+      ],
+      "snapshot": {
+        "arch": "arm",
+        "at": "2026-10-08T12:40:09.378Z",
+        "pc": 134217816,
+        "raw": {
+          "CPUID": 1092600369,
+          "ICSR": 2051,
+          "VTOR": 134217728,
+          "SHCSR": 0,
+          "CFSR": 33554432,
+          "HFSR": 1073741824,
+          "DFSR": 8,
+          "MMFAR": 3758157304,
+          "BFAR": 3758157304,
+          "AFSR": 0,
+          "core": {
+            "PC": 134217816,
+            "LR": 4294967289,
+            "XPSR": 1627389955,
+            "SP": 536936368,
+            "MSP": 536936368,
+            "PSP": 536871992
+          }
+        },
+        "frame": {
+          "pc": 134217872,
+          "sp": 536936404,
+          "regs": [
+            42,
+            536871012,
+            3758153728,
+            0,
+            2,
+            8,
+            79764919,
+            536936404,
+            1,
+            0,
+            0,
+            536875036,
+            4294896959,
+            536936404,
+            134217963,
+            134217872
+          ],
+          "known": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "kind": "exception",
+          "loc": {
+            "addr": 134217870,
+            "end": 134217876,
+            "line": 36,
+            "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+            "isStmt": true,
+            "prologueEnd": false,
+            "seqEnd": false,
+            "seq": 4,
+            "idx": 16
+          },
+          "name": "fault_div",
+          "base": 536936368,
+          "stack": "MSP",
+          "extended": false,
+          "aligned": true,
+          "xpsr": 1627390464,
+          "validated": true
+        },
+        "frames": [
+          {
+            "pc": 134217872,
+            "sp": 536936404,
+            "kind": "current",
+            "lookup": 134217872,
+            "name": "fault_div+0x6",
+            "loc": {
+              "addr": 134217870,
+              "end": 134217876,
+              "line": 36,
+              "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 4,
+              "idx": 16
+            },
+            "regs": [
+              42,
+              536871012,
+              3758153728,
+              0,
+              2,
+              8,
+              79764919,
+              536936404,
+              1,
+              0,
+              0,
+              536875036,
+              4294896959,
+              536936404,
+              134217963,
+              134217872
+            ],
+            "known": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "cfa": 536936408
+          },
+          {
+            "pc": 134217962,
+            "sp": 536936408,
+            "kind": "cfi",
+            "lookup": 134217960,
+            "name": "fault_mid+0x24",
+            "loc": {
+              "addr": 134217958,
+              "end": 134217962,
+              "line": 48,
+              "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+              "isStmt": false,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 7,
+              "idx": 36
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              2,
+              8,
+              79764919,
+              536936408,
+              1,
+              0,
+              0,
+              536875036,
+              0,
+              536936408,
+              134217963,
+              134217963
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 536936424
+          },
+          {
+            "pc": 134217992,
+            "sp": 536936424,
+            "kind": "cfi",
+            "lookup": 134217990,
+            "name": "fault_outer+0x6",
+            "loc": {
+              "addr": 134217988,
+              "end": 134217992,
+              "line": 53,
+              "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 8,
+              "idx": 45
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              528,
+              1,
+              8,
+              79764919,
+              536936424,
+              1,
+              0,
+              0,
+              536875036,
+              0,
+              536936424,
+              134217993,
+              134217993
+            ],
+            "known": [
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              3,
+              4,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 536936432
+          },
+          {
+            "pc": 134218144,
+            "sp": 536936432,
+            "kind": "cfi",
+            "lookup": 134218142,
+            "name": "main+0x76",
+            "loc": {
+              "addr": 134218140,
+              "end": 134218144,
+              "line": 67,
+              "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 9,
+              "idx": 65
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              1,
+              8,
+              79764919,
+              536936432,
+              1,
+              0,
+              0,
+              536875036,
+              0,
+              536936432,
+              134218145,
+              134218145
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 536936440
+          },
+          {
+            "pc": 134218236,
+            "sp": 536936440,
+            "kind": "cfi",
+            "lookup": 134218234,
+            "name": "Reset_Handler+0x3e",
+            "loc": {
+              "addr": 134218232,
+              "end": 134218236,
+              "line": 21,
+              "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 10,
+              "idx": 80
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              1,
+              8,
+              79764919,
+              536936440,
+              1,
+              0,
+              0,
+              536875036,
+              0,
+              536936440,
+              134218237,
+              134218237
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 536936448
+          }
+        ],
+        "findings": [
+          {
+            "confidence": "已确认",
+            "text": "DIVBYZERO：除零",
+            "evidence": "CFSR bit 25"
+          },
+          {
+            "confidence": "已确认",
+            "text": "FORCED：可配置异常升级为 HardFault。",
+            "evidence": "HFSR bit 30"
+          },
+          {
+            "confidence": "证据不足",
+            "text": "故障标志具有粘性，可能来自更早的异常；本次读取没有清除它们。",
+            "evidence": ""
+          },
+          {
+            "confidence": "已确认",
+            "text": "恢复异常硬件帧，保存 PC=0x08000090。",
+            "evidence": "保存 PC 是被打断的执行位置；非精确错误不能据此定位致错指令"
+          }
+        ],
+        "error": null,
+        "observedHalted": true,
+        "unwindReason": "到达栈末端",
+        "reads": 40,
+        "catchConfigured": true
+      },
+      "notes": [
+        "支持 Cortex-M3/M4/M7；无效 BFAR/MMFAR、堆栈失败与非精确错误均不输出虚假的准确位置。",
+        "只读诊断不主动暂停、继续、复位目标或清除异常寄存器。读取失败立即停止，保留已取得的证据。",
+        "ELF 必须与板上固件一致。完整调用链取决于有效栈与 CFI/EHABI 展开信息，未保存的 r4–r11 不会从处理器当前值伪造。"
+      ],
+      "history": {
+        "startedAt": "2026-10-08T12:40:05.811Z",
+        "events": [
+          {
+            "at": "2026-10-08T12:40:06.636Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:06.673Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T12:40:07.344Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T12:40:07.920Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:08.239Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:08.331Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T12:40:08.336Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T12:40:09.002Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T12:40:09.562Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          }
+        ],
+        "omitted": 0
+      }
+    },
+    "tab": "fault",
+    "halted": true,
+    "pc": 134217816,
+    "expected": 134217872,
+    "heal": 0,
+    "recoveries": 0,
+    "errors": [],
+    "log": "调试器就绪。连上目标后按 h 看命令，Tab 补全、↑↓ 翻历史、Ctrl+C 中断。已载入符号：f103ze_fault.elf —— 183 个符号（函数 77 · 数据 9），其中 4 个带类型变量（DWARF），行号表 82 条　行号表：1 段 · 82 条记录 · 8 个源文件（DWARF 4）源码目录建议：推荐选 e:/share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 e:/share（7，目录更大） · E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src（1）源码目录建议：推荐选 e:/share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 e:/share（7，目录更大） · E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src（1）──── 连接（WebUSB · 10000 kHz）────关掉 1 个残留的探针句柄已连接：akaLinkPro CMSIS-DAP · 512B/包 · SWD 10000kHz　SWD 10000 kHz　IDCODE=0x1BA01477硬件断点：6 个比较器（FPB rev1，CTRL=0x261）目标处于停止状态源码：源码目录「（已选文件夹）」：1 个文件源码目录建议：已选「（已选文件夹）」能解析 1/8 · 推荐选 e:/share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 e:/share（7，目录更大） · E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src（1）> halt已暂停　状态：已停止（halted）　PC=0x0800017e main+0x56> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x0800017e main+0x56⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x08000180 main+0x58> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x08000180 main+0x58⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)",
+    "readOnlyEvidence": {
+      "before": {
+        "regs": [
+          134217816,
+          4294967289,
+          1627389955,
+          536936368,
+          536936368,
+          536871992
+        ],
+        "scb": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0,
+          64,
+          8,
+          0,
+          0,
+          0,
+          248,
+          237,
+          0,
+          224,
+          248,
+          237,
+          0,
+          224,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "after": {
+        "regs": [
+          134217816,
+          4294967289,
+          1627389955,
+          536936368,
+          536936368,
+          536871992
+        ],
+        "scb": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0,
+          64,
+          8,
+          0,
+          0,
+          0,
+          248,
+          237,
+          0,
+          224,
+          248,
+          237,
+          0,
+          224,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "demcr": 16778240
+    },
+    "readOnly": true,
+    "demcr": 16778240,
+    "sourceShown": true,
+    "restoredDemcr": 16777216
+  },
+  {
+    "case": {
+      "mode": 3,
+      "name": "precise bus fault",
+      "flag": 9,
+      "label": "fault_bus_pc",
+      "stack": "MSP",
+      "address": 537001984
+    },
+    "baseline": {
+      "demcr": 16777216,
+      "heal": 0,
+      "recoveries": 0,
+      "heartbeat": 96120,
+      "clock": 10000000,
+      "wake": {
+        "romPc": 134218172,
+        "woken": false
+      }
+    },
+    "injection": {
+      "request": 3,
+      "demcr": 16778240,
+      "dhcsr": 196611
+    },
+    "report": {
+      "schema": "akalink-diagnostics/v1",
+      "kind": "fault",
+      "title": "异常诊断报告",
+      "exportedAt": "2026-10-08T12:40:11.179Z",
+      "environment": {
+        "Web版本": "2026-10-08-r3 (H743 异常诊断真机验收；保留即时异常停点；修正浮点保存帧与异常调用链；SWD 降档诊断)",
+        "ELF": "f103ze_fault.elf",
+        "后端": "WebUSB",
+        "数据": "真实目标",
+        "浏览器": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36"
+      },
+      "settings": {
+        "架构": "arm",
+        "现场时间": "2026-10-08T12:40:10.947Z",
+        "时段": "当前停止现场",
+        "恢复栈": "MSP",
+        "帧类型": "基本帧",
+        "帧校验": "已验证",
+        "完整性": "已完成有限读取",
+        "本页启用HardFault捕获": true,
+        "展开停止原因": "到达栈末端"
+      },
+      "metrics": [
+        {
+          "name": "停止 PC",
+          "value": "0x08000058",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "CPUID",
+          "value": "0x411fc231",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "ICSR",
+          "value": "0x00000803",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "VTOR",
+          "value": "0x08000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "SHCSR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "CFSR",
+          "value": "0x00008200",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "HFSR",
+          "value": "0x40000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "DFSR",
+          "value": "0x00000008",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "MMFAR",
+          "value": "0x20020000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": "MMARVALID 未置位，不能作为故障地址"
+        },
+        {
+          "name": "BFAR",
+          "value": "0x20020000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "AFSR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "LR",
+          "value": "0xfffffff9",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "XPSR",
+          "value": "0x21000003",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": "IPSR=3"
+        },
+        {
+          "name": "SP",
+          "value": "0x2000ffb0",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "MSP",
+          "value": "0x2000ffb0",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "PSP",
+          "value": "0x20000438",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "异常保存 PC",
+          "value": "0x080000a2",
+          "unit": "",
+          "source": "硬件保存帧",
+          "note": "已校验；非精确错误不保证为致错指令"
+        }
+      ],
+      "findings": [
+        {
+          "confidence": "已确认",
+          "text": "PRECISERR：精确数据总线错误",
+          "evidence": "CFSR bit 9"
+        },
+        {
+          "confidence": "已确认",
+          "text": "FORCED：可配置异常升级为 HardFault。",
+          "evidence": "HFSR bit 30"
+        },
+        {
+          "confidence": "已确认",
+          "text": "有效 BFAR：0x20020000",
+          "evidence": "BFARVALID 已置位"
+        },
+        {
+          "confidence": "证据不足",
+          "text": "故障标志具有粘性，可能来自更早的异常；本次读取没有清除它们。",
+          "evidence": ""
+        },
+        {
+          "confidence": "已确认",
+          "text": "恢复异常硬件帧，保存 PC=0x080000a2。",
+          "evidence": "保存 PC 是被打断的执行位置；非精确错误不能据此定位致错指令"
+        }
+      ],
+      "snapshot": {
+        "arch": "arm",
+        "at": "2026-10-08T12:40:10.947Z",
+        "pc": 134217816,
+        "raw": {
+          "CPUID": 1092600369,
+          "ICSR": 2051,
+          "VTOR": 134217728,
+          "SHCSR": 0,
+          "CFSR": 33280,
+          "HFSR": 1073741824,
+          "DFSR": 8,
+          "MMFAR": 537001984,
+          "BFAR": 537001984,
+          "AFSR": 0,
+          "core": {
+            "PC": 134217816,
+            "LR": 4294967289,
+            "XPSR": 553648131,
+            "SP": 536936368,
+            "MSP": 536936368,
+            "PSP": 536871992
+          }
+        },
+        "frame": {
+          "pc": 134217890,
+          "sp": 536936404,
+          "regs": [
+            537001984,
+            536871012,
+            536871024,
+            536871020,
+            3,
+            8,
+            79764919,
+            536936404,
+            1,
+            0,
+            0,
+            536875036,
+            4294896959,
+            536936404,
+            134217971,
+            134217890
+          ],
+          "known": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "kind": "exception",
+          "loc": {
+            "addr": 134217890,
+            "end": 134217892,
+            "line": 40,
+            "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+            "isStmt": false,
+            "prologueEnd": false,
+            "seqEnd": false,
+            "seq": 5,
+            "idx": 20
+          },
+          "name": "fault_bus",
+          "base": 536936368,
+          "stack": "MSP",
+          "extended": false,
+          "aligned": true,
+          "xpsr": 553648640,
+          "validated": true
+        },
+        "frames": [
+          {
+            "pc": 134217890,
+            "sp": 536936404,
+            "kind": "current",
+            "lookup": 134217890,
+            "name": "fault_bus+0x6",
+            "loc": {
+              "addr": 134217890,
+              "end": 134217892,
+              "line": 40,
+              "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+              "isStmt": false,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 5,
+              "idx": 20
+            },
+            "regs": [
+              537001984,
+              536871012,
+              536871024,
+              536871020,
+              3,
+              8,
+              79764919,
+              536936404,
+              1,
+              0,
+              0,
+              536875036,
+              4294896959,
+              536936404,
+              134217971,
+              134217890
+            ],
+            "known": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "cfa": 536936408
+          },
+          {
+            "pc": 134217970,
+            "sp": 536936408,
+            "kind": "cfi",
+            "lookup": 134217968,
+            "name": "fault_mid+0x2c",
+            "loc": {
+              "addr": 134217966,
+              "end": 134217970,
+              "line": 48,
+              "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+              "isStmt": false,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 7,
+              "idx": 39
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              3,
+              8,
+              79764919,
+              536936408,
+              1,
+              0,
+              0,
+              536875036,
+              0,
+              536936408,
+              134217971,
+              134217971
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 536936424
+          },
+          {
+            "pc": 134217992,
+            "sp": 536936424,
+            "kind": "cfi",
+            "lookup": 134217990,
+            "name": "fault_outer+0x6",
+            "loc": {
+              "addr": 134217988,
+              "end": 134217992,
+              "line": 53,
+              "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 8,
+              "idx": 45
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              536871020,
+              2,
+              8,
+              79764919,
+              536936424,
+              1,
+              0,
+              0,
+              536875036,
+              0,
+              536936424,
+              134217993,
+              134217993
+            ],
+            "known": [
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              3,
+              4,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 536936432
+          },
+          {
+            "pc": 134218144,
+            "sp": 536936432,
+            "kind": "cfi",
+            "lookup": 134218142,
+            "name": "main+0x76",
+            "loc": {
+              "addr": 134218140,
+              "end": 134218144,
+              "line": 67,
+              "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 9,
+              "idx": 65
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              2,
+              8,
+              79764919,
+              536936432,
+              1,
+              0,
+              0,
+              536875036,
+              0,
+              536936432,
+              134218145,
+              134218145
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 536936440
+          },
+          {
+            "pc": 134218236,
+            "sp": 536936440,
+            "kind": "cfi",
+            "lookup": 134218234,
+            "name": "Reset_Handler+0x3e",
+            "loc": {
+              "addr": 134218232,
+              "end": 134218236,
+              "line": 21,
+              "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 10,
+              "idx": 80
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              2,
+              8,
+              79764919,
+              536936440,
+              1,
+              0,
+              0,
+              536875036,
+              0,
+              536936440,
+              134218237,
+              134218237
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 536936448
+          }
+        ],
+        "findings": [
+          {
+            "confidence": "已确认",
+            "text": "PRECISERR：精确数据总线错误",
+            "evidence": "CFSR bit 9"
+          },
+          {
+            "confidence": "已确认",
+            "text": "FORCED：可配置异常升级为 HardFault。",
+            "evidence": "HFSR bit 30"
+          },
+          {
+            "confidence": "已确认",
+            "text": "有效 BFAR：0x20020000",
+            "evidence": "BFARVALID 已置位"
+          },
+          {
+            "confidence": "证据不足",
+            "text": "故障标志具有粘性，可能来自更早的异常；本次读取没有清除它们。",
+            "evidence": ""
+          },
+          {
+            "confidence": "已确认",
+            "text": "恢复异常硬件帧，保存 PC=0x080000a2。",
+            "evidence": "保存 PC 是被打断的执行位置；非精确错误不能据此定位致错指令"
+          }
+        ],
+        "error": null,
+        "observedHalted": true,
+        "unwindReason": "到达栈末端",
+        "reads": 40,
+        "catchConfigured": true
+      },
+      "notes": [
+        "支持 Cortex-M3/M4/M7；无效 BFAR/MMFAR、堆栈失败与非精确错误均不输出虚假的准确位置。",
+        "只读诊断不主动暂停、继续、复位目标或清除异常寄存器。读取失败立即停止，保留已取得的证据。",
+        "ELF 必须与板上固件一致。完整调用链取决于有效栈与 CFI/EHABI 展开信息，未保存的 r4–r11 不会从处理器当前值伪造。"
+      ],
+      "history": {
+        "startedAt": "2026-10-08T12:40:05.811Z",
+        "events": [
+          {
+            "at": "2026-10-08T12:40:06.636Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:06.673Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T12:40:07.344Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T12:40:07.920Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:08.239Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:08.331Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T12:40:08.336Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T12:40:09.002Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T12:40:09.562Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:09.827Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:09.915Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T12:40:09.921Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T12:40:10.583Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T12:40:11.135Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          }
+        ],
+        "omitted": 0
+      }
+    },
+    "tab": "fault",
+    "halted": true,
+    "pc": 134217816,
+    "expected": 134217890,
+    "heal": 0,
+    "recoveries": 0,
+    "errors": [],
+    "log": "调试器就绪。连上目标后按 h 看命令，Tab 补全、↑↓ 翻历史、Ctrl+C 中断。已载入符号：f103ze_fault.elf —— 183 个符号（函数 77 · 数据 9），其中 4 个带类型变量（DWARF），行号表 82 条　行号表：1 段 · 82 条记录 · 8 个源文件（DWARF 4）源码目录建议：推荐选 e:/share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 e:/share（7，目录更大） · E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src（1）源码目录建议：推荐选 e:/share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 e:/share（7，目录更大） · E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src（1）──── 连接（WebUSB · 10000 kHz）────关掉 1 个残留的探针句柄已连接：akaLinkPro CMSIS-DAP · 512B/包 · SWD 10000kHz　SWD 10000 kHz　IDCODE=0x1BA01477硬件断点：6 个比较器（FPB rev1，CTRL=0x261）目标处于停止状态源码：源码目录「（已选文件夹）」：1 个文件源码目录建议：已选「（已选文件夹）」能解析 1/8 · 推荐选 e:/share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 e:/share（7，目录更大） · E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src（1）> halt已暂停　状态：已停止（halted）　PC=0x0800017e main+0x56> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x0800017e main+0x56⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x08000180 main+0x58> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x08000180 main+0x58⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x08000180 main+0x58> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x08000180 main+0x58⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)",
+    "readOnlyEvidence": {
+      "before": {
+        "regs": [
+          134217816,
+          4294967289,
+          553648131,
+          536936368,
+          536936368,
+          536871992
+        ],
+        "scb": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          130,
+          0,
+          0,
+          0,
+          0,
+          0,
+          64,
+          8,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          32,
+          0,
+          0,
+          2,
+          32,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "after": {
+        "regs": [
+          134217816,
+          4294967289,
+          553648131,
+          536936368,
+          536936368,
+          536871992
+        ],
+        "scb": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          130,
+          0,
+          0,
+          0,
+          0,
+          0,
+          64,
+          8,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          32,
+          0,
+          0,
+          2,
+          32,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "demcr": 16778240
+    },
+    "readOnly": true,
+    "demcr": 16778240,
+    "sourceShown": true,
+    "restoredDemcr": 16777216
+  },
+  {
+    "case": {
+      "mode": 4,
+      "name": "UDF / PSP / alignment padding",
+      "flag": 16,
+      "label": "fault_udf_pc",
+      "stack": "PSP",
+      "aligned": true
+    },
+    "baseline": {
+      "demcr": 16777216,
+      "heal": 0,
+      "recoveries": 0,
+      "heartbeat": 95812,
+      "clock": 10000000,
+      "wake": {
+        "romPc": 134218172,
+        "woken": false
+      }
+    },
+    "injection": {
+      "request": 4,
+      "demcr": 16778240,
+      "dhcsr": 196611
+    },
+    "report": {
+      "schema": "akalink-diagnostics/v1",
+      "kind": "fault",
+      "title": "异常诊断报告",
+      "exportedAt": "2026-10-08T12:40:14.071Z",
+      "environment": {
+        "Web版本": "2026-10-08-r3 (H743 异常诊断真机验收；保留即时异常停点；修正浮点保存帧与异常调用链；SWD 降档诊断)",
+        "ELF": "f103ze_fault.elf",
+        "后端": "WebUSB",
+        "数据": "真实目标",
+        "浏览器": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36"
+      },
+      "settings": {
+        "架构": "arm",
+        "现场时间": "2026-10-08T12:40:13.835Z",
+        "时段": "当前停止现场",
+        "恢复栈": "PSP",
+        "帧类型": "基本帧",
+        "帧校验": "已验证",
+        "完整性": "已完成有限读取",
+        "本页启用HardFault捕获": true,
+        "展开停止原因": "回溯没有进展或栈形成循环"
+      },
+      "metrics": [
+        {
+          "name": "停止 PC",
+          "value": "0x08000058",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "CPUID",
+          "value": "0x411fc231",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "ICSR",
+          "value": "0x00000803",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "VTOR",
+          "value": "0x08000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "SHCSR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "CFSR",
+          "value": "0x00010000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "HFSR",
+          "value": "0x40000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "DFSR",
+          "value": "0x00000008",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "MMFAR",
+          "value": "0xe000edf8",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": "MMARVALID 未置位，不能作为故障地址"
+        },
+        {
+          "name": "BFAR",
+          "value": "0xe000edf8",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": "BFARVALID 未置位，不能作为故障地址"
+        },
+        {
+          "name": "AFSR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "LR",
+          "value": "0xfffffffd",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "XPSR",
+          "value": "0x01000003",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": "IPSR=3"
+        },
+        {
+          "name": "SP",
+          "value": "0x2000fff0",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "MSP",
+          "value": "0x2000fff0",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "PSP",
+          "value": "0x20000438",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "异常保存 PC",
+          "value": "0x08000080",
+          "unit": "",
+          "source": "硬件保存帧",
+          "note": "已校验；非精确错误不保证为致错指令"
+        }
+      ],
+      "findings": [
+        {
+          "confidence": "已确认",
+          "text": "UNDEFINSTR：未定义指令",
+          "evidence": "CFSR bit 16"
+        },
+        {
+          "confidence": "已确认",
+          "text": "FORCED：可配置异常升级为 HardFault。",
+          "evidence": "HFSR bit 30"
+        },
+        {
+          "confidence": "证据不足",
+          "text": "故障标志具有粘性，可能来自更早的异常；本次读取没有清除它们。",
+          "evidence": ""
+        },
+        {
+          "confidence": "已确认",
+          "text": "恢复异常硬件帧，保存 PC=0x08000080。",
+          "evidence": "保存 PC 是被打断的执行位置；非精确错误不能据此定位致错指令"
+        }
+      ],
+      "snapshot": {
+        "arch": "arm",
+        "at": "2026-10-08T12:40:13.835Z",
+        "pc": 134217816,
+        "raw": {
+          "CPUID": 1092600369,
+          "ICSR": 2051,
+          "VTOR": 134217728,
+          "SHCSR": 0,
+          "CFSR": 65536,
+          "HFSR": 1073741824,
+          "DFSR": 8,
+          "MMFAR": 3758157304,
+          "BFAR": 3758157304,
+          "AFSR": 0,
+          "core": {
+            "PC": 134217816,
+            "LR": 4294967293,
+            "XPSR": 16777219,
+            "SP": 536936432,
+            "MSP": 536936432,
+            "PSP": 536871992
+          }
+        },
+        "frame": {
+          "pc": 134217856,
+          "sp": 536872028,
+          "regs": [
+            42,
+            536872056,
+            2,
+            536871020,
+            4,
+            8,
+            79764919,
+            536872028,
+            1,
+            0,
+            0,
+            536875036,
+            4294896959,
+            536872028,
+            134217949,
+            134217856
+          ],
+          "known": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "kind": "exception",
+          "loc": {
+            "addr": 134217856,
+            "end": 134217858,
+            "line": 32,
+            "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+            "isStmt": true,
+            "prologueEnd": false,
+            "seqEnd": false,
+            "seq": 3,
+            "idx": 12
+          },
+          "name": "fault_udf",
+          "base": 536871992,
+          "stack": "PSP",
+          "extended": false,
+          "aligned": true,
+          "xpsr": 16777728,
+          "validated": true
+        },
+        "frames": [
+          {
+            "pc": 134217856,
+            "sp": 536872028,
+            "kind": "current",
+            "lookup": 134217856,
+            "name": "fault_udf+0x4",
+            "loc": {
+              "addr": 134217856,
+              "end": 134217858,
+              "line": 32,
+              "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 3,
+              "idx": 12
+            },
+            "regs": [
+              42,
+              536872056,
+              2,
+              536871020,
+              4,
+              8,
+              79764919,
+              536872028,
+              1,
+              0,
+              0,
+              536875036,
+              4294896959,
+              536872028,
+              134217949,
+              134217856
+            ],
+            "known": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "cfa": 536872032
+          },
+          {
+            "pc": 134217948,
+            "sp": 536872032,
+            "kind": "cfi",
+            "lookup": 134217946,
+            "name": "fault_mid+0x16",
+            "loc": {
+              "addr": 134217944,
+              "end": 134217948,
+              "line": 49,
+              "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+              "isStmt": false,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 7,
+              "idx": 31
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              4,
+              8,
+              79764919,
+              536872032,
+              1,
+              0,
+              0,
+              536875036,
+              0,
+              536872032,
+              134217949,
+              134217949
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 536872048
+          },
+          {
+            "pc": 134217992,
+            "sp": 536872048,
+            "kind": "cfi",
+            "lookup": 134217990,
+            "name": "fault_outer+0x6",
+            "loc": {
+              "addr": 134217988,
+              "end": 134217992,
+              "line": 53,
+              "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 8,
+              "idx": 45
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              536871020,
+              3,
+              8,
+              79764919,
+              536872048,
+              1,
+              0,
+              0,
+              536875036,
+              0,
+              536872048,
+              134217993,
+              134217993
+            ],
+            "known": [
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              3,
+              4,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 536872056
+          },
+          {
+            "pc": 134218022,
+            "sp": 536872056,
+            "kind": "cfi",
+            "lookup": 134218020,
+            "name": "enter_psp+0x10",
+            "loc": {
+              "addr": 134218004,
+              "end": 134218024,
+              "line": 55,
+              "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 9,
+              "idx": 49
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              3,
+              8,
+              79764919,
+              536936432,
+              1,
+              0,
+              0,
+              536875036,
+              0,
+              536872056,
+              134218023,
+              134218023
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 536872056
+          }
+        ],
+        "findings": [
+          {
+            "confidence": "已确认",
+            "text": "UNDEFINSTR：未定义指令",
+            "evidence": "CFSR bit 16"
+          },
+          {
+            "confidence": "已确认",
+            "text": "FORCED：可配置异常升级为 HardFault。",
+            "evidence": "HFSR bit 30"
+          },
+          {
+            "confidence": "证据不足",
+            "text": "故障标志具有粘性，可能来自更早的异常；本次读取没有清除它们。",
+            "evidence": ""
+          },
+          {
+            "confidence": "已确认",
+            "text": "恢复异常硬件帧，保存 PC=0x08000080。",
+            "evidence": "保存 PC 是被打断的执行位置；非精确错误不能据此定位致错指令"
+          }
+        ],
+        "error": null,
+        "observedHalted": true,
+        "unwindReason": "回溯没有进展或栈形成循环",
+        "reads": 36,
+        "catchConfigured": true
+      },
+      "notes": [
+        "支持 Cortex-M3/M4/M7；无效 BFAR/MMFAR、堆栈失败与非精确错误均不输出虚假的准确位置。",
+        "只读诊断不主动暂停、继续、复位目标或清除异常寄存器。读取失败立即停止，保留已取得的证据。",
+        "ELF 必须与板上固件一致。完整调用链取决于有效栈与 CFI/EHABI 展开信息，未保存的 r4–r11 不会从处理器当前值伪造。"
+      ],
+      "history": {
+        "startedAt": "2026-10-08T12:40:05.811Z",
+        "events": [
+          {
+            "at": "2026-10-08T12:40:06.636Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:06.673Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T12:40:07.344Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T12:40:07.920Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:08.239Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:08.331Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T12:40:08.336Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T12:40:09.002Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T12:40:09.562Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:09.827Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:09.915Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T12:40:09.921Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T12:40:10.583Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T12:40:11.135Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:11.417Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:12.785Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T12:40:12.789Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T12:40:13.458Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T12:40:14.018Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          }
+        ],
+        "omitted": 0
+      }
+    },
+    "tab": "fault",
+    "halted": true,
+    "pc": 134217816,
+    "expected": 134217856,
+    "heal": 0,
+    "recoveries": 0,
+    "errors": [],
+    "log": "调试器就绪。连上目标后按 h 看命令，Tab 补全、↑↓ 翻历史、Ctrl+C 中断。已载入符号：f103ze_fault.elf —— 183 个符号（函数 77 · 数据 9），其中 4 个带类型变量（DWARF），行号表 82 条　行号表：1 段 · 82 条记录 · 8 个源文件（DWARF 4）源码目录建议：推荐选 e:/share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 e:/share（7，目录更大） · E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src（1）源码目录建议：推荐选 e:/share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 e:/share（7，目录更大） · E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src（1）──── 连接（WebUSB · 10000 kHz）────关掉 1 个残留的探针句柄已连接：akaLinkPro CMSIS-DAP · 512B/包 · SWD 10000kHz　SWD 10000 kHz　IDCODE=0x1BA01477硬件断点：6 个比较器（FPB rev1，CTRL=0x261）目标处于停止状态源码：源码目录「（已选文件夹）」：1 个文件源码目录建议：已选「（已选文件夹）」能解析 1/8 · 推荐选 e:/share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 e:/share（7，目录更大） · E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src（1）> halt已暂停　状态：已停止（halted）　PC=0x0800017e main+0x56> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x0800017e main+0x56⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x08000180 main+0x58> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x08000180 main+0x58⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x08000180 main+0x58> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x08000180 main+0x58⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x0800017e main+0x56> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x0800017e main+0x56⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)",
+    "readOnlyEvidence": {
+      "before": {
+        "regs": [
+          134217816,
+          4294967293,
+          16777219,
+          536936432,
+          536936432,
+          536871992
+        ],
+        "scb": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          64,
+          8,
+          0,
+          0,
+          0,
+          248,
+          237,
+          0,
+          224,
+          248,
+          237,
+          0,
+          224,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "after": {
+        "regs": [
+          134217816,
+          4294967293,
+          16777219,
+          536936432,
+          536936432,
+          536871992
+        ],
+        "scb": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          64,
+          8,
+          0,
+          0,
+          0,
+          248,
+          237,
+          0,
+          224,
+          248,
+          237,
+          0,
+          224,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "demcr": 16778240
+    },
+    "readOnly": true,
+    "demcr": 16778240,
+    "sourceShown": true,
+    "restoredDemcr": 16777216
+  },
+  {
+    "case": {
+      "mode": 5,
+      "name": "unaligned access",
+      "flag": 24,
+      "label": "fault_unaligned_pc",
+      "stack": "MSP"
+    },
+    "baseline": {
+      "demcr": 16777216,
+      "heal": 0,
+      "recoveries": 0,
+      "heartbeat": 95030,
+      "clock": 10000000,
+      "wake": {
+        "romPc": 134218172,
+        "woken": false
+      }
+    },
+    "injection": {
+      "request": 5,
+      "demcr": 16778240,
+      "dhcsr": 196611
+    },
+    "report": {
+      "schema": "akalink-diagnostics/v1",
+      "kind": "fault",
+      "title": "异常诊断报告",
+      "exportedAt": "2026-10-08T12:40:15.663Z",
+      "environment": {
+        "Web版本": "2026-10-08-r3 (H743 异常诊断真机验收；保留即时异常停点；修正浮点保存帧与异常调用链；SWD 降档诊断)",
+        "ELF": "f103ze_fault.elf",
+        "后端": "WebUSB",
+        "数据": "真实目标",
+        "浏览器": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36"
+      },
+      "settings": {
+        "架构": "arm",
+        "现场时间": "2026-10-08T12:40:15.417Z",
+        "时段": "当前停止现场",
+        "恢复栈": "MSP",
+        "帧类型": "基本帧",
+        "帧校验": "已验证",
+        "完整性": "已完成有限读取",
+        "本页启用HardFault捕获": true,
+        "展开停止原因": "到达栈末端"
+      },
+      "metrics": [
+        {
+          "name": "停止 PC",
+          "value": "0x08000058",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "CPUID",
+          "value": "0x411fc231",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "ICSR",
+          "value": "0x00000803",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "VTOR",
+          "value": "0x08000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "SHCSR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "CFSR",
+          "value": "0x01000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "HFSR",
+          "value": "0x40000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "DFSR",
+          "value": "0x00000008",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "MMFAR",
+          "value": "0xe000edf8",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": "MMARVALID 未置位，不能作为故障地址"
+        },
+        {
+          "name": "BFAR",
+          "value": "0xe000edf8",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": "BFARVALID 未置位，不能作为故障地址"
+        },
+        {
+          "name": "AFSR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "LR",
+          "value": "0xfffffff9",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "XPSR",
+          "value": "0x21000003",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": "IPSR=3"
+        },
+        {
+          "name": "SP",
+          "value": "0x2000ffb0",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "MSP",
+          "value": "0x2000ffb0",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "PSP",
+          "value": "0x20000438",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "异常保存 PC",
+          "value": "0x080000b6",
+          "unit": "",
+          "source": "硬件保存帧",
+          "note": "已校验；非精确错误不保证为致错指令"
+        }
+      ],
+      "findings": [
+        {
+          "confidence": "已确认",
+          "text": "UNALIGNED：未对齐访问",
+          "evidence": "CFSR bit 24"
+        },
+        {
+          "confidence": "已确认",
+          "text": "FORCED：可配置异常升级为 HardFault。",
+          "evidence": "HFSR bit 30"
+        },
+        {
+          "confidence": "证据不足",
+          "text": "故障标志具有粘性，可能来自更早的异常；本次读取没有清除它们。",
+          "evidence": ""
+        },
+        {
+          "confidence": "已确认",
+          "text": "恢复异常硬件帧，保存 PC=0x080000b6。",
+          "evidence": "保存 PC 是被打断的执行位置；非精确错误不能据此定位致错指令"
+        }
+      ],
+      "snapshot": {
+        "arch": "arm",
+        "at": "2026-10-08T12:40:15.417Z",
+        "pc": 134217816,
+        "raw": {
+          "CPUID": 1092600369,
+          "ICSR": 2051,
+          "VTOR": 134217728,
+          "SHCSR": 0,
+          "CFSR": 16777216,
+          "HFSR": 1073741824,
+          "DFSR": 8,
+          "MMFAR": 3758157304,
+          "BFAR": 3758157304,
+          "AFSR": 0,
+          "core": {
+            "PC": 134217816,
+            "LR": 4294967289,
+            "XPSR": 553648131,
+            "SP": 536936368,
+            "MSP": 536936368,
+            "PSP": 536871992
+          }
+        },
+        "frame": {
+          "pc": 134217910,
+          "sp": 536936404,
+          "regs": [
+            536870913,
+            536871012,
+            3758153728,
+            520,
+            5,
+            8,
+            79764919,
+            536936404,
+            1,
+            0,
+            0,
+            536875036,
+            4294896959,
+            536936404,
+            134217979,
+            134217910
+          ],
+          "known": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "kind": "exception",
+          "loc": {
+            "addr": 134217910,
+            "end": 134217912,
+            "line": 44,
+            "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+            "isStmt": false,
+            "prologueEnd": false,
+            "seqEnd": false,
+            "seq": 6,
+            "idx": 24
+          },
+          "name": "fault_unaligned",
+          "base": 536936368,
+          "stack": "MSP",
+          "extended": false,
+          "aligned": true,
+          "xpsr": 553648640,
+          "validated": true
+        },
+        "frames": [
+          {
+            "pc": 134217910,
+            "sp": 536936404,
+            "kind": "current",
+            "lookup": 134217910,
+            "name": "fault_unaligned+0x6",
+            "loc": {
+              "addr": 134217910,
+              "end": 134217912,
+              "line": 44,
+              "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+              "isStmt": false,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 6,
+              "idx": 24
+            },
+            "regs": [
+              536870913,
+              536871012,
+              3758153728,
+              520,
+              5,
+              8,
+              79764919,
+              536936404,
+              1,
+              0,
+              0,
+              536875036,
+              4294896959,
+              536936404,
+              134217979,
+              134217910
+            ],
+            "known": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "cfa": 536936408
+          },
+          {
+            "pc": 134217978,
+            "sp": 536936408,
+            "kind": "cfi",
+            "lookup": 134217976,
+            "name": "fault_mid+0x34",
+            "loc": {
+              "addr": 134217974,
+              "end": 134217978,
+              "line": 49,
+              "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+              "isStmt": false,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 7,
+              "idx": 42
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              5,
+              8,
+              79764919,
+              536936408,
+              1,
+              0,
+              0,
+              536875036,
+              0,
+              536936408,
+              134217979,
+              134217979
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 536936424
+          },
+          {
+            "pc": 134217992,
+            "sp": 536936424,
+            "kind": "cfi",
+            "lookup": 134217990,
+            "name": "fault_outer+0x6",
+            "loc": {
+              "addr": 134217988,
+              "end": 134217992,
+              "line": 53,
+              "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 8,
+              "idx": 45
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              520,
+              4,
+              8,
+              79764919,
+              536936424,
+              1,
+              0,
+              0,
+              536875036,
+              0,
+              536936424,
+              134217993,
+              134217993
+            ],
+            "known": [
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              3,
+              4,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 536936432
+          },
+          {
+            "pc": 134218144,
+            "sp": 536936432,
+            "kind": "cfi",
+            "lookup": 134218142,
+            "name": "main+0x76",
+            "loc": {
+              "addr": 134218140,
+              "end": 134218144,
+              "line": 67,
+              "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 9,
+              "idx": 65
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              4,
+              8,
+              79764919,
+              536936432,
+              1,
+              0,
+              0,
+              536875036,
+              0,
+              536936432,
+              134218145,
+              134218145
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 536936440
+          },
+          {
+            "pc": 134218236,
+            "sp": 536936440,
+            "kind": "cfi",
+            "lookup": 134218234,
+            "name": "Reset_Handler+0x3e",
+            "loc": {
+              "addr": 134218232,
+              "end": 134218236,
+              "line": 21,
+              "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 10,
+              "idx": 80
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              4,
+              8,
+              79764919,
+              536936440,
+              1,
+              0,
+              0,
+              536875036,
+              0,
+              536936440,
+              134218237,
+              134218237
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 536936448
+          }
+        ],
+        "findings": [
+          {
+            "confidence": "已确认",
+            "text": "UNALIGNED：未对齐访问",
+            "evidence": "CFSR bit 24"
+          },
+          {
+            "confidence": "已确认",
+            "text": "FORCED：可配置异常升级为 HardFault。",
+            "evidence": "HFSR bit 30"
+          },
+          {
+            "confidence": "证据不足",
+            "text": "故障标志具有粘性，可能来自更早的异常；本次读取没有清除它们。",
+            "evidence": ""
+          },
+          {
+            "confidence": "已确认",
+            "text": "恢复异常硬件帧，保存 PC=0x080000b6。",
+            "evidence": "保存 PC 是被打断的执行位置；非精确错误不能据此定位致错指令"
+          }
+        ],
+        "error": null,
+        "observedHalted": true,
+        "unwindReason": "到达栈末端",
+        "reads": 40,
+        "catchConfigured": true
+      },
+      "notes": [
+        "支持 Cortex-M3/M4/M7；无效 BFAR/MMFAR、堆栈失败与非精确错误均不输出虚假的准确位置。",
+        "只读诊断不主动暂停、继续、复位目标或清除异常寄存器。读取失败立即停止，保留已取得的证据。",
+        "ELF 必须与板上固件一致。完整调用链取决于有效栈与 CFI/EHABI 展开信息，未保存的 r4–r11 不会从处理器当前值伪造。"
+      ],
+      "history": {
+        "startedAt": "2026-10-08T12:40:05.811Z",
+        "events": [
+          {
+            "at": "2026-10-08T12:40:06.636Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:06.673Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T12:40:07.344Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T12:40:07.920Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:08.239Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:08.331Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T12:40:08.336Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T12:40:09.002Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T12:40:09.562Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:09.827Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:09.915Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T12:40:09.921Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T12:40:10.583Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T12:40:11.135Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:11.417Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:12.785Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T12:40:12.789Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T12:40:13.458Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T12:40:14.018Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:14.296Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:14.387Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T12:40:14.393Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T12:40:15.054Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T12:40:15.595Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          }
+        ],
+        "omitted": 0
+      }
+    },
+    "tab": "fault",
+    "halted": true,
+    "pc": 134217816,
+    "expected": 134217910,
+    "heal": 0,
+    "recoveries": 0,
+    "errors": [],
+    "log": "调试器就绪。连上目标后按 h 看命令，Tab 补全、↑↓ 翻历史、Ctrl+C 中断。已载入符号：f103ze_fault.elf —— 183 个符号（函数 77 · 数据 9），其中 4 个带类型变量（DWARF），行号表 82 条　行号表：1 段 · 82 条记录 · 8 个源文件（DWARF 4）源码目录建议：推荐选 e:/share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 e:/share（7，目录更大） · E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src（1）源码目录建议：推荐选 e:/share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 e:/share（7，目录更大） · E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src（1）──── 连接（WebUSB · 10000 kHz）────关掉 1 个残留的探针句柄已连接：akaLinkPro CMSIS-DAP · 512B/包 · SWD 10000kHz　SWD 10000 kHz　IDCODE=0x1BA01477硬件断点：6 个比较器（FPB rev1，CTRL=0x261）目标处于停止状态源码：源码目录「（已选文件夹）」：1 个文件源码目录建议：已选「（已选文件夹）」能解析 1/8 · 推荐选 e:/share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 e:/share（7，目录更大） · E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src（1）> halt已暂停　状态：已停止（halted）　PC=0x0800017e main+0x56> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x0800017e main+0x56⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x08000180 main+0x58> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x08000180 main+0x58⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x08000180 main+0x58> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x08000180 main+0x58⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x0800017e main+0x56> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x0800017e main+0x56⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x08000188 main+0x60> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x08000188 main+0x60⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)",
+    "readOnlyEvidence": {
+      "before": {
+        "regs": [
+          134217816,
+          4294967289,
+          553648131,
+          536936368,
+          536936368,
+          536871992
+        ],
+        "scb": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          64,
+          8,
+          0,
+          0,
+          0,
+          248,
+          237,
+          0,
+          224,
+          248,
+          237,
+          0,
+          224,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "after": {
+        "regs": [
+          134217816,
+          4294967289,
+          553648131,
+          536936368,
+          536936368,
+          536871992
+        ],
+        "scb": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          64,
+          8,
+          0,
+          0,
+          0,
+          248,
+          237,
+          0,
+          224,
+          248,
+          237,
+          0,
+          224,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "demcr": 16778240
+    },
+    "readOnly": true,
+    "demcr": 16778240,
+    "sourceShown": true,
+    "restoredDemcr": 16777216
+  },
+  {
+    "case": {
+      "mode": 7,
+      "name": "UDF / PSP / no alignment padding",
+      "flag": 16,
+      "label": "fault_udf_pc",
+      "stack": "PSP",
+      "aligned": false
+    },
+    "baseline": {
+      "demcr": 16777216,
+      "heal": 0,
+      "recoveries": 0,
+      "heartbeat": 92367,
+      "clock": 10000000,
+      "wake": {
+        "romPc": 134218172,
+        "woken": false
+      }
+    },
+    "injection": {
+      "request": 7,
+      "demcr": 16778240,
+      "dhcsr": 196611
+    },
+    "report": {
+      "schema": "akalink-diagnostics/v1",
+      "kind": "fault",
+      "title": "异常诊断报告",
+      "exportedAt": "2026-10-08T12:40:19.220Z",
+      "environment": {
+        "Web版本": "2026-10-08-r3 (H743 异常诊断真机验收；保留即时异常停点；修正浮点保存帧与异常调用链；SWD 降档诊断)",
+        "ELF": "f103ze_fault.elf",
+        "后端": "WebUSB",
+        "数据": "真实目标",
+        "浏览器": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36"
+      },
+      "settings": {
+        "架构": "arm",
+        "现场时间": "2026-10-08T12:40:18.983Z",
+        "时段": "当前停止现场",
+        "恢复栈": "PSP",
+        "帧类型": "基本帧",
+        "帧校验": "已验证",
+        "完整性": "已完成有限读取",
+        "本页启用HardFault捕获": true,
+        "展开停止原因": "回溯没有进展或栈形成循环"
+      },
+      "metrics": [
+        {
+          "name": "停止 PC",
+          "value": "0x08000058",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "CPUID",
+          "value": "0x411fc231",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "ICSR",
+          "value": "0x00000803",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "VTOR",
+          "value": "0x08000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "SHCSR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "CFSR",
+          "value": "0x00010000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "HFSR",
+          "value": "0x40000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "DFSR",
+          "value": "0x00000008",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "MMFAR",
+          "value": "0xe000edf8",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": "MMARVALID 未置位，不能作为故障地址"
+        },
+        {
+          "name": "BFAR",
+          "value": "0xe000edf8",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": "BFARVALID 未置位，不能作为故障地址"
+        },
+        {
+          "name": "AFSR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "LR",
+          "value": "0xfffffffd",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "XPSR",
+          "value": "0x21000003",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": "IPSR=3"
+        },
+        {
+          "name": "SP",
+          "value": "0x2000fff0",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "MSP",
+          "value": "0x2000fff0",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "PSP",
+          "value": "0x20000438",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "异常保存 PC",
+          "value": "0x08000080",
+          "unit": "",
+          "source": "硬件保存帧",
+          "note": "已校验；非精确错误不保证为致错指令"
+        }
+      ],
+      "findings": [
+        {
+          "confidence": "已确认",
+          "text": "UNDEFINSTR：未定义指令",
+          "evidence": "CFSR bit 16"
+        },
+        {
+          "confidence": "已确认",
+          "text": "FORCED：可配置异常升级为 HardFault。",
+          "evidence": "HFSR bit 30"
+        },
+        {
+          "confidence": "证据不足",
+          "text": "故障标志具有粘性，可能来自更早的异常；本次读取没有清除它们。",
+          "evidence": ""
+        },
+        {
+          "confidence": "已确认",
+          "text": "恢复异常硬件帧，保存 PC=0x08000080。",
+          "evidence": "保存 PC 是被打断的执行位置；非精确错误不能据此定位致错指令"
+        }
+      ],
+      "snapshot": {
+        "arch": "arm",
+        "at": "2026-10-08T12:40:18.983Z",
+        "pc": 134217816,
+        "raw": {
+          "CPUID": 1092600369,
+          "ICSR": 2051,
+          "VTOR": 134217728,
+          "SHCSR": 0,
+          "CFSR": 65536,
+          "HFSR": 1073741824,
+          "DFSR": 8,
+          "MMFAR": 3758157304,
+          "BFAR": 3758157304,
+          "AFSR": 0,
+          "core": {
+            "PC": 134217816,
+            "LR": 4294967293,
+            "XPSR": 553648131,
+            "SP": 536936432,
+            "MSP": 536936432,
+            "PSP": 536871992
+          }
+        },
+        "frame": {
+          "pc": 134217856,
+          "sp": 536872024,
+          "regs": [
+            42,
+            536872052,
+            2,
+            536871020,
+            7,
+            8,
+            79764919,
+            536872024,
+            1,
+            0,
+            0,
+            536875036,
+            4294896959,
+            536872024,
+            134217949,
+            134217856
+          ],
+          "known": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "kind": "exception",
+          "loc": {
+            "addr": 134217856,
+            "end": 134217858,
+            "line": 32,
+            "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+            "isStmt": true,
+            "prologueEnd": false,
+            "seqEnd": false,
+            "seq": 3,
+            "idx": 12
+          },
+          "name": "fault_udf",
+          "base": 536871992,
+          "stack": "PSP",
+          "extended": false,
+          "aligned": false,
+          "xpsr": 553648128,
+          "validated": true
+        },
+        "frames": [
+          {
+            "pc": 134217856,
+            "sp": 536872024,
+            "kind": "current",
+            "lookup": 134217856,
+            "name": "fault_udf+0x4",
+            "loc": {
+              "addr": 134217856,
+              "end": 134217858,
+              "line": 32,
+              "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 3,
+              "idx": 12
+            },
+            "regs": [
+              42,
+              536872052,
+              2,
+              536871020,
+              7,
+              8,
+              79764919,
+              536872024,
+              1,
+              0,
+              0,
+              536875036,
+              4294896959,
+              536872024,
+              134217949,
+              134217856
+            ],
+            "known": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "cfa": 536872028
+          },
+          {
+            "pc": 134217948,
+            "sp": 536872028,
+            "kind": "cfi",
+            "lookup": 134217946,
+            "name": "fault_mid+0x16",
+            "loc": {
+              "addr": 134217944,
+              "end": 134217948,
+              "line": 49,
+              "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+              "isStmt": false,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 7,
+              "idx": 31
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              7,
+              8,
+              79764919,
+              536872028,
+              1,
+              0,
+              0,
+              536875036,
+              0,
+              536872028,
+              134217949,
+              134217949
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 536872044
+          },
+          {
+            "pc": 134217992,
+            "sp": 536872044,
+            "kind": "cfi",
+            "lookup": 134217990,
+            "name": "fault_outer+0x6",
+            "loc": {
+              "addr": 134217988,
+              "end": 134217992,
+              "line": 53,
+              "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 8,
+              "idx": 45
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              536871020,
+              5,
+              8,
+              79764919,
+              536872044,
+              1,
+              0,
+              0,
+              536875036,
+              0,
+              536872044,
+              134217993,
+              134217993
+            ],
+            "known": [
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              3,
+              4,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 536872052
+          },
+          {
+            "pc": 134218022,
+            "sp": 536872052,
+            "kind": "cfi",
+            "lookup": 134218020,
+            "name": "enter_psp+0x10",
+            "loc": {
+              "addr": 134218004,
+              "end": 134218024,
+              "line": 55,
+              "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 9,
+              "idx": 49
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              5,
+              8,
+              79764919,
+              536936432,
+              1,
+              0,
+              0,
+              536875036,
+              0,
+              536872052,
+              134218023,
+              134218023
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 536872052
+          }
+        ],
+        "findings": [
+          {
+            "confidence": "已确认",
+            "text": "UNDEFINSTR：未定义指令",
+            "evidence": "CFSR bit 16"
+          },
+          {
+            "confidence": "已确认",
+            "text": "FORCED：可配置异常升级为 HardFault。",
+            "evidence": "HFSR bit 30"
+          },
+          {
+            "confidence": "证据不足",
+            "text": "故障标志具有粘性，可能来自更早的异常；本次读取没有清除它们。",
+            "evidence": ""
+          },
+          {
+            "confidence": "已确认",
+            "text": "恢复异常硬件帧，保存 PC=0x08000080。",
+            "evidence": "保存 PC 是被打断的执行位置；非精确错误不能据此定位致错指令"
+          }
+        ],
+        "error": null,
+        "observedHalted": true,
+        "unwindReason": "回溯没有进展或栈形成循环",
+        "reads": 36,
+        "catchConfigured": true
+      },
+      "notes": [
+        "支持 Cortex-M3/M4/M7；无效 BFAR/MMFAR、堆栈失败与非精确错误均不输出虚假的准确位置。",
+        "只读诊断不主动暂停、继续、复位目标或清除异常寄存器。读取失败立即停止，保留已取得的证据。",
+        "ELF 必须与板上固件一致。完整调用链取决于有效栈与 CFI/EHABI 展开信息，未保存的 r4–r11 不会从处理器当前值伪造。"
+      ],
+      "history": {
+        "startedAt": "2026-10-08T12:40:05.811Z",
+        "events": [
+          {
+            "at": "2026-10-08T12:40:06.636Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:06.673Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T12:40:07.344Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T12:40:07.920Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:08.239Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:08.331Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T12:40:08.336Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T12:40:09.002Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T12:40:09.562Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:09.827Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:09.915Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T12:40:09.921Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T12:40:10.583Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T12:40:11.135Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:11.417Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:12.785Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T12:40:12.789Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T12:40:13.458Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T12:40:14.018Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:14.296Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:14.387Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T12:40:14.393Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T12:40:15.054Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T12:40:15.595Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:15.901Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:17.952Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T12:40:17.957Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T12:40:18.623Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T12:40:19.169Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          }
+        ],
+        "omitted": 0
+      }
+    },
+    "tab": "fault",
+    "halted": true,
+    "pc": 134217816,
+    "expected": 134217856,
+    "heal": 0,
+    "recoveries": 0,
+    "errors": [],
+    "log": "调试器就绪。连上目标后按 h 看命令，Tab 补全、↑↓ 翻历史、Ctrl+C 中断。已载入符号：f103ze_fault.elf —— 183 个符号（函数 77 · 数据 9），其中 4 个带类型变量（DWARF），行号表 82 条　行号表：1 段 · 82 条记录 · 8 个源文件（DWARF 4）源码目录建议：推荐选 e:/share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 e:/share（7，目录更大） · E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src（1）源码目录建议：推荐选 e:/share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 e:/share（7，目录更大） · E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src（1）──── 连接（WebUSB · 10000 kHz）────关掉 1 个残留的探针句柄已连接：akaLinkPro CMSIS-DAP · 512B/包 · SWD 10000kHz　SWD 10000 kHz　IDCODE=0x1BA01477硬件断点：6 个比较器（FPB rev1，CTRL=0x261）目标处于停止状态源码：源码目录「（已选文件夹）」：1 个文件源码目录建议：已选「（已选文件夹）」能解析 1/8 · 推荐选 e:/share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 e:/share（7，目录更大） · E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src（1）> halt已暂停　状态：已停止（halted）　PC=0x0800017e main+0x56> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x0800017e main+0x56⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x08000180 main+0x58> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x08000180 main+0x58⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x08000180 main+0x58> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x08000180 main+0x58⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x0800017e main+0x56> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x0800017e main+0x56⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x08000188 main+0x60> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x08000188 main+0x60⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x08000180 main+0x58> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x08000180 main+0x58⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)",
+    "readOnlyEvidence": {
+      "before": {
+        "regs": [
+          134217816,
+          4294967293,
+          553648131,
+          536936432,
+          536936432,
+          536871992
+        ],
+        "scb": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          64,
+          8,
+          0,
+          0,
+          0,
+          248,
+          237,
+          0,
+          224,
+          248,
+          237,
+          0,
+          224,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "after": {
+        "regs": [
+          134217816,
+          4294967293,
+          553648131,
+          536936432,
+          536936432,
+          536871992
+        ],
+        "scb": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          64,
+          8,
+          0,
+          0,
+          0,
+          248,
+          237,
+          0,
+          224,
+          248,
+          237,
+          0,
+          224,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "demcr": 16778240
+    },
+    "readOnly": true,
+    "demcr": 16778240,
+    "sourceShown": true,
+    "restoredDemcr": 16777216
+  },
+  {
+    "case": {
+      "mode": 1,
+      "name": "handler prologue unwind",
+      "flag": 16,
+      "label": "fault_udf_pc",
+      "stack": "MSP",
+      "catch": false
+    },
+    "baseline": {
+      "demcr": 16777216,
+      "heal": 0,
+      "recoveries": 0,
+      "heartbeat": 98624,
+      "clock": 10000000,
+      "wake": {
+        "romPc": 134218172,
+        "woken": false
+      }
+    },
+    "injection": {
+      "request": 1,
+      "demcr": 16777216,
+      "dhcsr": 196611
+    },
+    "report": {
+      "schema": "akalink-diagnostics/v1",
+      "kind": "fault",
+      "title": "异常诊断报告",
+      "exportedAt": "2026-10-08T12:40:22.365Z",
+      "environment": {
+        "Web版本": "2026-10-08-r3 (H743 异常诊断真机验收；保留即时异常停点；修正浮点保存帧与异常调用链；SWD 降档诊断)",
+        "ELF": "f103ze_fault.elf",
+        "后端": "WebUSB",
+        "数据": "真实目标",
+        "浏览器": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36"
+      },
+      "settings": {
+        "架构": "arm",
+        "现场时间": "2026-10-08T12:40:22.107Z",
+        "时段": "当前停止现场",
+        "恢复栈": "MSP",
+        "帧类型": "基本帧",
+        "帧校验": "已验证",
+        "完整性": "已完成有限读取",
+        "本页启用HardFault捕获": false,
+        "展开停止原因": "到达栈末端"
+      },
+      "metrics": [
+        {
+          "name": "停止 PC",
+          "value": "0x0800004e",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "CPUID",
+          "value": "0x411fc231",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "ICSR",
+          "value": "0x00000803",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "VTOR",
+          "value": "0x08000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "SHCSR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "CFSR",
+          "value": "0x00010000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "HFSR",
+          "value": "0x40000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "DFSR",
+          "value": "0x00000001",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "MMFAR",
+          "value": "0xe000edf8",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": "MMARVALID 未置位，不能作为故障地址"
+        },
+        {
+          "name": "BFAR",
+          "value": "0xe000edf8",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": "BFARVALID 未置位，不能作为故障地址"
+        },
+        {
+          "name": "AFSR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "LR",
+          "value": "0x08000061",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "XPSR",
+          "value": "0x01000003",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": "IPSR=3"
+        },
+        {
+          "name": "SP",
+          "value": "0x2000ffa4",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "MSP",
+          "value": "0x2000ffa4",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "PSP",
+          "value": "0x20000438",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "异常保存 PC",
+          "value": "0x08000080",
+          "unit": "",
+          "source": "硬件保存帧",
+          "note": "已校验；非精确错误不保证为致错指令"
+        }
+      ],
+      "findings": [
+        {
+          "confidence": "已确认",
+          "text": "UNDEFINSTR：未定义指令",
+          "evidence": "CFSR bit 16"
+        },
+        {
+          "confidence": "已确认",
+          "text": "FORCED：可配置异常升级为 HardFault。",
+          "evidence": "HFSR bit 30"
+        },
+        {
+          "confidence": "证据不足",
+          "text": "故障标志具有粘性，可能来自更早的异常；本次读取没有清除它们。",
+          "evidence": ""
+        },
+        {
+          "confidence": "已确认",
+          "text": "恢复异常硬件帧，保存 PC=0x08000080。",
+          "evidence": "保存 PC 是被打断的执行位置；非精确错误不能据此定位致错指令"
+        }
+      ],
+      "snapshot": {
+        "arch": "arm",
+        "at": "2026-10-08T12:40:22.107Z",
+        "pc": 134217806,
+        "raw": {
+          "CPUID": 1092600369,
+          "ICSR": 2051,
+          "VTOR": 134217728,
+          "SHCSR": 0,
+          "CFSR": 65536,
+          "HFSR": 1073741824,
+          "DFSR": 1,
+          "MMFAR": 3758157304,
+          "BFAR": 3758157304,
+          "AFSR": 0,
+          "core": {
+            "PC": 134217806,
+            "LR": 134217825,
+            "XPSR": 16777219,
+            "SP": 536936356,
+            "MSP": 536936356,
+            "PSP": 536871992
+          }
+        },
+        "frame": {
+          "pc": 134217856,
+          "sp": 536936404,
+          "kind": "exception",
+          "lookup": 134217856,
+          "name": "fault_udf+0x4",
+          "loc": {
+            "addr": 134217856,
+            "end": 134217858,
+            "line": 32,
+            "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+            "isStmt": true,
+            "prologueEnd": false,
+            "seqEnd": false,
+            "seq": 3,
+            "idx": 12
+          },
+          "regs": [
+            42,
+            536871012,
+            536871024,
+            536871020,
+            1,
+            8,
+            79764919,
+            536936404,
+            1,
+            0,
+            0,
+            536875036,
+            4294896959,
+            536936404,
+            134217949,
+            134217856
+          ],
+          "known": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "exception": {
+            "return": 4294967289,
+            "base": 536936368,
+            "stack": "MSP",
+            "extended": false,
+            "xpsr": 16777728,
+            "aligned": true
+          },
+          "return": 4294967289,
+          "base": 536936368,
+          "stack": "MSP",
+          "extended": false,
+          "xpsr": 16777728,
+          "aligned": true,
+          "validated": true,
+          "unwound": true
+        },
+        "frames": [
+          {
+            "pc": 134217856,
+            "sp": 536936404,
+            "kind": "current",
+            "lookup": 134217856,
+            "name": "fault_udf+0x4",
+            "loc": {
+              "addr": 134217856,
+              "end": 134217858,
+              "line": 32,
+              "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 3,
+              "idx": 12
+            },
+            "regs": [
+              42,
+              536871012,
+              536871024,
+              536871020,
+              1,
+              8,
+              79764919,
+              536936404,
+              1,
+              0,
+              0,
+              536875036,
+              4294896959,
+              536936404,
+              134217949,
+              134217856
+            ],
+            "known": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "cfa": 536936408
+          },
+          {
+            "pc": 134217948,
+            "sp": 536936408,
+            "kind": "cfi",
+            "lookup": 134217946,
+            "name": "fault_mid+0x16",
+            "loc": {
+              "addr": 134217944,
+              "end": 134217948,
+              "line": 49,
+              "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+              "isStmt": false,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 7,
+              "idx": 31
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              1,
+              8,
+              79764919,
+              536936408,
+              1,
+              0,
+              0,
+              536875036,
+              0,
+              536936408,
+              134217949,
+              134217949
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 536936424
+          },
+          {
+            "pc": 134217992,
+            "sp": 536936424,
+            "kind": "cfi",
+            "lookup": 134217990,
+            "name": "fault_outer+0x6",
+            "loc": {
+              "addr": 134217988,
+              "end": 134217992,
+              "line": 53,
+              "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 8,
+              "idx": 45
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              536871020,
+              7,
+              8,
+              79764919,
+              536936424,
+              1,
+              0,
+              0,
+              536875036,
+              0,
+              536936424,
+              134217993,
+              134217993
+            ],
+            "known": [
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              3,
+              4,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 536936432
+          },
+          {
+            "pc": 134218144,
+            "sp": 536936432,
+            "kind": "cfi",
+            "lookup": 134218142,
+            "name": "main+0x76",
+            "loc": {
+              "addr": 134218140,
+              "end": 134218144,
+              "line": 67,
+              "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 9,
+              "idx": 65
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              7,
+              8,
+              79764919,
+              536936432,
+              1,
+              0,
+              0,
+              536875036,
+              0,
+              536936432,
+              134218145,
+              134218145
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 536936440
+          },
+          {
+            "pc": 134218236,
+            "sp": 536936440,
+            "kind": "cfi",
+            "lookup": 134218234,
+            "name": "Reset_Handler+0x3e",
+            "loc": {
+              "addr": 134218232,
+              "end": 134218236,
+              "line": 21,
+              "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 10,
+              "idx": 80
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              7,
+              8,
+              79764919,
+              536936440,
+              1,
+              0,
+              0,
+              536875036,
+              0,
+              536936440,
+              134218237,
+              134218237
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 536936448
+          }
+        ],
+        "findings": [
+          {
+            "confidence": "已确认",
+            "text": "UNDEFINSTR：未定义指令",
+            "evidence": "CFSR bit 16"
+          },
+          {
+            "confidence": "已确认",
+            "text": "FORCED：可配置异常升级为 HardFault。",
+            "evidence": "HFSR bit 30"
+          },
+          {
+            "confidence": "证据不足",
+            "text": "故障标志具有粘性，可能来自更早的异常；本次读取没有清除它们。",
+            "evidence": ""
+          },
+          {
+            "confidence": "已确认",
+            "text": "恢复异常硬件帧，保存 PC=0x08000080。",
+            "evidence": "保存 PC 是被打断的执行位置；非精确错误不能据此定位致错指令"
+          }
+        ],
+        "error": null,
+        "observedHalted": true,
+        "handlerFrames": [
+          {
+            "pc": 134217806,
+            "sp": 536936356,
+            "kind": "current",
+            "lookup": 134217806,
+            "name": "fault_handler_body+0xe",
+            "loc": {
+              "addr": 134217806,
+              "end": 134217808,
+              "line": 24,
+              "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 0,
+              "idx": 2
+            },
+            "regs": [
+              42,
+              536871012,
+              536871016,
+              1,
+              1,
+              8,
+              79764919,
+              536936356,
+              1,
+              0,
+              0,
+              536875036,
+              4294896959,
+              536936356,
+              134217825,
+              134217806
+            ],
+            "known": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "cfa": 536936360
+          },
+          {
+            "pc": 134217824,
+            "sp": 536936360,
+            "kind": "cfi",
+            "lookup": 134217822,
+            "name": "HardFault_Handler+0x6",
+            "loc": {
+              "addr": 134217820,
+              "end": 134217824,
+              "line": 29,
+              "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 1,
+              "idx": 5
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              1,
+              8,
+              79764919,
+              536936360,
+              1,
+              0,
+              0,
+              536875036,
+              0,
+              536936360,
+              134217825,
+              134217825
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 536936368
+          },
+          {
+            "pc": 134217856,
+            "sp": 536936404,
+            "kind": "exception",
+            "lookup": 134217856,
+            "name": "fault_udf+0x4",
+            "loc": {
+              "addr": 134217856,
+              "end": 134217858,
+              "line": 32,
+              "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 3,
+              "idx": 12
+            },
+            "regs": [
+              42,
+              536871012,
+              536871024,
+              536871020,
+              1,
+              8,
+              79764919,
+              536936404,
+              1,
+              0,
+              0,
+              536875036,
+              4294896959,
+              536936404,
+              134217949,
+              134217856
+            ],
+            "known": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "exception": {
+              "return": 4294967289,
+              "base": 536936368,
+              "stack": "MSP",
+              "extended": false,
+              "xpsr": 16777728,
+              "aligned": true
+            }
+          }
+        ],
+        "unwindReason": "到达栈末端",
+        "reads": 47,
+        "catchConfigured": false
+      },
+      "notes": [
+        "支持 Cortex-M3/M4/M7；无效 BFAR/MMFAR、堆栈失败与非精确错误均不输出虚假的准确位置。",
+        "只读诊断不主动暂停、继续、复位目标或清除异常寄存器。读取失败立即停止，保留已取得的证据。",
+        "ELF 必须与板上固件一致。完整调用链取决于有效栈与 CFI/EHABI 展开信息，未保存的 r4–r11 不会从处理器当前值伪造。"
+      ],
+      "history": {
+        "startedAt": "2026-10-08T12:40:05.811Z",
+        "events": [
+          {
+            "at": "2026-10-08T12:40:06.636Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:06.673Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T12:40:07.344Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T12:40:07.920Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:08.239Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:08.331Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T12:40:08.336Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T12:40:09.002Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T12:40:09.562Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:09.827Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:09.915Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T12:40:09.921Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T12:40:10.583Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T12:40:11.135Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:11.417Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:12.785Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T12:40:12.789Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T12:40:13.458Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T12:40:14.018Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:14.296Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:14.387Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T12:40:14.393Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T12:40:15.054Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T12:40:15.595Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:15.901Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:17.952Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T12:40:17.957Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T12:40:18.623Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T12:40:19.169Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:19.456Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:21.063Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T12:40:21.068Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T12:40:22.352Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          }
+        ],
+        "omitted": 0
+      }
+    },
+    "tab": "fault",
+    "halted": true,
+    "pc": 134217806,
+    "expected": 134217856,
+    "heal": 0,
+    "recoveries": 0,
+    "errors": [],
+    "log": "调试器就绪。连上目标后按 h 看命令，Tab 补全、↑↓ 翻历史、Ctrl+C 中断。已载入符号：f103ze_fault.elf —— 183 个符号（函数 77 · 数据 9），其中 4 个带类型变量（DWARF），行号表 82 条　行号表：1 段 · 82 条记录 · 8 个源文件（DWARF 4）源码目录建议：推荐选 e:/share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 e:/share（7，目录更大） · E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src（1）源码目录建议：推荐选 e:/share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 e:/share（7，目录更大） · E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src（1）──── 连接（WebUSB · 10000 kHz）────关掉 1 个残留的探针句柄已连接：akaLinkPro CMSIS-DAP · 512B/包 · SWD 10000kHz　SWD 10000 kHz　IDCODE=0x1BA01477硬件断点：6 个比较器（FPB rev1，CTRL=0x261）目标处于停止状态源码：源码目录「（已选文件夹）」：1 个文件源码目录建议：已选「（已选文件夹）」能解析 1/8 · 推荐选 e:/share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 e:/share（7，目录更大） · E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src（1）> halt已暂停　状态：已停止（halted）　PC=0x0800017e main+0x56> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x0800017e main+0x56⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x08000180 main+0x58> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x08000180 main+0x58⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x08000180 main+0x58> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x08000180 main+0x58⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x0800017e main+0x56> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x0800017e main+0x56⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x08000188 main+0x60> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x08000188 main+0x60⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x08000180 main+0x58> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x08000180 main+0x58⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x08000186 main+0x5e> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x08000186 main+0x5e> halt已暂停　状态：已停止（halted）　PC=0x0800004e fault_handler_body+0xe",
+    "readOnlyEvidence": {
+      "before": {
+        "regs": [
+          134217806,
+          134217825,
+          16777219,
+          536936356,
+          536936356,
+          536871992
+        ],
+        "scb": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          64,
+          1,
+          0,
+          0,
+          0,
+          248,
+          237,
+          0,
+          224,
+          248,
+          237,
+          0,
+          224,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "after": {
+        "regs": [
+          134217806,
+          134217825,
+          16777219,
+          536936356,
+          536936356,
+          536871992
+        ],
+        "scb": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          64,
+          1,
+          0,
+          0,
+          0,
+          248,
+          237,
+          0,
+          224,
+          248,
+          237,
+          0,
+          224,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "demcr": 16777216
+    },
+    "readOnly": true,
+    "demcr": 16777216,
+    "sourceShown": true,
+    "restoredDemcr": 16777216
+  },
+  {
+    "case": {
+      "mode": 1,
+      "name": "repeat catch after reset",
+      "flag": 16,
+      "label": "fault_udf_pc",
+      "stack": "MSP"
+    },
+    "baseline": {
+      "demcr": 16777216,
+      "heal": 0,
+      "recoveries": 0,
+      "heartbeat": 96862,
+      "clock": 10000000,
+      "wake": {
+        "romPc": 134218172,
+        "woken": false
+      }
+    },
+    "injection": {
+      "request": 1,
+      "demcr": 16778240,
+      "dhcsr": 196611
+    },
+    "report": {
+      "schema": "akalink-diagnostics/v1",
+      "kind": "fault",
+      "title": "异常诊断报告",
+      "exportedAt": "2026-10-08T12:40:24.022Z",
+      "environment": {
+        "Web版本": "2026-10-08-r3 (H743 异常诊断真机验收；保留即时异常停点；修正浮点保存帧与异常调用链；SWD 降档诊断)",
+        "ELF": "f103ze_fault.elf",
+        "后端": "WebUSB",
+        "数据": "真实目标",
+        "浏览器": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36"
+      },
+      "settings": {
+        "架构": "arm",
+        "现场时间": "2026-10-08T12:40:23.813Z",
+        "时段": "当前停止现场",
+        "恢复栈": "MSP",
+        "帧类型": "基本帧",
+        "帧校验": "已验证",
+        "完整性": "已完成有限读取",
+        "本页启用HardFault捕获": true,
+        "展开停止原因": "到达栈末端"
+      },
+      "metrics": [
+        {
+          "name": "停止 PC",
+          "value": "0x08000058",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "CPUID",
+          "value": "0x411fc231",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "ICSR",
+          "value": "0x00000803",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "VTOR",
+          "value": "0x08000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "SHCSR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "CFSR",
+          "value": "0x00010000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "HFSR",
+          "value": "0x40000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "DFSR",
+          "value": "0x00000008",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "MMFAR",
+          "value": "0xe000edf8",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": "MMARVALID 未置位，不能作为故障地址"
+        },
+        {
+          "name": "BFAR",
+          "value": "0xe000edf8",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": "BFARVALID 未置位，不能作为故障地址"
+        },
+        {
+          "name": "AFSR",
+          "value": "0x00000000",
+          "unit": "",
+          "source": "目标寄存器",
+          "note": ""
+        },
+        {
+          "name": "LR",
+          "value": "0xfffffff9",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "XPSR",
+          "value": "0x01000003",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": "IPSR=3"
+        },
+        {
+          "name": "SP",
+          "value": "0x2000ffb0",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "MSP",
+          "value": "0x2000ffb0",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "PSP",
+          "value": "0x20000438",
+          "unit": "",
+          "source": "当前内核寄存器",
+          "note": ""
+        },
+        {
+          "name": "异常保存 PC",
+          "value": "0x08000080",
+          "unit": "",
+          "source": "硬件保存帧",
+          "note": "已校验；非精确错误不保证为致错指令"
+        }
+      ],
+      "findings": [
+        {
+          "confidence": "已确认",
+          "text": "UNDEFINSTR：未定义指令",
+          "evidence": "CFSR bit 16"
+        },
+        {
+          "confidence": "已确认",
+          "text": "FORCED：可配置异常升级为 HardFault。",
+          "evidence": "HFSR bit 30"
+        },
+        {
+          "confidence": "证据不足",
+          "text": "故障标志具有粘性，可能来自更早的异常；本次读取没有清除它们。",
+          "evidence": ""
+        },
+        {
+          "confidence": "已确认",
+          "text": "恢复异常硬件帧，保存 PC=0x08000080。",
+          "evidence": "保存 PC 是被打断的执行位置；非精确错误不能据此定位致错指令"
+        }
+      ],
+      "snapshot": {
+        "arch": "arm",
+        "at": "2026-10-08T12:40:23.813Z",
+        "pc": 134217816,
+        "raw": {
+          "CPUID": 1092600369,
+          "ICSR": 2051,
+          "VTOR": 134217728,
+          "SHCSR": 0,
+          "CFSR": 65536,
+          "HFSR": 1073741824,
+          "DFSR": 8,
+          "MMFAR": 3758157304,
+          "BFAR": 3758157304,
+          "AFSR": 0,
+          "core": {
+            "PC": 134217816,
+            "LR": 4294967289,
+            "XPSR": 16777219,
+            "SP": 536936368,
+            "MSP": 536936368,
+            "PSP": 536871992
+          }
+        },
+        "frame": {
+          "pc": 134217856,
+          "sp": 536936404,
+          "regs": [
+            42,
+            536871012,
+            536871024,
+            536871020,
+            1,
+            8,
+            79764919,
+            536936404,
+            1,
+            0,
+            0,
+            536875036,
+            4294896959,
+            536936404,
+            134217949,
+            134217856
+          ],
+          "known": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "kind": "exception",
+          "loc": {
+            "addr": 134217856,
+            "end": 134217858,
+            "line": 32,
+            "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+            "isStmt": true,
+            "prologueEnd": false,
+            "seqEnd": false,
+            "seq": 3,
+            "idx": 12
+          },
+          "name": "fault_udf",
+          "base": 536936368,
+          "stack": "MSP",
+          "extended": false,
+          "aligned": true,
+          "xpsr": 16777728,
+          "validated": true
+        },
+        "frames": [
+          {
+            "pc": 134217856,
+            "sp": 536936404,
+            "kind": "current",
+            "lookup": 134217856,
+            "name": "fault_udf+0x4",
+            "loc": {
+              "addr": 134217856,
+              "end": 134217858,
+              "line": 32,
+              "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 3,
+              "idx": 12
+            },
+            "regs": [
+              42,
+              536871012,
+              536871024,
+              536871020,
+              1,
+              8,
+              79764919,
+              536936404,
+              1,
+              0,
+              0,
+              536875036,
+              4294896959,
+              536936404,
+              134217949,
+              134217856
+            ],
+            "known": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "cfa": 536936408
+          },
+          {
+            "pc": 134217948,
+            "sp": 536936408,
+            "kind": "cfi",
+            "lookup": 134217946,
+            "name": "fault_mid+0x16",
+            "loc": {
+              "addr": 134217944,
+              "end": 134217948,
+              "line": 49,
+              "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+              "isStmt": false,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 7,
+              "idx": 31
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              1,
+              8,
+              79764919,
+              536936408,
+              1,
+              0,
+              0,
+              536875036,
+              0,
+              536936408,
+              134217949,
+              134217949
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 536936424
+          },
+          {
+            "pc": 134217992,
+            "sp": 536936424,
+            "kind": "cfi",
+            "lookup": 134217990,
+            "name": "fault_outer+0x6",
+            "loc": {
+              "addr": 134217988,
+              "end": 134217992,
+              "line": 53,
+              "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 8,
+              "idx": 45
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              536871020,
+              1,
+              8,
+              79764919,
+              536936424,
+              1,
+              0,
+              0,
+              536875036,
+              0,
+              536936424,
+              134217993,
+              134217993
+            ],
+            "known": [
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              3,
+              4,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 536936432
+          },
+          {
+            "pc": 134218144,
+            "sp": 536936432,
+            "kind": "cfi",
+            "lookup": 134218142,
+            "name": "main+0x76",
+            "loc": {
+              "addr": 134218140,
+              "end": 134218144,
+              "line": 67,
+              "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 9,
+              "idx": 65
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              1,
+              8,
+              79764919,
+              536936432,
+              1,
+              0,
+              0,
+              536875036,
+              0,
+              536936432,
+              134218145,
+              134218145
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 536936440
+          },
+          {
+            "pc": 134218236,
+            "sp": 536936440,
+            "kind": "cfi",
+            "lookup": 134218234,
+            "name": "Reset_Handler+0x3e",
+            "loc": {
+              "addr": 134218232,
+              "end": 134218236,
+              "line": 21,
+              "file": "E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src/main.c",
+              "isStmt": true,
+              "prologueEnd": false,
+              "seqEnd": false,
+              "seq": 10,
+              "idx": 80
+            },
+            "regs": [
+              0,
+              0,
+              0,
+              0,
+              1,
+              8,
+              79764919,
+              536936440,
+              1,
+              0,
+              0,
+              536875036,
+              0,
+              536936440,
+              134218237,
+              134218237
+            ],
+            "known": [
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              11,
+              7,
+              14,
+              15,
+              13
+            ],
+            "cfa": 536936448
+          }
+        ],
+        "findings": [
+          {
+            "confidence": "已确认",
+            "text": "UNDEFINSTR：未定义指令",
+            "evidence": "CFSR bit 16"
+          },
+          {
+            "confidence": "已确认",
+            "text": "FORCED：可配置异常升级为 HardFault。",
+            "evidence": "HFSR bit 30"
+          },
+          {
+            "confidence": "证据不足",
+            "text": "故障标志具有粘性，可能来自更早的异常；本次读取没有清除它们。",
+            "evidence": ""
+          },
+          {
+            "confidence": "已确认",
+            "text": "恢复异常硬件帧，保存 PC=0x08000080。",
+            "evidence": "保存 PC 是被打断的执行位置；非精确错误不能据此定位致错指令"
+          }
+        ],
+        "error": null,
+        "observedHalted": true,
+        "unwindReason": "到达栈末端",
+        "reads": 40,
+        "catchConfigured": true
+      },
+      "notes": [
+        "支持 Cortex-M3/M4/M7；无效 BFAR/MMFAR、堆栈失败与非精确错误均不输出虚假的准确位置。",
+        "只读诊断不主动暂停、继续、复位目标或清除异常寄存器。读取失败立即停止，保留已取得的证据。",
+        "ELF 必须与板上固件一致。完整调用链取决于有效栈与 CFI/EHABI 展开信息，未保存的 r4–r11 不会从处理器当前值伪造。"
+      ],
+      "history": {
+        "startedAt": "2026-10-08T12:40:05.811Z",
+        "events": [
+          {
+            "at": "2026-10-08T12:40:06.636Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:06.673Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T12:40:07.344Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T12:40:07.920Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:08.239Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:08.331Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T12:40:08.336Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T12:40:09.002Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T12:40:09.562Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:09.827Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:09.915Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T12:40:09.921Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T12:40:10.583Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T12:40:11.135Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:11.417Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:12.785Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T12:40:12.789Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T12:40:13.458Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T12:40:14.018Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:14.296Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:14.387Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T12:40:14.393Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T12:40:15.054Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T12:40:15.595Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:15.901Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:17.952Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T12:40:17.957Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T12:40:18.623Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T12:40:19.169Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:19.456Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:21.063Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "HardFault 捕获恢复原位"
+          },
+          {
+            "at": "2026-10-08T12:40:21.068Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T12:40:22.352Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:22.680Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          },
+          {
+            "at": "2026-10-08T12:40:22.773Z",
+            "code": "historical",
+            "level": "info",
+            "detail": "目标控制或写入操作，现场转为历史记录"
+          },
+          {
+            "at": "2026-10-08T12:40:23.437Z",
+            "code": "vector-catch",
+            "level": "info",
+            "detail": "启用 HardFault 捕获（DEMCR.VC_HARDERR），异常发生时内核将停止"
+          },
+          {
+            "at": "2026-10-08T12:40:23.987Z",
+            "code": "capture",
+            "level": "info",
+            "detail": "异常现场已读取"
+          }
+        ],
+        "omitted": 0
+      }
+    },
+    "tab": "fault",
+    "halted": true,
+    "pc": 134217816,
+    "expected": 134217856,
+    "heal": 0,
+    "recoveries": 0,
+    "errors": [],
+    "log": "调试器就绪。连上目标后按 h 看命令，Tab 补全、↑↓ 翻历史、Ctrl+C 中断。已载入符号：f103ze_fault.elf —— 183 个符号（函数 77 · 数据 9），其中 4 个带类型变量（DWARF），行号表 82 条　行号表：1 段 · 82 条记录 · 8 个源文件（DWARF 4）源码目录建议：推荐选 e:/share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 e:/share（7，目录更大） · E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src（1）源码目录建议：推荐选 e:/share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 e:/share（7，目录更大） · E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src（1）──── 连接（WebUSB · 10000 kHz）────关掉 1 个残留的探针句柄已连接：akaLinkPro CMSIS-DAP · 512B/包 · SWD 10000kHz　SWD 10000 kHz　IDCODE=0x1BA01477硬件断点：6 个比较器（FPB rev1，CTRL=0x261）目标处于停止状态源码：源码目录「（已选文件夹）」：1 个文件源码目录建议：已选「（已选文件夹）」能解析 1/8 · 推荐选 e:/share/env-windows/tools/gnu_gcc/arm_gcc/mingw/arm-none-eabi/include（覆盖 6/8 个源文件） · 要全覆盖就选 e:/share（7，目录更大） · E:/web-serial-rtt-tools-f103ze-fault/tools/target-firmware/stm32f103ze_fault/src（1）> halt已暂停　状态：已停止（halted）　PC=0x0800017e main+0x56> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x0800017e main+0x56⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x08000180 main+0x58> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x08000180 main+0x58⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x08000180 main+0x58> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x08000180 main+0x58⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x0800017e main+0x56> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x0800017e main+0x56⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x08000188 main+0x60> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x08000188 main+0x60⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x08000180 main+0x58> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x08000180 main+0x58⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)> halt已暂停　状态：已停止（halted）　PC=0x08000186 main+0x5e> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x08000186 main+0x5e> halt已暂停　状态：已停止（halted）　PC=0x0800004e fault_handler_body+0xe> halt已暂停　状态：已停止（halted）　PC=0x08000180 main+0x58> c继续运行（遇到断点或暂停为止）状态：运行中　PC=0x08000180 main+0x58⏹ 目标已停止 @ 0x08000058 main.c:28 (HardFault_Handler+0x0)",
+    "readOnlyEvidence": {
+      "before": {
+        "regs": [
+          134217816,
+          4294967289,
+          16777219,
+          536936368,
+          536936368,
+          536871992
+        ],
+        "scb": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          64,
+          8,
+          0,
+          0,
+          0,
+          248,
+          237,
+          0,
+          224,
+          248,
+          237,
+          0,
+          224,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "after": {
+        "regs": [
+          134217816,
+          4294967289,
+          16777219,
+          536936368,
+          536936368,
+          536871992
+        ],
+        "scb": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          64,
+          8,
+          0,
+          0,
+          0,
+          248,
+          237,
+          0,
+          224,
+          248,
+          237,
+          0,
+          224,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "demcr": 16778240
+    },
+    "readOnly": true,
+    "demcr": 16778240,
+    "sourceShown": true,
+    "restoredDemcr": 16777216
+  }
+]

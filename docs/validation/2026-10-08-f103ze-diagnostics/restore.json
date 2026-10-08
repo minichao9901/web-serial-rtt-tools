@@ -1,0 +1,11 @@
+{
+  "flashBytes": 524288,
+  "equal": true,
+  "beforeSha256": "c2ed64c452949005c057cb0d0e58c1dde508e7296962022d4f88aabd56faba98",
+  "afterSha256": "c2ed64c452949005c057cb0d0e58c1dde508e7296962022d4f88aabd56faba98",
+  "restoredPages": 3,
+  "pageBytes": 2048,
+  "restoredDemcr": "0x01000000",
+  "log": "restore.log",
+  "verified": true
+}

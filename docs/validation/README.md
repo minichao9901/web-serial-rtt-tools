@@ -19,6 +19,8 @@
 | 2026-10-08 | [探针固定 240 MHz 验证](https://github.com/minichao9901/5301evk_akaLinkPro/blob/main/docs/validation/2026-10-08-spi-fixed240.md) | H743 高频转发、实际 SCK 分频、SPI/QSPI 吞吐与 Web 缓冲对照 |
 | 2026-10-08 | [H743 异常诊断与性能对照](2026-10-08-h743-diagnostics.md) | 8 个真实故障、只读现场、浮点帧、调用链；开发前／面板关闭／面板打开对照；原固件全量恢复 |
 
+| 2026-10-08 | [F103ZE 异常诊断](2026-10-08-f103ze-diagnostics.md) | 独立 milestone worktree；8 个真实故障两轮通过、MSP/PSP 对齐与处理函数展开、原固件全量恢复 |
+
 ## 当前推荐顺序
 
 1. `make check` + `make test-board-matrix`

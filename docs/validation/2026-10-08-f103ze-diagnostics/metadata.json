@@ -1,0 +1,17 @@
+{
+  "deviceId": "0x10036414",
+  "cpuid": "0x411fc231",
+  "flashBytes": 524288,
+  "sha256": "c2ed64c452949005c057cb0d0e58c1dde508e7296962022d4f88aabd56faba98",
+  "demcr": 16777216,
+  "pc": "0x080002e0",
+  "baseCommit": "008e154a69c58c25b422d64a945f05674f31a15d",
+  "probeSerial": "B4444F2110DDDAFE44800BBB0AE800E0",
+  "backupConfirmed": true,
+  "fixtureSha256": "e3ca1e704810b51d2a5448dd343c20c70ba2382d1088f60f0ee23a43f2cbdd30",
+  "compiler": "GNU Arm Embedded Toolchain 10.3-2021.10 / GCC 10.3.1",
+  "testApp": "http://127.0.0.1:8901/index.html",
+  "testCdp": "http://127.0.0.1:9335",
+  "restoredPc": "0x080002ec",
+  "initialHarnessFailure": "The first attempt stopped after UDF/MSP because a new assertion required the exact function name fault_mid; the UI reports fault_mid+0x16. The assertion now accepts the displayed offset, and both complete 8-case runs passed."
+}
