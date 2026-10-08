@@ -18,8 +18,11 @@
 | 2026-10-08 | [SPI 发图通路](../spi-image-rate-2026-10-08.md)、[SPI转发回归](2026-10-08-spi-cdc-regression.md) | 发图吞吐、SPI转发与既有服务并发回归 |
 | 2026-10-08 | [探针固定 240 MHz 验证](https://github.com/minichao9901/5301evk_akaLinkPro/blob/main/docs/validation/2026-10-08-spi-fixed240.md) | H743 高频转发、实际 SCK 分频、SPI/QSPI 吞吐与 Web 缓冲对照 |
 | 2026-10-08 | [H743 异常诊断与性能对照](2026-10-08-h743-diagnostics.md) | 8 个真实故障、只读现场、浮点帧、调用链；开发前／面板关闭／面板打开对照；原固件全量恢复 |
-
 | 2026-10-08 | [F103ZE 异常诊断](2026-10-08-f103ze-diagnostics.md) | 独立 milestone worktree；8 个真实故障两轮通过、MSP/PSP 对齐与处理函数展开、原固件全量恢复 |
+| 2026-10-08 | [工作区布局](2026-10-08-ui-workspace.md)、[Inspector 与导航](2026-10-08-ui-inspector.md) | 可收起工作区、可调列宽、变化高亮、紧凑工具入口和浏览器布局验收 |
+| 2026-10-09 | [HPM porting](2026-10-09-hpm-porting.md)、[F103ZE ARM 回归](2026-10-09-f103ze-hpm-porting.md) | SDK 十板配置、共用算法构建及共享 ARM 路径实板验证 |
+| 2026-10-09 | [RTT/JScope/SPI 性能对照](2026-10-09-transfer-performance.md) | 同一 F103ZE 的交替速率与数据质量对照，原固件恢复 |
+| 2026-10-09 | [三个 worktree 合并验收](2026-10-09-worktree-merge.md) | 全量离线、十组页面、F103ZE 八异常与转发复核，备份归档及其它 worktree 清理 |
 
 ## 当前推荐顺序
 

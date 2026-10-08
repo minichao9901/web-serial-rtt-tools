@@ -66,6 +66,7 @@ async function ev(expr){
 }
 
 await send('Page.enable');
+await send('Page.bringToFront');
 await send('Runtime.enable');
 // 🚨 必须关缓存：python http.server 不发 Cache-Control，改完模块会拿到旧的（本仓库踩过）
 try { await send('Network.enable'); await send('Network.setCacheDisabled', { cacheDisabled: true }); } catch {}
@@ -111,8 +112,9 @@ console.log('== 1. 标签页与初始状态 ==');
   const s = await ev('return window.__tools.summary();');
   ok(Array.isArray(s.tabs) && s.tabs.includes('spi'), '标签栏里有 spi（桥页）');
   ok(s.tabs.includes('panel'), '标签栏里有 panel（屏页）');
-  ok(s.tabs.slice(-5).join(',') === 'spi,panel,i2c,analog,gen',
-     `菜单中的总线工具顺序是 SPI/QSPI → 屏 → I2C → ADC/DAC → 工程生成（${s.tabs.slice(-5).join(' → ')}）`, s.tabs.join(','));
+  const menu = await ev(`return [...document.querySelectorAll('#tool-switch [data-tab]')].map(e=>e.dataset.tab);`);
+  ok(menu.join(',') === 'spi,panel,spicdc,i2c,analog,gen',
+     '更多功能顺序：SPI/QSPI → 屏 → SPI 转发 → I2C → ADC/DAC → 工程生成', menu.join(','));
   ok(s.ok === true, '页面无 JS 错误', JSON.stringify(s.errors));
   ok(s.spi && s.spi.connected === false && s.spi.dataReady === false, '初始：未连接（HID 与数据面都空）');
   ok(s.panel && s.panel.connected === false, '屏页看到的是**同一个**会话（初始也未连接）');

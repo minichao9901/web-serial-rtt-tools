@@ -1141,7 +1141,7 @@ body.workspace-focused>.topbar{display:none}
 .topbar{grid-template-columns:auto minmax(0,1fr) auto;gap:8px;padding:4px 10px;position:relative;z-index:30}
 .topbar>.brand{grid-column:1;grid-row:1;white-space:nowrap;letter-spacing:0}
 .topbar>#tabs{grid-column:2;grid-row:1;display:flex;align-items:center;gap:6px;overflow:visible;scrollbar-width:none;padding:0}
-.primary-tabs{display:flex;align-items:center;gap:1px;flex:1 1 auto;overflow-x:auto;scrollbar-width:thin;min-width:0}
+.primary-tabs{display:flex;align-items:center;gap:1px;flex:1 1 auto;overflow-x:auto;scrollbar-width:none;min-width:0}
 .primary-tabs>.tab{padding:4px 7px}
 .topbar>.topright{grid-column:3;grid-row:1;flex-wrap:nowrap;gap:6px}
 .tool-switch{position:relative;flex:none;min-width:0;font-size:var(--text-xs)}

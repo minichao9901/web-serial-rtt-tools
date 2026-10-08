@@ -65,6 +65,7 @@ async function ev(expr){
 }
 
 await send('Page.enable');
+await send('Page.bringToFront');
 await send('Runtime.enable');
 try { await send('Network.enable'); await send('Network.setCacheDisabled', { cacheDisabled: true }); } catch {}
 await send('Page.navigate', { url: URL_ });
@@ -105,8 +106,8 @@ console.log('== 1. 标签页与初始状态 ==');
 {
   const s = await ev('return window.__tools.summary();');
   ok(Array.isArray(s.tabs) && s.tabs.includes('scope'), '标签栏里有 scope');
-  const i = s.tabs.indexOf('scope'), j = s.tabs.indexOf('rttcdc'), spi = s.tabs.indexOf('spicdc');
-  ok(spi === j + 1 && i === spi + 1, '入口顺序：RTT 转发 → SPI 转发 → JScope', s.tabs.join(','));
+  const nav = await ev(`return {primary:[...document.querySelectorAll('#tabs>.primary-tabs [data-tab]')].map(e=>e.dataset.tab), more:[...document.querySelectorAll('#tool-switch [data-tab]')].map(e=>e.dataset.tab)};`);
+  ok(nav.primary.indexOf('scope') === nav.primary.indexOf('rttcdc') + 1 && nav.more.includes('spicdc'), 'RTT 转发与 JScope 相邻，SPI 转发位于更多功能', JSON.stringify(nav));
   ok(s.ok === true, '页面无 JS 错误', JSON.stringify(s.errors));
   ok(s.scope && s.scope.mode === 'real' && s.scope.samples === 0, '初始：真机模式、0 样本');
   ok(s.scope.plan && s.scope.plan.spans >= 1, `初始就有读计划预览（${s.scope.plan?.spans} 个 span）`);
