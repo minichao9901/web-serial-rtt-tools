@@ -35,7 +35,7 @@ try{
   for(const width of [1920,1280,960,600]){
     await c.send('Emulation.setDeviceMetricsOverride',{width,height:900,deviceScaleFactor:1,mobile:false});await settle();
     const r=await c.eval(`const p=document.querySelector('.topbar');return {width:innerWidth,height:p.getBoundingClientRect().height,overflow:document.documentElement.scrollWidth-innerWidth,tabs:document.querySelectorAll('#tabs [data-tab]').length,font:getComputedStyle(document.body).fontSize};`);report.push(r);
-    ok(r.height<=42&&r.overflow<=1&&r.tabs===13&&r.font==='13px',`${width}：单行顶栏，保留入口与字号`);
+    ok(r.height<=42&&r.overflow<=1&&r.tabs===14&&r.font==='13px',`${width}：单行顶栏，保留入口与字号`);
     await shot(`debugger-${width}`);
     const aligned=await c.eval(`const rows=[...document.querySelectorAll('#d-watch-list .table-row')].filter(e=>e.children.length===5);return rows.every(e=>[...e.children].every((cell,i)=>Math.abs(cell.getBoundingClientRect().x-rows[0].children[i].getBoundingClientRect().x)<1));`);
     ok(aligned,`${width}：父项与结构体成员共用列宽`);
@@ -43,7 +43,7 @@ try{
   await c.send('Emulation.setDeviceMetricsOverride',{width:1280,height:900,deviceScaleFactor:1,mobile:false});await settle();
   ok(await c.eval(`return [...document.querySelectorAll('#tabs>.primary-tabs .tab')].map(e=>e.dataset.tab).join(',')==='serial,terminal,rtt,rttcdc,scope,flash,dbg'&&!document.getElementById('tool-switch').open;`),'7 个常用工具平铺，更多功能菜单默认关闭');
   await c.eval(`document.querySelector('#tool-switch>summary').click();`);await settle();
-  ok(await c.eval(`return document.querySelectorAll('#tool-switch .tool-menu>.tab').length===6&&[...document.querySelectorAll('#tool-switch .tool-menu>.tab')].map(e=>e.textContent.trim()).join(',')==='USB→SPI/QSPI,SPI/QSPI屏,SPI转发,USB→I2C,USB→ADC/DAC,工程生成'&&!document.querySelector('#tool-switch .tool-group');`),'更多功能按指定顺序列出 6 项且不分类');await shot('tools-menu');
+  ok(await c.eval(`return document.querySelectorAll('#tool-switch .tool-menu>.tab').length===7&&[...document.querySelectorAll('#tool-switch .tool-menu>.tab')].map(e=>e.textContent.trim()).join(',')==='USB→SPI/QSPI,SPI/QSPI屏,SPI转发,SWO 执行轨迹,USB→I2C,USB→ADC/DAC,工程生成'&&!document.querySelector('#tool-switch .tool-group');`),'更多功能按指定顺序列出 7 项且不分类');await shot('tools-menu');
   await c.eval(`document.querySelector('#tool-switch [data-tab="spicdc"]').click();`);await settle();
   ok(await c.eval(`return !document.getElementById('tool-switch').open&&document.getElementById('tool-switch').classList.contains('has-current')&&location.hash==='#spicdc'&&document.activeElement===document.querySelector('#tool-switch>summary');`),'从更多功能切换后关闭菜单、更新地址并归还焦点');
   await c.eval(`location.hash='#dbg';`);await settle();

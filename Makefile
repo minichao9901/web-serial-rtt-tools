@@ -136,7 +136,7 @@ test: test-stability test-dbg-features test-board-matrix test-random-flow
 	$(NODE) tools/selftest/scenery-samples.test.mjs
 
 # 离线总入口：先做语法/液体页面检查，再跑纯 Node 自测；不打开浏览器、不碰探针。
-test-offline: check test
+test-offline: check test test-swo
 
 test: test-stats
 .PHONY: test-stats
@@ -813,3 +813,16 @@ test-dbg-frame-gdb:
 .PHONY: test-hpm-porting-page
 test-hpm-porting-page: page-prep
 	$(NODE) tools/selftest/hpm-porting-page.test.mjs
+
+# SWO: pure offline / real browser offline / F103CB hardware with full Flash restore.
+.PHONY: test-swo test-swo-page build-swo-f103cb test-swo-hw
+test-swo:
+	$(NODE) tools/selftest/swo.test.mjs
+	$(NODE) tools/selftest/swo-capture.test.mjs
+	$(NODE) tools/selftest/swo-demo.test.mjs
+test-swo-page:
+	$(NODE) tools/selftest/swo-page.test.mjs
+build-swo-f103cb:
+	pwsh -NoProfile -File tools/target-firmware/stm32f103cb_swo/build.ps1
+test-swo-hw:
+	$(NODE) tools/selftest/swo-hw.mjs

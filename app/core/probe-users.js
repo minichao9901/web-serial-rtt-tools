@@ -19,6 +19,11 @@ export const PROBE_FEATURES = Object.freeze([
     release: t => t.dbg.disconnect(),
   },
   {
+    id: 'swo', label: 'SWO 记录', client: t => t.swo?.capture, view: t => t.swo, usbKind: 'dap',
+    resources: ['target-engine', 'debug-pins', 'dap-bulk', 'cdc-mode', 'cdc-port'],
+    active: t => !!t.swo?.capture?.active, release: t => t.swo.capture.stop(),
+  },
+  {
     id: 'rtt', label: 'RTT Viewer', client: t => t.rtt, usbKind: 'dap',
     resources: ['target-engine', 'debug-pins', 'rtt-ring', 'dap-bulk'],
     active: t => !!(t.rtt?.probe || t.rtt?.bridge) && !t.rtt?._probeMock,

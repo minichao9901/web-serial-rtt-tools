@@ -1,0 +1,61 @@
+{
+  "description": "Actual ITM/DWT delayed group at phase 3 -> 5; arrival order alone cannot assign the boundary PC.",
+  "events": [
+    {
+      "kind": "itm",
+      "port": 1,
+      "value": 2768372227,
+      "cycles": 69882,
+      "segment": 11,
+      "timeQuality": "local",
+      "sample": 751
+    },
+    {
+      "kind": "itm",
+      "port": 1,
+      "value": 2768372485,
+      "cycles": 344350,
+      "segment": 11,
+      "timeQuality": "delayed",
+      "sample": 817
+    },
+    {
+      "kind": "pc",
+      "pc": 134218914,
+      "fn": "branch_leaf_a",
+      "cycles": 344350,
+      "segment": 11,
+      "timeQuality": "delayed",
+      "sample": 817
+    },
+    {
+      "kind": "pc",
+      "pc": 134219038,
+      "fn": "encode_word",
+      "cycles": 347439,
+      "segment": 11,
+      "timeQuality": "local",
+      "sample": 818
+    }
+  ],
+  "oracle": {
+    "checked": 1,
+    "matched": 1,
+    "accuracy": 1,
+    "counts": {
+      "5": 1
+    },
+    "mismatches": [],
+    "mismatchCount": 0,
+    "ambiguousCount": 1,
+    "ambiguous": [
+      {
+        "sample": 817,
+        "fn": "branch_leaf_a",
+        "previous": 3,
+        "stage": 5,
+        "cycles": 344350
+      }
+    ]
+  }
+}

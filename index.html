@@ -39,6 +39,7 @@
         <button class="tab" data-tab="spi">USB→SPI/QSPI</button>
         <button class="tab" data-tab="panel">SPI/QSPI屏</button>
         <button class="tab" data-tab="spicdc">SPI转发</button>
+        <button class="tab" data-tab="swo">SWO 执行轨迹</button>
         <button class="tab" data-tab="i2c">USB→I2C</button>
         <button class="tab" data-tab="analog">USB→ADC/DAC</button>
         <button class="tab" data-tab="gen">工程生成</button>
@@ -2130,6 +2131,52 @@
   </div>
 </section>
 
+<section id="tab-swo" class="panel" aria-label="SWO 执行轨迹">
+  <div class="ws sw-workspace">
+    <aside class="side">
+      <fieldset><legend>记录 SWO</legend>
+        <p class="hint">目标 SWO → 探针 VCOM RX，NRZ / 8N1。通过 SWD 配置 STM32F103，不暂停程序。</p>
+        <div class="row"><span>VCOM 串口</span><select id="sw-port" aria-label="SWO VCOM 串口"></select><button id="sw-pick">选择…</button></div>
+        <div class="row"><span>核心频率 MHz</span><input id="sw-core" type="number" min="1" max="72" value="8"></div>
+        <div class="row"><span>SWO 波特率</span><select id="sw-baud"><option value="1000000">1,000,000</option><option value="2000000">2,000,000</option><option value="4000000">4,000,000</option><option value="500000">500,000</option></select></div>
+        <div class="row"><span>PC 间隔</span><select id="sw-period"><option value="256">256 周期</option><option value="512">512 周期</option><option value="1024">1024 周期</option><option value="2048">2048 周期</option><option value="4096" selected>4096 周期</option><option value="8192">8192 周期</option><option value="16384">16384 周期</option></select></div>
+        <div class="row"><span>记录秒数</span><input id="sw-seconds" type="number" min="0.1" max="120" step="0.1" value="5"></div>
+        <label class="chk"><input id="sw-exceptions" type="checkbox">同时记录异常进入/退出（增加带宽及溢出风险）</label>
+        <label class="chk"><input id="sw-itm" type="checkbox">同时开启 ITM 软件事件（若程序有输出）</label>
+        <p id="sw-plan" class="hint"></p>
+        <div class="row btnrow"><button id="sw-start" class="primary">开始记录</button><button id="sw-stop" disabled>停止并分析</button></div>
+        <p id="sw-status" role="status" class="hint">尚未记录</p>
+      </fieldset>
+      <fieldset><legend>离线分析</legend>
+        <div class="row btnrow"><button id="sw-demo">载入 F103CB 实测示例</button></div>
+        <div class="row btnrow"><button id="sw-import">打开记录…</button><button id="sw-save" disabled>保存记录</button></div>
+        <input id="sw-file" type="file" accept=".swopc,.bin" hidden>
+        <label class="chk"><input id="sw-aligned" type="checkbox">原始 .bin 从包边界开始（仅确定时勾选）</label>
+        <p class="hint">.swopc 保留参数、ELF 指纹及传输错误。原始 .bin 默认等待真实同步包再解码。</p>
+        <div class="row btnrow"><button id="sw-elf-pick">载入 ELF…</button><button id="sw-source-pick">源码目录…</button></div>
+        <input id="sw-elf-file" type="file" accept=".elf,.axf" hidden>
+        <input id="sw-source-files" type="file" webkitdirectory multiple hidden>
+        <p id="sw-files" class="hint">ELF 与源码均未载入</p>
+        <div class="row btnrow"><button id="sw-analyze" disabled>重新分析</button><button id="sw-csv" disabled>导出区间 CSV</button></div>
+        <p id="sw-warning" class="hint" role="alert"></p>
+      </fieldset>
+      <fieldset><legend>函数热点 · PC 样本占比</legend><div id="sw-hot" class="sw-hot"><span class="dim">载入记录后显示</span></div></fieldset>
+    </aside>
+    <div class="main sw-main">
+      <div class="toolbar sw-toolbar"><strong>SWO 执行轨迹</strong><span id="sw-counts" class="dim">先记录，也可直接打开离线文件</span></div>
+      <p class="sw-boundary">PC 采样是离散执行落点。相邻样本的跳转不代表直接调用，无法还原中间指令、完整分支或调用栈；缺口不会被补成执行路径。核心周期时间不是录制墙钟时间，睡眠可停止计数。</p>
+      <div class="row wrap sw-range"><span>样本区间</span><input id="sw-from" type="number" min="0" value="0" aria-label="区间开始样本"><span>至</span><input id="sw-to" type="number" min="0" value="0" aria-label="区间结束样本"><button id="sw-range-apply">应用</button><button id="sw-range-reset">全部</button><input id="sw-filter" placeholder="筛选函数 / 事件" aria-label="筛选轨迹"></div>
+      <div class="sw-chart-box"><canvas id="sw-chart" tabindex="0" aria-label="按样本序号排列的函数执行落点，点击定位源码"></canvas></div>
+      <div class="row sw-play"><button id="sw-prev" aria-label="上一个 PC 样本">←</button><button id="sw-play">逐样本回放</button><button id="sw-next" aria-label="下一个 PC 样本">→</button><input id="sw-cursor" type="range" min="0" max="0" value="0" aria-label="选择 PC 样本"><span id="sw-cursor-text">未选择</span></div>
+      <div class="sw-detail">
+        <div class="sw-events"><div class="row sw-pages"><button id="sw-page-prev">上一页</button><span id="sw-page-info">0 条事件</span><button id="sw-page-next">下一页</button></div><div class="sw-table-scroll"><table class="sw-table"><thead><tr><th>样本 / 事件</th><th>段内核心时间</th><th>执行落点</th><th>源码</th></tr></thead><tbody id="sw-rows"></tbody></table></div></div>
+        <div class="sw-source"><div id="sw-source-title">点击轨迹或热点查看源码</div><pre id="sw-source" tabindex="0">未选择采样位置</pre></div>
+      </div>
+      <p id="sw-edges" class="hint">观察到的相邻函数跳转将显示在这里</p>
+    </div>
+  </div>
+</section>
+
 </main>
 
 <div class="toasts" id="toasts"></div>
@@ -2147,6 +2194,8 @@
     <li>选好后端口会记在浏览器里，下次「刷新」就能直接看到并连接。</li>
     <li>⚠️ <b>独占</b>：SSCOM / 串口监视器 / idf.py monitor 开着同一个口时，这里打不开。</li>
   </ol>
+  <h3>SWO 执行轨迹</h3>
+  <p>更多功能 → SWO 执行轨迹。接好 SWO → VCOM RX、SWD 与共地，填写实际核心频率，载入匹配 ELF 和源码后记录。停止后可离线回放，也可直接载入 F103CB 实测示例。PC 采样展示收到的离散落点，无法恢复 ETM 的逐指令分支流。</p>
   <h3>RTT 为什么分三种后端</h3>
   <ul>
     <li><b>WebUSB · CMSIS-DAP</b>：零安装，页面上直接读目标 RAM 拿 RTT。只认 CMSIS-DAP 类探针（DAPLink、cherrydap…），<b>不认 J-Link</b>。</li>

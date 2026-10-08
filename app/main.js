@@ -27,6 +27,7 @@ import { I2cView } from './i2c/view.js';
 import { SpiCdcView } from './spi-cdc/view.js';
 import { ProbeBus, closeProbeUsbDevices } from './core/probe-bus.js';
 import { toast } from './ui/toast.js';
+import { SwoView } from './swo/view.js';
 import { BUILD } from './core/build.js';
 
 // ---------- 错误收集（自检/排障用；平时看不见） ----------
@@ -53,10 +54,11 @@ const panel = new SpiPanelView(spiSession);
 const i2c = new I2cView();
 const analog = new AnalogView();
 const spiCdc = new SpiCdcView(session);
+const swo = new SwoView();
 
 // Install ownership before init(): automatic reconnect/start paths use the same manager.
 const probeBus = new ProbeBus('page');
-const tools = { session, assistant, terminal, rtt, flash, gen, hid, stream, scope, spi, panel, dbg, i2c, analog, spiCdc, spiSession, probeBus, summary, errors };
+const tools = { session, assistant, terminal, rtt, flash, gen, hid, stream, scope, spi, panel, dbg, i2c, analog, spiCdc, spiSession, swo, probeBus, summary, errors };
 const probeManager = installProbeManager(tools, { bus: probeBus });
 initProbeStatus(tools);
 initEventLogs();
@@ -77,6 +79,7 @@ dbg.init();
 i2c.init();
 analog.init();
 spiCdc.init();
+swo.init();
 installAcquisitionDiagnostics(tools);
 
 initTabs(name => {
@@ -91,6 +94,7 @@ initTabs(name => {
   if (name === 'dbg') requestAnimationFrame(() => dbg.onShow());
   if (name === 'i2c') requestAnimationFrame(() => i2c.onShow());
   if (name === 'analog') requestAnimationFrame(() => analog.onShow());
+  if (name === 'swo') requestAnimationFrame(() => swo.onShow());
   if (name === 'spicdc') requestAnimationFrame(() => spiCdc.onShow());
   if (name === 'gen') requestAnimationFrame(() => gen.onShow());
 });
@@ -126,6 +130,7 @@ function summary(){
     stream: stream?.summary?.() || null,
     spiCdc: {connected:spiCdc.session.connected,running:spiCdc.session.running,status:spiCdc.session.last,stream:spiCdc.stream.summary()},
     scope: scope?.summary?.() || null,
+    swo: swo.summary(),
     spi: spi?.summary?.() || null,
     panel: panel?.summary?.() || null,
     dbg: dbg?.summary?.() || null,

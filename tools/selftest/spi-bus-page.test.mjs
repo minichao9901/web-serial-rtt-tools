@@ -113,8 +113,8 @@ console.log('== 1. 标签页与初始状态 ==');
   ok(Array.isArray(s.tabs) && s.tabs.includes('spi'), '标签栏里有 spi（桥页）');
   ok(s.tabs.includes('panel'), '标签栏里有 panel（屏页）');
   const menu = await ev(`return [...document.querySelectorAll('#tool-switch [data-tab]')].map(e=>e.dataset.tab);`);
-  ok(menu.join(',') === 'spi,panel,spicdc,i2c,analog,gen',
-     '更多功能顺序：SPI/QSPI → 屏 → SPI 转发 → I2C → ADC/DAC → 工程生成', menu.join(','));
+  ok(menu.join(',') === 'spi,panel,spicdc,swo,i2c,analog,gen',
+     '更多功能顺序：SPI/QSPI → 屏 → SPI 转发 → SWO → I2C → ADC/DAC → 工程生成', menu.join(','));
   ok(s.ok === true, '页面无 JS 错误', JSON.stringify(s.errors));
   ok(s.spi && s.spi.connected === false && s.spi.dataReady === false, '初始：未连接（HID 与数据面都空）');
   ok(s.panel && s.panel.connected === false, '屏页看到的是**同一个**会话（初始也未连接）');

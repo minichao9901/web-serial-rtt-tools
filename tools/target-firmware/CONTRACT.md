@@ -53,3 +53,7 @@ pwsh -File tools/dev/clean-firmware.ps1 -WhatIf
 F103C8、早期通用 `stm32f103`、H7B0 仍可手工编译或用于历史复现，但不属于四块活动板卡的
 完整流程。它们在清单的 `legacy` 中列出，避免被误当成当前发布产物；除非专门做历史复现，
 不要把这些目录的 ELF 喂给活动板卡流程。
+
+## SWO 独立诊断例程
+
+`stm32f103cb_swo` 是 F103CB 的 SWO PC 采样验证例程，发布文件 `fw.elf`，通过 `make build-swo-f103cb` 构建。它不替代活动矩阵的 RTT/JScope/调试压力固件，详见其 README 和 `docs/SWO-PC-SAMPLING.md`。

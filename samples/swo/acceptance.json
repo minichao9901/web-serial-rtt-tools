@@ -1,0 +1,660 @@
+{
+  "board": "f103cb",
+  "app": "http://127.0.0.1:8911/index.html",
+  "fixture": "tools/target-firmware/stm32f103cb_swo/fw.elf",
+  "rows": [
+    {
+      "cfg": {
+        "scenario": 0,
+        "itm": false,
+        "period": 4096,
+        "seconds": 5
+      },
+      "bytes": 74225,
+      "metadata": {
+        "format": "swo-pc-v1",
+        "startAligned": true,
+        "plan": {
+          "coreHz": 8000000,
+          "baudRate": 1000000,
+          "periodCycles": 4096,
+          "seconds": 5,
+          "itm": false,
+          "exceptions": false,
+          "tap": 1,
+          "post": 3,
+          "acpr": 7,
+          "samplesHz": 1953.125,
+          "estimatedBytes": 17578.125,
+          "wireBytes": 100000
+        },
+        "startedAt": "2026-10-08T17:53:54.365Z",
+        "clockCheck": {
+          "cfgr": 0,
+          "knownHz": 8000000
+        },
+        "target": {
+          "cpuid": 1092600369,
+          "device": 537093136
+        },
+        "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+        "transportGaps": [],
+        "configReadback": {
+          "dwt": 1073747559,
+          "itm": 65551,
+          "acpr": 7,
+          "sppr": 2,
+          "dbg": 807
+        },
+        "elapsedMs": 5000.600000023842,
+        "restored": true
+      },
+      "stats": {
+        "bytes": 74225,
+        "packets": 19544,
+        "pc": 8451,
+        "sleep": 1321,
+        "itm": 0,
+        "exceptions": 0,
+        "sync": 2,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 8451,
+        "analyzedSamples": 8451,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "hotspots": [
+        {
+          "fn": "verify_block",
+          "count": 1421
+        },
+        {
+          "fn": "recursive_mix",
+          "count": 1370
+        },
+        {
+          "fn": "encode_word",
+          "count": 1321
+        },
+        {
+          "fn": "branch_leaf_a",
+          "count": 1313
+        },
+        {
+          "fn": "insertion_sort",
+          "count": 1126
+        },
+        {
+          "fn": "crc_step",
+          "count": 921
+        },
+        {
+          "fn": "next_random",
+          "count": 401
+        },
+        {
+          "fn": "SysTick_Handler",
+          "count": 157
+        },
+        {
+          "fn": "pipeline_scan",
+          "count": 152
+        },
+        {
+          "fn": "irq_work",
+          "count": 78
+        },
+        {
+          "fn": "pipeline_pack",
+          "count": 77
+        },
+        {
+          "fn": "pipeline_sort",
+          "count": 64
+        },
+        {
+          "fn": "execute_phase",
+          "count": 25
+        },
+        {
+          "fn": "route_a",
+          "count": 17
+        },
+        {
+          "fn": "pipeline_recursive",
+          "count": 7
+        },
+        {
+          "fn": "trace_phase",
+          "count": 1
+        }
+      ],
+      "errors": [],
+      "oracle": {
+        "uniquePcs": 168,
+        "checked": 168,
+        "wrong": []
+      },
+      "exceptions": {},
+      "markerCount": 0,
+      "stageOracle": {
+        "checked": 0,
+        "matched": 0,
+        "accuracy": null,
+        "counts": {},
+        "mismatches": [],
+        "mismatchCount": 0
+      }
+    },
+    {
+      "cfg": {
+        "scenario": 1,
+        "itm": true,
+        "period": 4096,
+        "seconds": 5
+      },
+      "bytes": 75300,
+      "metadata": {
+        "format": "swo-pc-v1",
+        "startAligned": true,
+        "plan": {
+          "coreHz": 8000000,
+          "baudRate": 1000000,
+          "periodCycles": 4096,
+          "seconds": 5,
+          "itm": true,
+          "exceptions": false,
+          "tap": 1,
+          "post": 3,
+          "acpr": 7,
+          "samplesHz": 1953.125,
+          "estimatedBytes": 17578.125,
+          "wireBytes": 100000
+        },
+        "startedAt": "2026-10-08T17:54:00.565Z",
+        "clockCheck": {
+          "cfgr": 0,
+          "knownHz": 8000000
+        },
+        "target": {
+          "cpuid": 1092600369,
+          "device": 537093136
+        },
+        "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+        "transportGaps": [],
+        "configReadback": {
+          "dwt": 1073747559,
+          "itm": 65551,
+          "acpr": 7,
+          "sppr": 2,
+          "dbg": 807
+        },
+        "elapsedMs": 5000.200000017881,
+        "restored": true
+      },
+      "stats": {
+        "bytes": 75300,
+        "packets": 19830,
+        "pc": 8432,
+        "sleep": 1341,
+        "itm": 142,
+        "exceptions": 0,
+        "sync": 2,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 8432,
+        "analyzedSamples": 8432,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "hotspots": [
+        {
+          "fn": "verify_block",
+          "count": 1435
+        },
+        {
+          "fn": "recursive_mix",
+          "count": 1387
+        },
+        {
+          "fn": "branch_leaf_b",
+          "count": 1331
+        },
+        {
+          "fn": "encode_word",
+          "count": 1304
+        },
+        {
+          "fn": "insertion_sort",
+          "count": 1115
+        },
+        {
+          "fn": "crc_step",
+          "count": 961
+        },
+        {
+          "fn": "next_random",
+          "count": 369
+        },
+        {
+          "fn": "pipeline_scan",
+          "count": 188
+        },
+        {
+          "fn": "irq_work",
+          "count": 156
+        },
+        {
+          "fn": "pipeline_pack",
+          "count": 72
+        },
+        {
+          "fn": "pipeline_sort",
+          "count": 61
+        },
+        {
+          "fn": "execute_phase",
+          "count": 28
+        },
+        {
+          "fn": "pipeline_recursive",
+          "count": 12
+        },
+        {
+          "fn": "route_b",
+          "count": 11
+        },
+        {
+          "fn": "trace_phase",
+          "count": 2
+        }
+      ],
+      "errors": [],
+      "oracle": {
+        "uniquePcs": 161,
+        "checked": 161,
+        "wrong": []
+      },
+      "exceptions": {},
+      "markerCount": 142,
+      "phases": [
+        6,
+        8,
+        7,
+        1,
+        2,
+        4,
+        5
+      ],
+      "stageOracle": {
+        "checked": 8219,
+        "matched": 8219,
+        "accuracy": 1,
+        "counts": {
+          "1": 1363,
+          "2": 1331,
+          "4": 1342,
+          "5": 1349,
+          "6": 1399,
+          "7": 1435
+        },
+        "mismatches": [],
+        "mismatchCount": 0
+      }
+    },
+    {
+      "cfg": {
+        "scenario": 0,
+        "itm": true,
+        "period": 1024,
+        "seconds": 3
+      },
+      "bytes": 179130,
+      "metadata": {
+        "format": "swo-pc-v1",
+        "startAligned": true,
+        "plan": {
+          "coreHz": 8000000,
+          "baudRate": 1000000,
+          "periodCycles": 1024,
+          "seconds": 3,
+          "itm": true,
+          "exceptions": false,
+          "tap": 0,
+          "post": 15,
+          "acpr": 7,
+          "samplesHz": 7812.5,
+          "estimatedBytes": 70312.5,
+          "wireBytes": 100000
+        },
+        "startedAt": "2026-10-08T17:54:06.741Z",
+        "clockCheck": {
+          "cfgr": 0,
+          "knownHz": 8000000
+        },
+        "target": {
+          "cpuid": 1092600369,
+          "device": 537093136
+        },
+        "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+        "transportGaps": [],
+        "configReadback": {
+          "dwt": 1073747455,
+          "itm": 8454159,
+          "acpr": 7,
+          "sppr": 2,
+          "dbg": 807
+        },
+        "elapsedMs": 3000.0999999940395,
+        "restored": true
+      },
+      "stats": {
+        "bytes": 179130,
+        "packets": 47170,
+        "pc": 20320,
+        "sleep": 3180,
+        "itm": 85,
+        "exceptions": 0,
+        "sync": 1,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 20320,
+        "analyzedSamples": 20320,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "hotspots": [
+        {
+          "fn": "verify_block",
+          "count": 3404
+        },
+        {
+          "fn": "recursive_mix",
+          "count": 3285
+        },
+        {
+          "fn": "encode_word",
+          "count": 3225
+        },
+        {
+          "fn": "branch_leaf_a",
+          "count": 3165
+        },
+        {
+          "fn": "insertion_sort",
+          "count": 2682
+        },
+        {
+          "fn": "crc_step",
+          "count": 2287
+        },
+        {
+          "fn": "next_random",
+          "count": 903
+        },
+        {
+          "fn": "SysTick_Handler",
+          "count": 384
+        },
+        {
+          "fn": "pipeline_scan",
+          "count": 378
+        },
+        {
+          "fn": "irq_work",
+          "count": 188
+        },
+        {
+          "fn": "pipeline_pack",
+          "count": 177
+        },
+        {
+          "fn": "pipeline_sort",
+          "count": 137
+        },
+        {
+          "fn": "execute_phase",
+          "count": 53
+        },
+        {
+          "fn": "route_a",
+          "count": 30
+        },
+        {
+          "fn": "pipeline_recursive",
+          "count": 13
+        },
+        {
+          "fn": "trace_phase",
+          "count": 6
+        },
+        {
+          "fn": "pipeline_verify",
+          "count": 3
+        }
+      ],
+      "errors": [],
+      "oracle": {
+        "uniquePcs": 188,
+        "checked": 188,
+        "wrong": []
+      },
+      "exceptions": {},
+      "markerCount": 85,
+      "phases": [
+        6,
+        8,
+        7,
+        1,
+        2,
+        3,
+        5
+      ],
+      "stageOracle": {
+        "checked": 19499,
+        "matched": 19499,
+        "accuracy": 1,
+        "counts": {
+          "1": 3239,
+          "2": 3148,
+          "3": 3195,
+          "5": 3212,
+          "6": 3298,
+          "7": 3407
+        },
+        "mismatches": [],
+        "mismatchCount": 0
+      }
+    },
+    {
+      "cfg": {
+        "scenario": 0,
+        "itm": true,
+        "exceptions": true,
+        "period": 4096,
+        "seconds": 3
+      },
+      "bytes": 95810,
+      "metadata": {
+        "format": "swo-pc-v1",
+        "startAligned": true,
+        "plan": {
+          "coreHz": 8000000,
+          "baudRate": 1000000,
+          "periodCycles": 4096,
+          "seconds": 3,
+          "itm": true,
+          "exceptions": true,
+          "tap": 1,
+          "post": 3,
+          "acpr": 7,
+          "samplesHz": 1953.125,
+          "estimatedBytes": 17578.125,
+          "wireBytes": 100000
+        },
+        "startedAt": "2026-10-08T17:54:10.981Z",
+        "clockCheck": {
+          "cfgr": 0,
+          "knownHz": 8000000
+        },
+        "target": {
+          "cpuid": 1092600369,
+          "device": 537093136
+        },
+        "elfSha256": "1676a4ac2ba8a1edaa468bc918034095104d74bce8e98030d233c5cfca8493e2",
+        "transportGaps": [],
+        "configReadback": {
+          "dwt": 1073813095,
+          "itm": 65551,
+          "acpr": 7,
+          "sppr": 2,
+          "dbg": 807
+        },
+        "elapsedMs": 3000,
+        "restored": true
+      },
+      "stats": {
+        "bytes": 95810,
+        "packets": 29678,
+        "pc": 5048,
+        "sleep": 822,
+        "itm": 85,
+        "exceptions": 8996,
+        "sync": 1,
+        "overflow": 78,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 5048,
+        "analyzedSamples": 5048,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "hotspots": [
+        {
+          "fn": "verify_block",
+          "count": 853
+        },
+        {
+          "fn": "recursive_mix",
+          "count": 836
+        },
+        {
+          "fn": "branch_leaf_a",
+          "count": 784
+        },
+        {
+          "fn": "encode_word",
+          "count": 759
+        },
+        {
+          "fn": "insertion_sort",
+          "count": 669
+        },
+        {
+          "fn": "crc_step",
+          "count": 536
+        },
+        {
+          "fn": "next_random",
+          "count": 247
+        },
+        {
+          "fn": "pipeline_scan",
+          "count": 113
+        },
+        {
+          "fn": "SysTick_Handler",
+          "count": 94
+        },
+        {
+          "fn": "irq_work",
+          "count": 47
+        },
+        {
+          "fn": "pipeline_pack",
+          "count": 46
+        },
+        {
+          "fn": "pipeline_sort",
+          "count": 35
+        },
+        {
+          "fn": "execute_phase",
+          "count": 12
+        },
+        {
+          "fn": "route_a",
+          "count": 11
+        },
+        {
+          "fn": "pipeline_recursive",
+          "count": 3
+        },
+        {
+          "fn": "trace_phase",
+          "count": 2
+        },
+        {
+          "fn": "pipeline_verify",
+          "count": 1
+        }
+      ],
+      "errors": [],
+      "oracle": {
+        "uniquePcs": 149,
+        "checked": 149,
+        "wrong": []
+      },
+      "exceptions": {
+        "0": 3005,
+        "14": 59,
+        "15": 5932
+      },
+      "markerCount": 85,
+      "phases": [
+        8,
+        7,
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "stageOracle": {
+        "checked": 2932,
+        "matched": 2932,
+        "accuracy": 1,
+        "counts": {
+          "1": 535,
+          "2": 489,
+          "3": 479,
+          "5": 441,
+          "6": 581,
+          "7": 407
+        },
+        "mismatches": [],
+        "mismatchCount": 0
+      }
+    }
+  ],
+  "startedAt": "2026-10-08T17:53:48.412Z",
+  "originalSHA256": "5c54ac4301861d8827a31bbaf2d995f6fd2e2b58a845e706a4d367d352adce40",
+  "originalDemcr": 16777216,
+  "restoreBytes": 7168,
+  "passed": true,
+  "restore": {
+    "passed": true,
+    "sha256": "5c54ac4301861d8827a31bbaf2d995f6fd2e2b58a845e706a4d367d352adce40",
+    "bytes": 131072,
+    "pages": 7,
+    "demcr": 16777216
+  }
+}
