@@ -4,6 +4,8 @@
 
 H743 真实异常验收：先完整备份原始 Flash，烧入 `tools/target-firmware/stm32h743_fault/fw.elf`，启动 8899 / 9333 服务，然后执行 `node tools/selftest/diagnostics-hw.mjs`。脚本注入 8 个故障场景并检查保存 PC、帧类型、调用链、只读一致性和捕获位恢复；它会停机、复位及写测试 RAM，**不自动备份、烧录或恢复固件**，结束后必须恢复原始 Flash 并读回核对。`DIAG_FIXTURE` / `DIAG_OUT` 可覆盖 ELF 和输出目录；设置 `DIAG_SOURCE` 为夹具的 `src` 目录，可加载实际 `main.c` 并逐项验证源码正文跳转。
 
+F103ZE 真实异常验收：完整备份后烧入 `tools/target-firmware/stm32f103ze_fault/fw.elf`，执行 `node tools/selftest/diagnostics-hw.mjs --board=f103ze`，覆盖 8 个 Cortex-M3 场景；脚本仍不负责备份、烧录或恢复。`APP` / `CDP` 支持独立 worktree 的服务和浏览器端口，`DIAG_SOURCE=tools/target-firmware/stm32f103ze_fault/src` 启用实际源码验证。见 [F103ZE 真机结果与恢复判据](../../docs/validation/2026-10-08-f103ze-diagnostics.md)。
+
 性能对照：用 `git archive milestone-2026-10-08-pre-diagnostics app index.html` 导出基线到 `tmp/diagnostics-hw/baseline`，事先烧入对应夹具。执行 `node tools/selftest/diagnostics-perf-hw.mjs --kind=dbg`（故障夹具正常模式）、`--kind=scope`（`stm32h743_scope/fw.elf`），或 `--kind=rtt --clock=45000`（`stm32h743_rtt_speed/fw.elf`）。`--clock` 仅设置 RTT 请求 SWD 时钟，单位 kHz；Scope 固定请求 60 MHz，正常调试固定 10 MHz。默认每状态 3 轮、每采集窗口 8 秒，可用 `--seconds` / `--repeats` / `--baseline` / `--out` 覆盖。脚本按交替顺序测基线／关闭／打开，不改固件；RTT 重复行模式不匹配保留证据，不能据此计算 BER。固定时钟读错、网页错误会中止，已有结果仍保留。
 
 本轮 [硬件验收与性能数据](../../docs/validation/2026-10-08-h743-diagnostics.md)包含失败压力窗口及原固件完整恢复判据；重测时同一时间只运行一项硬件脚本，按生效 SWD 时钟比较。

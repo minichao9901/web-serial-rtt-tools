@@ -1,0 +1,9 @@
+{
+  "board": "f103ze",
+  "fixture": "tools/target-firmware/stm32f103ze_fault/fw.elf",
+  "app": "http://127.0.0.1:8901/index.html",
+  "cpuid": 1092600369,
+  "deviceId": 268657684,
+  "flashKiB": 512,
+  "clockHz": 10000000
+}
