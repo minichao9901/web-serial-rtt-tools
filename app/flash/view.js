@@ -23,12 +23,14 @@ import { CHIPS, fillChipSelect } from '../core/chips.js';
 import { BridgeClient } from '../rtt/bridge.js';
 import { WebUsbDapProbe, withTimeout } from '../rtt/dap-webusb.js';
 import { ALGOS, F1_DEV, checkFlashRange } from './algos.js';
-import { HPM_BOARDS, HPM_COMMON, hpmBoard, hpmCheckRange } from './hpm/chips.js';
+import { HPM_BOARDS, hpmBoard, hpmCheckRange } from './hpm/chips.js';
 import { DBGMCU_BASES, FLASH_SIZE_REGS, decodeCpuid, decodeDpIdcode, decodeStm32Dev, refineByFlash, saneFlashKb } from './devid.js';
 import { closeProbeUsbDevices } from '../core/probe-bus.js';
 import { DapJtagTransport, setOutputModeData, PROBE_OUTPUT_MODE } from './hpm/dap-transport.js';
 import { RiscvTransport } from './hpm/riscv-dm.js';
 import { HpmFlasher } from './hpm/flash.js';
+import { resolveHpmTarget, assertHpmIdentity } from '../targets/hpm/porting.js';
+import { selectedHpmBoard, rememberHpmBoard } from '../targets/hpm/select.js';
 import { AkaLinkHid } from '../hid/probe.js';
 import { FlashRunner } from './runner.js';
 import { parseFirmware } from './image.js';
@@ -58,7 +60,7 @@ export class FlashView {
     store.bind($('f-base'), 'flash.base');
     store.bind($('f-verify'), 'flash.verify', 'checked');
     store.bind($('f-reset'), 'flash.reset', 'checked');
-    $('f-chip').addEventListener('change', () => this._applyChip());
+    $('f-chip').addEventListener('change', () => { rememberHpmBoard($('f-chip').value); this._applyChip(); });
     this._applyChip();
     // 「选择…」：列出桥所在机器的 OpenOCD cfg 让你挑（浏览器拿不到本地文件路径，列表只能由桥给）
     $('f-cfgs-pick').addEventListener('click', async () => {
@@ -127,6 +129,12 @@ export class FlashView {
     else if (p) el.textContent = `将用桥所在电脑上的路径：${p}（仅「本地桥」后端可读路径）`;
     else el.textContent = '支持 .elf / .hex / .bin：点「选择文件…」或拖进右侧日志区；填路径仅「本地桥」后端支持';
     $('f-base-row').hidden = !/\.bin$/i.test(cur);
+  }
+
+  onShow(){
+    if (!this.probe && !this.busy && hpmBoard($('f-chip')?.value)) {
+      $('f-chip').value = selectedHpmBoard(); store.set('flash.chip', $('f-chip').value); this._applyChip();
+    }
   }
 
   _applyChip(){
@@ -407,10 +415,11 @@ export class FlashView {
     }
 
     this.probe = await this._openProbeForRead({ skipTargetInit: true });   // 必须跳过按 SWD 协商那套
-    const jtag = new DapJtagTransport(this.probe, { irLength: HPM_COMMON.irLength, log: l => this._log('   ' + l) });
-    const dm = new RiscvTransport(jtag, { idle: 8, log: l => this._log('   ' + l) });
+    const port = resolveHpmTarget($('f-chip').value);
+    const jtag = new DapJtagTransport(this.probe, { irLength: port.debug.irLength, log: l => this._log('   ' + l) });
+    const dm = new RiscvTransport(jtag, { port, log: l => this._log('   ' + l) });
     const info = await dm.init();
-    const known = info.idcode === HPM_COMMON.tapIdcode;
+    const known = info.idcode === port.debug.tapIdcode;
     this._log(`   TAP IDCODE 0x${info.idcode.toString(16).toUpperCase()} → ${known ? 'HPM 全系（IR 长度 5，HPM6800/HPM5300…）' : '不在已知表里'}`);
     this._log(`   dmstatus 0x${info.dmstatus.toString(16)} · dtmcs 0x${info.dtmcs.toString(16)}`);
     this._log(known ? '   ⇒ 判读：RISC-V 调试模块（DM）应答了，JTAG 链路正常'
@@ -780,17 +789,18 @@ export class FlashView {
     probe.fast = false;
     probe.onLog = s => this._log('   [usb] ' + s);
 
-    const jtag = new DapJtagTransport(probe, { irLength: HPM_COMMON.irLength, log: l => this._log('   ' + l) });
-    const dm = new RiscvTransport(jtag, { idle: 8, log: l => this._log('   ' + l) });
+    const port = resolveHpmTarget(board);
+    const jtag = new DapJtagTransport(probe, { irLength: port.debug.irLength, log: l => this._log('   ' + l) });
+    const dm = new RiscvTransport(jtag, { port, log: l => this._log('   ' + l) });
     this._status('打开 JTAG TAP / 唤醒调试模块…');
     const info = await dm.init();
     this._log(`   IDCODE=0x${info.idcode.toString(16)}（HPM 全系 0x1000563D）· dmstatus=0x${info.dmstatus.toString(16)}`);
-    if (info.idcode !== HPM_COMMON.tapIdcode){
-      throw new Error(`TAP IDCODE 是 0x${info.idcode.toString(16)}，不是 HPM 的 0x${HPM_COMMON.tapIdcode.toString(16)} —— ` +
+    if (info.idcode !== port.debug.tapIdcode){
+      throw new Error(`TAP IDCODE 是 0x${info.idcode.toString(16)}，不是 HPM 的 0x${port.debug.tapIdcode.toString(16)} —— ` +
         '检查：JTAG 接线（TCK/TMS/TDI/TDO/GND）、板子上电、探针 output_mode 是否切到 SWD+JTAG');
     }
-    await dm.activate(0);
-    await dm.halt(0, 3000);
+    await dm.activate(port.debug.hart);
+    await dm.halt(port.debug.hart, 3000);
 
     /**
      * 🚨 **烧录前的 SBA 健康自检 + 自愈**（2026-10 HPM6800EVK 真机加的一步）。
@@ -803,7 +813,7 @@ export class FlashView {
      */
     this._status('检查探针→目标的总线访问（SBA）是否健康…');
     try {
-      const h = await withTimeout(dm.sbaHealthCheck(), 15000, 'SBA 健康检查');
+      const h = await withTimeout(dm.sbaHealthCheck({ peekAddr: port.memory.healthPeekAddr }), 15000, 'SBA 健康检查');
       if (h.level === 'none') this._log('   SBA 健康检查：干净');
       else if (h.ok) this._log(`   ⚠ SBA 之前是脏的（before=0x${Number(h.before ?? 0).toString(16)}）→ 已自愈：${h.note}`);
       else throw new Error(`SBA 卡死且自愈无效：${h.note}（before=0x${Number(h.before ?? 0).toString(16)} after=0x${Number(h.after ?? 0).toString(16)}）—— ` +
@@ -811,8 +821,8 @@ export class FlashView {
       if (h.level === 'ndmreset'){
         // 系统复位把核重启了：halt 状态与 DM 都要重新建立，否则后面跑算法会莫名其妙
         await dm.init();
-        await dm.activate(0);
-        await dm.halt(0, 3000);
+        await dm.activate(port.debug.hart);
+        await dm.halt(port.debug.hart, 3000);
         this._log('   系统复位后已重新 halt');
       }
     } catch (e){
@@ -830,7 +840,7 @@ export class FlashView {
         this._status((verifying ? '校验' : '烧写') + ` ${done} / ${tot2} B（${pct}%）`);
       },
     });
-    this._status('加载 flashloader 到 SRAM（0x00000000）…');
+    this._status(`加载 flashloader 到 SRAM（0x${port.memory.workArea.addr.toString(16)}）…`);
     /**
      * ②③ 全过程包一层"失败收尾"（2026-10 用户现场）：
      * 算法跑不回来时旧代码直接抛错走人，**核被扔在跑飞状态**（板子随即 ping 不通，

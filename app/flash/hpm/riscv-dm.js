@@ -1,3 +1,4 @@
+import { resolveHpmTarget, overlapsSbaFence, assertHpmIdentity } from '../../targets/hpm/porting.js';
 /**
  * RISC-V 调试模块访问（DMI + SBA），跑在 CMSIS-DAP 的 JTAG 序列之上。
  *
@@ -55,7 +56,9 @@ export class RiscvTransport {
    */
   constructor(dap, opts = {}){
     this.dap = dap;
-    this.idle = opts.idle ?? 8;              // DTM 要求的 RTI 拍（探针固件默认 8）
+    this.port = resolveHpmTarget(opts.port);
+    this.hart = this.port.debug.hart;
+    this.idle = opts.idle ?? this.port.debug.idle;              // DTM 要求的 RTI 拍（探针固件默认 8）
     this.log = opts.log || (() => {});
     this.open = false;
     this.lastDtmcs = 0;
@@ -98,6 +101,7 @@ export class RiscvTransport {
         '把探针 USB 和板子电源一起拔掉，等 10 秒再插（只拔板子电源没用：探针的 5V 还在供电）。' +
         '详见 app/flash/hpm/riscv-dm.js 里 resetHalt() 的注释');
     }
+    assertHpmIdentity(this.port, { idcode: this.idcode });
     await this.sequences(tapLoadIR(IR_DTMCS));
     this.lastDtmcs = Number((await this._scanDR(DR_DTMCS_BITS, 0n)) & 0xffffffffn) >>> 0;
 
@@ -109,7 +113,7 @@ export class RiscvTransport {
     await this.dmiPost(DMI_OP.NOP, 0, 0);
     // ⑤ DM 复位（0）再唤醒（1）
     await this.dmiWrite(DM.DMCONTROL, 0);
-    await this.dmiWrite(DM.DMCONTROL, DMCONTROL.dmactive);
+    await this.dmiWrite(DM.DMCONTROL, this._ctl(this.hart ?? 0));
     // ⑥ 判据
     this.lastDmstatus = (await this.dmiRead(DM.DMSTATUS)) >>> 0;
     /**
@@ -178,7 +182,7 @@ export class RiscvTransport {
   async _dmWakeRecover(){
     for (let i = 0; i < 5; i++){
       try {
-        await this.dmiWrite(DM.DMCONTROL, DMCONTROL.dmactive);
+        await this.dmiWrite(DM.DMCONTROL, this._ctl(this.hart ?? 0));
         await new Promise(r => setTimeout(r, 50));
         const st = (await this.dmiRead(DM.DMSTATUS)) >>> 0;
         if (st) return st;
@@ -186,13 +190,14 @@ export class RiscvTransport {
     }
     try {
       await this.sequences(tapReset());
-      await this.sequences(tapLoadIR(IR_DTMCS));
+      assertHpmIdentity(this.port, { idcode: this.idcode });
+    await this.sequences(tapLoadIR(IR_DTMCS));
       await this._scanDR(DR_DTMCS_BITS, 1n << 17n);          // bit17 = dmihardreset
       await this.sequences(tapReset());
       await this.sequences(tapLoadIR(IR_DMI));
       await this.dmiPost(DMI_OP.NOP, 0, 0);
       await this.dmiPost(DMI_OP.NOP, 0, 0);
-      await this.dmiWrite(DM.DMCONTROL, DMCONTROL.dmactive);
+      await this.dmiWrite(DM.DMCONTROL, this._ctl(this.hart ?? 0));
       const st = (await this.dmiRead(DM.DMSTATUS)) >>> 0;
       if (st) this.log(' DM 之前不应答 → TAP 复位 + dmihardreset 后已唤醒');
       return st;
@@ -365,7 +370,7 @@ export class RiscvTransport {
 
   // ---------------------------------------------------------------- 目标控制
   /** 让 DM 上线（dmactive=1）并选 hart 0 */
-  async activate(hart = 0){
+  async activate(hart = this.hart ?? 0){
     await this.dmiWrite(DM.DMCONTROL, this._ctl(hart));
     const st = await this.dmiRead(DM.DMSTATUS);
     return st;
@@ -381,7 +386,7 @@ export class RiscvTransport {
    *    dmstatus 的 [9:8]（halted）会立刻置起、[11:10]（running）清零。
    *    只有在 haltreq 真的停不住时才退回 reset-halt（少数 DM 需要），见 `_haltByReset()`。
    */
-  async halt(hart = 0, timeoutMs = 3000){
+  async halt(hart = this.hart ?? 0, timeoutMs = 3000){
     await this.dmiWrite(DM.DMCONTROL, this._ctl(hart, DMCONTROL.haltreq));
     try {
       return await this.waitHalted(timeoutMs);
@@ -392,7 +397,7 @@ export class RiscvTransport {
   }
 
   /** reset-halt（兜底）：ndmreset 拉高带 haltreq → 松开 ndmreset（haltreq 保持）*/
-  async _haltByReset(hart = 0, timeoutMs = 3000){
+  async _haltByReset(hart = this.hart ?? 0, timeoutMs = 3000){
     await this.dmiWrite(DM.DMCONTROL, this._ctl(hart, DMCONTROL.ndmreset | DMCONTROL.haltreq));
     await new Promise(r => setTimeout(r, 50));
     // 🚨 放开 ndmreset 这一步**必须执行**（卡住就把整芯片按在复位态，见 resetHalt() 的注释）
@@ -439,7 +444,7 @@ export class RiscvTransport {
    *     · 先 reset-**halt**（核停在复位向量，应用没机会重配 XPI）→ setup→erase ：**118 ms 通过**
    *   ⇒ 所以这里用 reset-halt（**不是** reset-run）。
    */
-  async resetHalt(hart = 0, timeoutMs = 5000){
+  async resetHalt(hart = this.hart ?? 0, timeoutMs = 5000){
     /**
      * 🚨 **`ndmreset` 一定要放开**（2026-10 现场血案）：它是电平式的，"按住不放就整芯片停在复位态"
      *    （`PPOR_RESET_HOLD` 的 bit4 = debug reset 默认是置起的）。而放开它只能由 DM 写寄存器 ——
@@ -491,7 +496,7 @@ export class RiscvTransport {
   }
 
   /** 系统复位后运行（烧完让固件自己跑起来）：ndmreset 脉冲 + 不置 haltreq */
-  async resetRun(hart = 0){
+  async resetRun(hart = this.hart ?? 0){
     await this.dmiWrite(DM.DMCONTROL, this._ctl(hart, DMCONTROL.ndmreset));
     await new Promise(r => setTimeout(r, 50));
     await this.dmiWrite(DM.DMCONTROL, this._ctl(hart));
@@ -503,7 +508,7 @@ export class RiscvTransport {
    * 做法：写一次 haltreq（**不复位**），再看两套布局里哪一对 halted 位被置起来。
    * 真机标定结果（HPM6800EVK, 2026-10）：[9:8] → legacy（0.11 时代排法）。
    */
-  async detectLayout(hart = 0){
+  async detectLayout(hart = this.hart ?? 0){
     await this.dmiWrite(DM.DMCONTROL, this._ctl(hart, DMCONTROL.haltreq));
     const legacyMask = DMSTATUS_LAYOUT.legacy.allhalted | DMSTATUS_LAYOUT.legacy.anyhalted;
     const specMask = DMSTATUS_LAYOUT.spec.allhalted | DMSTATUS_LAYOUT.spec.anyhalted;
@@ -522,7 +527,7 @@ export class RiscvTransport {
   }
 
   /** 让目标跑起来（resumereq），可选先写 pc */
-  async resume(pc = null, hart = 0){
+  async resume(pc = null, hart = this.hart ?? 0){
     if (pc != null) await this.writeReg(REGNO.PC, pc >>> 0);
     await this.dmiWrite(DM.DMCONTROL, this._ctl(hart, DMCONTROL.resumereq));
   }
@@ -707,7 +712,9 @@ export class RiscvTransport {
    * @returns {Promise<{ok:boolean, before:number|null, after:number|null, level:string, note:string,
    *                    msPerScan?:number, slow?:boolean}>}
    */
-  async sbaHealthCheck({ peekAddr = 0x01200000, perWordMs = 800, allowSystemReset = true, slowMs = 5 } = {}){
+  async sbaHealthCheck({ peekAddr = (this.port || resolveHpmTarget()).memory.healthPeekAddr, perWordMs = 800, allowSystemReset = true, slowMs = 5 } = {}){
+    if (peekAddr == null) throw new Error('该目标未配置 SBA 健康检查地址');
+    this._validateMemory(peekAddr, 4);
     const readSbcs = async () => { try { return (await this.dmiRead(DM.SBCS)) >>> 0; } catch { return null; } };
     /** 脏判据：busy 挂着、或 busyerror/sberror 非 0 */
     const dirty = s => s == null || (s & SBCS.SBBUSY) !== 0 || (s & (SBCS.SBBUSYERROR | SBCS.SBERROR)) !== 0;
@@ -734,7 +741,7 @@ export class RiscvTransport {
 
     // ② DM 复位（dmcontrol 0 → 1）
     this.log('SBA 不健康 → 复位调试模块（dmcontrol 0→1）');
-    try { await this.dmiWrite(DM.DMCONTROL, 0); await this.dmiWrite(DM.DMCONTROL, DMCONTROL.dmactive); } catch {}
+    try { await this.dmiWrite(DM.DMCONTROL, 0); await this.dmiWrite(DM.DMCONTROL, this._ctl(this.hart ?? 0)); } catch {}
     after = await readSbcs();
     if (!dirty(after) && await peek()){
       return R({ ok: true, before, after, level: 'dm', note: `DM 复位后恢复（${spd}）` });
@@ -744,7 +751,7 @@ export class RiscvTransport {
     if (allowSystemReset){
       this.log('SBA 仍不健康 → 系统复位（ndmreset）自愈');
       try { await this.resetRun(); await new Promise(r => setTimeout(r, 1500)); } catch {}
-      try { await this.dmiWrite(DM.DMCONTROL, 0); await this.dmiWrite(DM.DMCONTROL, DMCONTROL.dmactive); } catch {}
+      try { await this.dmiWrite(DM.DMCONTROL, 0); await this.dmiWrite(DM.DMCONTROL, this._ctl(this.hart ?? 0)); } catch {}
       after = await readSbcs();
       if (!dirty(after) && await peek()){
         return R({ ok: true, before, after, level: 'ndmreset', note: `系统复位（ndmreset）后恢复（${spd}）` });
@@ -794,7 +801,7 @@ export class RiscvTransport {
         !Number.isInteger(length) || length < 0 || addr + length > 0x100000000)
       throw new Error('SBA 地址或长度超出 32 位地址空间');
     const start = Math.floor(addr / 4) * 4, end = Math.ceil((addr + length) / 4) * 4;
-    if (read && length && start < 0x90000000 && end > 0x80000000)
+    if (read && overlapsSbaFence(this.port || resolveHpmTarget(), start, end - start))
       throw new Error('读取范围覆盖 XIP/flash 窗口：拒绝 SBA 访问；请使用已载入 ELF 的只读镜像');
     return { start, end, words: (end - start) / 4 };
   }

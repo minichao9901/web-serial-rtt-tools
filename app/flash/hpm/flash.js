@@ -9,13 +9,14 @@
  * 🚨 轮询 halt 时**不能**再写 haltreq：那会把还在跑的算法当场打断（返回码就永远是垃圾）。
  *
  * 算法 blob 的来源与入口表语义见 `tools/target-firmware/hpm_flash_algo/README.md`；
- * 一块 1.4 KB 的 blob 通吃 HPM 全系（ROM API 表地址全系相同）。
+ * 公共 blob 与官方 hpm_xpi 的参数化设计一致；板级差异由 target port 提供。
  */
 
 import { HPM_ALGO, hpmAlgoBytes } from './algo.js';
 import { algoEntries } from './entry.js';
-import { HPM_COMMON, hpmInitArgs, hpmCheckRange } from './chips.js';
-import { XIP_COPY_ADDR, xipCopyBytes } from './xip-copy.js';
+import { hpmInitArgs, hpmCheckRange } from './chips.js';
+import { resolveHpmTarget, hpmWorkLayout, assertHpmIdentity } from '../../targets/hpm/porting.js';
+import { xipCopyBytes } from './xip-copy.js';
 
 /** flashloader 调用 ROM API 的返回码（`hpm_stat_t`，只列常见的）*/
 export const HPM_STATUS = {
@@ -38,7 +39,10 @@ export class HpmFlasher {
   constructor(dm, opts){
     if (!opts?.board) throw new Error('HpmFlasher 需要 board（见 chips.js 的 HPM_BOARDS）');
     this.dm = dm;
-    this.board = opts.board;
+    this.port = resolveHpmTarget(opts.board);
+    if (!this.port.flash) throw new Error('所选目标没有 HPM Flash port');
+    this.board = { ...this.port };
+    this.resetFirst = opts.resetFirst !== false;
     this.log = opts.log || (() => {});
     this.onProgress = opts.onProgress || (() => {});
     /**
@@ -47,12 +51,10 @@ export class HpmFlasher {
      * 🚨 2026-10 对照 OpenOCD 定标：原来是 4 KB —— 243 KB 镜像要调 **60 次** `flash_program`
      *    + 60 次 `flash_read`，每次都要"写 a0..a4 → prepareRun(dcsr+fence.i) → resume →
      *    轮询等 halt → 读回 a0"（实测每次 20~70 ms），光这部分就吃掉十几秒。
-     *    工作区 128 KB（`HPM_COMMON.workAreaSize`）：算法在 0x0、中转区在 0x2000，
-     *    单块上限约 120 KB —— 取 64 KB（16 次调用），留足余量。
+     *    默认取 64 KB；实际分块按 port 工作区扣除算法、拷贝例程和栈后收缩。
      */
-    this.chunkBytes = opts.chunkBytes ?? 65536;
-    this.scratchInfo = 0x1000;          // flash_get_info 的输出（8 B）
-    this.dataBuf = 0x2000;              // 编程数据中转区（RAM）
+    this.layout = hpmWorkLayout(this.port, hpmAlgoBytes().length, xipCopyBytes().length, opts.chunkBytes ?? 65536);
+    Object.assign(this, this.layout);
     this.inited = false;
     this.entries = null;
     this.chipInfo = null;
@@ -60,6 +62,7 @@ export class HpmFlasher {
 
   /** 把算法写进 SRAM 并调 flash_init + flash_get_info（拿到芯片回报的真实容量/扇区）*/
   async setup(){
+    this.inited = false; this.chipInfo = null;
     /**
      * 🚨 **先 reset-halt 把 XPI 打回 POR 态**（2026-10 真机 A/B 定因，见 `RiscvTransport.resetHalt`）：
      *    目标上跑着 flash_sdram_xip 的应用时，它已经把 XPI 配过一遍；在那种状态下跑 flash_init
@@ -67,28 +70,11 @@ export class HpmFlasher {
      *    reset-halt 让核停在复位向量、应用来不及重配 XPI，实测同参数 erase 从 >60 s 变成 118 ms。
      *    `opts.resetFirst === false` 可关掉（离线自测/特殊场合用）。
      */
-    if (this.resetFirst !== false){
-      /**
-       * 🚨 **这里必须硬要求 `resetHalt` 存在**（2026-10-01 用户现场）：
-       *    原来写的是 `await this.dm.resetHalt?.()` —— 一旦页面是**混版**（`flash.js` 是新的、
-       *    `riscv-dm.js` 还是旧的，GitHub Pages 按文件缓存 10 分钟很容易这样），
-       *    可选链会让这一步**静默跳过**，而下面那行日志照样打印"已 reset-halt"——
-       *    于是现象变成"日志看着是对的、第一次 erase 还是卡 60 s"（用户实测整整查了一轮）。
-       *    现在缺方法就直接报错并说清怎么办。
-       */
-      if (typeof this.dm.resetHalt !== 'function'){
-        throw new Error('页面模块版本不一致：flash.js 是新的，但 riscv-dm.js 还是旧的（没有 resetHalt）。' +
-          ' GitHub Pages 对 JS 有 10 分钟 HTTP 缓存，按 **Ctrl+Shift+R** 强制刷新页面再烧');
-      }
-      const t = Date.now();
-      await this.dm.resetHalt();
-      // ndmreset 之后 DM 也要重新建立（TAP 复位 + dmcontrol 0→1 + halt）
-      try { await this.dm.init(); } catch { /* 失败就让后面的调用去报错 */ }
-      await this.dm.activate(0);
-      await this.dm.halt(0, 3000);
-      this.log(`已 reset-halt（把 XPI 打回 POR 态，${Date.now() - t} ms）—— 不然第一次 erase 会卡死`);
-    }
-    const bytes = hpmAlgoBytes();
+    /* Reset/init sequencing belongs to the port. Fail before loading code if it cannot complete. */
+    assertHpmIdentity(this.port, { idcode: this.dm.idcode });
+    await this.port.hooks.prepareFlash({ dm: this.dm, port: this.port, resetFirst: this.resetFirst });
+    assertHpmIdentity(this.port, { idcode: this.dm.idcode });
+    const bytes = hpmAlgoBytes(this.loadAddr);
     const parsed = algoEntries(bytes);
     if (parsed.count < 7){
       throw new Error(`flashloader 入口表只认出 ${parsed.count} 个入口（期望 7）—— blob 不对？`);
@@ -97,20 +83,18 @@ export class HpmFlasher {
     for (const name of ['init', 'erase', 'program', 'read', 'info', 'eraseChip', 'deinit']){
       if (!this.entries[name]) throw new Error(`flashloader 缺少入口 ${name}`);
     }
-    if (bytes.length > HPM_COMMON.workAreaSize - this.dataBuf){
-      throw new Error(`算法 ${bytes.length} B + 数据区放不进 ${HPM_COMMON.workAreaSize / 1024} KB 的 work area`);
-    }
+    // Layout was validated before any target command in the constructor.
     this.log(`准备 flashloader：${bytes.length} B（入口 7 个，偏移 ` +
       Object.entries(this.entries).map(([k, v]) => `${k}+0x${v.entryOffset.toString(16)}`).join(' ') + '）');
-    await this.dm.writeMem(HPM_ALGO.loadAddr, bytes);
-    this.log(`写完 flashloader：${bytes.length} B → SRAM 0x${HPM_ALGO.loadAddr.toString(16)}`);
+    await this.dm.writeMem(this.loadAddr, bytes);
+    this.log(`写完 flashloader：${bytes.length} B → SRAM 0x${this.loadAddr.toString(16)}`);
 
     /**
      * 🚨 **写完立刻读回校验**（2026-10 真机教训）：SBA 写丢字（例如 DMI 忙时被丢掉的那条写）
      *    不会报错，只会让核跑一段残缺代码 —— 表现是"加载完 flashloader 就卡住"，
      *    排查起来极费劲（用户看到的只是转圈）。1388 B 读回约 0.2 s，换一个**当场能看懂的报错**很值。
      */
-    const back = await this.dm.readMem(HPM_ALGO.loadAddr, bytes.length);
+    const back = await this.dm.readMem(this.loadAddr, bytes.length);
     let badAt = -1;
     for (let i = 0; i < bytes.length; i++) if (back[i] !== bytes[i]){ badAt = i; break; }
     if (badAt >= 0){
@@ -126,14 +110,14 @@ export class HpmFlasher {
      *    它必须每次 setup 都写：`recoverCore()` 会重写算法区，而这里紧挨着算法区。
      */
     const copyBytes = xipCopyBytes();
-    await this.dm.writeMem(XIP_COPY_ADDR, copyBytes);
-    const copyBack = await this.dm.readMem(XIP_COPY_ADDR, copyBytes.length);
+    await this.dm.writeMem(this.copyAddr, copyBytes);
+    const copyBack = await this.dm.readMem(this.copyAddr, copyBytes.length);
     for (let i = 0; i < copyBytes.length; i++){
       if (copyBack[i] !== copyBytes[i]){
         throw new Error(`XIP 拷贝例程写进 SRAM 后读回不一致（第 ${i} 字节）—— SBA 写丢了数据，别继续跑`);
       }
     }
-    this.log(`XIP 拷贝例程就绪：${copyBytes.length} B → SRAM 0x${XIP_COPY_ADDR.toString(16)}（verify 走 CPU 读 XIP 窗口，不用 ROM 的 flash_read）`);
+    this.log(`XIP 拷贝例程就绪：${copyBytes.length} B → SRAM 0x${this.copyAddr.toString(16)}（verify 走 CPU 读 XIP 窗口，不用 ROM 的 flash_read）`);
 
     const a = hpmInitArgs(this.board, { 0: HPM_ALGO.headerWords0, 1: HPM_ALGO.headerWords1, 2: HPM_ALGO.headerWords2 });
     let rc = await this.call('init', [a.flashBase, a.header, a.option0, a.option1, a.xpiBase]);
@@ -145,10 +129,14 @@ export class HpmFlasher {
     const info = await this.dm.readMem(this.scratchInfo, 8);
     const dv = new DataView(info.buffer, info.byteOffset, info.byteLength);
     this.chipInfo = { totalBytes: dv.getUint32(0, true), sectorBytes: dv.getUint32(4, true) };
-    if (!this.chipInfo.totalBytes || !this.chipInfo.sectorBytes){
+    if (!this.chipInfo.totalBytes || !this.chipInfo.sectorBytes ||
+        this.chipInfo.totalBytes % this.chipInfo.sectorBytes ||
+        this.chipInfo.sectorBytes % 4 ||
+        this.board.flashBase + this.chipInfo.totalBytes > 0x100000000){
       throw new Error(`flashloader 回报的容量不合理（总 ${this.chipInfo.totalBytes} B / 扇区 ${this.chipInfo.sectorBytes} B）——` +
         ' 多半是 XPI 没配起来（option0/1 或 xpi_base 与板子不符）');
     }
+    this.board.flashSize = this.chipInfo.totalBytes;
     this.inited = true;
     this.log(`flashloader 就绪：总容量 ${(this.chipInfo.totalBytes / 1048576).toFixed(2)} MB · 扇区 ${this.chipInfo.sectorBytes} B`);
     return this.chipInfo;
@@ -168,7 +156,7 @@ export class HpmFlasher {
   async call(entry, args = [], timeoutMs = 20000){
     const e = this.entries[entry];
     if (!e) throw new Error(`没有入口 ${entry}`);
-    return await this.callAt((HPM_ALGO.loadAddr + e.entryOffset) >>> 0, args, timeoutMs);
+    return await this.callAt((this.loadAddr + e.entryOffset) >>> 0, args, timeoutMs);
   }
 
   /**
@@ -176,11 +164,12 @@ export class HpmFlasher {
    * @param {number} addr 例程入口（SRAM 绝对地址）
    */
   async callAt(addr, args = [], timeoutMs = 20000){
+    await this.dm.writeReg(0x1002, this.stackTop); // RV32 ABI: an aligned, reserved stack inside work area.
     // 参数放 a0..a4（x10..x14）
     for (let i = 0; i < args.length; i++) await this.dm.writeReg(0x1000 + 10 + i, args[i] >>> 0);
     // 🚨 跑之前必须：置 dcsr.ebreak*（否则收尾的 ebreak 变成异常，核跑飞）+ fence.i（刚写进去的代码）
     await this.dm.prepareRun();
-    await this.dm.resume(addr >>> 0);
+    await this.dm.resume(addr >>> 0, this.port.debug.hart);
     await this.dm.waitHalted(timeoutMs);
     return (await this.dm.readReg(0x1000 + 10)) >>> 0;
   }
@@ -190,19 +179,23 @@ export class HpmFlasher {
    * 把算法镜像**再写一遍并读回校验**（DMI 丢字 / 指令预取拿到旧内容都靠这步兜住）。
    */
   async recoverCore(){
-    const bytes = hpmAlgoBytes();
-    try { await this.dm.halt(0, 3000); } catch { /* 停不住也继续往下试 */ }
+    const bytes = hpmAlgoBytes(this.loadAddr);
+    try { await this.dm.halt(this.port.debug.hart, 3000); } catch { /* 停不住也继续往下试 */ }
     try { await this.dm.init(); } catch { /* DM 复位失败就让后面的读去报错 */ }
-    await this.dm.activate(0);
-    await this.dm.halt(0, 3000);
-    await this.dm.writeMem(HPM_ALGO.loadAddr, bytes);
-    const back = await this.dm.readMem(HPM_ALGO.loadAddr, bytes.length);
+    await this.dm.activate(this.port.debug.hart);
+    await this.dm.halt(this.port.debug.hart, 3000);
+    await this.dm.writeMem(this.loadAddr, bytes);
+    const back = await this.dm.readMem(this.loadAddr, bytes.length);
     for (let i = 0; i < bytes.length; i++){
       if (back[i] !== bytes[i]){
         throw new Error(`恢复时重写算法仍不一致（第 ${i} 字节：写 0x${bytes[i].toString(16)}、读回 0x${back[i].toString(16)}）` +
           ' —— 探针↔目标链路不稳，建议拔插一次探针/给板子断电重上电再烧');
       }
     }
+    const copy = xipCopyBytes();
+    await this.dm.writeMem(this.copyAddr, copy);
+    const copyBack = await this.dm.readMem(this.copyAddr, copy.length);
+    if (copy.some((b, i) => b !== copyBack[i])) throw new Error('恢复时 XIP 拷贝例程读回不一致');
     this.log('   已恢复现场（核已停、DM 已复位、算法镜像已重写并校验）');
   }
 
@@ -211,8 +204,8 @@ export class HpmFlasher {
    * （用户看到的会是"板子 ping 不通了、像坏了"，实际只是核在跑垃圾）。
    */
   async recoverAfterFailure(){
-    try { await this.dm.halt(0, 2000); } catch { /* 停不住就算了 */ }
-    try { await this.dm.resetRun(); } catch { /* 复位失败也认了 */ }
+    try { await this.dm.halt(this.port.debug.hart, 2000); } catch { /* 停不住就算了 */ }
+    try { await this.port.reset.run(this.dm, this.port.debug.hart); } catch { /* 复位失败也认了 */ }
   }
 
   /**
@@ -280,8 +273,8 @@ export class HpmFlasher {
   /** 烧写：分块写进 RAM 中转区 → flash_program */
   async program(addr, data){
     if (!this.inited) throw new Error('先 setup()');
-    const chk = hpmCheckRange(this.board, addr, data.length);
-    if (!chk.ok) throw new Error('烧写范围不合法：' + chk.why);
+    const chk = hpmCheckRange(this.board, addr, Math.ceil(data.length / 4) * 4);
+    if (!chk.ok || addr % 4) throw new Error('烧写范围不合法：' + (chk.why || '地址必须 4 字节对齐'));
     const total = data.length;
     for (let off = 0; off < total; off += this.chunkBytes){
       const n = Math.min(this.chunkBytes, total - off);
@@ -314,7 +307,7 @@ export class HpmFlasher {
     if (len <= 0) return;
     if (len % 4) throw new Error(`XIP 拷贝要求长度是 4 的倍数（${len}）`);
     try {
-      await this.callAt(XIP_COPY_ADDR, [flashAddr >>> 0, dst >>> 0, len >>> 0], 20000);
+      await this.callAt(this.copyAddr, [flashAddr >>> 0, dst >>> 0, len >>> 0], 20000);
     } catch (e){
       throw new Error(`XIP 拷贝例程没回来（读 0x${(flashAddr >>> 0).toString(16)} + ${len} B）：${e.message}` +
         '　—— XPI 窗口可能没配上（flash_init 没跑？）或地址不在 flash 窗口内');
@@ -331,6 +324,8 @@ export class HpmFlasher {
    */
   async verify(addr, data){
     if (!this.inited) throw new Error('先 setup()');
+    const chk = hpmCheckRange(this.board, addr, Math.ceil(data.length / 4) * 4);
+    if (!chk.ok || addr % 4) throw new Error('校验范围不合法：' + (chk.why || '地址必须 4 字节对齐'));
     let bad = -1, firstBad = null;
     for (let off = 0; off < data.length; off += this.chunkBytes){
       const n = Math.min(this.chunkBytes, data.length - off);
@@ -355,7 +350,7 @@ export class HpmFlasher {
   /** 收尾：flash_deinit + 让目标从 flash 启动（系统复位）*/
   async finish({ run = true } = {}){
     try { await this.call('deinit', [], 3000); } catch { /* 收尾失败不影响结果 */ }
-    if (run) await this.dm.resetRun();
+    if (run) await this.port.reset.run(this.dm, this.port.debug.hart);
   }
 
   /** 一步到位：擦 → 写 → 校验（可选） */

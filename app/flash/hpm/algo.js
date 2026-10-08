@@ -8,9 +8,17 @@
  *    偏移由 app/flash/hpm/entry.js 在运行时从 blob 里走一遍 jal 发现，
  *    symbols 是构建时从 ELF 取的真值，自测拿它逐项对账。
  */
+import { relocateAlgoBytes } from './entry.js';
 export const HPM_ALGO = {
   loadAddr: 0x00000000,
   size: 1388,
+  /** Internal GOT pointers, generated from ELF .got for runtime relocation. */
+  relocations: [
+    { offset: 0x554, target: 0x440 },
+    { offset: 0x558, target: 0x438 },
+    { offset: 0x55c, target: 0x43c },
+    { offset: 0x560, target: 0x434 },
+  ],
   /** 构建时的符号地址（仅供自测对账，运行时不依赖它）*/
   symbols: {
     flash_init: 0x50,
@@ -50,9 +58,9 @@ export const HPM_ALGO = {
 };
 
 /** 解出 blob 字节（每次调用都新建一份，避免被就地改动）*/
-export function hpmAlgoBytes(){
+export function hpmAlgoBytes(loadAddr = HPM_ALGO.loadAddr){
   const bin = atob(HPM_ALGO.b64);
   const out = new Uint8Array(bin.length);
   for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
-  return out;
+  return relocateAlgoBytes(out, HPM_ALGO, loadAddr);
 }

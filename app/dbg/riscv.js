@@ -33,7 +33,7 @@ import { DapJtagTransport, setOutputModeData, PROBE_OUTPUT_MODE } from '../flash
 import { AkaLinkHid } from '../hid/probe.js';
 import { WebUsbDapProbe, withTimeout } from '../rtt/dap-webusb.js';
 import { closeProbeUsbDevices } from '../core/probe-bus.js';
-import { HPM_COMMON } from '../flash/hpm/chips.js';
+import { resolveHpmTarget, assertHpmIdentity, overlapsSbaFence } from '../targets/hpm/porting.js';
 import { sleep, waitMs } from '../core/pace.js';
 import { align2 } from './fmt.js';
 
@@ -79,10 +79,11 @@ export function rvRegno(name){
 }
 
 export class RiscvDebugSession extends DebugSession {
-  constructor(){
+  constructor({ target } = {}){
     super();
     this.arch = RV_ARCH;                  // 指令解码/落点/返回地址校验都换成 RISC-V 那份
     this.isRiscv = true;
+    this.port = resolveHpmTarget(target);
     this.dm = null;                       // RiscvTransport（DMI/SBA/抽象命令）
     this.jtag = null;
     this.caps = { numCode: 0, rev: 2, raw: 0 };
@@ -97,8 +98,9 @@ export class RiscvDebugSession extends DebugSession {
    *   · 还要让探针自己的 RISC-V 引擎与 RTT 桥**放开 TAP**（HID 0x33/0x31 的 action 0）；
    *   · `WebUsbDapProbe.open` 必须 `skipTargetInit: true` —— 默认那套按 SWD 协商，RISC-V 上必 NO ACK。
    */
-  async connect({ clockKhz = 0, all = false, bus = null } = {}){
+  async connect({ clockKhz = 0, all = false, bus = null, target = this.port } = {}){
     if (this.probe) throw new Error('已经连接了（先断开）');
+    this.port = resolveHpmTarget(target);
     if (bus?.supported){
       const r = await bus.requestRelease({ why: '调试页要占用探针（RISC-V/JTAG）' });
       if (r.asked) this._log(`跨页签协调：请 ${r.asked} 个其他页签让出探针，${r.acked} 个确认（等了 ${r.ms} ms）`, 'dim');
@@ -152,9 +154,10 @@ export class RiscvDebugSession extends DebugSession {
     if (Number(clockKhz) > 0){
       try { await this.probe.setClock(Number(clockKhz) * 1000); } catch (e){ this._log('设 JTAG 时钟失败：' + (e?.message || e), 'warn'); }
     }
-    this.jtag = new DapJtagTransport(this.probe, { irLength: HPM_COMMON.irLength, log: s => this._log('   [jtag] ' + s, 'dim') });
-    this.dm = new RiscvTransport(this.jtag, { idle: 8, log: s => this._log('   [dm] ' + s, 'dim') });
+    this.jtag = new DapJtagTransport(this.probe, { irLength: this.port.debug.irLength, log: s => this._log('   [jtag] ' + s, 'dim') });
+    this.dm = new RiscvTransport(this.jtag, { port: this.port, log: s => this._log('   [dm] ' + s, 'dim') });
     const info = await withTimeout(this.dm.init(), 20000, '初始化 RISC-V 调试模块');
+    assertHpmIdentity(this.port, info);
     this.clockHz = Number(clockKhz) > 0 ? Number(clockKhz) * 1000 : 0;
     this.idcode = info?.idcode >>> 0;
     this.name = `RISC-V/JTAG · DM v${((info?.dmstatus ?? 0) >>> 0).toString(16)}`;
@@ -319,33 +322,9 @@ export class RiscvDebugSession extends DebugSession {
 
   // ---------------------------------------------------------------- 内存（SBA）
 
-  /** HPM6880 DDR is clock-gated after reset, until _init_ext_ram runs.
-   * Reading SDRAM before that hangs the bus, including OpenOCD's sysbus path.
-   * Identify this SDK profile from ELF symbols, read the always-on SYSCTL first,
-   * and only touch DDRCTL STAT after its clock has been enabled and settled.
-   * No clock/controller writes or target state changes are allowed here.
-   */
+  /** Memory readiness is chip-specific; it must never initialize/reset the target. */
   async _checkExternalRam(addr, length){
-    if (!length || addr >= 0x50000000 || addr + length <= 0x40000000 ||
-        !this.sym?.find?.('_init_ext_ram') ||
-        !(this.sym.find('init_ddr3l_1333') || this.sym.find('init_ddr2_800'))) return;
-    const word = async a => {
-      const b = await this.dm.readMem(a, 4, 1500);
-      return new DataView(b.buffer, b.byteOffset, 4).getUint32(0, true);
-    };
-    // SDK: DDR0 resource 263; linkable resources start at 256. GROUP0[0]
-    // bit 7 requests DDR0. RESOURCE mode 1 is always-on, 2 is always-off;
-    // bit 30 marks a clock transition. Addresses are from hpm_sysctl_regs.h.
-    const group = await word(0xf4000800);
-    const resource = await word(0xf400041c);
-    const mode = resource & 3;
-    const clockReady = mode !== 2 && mode !== 3 &&
-      (mode === 1 || (group & 0x80)) && !(resource & 0x40000000);
-    if (!clockReady || ((await word(0xf3010004)) & 7) !== 1){
-      const e = new Error('外部 SDRAM 尚未初始化；继续运行到 main 或初始化完成的位置后可读取');
-      e.code = 'MEMORY_NOT_READY'; e.sbaHandled = true;
-      throw e;
-    }
+    await (this.port || resolveHpmTarget()).hooks.checkMemoryReady(this, addr, length);
   }
 
   /** Read target RAM via SBA; XIP uses only fully covered ELF image bytes.
@@ -357,9 +336,11 @@ export class RiscvDebugSession extends DebugSession {
       throw new Error('内存地址或长度超出 32 位地址空间');
     if (!len) return new Uint8Array(0);
     const a = addr, n = len;
-    if (a < 0x90000000 && a + n > 0x80000000){
+    if (overlapsSbaFence(this.port || resolveHpmTarget(), a, n)){
       // A request crossing into/out of XIP must not touch SBA, even partially.
-      const b = a >= 0x80000000 && a + n <= 0x90000000 ? this.sym?.codeBytes?.(a, n) : null;
+      const port = this.port || resolveHpmTarget();
+      const inside = port.memory.sbaReadForbidden.some(r => a >= r.start && a + n <= r.end);
+      const b = inside ? this.sym?.codeBytes?.(a, n) : null;
       if (!b || b.length !== n)
         throw new Error('XIP/flash 数据不可用：载入的 ELF 只读段未完整覆盖请求；未访问 SBA，未补零');
       if (!this._xipFallbackLogged){
@@ -426,12 +407,12 @@ export class RiscvDebugSession extends DebugSession {
    *    所以这里自己走"安静停机"：先纯 haltreq，不行先治 DM（`dm.init()` 里有 dmactive 0→1、
    *    TAP 复位 + dmihardreset、DMI 冻住判别），治好再停一次；仍然失败则报错，不自动系统复位。
    */
-  async _haltQuiet(hart = 0, timeoutMs = 2500){
+  async _haltQuiet(hart = this.port?.debug.hart ?? 0, timeoutMs = 2500){
     await this.dm.dmiWrite(0x10, this.dm._ctl(hart, DMCONTROL.haltreq));
     return await this.dm.waitHalted(timeoutMs);
   }
 
-  async _haltWithHeal(why = '停机', hart = 0, timeoutMs = 2500){
+  async _haltWithHeal(why = '停机', hart = this.port?.debug.hart ?? 0, timeoutMs = 2500){
     try { return await this._haltQuiet(hart, timeoutMs); }
     catch (e){
       this._log(`${why}失败（${e?.message || e}）—— 先重新初始化调试模块，再停一次`, 'warn');
@@ -477,7 +458,7 @@ export class RiscvDebugSession extends DebugSession {
     const wasPc = this.pc;
     try { return await fn(); }
     finally {
-      try { await this.dm.resume(null, 0); this.halted = false; this.pc = wasPc; } catch {}
+      try { await this.dm.resume(null, this.port?.debug.hart ?? 0); this.halted = false; this.pc = wasPc; } catch {}
     }
   }
 
@@ -593,19 +574,19 @@ export class RiscvDebugSession extends DebugSession {
     const live = await this._pollHalted();
     if (live === false){
       if (this.halted) this._log('继续：目标其实在跑（dmstatus 说没停）—— 只纠正状态，不下发抽象命令', 'warn');
-      await this.dm.dmiWrite(0x10, this.dm._ctl(0, DMCONTROL.resumereq));
+      await this.dm.dmiWrite(0x10, this.dm._ctl(this.port?.debug.hart ?? 0, DMCONTROL.resumereq));
       this.halted = false;
       return;
     }
     const d = (await this.dm.readReg(REGNO.DCSR)) >>> 0;
     if (d & DCSR_STEP) await this.dm.writeReg(REGNO.DCSR, (d & ~DCSR_STEP) >>> 0);   // 别带着 step 跑
-    await this.dm.dmiWrite(0x10, this.dm._ctl(0, DMCONTROL.resumereq));
+    await this.dm.dmiWrite(0x10, this.dm._ctl(this.port?.debug.hart ?? 0, DMCONTROL.resumereq));
     this.halted = false;
   }
 
   async halt(){
     this.clearFrames();
-    await this._haltWithHeal('暂停', 0, 3000);
+    await this._haltWithHeal('暂停', this.port?.debug.hart ?? 0, 3000);
     this.halted = await this._pollHalted();
     if (!this.halted) throw new Error('暂停未确认，目标仍在运行');
     try { this.pc = (await this.dm.readReg(REGNO.PC)) >>> 0; } catch {}
@@ -627,7 +608,7 @@ export class RiscvDebugSession extends DebugSession {
     await this._withBpCleared(pc, async () => {
       const d = (await this.dm.readReg(REGNO.DCSR)) >>> 0;
       await this.dm.writeReg(REGNO.DCSR, (d | DCSR_STEP | EBREAK_ALL) >>> 0);
-      await this.dm.dmiWrite(0x10, this.dm._ctl(0, DMCONTROL.resumereq));
+      await this.dm.dmiWrite(0x10, this.dm._ctl(this.port?.debug.hart ?? 0, DMCONTROL.resumereq));
       this.halted = false;
       /**
        * 🚨 **先确认真的跑起来了，再等它停**（2026-10 真机定因）。
@@ -638,7 +619,7 @@ export class RiscvDebugSession extends DebugSession {
        */
       await this._waitResumed(pc, 400);
       try { await this.dm.waitHalted(3000); }
-      catch (e){ await this._haltQuiet(0, 1500).catch(() => {}); throw new Error('单步没停下来：' + (e?.message || e)); }
+      catch (e){ await this._haltQuiet(this.port?.debug.hart ?? 0, 1500).catch(() => {}); throw new Error('单步没停下来：' + (e?.message || e)); }
       await this.dm.writeReg(REGNO.DCSR, (d & ~DCSR_STEP) >>> 0).catch(() => {});
       this.halted = true;
     });
@@ -672,7 +653,7 @@ export class RiscvDebugSession extends DebugSession {
   async resetHalt(){
     this.clearFrames();
     this._badAddrs?.clear();
-    await this.dm.resetHalt(0);
+    await (this.port || resolveHpmTarget()).reset.halt(this.dm, this.port?.debug.hart ?? 0);
     this.halted = await this._pollHalted();
     if (!this.halted) throw new Error('复位后停机未确认，未重装断点');
     await this._rearmBpsAfterReset();
@@ -698,7 +679,7 @@ export class RiscvDebugSession extends DebugSession {
     this._badAddrs?.clear();
     const DMC = 0x10;
     // ①②③：复位 + 停在复位向量（ndmreset 放开与否由 dm 侧复验，见那里的"血案"注释）
-    await this.dm._haltByReset(0);
+    await (this.port || resolveHpmTarget()).reset.haltForRun(this.dm, this.port?.debug.hart ?? 0);
     this.halted = await this._pollHalted();
     if (!this.halted) throw new Error('复位后停机未确认，未继续运行');
     // ④：现在核确实停着、且 ndmreset 已放开 —— 抽象命令写触发器才写得进去

@@ -26,6 +26,7 @@ import { store } from '../core/store.js';
 import { waitMs } from '../core/pace.js';
 import { DebugSession, DEFAULT_CLOCK_KHZ } from './session.js';
 import { RiscvDebugSession } from './riscv.js';
+import { fillHpmSelect, selectedHpmBoard, rememberHpmBoard } from '../targets/hpm/select.js';
 import { runCmd } from './cmd.js';
 import { SymTab } from './symbols.js';
 /**
@@ -94,6 +95,11 @@ export class DbgView {
     this.session.sym = null;
 
     // ---- 侧栏 ----
+    fillHpmSelect($('d-hpm-target'), store.get('dbg.rvTarget') === 'riscv-other' ? 'riscv-other' : selectedHpmBoard(), true);
+    $('d-hpm-target')?.addEventListener('change', () => {
+      store.set('dbg.rvTarget', $('d-hpm-target').value);
+      rememberHpmBoard($('d-hpm-target').value);
+    });
     const be = $('d-backend');
     if (be){ store.bind(be, 'dbg.backend'); be.addEventListener('change', () => this._syncBackend()); }
     const clk = $('d-clock');
@@ -276,6 +282,8 @@ export class DbgView {
   static supported(){ return typeof navigator !== 'undefined' && 'usb' in navigator; }
 
   onShow(){
+    if (!this.session.connected && !$('d-hpm-target')?.disabled && $('d-hpm-target'))
+      $('d-hpm-target').value = store.get('dbg.rvTarget') === 'riscv-other' ? 'riscv-other' : selectedHpmBoard();
     // 切回本页时对账一次状态（目标可能在别的页签里被复位/被烧录器抢走）
     // 🚨 用 tryExclusive：观察循环正在读的时候直接跳过这一拍，别和它抢 SWD
     if (this.session.connected){
@@ -385,6 +393,10 @@ export class DbgView {
     const mock = v === 'mock';
     const riscv = v === 'riscv';
     await this._ensureSession(riscv);
+    if ($('d-hpm-target-row')) {
+      $('d-hpm-target-row').hidden = !riscv;
+      $('d-hpm-target-row').style.display = riscv ? '' : 'none';
+    }
     const clk = $('d-clock');
     if (clk){
       clk.disabled = mock;
@@ -404,6 +416,7 @@ export class DbgView {
     this.faultPanel?.sync();
     if(!this.session.connected || !this.session.halted || (this._btSnapshotValid && this.session.pc!==this._btSnapshotPc)) this._invalidateBacktrace();
     const c = connected ?? this.session.connected;
+    if ($('d-hpm-target')) $('d-hpm-target').disabled = c || !!this._connecting;
     const h = halted ?? this.session.halted;
     for (const id of ['d-cont', 'd-step', 'd-halt', 'd-mem-read']){
       const el = $(id);
@@ -432,12 +445,16 @@ export class DbgView {
     if (this._connecting || this._disconnecting) return false;
     const generation = this._connectionGen = (this._connectionGen || 0) + 1;
     this._connecting = true;
+    if ($('d-hpm-target')) $('d-hpm-target').disabled = true;
     try {
       return await runProbeOperation(this, 'dbg', () => this._connectNow(generation), {
         mock: $('d-backend')?.value === 'mock', reason: '调试器要使用探针', recovery: true,
       });
     } catch (e){ this._out('✗ 连接失败：' + e.message, 'err'); toast(e.message, 'err'); return false; }
-    finally { this._connecting = false; this._connectionTask = null; }
+    finally {
+      this._connecting = false; this._connectionTask = null;
+      if ($('d-hpm-target')) $('d-hpm-target').disabled = !!this.session?.connected;
+    }
   }
 
   async _connectNow(generation = this._connectionGen = (this._connectionGen || 0) + 1){
@@ -460,6 +477,7 @@ export class DbgView {
       if (this._disconnecting || generation !== this._connectionGen) return false;
       this._connectionTask = this.session.exclusive(() => this.session.connect({
         mock, clockKhz, bus: null, stopBridge: false,
+        ...(riscv ? { target: $('d-hpm-target')?.value || selectedHpmBoard() } : {}),
       }));
       await this._connectionTask;
       if (this._disconnecting || generation !== this._connectionGen) return false;

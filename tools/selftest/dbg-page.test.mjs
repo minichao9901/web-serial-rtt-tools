@@ -82,6 +82,8 @@ await send('Page.enable');
 await send('Runtime.enable');
 // 🚨 必须关缓存：python http.server 不发 Cache-Control，改完模块会拿到旧的（本仓库踩过）
 try { await send('Network.enable'); await send('Network.setCacheDisabled', { cacheDisabled: true }); } catch {}
+// Layout assertions use a fixed viewport rather than desktop browser chrome height.
+await send('Emulation.setDeviceMetricsOverride', { width:1600, height:1000, deviceScaleFactor:1, mobile:false });
 await send('Page.navigate', { url: URL_ });
 console.log('目标: ' + URL_);
 
@@ -774,7 +776,7 @@ console.log('== 15. 版式：源码 + 命令行各占一块大的，右侧是「
     }
     return { seq, saved: JSON.parse(localStorage.getItem('serial-rtt-tools:v1') || '{}')['dbg.dock'], tabs: pages.length,
              on: [...document.querySelectorAll('#d-dock-tabs button')].filter(b => b.classList.contains('on')).map(b => b.dataset.dock) };`);
-  ok(tab.tabs === 5, '右侧面板有 5 个 tab（寄存器/内存/变量/SVD/RTT）', String(tab.tabs));
+  ok(tab.tabs === 6, '右侧面板有 6 个 tab（寄存器/内存/变量/SVD/RTT/异常）', String(tab.tabs));
   ok(tab.seq.every(v => v.length === 1), '任何时刻只显示一个面板（不再平铺成小格子）', JSON.stringify(tab.seq));
   ok(JSON.stringify(tab.seq.map(v => v[0])) === JSON.stringify(['regs', 'mem', 'var', 'svd', 'rtt', 'regs']), '点 tab 真的切换面板', JSON.stringify(tab.seq));
   ok(tab.saved === 'regs' && tab.on.length === 1, 'tab 选择落进 localStorage，且只有一个是选中态', JSON.stringify(tab));

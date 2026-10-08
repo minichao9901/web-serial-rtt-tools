@@ -12,7 +12,7 @@
 # 参数（环境变量可覆盖）：
 #   $env:HPM_SDK_BASE  HPM SDK 根目录
 #   $env:RV_TOOLCHAIN  RISC-V 工具链 bin 目录
-#   $env:HPM_SOC_DIR   SoC 头文件目录（默认 HPM6800/HPM6880；所有 HPM 系列 ROM API 表地址相同）
+#   $env:HPM_SOC_DIR   SoC 头文件目录（默认 HPM6800/HPM6880；板卡参数经公共 hpm_xpi ABI 在运行时传入）
 #   $env:HPM_BOARD_DIR 板级头文件目录（只有 board.h 需要）
 
 param(
@@ -129,6 +129,22 @@ foreach ($name in $table){
 $symJs = (($table | ForEach-Object { "    ${_}: 0x$($syms[$_].ToString('x'))," }) -join "`n")
 Write-Host ("  入口符号：" + (($table | ForEach-Object { "$_@0x$($syms[$_].ToString('x'))" }) -join ' '))
 
+# PIC code uses PC-relative GOT access, but GOT entries still contain linked addresses.
+# Extract internal pointer relocations from ELF .got; do not guess fixed offsets.
+$gotHeader = (& $objdump -h $elf) | Where-Object { $_ -match '^\s*\d+\s+\.got\s+' } | Select-Object -First 1
+$relocJs = @()
+if ($gotHeader -match '^\s*\d+\s+\.got\s+([0-9a-fA-F]+)\s+([0-9a-fA-F]+)'){
+    $gotSize = [Convert]::ToUInt32($matches[1], 16)
+    $gotAddr = [Convert]::ToUInt32($matches[2], 16)
+    if ($gotAddr + $gotSize -gt $blob.Length -or $gotSize % 4){ throw 'GOT outside algorithm blob' }
+    # Slot zero is the reserved dynamic-table pointer, not an internal data pointer.
+    for ($relocOffset = $gotAddr + 4; $relocOffset -lt $gotAddr + $gotSize; $relocOffset += 4){
+        $pointer = [BitConverter]::ToUInt32($blob, $relocOffset)
+        if ($pointer -lt $blob.Length){
+            $relocJs += "    { offset: 0x$($relocOffset.ToString('x')), target: 0x$($pointer.ToString('x')) },"
+        }
+    }
+}
 Write-Host '== 生成 app/flash/hpm/algo.js =='
 $b64 = [Convert]::ToBase64String($blob)
 $jsPath = Join-Path $repo 'app\flash\hpm\algo.js'
@@ -146,9 +162,14 @@ $js = @"
  *    偏移由 app/flash/hpm/entry.js 在运行时从 blob 里走一遍 jal 发现，
  *    symbols 是构建时从 ELF 取的真值，自测拿它逐项对账。
  */
+import { relocateAlgoBytes } from './entry.js';
 export const HPM_ALGO = {
   loadAddr: 0x00000000,
   size: $($blob.Length),
+  /** Internal GOT pointers, generated from ELF .got for runtime relocation. */
+  relocations: [
+$($relocJs -join "`n")
+  ],
   /** 构建时的符号地址（仅供自测对账，运行时不依赖它）*/
   symbols: {
 $symJs
@@ -163,15 +184,24 @@ $(($lines | ForEach-Object { "    '$_'," }) -join "`n")
 };
 
 /** 解出 blob 字节（每次调用都新建一份，避免被就地改动）*/
-export function hpmAlgoBytes(){
+export function hpmAlgoBytes(loadAddr = HPM_ALGO.loadAddr){
   const bin = atob(HPM_ALGO.b64);
   const out = new Uint8Array(bin.length);
   for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
-  return out;
+  return relocateAlgoBytes(out, HPM_ALGO, loadAddr);
 }
 "@
-Set-Content -Path $jsPath -Value $js -Encoding utf8
+[IO.File]::WriteAllText($jsPath, ($js -replace "`r`n", "`n") + "`n", [Text.UTF8Encoding]::new($false))
 Write-Host "已写入 $jsPath（base64 $($b64.Length) 字符）"
 
+# Validate runtime GOT relocation against a second independent compiler link.
+$oracleElf = Join-Path $out 'linked-4000.elf'
+$oracleBin = Join-Path $out 'linked-4000.bin'
+& $gcc "@$rsp" '-Wl,-Ttext=0x4000' '-o' $oracleElf
+if ($LASTEXITCODE -ne 0){ throw 'Relocation oracle link failed' }
+& $objcopy -O binary $oracleElf $oracleBin
+if ($LASTEXITCODE -ne 0){ throw 'Relocation oracle objcopy failed' }
+& node (Join-Path $here 'check-relocation.mjs') $oracleBin '0x4000'
+if ($LASTEXITCODE -ne 0){ throw 'Runtime relocation differs from independently linked binary' }
 if (-not $KeepElf){ Remove-Item $rsp -ErrorAction SilentlyContinue }
 Write-Host '完成 ✅'

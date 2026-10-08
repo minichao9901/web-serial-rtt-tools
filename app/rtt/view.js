@@ -13,6 +13,8 @@ import { FileRecorder, recordButtonState } from '../core/recorder.js';
 import { Rtt } from './protocol.js';
 import { WebUsbDapProbe, withTimeout } from './dap-webusb.js';
 import { openRiscvMem } from './riscv-mem.js';
+import { HPM_BOARDS, hpmBoard } from '../targets/hpm/porting.js';
+import { selectedHpmBoard, rememberHpmBoard } from '../targets/hpm/select.js';
 import { MockProbe } from './mock.js';
 import { BridgeClient } from './bridge.js';
 import { findSymbol } from './elf.js';
@@ -55,34 +57,7 @@ const OCD_RAM = {
   stm32wl:  '0x20000000-0x20010000',  // WLE5 64K
 };
 
-/**
- * RISC-V 目标的默认扫描范围（按芯片）。
- *
- * 🚨 **别照搬 ARM 的 0x20000000**：RTT 控制块必须放在**非缓存**内存里 —— 探针的 SBA（系统总线）
- *    读**不旁路 D-cache**，放可缓存区读到的是陈旧值（scope 那份固件故意放了 `g_v` / `g_v_cached`
- *    两份做对照，实测就是这样）。
- * 这里的窗口是**从各系列 SDK 链接脚本推出来的**（`hpm_sdk/soc/<系列>/toolchains/gcc/flash_xip.ld`）：
- *    AXI_SRAM_NONCACHEABLE 的起点 = 该系列 AXI SRAM 顶端往下 `_noncacheable_size`（常见 256 KB）。
- *    例：HPM6800 → `ORIGIN = 0x01280000 - _noncacheable_size` = **0x01240000**（本机 HPM6800EVK
- *    固件的 `_SEGGER_RTT` 实测就在这儿 ✓）；HPM6200/HPM6P00 的非缓存区在 AXI SRAM **开头**。
- *    窗口取 64 KB（扫一遍 ~0.5 s：SBA 是"每批 12 个字一条 USB 命令"，64 KB ≈ 1400 条）。
- * ⚠️ `_noncacheable_size` 是工程自己的宏，**以你的链接脚本为准**；最稳的是点「载入 ELF…」
- *    直接用 `_SEGGER_RTT` 把地址填死（那时这格只当兜底）。
- */
-const RISCV_RAM = {
-  hpm6800evk:    '0x01240000-0x01250000',
-  hpm6750evk2:   '0x01100000-0x01110000',
-  hpm6750evkmini:'0x01100000-0x01110000',
-  hpm6300evk:    '0x010C0000-0x010D0000',
-  hpm6200evk:    '0x01080000-0x01090000',
-  hpm6e00evk:    '0x01280000-0x01290000',
-  hpm6p00evk:    '0x01200000-0x01210000',
-  hpm5e00evk:    '0x01200000-0x01210000',
-  hpm5300evk:    '0x00080000-0x00090000',   // 5300 没有 AXI SRAM：DLM
-  hpm5301evklite:'0x00080000-0x00090000',
-};
-/** 选「其它 RISC-V」时的兜底窗口（HPM 最常见的非缓存区起点） */
-const RISCV_RAM_FALLBACK = '0x01240000-0x01250000';
+const rvRange = id => hpmBoard(id)?.memory.rttRange || '0x01240000-0x01250000';
 
 /**
  * 「芯片」下拉（`#r-chip`）—— **一个下拉、两个组**（用户 2026-09-30：原来按目标类型换着显示的
@@ -108,7 +83,7 @@ const armChipId = () => {
 /** 当前 RISC-V 组那颗（RAM 窗口用它；选的是 ARM 时回退到上次选过的 RISC-V 那颗）*/
 const rvChipId = () => {
   const v = chipSel()?.value || '';
-  return chipArchOf(v) === 'riscv' ? v : (store.get('rtt.rvChip', '') || 'hpm6800evk');
+  return chipArchOf(v) === 'riscv' ? v : (store.get('rtt.rvChip', '') || selectedHpmBoard());
 };
 
 export class RttView {
@@ -139,6 +114,10 @@ export class RttView {
   }
 
   init(){
+    const group = document.querySelector('#r-chip optgroup[data-arch="riscv"]');
+    if (group) group.replaceChildren(...HPM_BOARDS.map(b => new Option(b.name, b.id)),
+      new Option('其它 RISC-V（自己填 RAM 范围）', 'riscv-other'));
+
     this.tx = new RxBuffer($('r-rx'), { mode: 'ascii', maxLines: 4000, maxRaw: MAX_RAW });
 
     // ---------- 设置 ----------
@@ -230,9 +209,9 @@ export class RttView {
        *    加个"已经在对的组里就不动"的判断，加载时就会显示成 stm32f103（而不是存的 custom）。
        *    从下拉那头切过来时也不会被覆盖：处理器先写 store 再切目标类型，这里读到的就是刚选的那颗。
        */
-      if (chip) chip.value = rv ? (store.get('rtt.rvChip', '') || 'hpm6800evk')
+      if (chip) chip.value = rv ? (store.get('rtt.rvChip', '') || selectedHpmBoard())
                                 : (store.get('rtt.ocdTarget', '') || 'stm32f103');
-      $('r-range').value = rv ? (RISCV_RAM[rvChipId()] || RISCV_RAM_FALLBACK)
+      $('r-range').value = rv ? (rvRange(rvChipId()))
                               : (OCD_RAM[armChipId()] || $('r-range').value);
       this._applyOcdTarget(false);
     };
@@ -250,12 +229,13 @@ export class RttView {
     chip?.addEventListener('change', () => {
       const id = chip.value, arch = chipArchOf(id);
       store.set(arch === 'riscv' ? 'rtt.rvChip' : 'rtt.ocdTarget', id);
+      if (arch === 'riscv') rememberHpmBoard(id);
       const wantRv = arch === 'riscv';
       if (wantRv !== ($('r-target').value === 'riscv')){
         $('r-target').value = wantRv ? 'riscv' : 'swd';
         onTargetChanged();
       } else {
-        $('r-range').value = wantRv ? (RISCV_RAM[id] || RISCV_RAM_FALLBACK) : (OCD_RAM[id] || $('r-range').value);
+        $('r-range').value = wantRv ? (rvRange(id)) : (OCD_RAM[id] || $('r-range').value);
         this._applyOcdTarget(true);
       }
     });
@@ -386,7 +366,8 @@ export class RttView {
            * （见 app/rtt/riscv-mem.js）。它自己会把探针侧那个占着 TAP 的 RISC-V 引擎/RTT 桥停掉，
            * 所以这里不用再管 `authorized()` 那套 ARM 的时钟协商（那套按 SWD 走，RISC-V 上必 NO ACK）。
            */
-          const openOnce = () => openRiscvMem({ clockKhz, all: $('r-usb-all').checked, log: s => console.log('[riscv]', s) });
+          const target = rvChipId();
+          const openOnce = () => openRiscvMem({ target, clockKhz, all: $('r-usb-all').checked, log: s => console.log('[riscv]', s) });
           try {
             this.probe = await openOnce();
           } catch (e1){
@@ -779,6 +760,12 @@ export class RttView {
 
   /** 切到本标签时调用（隐藏状态下建的终端在这里补尺寸/重放） */
   onShow(){
+    if (!this.probe && !this.bridge && $('r-target').value === 'riscv' && hpmBoard(chipSel()?.value)) {
+      const previous = hpmBoard(chipSel().value);
+      const id = selectedHpmBoard();
+      if ($('r-range').value === previous.memory.rttRange) $('r-range').value = rvRange(id);
+      chipSel().value = id; // Preserve custom range and explicit ELF address.
+    }
     /**
      * 目标类型是**全局且粘**的（HID 0x31 action 10），波形页也能切、而且写的是同一个键
      * （`rtt.target`）。用户很可能在那边刚切过 RISC-V —— 切回来时这一格得跟上，
