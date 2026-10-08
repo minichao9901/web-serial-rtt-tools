@@ -1,0 +1,67 @@
+{
+  "description": "当前 J-Scope 内置模拟数据的界面演示，不是硬件性能验收。原始页面截图，无图片后期修改。",
+  "capturedAt": "2026-10-08T04:01:12.878Z",
+  "url": "http://127.0.0.1:8899/index.html?readme-showcase=scope#scope",
+  "viewport": {
+    "width": 1600,
+    "height": 1000
+  },
+  "summary": {
+    "state": "已停止：8680 个样本 / 867.90 ms，跳拍 0 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+    "mode": "mock",
+    "elf": null,
+    "vars": [
+      "mock0.f32:f32@0x20000000",
+      "mock3.u16:u16@0x2000000c",
+      "mock4.i16:i16@0x20000010"
+    ],
+    "varCount": 3,
+    "plan": {
+      "spans": 1,
+      "frameBytes": 8,
+      "estUs": 8.93,
+      "estHz": 111982
+    },
+    "samples": 8680,
+    "capacity": 22064,
+    "packets": 143,
+    "lost": 0,
+    "lostProbe": 0,
+    "lostUsb": 0,
+    "readErrors": 0,
+    "dapYields": 0,
+    "metricsError": null,
+    "lostGap": 0,
+    "benchUs": null,
+    "blob": null,
+    "connectErr": null,
+    "rateHz": 10000,
+    "trigger": {
+      "mode": 0,
+      "hit": -1,
+      "hits": 0,
+      "marker": false
+    },
+    "view": {
+      "start": 0,
+      "end": 600
+    },
+    "lod": false,
+    "resyncs": 0,
+    "raw": 0,
+    "running": false,
+    "mockVars": [
+      "mock0.f32",
+      "mock1.f32",
+      "mock2.i32",
+      "mock3.u16",
+      "mock4.i16",
+      "mock5.u8",
+      "mock6.i8",
+      "mock7.f64"
+    ]
+  },
+  "mismatches": 0,
+  "timeGaps": 0,
+  "maxSineDelta": 0.019999666139483452
+}
