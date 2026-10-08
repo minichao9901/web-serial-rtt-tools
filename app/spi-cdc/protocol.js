@@ -6,9 +6,9 @@ export function startData({mode=0,lsb=false}={}){
 }
 export function decodeReply(payload,action=ACT.STATUS){
   if(!(payload instanceof Uint8Array)||payload.length<55||payload[0]<54||payload[0]>payload.length-1||payload[1]!==CMD||payload[2]!==action)
-    throw Error('SPI→USB 响应无效；请更新探针固件');
+    throw Error('SPI转发 响应无效；请更新探针固件');
   const d=new DataView(payload.buffer,payload.byteOffset+3,52),w=i=>d.getUint32(i*4,true);
-  if(w(0)!==MAGIC)throw Error('探针固件尚未支持 SPI→USB');
+  if(w(0)!==MAGIC)throw Error('探针固件尚未支持 SPI转发');
   const flags=w(1),config=w(3);
   return {supported:!!(flags&1),running:!!(flags&2),pending:!!(flags&4),rc:d.getInt32(8,true),
     mode:config&3,lsb:!!(config&256),bufferBytes:w(4),received:w(5),forwarded:w(6),dropped:w(7),

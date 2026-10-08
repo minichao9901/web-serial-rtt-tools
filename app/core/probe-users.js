@@ -49,7 +49,7 @@ export const PROBE_FEATURES = Object.freeze([
     guarded: t => !t.spiSession?.usingMock && !!t.spiSession?.busy,
   },
   {
-    id: 'spicdc', label: 'SPI→USB', client: t => t.spiCdc?.session,
+    id: 'spicdc', label: 'SPI转发', client: t => t.spiCdc?.session,
     resources: ['spi-pins', 'spi-bulk', 'cdc-mode'],
     active: t => !!t.spiCdc?.session?.connected || !!t.spiCdc?.session?._requested,
     release: t => t.spiCdc.session.disconnect(), guarded: t => !!t.spiCdc?.session?.busy,

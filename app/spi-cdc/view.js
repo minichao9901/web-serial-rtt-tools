@@ -4,6 +4,7 @@ import {bytes as fBytes} from '../core/format.js';
 import {RttCdcStreamView} from '../hid/stream.js';
 import {SpiCdcSession} from './session.js';
 import {resultText} from './protocol.js';
+import {PinMap} from '../ui/pin-map.js';
 export class SpiCdcView {
   constructor(serial){
     this.session=new SpiCdcSession();
@@ -11,6 +12,8 @@ export class SpiCdcView {
   }
   init(){
     this.stream.init();
+    this.pinMap=new PinMap({buttonId:'si-pinmap-btn',feature:'spicdc',state:()=>({connected:this.session.connected,connectionKey:this.session.hid?.device||this.session.hid,supported:this.session.last?.supported})});
+    this.pinMap.init();
     for(const id of ['mode','lsb'])store.bind($('si-'+id),'spicdc.'+id);
     this.session.onChange=()=>this.render();
     const bind=(id,fn)=>$('si-'+id).addEventListener('click',async()=>{
@@ -27,6 +30,7 @@ export class SpiCdcView {
   }
   onShow(){this.stream.onShow();this.render();}
   render(){
+    this.pinMap?.refresh();
     const s=this.session.last,connected=this.session.connected,busy=this.session.busy;
     for(const id of ['connect','reconnect'])$('si-'+id).disabled=connected||busy;
     $('si-disconnect').disabled=!connected||busy;

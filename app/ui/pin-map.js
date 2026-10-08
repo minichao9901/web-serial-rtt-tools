@@ -2,6 +2,11 @@ import { esc } from './dom.js';
 import { EVKLITE_J3 } from './board-pinout.js';
 
 const FEATURES=Object.freeze({
+  spicdc:{title:'SPI转发 · 引脚分配图',signals:{13:'SCK IN · PB11',26:'CS IN · PB10',28:'MOSI IN · PB13'},
+    wiring:'外部主机 CS → J3[26] / PB10；SCK → J3[13] / PB11；MOSI → J3[28] / PB13；主机 GND → 任一 J3 GND。PB12 / J3[27] MISO 可不接。',
+    notes:['探针作为 SPI 从机接收，时钟由外部主机提供；3.3 V 电平、CS 低有效、8 位数据，模式和位顺序需与主机一致。',
+      '接收数据经探针 CDC 串口输出，先连接接收串口，再启动外部主机发送。',
+      '与 USB→SPI/QSPI、SPI/QSPI 屏及 ADC 共用资源；CDC 与 UART、RTT 转发共用串口，使用前停止对应功能。']},
   i2c:{title:'I²C 接线',signals:{19:'SCL · PA29',21:'SDA · PA28'},
     wiring:'SCL → J3[19] / PA29；SDA → J3[21] / PA28；器件 GND → 任一 J3 GND。',
     notes:['SDA 板上没有上拉；SCL 有 R6 10 kΩ 上拉。核对模块已有上拉，裸器件需配外部上拉至 3.3 V；内部上拉只作低速短线应急。',

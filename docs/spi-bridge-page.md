@@ -1,5 +1,7 @@
 # USB → SPI/QSPI 桥页（`#spi` + `#panel`）方案
 
+> 2026-10-08 时钟更新：新版探针 SPI2 模块固定 240 MHz，SPI/QSPI 主机和 SPI转发从机共用。外部 SCK 与内部模块时钟分别设置；10/20/40/60 MHz 可精确生成，75/100 MHz 请求实际降为 60 MHz，页面以状态回读的实际速率为准。旧 `moduleClkHz` 提示统一归一化为 240000000。网页默认配置与假探针已同步。
+
 > 页面：`index.html` 新增第 8、9 个标签页 —— **`#spi`「SPI/QSPI 桥」** 与 **`#panel`「SPI/QSPI 屏」**（工作目录本仓库）
 > 对端固件：`E:\Share\github\akaLinkPro` 分支 `feature/usb-spi-bridge`（HEAD `aedb705`，P1 已完成）
 > 协议真源：`firmware/application_5301/src/spi_bridge/spi_bridge_proto.h`（+ `spi_bridge.c` 实现）

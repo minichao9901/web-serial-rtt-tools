@@ -145,18 +145,14 @@ export const MOCK_DCS_REGS = {
   0xda: [0x00], 0xdb: [0x93], 0xdc: [0x96], 0xd3: [0x00, 0x93, 0x96, 0x00],
 };
 
-/** 简化版 sb_pick_sclk：模块时钟源（PLL0 三路）整数分频里挑最接近的（分频必须是偶数）*/
+/** 与固件相同：固定 240 MHz 模块时钟，SDK 接受的偶数整除分频，不超过请求。 */
 export function mockPickSclk(wantHz){
-  const want = wantHz || 20000000;
-  let best = 0, bestDiff = Infinity;
-  for (const src of [720e6, 600e6, 400e6]){
-    for (let n = 2; n <= 512; n += 2){
-      const hz = src / n;
-      const diff = Math.abs(hz - want);
-      if (diff < bestDiff){ bestDiff = diff; best = hz; }
-    }
+  const want = Math.min(wantHz || 20000000,100000000),module=240000000;
+  let n=Math.max(2,Math.ceil(module/want));if(n&1)n++;
+  for (;n<=510;n+=2){
+    if(module%n===0)return module/n;
   }
-  return Math.round(best);
+  return 0;
 }
 
 /**
@@ -291,7 +287,7 @@ export class MockSpiProbe {
       sclkHz: 0, mode: 0, bits: 8, csPolicy: 0, txDmaThreshold: 100,
       padDc: 14 /*PA26*/, padRst: 5 /*PA02*/, padCsAux: 0, padBl: 13 /*PA31*/, padTe: 0,
       padActiveLow: 0x06 /*RST+CS 低有效*/, padLowRaw: 0x06, flags: CFG_FLAG.CLEAR_ON_ENABLE,
-      reserved0: 0, outRingKb: 16, inRingKb: 8, maxFrameBytes: FRAME_MAX,
+      reserved0: 0, outRingKb: 16, inRingKb: 8, maxFrameBytes: FRAME_MAX,moduleClkHz:240000000,
     };
     this.profile = { profile: 0, defLines: 1, dcActiveHigh: 1, csHoldInStep: 1, qspiWrOpcode: 0x02, qspiColorOpcode: 0x32, qspiAddrBytes: 3, flags: 0 };
 
@@ -405,7 +401,7 @@ export class MockSpiProbe {
           new DataView(res.buffer).setUint32(3, this.statusWord() | (ST.RANGE << 8), true);
           break;
         }
-        Object.assign(this.cfg, c, { maxFrameBytes: FRAME_MAX });
+        Object.assign(this.cfg, c, { maxFrameBytes: FRAME_MAX, moduleClkHz:240000000 });
         if (this.enabled) this.actualSclk = mockPickSclk(this.cfg.sclkHz);
         res[0] = 8;
         new DataView(res.buffer).setUint32(3, this.statusWord(), true);
@@ -483,6 +479,7 @@ export class MockSpiProbe {
   }
 
   _validateCfg(c){
+    if(!mockPickSclk(c.sclkHz))return 'sclk';
     if (c.mode > 3) return 'mode';
     if (c.bits !== 8) return 'bits';
     if (c.csPolicy > 3) return 'csPolicy';
@@ -499,6 +496,7 @@ export class MockSpiProbe {
     b[12] = this.cfg.padActiveLow; b[13] = this.cfg.padTe; b[14] = this.cfg.flags;
     dv.setUint16(16, this.cfg.outRingKb, true); dv.setUint16(18, this.cfg.inRingKb, true);
     dv.setUint16(20, FRAME_MAX, true);
+    dv.setUint32(24, this.cfg.moduleClkHz, true);
     return b;
   }
 

@@ -25,7 +25,14 @@ try{
  await click('si-disconnect');
  return {started,stopped,disconnected:!s.connected,tabs:[...document.querySelectorAll('#tabs [data-tab]')].map(e=>[e.dataset.tab,e.textContent.trim()]),duplicates:[...document.querySelectorAll('[id]')].map(e=>e.id).filter((x,i,a)=>a.indexOf(x)!==i),errors:t.errors};`);
  assert.ok(controls.started.running&&controls.started.disabled);assert.equal(controls.started.mode,3);assert.equal(controls.started.lsb,true);assert.ok(controls.stopped&&controls.disconnected);assert.deepEqual(controls.duplicates,[]);assert.deepEqual(controls.errors,[]);
- assert.equal(controls.tabs.findIndex(x=>x[0]==='spicdc'),controls.tabs.findIndex(x=>x[0]==='panel')+1);assert.equal(controls.tabs.find(x=>x[0]==='spi')[1],'USB→SPI/QSPI');
+ assert.equal(controls.tabs.findIndex(x=>x[0]==='spicdc'),controls.tabs.findIndex(x=>x[0]==='rttcdc')+1);assert.equal(controls.tabs.find(x=>x[0]==='spicdc')[1],'SPI转发');assert.equal(controls.tabs.find(x=>x[0]==='spi')[1],'USB→SPI/QSPI');
+ const pins=await c.eval(`
+ document.getElementById('si-pinmap-btn').click();const m=__tools.spiCdc.pinMap;
+ m.board.value='hpm5301evklite';m.board.dispatchEvent(new Event('change'));
+ const result={visible:!m.box.hidden,count:m.box.querySelectorAll('.p-pin').length,signals:[...m.box.querySelectorAll('.is-signal .p-note')].map(e=>e.textContent),wiring:m.box.querySelector('[data-wiring]').textContent};
+ m.box.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true}));
+ return {...result,closed:m.box.hidden,focused:document.activeElement.id};`);
+ assert.ok(pins.visible&&pins.closed);assert.equal(pins.count,40);assert.deepEqual(pins.signals,['SCK IN · PB11','CS IN · PB10','MOSI IN · PB13']);assert.match(pins.wiring,/J3\[26\].*PB10.*J3\[13\].*PB11.*J3\[28\].*PB13/);assert.equal(pins.focused,'si-pinmap-btn');
  const stream=await c.eval(`
  const t=__tools,s=t.spiCdc.stream;t.session.isOpen=true;
  s.rx.clear();s.rxc.reset();s.rx.setAutoscroll(true);s._setRxMode('ascii');s.rx.setTimestamps(false);t.stream.rx.clear();
@@ -39,5 +46,5 @@ try{
  const high=s.suppressed;clearInterval(timer);rec._flush();await rec._wq;await rec.stop();await new Promise(r=>setTimeout(r,1400));s._stats();
  t.session.isOpen=false;return {shown,cleared,paused,resumed:!s.rx.paused,high,recovered:!s.suppressed,received:s.rxc.total,recorded,beats,maxGap,bytes:s.rx.bytes,chars:s.rx.el.textContent.length,errors:t.errors};`);
  assert.ok(stream.shown&&stream.cleared&&stream.paused&&stream.resumed&&stream.high&&stream.recovered);assert.equal(stream.received,4096*1200);assert.equal(stream.received,stream.recorded);assert.ok(stream.maxGap<500);assert.ok(stream.bytes<=2*1024*1024&&stream.chars<=262144);assert.deepEqual(stream.errors,[]);
- mkdirSync('tmp',{recursive:true});writeFileSync('tmp/spi-cdc-page-result.json',JSON.stringify({controls,stream},null,2));console.log(JSON.stringify({controls,stream},null,2));
+ mkdirSync('tmp',{recursive:true});writeFileSync('tmp/spi-cdc-page-result.json',JSON.stringify({controls,pins,stream},null,2));console.log(JSON.stringify({controls,pins,stream},null,2));
 }finally{c.close();await fetch(base+'/json/close/'+p.id).catch(()=>{});}

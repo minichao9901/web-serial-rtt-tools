@@ -5,14 +5,19 @@ import {mkdirSync,writeFileSync} from 'node:fs';
 import {Cdp,sleep} from './cdp-lib.mjs';
 const repo=process.env.PROBE_REPO||'E:/Share/github/akaLinkPro',base=process.env.CDP||'http://127.0.0.1:9333';
 const c=new Cdp(base,30000),seconds=Number(process.env.SECONDS||10);
-function target(run,divider=1,hello=false){
- const code='import sys,json;sys.path.insert(0,sys.argv[1]+"/script_test");from spi_cdc_hw import target,symbols;print(json.dumps(target(symbols(),int(sys.argv[2]),int(sys.argv[3]),int(sys.argv[4]))))';
+const h743=process.env.SPI_TARGET==='h743',mhz=Number(process.env.SPI_MHZ||40);
+const serialBuffer=Number(process.env.SPI_SERIAL_BUFFER||4096);
+assert.ok(Number.isInteger(serialBuffer)&&serialBuffer>0&&serialBuffer<=16*1024*1024);
+function target(run,divider=h743?mhz:1,hello=false){
+ const code=h743?'import sys,json;sys.path.insert(0,sys.argv[1]+"/script_test");from spi_cdc_h743_hw import target,symbols;print(json.dumps(target(symbols(),int(sys.argv[2]),int(sys.argv[3]))))':'import sys,json;sys.path.insert(0,sys.argv[1]+"/script_test");from spi_cdc_hw import target,symbols;print(json.dumps(target(symbols(),int(sys.argv[2]),int(sys.argv[3]),int(sys.argv[4]))))';
  return JSON.parse(execFileSync('py',['-c',code,repo,String(+run),String(divider),String(+!hello)],{encoding:'utf8',timeout:25000}));
 }
 try{
  await c.connect();await c.send('Page.navigate',{url:'http://127.0.0.1:8899/index.html?spi-hw='+Date.now()+'#spicdc'});
  for(let i=0;i<100;i++){if(await c.eval('return !!globalThis.__tools?.spiCdc?.stream?.rx').catch(()=>false))break;await sleep(50);}
  target(false);
+ // Test-only A/B override; navigation discards it. Production uses its own default.
+ if(serialBuffer!==4096)await c.eval(`globalThis.spiBenchSerialOpen=SerialPort.prototype.open;SerialPort.prototype.open=function(opts){return spiBenchSerialOpen.call(this,{...opts,bufferSize:${serialBuffer}});};`);
  await c.eval(`await __tools.spiCdc.session.connect(false);await __tools.spiCdc.stream.refreshPorts();await __tools.spiCdc.stream.connect();if(!__tools.session.isOpen)throw Error('CDC permission/open failed');await __tools.spiCdc.session.start({mode:0,lsb:false});`);
  await c.eval(`
  const t=__tools;t.spiCdc.stream.rx.clear();t.spiCdc.stream.rxc.reset();
@@ -26,19 +31,21 @@ try{
  }s.tail=a.slice(p);
  });`);
  const clocks=target(true);await sleep(500);
- const before=await c.eval('return {bytes:spiCheck.bytes,time:performance.now(),status:await __tools.spiCdc.session.status()};');
+ const before=await c.eval('return {bytes:spiCheck.bytes,frames:spiCheck.frames,gaps:spiCheck.gaps,bad:spiCheck.bad,reversed:spiCheck.reversed,time:performance.now(),status:await __tools.spiCdc.session.status()};');
  await sleep(seconds*1000);
  const after=await c.eval('const s=spiCheck;return {bytes:s.bytes,time:performance.now(),frames:s.frames,gaps:s.gaps,bad:s.bad,reversed:s.reversed,maxGap:s.maxGap,beats:s.beats,high:__tools.spiCdc.stream.suppressed,raw:__tools.spiCdc.stream.rx.bytes,chars:__tools.spiCdc.stream.rx.el.textContent.length,errors:__tools.errors,status:await __tools.spiCdc.session.status()};');
  const finalClocks=target(false);await sleep(100);await c.eval('clearInterval(spiCheck.timer);await __tools.spiCdc.session.stop();');
  const stopped=await c.eval('return {status:__tools.spiCdc.session.last,portOpen:__tools.session.isOpen};');
- const result={clocks,finalClocks,seconds:(after.time-before.time)/1000,MBps:(after.bytes-before.bytes)/(after.time-before.time)/1000,before,after,stopped};
- mkdirSync('tmp',{recursive:true});writeFileSync('tmp/spi-cdc-hw-result.json',JSON.stringify(result,null,2));console.log(JSON.stringify(result,null,2));
- assert.ok(result.MBps>2.1);assert.equal(clocks.g_spi_hz,18000000);assert.equal(finalClocks.g_refill_late,0);
- for(const k of ['bad','gaps','reversed'])assert.equal(after[k],0,k);
- for(const k of ['dropped','fifoOverflows','dmaErrors'])assert.equal(after.status[k],0,k);
+ const result={clocks,finalClocks,serialBuffer,seconds:(after.time-before.time)/1000,MBps:(after.bytes-before.bytes)/(after.time-before.time)/1000,before,after,stopped};
+ mkdirSync('tmp',{recursive:true});writeFileSync(process.env.SPI_RESULT||'tmp/spi-cdc-hw-result.json',JSON.stringify(result,null,2));console.log(JSON.stringify(result,null,2));
+ assert.ok(result.MBps>(h743?mhz/8*.95:2.1));assert.equal(clocks.g_spi_hz,h743?mhz*1e6:18000000);assert.equal(finalClocks.g_refill_late,0);
+ if(h743)assert.equal(finalClocks.g_dma_errors,0);
+ for(const k of ['bad','gaps','reversed'])assert.equal(after[k]-(h743?before[k]:0),0,k);
+ for(const k of ['dropped','fifoOverflows','dmaErrors'])assert.equal(after.status[k]-(h743?before.status[k]:0),0,k);
  assert.ok(after.high&&after.raw<=2097152&&after.chars<=262144&&after.maxGap<500);assert.deepEqual(after.errors,[]);assert.ok(!stopped.status.running&&stopped.portOpen);
 }finally{
  try{target(false);}catch{}
  try{await c.eval('if(globalThis.spiCheck)clearInterval(spiCheck.timer);await __tools.spiCdc.session.disconnect();await __tools.session.close();');}catch{}
+ try{await c.eval('if(globalThis.spiBenchSerialOpen){SerialPort.prototype.open=spiBenchSerialOpen;delete globalThis.spiBenchSerialOpen;}');}catch{}
  c.close();
 }

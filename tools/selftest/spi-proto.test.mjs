@@ -279,6 +279,18 @@ console.log('== 5. 假探针：HID 0x35 语义 ==');
   const st1 = P.parseStatusPayload(await probe.xfer(P.HID_CMD, P.hidData.status()));
   ok(st1.actualSclkHz === 40000000, `使能后回读实际 SCLK = ${st1.actualSclkHz}（假探针按整除模型算）`);
 
+  for (const [requested, actual] of [[10000000,10000000],[20000000,20000000],[60000000,60000000],[75000000,60000000],[100000000,60000000],[500000,500000],[480000,480000]]) {
+    await probe.xfer(P.HID_CMD, P.hidData.setCfg(P.encodeCfg({ sclkHz: requested, moduleClkHz: 120000000 })));
+    const got = P.parseCfgPayload(await probe.xfer(P.HID_CMD, P.hidData.getCfg()));
+    const state = P.parseStatusPayload(await probe.xfer(P.HID_CMD, P.hidData.status()));
+    ok(got.moduleClkHz === 240000000 && state.actualSclkHz === actual && actual <= requested,
+       `固定 240 MHz，忽略旧时钟提示；请求 ${requested} Hz → ${actual} Hz`);
+  }
+  await probe.xfer(P.HID_CMD, P.hidData.setCfg(P.encodeCfg({ sclkHz: 479999 })));
+  const low = P.parseCfgPayload(await probe.xfer(P.HID_CMD, P.hidData.getCfg()));
+  ok(low.sclkHz === 480000, '不可分频的低速配置被拒绝，保留原配置');
+  ok(P.decodeCfg(P.encodeCfg({})).moduleClkHz === 240000000, '网页默认编码模块时钟为 240 MHz');
+
   const prof = P.parseProfilePayload(await probe.xfer(P.HID_CMD, P.hidData.getProfile()));
   ok(prof.profile === 0 && prof.qspiColorOpcode === 0x32, '默认面板档 = raw，QSPI 像素 opcode 0x32');
 

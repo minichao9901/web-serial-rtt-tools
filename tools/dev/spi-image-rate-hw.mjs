@@ -95,7 +95,7 @@ try{
      }
      const after=await s.pollStatus(true),delta=Object.fromEntries(['framesOk','framesErr','bytesTx','bytesRx','outOverrun','inDrop','txDma','txPoll'].map(k=>[k,(after[k]-before[k])>>>0]));
      return {kind:'bmp-page',panel:${JSON.stringify(panel)},clockMHz:${clock},batchBytes:${batch},geometry:g,actualSclkHz:after.actualSclkHz,protocolFrames,wireBytes,cpu,runs,before,after,delta};`);
-    assert.equal(row.actualSclkHz,clock*1e6);assert.equal(row.delta.framesErr,0);assert.equal(row.delta.outOverrun,0);assert.equal(row.delta.inDrop,0);
+    assert.equal(row.actualSclkHz,clock===75?60000000:clock*1e6);assert.equal(row.delta.framesErr,0);assert.equal(row.delta.outOverrun,0);assert.equal(row.delta.inDrop,0);
     assert.equal(row.delta.framesOk,row.protocolFrames*rounds,'all expected frames must execute');
     if(fullPanel)assert.ok(row.runs.every(r=>r.bytes===row.geometry.w*row.geometry.h*2),'full panel pixel count');
     const sum=row.runs.reduce((n,r)=>n+r.ms,0);row.MBps=row.runs.reduce((n,r)=>n+r.bytes,0)/sum/1000;

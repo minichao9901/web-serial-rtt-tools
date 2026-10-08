@@ -546,7 +546,7 @@ export function encodeCfg(o = {}){
   b[13] = o.padTe & 0xff;
   b[14] = o.flags & 0xff;
   u16(dv, 16, o.outRingKb ?? 0); u16(dv, 18, o.inRingKb ?? 0); u16(dv, 20, o.maxFrameBytes ?? FRAME_MAX);
-  u32(dv, 24, o.moduleClkHz | 0);   // 调板旋钮：SPI1 模块时钟目标，0 = 自动（推荐）
+  u32(dv, 24, o.moduleClkHz ?? 240000000); // SPI2 模块固定 240 MHz；旧提示值由固件归一化。
   return b;
 }
 

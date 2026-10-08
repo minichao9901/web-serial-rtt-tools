@@ -10,7 +10,7 @@ export class SpiCdcSession {
   get running(){return !!(this.last?.running||this._requested);}
   async connect(interactive=true){
     if(this._connectPromise)return this._connectPromise;
-    if(this.busy)throw Error('正在处理 SPI→USB 启停');
+    if(this.busy)throw Error('正在处理 SPI转发 启停');
     this.busy=true;this.onChange?.();
     this._connectPromise=runProbeOperation(this,'spicdc',async lease=>{
       if(this.connected)return this.status();
@@ -27,7 +27,7 @@ export class SpiCdcSession {
         try{await hid.close();}catch(cleanup){this.hid=hid;this.probeManager?.fail('spicdc',cleanup);throw cleanup;}
         throw error;
       }
-    },{reason:'SPI→USB 要使用共享 SPI 缓冲和 CDC 数据源',recovery:true});
+    },{reason:'SPI转发 要使用共享 SPI 缓冲和 CDC 数据源',recovery:true});
     try{return await this._connectPromise;}finally{this._connectPromise=null;this.busy=false;this.onChange?.();}
   }
   async command(action,data=Uint8Array.of(action)){
@@ -38,15 +38,15 @@ export class SpiCdcSession {
   async settled(generation){
     for(let i=0;i<100;i++){
       const s=await this.status();
-      if(generation!==undefined&&s.generation!==generation)throw Error('SPI→USB 请求被另一会话替换');
+      if(generation!==undefined&&s.generation!==generation)throw Error('SPI转发 请求被另一会话替换');
       if(!s.pending&&s.rc!==-100)return s;
       await this.wait(20);
     }
-    throw Error('SPI→USB 启停超时，请重连并停止');
+    throw Error('SPI转发 启停超时，请重连并停止');
   }
   async start(config){
     const data=startData(config);
-    if(this.busy)throw Error('正在处理 SPI→USB 启停');
+    if(this.busy)throw Error('正在处理 SPI转发 启停');
     if(!this.connected)throw Error('先连接探针');
     this.busy=true;this.onChange?.();
     this._startPromise=(async()=>{try{
@@ -71,7 +71,7 @@ export class SpiCdcSession {
     this.probeManager?.cancel('spicdc');
     this._stopPromise=(async()=>{
     if(this._startPromise)await this._startPromise.catch(()=>{});
-    if(!this.connected){if(this._requested)throw Error('SPI→USB 停止尚未确认，请先重连探针');return;}
+    if(!this.connected){if(this._requested)throw Error('SPI转发 停止尚未确认，请先重连探针');return;}
     this.busy=true;this.onChange?.();
     try{
       const accepted=await this.command(ACT.STOP);const s=await this.settled(accepted.generation);
