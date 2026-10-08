@@ -5,6 +5,7 @@
  */
 import { installProbeManager } from './core/probe-users.js';
 import { initTabs } from './ui/tabs.js';
+import { initWorkspaces } from './ui/workspace.js';
 import { initProbeStatus } from './ui/probe-status.js';
 import { initEventLogs } from './ui/event-logs.js';
 import { SerialSession } from './serial/session.js';
@@ -60,6 +61,7 @@ const probeManager = installProbeManager(tools, { bus: probeBus });
 initProbeStatus(tools);
 initEventLogs();
 window.__tools = tools;
+const workspace = initWorkspaces();
 
 assistant.init();
 terminal.init();
@@ -78,6 +80,7 @@ spiCdc.init();
 installAcquisitionDiagnostics(tools);
 
 initTabs(name => {
+  workspace.sync();
   if (name === 'serial') requestAnimationFrame(() => assistant.onShow());
   if (name === 'terminal') requestAnimationFrame(() => terminal.onShow());
   if (name === 'rtt') requestAnimationFrame(() => rtt.onShow());
@@ -164,7 +167,7 @@ document.body.appendChild(box);
   stamp.title = '当前页面加载的代码版本（GitHub Pages 有 10 分钟 HTTP 缓存：推完修复要硬刷新才生效）';
   stamp.className = 'build-stamp';
   stamp.textContent = BUILD.split(' ')[0] + ' 版';
-  (document.querySelector('.topright') || document.querySelector('header') || document.body).appendChild(stamp);
+  (document.querySelector('.more-menu') || document.querySelector('.topright') || document.body).appendChild(stamp);
   (async () => {
     try {
       const r = await fetch(self.href + '?t=' + Date.now(), { cache: 'no-store' });
@@ -173,6 +176,8 @@ document.body.appendChild(box);
         stamp.textContent = '⚠ 页面是旧版，请 Ctrl+Shift+R';
         stamp.style.color = '#c60';
         stamp.title = '线上有更新的版本（HTTP 缓存最多 10 分钟）；按 Ctrl+Shift+R 强制刷新即可';
+        const menu = document.querySelector('#app-more>summary');
+        if (menu){ menu.textContent = '更多 · 有更新'; menu.style.color = 'var(--warn)'; }
         console.warn('[build] 页面模块是旧版（HTTP 缓存）：线上已有更新，Ctrl+Shift+R 刷新');
         errors.push?.('页面是旧版（HTTP 缓存），建议 Ctrl+Shift+R');
       }

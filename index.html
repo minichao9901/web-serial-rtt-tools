@@ -41,8 +41,13 @@
   <div class="topright">
     <span id="conn-flag" class="flag flag-off">串口：未连接</span>
     <span id="probe-flag" class="flag flag-off" role="status">探针：未使用</span>
-    <button class="ghost" id="btn-help">帮助</button>
-    <a class="ghost" id="lnk-github" href="https://github.com/minichao9901/web-serial-rtt-tools" target="_blank" rel="noopener">GitHub</a>
+    <details class="app-more" id="app-more">
+      <summary>更多</summary>
+      <div class="more-menu">
+        <button class="ghost" id="btn-help">帮助与快捷键</button>
+        <a class="ghost" id="lnk-github" href="https://github.com/minichao9901/web-serial-rtt-tools" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </details>
   </div>
 </header>
 
@@ -506,7 +511,7 @@
 </section>
 
 <!-- ============================ J-Scope 波形 ============================ -->
-<section class="panel" id="tab-scope">
+<section class="panel" id="tab-scope" data-workspace="scope">
   <div class="ws">
     <aside class="side">
       <fieldset>
@@ -530,10 +535,12 @@
           <button id="sc-varclear">清空勾选</button>
         </div>
         <p class="hint" id="sc-elfinfo">未载入（也可以用假探针自带的 8 个通道）</p>
+        <details class="helpnote"><summary>添加数组元素</summary>
         <label class="row"><span>数组元素</span><input id="sc-arraypath" list="sc-arrayexamples" placeholder="数组[0] 或 数组[0].成员" autocomplete="off"></label>
         <datalist id="sc-arrayexamples"></datalist>
         <div class="row btnrow"><button id="sc-arrayadd">添加元素</button></div>
         <p class="hint" id="sc-arrayinfo">载入 ELF 后，可按下标添加数组元素；二维数组用 [0][0]。</p>
+        </details>
         <label class="row"><span>搜索</span><input id="sc-search" placeholder="变量名…"></label>
         <div class="varlist" id="sc-vars"></div>
         <p class="hint" id="sc-count">已选 0 / 8</p>
@@ -695,7 +702,7 @@
 </section>
 
 <!-- ============================ 调试器 ============================ -->
-<section class="panel" id="tab-dbg">
+<section class="panel" id="tab-dbg" data-workspace="dbg">
   <div class="ws">
     <aside class="side">
       <fieldset>
@@ -731,7 +738,7 @@
           <button id="d-elf-pick">载入 ELF…</button>
           <input type="file" id="d-elf-file" accept=".elf,.axf,.out,.bin" hidden>
         </div>
-        <p class="hint" id="d-elf-info">载入 .elf 后可以按符号名下断点（<code>b main</code>）、<code>p 变量</code> 看数值、PC 显示函数名与源码行。符号列表在右边「变量」标签里。</p>
+        <p class="hint" id="d-elf-info">未载入 ELF</p>
       </fieldset>
 
       <fieldset>

@@ -3,11 +3,10 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
 const CDP = process.env.CDP || 'http://127.0.0.1:9333';
-const APP = process.env.APP || 'http://127.0.0.1:8899/index.html';
+const APP = process.env.APP || 'http://localhost:8899/index.html';
 const out = 'tmp/ui-review/after';
-const pages = await (await fetch(CDP + '/json/list')).json();
-const page = pages.find(p => p.type === 'page');
-if (!page) throw Error('请先启动测试浏览器（make browser）');
+// Separate tab: never navigate a user's active hardware session.
+const page = await (await fetch(CDP + '/json/new?' + encodeURIComponent('about:blank'), {method:'PUT'})).json();
 const ws = new WebSocket(page.webSocketDebuggerUrl);
 await new Promise((resolve,reject) => { ws.onopen=resolve;ws.onerror=reject; });
 let seq=0,pass=0,fail=0;
@@ -73,6 +72,6 @@ try {
   await writeFile(join(out,'layout.json'),JSON.stringify({time:new Date().toISOString(),pass,fail,pages:report},null,2));
   console.log(`UI layout: ${pass} 通过 / ${fail} 失败；截图 ${out}`);
 } finally {
-  await send('Emulation.clearDeviceMetricsOverride');ws.close();
+  ws.close();await fetch(CDP + '/json/close/' + page.id);
 }
 process.exitCode=fail?1:0;

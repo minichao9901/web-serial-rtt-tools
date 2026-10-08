@@ -85,6 +85,9 @@ export class ScopeView {
     this.canvas = $('sc-canvas');
     this.renderer = new ScopeRenderer(this.canvas);
     this.ctx = this.canvas.getContext('2d');
+    // Layout changes must also redraw a stopped capture at its new pixel size.
+    this._canvasResize = new ResizeObserver(() => { this._needDraw = true; });
+    this._canvasResize.observe(this.canvas);
     this.elfInput = this._fileInput('.elf,.axf', f => this.loadElfFile(f));
     this.jspInput = this._fileInput('.jsp,.bin', f => this.replayFile(f));
 

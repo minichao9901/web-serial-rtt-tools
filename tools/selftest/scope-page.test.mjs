@@ -105,8 +105,8 @@ console.log('== 1. 标签页与初始状态 ==');
 {
   const s = await ev('return window.__tools.summary();');
   ok(Array.isArray(s.tabs) && s.tabs.includes('scope'), '标签栏里有 scope');
-  const i = s.tabs.indexOf('scope'), j = s.tabs.indexOf('rttcdc');
-  ok(i === j + 1, `scope 紧跟在 RTT 转发后面（第 ${i + 1} 个）`, s.tabs.join(','));
+  const i = s.tabs.indexOf('scope'), j = s.tabs.indexOf('rttcdc'), spi = s.tabs.indexOf('spicdc');
+  ok(spi === j + 1 && i === spi + 1, '入口顺序：RTT 转发 → SPI 转发 → JScope', s.tabs.join(','));
   ok(s.ok === true, '页面无 JS 错误', JSON.stringify(s.errors));
   ok(s.scope && s.scope.mode === 'real' && s.scope.samples === 0, '初始：真机模式、0 样本');
   ok(s.scope.plan && s.scope.plan.spans >= 1, `初始就有读计划预览（${s.scope.plan?.spans} 个 span）`);

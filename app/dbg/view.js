@@ -394,10 +394,10 @@ export class DbgView {
     }
     const hint = $('d-elf-info');
     if (hint && !this.sym) hint.textContent = mock
-      ? '模拟目标也有自己的内存/寄存器，可以配合载入 .elf 练手（断点、单步、p 变量都能跑）。'
+      ? '未载入 ELF · 模拟目标'
       : (riscv
-        ? 'RISC-V/JTAG：走探针的 JTAG 引擎（HPM 等）。载入目标 .elf 后一样能按符号/文件:行下断点、`p 变量`、结构体树。'
-        : '载入 .elf 后可用符号名下断点、`p 变量` 看数值、PC 显示函数名与源码行。符号列表在右边「变量」标签里。');
+        ? '未载入 ELF · RISC-V/JTAG'
+        : '未载入 ELF（符号、源码与变量）');
   }
 
   _syncButtons(connected, halted){

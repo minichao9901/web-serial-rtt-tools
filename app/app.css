@@ -46,15 +46,15 @@ code{font-family:var(--mono);background:var(--bg3);padding:0 4px;border-radius:v
 
 /* ---------------- 顶栏 ---------------- */
 .topbar{
-  display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:6px 14px;padding:7px 12px;
+  display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:2px 12px;padding:3px 10px;
   background:var(--bg2);border-bottom:1px solid var(--line);flex:none;
 }
 .brand{font-weight:600;letter-spacing:.2px}
 .logo{font-family:var(--mono);color:var(--acc)}
 /* 页签独占一行；窄窗口横向滚动，保留全部工具的直接入口。 */
-.tabs{grid-column:1/-1;grid-row:2;display:flex;gap:4px;min-width:0;overflow-x:auto;scrollbar-width:thin;padding-bottom:2px}
+.tabs{grid-column:1/-1;grid-row:2;display:flex;gap:2px;min-width:0;overflow-x:auto;scrollbar-width:thin;padding-bottom:0}
 .tabs .tab{flex:none}
-.tab{background:transparent;border:1px solid transparent;color:var(--fg2);padding:4px 12px;border-radius:var(--radius-control)}
+.tab{background:transparent;border:1px solid transparent;color:var(--fg2);padding:3px 10px;border-radius:var(--radius-control)}
 .tab:hover{color:var(--fg);background:var(--bg3)}
 .tab.active{background:var(--bg3);border-color:var(--line);color:var(--fg);font-weight:600}
 .topright{justify-self:end;display:flex;align-items:center;gap:8px;min-width:0}
@@ -63,6 +63,14 @@ code{font-family:var(--mono);background:var(--bg3);padding:0 4px;border-radius:v
 .flag-warn{color:#0d1117;background:var(--warn);border-color:var(--warn);font-weight:600}
 .flag-err{color:var(--err);border-color:var(--err)}
 .build-stamp{color:var(--fg2);font-size:var(--text-xs)}
+.app-more{position:relative;font-size:var(--text-xs)}
+.app-more>summary{cursor:pointer;list-style:none;padding:2px 7px;border-radius:var(--radius-control);color:var(--fg2)}
+.app-more>summary::-webkit-details-marker{display:none}
+.app-more>summary:hover{color:var(--fg);background:var(--bg3)}
+.more-menu{position:absolute;right:0;top:calc(100% + 6px);z-index:60;display:flex;flex-direction:column;gap:3px;min-width:174px;padding:7px;background:var(--bg2);border:1px solid var(--line);border-radius:6px;box-shadow:0 8px 24px #0008}
+.more-menu>.ghost{text-align:left}
+.more-menu>.build-stamp{display:block;padding:5px 8px;border-top:1px solid var(--line)}
+.app-more:not([open])>.more-menu{display:none}
 button.primary:disabled{background:var(--bg3);border-color:var(--line);color:var(--fg2)}
 button.danger{color:var(--err);border-color:#f8514966}
 button.danger:hover:enabled{background:#f851491a;border-color:var(--err)}
@@ -849,8 +857,8 @@ fieldset.folded > legend::after{content:' · 已折叠';color:var(--fg2);font-si
 #tab-dbg .srcrow .srctx{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}
 #tab-dbg #d-src-file{font-size:var(--text-xs);color:var(--fg2)}
 
-/* 命令行：占左列下面（默认 flex-basis 38%，拖动后是 px），输出区 + 贴底输入行 */
-#tab-dbg .dbgterm{flex:0 1 38%;min-height:110px;max-height:82%}
+/* 命令行：占左列下面（默认 flex-basis 28%，拖动后是 px），输出区 + 贴底输入行 */
+#tab-dbg .dbgterm{flex:0 1 28%;min-height:110px;max-height:82%}
 #tab-dbg #d-out{flex:1 1 auto;min-height:0;height:auto;overflow:auto;background:#010409}
 #tab-dbg #d-out .cmdecho{color:#9fd0ff}
 #tab-dbg .sendbar.terminal{flex:none;margin-top:5px;gap:6px;flex-wrap:nowrap}
@@ -1054,7 +1062,7 @@ fieldset.folded > legend::after{content:' · 已折叠';color:var(--fg2);font-si
 #tab-dbg #d-bt-list button{width:100%;min-width:0;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
 /* 窗口窄：右侧面板压到下面去（仍然是一整条 tab 面板，不再平铺） */
-@media (max-width:1240px){
+@media (max-width:1050px){
   #tab-dbg .dbgwork{flex-wrap:wrap}
   #tab-dbg .dbgleft{flex:1 1 100%}
   #tab-dbg .grip-v{display:none}
@@ -1069,6 +1077,54 @@ fieldset.folded > legend::after{content:' · 已折叠';color:var(--fg2);font-si
 #tab-dbg #d-locals{max-height:240px;overflow-wrap:anywhere;white-space:normal}
 #tab-dbg #d-locals>div,#tab-dbg #d-locals>details{padding:3px 0}
 #tab-dbg #d-locals summary{cursor:pointer}
+
+/* 紧凑工作区：保留字号和操作尺寸，把空间让给源码与波形。 */
+.panel[data-workspace]{padding:6px 8px}
+.panel[data-workspace]>.ws{grid-template-columns:280px minmax(0,1fr);gap:8px}
+.panel[data-workspace] .side{gap:4px;padding-right:8px;border-right:1px solid var(--line)}
+.panel[data-workspace] .side>fieldset{border:0;border-bottom:1px solid var(--line);border-radius:0;background:transparent;padding:4px 2px 8px}
+.panel[data-workspace] .side>fieldset:last-child{border-bottom:0}
+.panel[data-workspace] .side>fieldset>legend{padding:0;font-weight:600;color:var(--fg)}
+.panel[data-workspace] .main{gap:6px}
+.panel[data-workspace] .toolbar{gap:6px;padding:4px 6px;border-radius:6px;background:transparent}
+.workspace-button{flex:none;padding:2px 7px;font-size:var(--text-xs);background:transparent;border-color:transparent;color:var(--fg2)}
+.workspace-button:hover,.workspace-button[aria-pressed="true"]{color:var(--fg);background:var(--bg3);border-color:var(--line)}
+.workspace-help{margin-top:4px;font-size:var(--text-xs);color:var(--fg2)}
+.workspace-help>summary{cursor:pointer}
+.panel[data-workspace].sidebar-collapsed>.ws,.panel[data-workspace][data-focus]>.ws{grid-template-columns:minmax(0,1fr)}
+.panel[data-workspace].sidebar-collapsed>.ws>.side,.panel[data-workspace][data-focus]>.ws>.side{display:none}
+body.workspace-focused>.topbar{display:none}
+#tab-dbg .dbgbox{border-radius:6px;padding:4px 7px 6px}
+#tab-dbg .dbgbox>legend{display:flex;align-items:center;gap:5px;max-width:100%;width:100%;padding:0 2px}
+#tab-dbg .dbgbox>legend .workspace-button{margin-left:auto}
+#tab-dbg #d-src-file{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis}
+#tab-dbg .dbgbox>legend .docktabs{flex:1;min-width:0;overflow-x:auto}
+#tab-dbg .docktabs>button{flex:none}
+#tab-dbg .dbgbox .srclist,#tab-dbg #d-out{border:0;border-radius:3px}
+#tab-dbg .dbgterm>.sendbar{border:0;background:transparent;padding:4px 0 0}
+#tab-dbg .grip-h{height:7px;margin:1px 0}
+#tab-dbg[data-focus="src"] #d-box-term,#tab-dbg[data-focus="src"] #d-grip-term,
+#tab-dbg[data-focus="src"] #d-grip-dock,#tab-dbg[data-focus="src"] #d-box-dock,
+#tab-dbg[data-focus="term"] #d-box-src,#tab-dbg[data-focus="term"] #d-grip-term,
+#tab-dbg[data-focus="term"] #d-grip-dock,#tab-dbg[data-focus="term"] #d-box-dock,
+#tab-dbg[data-focus="dock"] .dbgleft,#tab-dbg[data-focus="dock"] #d-grip-dock{display:none}
+#tab-dbg[data-focus="src"] .dbgleft,#tab-dbg[data-focus="term"] .dbgleft{min-width:0;flex:1}
+#tab-dbg[data-focus="term"] #d-box-term,#tab-dbg[data-focus="dock"] #d-box-dock{flex:1 1 0;min-width:0;max-width:none;max-height:none}
+@media(min-width:760px){
+  #tab-dbg.sidebar-collapsed .dbgwork,#tab-dbg[data-focus] .dbgwork{flex-wrap:nowrap}
+  #tab-dbg.sidebar-collapsed .dbgleft,#tab-dbg[data-focus="work"] .dbgleft{flex:1 1 0}
+  #tab-dbg.sidebar-collapsed .dbgdock,#tab-dbg[data-focus="work"] .dbgdock{flex:0 1 380px;min-height:0;max-height:none}
+  #tab-dbg.sidebar-collapsed .grip-v,#tab-dbg[data-focus="work"] .grip-v{display:block}
+}
+@media(max-width:860px){
+  .panel[data-workspace]>.ws{grid-template-columns:240px minmax(0,1fr)}
+  .panel[data-workspace] .side .row>span:first-child{width:72px}
+}
+@media(max-width:600px){
+  .panel[data-workspace]>.ws{grid-template-columns:minmax(0,1fr);overflow:auto}
+  .panel[data-workspace]>.ws>.side{max-height:36vh;border-right:0;border-bottom:1px solid var(--line)}
+  .panel[data-workspace] .main{min-height:400px}
+}
 
 /* Fault diagnostics / acquisition quality drawer preserve waveform height. */
 .diag-drawer { position: fixed; z-index: 90; right: 12px; top: 110px; bottom: 12px; width: min(520px, calc(100vw - 24px)); background: #10161d; border: 1px solid #405063; border-radius: 10px; box-shadow: 0 8px 36px #0009; display: flex; flex-direction: column; }
