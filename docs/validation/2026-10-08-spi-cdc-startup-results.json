@@ -1,0 +1,212 @@
+{
+  "date": "2026-10-08T11:11:41.245Z",
+  "initial": {
+    "url": "http://127.0.0.1:8899/index.html?diagnostics-hw=1791451948810#dbg",
+    "status": {
+      "supported": true,
+      "running": true,
+      "pending": false,
+      "rc": 0,
+      "mode": 0,
+      "lsb": false,
+      "bufferBytes": 16384,
+      "received": 376297634,
+      "forwarded": 376297632,
+      "dropped": 0,
+      "fifoOverflows": 0,
+      "pendingBytes": 2,
+      "cdcQueued": 59,
+      "generation": 4,
+      "dmaErrors": 0
+    },
+    "stream": {
+      "open": true,
+      "bytes": 376298626,
+      "frames": 8479566,
+      "rate": 218947,
+      "buffered": 10230,
+      "paused": false,
+      "suppressed": true,
+      "mode": "ascii",
+      "recording": false,
+      "recordBytes": 0,
+      "shown": 0
+    }
+  },
+  "oldCounter": {
+    "before": {
+      "time": 765953.200000003,
+      "bytes": 376304131,
+      "status": {
+        "supported": true,
+        "running": true,
+        "pending": false,
+        "rc": 0,
+        "mode": 0,
+        "lsb": false,
+        "bufferBytes": 16384,
+        "received": 376312701,
+        "forwarded": 376312701,
+        "dropped": 0,
+        "fifoOverflows": 0,
+        "pendingBytes": 0,
+        "cdcQueued": 81,
+        "generation": 4,
+        "dmaErrors": 0
+      }
+    },
+    "after": {
+      "time": 769975.900000006,
+      "bytes": 381354422,
+      "shownRate": 197807,
+      "entries": 3088,
+      "status": {
+        "supported": true,
+        "running": true,
+        "pending": false,
+        "rc": 0,
+        "mode": 0,
+        "lsb": false,
+        "bufferBytes": 16384,
+        "received": 381359639,
+        "forwarded": 381359639,
+        "dropped": 0,
+        "fifoOverflows": 0,
+        "pendingBytes": 0,
+        "cdcQueued": 57,
+        "generation": 4,
+        "dmaErrors": 0
+      }
+    },
+    "measuredBps": 1255448.08213296
+  },
+  "fixed10": {
+    "mhz": 10,
+    "before": {
+      "time": 771201.900000006,
+      "bytes": 1522089,
+      "frames": 23782,
+      "bad": 36,
+      "gaps": 0,
+      "reverse": 0,
+      "shownRate": 1255004,
+      "status": {
+        "supported": true,
+        "running": true,
+        "pending": false,
+        "rc": 0,
+        "mode": 0,
+        "lsb": false,
+        "bufferBytes": 16384,
+        "received": 382896142,
+        "forwarded": 382896142,
+        "dropped": 0,
+        "fifoOverflows": 0,
+        "pendingBytes": 0,
+        "cdcQueued": 76,
+        "generation": 4,
+        "dmaErrors": 0
+      }
+    },
+    "after": {
+      "time": 776212.599999994,
+      "bytes": 7812111,
+      "frames": 122063,
+      "bad": 36,
+      "gaps": 0,
+      "reverse": 0,
+      "shownRate": 1254825,
+      "status": {
+        "supported": true,
+        "running": true,
+        "pending": false,
+        "rc": 0,
+        "mode": 0,
+        "lsb": false,
+        "bufferBytes": 16384,
+        "received": 389187764,
+        "forwarded": 389187764,
+        "dropped": 0,
+        "fifoOverflows": 0,
+        "pendingBytes": 0,
+        "cdcQueued": 70,
+        "generation": 4,
+        "dmaErrors": 0
+      }
+    },
+    "Bps": 1255318.0194413883,
+    "frames": 98281,
+    "bad": 0,
+    "gaps": 0,
+    "reverse": 0
+  },
+  "fixed60": {
+    "mhz": 60,
+    "before": {
+      "time": 777575.799999997,
+      "bytes": 16993722,
+      "frames": 265526,
+      "bad": 53,
+      "gaps": 0,
+      "reverse": 1,
+      "shownRate": 7527075,
+      "status": {
+        "supported": true,
+        "running": true,
+        "pending": false,
+        "rc": 0,
+        "mode": 0,
+        "lsb": false,
+        "bufferBytes": 16384,
+        "received": 9208677,
+        "forwarded": 9208657,
+        "dropped": 0,
+        "fifoOverflows": 0,
+        "pendingBytes": 20,
+        "cdcQueued": 444,
+        "generation": 5,
+        "dmaErrors": 0
+      }
+    },
+    "after": {
+      "time": 782583.299999997,
+      "bytes": 54709550,
+      "frames": 854835,
+      "bad": 53,
+      "gaps": 0,
+      "reverse": 1,
+      "shownRate": 7528209,
+      "status": {
+        "supported": true,
+        "running": true,
+        "pending": false,
+        "rc": 0,
+        "mode": 0,
+        "lsb": false,
+        "bufferBytes": 16384,
+        "received": 46896068,
+        "forwarded": 46896068,
+        "dropped": 0,
+        "fifoOverflows": 0,
+        "pendingBytes": 0,
+        "cdcQueued": 411,
+        "generation": 5,
+        "dmaErrors": 0
+      }
+    },
+    "Bps": 7531867.798302546,
+    "frames": 589309,
+    "bad": 0,
+    "gaps": 0,
+    "reverse": 0
+  },
+  "target": {
+    "g_run": 1,
+    "g_mhz": 60,
+    "g_spi_hz": 60000000,
+    "g_clock_err": 0,
+    "g_dma_errors": 0,
+    "g_refill_late": 0,
+    "g_blocks": 2876
+  }
+}

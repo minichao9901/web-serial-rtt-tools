@@ -137,6 +137,11 @@ test: test-stability test-dbg-features test-board-matrix test-random-flow
 # 离线总入口：先做语法/液体页面检查，再跑纯 Node 自测；不打开浏览器、不碰探针。
 test-offline: check test
 
+test: test-stats
+.PHONY: test-stats
+test-stats:
+	$(NODE) tools/selftest/stats.test.mjs
+
 .PHONY: test-bus-periodic
 test-bus-periodic:
 	$(NODE) tools/selftest/bus-periodic.test.mjs
