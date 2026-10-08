@@ -1,0 +1,64 @@
+{
+  "date": "2026-10-09",
+  "baseCommit": "f7b97e6",
+  "branch": "codex/hpm-target-porting",
+  "worktree": "E:\\web-serial-rtt-tools-hpm-porting",
+  "sdk": "HPM SDK v1.11.0",
+  "hardwareAccessed": false,
+  "algorithm": {
+    "canonicalBytesUnchanged": true,
+    "sizeBytes": 1388,
+    "sha256": "dde44aa7d7de1f30bbb14fc84c6690f35d64ea484f135628a9e1c1202a8c2084",
+    "gotRelocations": 4,
+    "independentLinkAddress": "0x4000",
+    "oracle": "all bytes equal"
+  },
+  "checks": [
+    {
+      "name": "make test",
+      "result": "passed",
+      "note": "complete offline suite; final health guard followed by affected HPM/memory/SBA regressions"
+    },
+    {
+      "name": "make test-hpm",
+      "result": "passed",
+      "legacyChecks": 94,
+      "portingScenarios": 22,
+      "sdkBoardConfigurations": 10
+    },
+    {
+      "name": "algorithm build and relocation oracle",
+      "result": "passed"
+    },
+    {
+      "name": "hpm-porting-page",
+      "result": "passed",
+      "checks": 10
+    },
+    {
+      "name": "dbg-page",
+      "result": "passed",
+      "checks": 156
+    },
+    {
+      "name": "diagnostics-page",
+      "result": "passed",
+      "maxUiIntervalMs": 38.8
+    },
+    {
+      "name": "ui.page with isolated preferences",
+      "result": "passed",
+      "checks": 25,
+      "baselineChecksPassed": 25
+    },
+    {
+      "name": "git diff --check",
+      "result": "passed"
+    }
+  ],
+  "limitations": [
+    "No board ROM/XPI timing or electrical/reset/startup verification",
+    "Simulator executes protocol and algorithm behavior, not actual chip ROM",
+    "JScope probe firmware and HID protocol unchanged"
+  ]
+}

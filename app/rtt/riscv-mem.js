@@ -22,7 +22,7 @@ import { AkaLinkHid } from '../hid/probe.js';
 import { WebUsbDapProbe, withTimeout } from './dap-webusb.js';
 import { DapJtagTransport, setOutputModeData, PROBE_OUTPUT_MODE } from '../flash/hpm/dap-transport.js';
 import { RiscvTransport } from '../flash/hpm/riscv-dm.js';
-import { HPM_COMMON } from '../flash/hpm/chips.js';
+import { resolveHpmTarget, assertHpmIdentity } from '../targets/hpm/porting.js';
 
 /**
  * Viewer 侧要的 `mem` 形状（`Rtt` 只用这两个方法 + 界面上那几个可选钩子）。
@@ -30,10 +30,11 @@ import { HPM_COMMON } from '../flash/hpm/chips.js';
  * 不提供 `run/isHalted/reset`（那是 Cortex-M 的 DHCSR 语义），界面据此把按钮关掉。
  */
 export class RiscvMem {
-  constructor({ probe, jtag, dm, clockKhz = 0, log = () => {}, perWordMs = 700 }){
+  constructor({ probe, jtag, dm, clockKhz = 0, log = () => {}, perWordMs = 700, target }){
     this.probe = probe;
     this.jtag = jtag;
     this.dm = dm;
+    this.port = resolveHpmTarget(target || dm?.port);
     this.clockKhz = clockKhz;
     this.perWordMs = perWordMs;      // 单字读的墙钟上限（正常 ~0.2 ms；给 700 ms 已经很宽松）
     this.log = log;
@@ -64,6 +65,7 @@ export class RiscvMem {
 
   /** 普通 RTT 读取使用共用 SBA 的有界清理；失败不改变目标执行状态。 */
   async _read(addr, len){
+    await this.port.hooks.checkMemoryReady(this, addr, len);
     return await this.dm.readMem(addr, len, this.perWordMs);
   }
 
@@ -71,6 +73,7 @@ export class RiscvMem {
   async recover(){
     try { await this.dm.sbaClearErrors(); } catch {}
     const r = await this.dm.init();
+    assertHpmIdentity(this.port, r);
     this.log(`RISC-V 链路已重置：idcode=0x${Number(r?.idcode || 0).toString(16)}`);
     return r;
   }
@@ -102,6 +105,7 @@ export class RiscvMem {
 export async function openRiscvMem(opts = {}){
   const log = opts.log || (() => {});
   const timeoutMs = opts.timeoutMs ?? 20000;
+  const port = resolveHpmTarget(opts.target);
 
   // ① 探针：HID 切 SWD+JTAG 输出模式，并把两个"占 TAP 的家伙"停掉
   const hid = new AkaLinkHid();
@@ -138,9 +142,10 @@ export async function openRiscvMem(opts = {}){
       await probe.setClock(clockKhz * 1000);
       log(`JTAG TCK = ${clockKhz / 1000} MHz（DAP_SWJ_Clock）`);
     }
-    const jtag = new DapJtagTransport(probe, { irLength: HPM_COMMON.irLength, log });
-    const dm = new RiscvTransport(jtag, { idle: 8, log });
+    const jtag = new DapJtagTransport(probe, { irLength: port.debug.irLength, log });
+    const dm = new RiscvTransport(jtag, { port, log });
     const info = await withTimeout(dm.init(), timeoutMs, '初始化 RISC-V 调试模块');
+    assertHpmIdentity(port, info);
     log(`RISC-V 就绪：idcode=0x${Number(info.idcode).toString(16)} dmstatus=0x${Number(info.dmstatus).toString(16)}`);
     /**
      * 连接阶段检查 SBA：清理跨会话留下的粘滞错误，并检测链路速度。
@@ -149,12 +154,12 @@ export async function openRiscvMem(opts = {}){
      */
     let health = null;
     try {
-      health = await withTimeout(dm.sbaHealthCheck({ peekAddr: 0x01200000, allowSystemReset: false }), 15000, 'SBA 健康检查');
+      if (port.memory.healthPeekAddr != null) health = await withTimeout(dm.sbaHealthCheck({ peekAddr: port.memory.healthPeekAddr, allowSystemReset: false }), 15000, 'SBA 健康检查');
       if (health) log(`SBA 健康检查：${JSON.stringify(health)}`);
     } catch (e){
       log('⚠ SBA 健康检查没做完（继续试）：' + (e?.message || e));
     }
-    const mem = new RiscvMem({ probe, jtag, dm, clockKhz, log });
+    const mem = new RiscvMem({ probe, jtag, dm, clockKhz, log, target: port });
     /* 健康检查结果留给上层（编排脚本靠 health.slow 判断"是不是该重开 USB 会话"） */
     mem.health = health;
     return mem;

@@ -352,16 +352,6 @@
               <option value="custom">自定义 cfg…</option>
             </optgroup>
             <optgroup label="RISC-V（只能 JTAG · 控制块要在非缓存区）" data-arch="riscv">
-              <option value="hpm6800evk">HPM6800EVK（HPM6880）· AXI SRAM 0x01240000</option>
-              <option value="hpm6750evk2">HPM6750EVK2 · AXI SRAM 0x01100000</option>
-              <option value="hpm6750evkmini">HPM6750EVKMINI · AXI SRAM 0x01100000</option>
-              <option value="hpm6300evk">HPM6300EVK · AXI SRAM 0x010C0000</option>
-              <option value="hpm6200evk">HPM6200EVK · AXI SRAM 0x01080000</option>
-              <option value="hpm6e00evk">HPM6E00EVK · AXI SRAM 0x01280000</option>
-              <option value="hpm6p00evk">HPM6P00EVK · AXI SRAM 0x01200000</option>
-              <option value="hpm5e00evk">HPM5E00EVK · AXI SRAM 0x01200000</option>
-              <option value="hpm5300evk">HPM5300EVK · DLM 0x00080000（没有 AXI SRAM）</option>
-              <option value="hpm5301evklite">HPM5301EVKLite · DLM 0x00080000</option>
               <option value="riscv-other">其它 RISC-V（自己填 RAM 范围）</option>
             </optgroup>
           </select>
@@ -721,6 +711,9 @@
             <option value="riscv">WebUSB · RISC-V/JTAG（HPM 等）</option>
             <option value="mock">模拟目标（不需要硬件）</option>
           </select>
+        </label>
+        <label class="row" id="d-hpm-target-row" hidden style="display:none"><span>目标板卡</span>
+          <select id="d-hpm-target" title="选择板卡以使用对应的内存与复位配置"></select>
         </label>
         <label class="row"><span>SWD 时钟</span>
           <select id="d-clock" title="SWD 时钟。2026-10 真机实测（akaLinkPro + STM32F103ZE）：10 / 20 / 30 MHz 下寄存器（PPB）、FPB、内存全都正确，内存读比 1 MHz 快 3~4 倍 —— 所以默认 10 MHz。若换了探针固件发现寄存器读回 0/0xFFFFFFFF，连接时会自动退回 1 MHz 并在日志里说明原因（历史上这颗固件高时钟读 PPB 会回 0）。切到 RISC-V/JTAG 后这一格是 JTAG TCK。">

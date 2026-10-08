@@ -1,3 +1,4 @@
+import { HPM_BOARDS } from '../targets/hpm/porting.js';
 /**
  * 芯片预设表：烧录器与 RTT Viewer 共用的「芯片 → OpenOCD cfg / RAM 扫描范围」。
  * RTT 的下拉目前在 HTML 里手写（内容与此表一致），改这里记得同步那边。
@@ -31,22 +32,7 @@ export const CHIPS = [
   { v: 'stm32wl',   label: 'STM32WL',             ram: '0x20000000-0x20010000' },
   { v: 'esp32s31',  label: 'ESP32-S31（板载 USB-JTAG）' },
   { v: 'esp32',     label: 'ESP32（Wrover Kit）' },
-  /**
-   * HPM 系列（RISC-V）：**零安装 WebUSB 烧录**走的是另一条路（JTAG + 芯片 ROM 里的 XPI 驱动），
-   * 参数来自 HPM SDK 的 `boards/openocd/boards/*.cfg`（见 `app/flash/hpm/chips.js`）。
-   * 这些 id 必须与 `HPM_BOARDS` 里的 id 一致 —— 烧录页靠它分派。
-   * 本地桥（OpenOCD）也能烧：cfg 用 SDK 的 `hpm<xxxx>_all_in_one.cfg`。
-   */
-  { v: 'hpm5300evk',    label: 'HPM5300EVK（RISC-V，零安装）', ram: '0x00000000-0x00020000' },
-  { v: 'hpm5301evklite', label: 'HPM5301EVKLite（RISC-V，零安装）', ram: '0x00000000-0x00020000' },
-  { v: 'hpm5e00evk',    label: 'HPM5E00EVK（RISC-V，零安装）' },
-  { v: 'hpm6200evk',    label: 'HPM6200EVK（RISC-V，零安装）' },
-  { v: 'hpm6300evk',    label: 'HPM6300EVK（RISC-V，零安装）' },
-  { v: 'hpm6750evk2',   label: 'HPM6750EVK2（RISC-V，零安装）' },
-  { v: 'hpm6750evkmini', label: 'HPM6750EVKMINI（RISC-V，零安装）' },
-  { v: 'hpm6800evk',    label: 'HPM6800EVK（RISC-V，零安装）', ram: '0x00000000-0x00020000' },
-  { v: 'hpm6e00evk',    label: 'HPM6E00EVK（RISC-V，零安装）' },
-  { v: 'hpm6p00evk',    label: 'HPM6P00EVK（RISC-V，零安装）' },
+  ...HPM_BOARDS.map(b => ({ v: b.id, label: b.name + '（RISC-V，零安装）', ram: b.memory.rttRange })),
   { v: 'custom',    label: '自定义 cfg…' },
 ];
 

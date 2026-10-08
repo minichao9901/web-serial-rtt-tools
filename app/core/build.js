@@ -12,4 +12,4 @@
  * `main.js` 会把它显示在标题栏，并在加载后做一次自检：用 cache-buster 重新拉本文件，
  * 若里面的 BUILD 与内存里的不一致 → 说明页面是旧的，提示刷新。
  */
-export const BUILD = '2026-10-08-r7 (常用工具平铺；其他工具收进更多功能)';
+export const BUILD = '2026-10-09-r8 (整合界面工作区、F103ZE 异常验收与 HPM porting)';

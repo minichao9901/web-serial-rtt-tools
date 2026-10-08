@@ -1,0 +1,53 @@
+{
+  "date": "2026-10-09",
+  "testedCommit": "890fe0c",
+  "board": "STM32F103ZE",
+  "probeSerial": "B4444F2110DDDAFE44800BBB0AE800E0",
+  "scope": "ARM shared-path regression; existing firmware; no Flash writes",
+  "passed": true,
+  "beforeSHA256": "c2ed64c452949005c057cb0d0e58c1dde508e7296962022d4f88aabd56faba98",
+  "afterSHA256": "c2ed64c452949005c057cb0d0e58c1dde508e7296962022d4f88aabd56faba98",
+  "originalDemcr": 0,
+  "checks": [
+    {
+      "name": "ARM backend connects while HPM port is selected",
+      "passed": true
+    },
+    {
+      "name": "F103ZE identity and register read",
+      "passed": true
+    },
+    {
+      "name": "HardFault catch toggle restores complete DEMCR",
+      "passed": true
+    },
+    {
+      "name": "Fault snapshot leaves registers and SCB unchanged",
+      "passed": true
+    },
+    {
+      "name": "20 halt / continue cycles",
+      "passed": true
+    },
+    {
+      "name": "Two instruction steps advance PC",
+      "passed": true
+    },
+    {
+      "name": "Hardware breakpoint comparator install and removal",
+      "passed": true
+    },
+    {
+      "name": "Full 512 KiB Flash unchanged",
+      "passed": true
+    },
+    {
+      "name": "Restore DEMCR and release probe",
+      "passed": true
+    }
+  ],
+  "limitations": [
+    "未注入真实异常；验证异常读取只读性和捕获开关恢复",
+    "未验证 HPM 的 JTAG/DMI/SBA、ROM/XPI 和真实算法执行"
+  ]
+}

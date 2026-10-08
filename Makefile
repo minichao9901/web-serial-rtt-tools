@@ -116,6 +116,7 @@ test: test-stability test-dbg-features test-board-matrix test-random-flow
 	$(NODE) tools/selftest/bridge-lifecycle.test.mjs
 	$(NODE) tools/selftest/flash-image.test.mjs
 	$(NODE) tools/selftest/hpm-flash.test.mjs
+	$(NODE) tools/selftest/hpm-porting.test.mjs
 	$(NODE) tools/selftest/spi-proto.test.mjs
 	$(NODE) tools/selftest/spi-panel-code.test.mjs
 	$(NODE) tools/selftest/spi-read.test.mjs
@@ -279,6 +280,7 @@ test-image:
 # HPM（RISC-V）零安装烧录：跑在模拟 DTM + 模拟 XPI flash 上（不需要探针/板子）
 test-hpm:
 	$(NODE) tools/selftest/hpm-flash.test.mjs
+	$(NODE) tools/selftest/hpm-porting.test.mjs
 
 # 重新构建 HPM flashloader（需要 HPM SDK + RISC-V 工具链），并刷新 app/flash/hpm/algo.js
 hpm-algo:
@@ -806,3 +808,8 @@ test-dbg-frame-native:
 
 test-dbg-frame-gdb:
 	python tools/selftest/dbg-frame-gdb.test.py
+
+# HPM target selection and port lifecycle in the browser, no hardware.
+.PHONY: test-hpm-porting-page
+test-hpm-porting-page: page-prep
+	$(NODE) tools/selftest/hpm-porting-page.test.mjs

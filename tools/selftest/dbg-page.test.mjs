@@ -82,6 +82,8 @@ await send('Page.enable');
 await send('Runtime.enable');
 // 🚨 必须关缓存：python http.server 不发 Cache-Control，改完模块会拿到旧的（本仓库踩过）
 try { await send('Network.enable'); await send('Network.setCacheDisabled', { cacheDisabled: true }); } catch {}
+// Layout assertions use a fixed viewport rather than desktop browser chrome height.
+await send('Emulation.setDeviceMetricsOverride', { width:1600, height:1000, deviceScaleFactor:1, mobile:false });
 await send('Page.navigate', { url: URL_ });
 console.log('目标: ' + URL_);
 

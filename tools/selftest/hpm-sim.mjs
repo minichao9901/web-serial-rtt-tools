@@ -32,7 +32,14 @@ export class SimTarget {
    * @param {{ramSize?:number, flashSize?:number, sectorSize?:number, blockSize?:number}} [opts]
    */
   constructor(opts = {}){
-    this.idcode = 0x1000563D;
+    this.idcode = opts.idcode ?? 0x1000563D;
+    this.ramBase = opts.ramBase ?? 0;
+    this.algoLoadAddr = opts.algoLoadAddr ?? this.ramBase;
+    this.copyAddr = opts.copyAddr ?? this.ramBase + XIP_COPY_ADDR;
+    this.flashBase = opts.flashBase ?? 0x80000000;
+    this.expectedInitArgs = opts.expectedInitArgs;
+    this.initCalls = [];
+    this.selectedHarts = [];
     this.dtmcs = 0x71;                        // version=1, idle=7（与真探针一致）
     this.ramSize = opts.ramSize ?? 0x10000;   // 64 KB SRAM
     this.ram = new Uint8Array(this.ramSize);
@@ -260,6 +267,7 @@ export class SimTarget {
         const wasActive = !!(d.dmcontrol & 1);
         const wasReset = !!(d.dmcontrol & 2);
         d.dmcontrol = data >>> 0;
+        this.selectedHarts.push((data >>> 16) & 0x3ff);
         if (data & (1 << 31)){ this.halted = true; }                  // haltreq
         if (data & (1 << 30)){                                        // resumereq
           this.halted = false;
@@ -335,8 +343,8 @@ export class SimTarget {
 
   _sbaStore(v){
     const a = this.dm.sbaddress >>> 0;
-    if (a < this.ramSize){
-      const dv = new DataView(this.ram.buffer, a, 4);
+    if (a >= this.ramBase && a + 4 <= this.ramBase + this.ramSize){
+      const dv = new DataView(this.ram.buffer, a - this.ramBase, 4);
       dv.setUint32(0, v, true);
       // 写进 RAM 的可能是 flashloader 的代码/数据，也可能是普通数据 —— 都一样处理
     } else {
@@ -346,8 +354,8 @@ export class SimTarget {
 
   _loadWord(a){
     a = a >>> 0;
-    if (a < this.ramSize){
-      const dv = new DataView(this.ram.buffer, a, 4);
+    if (a >= this.ramBase && a + 4 <= this.ramBase + this.ramSize){
+      const dv = new DataView(this.ram.buffer, a - this.ramBase, 4);
       return dv.getUint32(0, true);
     }
     this.sbaError = 2;
@@ -361,7 +369,7 @@ export class SimTarget {
    */
   runAlgoEntry(entryOffset, args = []){
     for (let i = 0; i < args.length; i++) this.regs[10 + i] = args[i] >>> 0;
-    this.pc = entryOffset >>> 0;
+    this.pc = (this.algoLoadAddr + entryOffset) >>> 0;
     this.halted = false;
     this._onResume();
     return this.halted;
@@ -394,7 +402,7 @@ export class SimTarget {
      *    这里按例程的真实语义执行：从 XPI 窗口拷 len 字节到 RAM；越界/非 4 倍数 → fault（不 halt）。
      *    ⚠️ 它**不是入口表里的一项**，所以必须在"查表 + 不是入口就 return"**之前**处理。
      */
-    if ((this.pc >>> 0) === XIP_COPY_ADDR){
+    if ((this.pc >>> 0) === this.copyAddr){
       if (!ebreakOk()) return;
       const r = this._xipCopy(a0, a1, a2);
       if (r === STATUS.success){
@@ -410,13 +418,13 @@ export class SimTarget {
     }
     const table = this._entryTable();
     // 🚨 pc 指的是**表项位置**（loadAddr + entryOffset，init 就是 0），不是 jal 的落点
-    const hit = table.find(e => e.entryOffset === (this.pc >>> 0));
+    const hit = table.find(e => this.algoLoadAddr + e.entryOffset === (this.pc >>> 0));
     if (!hit) { this.log.push(`resume pc=0x${this.pc.toString(16)}（不是算法入口，当作普通运行）`); return; }
     const entry = ENTRY_ORDER[table.indexOf(hit)];
     if (!ebreakOk()) return;
     let rc = STATUS.success;
     switch (entry){
-      case 'init':  rc = this._flashInit(a0, a2, a3); break;
+      case 'init':  rc = this._flashInit(a0, a1, a2, a3, a4); break;
       case 'erase': rc = this._flashErase(a0, a1, a2); break;
       case 'program': rc = this._flashProgram(a0, a1, a2, a3); break;
       // 参数顺序照 README 的签名：flash_read(flash_base, buf, address, size) → a0..a3
@@ -438,12 +446,16 @@ export class SimTarget {
   /** 从 RAM 里现解析 flashloader 的入口表（缓存）*/
   _entryTable(){
     if (this._table) return this._table;
-    const view = this.ram.subarray(0, 0x200);
+    const off = this.algoLoadAddr - this.ramBase;
+    const view = this.ram.subarray(off, off + 0x200);
     this._table = parseAlgoEntryTable(view);
     return this._table;
   }
 
-  _flashInit(flashBase, opt0, opt1){
+  _flashInit(flashBase, header, opt0, opt1, xpiBase){
+    const args = [flashBase, header, opt0, opt1, xpiBase];
+    this.initCalls.push(args);
+    if (this.expectedInitArgs && args.some((v, i) => v !== this.expectedInitArgs[i])) return STATUS.invalidArgument;
     this.flashInited = true;
     this.log.push(`flash_init(base=0x${flashBase.toString(16)}, opt0=0x${opt0.toString(16)}, opt1=0x${opt1.toString(16)})`);
     return STATUS.success;
@@ -480,8 +492,8 @@ export class SimTarget {
     if (!this.flashInited) return STATUS.noFlash;
     const off = addr >>> 0;
     if (off + size > this.flash.length) return STATUS.outOfRange;
-    if (bufAddr + size > this.ramSize) return STATUS.invalidArgument;
-    const src = this.ram.subarray(bufAddr, bufAddr + size);
+    if (bufAddr < this.ramBase || bufAddr + size > this.ramBase + this.ramSize) return STATUS.invalidArgument;
+    const src = this.ram.subarray(bufAddr - this.ramBase, bufAddr - this.ramBase + size);
     /**
      * NOR flash 的编程语义是**按位与**：只能把 1 写成 0，写 1 到已经是 0 的位不会把它变回 1
      * （硬件不报错，只是写不进去）。所以"没擦就写"不会当场失败，而是**校验时**露馅 ——
@@ -517,27 +529,27 @@ export class SimTarget {
       return STATUS.success;
     }
     if (off + size > this.flash.length) return STATUS.outOfRange;
-    if (bufAddr + size > this.ramSize) return STATUS.invalidArgument;
-    this.ram.set(this.flash.subarray(off, off + size), bufAddr);
+    if (bufAddr < this.ramBase || bufAddr + size > this.ramBase + this.ramSize) return STATUS.invalidArgument;
+    this.ram.set(this.flash.subarray(off, off + size), bufAddr - this.ramBase);
     this.romReads = (this.romReads || 0) + 1;
     return STATUS.success;
   }
 
   /** XIP 拷贝例程的语义（内核走 XPI 窗口读，见 app/flash/hpm/xip-copy.js）*/
   _xipCopy(src, dst, len){
-    const XIP_BASE = 0x80000000;
+    const XIP_BASE = this.flashBase;
     if (len === 0 || (len >>> 0) % 4) return STATUS.invalidArgument;
     if ((src >>> 0) < XIP_BASE || ((src >>> 0) - XIP_BASE) + (len >>> 0) > this.flash.length) return STATUS.outOfRange;
-    if ((dst >>> 0) + (len >>> 0) > this.ramSize) return STATUS.invalidArgument;
-    this.ram.set(this.flash.subarray((src >>> 0) - XIP_BASE, (src >>> 0) - XIP_BASE + (len >>> 0)), dst >>> 0);
+    if (dst < this.ramBase || dst + len > this.ramBase + this.ramSize) return STATUS.invalidArgument;
+    this.ram.set(this.flash.subarray((src >>> 0) - XIP_BASE, (src >>> 0) - XIP_BASE + (len >>> 0)), dst - this.ramBase);
     this.xipCopies = (this.xipCopies || 0) + 1;
     this.log.push(`xip_copy(0x${(src >>> 0).toString(16)} → RAM 0x${(dst >>> 0).toString(16)}, ${len} B)`);
     return STATUS.success;
   }
 
   _flashInfo(flashBase, infoAddr){
-    if (!infoAddr || infoAddr + 8 > this.ramSize) return STATUS.invalidArgument;
-    const dv = new DataView(this.ram.buffer, infoAddr, 8);
+    if (infoAddr < this.ramBase || infoAddr + 8 > this.ramBase + this.ramSize) return STATUS.invalidArgument;
+    const dv = new DataView(this.ram.buffer, infoAddr - this.ramBase, 8);
     dv.setUint32(0, this.flashInfo.totalBytes, true);
     dv.setUint32(4, this.flashInfo.sectorBytes, true);
     return STATUS.success;

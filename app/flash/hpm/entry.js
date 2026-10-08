@@ -93,3 +93,20 @@ export function algoEntries(bytes){
   ENTRY_ORDER.forEach((name, i) => { if (list[i]) out[name] = list[i]; });
   return { list, byName: out, count: list.length };
 }
+
+/** Relocate only ELF-declared internal GOT pointers. The canonical blob stays unchanged. */
+export function relocateAlgoBytes(bytes, descriptor, loadAddr){
+  if (!Number.isInteger(loadAddr) || loadAddr < 0 || loadAddr + bytes.length > 0x100000000)
+    throw new Error('算法加载地址超出 32 位范围');
+  if (loadAddr !== descriptor.loadAddr && !Array.isArray(descriptor.relocations))
+    throw new Error('算法缺少 GOT 重定位信息，请重建算法');
+  const out = new Uint8Array(bytes), view = new DataView(out.buffer);
+  for (const { offset, target } of descriptor.relocations || []) {
+    if (!Number.isInteger(offset) || offset < 0 || offset % 4 || offset + 4 > out.length ||
+        !Number.isInteger(target) || target < descriptor.loadAddr || target >= descriptor.loadAddr + out.length ||
+        view.getUint32(offset,true) !== target)
+      throw new Error('算法 GOT 重定位信息与机器码不一致');
+    view.setUint32(offset, target + loadAddr - descriptor.loadAddr, true);
+  }
+  return out;
+}

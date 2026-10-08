@@ -12,7 +12,7 @@
 | 算法怎么调 | 入口表 + 各函数签名（`flash_init/erase/program/read/get_info/erase_chip/deinit`）来自那份源码 |
 | 板级参数（flash 基址/XPI 基址/option0/option1） | SDK 的 `boards/openocd/boards/*.cfg` 里 `flash bank xpi0 hpm_xpi …` 一行 |
 | TAP IDCODE / IR 长度 / work-area | SDK 的 `boards/openocd/soc/*.cfg` |
-| ROM API 表地址 | 各 `soc/<系列>/<型号>/hpm_romapi.h`：**全系都是 `0x2001FF00`** ⇒ 一份 blob 通吃 |
+| ROM API 表地址 | 各 `soc/<系列>/<型号>/hpm_romapi.h`：SDK 所列系列共用 `0x2001FF00`；官方 `hpm_xpi` 驱动实际加载统一算法数组，以运行时参数适配板卡 |
 | JTAG 位序、DMI 流水线、SBA 语义 | akaLinkPro 探针固件 `src/riscv/riscv_jtag.c`（那份在 HPM6800EVK 上跑通过），逐条对齐 |
 | DAP 封包格式 | 探针固件 `src/dap/DAP.c` 的 `DAP_JTAG_Sequence` 实现（照它的字节布局，不照记忆） |
 | output_mode 切换报文 | akaLinkPro 的 `script_test/hpm6800_probe.py set-mode`（照抄 7 个字节） |
@@ -37,7 +37,7 @@
 |---|---|
 | `algo.js` | **自动生成**：flashloader blob（base64）+ 构建时的符号地址 + header 常量 |
 | `entry.js` | 入口表解析：走一遍 `jal` 发现偏移（**步长不是 8 B**，见下） |
-| `chips.js` | 10 块板的参数 + 全系通用常量 + 范围检查（纯函数） |
+| `chips.js` | 兼容导出 + 初始化参数/范围检查；权威参数与钩子在 `app/targets/hpm/porting.js` |
 | `jtag.js` | TAP 动作 / DMI 41 位编码 / 抽象命令 / sbcs 位（TM 位置与固件逐条对齐） |
 | `riscv-dm.js` | `RiscvTransport`：init / halt / waitHalted / 抽象寄存器 / SBA 块读写 / 单字流水读 |
 | `dap-transport.js` | 真机：WebUSB + CMSIS-DAP 的 JTAG 序列封包/解包 |
@@ -131,4 +131,6 @@ pwsh -File tools/target-firmware/hpm_flash_algo/build.ps1   # 或 make hpm-algo
 ```
 
 脚本会编译、**跑机器码级结构自检**（入口表 7 项 + 无"无出口自循环/自递归"）、
-写出 `app/flash/hpm/algo.js`（base64）。改了 SDK 版本或板子后重跑一次即可。
+写出 `app/flash/hpm/algo.js`（base64）。改了 SDK 版本或算法源码后重建；换板卡只更新 porting 参数，不需要按型号重建算法。
+
+移植接口、工作区与 GOT 重定位说明见 [HPM 移植接口](hpm-porting.md)。
