@@ -18,7 +18,7 @@
  *     → CPUID（认内核）→ STM32 DBGMCU DEV_ID（**这个才认得出型号**）→ flash 容量寄存器；
  *   · RISC-V/JTAG：TAP IDCODE（HPM6800 是 0x1000563D）。
  */
-import { Cdp, sleep } from './cdp-lib.mjs';
+import { Cdp, sleep, DEV_RE } from './cdp-lib.mjs';
 
 const argv = process.argv.slice(2);
 const argV = (k, d) => { const h = argv.find(a => a.startsWith('--' + k + '=')); return h ? h.split('=').slice(1).join('=') : d; };
