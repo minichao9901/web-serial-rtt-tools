@@ -103,6 +103,8 @@ test: test-stability test-dbg-features test-board-matrix test-random-flow
 	$(NODE) tools/selftest/dac-protocol.test.mjs
 	$(NODE) tools/selftest/dac-generator.test.mjs
 	$(NODE) tools/selftest/rtt.test.mjs
+	$(NODE) tools/selftest/rtt-campaign-wait.test.mjs
+	$(NODE) tools/selftest/campaign-summary.test.mjs
 	$(NODE) tools/selftest/serial-display.test.mjs
 	$(NODE) tools/selftest/gen-parity.mjs
 	$(NODE) tools/selftest/hid-proto.test.mjs

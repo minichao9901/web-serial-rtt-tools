@@ -31,8 +31,8 @@ let recorded=0;const rec=s.rec;rec.active=true;rec._w={write:async b=>{
   for(let i=0;i<b.length;i++)if(b[i]!==packet[(recorded+i)%packet.length])throw Error('记录字节内容错位');
   recorded+=b.length;
 },close:async()=>{}};
-const packet=enc.encode(('trace eth tcp repeat abcdefghijklmnopqrstuvwxyz 1234567890\\n').repeat(64));
-const n=4096,expected=n*packet.length;
+const packet=enc.encode(('trace eth tcp repeat abcdefghijklmnopqrstuvwxyz 1234567890\\n').repeat(2048)).slice(0,65536);
+const n=256,expected=n*packet.length;
 const ss=new SerialSession();let index=0;ss.isOpen=true;
 ss.port={readable:{getReader:()=>({read:async()=>{if(index++<n)return {value:packet,done:false};ss.isOpen=false;return {done:true};},releaseLock(){}})},close:async()=>{}};
 ss.on('data',(b,timestamp)=>t.session.emit('data',b,timestamp));

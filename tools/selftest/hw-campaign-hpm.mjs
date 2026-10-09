@@ -25,6 +25,7 @@ import path from 'node:path';
 import { findSymbol } from '../../app/rtt/elf.js';
 import { printSummary } from './campaign-summary.mjs';
 import { artifact } from './board-matrix.mjs';
+import { waitForFirstRttData, waitForNextRttPoll } from './rtt-campaign-wait.mjs';
 
 const arg = k => process.argv.find(a => a.startsWith(`--${k}=`));
 const has = k => process.argv.includes(`--${k}`);
@@ -430,50 +431,31 @@ async function rttViewerRiscv(secs, cbAddr){
     try { await cdp.eval(`(async()=>{ const s=window.__tools.scope;
         try{ if (s.running) await s.stop('清理'); }catch(e){}
         try{ await s.transport?.stop?.(); }catch(e){} })()`); } catch {}
-    try { await cdp.eval(`window.__tools.rtt.probe?.recover?.()`); } catch {}
     try { await cdp.eval(`window.__tools.rtt.disconnect()`); } catch {}
     await nap(400);
   };
   await preClean();
+  // Each throughput window starts with the same display history.
+  await cdp.eval(`document.getElementById('r-clear').click()`);
   /**
    * 等**第一次轮询真的跑完**再开始计时。
    *
    * RISC-V 这条路的一次轮询 = 读控制块 + 读整段环（十几条 DAP 命令）；"running 为真"
    * 在首轮**开始**时就成立，不等它就会把启动开销算进 8 s 窗口（甚至 0 次轮询 → 0.0 KB/s）。
    *
-   * 🚨 三级升级（2026-10 现场，每一级都真的踩到过）：
-   *   ① 状态栏报错、`polls` 卡在 1 → `probe.recover()`（清 SBA sticky + 复位 DM）；
-   *   ② 还不动 → `dm.resetRun()`（ndmreset；那条 sticky 只有系统复位才解得开的情形）；
-   *   ③ 报错就**抛**出去，让外层的"清场 + 重连"再走一遍（重连会复位 USB 端口 + 清队列，
-   *      这是"页面自己那套 dmiSpeedProbe 说链路偏慢"时的正解）。
-   * 只等不重连的话，第 2 轮就整轮报废（实测）。
+   * 状态栏也显示成功消息，非空不代表故障。首轮 readUp 仍在进行时
+   * recover()/init() 会重置 TAP，与读指针写入重叠，制造 DMI_INVALID。
+   * 这里只观察；轮询停止报错或超时后，外层先断开再重连。
    */
   const waitFirstPoll = async () => {
-    const t0 = Date.now();
-    const deadline = t0 + 25000;
-    let stage = 0;
-    for (;;){
-      const st = await cdp.evalJson(`({ polls: window.__tools.rtt.stats.polls, bytes: window.__tools.rtt.stats.bytes,
+    return await waitForFirstRttData({
+      pause: nap,
+      readState: () => cdp.evalJson(`({ polls: window.__tools.rtt.stats.polls, bytes: window.__tools.rtt.stats.bytes,
+          running: !!window.__tools.rtt.running,
           err: document.getElementById('r-err').textContent,
-          slow: !!window.__tools.rtt.probe?.health?.slow, health: window.__tools.rtt.probe?.health || null })`);
-      if (st.polls >= 1 && st.bytes > 0) return st;
-      if (st.slow){
-        throw new Error(`链路偏慢（health=${JSON.stringify(st.health)}）—— 需要重开 USB 会话`);
-      }
-      if (stage === 0 && st.err && st.polls <= 1){
-        stage = 1;
-        console.log(`   [RTT Viewer] 首轮卡住（${st.err}）→ 清 SBA 错误 + 复位 DM`);
-        try { await cdp.eval(`window.__tools.rtt.probe?.recover?.()`); } catch {}
-      } else if (stage === 1 && Date.now() - t0 > 6000){
-        stage = 2;
-        console.log('   [RTT Viewer] 还不动 → 系统复位（ndmreset）自愈后再等');
-        try { await cdp.eval(`window.__tools.rtt.probe?.dm?.resetRun?.()`); } catch {}
-      }
-      if (Date.now() > deadline){
-        throw new Error(`RTT Viewer（RISC-V）首轮没跑起来：polls=${st.polls} bytes=${st.bytes} 状态栏=${st.err || '—'}`);
-      }
-      await nap(400);
-    }
+          error: document.getElementById('r-err').classList.contains('err'),
+          slow: !!window.__tools.rtt.probe?.health?.slow, health: window.__tools.rtt.probe?.health || null })`),
+    });
   };
   let lastErr = '';
   for (let attempt = 1; attempt <= 3; attempt++){
@@ -504,23 +486,22 @@ async function rttViewerRiscv(secs, cbAddr){
     }
   }
   if (lastErr) throw new Error('RTT Viewer（RISC-V）连不上（试了 3 次）：' + lastErr);
-  /**
-   * 🚨 还要等**第一次轮询真的跑完**再开始计时。
-   *    RISC-V 这条路的一次轮询 = 读控制块 + 读整段环（十几条 DAP 命令），冷启动时
-   *    还可能夹着 USB 端口复位 / DM 复位（见 riscv-mem.js 的注释）。实测首轮偶发要
-   *    2~8 s，而"running 为真"在首轮**开始**时就成立了 —— 不等它就会把启动开销
-   *    算进 8 s 窗口（甚至 0 次轮询 → 判决 0.0 KB/s）。
-   *    期间如果状态栏报了错、或者排空超过 6 s 还没动，就用页面自己的
-   *    `probe.recover()`（清 SBA 错误 + 复位 DM）救一次，再接着等。
-   */
-  const a = await cdp.evalJson(`({ b: window.__tools.rtt.stats.bytes, p: window.__tools.rtt.stats.polls, t: performance.now() })`);
-  console.log(`   [RTT Viewer] 量速率 ${secs}s…（JTAG TCK 档 ${await cdp.evalJson(`document.getElementById('r-usb-clock')?.value`)}）`);
-  await nap(secs * 1000);
-  const b = await cdp.evalJson(`({ b: window.__tools.rtt.stats.bytes, p: window.__tools.rtt.stats.polls, t: performance.now(),
+  // Align both snapshots with completed polls; ~32 KiB per poll otherwise
+  // introduces several KiB/s of boundary quantization into an 8 s window.
+  const boundary = () => cdp.evalJson(`(${waitForNextRttPoll.toString()})({
+    now: () => performance.now(), pause: ms => new Promise(r => setTimeout(r, ms)),
+    readState: () => ({ bytes: window.__tools.rtt.stats.bytes, polls: window.__tools.rtt.stats.polls,
+      b: window.__tools.rtt.stats.bytes, p: window.__tools.rtt.stats.polls, t: performance.now(),
+      running: !!window.__tools.rtt.running,
       lost: window.__tools.rtt.stats.lost, corrupt: window.__tools.rtt.stats.corrupt,
       rate: document.getElementById('r-rate').textContent, hz: document.getElementById('r-hz').textContent,
       cb: document.getElementById('r-cb').textContent, up: document.getElementById('r-up').textContent,
-      err: document.getElementById('r-err').textContent })`);
+      err: document.getElementById('r-err').textContent })
+  })`);
+  const a = await boundary();
+  console.log(`   [RTT Viewer] 量速率 ${secs}s…（JTAG TCK 档 ${await cdp.evalJson(`document.getElementById('r-usb-clock')?.value`)}）`);
+  await nap(secs * 1000);
+  const b = await boundary();
   const dt = (b.t - a.t) / 1000;
   const kbps = (b.b - a.b) / dt / 1024;
   const out = { bytesPerSec: Math.round((b.b - a.b) / dt), kbps: +kbps.toFixed(1), pollHz: +((b.p - a.p) / dt).toFixed(1),
@@ -529,6 +510,8 @@ async function rttViewerRiscv(secs, cbAddr){
   await nap(500);
   console.log(`   [RTT Viewer] ${kbps.toFixed(1)} KB/s（页面显示 ${out.pageRate} · 轮询 ${out.pollHz} Hz · 控制块 ${out.cb}`
     + ` · 溢出丢 ${out.lost} B · 错位读 ${out.corrupt}）`);
+  // Retain the measurement even when the following assertion stops the cycle.
+  if (report.cycles.length) report.cycles.at(-1).viewer = out;
   judge('RTT Viewer（RISC-V）速率', 'viewerKBps', SPEC.viewerKBps == null || kbps >= SPEC.viewerKBps,
     `${kbps.toFixed(1)} KB/s（轮询 ${out.pollHz} Hz）`, +kbps.toFixed(1));
   judge('RTT Viewer 无错位读', 'viewerCorrupt', SPEC.viewerCorrupt == null || out.corrupt <= SPEC.viewerCorrupt,
@@ -802,6 +785,7 @@ try {
   for (let c = 1; c <= CYCLES; c++){
     console.log(`\n========== 第 ${c}/${CYCLES} 轮 ==========`);
     const rec = { cycle: c };
+    report.cycles.push(rec); // Preserve completed stages if a later stage fails.
     rec.flashFlood = await flash('flood', `flood #${c}`);
     judge('烧 flood 固件耗时', 'flashFloodS', SPEC.flashFloodS == null || rec.flashFlood.ms / 1000 <= SPEC.flashFloodS,
       `${(rec.flashFlood.ms / 1000).toFixed(1)} s`, +(rec.flashFlood.ms / 1000).toFixed(1));
@@ -835,7 +819,6 @@ try {
      *    （F103 那边 3 变量 @20µs 能跑（60 MHz 档 3 span 也有 ~60 kHz 能力），所以那边不用改。）
      */
     rec.j50k3 = await scopeRun({ idxs: picks.three, periodUs: 30, secs: SCOPE_SECS, label: '3 变量 @30µs' });
-    report.cycles.push(rec);
     dump();
   }
 
@@ -864,6 +847,10 @@ await quietProbe();
  */
 console.log('\n================ 汇总 ================');
 for (const r of report.cycles){
+  if (!r.viewer || !r.fwd || !r.j1 || !r.j3 || !r.j50k1 || !r.j50k3){
+    console.log(`第 ${r.cycle} 轮未完成；已完成项目见下表，失败原因见错误列表。`);
+    continue;
+  }
   console.log(`第 ${r.cycle} 轮：烧 flood ${(r.flashFlood.ms / 1000).toFixed(1)}s → RTT Viewer ${(r.viewer?.kbps ?? 0).toFixed(1)} KB/s`
     + ` → 转发 ${r.fwd.rateMB.toFixed(3)} MB/s（探针侧 ${r.fwd.probeRateMB.toFixed(3)}）`
     + ` → 存盘 ${(r.fwd.record.fileBytes / 1048576).toFixed(2)} MB/${r.fwd.record.seconds}s`
@@ -884,14 +871,14 @@ const avgOf = key => {
   return v.length ? v.reduce((a, b) => a + b, 0) / v.length : 0;
 };
 const m = {
-  floodS: avgOf(c => c.flashFlood.ms / 1000),
-  scopeS: avgOf(c => c.flashScope.ms / 1000),
+  floodS: avgOf(c => c.flashFlood?.ms / 1000),
+  scopeS: avgOf(c => c.flashScope?.ms / 1000),
   viewerKBps: avgOf(c => c.viewer?.kbps),
   viewerCorrupt: report.cycles.reduce((s, c) => s + (c.viewer?.corrupt || 0), 0),
-  fwdMBps: avgOf(c => c.fwd.rateMB),
-  j1kHz: avgOf(c => c.j1.rateHz / 1000),
-  j3kHz: avgOf(c => c.j3.rateHz / 1000),
-  recordRatio: avgOf(c => c.fwd.record.ratio),
+  fwdMBps: avgOf(c => c.fwd?.rateMB),
+  j1kHz: avgOf(c => c.j1?.rateHz / 1000),
+  j3kHz: avgOf(c => c.j3?.rateHz / 1000),
+  recordRatio: avgOf(c => c.fwd?.record?.ratio),
 };
 if (RECORD_ONLY || SPEC.fwdMBps == null || SPEC.viewerKBps == null){
   console.log('\n---------- spec 建议（实测均值 × 80%）----------');

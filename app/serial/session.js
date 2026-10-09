@@ -83,15 +83,11 @@ export class SerialSession extends Bus {
       stopBits: Number(opts.stopBits) || 1,
       parity: opts.parity || 'none',
       flowControl: opts.flowControl || 'none',
-      /**
-       * 🚨 **保持 4 KB，别学 2026-10 审查建议提到 64 KB**（我们试过、真机打脸）：
-       *    它的理由是"高速流下读取端慢一拍就 BufferOverrunError"，听着无害，实测在
-       *    RTT→CDC 打流 **2.9 MB/s** 时**把整页冻住**（页面来不及排空大缓冲，用户看到的是
-       *    "打开 CDC 串口"那步超时、像串口/探针坏了）—— 已回退（见 git 历史 743e66e）。
-       *    这里是主机侧读+渲染的路径，缓冲大小不是吞吐杠杆；真要动它，先在真机上按
-       *    `make hw-campaign`（转发 2.9 MB/s + 10 s 存盘）验一轮再说。
-       */
-      bufferSize: 4096,
+      // RTT 是持续的二进制 CDC 流：4 KiB 在页面短暂停顿时会出现缺口。
+      // 64 KiB 已用 HPM 序号/CRC 流和 25 ms 主线程停顿验证；读循环仍须
+      // 每 8 ms 让出事件循环，避免大缓冲持续兑现 read() 时饿死页面。
+      // 其他串口用途沿用原来的接收预算。
+      bufferSize: opts.owner === 'rtt' ? 65536 : 4096,
       owner: opts.owner || '',
     };
     await port.open(o);

@@ -4,14 +4,14 @@ import { createProbeManager } from '../../app/core/probe-users.js';
 const tick=()=>new Promise(r=>setImmediate(r));
 function fakePort(vendorId=0xd28){
  const events=[],port={getInfo:()=>({usbVendorId:vendorId,usbProductId:0x204}),
-  async open(){ events.push('open');this.readable=new ReadableStream();this.writable=new WritableStream({write:async b=>events.push(`tx:${b[0]}`)});},
+  async open(opts){ this.openOptions=opts;events.push('open');this.readable=new ReadableStream();this.writable=new WritableStream({write:async b=>events.push(`tx:${b[0]}`)});},
   async setSignals(){},async close(){events.push('close');this.readable=null;this.writable=null;}};
  return {port,events};
 }
 const session=new SerialSession(),{port,events}=fakePort();
 const hid={last:{running:false},_bridgeRequested:false,async stop(){this.last.running=false;this._bridgeRequested=false;}};
 const scope={running:false}; const tools={session,hid,scope};const manager=createProbeManager(tools,{locks:null});session.probeManager=manager;
-await session.open(port,{owner:'assistant'});assert.deepEqual(manager.summary().owners,['serial']);
+await session.open(port,{owner:'assistant'});assert.equal(port.openOptions.bufferSize,4096);assert.deepEqual(manager.summary().owners,['serial']);
 await session.write(Uint8Array.of(1));assert.ok(events.includes('tx:1'));
 await manager.run('hid',async()=>{hid._bridgeRequested=true;await manager.cdcMode.drainWrites();hid.last.running=true;});
 assert.equal(manager.summary().cdc.mode,'rtt');assert.equal(events.filter(x=>x==='open').length,1,'RTT changes producer without reopening the shared receiver');
@@ -25,7 +25,7 @@ await assert.rejects(session.open(port,{owner:'rtt'}),/CDC/);assert.ok(scope.run
 manager.fail('scope',new Error('STOP unknown'));
 await assert.rejects(session.open(port,{owner:'rtt'}),/释放尚未确认/);
 scope._cdcPausedRequested=false;manager.confirm('scope');manager.narrow('scope');
-await session.open(port,{owner:'rtt'});assert.ok(session.isOpen,'confirmed STOP releases only the optional CDC pause resource');
+await session.open(port,{owner:'rtt'});assert.equal(port.openOptions.bufferSize,65536);assert.ok(session.isOpen,'confirmed STOP releases only the optional CDC pause resource');
 assert.deepEqual(manager.summary().owners,['scope','serial']);await session.close();manager.forget('scope');
 // An unrelated USB-UART adapter does not participate in probe arbitration.
 const other=fakePort(0x1234);scope.running=true;scope._cdcPausedRequested=true;

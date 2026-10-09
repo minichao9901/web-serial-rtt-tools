@@ -1,0 +1,5452 @@
+{
+  "date": "2026-10-09/10",
+  "webBase": "e38b1ab",
+  "oldWeb": "008e154",
+  "probeBase": "2df2d39",
+  "oldProbeSource": "ecebd8a",
+  "oldProbeIsRebuild": true,
+  "finalProbeBuild": "2026/10/09 23:26:06",
+  "finalProbePackedSha256": "17BE279D3CFAE9DDBC666587A852F436652004F11FA4D541A93A375537FEBCBE",
+  "scopeElfSha256": "E5124CA35A872C2C54F210DF99C5CFC3CA7A0D8F6A64F1CFA29A907AEB9B73A9",
+  "matrices": {
+    "hss-current": {
+      "rate": {
+        "startedAt": "2026-10-09T14:56:55.747Z",
+        "seconds": 8,
+        "contract": "g_v.u_hi",
+        "rows": [
+          {
+            "cfg": {
+              "period": 2,
+              "draw": true,
+              "adaptive": true
+            },
+            "calibration": {
+              "readUs": 3.012875,
+              "recommendedUs": 5,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.008091125,
+              "produced": 2380030,
+              "skipped": 1624017,
+              "usb": 0,
+              "errors": 0,
+              "yields": 0,
+              "received": 2378692,
+              "probeHz": 297203.16150872974,
+              "webHz": 297043.1698695325,
+              "dropPercent": 40.55938903814066,
+              "maxMainThreadLagMs": 12.900000005960464
+            },
+            "checked": 2571760,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 0,
+            "hiPhaseBudget": 2,
+            "phaseSkewCounts": {},
+            "readAhead": {
+              "depth": 16,
+              "bytes": 8192
+            }
+          },
+          {
+            "cfg": {
+              "period": 3.25,
+              "draw": true,
+              "adaptive": true
+            },
+            "calibration": {
+              "readUs": 3.012875,
+              "recommendedUs": 5,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.008091708333334,
+              "produced": 2396505,
+              "skipped": 67523,
+              "usb": 0,
+              "errors": 0,
+              "yields": 0,
+              "received": 2396424,
+              "probeHz": 299260.4339815643,
+              "webHz": 299246.2725710606,
+              "dropPercent": 2.7403503531615714,
+              "maxMainThreadLagMs": 6.300000011920929
+            },
+            "checked": 2585400,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 0,
+            "hiPhaseBudget": 2,
+            "phaseSkewCounts": {},
+            "readAhead": {
+              "depth": 13,
+              "bytes": 8192
+            }
+          },
+          {
+            "cfg": {
+              "period": 4,
+              "draw": true,
+              "adaptive": true
+            },
+            "calibration": {
+              "readUs": 3.012875,
+              "recommendedUs": 5,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.00809125,
+              "produced": 1984569,
+              "skipped": 12468,
+              "usb": 0,
+              "errors": 0,
+              "yields": 4763,
+              "received": 1984248,
+              "probeHz": 247820.47781985503,
+              "webHz": 247780.12262602575,
+              "dropPercent": 0.6243249373947504,
+              "maxMainThreadLagMs": 7
+            },
+            "checked": 2139496,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 0,
+            "hiPhaseBudget": 2,
+            "phaseSkewCounts": {},
+            "readAhead": {
+              "depth": 11,
+              "bytes": 8192
+            }
+          },
+          {
+            "cfg": {
+              "period": 5,
+              "draw": true,
+              "adaptive": true
+            },
+            "calibration": {
+              "readUs": 3.012875,
+              "recommendedUs": 5,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.012090541666666,
+              "produced": 1602228,
+              "skipped": 190,
+              "usb": 0,
+              "errors": 0,
+              "yields": 0,
+              "received": 1601460,
+              "probeHz": 199976.27231839873,
+              "webHz": 199877.6865283421,
+              "dropPercent": 0.011857080986359365,
+              "maxMainThreadLagMs": 9.700000017881393
+            },
+            "checked": 1729304,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 0,
+            "hiPhaseBudget": 2,
+            "phaseSkewCounts": {},
+            "readAhead": {
+              "depth": 9,
+              "bytes": 8192
+            }
+          },
+          {
+            "cfg": {
+              "period": 6,
+              "draw": true,
+              "adaptive": true
+            },
+            "calibration": {
+              "readUs": 3.012875,
+              "recommendedUs": 5,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.0120905,
+              "produced": 1335342,
+              "skipped": 7,
+              "usb": 0,
+              "errors": 0,
+              "yields": 0,
+              "received": 1335852,
+              "probeHz": 166665.86579370266,
+              "webHz": 166725.16006614987,
+              "dropPercent": 0.0005242075292676297,
+              "maxMainThreadLagMs": 10.900000005960464
+            },
+            "checked": 1440384,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 0,
+            "hiPhaseBudget": 2,
+            "phaseSkewCounts": {},
+            "readAhead": {
+              "depth": 7,
+              "bytes": 8192
+            }
+          },
+          {
+            "cfg": {
+              "period": 10,
+              "draw": true,
+              "adaptive": true
+            },
+            "calibration": {
+              "readUs": 3.012875,
+              "recommendedUs": 5,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.008091708333334,
+              "produced": 800809,
+              "skipped": 0,
+              "usb": 0,
+              "errors": 0,
+              "yields": 0,
+              "received": 800792,
+              "probeHz": 99999.97866741047,
+              "webHz": 99997.75227589517,
+              "dropPercent": 0,
+              "maxMainThreadLagMs": 12.400000005960464
+            },
+            "checked": 864528,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 0,
+            "hiPhaseBudget": 2,
+            "phaseSkewCounts": {},
+            "readAhead": {
+              "depth": 6,
+              "bytes": 8192
+            }
+          },
+          {
+            "cfg": {
+              "period": 3.25,
+              "draw": true,
+              "adaptive": true,
+              "batch": false
+            },
+            "calibration": {
+              "readUs": 3.0064583333333337,
+              "recommendedUs": 5,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.012090791666667,
+              "produced": 2205110,
+              "skipped": 260150,
+              "usb": 0,
+              "errors": 0,
+              "yields": 0,
+              "received": 2204968,
+              "probeHz": 275222.7923195183,
+              "webHz": 275201.31798945094,
+              "dropPercent": 10.552639478188913,
+              "maxMainThreadLagMs": 6.4000000059604645
+            },
+            "checked": 2380552,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 0,
+            "hiPhaseBudget": 2,
+            "phaseSkewCounts": {},
+            "readAhead": {
+              "depth": 13,
+              "bytes": 8192
+            }
+          },
+          {
+            "cfg": {
+              "period": 40,
+              "draw": true,
+              "adaptive": false,
+              "vars": [
+                "g_v.tick",
+                "g_v.u_hi",
+                "g_v.f_sin",
+                "g_v.f_tri",
+                "g_v.i_sq1k",
+                "g_v.i_sq5k",
+                "g_v.u_ramp",
+                "g_v.lfsr"
+              ],
+              "stallMs": 25
+            },
+            "calibration": {
+              "readUs": 31.080916666666667,
+              "recommendedUs": 47,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.032091291666667,
+              "produced": 197997,
+              "skipped": 0,
+              "usb": 2805,
+              "errors": 0,
+              "yields": 0,
+              "received": 197970,
+              "probeHz": 24650.740736154585,
+              "webHz": 24647.966234621083,
+              "dropPercent": 1.396898437266561,
+              "maxMainThreadLagMs": 5.4000000059604645
+            },
+            "checked": 213870,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 0,
+            "hiPhaseBudget": 8,
+            "phaseSkewCounts": {},
+            "readAhead": {
+              "depth": 3,
+              "bytes": 4096
+            }
+          },
+          {
+            "cfg": {
+              "period": 40,
+              "draw": true,
+              "adaptive": true,
+              "vars": [
+                "g_v.tick",
+                "g_v.u_hi",
+                "g_v.f_sin",
+                "g_v.f_tri",
+                "g_v.i_sq1k",
+                "g_v.i_sq5k",
+                "g_v.u_ramp",
+                "g_v.lfsr"
+              ],
+              "stallMs": 25
+            },
+            "calibration": {
+              "readUs": 31.0749375,
+              "recommendedUs": 47,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.04009075,
+              "produced": 201002,
+              "skipped": 0,
+              "usb": 0,
+              "errors": 0,
+              "yields": 0,
+              "received": 201045,
+              "probeHz": 24999.96657376038,
+              "webHz": 25004.975000566264,
+              "dropPercent": 0,
+              "maxMainThreadLagMs": 8.800000011920929
+            },
+            "checked": 216810,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 0,
+            "hiPhaseBudget": 8,
+            "phaseSkewCounts": {},
+            "readAhead": {
+              "depth": 9,
+              "bytes": 8192
+            }
+          },
+          {
+            "cfg": {
+              "period": 40,
+              "draw": true,
+              "adaptive": true,
+              "vars": [
+                "g_v.tick",
+                "g_v.u_hi",
+                "g_v.f_sin",
+                "g_v.f_tri",
+                "g_v.i_sq1k",
+                "g_v.i_sq5k",
+                "g_v.u_ramp",
+                "g_v.lfsr"
+              ]
+            },
+            "calibration": {
+              "readUs": 31.073729166666666,
+              "recommendedUs": 47,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.008089291666666,
+              "produced": 200202,
+              "skipped": 0,
+              "usb": 0,
+              "errors": 0,
+              "yields": 0,
+              "received": 200100,
+              "probeHz": 24999.970992872557,
+              "webHz": 24986.264422430915,
+              "dropPercent": 0,
+              "maxMainThreadLagMs": 9
+            },
+            "checked": 215865,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 0,
+            "hiPhaseBudget": 8,
+            "phaseSkewCounts": {},
+            "readAhead": {
+              "depth": 9,
+              "bytes": 8192
+            }
+          },
+          {
+            "cfg": {
+              "period": 47,
+              "draw": true,
+              "adaptive": true,
+              "vars": [
+                "g_v.tick",
+                "g_v.u_hi",
+                "g_v.f_sin",
+                "g_v.f_tri",
+                "g_v.i_sq1k",
+                "g_v.i_sq5k",
+                "g_v.u_ramp",
+                "g_v.lfsr"
+              ]
+            },
+            "calibration": {
+              "readUs": 31.06175,
+              "recommendedUs": 47,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.01208925,
+              "produced": 170470,
+              "skipped": 0,
+              "usb": 0,
+              "errors": 0,
+              "yields": 0,
+              "received": 170580,
+              "probeHz": 21276.597736351974,
+              "webHz": 21290.032700084783,
+              "dropPercent": 0,
+              "maxMainThreadLagMs": 9.299999982118607
+            },
+            "checked": 183930,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 0,
+            "hiPhaseBudget": 8,
+            "phaseSkewCounts": {},
+            "readAhead": {
+              "depth": 8,
+              "bytes": 8192
+            }
+          },
+          {
+            "cfg": {
+              "period": 60,
+              "draw": true,
+              "adaptive": true,
+              "vars": [
+                "g_v.tick",
+                "g_v.u_hi",
+                "g_v.f_sin",
+                "g_v.f_tri",
+                "g_v.i_sq1k",
+                "g_v.i_sq5k",
+                "g_v.u_ramp",
+                "g_v.lfsr"
+              ]
+            },
+            "calibration": {
+              "readUs": 31.06279166666667,
+              "recommendedUs": 47,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.020088958333334,
+              "produced": 133668,
+              "skipped": 0,
+              "usb": 0,
+              "errors": 0,
+              "yields": 0,
+              "received": 133725,
+              "probeHz": 16666.64805022035,
+              "webHz": 16673.316459521233,
+              "dropPercent": 0,
+              "maxMainThreadLagMs": 11.799999982118607
+            },
+            "checked": 144300,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 0,
+            "hiPhaseBudget": 8,
+            "phaseSkewCounts": {},
+            "readAhead": {
+              "depth": 6,
+              "bytes": 8192
+            }
+          }
+        ]
+      },
+      "smooth": {
+        "startedAt": "2026-10-09T14:58:50.369Z",
+        "seconds": 8,
+        "contract": "g_v_hi.tick",
+        "rows": [
+          {
+            "cfg": {
+              "period": 2,
+              "draw": true,
+              "adaptive": true
+            },
+            "calibration": {
+              "readUs": 3.0094791666666665,
+              "recommendedUs": 5,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.008088541666666,
+              "produced": 2389412,
+              "skipped": 1614633,
+              "usb": 0,
+              "errors": 0,
+              "yields": 0,
+              "received": 2388612,
+              "probeHz": 298374.82285163505,
+              "webHz": 298267.04793732055,
+              "dropPercent": 40.32504629693223,
+              "maxMainThreadLagMs": 6.9000000059604645
+            },
+            "checked": 2577836,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 0,
+            "hiPhaseBudget": 2,
+            "phaseSkewCounts": {},
+            "readAhead": {
+              "depth": 16,
+              "bytes": 8192
+            }
+          },
+          {
+            "cfg": {
+              "period": 20,
+              "draw": true,
+              "adaptive": true,
+              "vars": [
+                "g_v_hi.tick",
+                "g_v_hi.f_sin"
+              ]
+            },
+            "calibration": {
+              "readUs": 15.810875,
+              "recommendedUs": 24,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.008088791666667,
+              "produced": 400405,
+              "skipped": 0,
+              "usb": 0,
+              "errors": 0,
+              "yields": 0,
+              "received": 400396,
+              "probeHz": 50000.06998132529,
+              "webHz": 49997.62746162032,
+              "dropPercent": 0,
+              "maxMainThreadLagMs": 12.699999988079071
+            },
+            "checked": 432078,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 0,
+            "hiPhaseBudget": 5,
+            "phaseSkewCounts": {
+              "0": 2369,
+              "1": 423428,
+              "2": 4325,
+              "-1": 1956
+            },
+            "readAhead": {
+              "depth": 6,
+              "bytes": 8192
+            }
+          },
+          {
+            "cfg": {
+              "period": 25,
+              "draw": true,
+              "adaptive": true,
+              "vars": [
+                "g_v_hi.tick",
+                "g_v_hi.f_sin"
+              ]
+            },
+            "calibration": {
+              "readUs": 15.810104166666665,
+              "recommendedUs": 24,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.008089375,
+              "produced": 320324,
+              "skipped": 0,
+              "usb": 0,
+              "errors": 0,
+              "yields": 0,
+              "received": 320292,
+              "probeHz": 40000.05307133575,
+              "webHz": 39995.005182064015,
+              "dropPercent": 0,
+              "maxMainThreadLagMs": 10.400000005960464
+            },
+            "checked": 345588,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 1,
+            "hiPhaseBudget": 5,
+            "phaseSkewCounts": {
+              "0": 1809,
+              "1": 336048,
+              "2": 6176,
+              "3": 1,
+              "-1": 1554
+            },
+            "readAhead": {
+              "depth": 3,
+              "bytes": 4096
+            }
+          }
+        ]
+      }
+    },
+    "hss-old-probe": {
+      "rate": {
+        "startedAt": "2026-10-09T15:13:44.390Z",
+        "seconds": 8,
+        "contract": "g_v.u_hi",
+        "rows": [
+          {
+            "cfg": {
+              "period": 2,
+              "draw": true,
+              "adaptive": true
+            },
+            "calibration": {
+              "readUs": 2.9644375,
+              "recommendedUs": 5,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.008091375,
+              "produced": 2436419,
+              "skipped": 1567628,
+              "usb": 0,
+              "errors": 0,
+              "yields": 0,
+              "received": 2435360,
+              "probeHz": 304244.6553002775,
+              "webHz": 304108.2890030921,
+              "dropPercent": 39.151088885819775,
+              "maxMainThreadLagMs": 2
+            },
+            "checked": 2628676,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 0,
+            "hiPhaseBudget": 2,
+            "phaseSkewCounts": {},
+            "readAhead": {
+              "depth": 16,
+              "bytes": 8192
+            }
+          },
+          {
+            "cfg": {
+              "period": 3.25,
+              "draw": true,
+              "adaptive": true
+            },
+            "calibration": {
+              "readUs": 2.9644375,
+              "recommendedUs": 5,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.008090083333334,
+              "produced": 2422253,
+              "skipped": 41775,
+              "usb": 0,
+              "errors": 0,
+              "yields": 0,
+              "received": 2421720,
+              "probeHz": 302475.74325384555,
+              "webHz": 302405.03483973985,
+              "dropPercent": 1.695394695190152,
+              "maxMainThreadLagMs": 1.800000011920929
+            },
+            "checked": 2614664,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 0,
+            "hiPhaseBudget": 2,
+            "phaseSkewCounts": {},
+            "readAhead": {
+              "depth": 13,
+              "bytes": 8192
+            }
+          },
+          {
+            "cfg": {
+              "period": 4,
+              "draw": true,
+              "adaptive": true
+            },
+            "calibration": {
+              "readUs": 2.9644375,
+              "recommendedUs": 5,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.008089791666666,
+              "produced": 1998166,
+              "skipped": 3856,
+              "usb": 0,
+              "errors": 0,
+              "yields": 0,
+              "received": 1998012,
+              "probeHz": 249518.4309845427,
+              "webHz": 249495.76683843293,
+              "dropPercent": 0.19260527606589736,
+              "maxMainThreadLagMs": 2
+            },
+            "checked": 2155120,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 0,
+            "hiPhaseBudget": 2,
+            "phaseSkewCounts": {},
+            "readAhead": {
+              "depth": 11,
+              "bytes": 8192
+            }
+          },
+          {
+            "cfg": {
+              "period": 5,
+              "draw": true,
+              "adaptive": true
+            },
+            "calibration": {
+              "readUs": 2.9644375,
+              "recommendedUs": 5,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.0080895,
+              "produced": 1601576,
+              "skipped": 42,
+              "usb": 0,
+              "errors": 0,
+              "yields": 0,
+              "received": 1601460,
+              "probeHz": 199994.76779074458,
+              "webHz": 199977.52303918282,
+              "dropPercent": 0.002622348150432875,
+              "maxMainThreadLagMs": 1.800000011920929
+            },
+            "checked": 1727320,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 0,
+            "hiPhaseBudget": 2,
+            "phaseSkewCounts": {},
+            "readAhead": {
+              "depth": 9,
+              "bytes": 8192
+            }
+          },
+          {
+            "cfg": {
+              "period": 6,
+              "draw": true,
+              "adaptive": true
+            },
+            "calibration": {
+              "readUs": 2.9644375,
+              "recommendedUs": 5,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.008088458333333,
+              "produced": 1334666,
+              "skipped": 15,
+              "usb": 0,
+              "errors": 0,
+              "yields": 0,
+              "received": 1335852,
+              "probeHz": 166664.74239693585,
+              "webHz": 166808.436247145,
+              "dropPercent": 0.001123864054407008,
+              "maxMainThreadLagMs": 1.9000000059604645
+            },
+            "checked": 1440632,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 0,
+            "hiPhaseBudget": 2,
+            "phaseSkewCounts": {},
+            "readAhead": {
+              "depth": 7,
+              "bytes": 8192
+            }
+          },
+          {
+            "cfg": {
+              "period": 10,
+              "draw": true,
+              "adaptive": true
+            },
+            "calibration": {
+              "readUs": 2.9644375,
+              "recommendedUs": 5,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.008089,
+              "produced": 800806,
+              "skipped": 3,
+              "usb": 0,
+              "errors": 0,
+              "yields": 0,
+              "received": 800792,
+              "probeHz": 99999.63786616258,
+              "webHz": 99996.50358397543,
+              "dropPercent": 0.00037462116434755353,
+              "maxMainThreadLagMs": 11.199999988079071
+            },
+            "checked": 864776,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 0,
+            "hiPhaseBudget": 2,
+            "phaseSkewCounts": {},
+            "readAhead": {
+              "depth": 6,
+              "bytes": 8192
+            }
+          },
+          {
+            "cfg": {
+              "period": 3.25,
+              "draw": true,
+              "adaptive": true,
+              "batch": false
+            },
+            "calibration": {
+              "readUs": 2.9589166666666666,
+              "recommendedUs": 5,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.008090125,
+              "produced": 2309548,
+              "skipped": 154479,
+              "usb": 0,
+              "errors": 0,
+              "yields": 0,
+              "received": 2308508,
+              "probeHz": 288401.84912379464,
+              "webHz": 288268.0252734504,
+              "dropPercent": 6.269371236597651,
+              "maxMainThreadLagMs": 3.7000000178813934
+            },
+            "checked": 2491780,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 0,
+            "hiPhaseBudget": 2,
+            "phaseSkewCounts": {},
+            "readAhead": {
+              "depth": 13,
+              "bytes": 8192
+            }
+          },
+          {
+            "cfg": {
+              "period": 40,
+              "draw": true,
+              "adaptive": false,
+              "vars": [
+                "g_v.tick",
+                "g_v.u_hi",
+                "g_v.f_sin",
+                "g_v.f_tri",
+                "g_v.i_sq1k",
+                "g_v.i_sq5k",
+                "g_v.u_ramp",
+                "g_v.lfsr"
+              ],
+              "stallMs": 25
+            },
+            "calibration": {
+              "readUs": 31.0515,
+              "recommendedUs": 47,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.032090166666666,
+              "produced": 197365,
+              "skipped": 0,
+              "usb": 3437,
+              "errors": 0,
+              "yields": 0,
+              "received": 197385,
+              "probeHz": 24572.059813156564,
+              "webHz": 24573.907847122173,
+              "dropPercent": 1.7116363382834832,
+              "maxMainThreadLagMs": 5.4000000059604645
+            },
+            "checked": 213330,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 0,
+            "hiPhaseBudget": 8,
+            "phaseSkewCounts": {},
+            "readAhead": {
+              "depth": 3,
+              "bytes": 4096
+            }
+          },
+          {
+            "cfg": {
+              "period": 40,
+              "draw": true,
+              "adaptive": true,
+              "vars": [
+                "g_v.tick",
+                "g_v.u_hi",
+                "g_v.f_sin",
+                "g_v.f_tri",
+                "g_v.i_sq1k",
+                "g_v.i_sq5k",
+                "g_v.u_ramp",
+                "g_v.lfsr"
+              ],
+              "stallMs": 25
+            },
+            "calibration": {
+              "readUs": 31.0456875,
+              "recommendedUs": 47,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.032089166666667,
+              "produced": 200802,
+              "skipped": 0,
+              "usb": 0,
+              "errors": 0,
+              "yields": 0,
+              "received": 200805,
+              "probeHz": 24999.97146861023,
+              "webHz": 25000.311251123494,
+              "dropPercent": 0,
+              "maxMainThreadLagMs": 5.5999999940395355
+            },
+            "checked": 216555,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 0,
+            "hiPhaseBudget": 8,
+            "phaseSkewCounts": {},
+            "readAhead": {
+              "depth": 9,
+              "bytes": 8192
+            }
+          },
+          {
+            "cfg": {
+              "period": 40,
+              "draw": true,
+              "adaptive": true,
+              "vars": [
+                "g_v.tick",
+                "g_v.u_hi",
+                "g_v.f_sin",
+                "g_v.f_tri",
+                "g_v.i_sq1k",
+                "g_v.i_sq5k",
+                "g_v.u_ramp",
+                "g_v.lfsr"
+              ]
+            },
+            "calibration": {
+              "readUs": 31.045625,
+              "recommendedUs": 47,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.008088833333334,
+              "produced": 200202,
+              "skipped": 0,
+              "usb": 0,
+              "errors": 0,
+              "yields": 0,
+              "received": 200340,
+              "probeHz": 24999.972423715826,
+              "webHz": 25017.170115276924,
+              "dropPercent": 0,
+              "maxMainThreadLagMs": 1.800000011920929
+            },
+            "checked": 216060,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 0,
+            "hiPhaseBudget": 8,
+            "phaseSkewCounts": {},
+            "readAhead": {
+              "depth": 9,
+              "bytes": 8192
+            }
+          },
+          {
+            "cfg": {
+              "period": 47,
+              "draw": true,
+              "adaptive": true,
+              "vars": [
+                "g_v.tick",
+                "g_v.u_hi",
+                "g_v.f_sin",
+                "g_v.f_tri",
+                "g_v.i_sq1k",
+                "g_v.i_sq5k",
+                "g_v.u_ramp",
+                "g_v.lfsr"
+              ]
+            },
+            "calibration": {
+              "readUs": 31.04660416666667,
+              "recommendedUs": 47,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.008089333333333,
+              "produced": 170385,
+              "skipped": 0,
+              "usb": 0,
+              "errors": 0,
+              "yields": 0,
+              "received": 170340,
+              "probeHz": 21276.610800379018,
+              "webHz": 21270.963149747487,
+              "dropPercent": 0,
+              "maxMainThreadLagMs": 1.9000000059604645
+            },
+            "checked": 183690,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 0,
+            "hiPhaseBudget": 8,
+            "phaseSkewCounts": {},
+            "readAhead": {
+              "depth": 8,
+              "bytes": 8192
+            }
+          },
+          {
+            "cfg": {
+              "period": 60,
+              "draw": true,
+              "adaptive": true,
+              "vars": [
+                "g_v.tick",
+                "g_v.u_hi",
+                "g_v.f_sin",
+                "g_v.f_tri",
+                "g_v.i_sq1k",
+                "g_v.i_sq5k",
+                "g_v.u_ramp",
+                "g_v.lfsr"
+              ]
+            },
+            "calibration": {
+              "readUs": 31.045125,
+              "recommendedUs": 47,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.008086208333333,
+              "produced": 133468,
+              "skipped": 0,
+              "usb": 0,
+              "errors": 0,
+              "yields": 0,
+              "received": 133485,
+              "probeHz": 16666.65374569909,
+              "webHz": 16669.164200339743,
+              "dropPercent": 0,
+              "maxMainThreadLagMs": 4.100000023841858
+            },
+            "checked": 144075,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 0,
+            "hiPhaseBudget": 8,
+            "phaseSkewCounts": {},
+            "readAhead": {
+              "depth": 6,
+              "bytes": 8192
+            }
+          }
+        ]
+      },
+      "smooth": {
+        "startedAt": "2026-10-09T15:15:38.931Z",
+        "seconds": 8,
+        "contract": "g_v_hi.tick",
+        "rows": [
+          {
+            "cfg": {
+              "period": 2,
+              "draw": true,
+              "adaptive": true
+            },
+            "calibration": {
+              "readUs": 2.9659583333333335,
+              "recommendedUs": 5,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.008089166666666,
+              "produced": 2444340,
+              "skipped": 1559706,
+              "usb": 0,
+              "errors": 0,
+              "yields": 0,
+              "received": 2443172,
+              "probeHz": 305233.86405017343,
+              "webHz": 305087.59880530037,
+              "dropPercent": 38.953248788850075,
+              "maxMainThreadLagMs": 1.7999999821186066
+            },
+            "checked": 2638100,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 0,
+            "hiPhaseBudget": 2,
+            "phaseSkewCounts": {},
+            "readAhead": {
+              "depth": 16,
+              "bytes": 8192
+            }
+          },
+          {
+            "cfg": {
+              "period": 20,
+              "draw": true,
+              "adaptive": true,
+              "vars": [
+                "g_v_hi.tick",
+                "g_v_hi.f_sin"
+              ]
+            },
+            "calibration": {
+              "readUs": 15.790979166666666,
+              "recommendedUs": 24,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.008089458333334,
+              "produced": 400404,
+              "skipped": 0,
+              "usb": 0,
+              "errors": 0,
+              "yields": 0,
+              "received": 400396,
+              "probeHz": 49999.9409451319,
+              "webHz": 49998.251791987714,
+              "dropPercent": 0,
+              "maxMainThreadLagMs": 1.600000023841858
+            },
+            "checked": 432202,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 3,
+            "hiPhaseBudget": 5,
+            "phaseSkewCounts": {
+              "0": 3790,
+              "1": 421787,
+              "2": 4659,
+              "3": 1,
+              "4": 2,
+              "-1": 1963
+            },
+            "readAhead": {
+              "depth": 6,
+              "bytes": 8192
+            }
+          },
+          {
+            "cfg": {
+              "period": 25,
+              "draw": true,
+              "adaptive": true,
+              "vars": [
+                "g_v_hi.tick",
+                "g_v_hi.f_sin"
+              ]
+            },
+            "calibration": {
+              "readUs": 15.7859375,
+              "recommendedUs": 24,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.008087666666666,
+              "produced": 320324,
+              "skipped": 0,
+              "usb": 0,
+              "errors": 0,
+              "yields": 0,
+              "received": 320292,
+              "probeHz": 40000.0616043872,
+              "webHz": 39995.50460768772,
+              "dropPercent": 0,
+              "maxMainThreadLagMs": 1.5999999940395355
+            },
+            "checked": 346022,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 1,
+            "hiPhaseBudget": 5,
+            "phaseSkewCounts": {
+              "0": 3426,
+              "1": 336497,
+              "2": 4563,
+              "4": 1,
+              "-1": 1535
+            },
+            "readAhead": {
+              "depth": 3,
+              "bytes": 4096
+            }
+          }
+        ]
+      }
+    },
+    "hss-final": {
+      "rate": {
+        "startedAt": "2026-10-09T15:27:12.436Z",
+        "seconds": 8,
+        "contract": "g_v.u_hi",
+        "rows": [
+          {
+            "cfg": {
+              "period": 2,
+              "draw": true,
+              "adaptive": true
+            },
+            "calibration": {
+              "readUs": 2.9890625,
+              "recommendedUs": 5,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.008093375,
+              "produced": 2417519,
+              "skipped": 1586530,
+              "usb": 0,
+              "errors": 0,
+              "yields": 0,
+              "received": 2417876,
+              "probeHz": 301884.46697526175,
+              "webHz": 301925.0268479308,
+              "dropPercent": 39.62314147504189,
+              "maxMainThreadLagMs": 2.5
+            },
+            "checked": 2608340,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 0,
+            "hiPhaseBudget": 2,
+            "phaseSkewCounts": {},
+            "readAhead": {
+              "depth": 16,
+              "bytes": 8192
+            }
+          },
+          {
+            "cfg": {
+              "period": 3.25,
+              "draw": true,
+              "adaptive": true
+            },
+            "calibration": {
+              "readUs": 2.9890625,
+              "recommendedUs": 5,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.008094875,
+              "produced": 2424303,
+              "skipped": 39727,
+              "usb": 0,
+              "errors": 0,
+              "yields": 0,
+              "received": 2425688,
+              "probeHz": 302731.5532397461,
+              "webHz": 302908.0919080919,
+              "dropPercent": 1.6122774479206827,
+              "maxMainThreadLagMs": 2.7000000178813934
+            },
+            "checked": 2616524,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 0,
+            "hiPhaseBudget": 2,
+            "phaseSkewCounts": {},
+            "readAhead": {
+              "depth": 13,
+              "bytes": 8192
+            }
+          },
+          {
+            "cfg": {
+              "period": 4,
+              "draw": true,
+              "adaptive": true
+            },
+            "calibration": {
+              "readUs": 2.9890625,
+              "recommendedUs": 5,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.008093125,
+              "produced": 1998165,
+              "skipped": 3858,
+              "usb": 0,
+              "errors": 0,
+              "yields": 0,
+              "received": 1998012,
+              "probeHz": 249518.202249927,
+              "webHz": 249495.76683843293,
+              "dropPercent": 0.19270507881278087,
+              "maxMainThreadLagMs": 1.9000000059604645
+            },
+            "checked": 2155120,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 0,
+            "hiPhaseBudget": 2,
+            "phaseSkewCounts": {},
+            "readAhead": {
+              "depth": 11,
+              "bytes": 8192
+            }
+          },
+          {
+            "cfg": {
+              "period": 5,
+              "draw": true,
+              "adaptive": true
+            },
+            "calibration": {
+              "readUs": 2.9890625,
+              "recommendedUs": 5,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.008092291666667,
+              "produced": 1601580,
+              "skipped": 39,
+              "usb": 0,
+              "errors": 0,
+              "yields": 0,
+              "received": 1601460,
+              "probeHz": 199995.19756617022,
+              "webHz": 199980.02022966646,
+              "dropPercent": 0.002435036047899032,
+              "maxMainThreadLagMs": 1.800000011920929
+            },
+            "checked": 1726328,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 0,
+            "hiPhaseBudget": 2,
+            "phaseSkewCounts": {},
+            "readAhead": {
+              "depth": 9,
+              "bytes": 8192
+            }
+          },
+          {
+            "cfg": {
+              "period": 6,
+              "draw": true,
+              "adaptive": true
+            },
+            "calibration": {
+              "readUs": 2.9890625,
+              "recommendedUs": 5,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.008091583333334,
+              "produced": 1334676,
+              "skipped": 6,
+              "usb": 0,
+              "errors": 0,
+              "yields": 0,
+              "received": 1335852,
+              "probeHz": 166665.9260962706,
+              "webHz": 166810.5192180501,
+              "dropPercent": 0.00044954528494427887,
+              "maxMainThreadLagMs": 1.7000000178813934
+            },
+            "checked": 1442368,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 0,
+            "hiPhaseBudget": 2,
+            "phaseSkewCounts": {},
+            "readAhead": {
+              "depth": 7,
+              "bytes": 8192
+            }
+          },
+          {
+            "cfg": {
+              "period": 10,
+              "draw": true,
+              "adaptive": true
+            },
+            "calibration": {
+              "readUs": 2.9890625,
+              "recommendedUs": 5,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.008090791666667,
+              "produced": 800808,
+              "skipped": 1,
+              "usb": 0,
+              "errors": 0,
+              "yields": 0,
+              "received": 800792,
+              "probeHz": 99999.86524045558,
+              "webHz": 99996.5035836033,
+              "dropPercent": 0.0001248737214491845,
+              "maxMainThreadLagMs": 1.7000000178813934
+            },
+            "checked": 864528,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 0,
+            "hiPhaseBudget": 2,
+            "phaseSkewCounts": {},
+            "readAhead": {
+              "depth": 6,
+              "bytes": 8192
+            }
+          },
+          {
+            "cfg": {
+              "period": 3.25,
+              "draw": true,
+              "adaptive": true,
+              "batch": false
+            },
+            "calibration": {
+              "readUs": 3.0023125,
+              "recommendedUs": 5,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.008090291666667,
+              "produced": 2265998,
+              "skipped": 198032,
+              "usb": 0,
+              "errors": 0,
+              "yields": 0,
+              "received": 2265480,
+              "probeHz": 282963.59275045013,
+              "webHz": 282895.0325920147,
+              "dropPercent": 8.03691513496183,
+              "maxMainThreadLagMs": 1.9000000059604645
+            },
+            "checked": 2445032,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 0,
+            "hiPhaseBudget": 2,
+            "phaseSkewCounts": {},
+            "readAhead": {
+              "depth": 13,
+              "bytes": 8192
+            }
+          },
+          {
+            "cfg": {
+              "period": 40,
+              "draw": true,
+              "adaptive": false,
+              "vars": [
+                "g_v.tick",
+                "g_v.u_hi",
+                "g_v.f_sin",
+                "g_v.f_tri",
+                "g_v.i_sq1k",
+                "g_v.i_sq5k",
+                "g_v.u_ramp",
+                "g_v.lfsr"
+              ],
+              "stallMs": 25
+            },
+            "calibration": {
+              "readUs": 31.10772916666667,
+              "recommendedUs": 47,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.032091291666667,
+              "produced": 197391,
+              "skipped": 0,
+              "usb": 3411,
+              "errors": 0,
+              "yields": 0,
+              "received": 197385,
+              "probeHz": 24575.29338651742,
+              "webHz": 24574.213789442565,
+              "dropPercent": 1.6986882600770907,
+              "maxMainThreadLagMs": 5.399999976158142
+            },
+            "checked": 213270,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 0,
+            "hiPhaseBudget": 8,
+            "phaseSkewCounts": {},
+            "readAhead": {
+              "depth": 3,
+              "bytes": 4096
+            }
+          },
+          {
+            "cfg": {
+              "period": 40,
+              "draw": true,
+              "adaptive": true,
+              "vars": [
+                "g_v.tick",
+                "g_v.u_hi",
+                "g_v.f_sin",
+                "g_v.f_tri",
+                "g_v.i_sq1k",
+                "g_v.i_sq5k",
+                "g_v.u_ramp",
+                "g_v.lfsr"
+              ],
+              "stallMs": 25
+            },
+            "calibration": {
+              "readUs": 31.0931875,
+              "recommendedUs": 47,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.03209025,
+              "produced": 200802,
+              "skipped": 0,
+              "usb": 0,
+              "errors": 0,
+              "yields": 0,
+              "received": 200805,
+              "probeHz": 24999.96809672302,
+              "webHz": 25000.311251123494,
+              "dropPercent": 0,
+              "maxMainThreadLagMs": 5.5
+            },
+            "checked": 216555,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 0,
+            "hiPhaseBudget": 8,
+            "phaseSkewCounts": {},
+            "readAhead": {
+              "depth": 9,
+              "bytes": 8192
+            }
+          },
+          {
+            "cfg": {
+              "period": 40,
+              "draw": true,
+              "adaptive": true,
+              "vars": [
+                "g_v.tick",
+                "g_v.u_hi",
+                "g_v.f_sin",
+                "g_v.f_tri",
+                "g_v.i_sq1k",
+                "g_v.i_sq5k",
+                "g_v.u_ramp",
+                "g_v.lfsr"
+              ]
+            },
+            "calibration": {
+              "readUs": 31.0999375,
+              "recommendedUs": 47,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.008091125,
+              "produced": 200202,
+              "skipped": 0,
+              "usb": 0,
+              "errors": 0,
+              "yields": 0,
+              "received": 200100,
+              "probeHz": 24999.965269501103,
+              "webHz": 24988.76067728211,
+              "dropPercent": 0,
+              "maxMainThreadLagMs": 1.800000011920929
+            },
+            "checked": 215820,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 0,
+            "hiPhaseBudget": 8,
+            "phaseSkewCounts": {},
+            "readAhead": {
+              "depth": 9,
+              "bytes": 8192
+            }
+          },
+          {
+            "cfg": {
+              "period": 47,
+              "draw": true,
+              "adaptive": true,
+              "vars": [
+                "g_v.tick",
+                "g_v.u_hi",
+                "g_v.f_sin",
+                "g_v.f_tri",
+                "g_v.i_sq1k",
+                "g_v.i_sq5k",
+                "g_v.u_ramp",
+                "g_v.lfsr"
+              ]
+            },
+            "calibration": {
+              "readUs": 31.0990625,
+              "recommendedUs": 47,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.00809175,
+              "produced": 170385,
+              "skipped": 0,
+              "usb": 0,
+              "errors": 0,
+              "yields": 0,
+              "received": 170340,
+              "probeHz": 21276.604379563956,
+              "webHz": 21270.69753505826,
+              "dropPercent": 0,
+              "maxMainThreadLagMs": 1.9000000059604645
+            },
+            "checked": 183750,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 0,
+            "hiPhaseBudget": 8,
+            "phaseSkewCounts": {},
+            "readAhead": {
+              "depth": 8,
+              "bytes": 8192
+            }
+          },
+          {
+            "cfg": {
+              "period": 60,
+              "draw": true,
+              "adaptive": true,
+              "vars": [
+                "g_v.tick",
+                "g_v.u_hi",
+                "g_v.f_sin",
+                "g_v.f_tri",
+                "g_v.i_sq1k",
+                "g_v.i_sq5k",
+                "g_v.u_ramp",
+                "g_v.lfsr"
+              ]
+            },
+            "calibration": {
+              "readUs": 31.09883333333333,
+              "recommendedUs": 47,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.008090375,
+              "produced": 133468,
+              "skipped": 0,
+              "usb": 0,
+              "errors": 0,
+              "yields": 0,
+              "received": 133485,
+              "probeHz": 16666.64507392001,
+              "webHz": 16668.539746784383,
+              "dropPercent": 0,
+              "maxMainThreadLagMs": 1.5999999940395355
+            },
+            "checked": 144045,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 0,
+            "hiPhaseBudget": 8,
+            "phaseSkewCounts": {},
+            "readAhead": {
+              "depth": 6,
+              "bytes": 8192
+            }
+          }
+        ]
+      },
+      "smooth": {
+        "startedAt": "2026-10-09T15:29:06.987Z",
+        "seconds": 8,
+        "contract": "g_v_hi.tick",
+        "rows": [
+          {
+            "cfg": {
+              "period": 2,
+              "draw": true,
+              "adaptive": true
+            },
+            "calibration": {
+              "readUs": 3.0082708333333334,
+              "recommendedUs": 5,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.008089083333333,
+              "produced": 2421609,
+              "skipped": 1582437,
+              "usb": 0,
+              "errors": 0,
+              "yields": 0,
+              "received": 2421720,
+              "probeHz": 302395.362339303,
+              "webHz": 302405.03483973985,
+              "dropPercent": 39.520949559520545,
+              "maxMainThreadLagMs": 24.400000005960464
+            },
+            "checked": 2612432,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 0,
+            "hiPhaseBudget": 2,
+            "phaseSkewCounts": {},
+            "readAhead": {
+              "depth": 16,
+              "bytes": 8192
+            }
+          },
+          {
+            "cfg": {
+              "period": 20,
+              "draw": true,
+              "adaptive": true,
+              "vars": [
+                "g_v_hi.tick",
+                "g_v_hi.f_sin"
+              ]
+            },
+            "calibration": {
+              "readUs": 15.839375,
+              "recommendedUs": 24,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.008089833333333,
+              "produced": 400404,
+              "skipped": 0,
+              "usb": 0,
+              "errors": 0,
+              "yields": 0,
+              "received": 400334,
+              "probeHz": 49999.93860375234,
+              "webHz": 49989.26127562335,
+              "dropPercent": 0,
+              "maxMainThreadLagMs": 2
+            },
+            "checked": 431334,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 1,
+            "hiPhaseBudget": 5,
+            "phaseSkewCounts": {
+              "0": 2847,
+              "1": 422494,
+              "2": 4054,
+              "3": 1,
+              "-1": 1938
+            },
+            "readAhead": {
+              "depth": 6,
+              "bytes": 8192
+            }
+          },
+          {
+            "cfg": {
+              "period": 25,
+              "draw": true,
+              "adaptive": true,
+              "vars": [
+                "g_v_hi.tick",
+                "g_v_hi.f_sin"
+              ]
+            },
+            "calibration": {
+              "readUs": 15.839166666666666,
+              "recommendedUs": 24,
+              "fresh": true
+            },
+            "stable": {
+              "dt": 8.008092041666666,
+              "produced": 320324,
+              "skipped": 0,
+              "usb": 0,
+              "errors": 0,
+              "yields": 0,
+              "received": 320292,
+              "probeHz": 40000.039751457865,
+              "webHz": 39995.00518221285,
+              "dropPercent": 0,
+              "maxMainThreadLagMs": 2
+            },
+            "checked": 345526,
+            "bad": 0,
+            "waveformBad": 0,
+            "counterBackwards": 0,
+            "reordered": 0,
+            "phaseOutliers": 1,
+            "hiPhaseBudget": 5,
+            "phaseSkewCounts": {
+              "0": 2170,
+              "1": 336534,
+              "2": 5306,
+              "3": 1,
+              "-1": 1515
+            },
+            "readAhead": {
+              "depth": 3,
+              "bytes": 4096
+            }
+          }
+        ]
+      }
+    }
+  },
+  "extra": {
+    "hss-old-loop": [
+      {
+        "cfg": {
+          "period": 2,
+          "draw": true,
+          "adaptive": true
+        },
+        "calibration": {
+          "readUs": 3.0096458333333334,
+          "recommendedUs": 5,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.008086916666667,
+          "produced": 2416822,
+          "skipped": 1587224,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 2415892,
+          "probeHz": 301797.6734206067,
+          "webHz": 301681.0479380636,
+          "dropPercent": 39.64050363057767,
+          "maxMainThreadLagMs": 3.5
+        },
+        "checked": 2607224,
+        "bad": 0,
+        "waveformBad": 0,
+        "counterBackwards": 0,
+        "reordered": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 2,
+        "phaseSkewCounts": {},
+        "readAhead": {
+          "depth": 16,
+          "bytes": 8192
+        }
+      },
+      {
+        "cfg": {
+          "period": 3.25,
+          "draw": true,
+          "adaptive": true
+        },
+        "calibration": {
+          "readUs": 3.0096458333333334,
+          "recommendedUs": 5,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.00808775,
+          "produced": 2424127,
+          "skipped": 39901,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 2423704,
+          "probeHz": 302709.8448065832,
+          "webHz": 302633.8856498068,
+          "dropPercent": 1.6193403646387137,
+          "maxMainThreadLagMs": 2
+        },
+        "checked": 2616028,
+        "bad": 0,
+        "waveformBad": 0,
+        "counterBackwards": 0,
+        "reordered": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 2,
+        "phaseSkewCounts": {},
+        "readAhead": {
+          "depth": 13,
+          "bytes": 8192
+        }
+      },
+      {
+        "cfg": {
+          "period": 3.25,
+          "draw": true,
+          "adaptive": true,
+          "batch": false
+        },
+        "calibration": {
+          "readUs": 3.0015625,
+          "recommendedUs": 5,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.008085541666667,
+          "produced": 2273344,
+          "skipped": 190683,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 2273292,
+          "probeHz": 283881.0834589143,
+          "webHz": 283874.0774956896,
+          "dropPercent": 7.738673318108933,
+          "maxMainThreadLagMs": 1.7999999821186066
+        },
+        "checked": 2452348,
+        "bad": 0,
+        "waveformBad": 0,
+        "counterBackwards": 0,
+        "reordered": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 2,
+        "phaseSkewCounts": {},
+        "readAhead": {
+          "depth": 13,
+          "bytes": 8192
+        }
+      }
+    ],
+    "hss-gated/rate": [
+      {
+        "cfg": {
+          "period": 2,
+          "draw": true,
+          "adaptive": true
+        },
+        "calibration": {
+          "readUs": 2.976625,
+          "recommendedUs": 5,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.008088125,
+          "produced": 2369797,
+          "skipped": 1634247,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 2368896,
+          "probeHz": 295925.4397565711,
+          "webHz": 295812.4898531421,
+          "dropPercent": 40.81491112485278,
+          "maxMainThreadLagMs": 2
+        },
+        "checked": 2556384,
+        "bad": 0,
+        "waveformBad": 0,
+        "counterBackwards": 0,
+        "reordered": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 2,
+        "phaseSkewCounts": {},
+        "readAhead": {
+          "depth": 16,
+          "bytes": 8192
+        }
+      },
+      {
+        "cfg": {
+          "period": 3.25,
+          "draw": true,
+          "adaptive": true
+        },
+        "calibration": {
+          "readUs": 2.976625,
+          "recommendedUs": 5,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.008087625,
+          "produced": 2396632,
+          "skipped": 67397,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 2396300,
+          "probeHz": 299276.4455421403,
+          "webHz": 299234.52504361625,
+          "dropPercent": 2.7352356648399834,
+          "maxMainThreadLagMs": 3.899999976158142
+        },
+        "checked": 2586640,
+        "bad": 0,
+        "waveformBad": 0,
+        "counterBackwards": 0,
+        "reordered": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 2,
+        "phaseSkewCounts": {},
+        "readAhead": {
+          "depth": 13,
+          "bytes": 8192
+        }
+      },
+      {
+        "cfg": {
+          "period": 4,
+          "draw": true,
+          "adaptive": true
+        },
+        "calibration": {
+          "readUs": 2.976625,
+          "recommendedUs": 5,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.0080865,
+          "produced": 1976816,
+          "skipped": 25207,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 1976436,
+          "probeHz": 246852.47842914786,
+          "webHz": 246801.52843280474,
+          "dropPercent": 1.2590764441767153,
+          "maxMainThreadLagMs": 1.7000000178813934
+        },
+        "checked": 2131684,
+        "bad": 0,
+        "waveformBad": 0,
+        "counterBackwards": 0,
+        "reordered": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 2,
+        "phaseSkewCounts": {},
+        "readAhead": {
+          "depth": 11,
+          "bytes": 8192
+        }
+      },
+      {
+        "cfg": {
+          "period": 5,
+          "draw": true,
+          "adaptive": true
+        },
+        "calibration": {
+          "readUs": 2.976625,
+          "recommendedUs": 5,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.008089125,
+          "produced": 1599806,
+          "skipped": 1811,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 1599600,
+          "probeHz": 199773.7506449143,
+          "webHz": 199737.77861022664,
+          "dropPercent": 0.11307322537160883,
+          "maxMainThreadLagMs": 1.7000000178813934
+        },
+        "checked": 1726080,
+        "bad": 0,
+        "waveformBad": 0,
+        "counterBackwards": 0,
+        "reordered": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 2,
+        "phaseSkewCounts": {},
+        "readAhead": {
+          "depth": 9,
+          "bytes": 8192
+        }
+      },
+      {
+        "cfg": {
+          "period": 6,
+          "draw": true,
+          "adaptive": true
+        },
+        "calibration": {
+          "readUs": 2.976625,
+          "recommendedUs": 5,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.008088958333333,
+          "produced": 1334194,
+          "skipped": 488,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 1333868,
+          "probeHz": 166605.79158672038,
+          "webHz": 166562.77315714164,
+          "dropPercent": 0.03656301650880135,
+          "maxMainThreadLagMs": 1.600000023841858
+        },
+        "checked": 1438524,
+        "bad": 0,
+        "waveformBad": 0,
+        "counterBackwards": 0,
+        "reordered": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 2,
+        "phaseSkewCounts": {},
+        "readAhead": {
+          "depth": 7,
+          "bytes": 8192
+        }
+      },
+      {
+        "cfg": {
+          "period": 10,
+          "draw": true,
+          "adaptive": true
+        },
+        "calibration": {
+          "readUs": 2.976625,
+          "recommendedUs": 5,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.008086958333333,
+          "produced": 800808,
+          "skipped": 1,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 800792,
+          "probeHz": 99999.91310866916,
+          "webHz": 99995.25492324065,
+          "dropPercent": 0.0001248737214491845,
+          "maxMainThreadLagMs": 1.800000011920929
+        },
+        "checked": 864652,
+        "bad": 0,
+        "waveformBad": 0,
+        "counterBackwards": 0,
+        "reordered": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 2,
+        "phaseSkewCounts": {},
+        "readAhead": {
+          "depth": 6,
+          "bytes": 8192
+        }
+      },
+      {
+        "cfg": {
+          "period": 3.25,
+          "draw": true,
+          "adaptive": true,
+          "batch": false
+        },
+        "calibration": {
+          "readUs": 2.9678958333333334,
+          "recommendedUs": 5,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.008085291666667,
+          "produced": 2232708,
+          "skipped": 231319,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 2232248,
+          "probeHz": 278806.7207929702,
+          "webHz": 278745.2860821811,
+          "dropPercent": 9.387843558532435,
+          "maxMainThreadLagMs": 1.9000000059604645
+        },
+        "checked": 2411428,
+        "bad": 0,
+        "waveformBad": 0,
+        "counterBackwards": 0,
+        "reordered": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 2,
+        "phaseSkewCounts": {},
+        "readAhead": {
+          "depth": 13,
+          "bytes": 8192
+        }
+      },
+      {
+        "cfg": {
+          "period": 40,
+          "draw": true,
+          "adaptive": false,
+          "vars": [
+            "g_v.tick",
+            "g_v.u_hi",
+            "g_v.f_sin",
+            "g_v.f_tri",
+            "g_v.i_sq1k",
+            "g_v.i_sq5k",
+            "g_v.u_ramp",
+            "g_v.lfsr"
+          ],
+          "stallMs": 25
+        },
+        "calibration": {
+          "readUs": 31.04252083333333,
+          "recommendedUs": 47,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.032084708333333,
+          "produced": 197329,
+          "skipped": 0,
+          "usb": 3473,
+          "errors": 0,
+          "yields": 0,
+          "received": 197385,
+          "probeHz": 24567.59448705391,
+          "webHz": 24573.907847030994,
+          "dropPercent": 1.7295644465692575,
+          "maxMainThreadLagMs": 5.4000000059604645
+        },
+        "checked": 213210,
+        "bad": 0,
+        "waveformBad": 0,
+        "counterBackwards": 0,
+        "reordered": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 8,
+        "phaseSkewCounts": {},
+        "readAhead": {
+          "depth": 3,
+          "bytes": 4096
+        }
+      },
+      {
+        "cfg": {
+          "period": 40,
+          "draw": true,
+          "adaptive": true,
+          "vars": [
+            "g_v.tick",
+            "g_v.u_hi",
+            "g_v.f_sin",
+            "g_v.f_tri",
+            "g_v.i_sq1k",
+            "g_v.i_sq5k",
+            "g_v.u_ramp",
+            "g_v.lfsr"
+          ],
+          "stallMs": 25
+        },
+        "calibration": {
+          "readUs": 31.035875,
+          "recommendedUs": 47,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.03208775,
+          "produced": 200802,
+          "skipped": 0,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 200805,
+          "probeHz": 24999.975878002577,
+          "webHz": 24999.688756607942,
+          "dropPercent": 0,
+          "maxMainThreadLagMs": 5.5999999940395355
+        },
+        "checked": 216570,
+        "bad": 0,
+        "waveformBad": 0,
+        "counterBackwards": 0,
+        "reordered": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 8,
+        "phaseSkewCounts": {},
+        "readAhead": {
+          "depth": 9,
+          "bytes": 8192
+        }
+      },
+      {
+        "cfg": {
+          "period": 40,
+          "draw": true,
+          "adaptive": true,
+          "vars": [
+            "g_v.tick",
+            "g_v.u_hi",
+            "g_v.f_sin",
+            "g_v.f_tri",
+            "g_v.i_sq1k",
+            "g_v.i_sq5k",
+            "g_v.u_ramp",
+            "g_v.lfsr"
+          ]
+        },
+        "calibration": {
+          "readUs": 31.036166666666666,
+          "recommendedUs": 47,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.00808625,
+          "produced": 200202,
+          "skipped": 0,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 200340,
+          "probeHz": 24999.980488471887,
+          "webHz": 25016.54533427161,
+          "dropPercent": 0,
+          "maxMainThreadLagMs": 1.7000000178813934
+        },
+        "checked": 216075,
+        "bad": 0,
+        "waveformBad": 0,
+        "counterBackwards": 0,
+        "reordered": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 8,
+        "phaseSkewCounts": {},
+        "readAhead": {
+          "depth": 9,
+          "bytes": 8192
+        }
+      },
+      {
+        "cfg": {
+          "period": 47,
+          "draw": true,
+          "adaptive": true,
+          "vars": [
+            "g_v.tick",
+            "g_v.u_hi",
+            "g_v.f_sin",
+            "g_v.f_tri",
+            "g_v.i_sq1k",
+            "g_v.i_sq5k",
+            "g_v.u_ramp",
+            "g_v.lfsr"
+          ]
+        },
+        "calibration": {
+          "readUs": 31.03525,
+          "recommendedUs": 47,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.008085833333332,
+          "produced": 170385,
+          "skipped": 0,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 170340,
+          "probeHz": 21276.620099497355,
+          "webHz": 21270.963149747487,
+          "dropPercent": 0,
+          "maxMainThreadLagMs": 1.800000011920929
+        },
+        "checked": 183690,
+        "bad": 0,
+        "waveformBad": 0,
+        "counterBackwards": 0,
+        "reordered": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 8,
+        "phaseSkewCounts": {},
+        "readAhead": {
+          "depth": 8,
+          "bytes": 8192
+        }
+      },
+      {
+        "cfg": {
+          "period": 60,
+          "draw": true,
+          "adaptive": true,
+          "vars": [
+            "g_v.tick",
+            "g_v.u_hi",
+            "g_v.f_sin",
+            "g_v.f_tri",
+            "g_v.i_sq1k",
+            "g_v.i_sq5k",
+            "g_v.u_ramp",
+            "g_v.lfsr"
+          ]
+        },
+        "calibration": {
+          "readUs": 31.036916666666666,
+          "recommendedUs": 47,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.0080865,
+          "produced": 133468,
+          "skipped": 0,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 133485,
+          "probeHz": 16666.653138674264,
+          "webHz": 16668.74789277099,
+          "dropPercent": 0,
+          "maxMainThreadLagMs": 1.7000000178813934
+        },
+        "checked": 144075,
+        "bad": 0,
+        "waveformBad": 0,
+        "counterBackwards": 0,
+        "reordered": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 8,
+        "phaseSkewCounts": {},
+        "readAhead": {
+          "depth": 6,
+          "bytes": 8192
+        }
+      }
+    ],
+    "hss-fast-swo": [
+      {
+        "cfg": {
+          "period": 2,
+          "draw": true,
+          "adaptive": true
+        },
+        "calibration": {
+          "readUs": 3.00125,
+          "recommendedUs": 5,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.008088916666667,
+          "produced": 2407918,
+          "skipped": 1596129,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 2408080,
+          "probeHz": 300685.72228120134,
+          "webHz": 300705.53564538306,
+          "dropPercent": 39.86289371728154,
+          "maxMainThreadLagMs": 1.9000000059604645
+        },
+        "checked": 2597428,
+        "bad": 0,
+        "waveformBad": 0,
+        "counterBackwards": 0,
+        "reordered": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 2,
+        "phaseSkewCounts": {},
+        "readAhead": {
+          "depth": 16,
+          "bytes": 8192
+        }
+      },
+      {
+        "cfg": {
+          "period": 3.25,
+          "draw": true,
+          "adaptive": true
+        },
+        "calibration": {
+          "readUs": 3.00125,
+          "recommendedUs": 5,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.008090625,
+          "produced": 2423192,
+          "skipped": 40836,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 2423704,
+          "probeHz": 302592.9792096977,
+          "webHz": 302652.7809000285,
+          "dropPercent": 1.6572863620056266,
+          "maxMainThreadLagMs": 7.0999999940395355
+        },
+        "checked": 2614044,
+        "bad": 0,
+        "waveformBad": 0,
+        "counterBackwards": 0,
+        "reordered": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 2,
+        "phaseSkewCounts": {},
+        "readAhead": {
+          "depth": 13,
+          "bytes": 8192
+        }
+      },
+      {
+        "cfg": {
+          "period": 3.25,
+          "draw": true,
+          "adaptive": true,
+          "batch": false
+        },
+        "calibration": {
+          "readUs": 2.9948125,
+          "recommendedUs": 5,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.008089375,
+          "produced": 2233503,
+          "skipped": 230525,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 2234232,
+          "probeHz": 278905.8532454253,
+          "webHz": 279006.9682055838,
+          "dropPercent": 9.355616088778213,
+          "maxMainThreadLagMs": 4.5999999940395355
+        },
+        "checked": 2409692,
+        "bad": 0,
+        "waveformBad": 0,
+        "counterBackwards": 0,
+        "reordered": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 2,
+        "phaseSkewCounts": {},
+        "readAhead": {
+          "depth": 13,
+          "bytes": 8192
+        }
+      }
+    ],
+    "hss-fast-main": [
+      {
+        "cfg": {
+          "period": 2,
+          "draw": true,
+          "adaptive": true
+        },
+        "calibration": {
+          "readUs": 2.96125,
+          "recommendedUs": 5,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.008087166666666,
+          "produced": 2442535,
+          "skipped": 1561511,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 2443172,
+          "probeHz": 305008.5431346142,
+          "webHz": 305079.9795219279,
+          "dropPercent": 38.99832819103477,
+          "maxMainThreadLagMs": 1.800000011920929
+        },
+        "checked": 2634504,
+        "bad": 0,
+        "waveformBad": 0,
+        "counterBackwards": 0,
+        "reordered": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 2,
+        "phaseSkewCounts": {},
+        "readAhead": {
+          "depth": 16,
+          "bytes": 8192
+        }
+      },
+      {
+        "cfg": {
+          "period": 3.25,
+          "draw": true,
+          "adaptive": true
+        },
+        "calibration": {
+          "readUs": 2.96125,
+          "recommendedUs": 5,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.008089208333333,
+          "produced": 2420368,
+          "skipped": 43660,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 2419736,
+          "probeHz": 302240.3893155099,
+          "webHz": 302157.28877945134,
+          "dropPercent": 1.7718954492400247,
+          "maxMainThreadLagMs": 1.800000011920929
+        },
+        "checked": 2610076,
+        "bad": 0,
+        "waveformBad": 0,
+        "counterBackwards": 0,
+        "reordered": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 2,
+        "phaseSkewCounts": {},
+        "readAhead": {
+          "depth": 13,
+          "bytes": 8192
+        }
+      },
+      {
+        "cfg": {
+          "period": 3.25,
+          "draw": true,
+          "adaptive": true,
+          "batch": false
+        },
+        "calibration": {
+          "readUs": 2.9565,
+          "recommendedUs": 5,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.00809225,
+          "produced": 2218954,
+          "skipped": 245075,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 2218608,
+          "probeHz": 277088.9658520105,
+          "webHz": 277038.5724806385,
+          "dropPercent": 9.946108588819369,
+          "maxMainThreadLagMs": 2
+        },
+        "checked": 2393324,
+        "bad": 0,
+        "waveformBad": 0,
+        "counterBackwards": 0,
+        "reordered": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 2,
+        "phaseSkewCounts": {},
+        "readAhead": {
+          "depth": 13,
+          "bytes": 8192
+        }
+      }
+    ],
+    "hss-fast-scope": [
+      {
+        "cfg": {
+          "period": 2,
+          "draw": true,
+          "adaptive": true
+        },
+        "calibration": {
+          "readUs": 2.9722083333333336,
+          "recommendedUs": 5,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.008089666666667,
+          "produced": 2426415,
+          "skipped": 1577631,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 2425564,
+          "probeHz": 302995.4834421809,
+          "webHz": 302881.2606915811,
+          "dropPercent": 39.400920968440424,
+          "maxMainThreadLagMs": 1.7000000178813934
+        },
+        "checked": 2618880,
+        "bad": 0,
+        "waveformBad": 0,
+        "counterBackwards": 0,
+        "reordered": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 2,
+        "phaseSkewCounts": {},
+        "readAhead": {
+          "depth": 16,
+          "bytes": 8192
+        }
+      },
+      {
+        "cfg": {
+          "period": 3.25,
+          "draw": true,
+          "adaptive": true
+        },
+        "calibration": {
+          "readUs": 2.9722083333333336,
+          "recommendedUs": 5,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.0080915,
+          "produced": 2423868,
+          "skipped": 40160,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 2423704,
+          "probeHz": 302677.3607669193,
+          "webHz": 302652.78089890216,
+          "dropPercent": 1.6298516088291204,
+          "maxMainThreadLagMs": 1.5999999940395355
+        },
+        "checked": 2614664,
+        "bad": 0,
+        "waveformBad": 0,
+        "counterBackwards": 0,
+        "reordered": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 2,
+        "phaseSkewCounts": {},
+        "readAhead": {
+          "depth": 13,
+          "bytes": 8192
+        }
+      },
+      {
+        "cfg": {
+          "period": 3.25,
+          "draw": true,
+          "adaptive": true,
+          "batch": false
+        },
+        "calibration": {
+          "readUs": 2.9655416666666663,
+          "recommendedUs": 5,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.008090916666667,
+          "produced": 2199609,
+          "skipped": 264419,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 2199140,
+          "probeHz": 274673.3301219284,
+          "webHz": 274611.02370111557,
+          "dropPercent": 10.73116863931741,
+          "maxMainThreadLagMs": 2.0999999940395355
+        },
+        "checked": 2372616,
+        "bad": 0,
+        "waveformBad": 0,
+        "counterBackwards": 0,
+        "reordered": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 2,
+        "phaseSkewCounts": {},
+        "readAhead": {
+          "depth": 13,
+          "bytes": 8192
+        }
+      }
+    ],
+    "hss-final-candidate": [
+      {
+        "cfg": {
+          "period": 2,
+          "draw": true,
+          "adaptive": true
+        },
+        "calibration": {
+          "readUs": 2.9934166666666666,
+          "recommendedUs": 5,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.00808875,
+          "produced": 2423089,
+          "skipped": 1580956,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 2423704,
+          "probeHz": 302580.18806297565,
+          "webHz": 302660.3396603397,
+          "dropPercent": 39.48397183348339,
+          "maxMainThreadLagMs": 1.800000011920929
+        },
+        "checked": 2613052,
+        "bad": 0,
+        "waveformBad": 0,
+        "counterBackwards": 0,
+        "reordered": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 2,
+        "phaseSkewCounts": {},
+        "readAhead": {
+          "depth": 16,
+          "bytes": 8192
+        }
+      },
+      {
+        "cfg": {
+          "period": 3.25,
+          "draw": true,
+          "adaptive": true
+        },
+        "calibration": {
+          "readUs": 2.9934166666666666,
+          "recommendedUs": 5,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.00809025,
+          "produced": 2424305,
+          "skipped": 39724,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 2423704,
+          "probeHz": 302731.9778270481,
+          "webHz": 302656.5602329896,
+          "dropPercent": 1.6121563504325638,
+          "maxMainThreadLagMs": 2
+        },
+        "checked": 2614044,
+        "bad": 0,
+        "waveformBad": 0,
+        "counterBackwards": 0,
+        "reordered": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 2,
+        "phaseSkewCounts": {},
+        "readAhead": {
+          "depth": 13,
+          "bytes": 8192
+        }
+      },
+      {
+        "cfg": {
+          "period": 3.25,
+          "draw": true,
+          "adaptive": true,
+          "batch": false
+        },
+        "calibration": {
+          "readUs": 2.9852916666666665,
+          "recommendedUs": 5,
+          "fresh": true
+        },
+        "stable": {
+          "dt": 8.008089958333333,
+          "produced": 2266291,
+          "skipped": 197738,
+          "usb": 0,
+          "errors": 0,
+          "yields": 0,
+          "received": 2265480,
+          "probeHz": 283000.19252926414,
+          "webHz": 282895.03259096196,
+          "dropPercent": 8.02498671890631,
+          "maxMainThreadLagMs": 2.5
+        },
+        "checked": 2444908,
+        "bad": 0,
+        "waveformBad": 0,
+        "counterBackwards": 0,
+        "reordered": 0,
+        "phaseOutliers": 0,
+        "hiPhaseBudget": 2,
+        "phaseSkewCounts": {},
+        "readAhead": {
+          "depth": 13,
+          "bytes": 8192
+        }
+      }
+    ]
+  },
+  "campaigns": {
+    "current-measurement": {
+      "startedAt": "2026-10-09T14:49:02.129Z",
+      "board": "hpm6800evk",
+      "app": "http://127.0.0.1:8899/index.html?t=1791557341675#flash",
+      "cycles": [
+        {
+          "cycle": 1,
+          "flashFlood": {
+            "label": "flood #1",
+            "fw": "demo.elf",
+            "size": 348208,
+            "ms": 4362,
+            "summary": "小结：45.6 KB · 校验开 · 复位开 · JTAG 批次 8905 次 / 369045 B · flash 16.00 MB / 扇区 4096 B",
+            "status": "校验（读回 flash 逐字节比）…"
+          },
+          "cbAddr": 19136512,
+          "viewer": {
+            "bytesPerSec": 57264,
+            "kbps": 55.9,
+            "pollHz": 1.7,
+            "seconds": 8,
+            "pageRate": "64.0 KB/s",
+            "cb": "0x1240000",
+            "up": "3",
+            "lost": 0,
+            "corrupt": 0,
+            "err": "控制块 0x1240000，上行缓冲 32768 B（固件声明 3 个上行通道，本页读 ch0）"
+          },
+          "fwd": {
+            "cbAddr": "0x1240000",
+            "rateMB": 1.387535090455396,
+            "probeRateMB": 1.3848545695570804,
+            "seconds": 8,
+            "record": {
+              "seconds": 10.2,
+              "rxBytes": 14790656,
+              "fileBytes": 14721023,
+              "ratio": 0.9953,
+              "backlogKB": 52,
+              "path": "tmp/hpm-forward-2026-10-09T14-49-34.bin",
+              "words": 314
+            }
+          },
+          "flashScope": {
+            "label": "scope #1",
+            "fw": "demo.elf",
+            "size": 338952,
+            "ms": 4371,
+            "summary": "小结：46.7 KB · 校验开 · 复位开 · JTAG 批次 8992 次 / 376956 B · flash 16.00 MB / 扇区 4096 B",
+            "status": "校验（读回 flash 逐字节比）…"
+          },
+          "elf": {
+            "cached": false,
+            "n": 30
+          },
+          "picks": {
+            "one": [
+              11
+            ],
+            "three": [
+              11,
+              12,
+              13
+            ],
+            "oneName": "g_v.tick",
+            "threeNames": [
+              "g_v.tick",
+              "g_v.u_hi",
+              "g_v.f_sin"
+            ],
+            "from": "g_v 结构体成员"
+          },
+          "j1": {
+            "label": "1 变量 @2µs",
+            "periodUs": 2,
+            "wantHz": 500000,
+            "vars": [
+              "g_v.tick@0x1240000"
+            ],
+            "spans": 1,
+            "frameBytes": 4,
+            "samples": 889452,
+            "rateHz": 296454,
+            "lostProbe": 633037,
+            "lostUsb": 469,
+            "lostGap": 0,
+            "state": "已停止（时长到 3.000 s）：889452 个样本 / 3.000 s，跳拍 633037 / USB 丢样本 469 / 读错 0 / 包缺口 0",
+            "autoStopped": true
+          },
+          "j3": {
+            "label": "3 变量 @2µs",
+            "periodUs": 2,
+            "wantHz": 500000,
+            "vars": [
+              "g_v.tick@0x1240000",
+              "g_v.u_hi@0x1240004",
+              "g_v.f_sin@0x1240008"
+            ],
+            "spans": 1,
+            "frameBytes": 12,
+            "samples": 154611,
+            "rateHz": 51529,
+            "lostProbe": 1436936,
+            "lostUsb": 0,
+            "lostGap": 0,
+            "state": "已停止（时长到 3.000 s）：154611 个样本 / 3.000 s，跳拍 1436936 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+            "autoStopped": true
+          },
+          "j50k1": {
+            "label": "1 变量 @20µs",
+            "periodUs": 20,
+            "wantHz": 50000,
+            "vars": [
+              "g_v.tick@0x1240000"
+            ],
+            "spans": 1,
+            "frameBytes": 4,
+            "samples": 150040,
+            "rateHz": 50000,
+            "lostProbe": 1,
+            "lostUsb": 0,
+            "lostGap": 0,
+            "state": "已停止（时长到 3.001 s）：150040 个样本 / 3.001 s，跳拍 1 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+            "autoStopped": true
+          },
+          "j50k3": {
+            "label": "3 变量 @30µs",
+            "periodUs": 30,
+            "wantHz": 33333,
+            "vars": [
+              "g_v.tick@0x1240000",
+              "g_v.u_hi@0x1240004",
+              "g_v.f_sin@0x1240008"
+            ],
+            "spans": 1,
+            "frameBytes": 12,
+            "samples": 100040,
+            "rateHz": 33333,
+            "lostProbe": 0,
+            "lostUsb": 0,
+            "lostGap": 0,
+            "state": "已停止（时长到 3.001 s）：100040 个样本 / 3.001 s，跳拍 0 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+            "autoStopped": true
+          }
+        },
+        {
+          "cycle": 2,
+          "flashFlood": {
+            "label": "flood #2",
+            "fw": "demo.elf",
+            "size": 348208,
+            "ms": 4365,
+            "summary": "小结：45.6 KB · 校验开 · 复位开 · JTAG 批次 8895 次 / 368975 B · flash 16.00 MB / 扇区 4096 B",
+            "status": "校验（读回 flash 逐字节比）…"
+          },
+          "cbAddr": 19136512,
+          "viewer": {
+            "bytesPerSec": 57281,
+            "kbps": 55.9,
+            "pollHz": 1.7,
+            "seconds": 8,
+            "pageRate": "64.0 KB/s",
+            "cb": "0x1240000",
+            "up": "3",
+            "lost": 0,
+            "corrupt": 0,
+            "err": "控制块 0x1240000，上行缓冲 32768 B（固件声明 3 个上行通道，本页读 ch0）"
+          },
+          "fwd": {
+            "cbAddr": "0x1240000",
+            "rateMB": 1.387487189418486,
+            "probeRateMB": 1.3872430854090878,
+            "seconds": 8,
+            "record": {
+              "seconds": 10.2,
+              "rxBytes": 14802944,
+              "fileBytes": 14712832,
+              "ratio": 0.9939,
+              "backlogKB": 44,
+              "path": "tmp/hpm-forward-2026-10-09T14-50-43.bin",
+              "words": 314
+            }
+          },
+          "flashScope": {
+            "label": "scope #2",
+            "fw": "demo.elf",
+            "size": 338952,
+            "ms": 4200,
+            "summary": "小结：46.7 KB · 校验开 · 复位开 · JTAG 批次 9164 次 / 378160 B · flash 16.00 MB / 扇区 4096 B",
+            "status": "校验（读回 flash 逐字节比）…"
+          },
+          "elf": {
+            "cached": true,
+            "n": 30
+          },
+          "picks": {
+            "one": [
+              11
+            ],
+            "three": [
+              11,
+              12,
+              13
+            ],
+            "oneName": "g_v.tick",
+            "threeNames": [
+              "g_v.tick",
+              "g_v.u_hi",
+              "g_v.f_sin"
+            ],
+            "from": "g_v 结构体成员"
+          },
+          "j1": {
+            "label": "1 变量 @2µs",
+            "periodUs": 2,
+            "wantHz": 500000,
+            "vars": [
+              "g_v.tick@0x1240000"
+            ],
+            "spans": 1,
+            "frameBytes": 4,
+            "samples": 890692,
+            "rateHz": 296887,
+            "lostProbe": 632070,
+            "lostUsb": 0,
+            "lostGap": 0,
+            "state": "已停止（时长到 3.000 s）：890692 个样本 / 3.000 s，跳拍 632070 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+            "autoStopped": true
+          },
+          "j3": {
+            "label": "3 变量 @2µs",
+            "periodUs": 2,
+            "wantHz": 500000,
+            "vars": [
+              "g_v.tick@0x1240000",
+              "g_v.u_hi@0x1240004",
+              "g_v.f_sin@0x1240008"
+            ],
+            "spans": 1,
+            "frameBytes": 12,
+            "samples": 154939,
+            "rateHz": 51637,
+            "lostProbe": 1441977,
+            "lostUsb": 0,
+            "lostGap": 0,
+            "state": "已停止（时长到 3.001 s）：154939 个样本 / 3.001 s，跳拍 1441977 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+            "autoStopped": true
+          },
+          "j50k1": {
+            "label": "1 变量 @20µs",
+            "periodUs": 20,
+            "wantHz": 50000,
+            "vars": [
+              "g_v.tick@0x1240000"
+            ],
+            "spans": 1,
+            "frameBytes": 4,
+            "samples": 150040,
+            "rateHz": 50000,
+            "lostProbe": 0,
+            "lostUsb": 0,
+            "lostGap": 0,
+            "state": "已停止（时长到 3.001 s）：150040 个样本 / 3.001 s，跳拍 0 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+            "autoStopped": true
+          },
+          "j50k3": {
+            "label": "3 变量 @30µs",
+            "periodUs": 30,
+            "wantHz": 33333,
+            "vars": [
+              "g_v.tick@0x1240000",
+              "g_v.u_hi@0x1240004",
+              "g_v.f_sin@0x1240008"
+            ],
+            "spans": 1,
+            "frameBytes": 12,
+            "samples": 100040,
+            "rateHz": 33333,
+            "lostProbe": 0,
+            "lostUsb": 0,
+            "lostGap": 0,
+            "state": "已停止（时长到 3.001 s）：100040 个样本 / 3.001 s，跳拍 0 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+            "autoStopped": true
+          }
+        }
+      ],
+      "alt": [
+        {
+          "i": 1,
+          "floodMs": 4215,
+          "scopeMs": 4361
+        }
+      ],
+      "errors": [],
+      "spec": {
+        "flashFloodS": 12,
+        "flashScopeS": 12,
+        "viewerKBps": 56.5,
+        "viewerCorrupt": 0,
+        "fwdMBps": 1.101,
+        "recordBytesRatio": 0.98,
+        "j1kHz": 206.6,
+        "j3kHz": 32.6,
+        "j50k": true
+      },
+      "fwdRateMBs": [
+        1.388,
+        1.387
+      ]
+    },
+    "old-web-current-probe": {
+      "startedAt": "2026-10-09T14:52:23.367Z",
+      "board": "hpm6800evk",
+      "app": "http://127.0.0.1:8899/tmp/hpm-regression-20261009/web-008e154/index.html?t=1791557542863#flash",
+      "cycles": [
+        {
+          "cycle": 1,
+          "flashFlood": {
+            "label": "flood #1",
+            "fw": "demo.elf",
+            "size": 348208,
+            "ms": 4216,
+            "summary": "小结：45.6 KB · 校验开 · 复位开 · JTAG 批次 8801 次 / 368317 B · flash 16.00 MB / 扇区 4096 B",
+            "status": "校验（读回 flash 逐字节比）…"
+          },
+          "cbAddr": 19136512,
+          "viewer": {
+            "bytesPerSec": 61386,
+            "kbps": 59.9,
+            "pollHz": 1.9,
+            "seconds": 8,
+            "pageRate": "64.0 KB/s",
+            "cb": "0x1240000",
+            "up": "3",
+            "lost": 0,
+            "corrupt": 0,
+            "err": "控制块 0x1240000，上行缓冲 32768 B（固件声明 3 个上行通道，本页读 ch0）"
+          },
+          "fwd": {
+            "cbAddr": "0x1240000",
+            "rateMB": 1.3878666151014518,
+            "probeRateMB": 1.3846990824476038,
+            "seconds": 8,
+            "record": {
+              "seconds": 10.2,
+              "rxBytes": 14794752,
+              "fileBytes": 14737408,
+              "ratio": 0.9961,
+              "backlogKB": 64,
+              "path": "tmp/hpm-forward-2026-10-09T14-52-55.bin",
+              "words": 314
+            }
+          },
+          "flashScope": {
+            "label": "scope #1",
+            "fw": "demo.elf",
+            "size": 338952,
+            "ms": 4035,
+            "summary": "小结：46.7 KB · 校验开 · 复位开 · JTAG 批次 9118 次 / 377838 B · flash 16.00 MB / 扇区 4096 B",
+            "status": "校验（读回 flash 逐字节比）…"
+          },
+          "elf": {
+            "cached": false,
+            "n": 30
+          },
+          "picks": {
+            "one": [
+              11
+            ],
+            "three": [
+              11,
+              12,
+              13
+            ],
+            "oneName": "g_v.tick",
+            "threeNames": [
+              "g_v.tick",
+              "g_v.u_hi",
+              "g_v.f_sin"
+            ],
+            "from": "g_v 结构体成员"
+          },
+          "j1": {
+            "label": "1 变量 @2µs",
+            "periodUs": 2,
+            "wantHz": 500000,
+            "vars": [
+              "g_v.tick@0x1240000"
+            ],
+            "spans": 1,
+            "frameBytes": 4,
+            "samples": 894908,
+            "rateHz": 298262,
+            "lostProbe": 627775,
+            "lostUsb": 0,
+            "lostGap": 0,
+            "state": "已停止（时长到 3.000 s）：894908 个样本 / 3.000 s，跳拍 627775 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+            "autoStopped": true
+          },
+          "j3": {
+            "label": "3 变量 @2µs",
+            "periodUs": 2,
+            "wantHz": 500000,
+            "vars": [
+              "g_v.tick@0x1240000",
+              "g_v.u_hi@0x1240004",
+              "g_v.f_sin@0x1240008"
+            ],
+            "spans": 1,
+            "frameBytes": 12,
+            "samples": 154611,
+            "rateHz": 51526,
+            "lostProbe": 1438740,
+            "lostUsb": 0,
+            "lostGap": 0,
+            "state": "已停止（时长到 3.001 s）：154611 个样本 / 3.001 s，跳拍 1438740 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+            "autoStopped": true
+          },
+          "j50k1": {
+            "label": "1 变量 @20µs",
+            "periodUs": 20,
+            "wantHz": 50000,
+            "vars": [
+              "g_v.tick@0x1240000"
+            ],
+            "spans": 1,
+            "frameBytes": 4,
+            "samples": 150040,
+            "rateHz": 50000,
+            "lostProbe": 0,
+            "lostUsb": 0,
+            "lostGap": 0,
+            "state": "已停止（时长到 3.001 s）：150040 个样本 / 3.001 s，跳拍 0 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+            "autoStopped": true
+          },
+          "j50k3": {
+            "label": "3 变量 @30µs",
+            "periodUs": 30,
+            "wantHz": 33333,
+            "vars": [
+              "g_v.tick@0x1240000",
+              "g_v.u_hi@0x1240004",
+              "g_v.f_sin@0x1240008"
+            ],
+            "spans": 1,
+            "frameBytes": 12,
+            "samples": 100040,
+            "rateHz": 33333,
+            "lostProbe": 0,
+            "lostUsb": 0,
+            "lostGap": 0,
+            "state": "已停止（时长到 3.001 s）：100040 个样本 / 3.001 s，跳拍 0 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+            "autoStopped": true
+          }
+        },
+        {
+          "cycle": 2,
+          "flashFlood": {
+            "label": "flood #2",
+            "fw": "demo.elf",
+            "size": 348208,
+            "ms": 4364,
+            "summary": "小结：45.6 KB · 校验开 · 复位开 · JTAG 批次 8879 次 / 368863 B · flash 16.00 MB / 扇区 4096 B",
+            "status": "校验（读回 flash 逐字节比）…"
+          },
+          "cbAddr": 19136512,
+          "viewer": {
+            "bytesPerSec": 57239,
+            "kbps": 55.9,
+            "pollHz": 1.7,
+            "seconds": 8,
+            "pageRate": "64.0 KB/s",
+            "cb": "0x1240000",
+            "up": "3",
+            "lost": 0,
+            "corrupt": 0,
+            "err": "控制块 0x1240000，上行缓冲 32768 B（固件声明 3 个上行通道，本页读 ch0）"
+          },
+          "fwd": {
+            "cbAddr": "0x1240000",
+            "rateMB": 1.3875177789432784,
+            "probeRateMB": 1.3850809721660686,
+            "seconds": 8,
+            "record": {
+              "seconds": 10.2,
+              "rxBytes": 14786560,
+              "fileBytes": 14753792,
+              "ratio": 0.9978,
+              "backlogKB": 80,
+              "path": "tmp/hpm-forward-2026-10-09T14-54-04.bin",
+              "words": 314
+            }
+          },
+          "flashScope": {
+            "label": "scope #2",
+            "fw": "demo.elf",
+            "size": 338952,
+            "ms": 4219,
+            "summary": "小结：46.7 KB · 校验开 · 复位开 · JTAG 批次 9066 次 / 377474 B · flash 16.00 MB / 扇区 4096 B",
+            "status": "校验（读回 flash 逐字节比）…"
+          },
+          "elf": {
+            "cached": true,
+            "n": 30
+          },
+          "picks": {
+            "one": [
+              11
+            ],
+            "three": [
+              11,
+              12,
+              13
+            ],
+            "oneName": "g_v.tick",
+            "threeNames": [
+              "g_v.tick",
+              "g_v.u_hi",
+              "g_v.f_sin"
+            ],
+            "from": "g_v 结构体成员"
+          },
+          "j1": {
+            "label": "1 变量 @2µs",
+            "periodUs": 2,
+            "wantHz": 500000,
+            "vars": [
+              "g_v.tick@0x1240000"
+            ],
+            "spans": 1,
+            "frameBytes": 4,
+            "samples": 885608,
+            "rateHz": 295174,
+            "lostProbe": 637372,
+            "lostUsb": 0,
+            "lostGap": 0,
+            "state": "已停止（时长到 3.000 s）：885608 个样本 / 3.000 s，跳拍 637372 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+            "autoStopped": true
+          },
+          "j3": {
+            "label": "3 变量 @2µs",
+            "periodUs": 2,
+            "wantHz": 500000,
+            "vars": [
+              "g_v.tick@0x1240000",
+              "g_v.u_hi@0x1240004",
+              "g_v.f_sin@0x1240008"
+            ],
+            "spans": 1,
+            "frameBytes": 12,
+            "samples": 154611,
+            "rateHz": 51525,
+            "lostProbe": 1438749,
+            "lostUsb": 0,
+            "lostGap": 0,
+            "state": "已停止（时长到 3.001 s）：154611 个样本 / 3.001 s，跳拍 1438749 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+            "autoStopped": true
+          },
+          "j50k1": {
+            "label": "1 变量 @20µs",
+            "periodUs": 20,
+            "wantHz": 50000,
+            "vars": [
+              "g_v.tick@0x1240000"
+            ],
+            "spans": 1,
+            "frameBytes": 4,
+            "samples": 150040,
+            "rateHz": 50000,
+            "lostProbe": 0,
+            "lostUsb": 0,
+            "lostGap": 0,
+            "state": "已停止（时长到 3.001 s）：150040 个样本 / 3.001 s，跳拍 0 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+            "autoStopped": true
+          },
+          "j50k3": {
+            "label": "3 变量 @30µs",
+            "periodUs": 30,
+            "wantHz": 33333,
+            "vars": [
+              "g_v.tick@0x1240000",
+              "g_v.u_hi@0x1240004",
+              "g_v.f_sin@0x1240008"
+            ],
+            "spans": 1,
+            "frameBytes": 12,
+            "samples": 100040,
+            "rateHz": 33333,
+            "lostProbe": 0,
+            "lostUsb": 0,
+            "lostGap": 0,
+            "state": "已停止（时长到 3.001 s）：100040 个样本 / 3.001 s，跳拍 0 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+            "autoStopped": true
+          }
+        }
+      ],
+      "alt": [],
+      "errors": [],
+      "spec": {
+        "flashFloodS": 12,
+        "flashScopeS": 12,
+        "viewerKBps": 56.5,
+        "viewerCorrupt": 0,
+        "fwdMBps": 1.101,
+        "recordBytesRatio": 0.98,
+        "j1kHz": 206.6,
+        "j3kHz": 32.6,
+        "j50k": true
+      },
+      "fwdRateMBs": [
+        1.388,
+        1.388
+      ]
+    },
+    "final-fresh-browser": {
+      "startedAt": "2026-10-09T15:35:01.422Z",
+      "board": "hpm6800evk",
+      "app": "http://127.0.0.1:8899/index.html?t=1791560100295#flash",
+      "cycles": [
+        {
+          "cycle": 1,
+          "flashFlood": {
+            "label": "flood #1",
+            "fw": "demo.elf",
+            "size": 348208,
+            "ms": 3755,
+            "summary": "小结：45.6 KB · 校验开 · 复位开 · JTAG 批次 9287 次 / 371719 B · flash 16.00 MB / 扇区 4096 B",
+            "status": "擦除 0x80003000 起 42.5 KB…"
+          },
+          "cbAddr": 19136512,
+          "viewer": {
+            "bytesPerSec": 64462,
+            "kbps": 63,
+            "pollHz": 2,
+            "seconds": 8.1,
+            "pageRate": "64.0 KB/s",
+            "cb": "0x1240000",
+            "up": "3",
+            "lost": 0,
+            "corrupt": 0,
+            "err": ""
+          },
+          "fwd": {
+            "cbAddr": "0x1240000",
+            "rateMB": 1.384945843640938,
+            "probeRateMB": 1.384213842666498,
+            "seconds": 8,
+            "record": {
+              "seconds": 10.2,
+              "rxBytes": 14766080,
+              "fileBytes": 14716928,
+              "ratio": 0.9967,
+              "backlogKB": 72,
+              "path": "tmp/hpm-forward-2026-10-09T15-35-32.bin",
+              "words": 315
+            }
+          },
+          "flashScope": {
+            "label": "scope #1",
+            "fw": "demo.elf",
+            "size": 338952,
+            "ms": 4042,
+            "summary": "小结：46.7 KB · 校验开 · 复位开 · JTAG 批次 9146 次 / 378034 B · flash 16.00 MB / 扇区 4096 B",
+            "status": "校验（读回 flash 逐字节比）…"
+          },
+          "elf": {
+            "cached": false,
+            "n": 30
+          },
+          "picks": {
+            "one": [
+              11
+            ],
+            "three": [
+              11,
+              12,
+              13
+            ],
+            "oneName": "g_v.tick",
+            "threeNames": [
+              "g_v.tick",
+              "g_v.u_hi",
+              "g_v.f_sin"
+            ],
+            "from": "g_v 结构体成员"
+          },
+          "j1": {
+            "label": "1 变量 @2µs",
+            "periodUs": 2,
+            "wantHz": 500000,
+            "vars": [
+              "g_v.tick@0x1240000"
+            ],
+            "spans": 1,
+            "frameBytes": 4,
+            "samples": 908300,
+            "rateHz": 302754,
+            "lostProbe": 613805,
+            "lostUsb": 0,
+            "lostGap": 0,
+            "state": "已停止（时长到 3.000 s）：908300 个样本 / 3.000 s，跳拍 613805 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+            "autoStopped": true
+          },
+          "j3": {
+            "label": "3 变量 @2µs",
+            "periodUs": 2,
+            "wantHz": 500000,
+            "vars": [
+              "g_v.tick@0x1240000",
+              "g_v.u_hi@0x1240004",
+              "g_v.f_sin@0x1240008"
+            ],
+            "spans": 1,
+            "frameBytes": 12,
+            "samples": 155349,
+            "rateHz": 51770,
+            "lostProbe": 1436156,
+            "lostUsb": 0,
+            "lostGap": 0,
+            "state": "已停止（时长到 3.001 s）：155349 个样本 / 3.001 s，跳拍 1436156 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+            "autoStopped": true
+          },
+          "j50k1": {
+            "label": "1 变量 @20µs",
+            "periodUs": 20,
+            "wantHz": 50000,
+            "vars": [
+              "g_v.tick@0x1240000"
+            ],
+            "spans": 1,
+            "frameBytes": 4,
+            "samples": 150040,
+            "rateHz": 50000,
+            "lostProbe": 0,
+            "lostUsb": 0,
+            "lostGap": 0,
+            "state": "已停止（时长到 3.001 s）：150040 个样本 / 3.001 s，跳拍 0 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+            "autoStopped": true
+          },
+          "j50k3": {
+            "label": "3 变量 @30µs",
+            "periodUs": 30,
+            "wantHz": 33333,
+            "vars": [
+              "g_v.tick@0x1240000",
+              "g_v.u_hi@0x1240004",
+              "g_v.f_sin@0x1240008"
+            ],
+            "spans": 1,
+            "frameBytes": 12,
+            "samples": 100040,
+            "rateHz": 33333,
+            "lostProbe": 0,
+            "lostUsb": 0,
+            "lostGap": 0,
+            "state": "已停止（时长到 3.001 s）：100040 个样本 / 3.001 s，跳拍 0 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+            "autoStopped": true
+          }
+        },
+        {
+          "cycle": 2,
+          "flashFlood": {
+            "label": "flood #2",
+            "fw": "demo.elf",
+            "size": 348208,
+            "ms": 4049,
+            "summary": "小结：45.6 KB · 校验开 · 复位开 · JTAG 批次 9003 次 / 369731 B · flash 16.00 MB / 扇区 4096 B",
+            "status": "校验（读回 flash 逐字节比）…"
+          },
+          "cbAddr": 19136512,
+          "viewer": {
+            "bytesPerSec": 56239,
+            "kbps": 54.9,
+            "pollHz": 1.7,
+            "seconds": 8.2,
+            "pageRate": "64.0 KB/s",
+            "cb": "0x1240000",
+            "up": "3",
+            "lost": 0,
+            "corrupt": 0,
+            "err": "控制块 0x1240000，上行缓冲 32768 B（固件声明 3 个上行通道，本页读 ch0）"
+          }
+        }
+      ],
+      "alt": [],
+      "errors": [
+        "判决未通过：RTT Viewer（RISC-V）速率（54.9 KB/s（轮询 1.7 Hz））"
+      ],
+      "spec": {
+        "flashFloodS": 12,
+        "flashScopeS": 12,
+        "viewerKBps": 56.5,
+        "viewerCorrupt": 0,
+        "fwdMBps": 1.101,
+        "recordBytesRatio": 0.98,
+        "j1kHz": 206.6,
+        "j3kHz": 32.6,
+        "j50k": true
+      },
+      "fwdRateMBs": [
+        1.385
+      ]
+    },
+    "final-acceptance": {
+      "startedAt": "2026-10-09T15:38:42.559Z",
+      "board": "hpm6800evk",
+      "app": "http://127.0.0.1:8899/index.html?t=1791560322120#flash",
+      "cycles": [
+        {
+          "cycle": 1,
+          "flashFlood": {
+            "label": "flood #1",
+            "fw": "demo.elf",
+            "size": 348208,
+            "ms": 4369,
+            "summary": "小结：45.6 KB · 校验开 · 复位开 · JTAG 批次 8491 次 / 366147 B · flash 16.00 MB / 扇区 4096 B",
+            "status": "校验（读回 flash 逐字节比）…"
+          },
+          "cbAddr": 19136512,
+          "viewer": {
+            "bytesPerSec": 61944,
+            "kbps": 60.5,
+            "pollHz": 1.9,
+            "seconds": 8.5,
+            "pageRate": "64.0 KB/s",
+            "cb": "0x1240000",
+            "up": "3",
+            "lost": 0,
+            "corrupt": 0,
+            "err": "控制块 0x1240000，上行缓冲 32768 B（固件声明 3 个上行通道，本页读 ch0）"
+          },
+          "fwd": {
+            "cbAddr": "0x1240000",
+            "rateMB": 1.3847692370149811,
+            "probeRateMB": 1.3845251818093034,
+            "seconds": 8,
+            "record": {
+              "seconds": 10.2,
+              "rxBytes": 14782464,
+              "fileBytes": 14749696,
+              "ratio": 0.9978,
+              "backlogKB": 104,
+              "path": "tmp/hpm-forward-2026-10-09T15-39-14.bin",
+              "words": 314
+            }
+          },
+          "flashScope": {
+            "label": "scope #1",
+            "fw": "demo.elf",
+            "size": 338952,
+            "ms": 3925,
+            "summary": "小结：46.7 KB · 校验开 · 复位开 · JTAG 批次 9172 次 / 378216 B · flash 16.00 MB / 扇区 4096 B",
+            "status": "校验（读回 flash 逐字节比）…"
+          },
+          "elf": {
+            "cached": false,
+            "n": 30
+          },
+          "picks": {
+            "one": [
+              11
+            ],
+            "three": [
+              11,
+              12,
+              13
+            ],
+            "oneName": "g_v.tick",
+            "threeNames": [
+              "g_v.tick",
+              "g_v.u_hi",
+              "g_v.f_sin"
+            ],
+            "from": "g_v 结构体成员"
+          },
+          "j1": {
+            "label": "1 变量 @2µs",
+            "periodUs": 2,
+            "wantHz": 500000,
+            "vars": [
+              "g_v.tick@0x1240000"
+            ],
+            "spans": 1,
+            "frameBytes": 4,
+            "samples": 908300,
+            "rateHz": 302760,
+            "lostProbe": 613790,
+            "lostUsb": 1,
+            "lostGap": 0,
+            "state": "已停止（时长到 3.000 s）：908300 个样本 / 3.000 s，跳拍 613790 / USB 丢样本 1 / 读错 0 / 包缺口 0",
+            "autoStopped": true
+          },
+          "j3": {
+            "label": "3 变量 @2µs",
+            "periodUs": 2,
+            "wantHz": 500000,
+            "vars": [
+              "g_v.tick@0x1240000",
+              "g_v.u_hi@0x1240004",
+              "g_v.f_sin@0x1240008"
+            ],
+            "spans": 1,
+            "frameBytes": 12,
+            "samples": 155431,
+            "rateHz": 51797,
+            "lostProbe": 1439664,
+            "lostUsb": 0,
+            "lostGap": 0,
+            "state": "已停止（时长到 3.001 s）：155431 个样本 / 3.001 s，跳拍 1439664 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+            "autoStopped": true
+          },
+          "j50k1": {
+            "label": "1 变量 @20µs",
+            "periodUs": 20,
+            "wantHz": 50000,
+            "vars": [
+              "g_v.tick@0x1240000"
+            ],
+            "spans": 1,
+            "frameBytes": 4,
+            "samples": 150040,
+            "rateHz": 50000,
+            "lostProbe": 0,
+            "lostUsb": 0,
+            "lostGap": 0,
+            "state": "已停止（时长到 3.001 s）：150040 个样本 / 3.001 s，跳拍 0 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+            "autoStopped": true
+          },
+          "j50k3": {
+            "label": "3 变量 @30µs",
+            "periodUs": 30,
+            "wantHz": 33333,
+            "vars": [
+              "g_v.tick@0x1240000",
+              "g_v.u_hi@0x1240004",
+              "g_v.f_sin@0x1240008"
+            ],
+            "spans": 1,
+            "frameBytes": 12,
+            "samples": 100040,
+            "rateHz": 33333,
+            "lostProbe": 0,
+            "lostUsb": 0,
+            "lostGap": 0,
+            "state": "已停止（时长到 3.001 s）：100040 个样本 / 3.001 s，跳拍 0 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+            "autoStopped": true
+          }
+        }
+      ],
+      "alt": [
+        {
+          "i": 1,
+          "floodMs": 3747,
+          "scopeMs": 4203
+        }
+      ],
+      "errors": [],
+      "spec": {
+        "flashFloodS": 12,
+        "flashScopeS": 12,
+        "viewerKBps": 56.5,
+        "viewerCorrupt": 0,
+        "fwdMBps": 1.101,
+        "recordBytesRatio": 0.98,
+        "j1kHz": 206.6,
+        "j3kHz": 32.6,
+        "j50k": true
+      },
+      "fwdRateMBs": [
+        1.385
+      ]
+    },
+    "final-campaign-repeat": {
+      "startedAt": "2026-10-09T15:32:06.322Z",
+      "board": "hpm6800evk",
+      "app": "http://127.0.0.1:8899/index.html?t=1791559925285#flash",
+      "cycles": [
+        {
+          "cycle": 1,
+          "flashFlood": {
+            "label": "flood #1",
+            "fw": "demo.elf",
+            "size": 348208,
+            "ms": 7549,
+            "summary": "小结：45.6 KB · 校验开 · 复位开 · JTAG 批次 7885 次 / 361905 B · flash 16.00 MB / 扇区 4096 B",
+            "status": "校验（读回 flash 逐字节比）…"
+          },
+          "cbAddr": 19136512
+        }
+      ],
+      "alt": [],
+      "errors": [
+        "判决未通过：RTT Viewer（RISC-V）速率（25.4 KB/s（轮询 0.8 Hz））"
+      ],
+      "spec": {
+        "flashFloodS": 12,
+        "flashScopeS": 12,
+        "viewerKBps": 56.5,
+        "viewerCorrupt": 0,
+        "fwdMBps": 1.101,
+        "recordBytesRatio": 0.98,
+        "j1kHz": 206.6,
+        "j3kHz": 32.6,
+        "j50k": true
+      }
+    },
+    "final-web-acceptance": {
+      "startedAt": "2026-10-09T16:10:12.064Z",
+      "board": "hpm6800evk",
+      "app": "http://127.0.0.1:8899/index.html?t=1791562206118#flash",
+      "cycles": [
+        {
+          "cycle": 1,
+          "flashFlood": {
+            "label": "flood #1",
+            "fw": "demo.elf",
+            "size": 348208,
+            "ms": 3749,
+            "summary": "小结：45.6 KB · 校验开 · 复位开 · JTAG 批次 9485 次 / 373105 B · flash 16.00 MB / 扇区 4096 B",
+            "status": "擦除 0x80003000 起 42.5 KB…"
+          },
+          "cbAddr": 19136512,
+          "viewer": {
+            "bytesPerSec": 66647,
+            "kbps": 65.1,
+            "pollHz": 2,
+            "seconds": 8.4,
+            "pageRate": "64.0 KB/s",
+            "cb": "0x1240000",
+            "up": "3",
+            "lost": 0,
+            "corrupt": 0,
+            "err": "控制块 0x1240000，上行缓冲 32768 B（固件声明 3 个上行通道，本页读 ch0）"
+          },
+          "fwd": {
+            "cbAddr": "0x1240000",
+            "rateMB": 1.3847454876790257,
+            "probeRateMB": 1.3830389351413932,
+            "seconds": 8,
+            "record": {
+              "seconds": 10.2,
+              "rxBytes": 14782464,
+              "fileBytes": 14704640,
+              "ratio": 0.9947,
+              "backlogKB": 64,
+              "path": "tmp/hpm-forward-2026-10-09T16-10-43.bin",
+              "words": 315
+            }
+          },
+          "flashScope": {
+            "label": "scope #1",
+            "fw": "demo.elf",
+            "size": 338952,
+            "ms": 3753,
+            "summary": "小结：46.7 KB · 校验开 · 复位开 · JTAG 批次 9596 次 / 381184 B · flash 16.00 MB / 扇区 4096 B",
+            "status": "擦除 0x80003000 起 43.6 KB…"
+          },
+          "elf": {
+            "cached": false,
+            "n": 30
+          },
+          "picks": {
+            "one": [
+              11
+            ],
+            "three": [
+              11,
+              12,
+              13
+            ],
+            "oneName": "g_v.tick",
+            "threeNames": [
+              "g_v.tick",
+              "g_v.u_hi",
+              "g_v.f_sin"
+            ],
+            "from": "g_v 结构体成员"
+          },
+          "j1": {
+            "label": "1 变量 @2µs",
+            "periodUs": 2,
+            "wantHz": 500000,
+            "vars": [
+              "g_v.tick@0x1240000"
+            ],
+            "spans": 1,
+            "frameBytes": 4,
+            "samples": 908300,
+            "rateHz": 302755,
+            "lostProbe": 613802,
+            "lostUsb": 0,
+            "lostGap": 0,
+            "state": "已停止（时长到 3.000 s）：908300 个样本 / 3.000 s，跳拍 613802 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+            "autoStopped": true
+          },
+          "j3": {
+            "label": "3 变量 @2µs",
+            "periodUs": 2,
+            "wantHz": 500000,
+            "vars": [
+              "g_v.tick@0x1240000",
+              "g_v.u_hi@0x1240004",
+              "g_v.f_sin@0x1240008"
+            ],
+            "spans": 1,
+            "frameBytes": 12,
+            "samples": 155431,
+            "rateHz": 51798,
+            "lostProbe": 1441452,
+            "lostUsb": 0,
+            "lostGap": 0,
+            "state": "已停止（时长到 3.001 s）：155431 个样本 / 3.001 s，跳拍 1441452 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+            "autoStopped": true
+          },
+          "j50k1": {
+            "label": "1 变量 @20µs",
+            "periodUs": 20,
+            "wantHz": 50000,
+            "vars": [
+              "g_v.tick@0x1240000"
+            ],
+            "spans": 1,
+            "frameBytes": 4,
+            "samples": 150040,
+            "rateHz": 50000,
+            "lostProbe": 0,
+            "lostUsb": 0,
+            "lostGap": 0,
+            "state": "已停止（时长到 3.001 s）：150040 个样本 / 3.001 s，跳拍 0 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+            "autoStopped": true
+          },
+          "j50k3": {
+            "label": "3 变量 @30µs",
+            "periodUs": 30,
+            "wantHz": 33333,
+            "vars": [
+              "g_v.tick@0x1240000",
+              "g_v.u_hi@0x1240004",
+              "g_v.f_sin@0x1240008"
+            ],
+            "spans": 1,
+            "frameBytes": 12,
+            "samples": 100040,
+            "rateHz": 33333,
+            "lostProbe": 0,
+            "lostUsb": 0,
+            "lostGap": 0,
+            "state": "已停止（时长到 3.001 s）：100040 个样本 / 3.001 s，跳拍 0 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+            "autoStopped": true
+          }
+        }
+      ],
+      "alt": [
+        {
+          "i": 1,
+          "floodMs": 3745,
+          "scopeMs": 3595
+        }
+      ],
+      "errors": [],
+      "spec": {
+        "flashFloodS": 12,
+        "flashScopeS": 12,
+        "viewerKBps": 56.5,
+        "viewerCorrupt": 0,
+        "fwdMBps": 1.101,
+        "recordBytesRatio": 0.98,
+        "j1kHz": 206.6,
+        "j3kHz": 32.6,
+        "j50k": true
+      },
+      "fwdRateMBs": [
+        1.385
+      ]
+    }
+  },
+  "integrity": {
+    "pattern": "hello world!\n",
+    "files": [
+      {
+        "path": "tmp/hpm-forward-2026-10-09T14-49-34.bin",
+        "bytes": 14721023,
+        "sha256": "8b3cb9d08b674ccfbd26f79185dfe1f4d3549bc95d585ff5de37df2734bbbb03",
+        "phase": 3,
+        "invalidBytes": 0,
+        "discontinuities": []
+      },
+      {
+        "path": "tmp/hpm-forward-2026-10-09T14-50-43.bin",
+        "bytes": 14712832,
+        "sha256": "e3e298668c5f5c6591ac084bb967995ce5454dd75db3362a9c279ee947a5487f",
+        "phase": 9,
+        "invalidBytes": 0,
+        "discontinuities": [
+          {
+            "offset": 4829184,
+            "fromPhase": 5,
+            "toPhase": 7,
+            "phaseDelta": 2
+          }
+        ]
+      },
+      {
+        "path": "tmp/hpm-forward-2026-10-09T14-52-55.bin",
+        "bytes": 14737408,
+        "sha256": "c5852a10a4246417112ecf0458b88b4ee0454ddf0742947a342d0684483db991",
+        "phase": 6,
+        "invalidBytes": 0,
+        "discontinuities": []
+      },
+      {
+        "path": "tmp/hpm-forward-2026-10-09T14-54-04.bin",
+        "bytes": 14753792,
+        "sha256": "7bfbacc27a7d7213de5bf00e6bdf4a7b07d6f0740a8d28f35697e1a3b2606b5a",
+        "phase": 2,
+        "invalidBytes": 0,
+        "discontinuities": []
+      },
+      {
+        "path": "tmp/hpm-forward-2026-10-09T15-35-32.bin",
+        "bytes": 14716928,
+        "sha256": "e88b05ec005893b145564223f974c2b1bd1728afbc5a3742c67fdbdcc343f5df",
+        "phase": 11,
+        "invalidBytes": 0,
+        "discontinuities": []
+      },
+      {
+        "path": "tmp/hpm-forward-2026-10-09T15-39-14.bin",
+        "bytes": 14749696,
+        "sha256": "71cd0624a5afa4c3e209f746a78a80e8cbf80afc2178d218fb9c56ab72872218",
+        "phase": 9,
+        "invalidBytes": 0,
+        "discontinuities": [
+          {
+            "offset": 10039296,
+            "fromPhase": 3,
+            "toPhase": 8,
+            "phaseDelta": 5
+          }
+        ]
+      },
+      {
+        "path": "tmp/hpm-forward-2026-10-09T16-10-43.bin",
+        "bytes": 14704640,
+        "sha256": "81af5b781b365f82b63e1396718947b6384add868d64263b4980844f1740a376",
+        "phase": 12,
+        "invalidBytes": 0,
+        "discontinuities": []
+      }
+    ],
+    "totalBytes": 103096319,
+    "invalidBytes": 0,
+    "discontinuities": 2,
+    "limitation": "重复13B模式无法识别整段13B倍数的重复或丢失；契约校验不是全通道每比特BER证明"
+  },
+  "sequenceTests": {
+    "native": {
+      "bytes": 43646976,
+      "good": 170495,
+      "crcBad": 0,
+      "payloadBad": 0,
+      "lost": 0,
+      "repeat": 0,
+      "backward": 0,
+      "skipped": 53,
+      "tail": 203,
+      "events": []
+    },
+    "web4kFirstOffline": {
+      "path": "tmp/hpm-forward-2026-10-09T15-51-18.bin",
+      "bytes": 43581440,
+      "good": 170237,
+      "crcBad": 2,
+      "payloadBad": 0,
+      "lost": 10,
+      "repeat": 0,
+      "backward": 0,
+      "skipped": 565,
+      "tail": 203,
+      "events": [
+        {
+          "prev": 82286,
+          "seq": 82294,
+          "delta": 8,
+          "atBytes": 1638400
+        },
+        {
+          "prev": 144260,
+          "seq": 144264,
+          "delta": 4,
+          "atBytes": 17498112
+        }
+      ]
+    },
+    "web64k": {
+      "startedAt": "2026-10-09T16:02:56.630Z",
+      "board": "hpm6800evk",
+      "app": "http://127.0.0.1:8899/index.html?t=1791561776170#flash",
+      "cycles": [
+        {
+          "cycle": 1,
+          "flashFlood": {
+            "label": "flood #1",
+            "fw": "fw.elf",
+            "size": 349104,
+            "ms": 4048,
+            "summary": "小结：45.9 KB · 校验开 · 复位开 · JTAG 批次 8962 次 / 371346 B · flash 16.00 MB / 扇区 4096 B",
+            "status": "校验（读回 flash 逐字节比）…"
+          },
+          "cbAddr": 19136512,
+          "fwd": {
+            "cbAddr": "0x1240000",
+            "rateMB": 1.3847382522701994,
+            "probeRateMB": 1.3840063610163567,
+            "seconds": 8,
+            "record": {
+              "seconds": 30.2,
+              "rxBytes": 43814912,
+              "fileBytes": 43646976,
+              "ratio": 0.9962,
+              "backlogKB": 80,
+              "path": "tmp/hpm-forward-2026-10-09T16-03-17.bin",
+              "words": 16
+            }
+          },
+          "integrity": {
+            "buffer": 65536,
+            "live": {
+              "bytes": 43646976,
+              "good": 170495,
+              "crcBad": 0,
+              "payloadBad": 0,
+              "lost": 0,
+              "repeat": 0,
+              "backward": 0,
+              "skipped": 53,
+              "tail": 203,
+              "events": []
+            },
+            "serialErrors": [],
+            "hid": {
+              "running": false,
+              "channel": 0,
+              "swdReady": false,
+              "clockDelay": 2,
+              "cbAddr": 0,
+              "upAddr": 0,
+              "moved": 65734656,
+              "polls": 14599,
+              "transfers": 32097,
+              "rdErr": 0,
+              "wrErr": 0,
+              "lastChunk": 2048,
+              "emptyRing": 0,
+              "dapYield": 41562,
+              "rescans": 0,
+              "lastCmdId": 0,
+              "lastResp": 0,
+              "startRc": 0,
+              "chunkBytes": 2048,
+              "discard": false,
+              "swdMhz": 45
+            }
+          }
+        }
+      ],
+      "alt": [],
+      "errors": [],
+      "spec": {
+        "flashFloodS": 12,
+        "flashScopeS": 12,
+        "viewerKBps": 56.5,
+        "viewerCorrupt": 0,
+        "fwdMBps": 1.101,
+        "recordBytesRatio": 0.98,
+        "j1kHz": 206.6,
+        "j3kHz": 32.6,
+        "j50k": true
+      },
+      "fwdRateMBs": [
+        1.385
+      ]
+    },
+    "web4kRepeat": {
+      "startedAt": "2026-10-09T16:04:04.877Z",
+      "board": "hpm6800evk",
+      "app": "http://127.0.0.1:8899/index.html?t=1791561844396#flash",
+      "cycles": [
+        {
+          "cycle": 1,
+          "flashFlood": {
+            "label": "flood #1",
+            "fw": "fw.elf",
+            "size": 349104,
+            "ms": 3907,
+            "summary": "小结：45.9 KB · 校验开 · 复位开 · JTAG 批次 9206 次 / 373054 B · flash 16.00 MB / 扇区 4096 B",
+            "status": "校验 43792 / 43792 B（100%）"
+          },
+          "cbAddr": 19136512,
+          "fwd": {
+            "cbAddr": "0x1240000",
+            "rateMB": 1.3850291314209826,
+            "probeRateMB": 1.3823487442912095,
+            "seconds": 8,
+            "record": {
+              "seconds": 30.2,
+              "rxBytes": 43794432,
+              "fileBytes": 43745280,
+              "ratio": 0.9989,
+              "backlogKB": 164,
+              "path": "tmp/hpm-forward-2026-10-09T16-04-25.bin",
+              "words": 16
+            }
+          },
+          "integrity": {
+            "buffer": 4096,
+            "live": {
+              "bytes": 43745280,
+              "good": 170879,
+              "crcBad": 0,
+              "payloadBad": 0,
+              "lost": 0,
+              "repeat": 0,
+              "backward": 0,
+              "skipped": 53,
+              "tail": 203,
+              "events": []
+            },
+            "serialErrors": [],
+            "hid": {
+              "running": false,
+              "channel": 0,
+              "swdReady": false,
+              "clockDelay": 2,
+              "cbAddr": 0,
+              "upAddr": 0,
+              "moved": 65581056,
+              "polls": 14441,
+              "transfers": 32023,
+              "rdErr": 0,
+              "wrErr": 0,
+              "lastChunk": 2048,
+              "emptyRing": 0,
+              "dapYield": 41564,
+              "rescans": 0,
+              "lastCmdId": 0,
+              "lastResp": 0,
+              "startRc": 0,
+              "chunkBytes": 2048,
+              "discard": false,
+              "swdMhz": 45
+            }
+          }
+        }
+      ],
+      "alt": [],
+      "errors": [],
+      "spec": {
+        "flashFloodS": 12,
+        "flashScopeS": 12,
+        "viewerKBps": 56.5,
+        "viewerCorrupt": 0,
+        "fwdMBps": 1.101,
+        "recordBytesRatio": 0.98,
+        "j1kHz": 206.6,
+        "j3kHz": 32.6,
+        "j50k": true
+      },
+      "fwdRateMBs": [
+        1.385
+      ]
+    },
+    "web4kStall": {
+      "startedAt": "2026-10-09T16:05:34.620Z",
+      "board": "hpm6800evk",
+      "app": "http://127.0.0.1:8899/index.html?t=1791561934151#flash",
+      "cycles": [
+        {
+          "cycle": 1,
+          "flashFlood": {
+            "label": "flood #1",
+            "fw": "fw.elf",
+            "size": 349104,
+            "ms": 3891,
+            "summary": "小结：45.9 KB · 校验开 · 复位开 · JTAG 批次 9060 次 / 372032 B · flash 16.00 MB / 扇区 4096 B",
+            "status": "校验 43792 / 43792 B（100%）"
+          },
+          "cbAddr": 19136512,
+          "fwd": {
+            "cbAddr": "0x1240000",
+            "rateMB": 1.3851534972626314,
+            "probeRateMB": 1.3844213865346913,
+            "seconds": 8,
+            "record": {
+              "seconds": 30.2,
+              "rxBytes": 43810816,
+              "fileBytes": 43827200,
+              "ratio": 1.0004,
+              "backlogKB": 220,
+              "path": "tmp/hpm-forward-2026-10-09T16-05-55.bin",
+              "words": 16
+            }
+          },
+          "integrity": {
+            "buffer": 4096,
+            "stallMs": 25,
+            "stallCount": 30,
+            "live": {
+              "bytes": 43827200,
+              "good": 171194,
+              "crcBad": 5,
+              "payloadBad": 0,
+              "lost": 25,
+              "repeat": 0,
+              "backward": 0,
+              "skipped": 1333,
+              "tail": 203,
+              "events": [
+                {
+                  "prev": 81130,
+                  "seq": 81136,
+                  "delta": 6,
+                  "atBytes": 1699840
+                },
+                {
+                  "prev": 144398,
+                  "seq": 144406,
+                  "delta": 8,
+                  "atBytes": 17895424
+                },
+                {
+                  "prev": 154884,
+                  "seq": 154888,
+                  "delta": 4,
+                  "atBytes": 20578304
+                },
+                {
+                  "prev": 217318,
+                  "seq": 217326,
+                  "delta": 8,
+                  "atBytes": 36560896
+                },
+                {
+                  "prev": 222940,
+                  "seq": 222944,
+                  "delta": 4,
+                  "atBytes": 37998592
+                }
+              ]
+            },
+            "serialErrors": [],
+            "hid": {
+              "running": false,
+              "channel": 0,
+              "swdReady": false,
+              "clockDelay": 2,
+              "cbAddr": 0,
+              "upAddr": 0,
+              "moved": 65644544,
+              "polls": 14493,
+              "transfers": 32053,
+              "rdErr": 0,
+              "wrErr": 0,
+              "lastChunk": 2048,
+              "emptyRing": 0,
+              "dapYield": 41564,
+              "rescans": 0,
+              "lastCmdId": 0,
+              "lastResp": 0,
+              "startRc": 0,
+              "chunkBytes": 2048,
+              "discard": false,
+              "swdMhz": 45
+            }
+          }
+        }
+      ],
+      "alt": [],
+      "errors": [],
+      "spec": {
+        "flashFloodS": 12,
+        "flashScopeS": 12,
+        "viewerKBps": 56.5,
+        "viewerCorrupt": 0,
+        "fwdMBps": 1.101,
+        "recordBytesRatio": 0.98,
+        "j1kHz": 206.6,
+        "j3kHz": 32.6,
+        "j50k": true
+      },
+      "fwdRateMBs": [
+        1.385
+      ]
+    },
+    "web64kStall": {
+      "startedAt": "2026-10-09T16:06:48.638Z",
+      "board": "hpm6800evk",
+      "app": "http://127.0.0.1:8899/index.html?t=1791562008165#flash",
+      "cycles": [
+        {
+          "cycle": 1,
+          "flashFlood": {
+            "label": "flood #1",
+            "fw": "fw.elf",
+            "size": 349104,
+            "ms": 3906,
+            "summary": "小结：45.9 KB · 校验开 · 复位开 · JTAG 批次 9150 次 / 372662 B · flash 16.00 MB / 扇区 4096 B",
+            "status": "校验 43792 / 43792 B（100%）"
+          },
+          "cbAddr": 19136512,
+          "fwd": {
+            "cbAddr": "0x1240000",
+            "rateMB": 1.3847519336730119,
+            "probeRateMB": 1.3845078815169187,
+            "seconds": 8,
+            "record": {
+              "seconds": 30.2,
+              "rxBytes": 43794432,
+              "fileBytes": 43778048,
+              "ratio": 0.9996,
+              "backlogKB": 160,
+              "path": "tmp/hpm-forward-2026-10-09T16-07-09.bin",
+              "words": 16
+            }
+          },
+          "integrity": {
+            "buffer": 65536,
+            "stallMs": 25,
+            "stallCount": 30,
+            "live": {
+              "bytes": 43778048,
+              "good": 171007,
+              "crcBad": 0,
+              "payloadBad": 0,
+              "lost": 0,
+              "repeat": 0,
+              "backward": 0,
+              "skipped": 53,
+              "tail": 203,
+              "events": []
+            },
+            "serialErrors": [],
+            "hid": {
+              "running": false,
+              "channel": 0,
+              "swdReady": false,
+              "clockDelay": 2,
+              "cbAddr": 0,
+              "upAddr": 0,
+              "moved": 66072576,
+              "polls": 14133,
+              "transfers": 32263,
+              "rdErr": 0,
+              "wrErr": 0,
+              "lastChunk": 2048,
+              "emptyRing": 0,
+              "dapYield": 41558,
+              "rescans": 0,
+              "lastCmdId": 0,
+              "lastResp": 0,
+              "startRc": 0,
+              "chunkBytes": 2048,
+              "discard": false,
+              "swdMhz": 45
+            }
+          }
+        }
+      ],
+      "alt": [],
+      "errors": [],
+      "spec": {
+        "flashFloodS": 12,
+        "flashScopeS": 12,
+        "viewerKBps": 56.5,
+        "viewerCorrupt": 0,
+        "fwdMBps": 1.101,
+        "recordBytesRatio": 0.98,
+        "j1kHz": 206.6,
+        "j3kHz": 32.6,
+        "j50k": true
+      },
+      "fwdRateMBs": [
+        1.385
+      ]
+    },
+    "webFinalDefault": {
+      "startedAt": "2026-10-09T16:08:15.761Z",
+      "board": "hpm6800evk",
+      "app": "http://127.0.0.1:8899/index.html?t=1791562095329#flash",
+      "cycles": [
+        {
+          "cycle": 1,
+          "flashFlood": {
+            "label": "flood #1",
+            "fw": "fw.elf",
+            "size": 349104,
+            "ms": 3905,
+            "summary": "小结：45.9 KB · 校验开 · 复位开 · JTAG 批次 9064 次 / 372060 B · flash 16.00 MB / 扇区 4096 B",
+            "status": "校验（读回 flash 逐字节比）…"
+          },
+          "cbAddr": 19136512,
+          "fwd": {
+            "cbAddr": "0x1240000",
+            "rateMB": 1.3851015780222287,
+            "probeRateMB": 1.3843694947357477,
+            "seconds": 8,
+            "record": {
+              "seconds": 60.2,
+              "rxBytes": 87396352,
+              "fileBytes": 87379968,
+              "ratio": 0.9998,
+              "backlogKB": 232,
+              "path": "tmp/hpm-forward-2026-10-09T16-08-36.bin",
+              "words": 16
+            }
+          },
+          "integrity": {
+            "buffer": 65536,
+            "stallMs": 25,
+            "stallCount": 60,
+            "live": {
+              "bytes": 87379968,
+              "good": 341327,
+              "crcBad": 0,
+              "payloadBad": 0,
+              "lost": 0,
+              "repeat": 0,
+              "backward": 0,
+              "skipped": 53,
+              "tail": 203,
+              "events": []
+            },
+            "serialErrors": [],
+            "hid": {
+              "running": false,
+              "channel": 0,
+              "swdReady": false,
+              "clockDelay": 2,
+              "cbAddr": 0,
+              "upAddr": 0,
+              "moved": 111556608,
+              "polls": 35922,
+              "transfers": 54471,
+              "rdErr": 0,
+              "wrErr": 0,
+              "lastChunk": 2048,
+              "emptyRing": 0,
+              "dapYield": 41562,
+              "rescans": 0,
+              "lastCmdId": 0,
+              "lastResp": 0,
+              "startRc": 0,
+              "chunkBytes": 2048,
+              "discard": false,
+              "swdMhz": 45
+            }
+          }
+        }
+      ],
+      "alt": [],
+      "errors": [],
+      "spec": {
+        "flashFloodS": 12,
+        "flashScopeS": 12,
+        "viewerKBps": 56.5,
+        "viewerCorrupt": 0,
+        "fwdMBps": 1.101,
+        "recordBytesRatio": 0.98,
+        "j1kHz": 206.6,
+        "j3kHz": 32.6,
+        "j50k": true
+      },
+      "fwdRateMBs": [
+        1.385
+      ]
+    }
+  },
+  "trap": {
+    "mcause": 2,
+    "mepc": 2147505492,
+    "mtval": 4294967295,
+    "error": null,
+    "passed": true
+  },
+  "pendingIssue": {
+    "swoArbitraryBaud": 11234567,
+    "rc": -8,
+    "requiresProbeReboot": true,
+    "resolved": false
+  },
+  "debug": {
+    "at": "2026-10-09T15:40:43.093Z",
+    "elf": "/tools/target-firmware/hpm6800evk_dbgstress/build/flash_xip/output/demo.elf",
+    "pass": 57,
+    "fail": 0,
+    "failures": [],
+    "oracle": {
+      "elf": "/tools/target-firmware/hpm6800evk_dbgstress/build/flash_xip/output/demo.elf",
+      "arch": "riscv",
+      "linear": [
+        {
+          "pc": 2147506068,
+          "line": 22,
+          "halted": true
+        },
+        {
+          "pc": 2147506076,
+          "line": 23,
+          "halted": true
+        },
+        {
+          "pc": 2147506082,
+          "line": 24,
+          "halted": true
+        },
+        {
+          "pc": 2147506088,
+          "line": 25,
+          "halted": true
+        },
+        {
+          "pc": 2147506102,
+          "line": 26,
+          "halted": true
+        },
+        {
+          "pc": 2147506106,
+          "line": 26,
+          "halted": true
+        },
+        {
+          "pc": 2147506110,
+          "line": 27,
+          "halted": true
+        },
+        {
+          "pc": 2147506124,
+          "line": 28,
+          "halted": true
+        },
+        {
+          "pc": 2147506128,
+          "line": 28,
+          "halted": true
+        },
+        {
+          "pc": 2147506132,
+          "line": 29,
+          "halted": true
+        },
+        {
+          "pc": 2147506140,
+          "line": 30,
+          "halted": true
+        },
+        {
+          "pc": 2147506144,
+          "line": 30,
+          "halted": true
+        },
+        {
+          "pc": 2147506148,
+          "line": 31,
+          "halted": true
+        },
+        {
+          "pc": 2147506160,
+          "line": 32,
+          "halted": true
+        },
+        {
+          "pc": 2147506164,
+          "line": 32,
+          "halted": true
+        },
+        {
+          "pc": 2147506168,
+          "line": 33,
+          "halted": true
+        },
+        {
+          "pc": 2147506174,
+          "line": 33,
+          "halted": true
+        },
+        {
+          "pc": 2147506180,
+          "line": 34,
+          "halted": true
+        },
+        {
+          "pc": 2147506184,
+          "line": 34,
+          "halted": true
+        },
+        {
+          "pc": 2147506188,
+          "line": 35,
+          "halted": true
+        }
+      ],
+      "bpAddr": {
+        "engine.c:22": 2147506068,
+        "model.c:123": 2147508380
+      },
+      "struct": {},
+      "steps": {
+        "intoLeaf": 2147506026
+      }
+    }
+  },
+  "lease": {
+    "before": {
+      "version": 1,
+      "rc": 0,
+      "token": 0,
+      "mode": -1,
+      "requestedBaud": 0,
+      "actualBaud": 0,
+      "uartHz": 240000000,
+      "systemDivider": 0,
+      "source": 0,
+      "osr": 0,
+      "uartDivider": 0,
+      "pll1Hz": 800000000,
+      "leaseMs": 0,
+      "blocker": 0
+    },
+    "active": {
+      "version": 1,
+      "rc": 0,
+      "token": 1,
+      "mode": 0,
+      "requestedBaud": 1000000,
+      "actualBaud": 1000000,
+      "uartHz": 240000000,
+      "systemDivider": 3,
+      "source": 1,
+      "osr": 8,
+      "uartDivider": 30,
+      "pll1Hz": 800000000,
+      "leaseMs": 4968,
+      "blocker": 4294967295
+    },
+    "heartbeat": {
+      "version": 1,
+      "rc": 0,
+      "token": 1,
+      "mode": 0,
+      "requestedBaud": 1000000,
+      "actualBaud": 1000000,
+      "uartHz": 240000000,
+      "systemDivider": 3,
+      "source": 1,
+      "osr": 8,
+      "uartDivider": 30,
+      "pll1Hz": 800000000,
+      "leaseMs": 5000,
+      "blocker": 4294967295
+    },
+    "released": {
+      "version": 1,
+      "rc": 0,
+      "token": 0,
+      "mode": -1,
+      "requestedBaud": 1000000,
+      "actualBaud": 0,
+      "uartHz": 240000000,
+      "systemDivider": 3,
+      "source": 1,
+      "osr": 8,
+      "uartDivider": 30,
+      "pll1Hz": 800000000,
+      "leaseMs": 0,
+      "blocker": 4294967295
+    },
+    "retuned": {
+      "version": 1,
+      "rc": 0,
+      "token": 2,
+      "mode": 2,
+      "requestedBaud": 23000000,
+      "actualBaud": 23000000,
+      "uartHz": 230000000,
+      "systemDivider": 4,
+      "source": 4,
+      "osr": 10,
+      "uartDivider": 1,
+      "pll1Hz": 920000000,
+      "leaseMs": 4964,
+      "blocker": 4294967295
+    },
+    "expired": {
+      "version": 1,
+      "rc": 0,
+      "token": 0,
+      "mode": -1,
+      "requestedBaud": 23000000,
+      "actualBaud": 0,
+      "uartHz": 240000000,
+      "systemDivider": 4,
+      "source": 4,
+      "osr": 10,
+      "uartDivider": 1,
+      "pll1Hz": 800000000,
+      "leaseMs": 0,
+      "blocker": 4294967295
+    },
+    "roots": {
+      "frequencies": [
+        24000000,
+        720000000,
+        600000000,
+        400000000,
+        800000000,
+        666666666,
+        500000000,
+        266666666
+      ],
+      "cpuClock": 50462977,
+      "mfi": 805306401,
+      "mfn": 80000000,
+      "mfd": 240000000
+    },
+    "afterRoots": {
+      "frequencies": [
+        24000000,
+        720000000,
+        600000000,
+        400000000,
+        800000000,
+        666666666,
+        500000000,
+        266666666
+      ],
+      "cpuClock": 50462977,
+      "mfi": 805306401,
+      "mfn": 80000000,
+      "mfd": 240000000
+    },
+    "nodes": [
+      16842752,
+      134218761,
+      134218761,
+      134218761,
+      134218761,
+      134218761,
+      134218761,
+      134218761,
+      134218761,
+      152044551,
+      152044551,
+      134218759,
+      134218759,
+      134218761,
+      134218761,
+      134218761,
+      152044553,
+      152044553,
+      152044553,
+      152044553,
+      134218761,
+      152044553,
+      134218761,
+      50462978,
+      134218761,
+      134218761,
+      134218761,
+      134218761,
+      134218761,
+      152044550,
+      134218755,
+      134218755,
+      134218755,
+      134218755,
+      201328137,
+      201328137
+    ],
+    "afterNodes": [
+      16842752,
+      134218761,
+      134218761,
+      134218761,
+      134218761,
+      134218761,
+      134218761,
+      134218761,
+      134218761,
+      152044551,
+      152044551,
+      134218759,
+      134218759,
+      134218761,
+      134218761,
+      134218761,
+      152044553,
+      152044553,
+      152044553,
+      152044553,
+      134218761,
+      152044553,
+      134218761,
+      50462978,
+      134218761,
+      134218761,
+      134218761,
+      134218761,
+      134218761,
+      152044550,
+      134218755,
+      134218755,
+      134218755,
+      134218755,
+      201328137,
+      201328137
+    ],
+    "passed": true
+  },
+  "failureTimeline": [
+    {
+      "ms": 5751.5,
+      "event": "init",
+      "phase": "begin",
+      "active": 0,
+      "status": "已断开",
+      "cls": ""
+    },
+    {
+      "ms": 5757.4000000059605,
+      "event": "init",
+      "phase": "end",
+      "active": 0
+    },
+    {
+      "ms": 5768,
+      "event": "_read",
+      "phase": "begin",
+      "active": 1,
+      "addr": 19136512,
+      "len": 24,
+      "status": "正在查找 RTT 控制块…",
+      "cls": ""
+    },
+    {
+      "ms": 5772.9000000059605,
+      "event": "_read",
+      "phase": "end",
+      "active": 1
+    },
+    {
+      "ms": 5773,
+      "event": "_read",
+      "phase": "begin",
+      "active": 1,
+      "addr": 19136536,
+      "len": 24,
+      "status": "正在查找 RTT 控制块…",
+      "cls": ""
+    },
+    {
+      "ms": 5781.0999999940395,
+      "event": "_read",
+      "phase": "end",
+      "active": 1
+    },
+    {
+      "ms": 5781.200000017881,
+      "event": "_read",
+      "phase": "begin",
+      "active": 1,
+      "addr": 19136560,
+      "len": 24,
+      "status": "正在查找 RTT 控制块…",
+      "cls": ""
+    },
+    {
+      "ms": 5786.200000017881,
+      "event": "_read",
+      "phase": "end",
+      "active": 1
+    },
+    {
+      "ms": 5786.200000017881,
+      "event": "_read",
+      "phase": "begin",
+      "active": 1,
+      "addr": 19136584,
+      "len": 24,
+      "status": "正在查找 RTT 控制块…",
+      "cls": ""
+    },
+    {
+      "ms": 5791,
+      "event": "_read",
+      "phase": "end",
+      "active": 1
+    },
+    {
+      "ms": 5791,
+      "event": "_read",
+      "phase": "begin",
+      "active": 1,
+      "addr": 19136608,
+      "len": 24,
+      "status": "正在查找 RTT 控制块…",
+      "cls": ""
+    },
+    {
+      "ms": 5798.300000011921,
+      "event": "_read",
+      "phase": "end",
+      "active": 1
+    },
+    {
+      "ms": 5798.300000011921,
+      "event": "_read",
+      "phase": "begin",
+      "active": 1,
+      "addr": 19136632,
+      "len": 24,
+      "status": "正在查找 RTT 控制块…",
+      "cls": ""
+    },
+    {
+      "ms": 5803,
+      "event": "_read",
+      "phase": "end",
+      "active": 1
+    },
+    {
+      "ms": 5803,
+      "event": "_read",
+      "phase": "begin",
+      "active": 1,
+      "addr": 19136656,
+      "len": 24,
+      "status": "正在查找 RTT 控制块…",
+      "cls": ""
+    },
+    {
+      "ms": 5808,
+      "event": "_read",
+      "phase": "end",
+      "active": 1
+    },
+    {
+      "ms": 5808.0999999940395,
+      "event": "_read",
+      "phase": "begin",
+      "active": 1,
+      "addr": 19136512,
+      "len": 24,
+      "status": "正在查找 RTT 控制块…",
+      "cls": ""
+    },
+    {
+      "ms": 5814.700000017881,
+      "event": "_read",
+      "phase": "end",
+      "active": 1
+    },
+    {
+      "ms": 5814.700000017881,
+      "event": "_read",
+      "phase": "begin",
+      "active": 1,
+      "addr": 19136536,
+      "len": 24,
+      "status": "正在查找 RTT 控制块…",
+      "cls": ""
+    },
+    {
+      "ms": 5819.9000000059605,
+      "event": "_read",
+      "phase": "end",
+      "active": 1
+    },
+    {
+      "ms": 5819.9000000059605,
+      "event": "_read",
+      "phase": "begin",
+      "active": 1,
+      "addr": 19136560,
+      "len": 24,
+      "status": "正在查找 RTT 控制块…",
+      "cls": ""
+    },
+    {
+      "ms": 5825.0999999940395,
+      "event": "_read",
+      "phase": "end",
+      "active": 1
+    },
+    {
+      "ms": 5825.0999999940395,
+      "event": "_read",
+      "phase": "begin",
+      "active": 1,
+      "addr": 19136584,
+      "len": 24,
+      "status": "正在查找 RTT 控制块…",
+      "cls": ""
+    },
+    {
+      "ms": 5832.200000017881,
+      "event": "_read",
+      "phase": "end",
+      "active": 1
+    },
+    {
+      "ms": 5832.200000017881,
+      "event": "_read",
+      "phase": "begin",
+      "active": 1,
+      "addr": 19136608,
+      "len": 24,
+      "status": "正在查找 RTT 控制块…",
+      "cls": ""
+    },
+    {
+      "ms": 5837.4000000059605,
+      "event": "_read",
+      "phase": "end",
+      "active": 1
+    },
+    {
+      "ms": 5837.4000000059605,
+      "event": "_read",
+      "phase": "begin",
+      "active": 1,
+      "addr": 19136632,
+      "len": 24,
+      "status": "正在查找 RTT 控制块…",
+      "cls": ""
+    },
+    {
+      "ms": 5842.5,
+      "event": "_read",
+      "phase": "end",
+      "active": 1
+    },
+    {
+      "ms": 5842.5,
+      "event": "_read",
+      "phase": "begin",
+      "active": 1,
+      "addr": 19136656,
+      "len": 24,
+      "status": "正在查找 RTT 控制块…",
+      "cls": ""
+    },
+    {
+      "ms": 5849.0999999940395,
+      "event": "_read",
+      "phase": "end",
+      "active": 1
+    },
+    {
+      "ms": 5849.5999999940395,
+      "event": "_read",
+      "phase": "begin",
+      "active": 1,
+      "addr": 19136536,
+      "len": 24,
+      "status": "控制块 0x1240000，上行缓冲 32768 B（固件声明 3 个上行通道，本页读 ch0）",
+      "cls": "ok"
+    },
+    {
+      "ms": 5854.700000017881,
+      "event": "_read",
+      "phase": "end",
+      "active": 1
+    },
+    {
+      "ms": 5854.700000017881,
+      "event": "_read",
+      "phase": "begin",
+      "active": 1,
+      "addr": 19136680,
+      "len": 32767,
+      "status": "控制块 0x1240000，上行缓冲 32768 B（固件声明 3 个上行通道，本页读 ch0）",
+      "cls": "ok"
+    },
+    {
+      "ms": 5934.800000011921,
+      "event": "recover",
+      "phase": "begin",
+      "active": 1,
+      "status": "控制块 0x1240000，上行缓冲 32768 B（固件声明 3 个上行通道，本页读 ch0）",
+      "cls": "ok"
+    },
+    {
+      "ms": 6309,
+      "event": "_read",
+      "phase": "end",
+      "active": 1
+    },
+    {
+      "ms": 6309.5,
+      "event": "writeMem",
+      "phase": "begin",
+      "active": 1,
+      "addr": 19136552,
+      "len": 4,
+      "status": "控制块 0x1240000，上行缓冲 32768 B（固件声明 3 个上行通道，本页读 ch0）",
+      "cls": "ok"
+    },
+    {
+      "ms": 6311,
+      "event": "init",
+      "phase": "begin",
+      "active": 1,
+      "status": "控制块 0x1240000，上行缓冲 32768 B（固件声明 3 个上行通道，本页读 ch0）",
+      "cls": "ok"
+    },
+    {
+      "ms": 6312.4000000059605,
+      "event": "writeMem",
+      "phase": "error",
+      "active": 1,
+      "error": "DMI 响应使用保留状态（op=1）"
+    },
+    {
+      "ms": 6316,
+      "event": "init",
+      "phase": "end",
+      "active": 0
+    },
+    {
+      "ms": 6316.0999999940395,
+      "event": "recover",
+      "phase": "end",
+      "active": 0
+    }
+  ]
+}
