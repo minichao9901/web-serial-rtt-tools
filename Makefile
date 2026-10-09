@@ -188,6 +188,7 @@ test-diagnostics-page: page-prep
 	$(NODE) tools/selftest/diagnostics-page.test.mjs
 
 test-dbg-features:
+	$(NODE) tools/selftest/dbg-source-syntax.test.mjs
 	$(NODE) tools/selftest/dap-resume.test.mjs
 	$(NODE) tools/selftest/diagnostics.test.mjs
 	$(NODE) tools/selftest/dbg-dwt.test.mjs

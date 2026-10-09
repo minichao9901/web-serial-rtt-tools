@@ -878,6 +878,13 @@ fieldset.folded > legend::after{content:' · 已折叠';color:var(--fg2);font-si
 /* 🚨 类名是 `.srctx` 不是 `.tx`：`.tx` 被「文本发送」那个 textarea 的全局规则占着（min-height:52px），
    用它会把每一行源码撑到 52px —— 就是用户报的"行距太大"。 */
 #tab-dbg .srcrow .srctx{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}
+#tab-dbg .srctx .src-keyword{color:#c792ea}
+#tab-dbg .srctx .src-type{color:#80cbc4}
+#tab-dbg .srctx .src-function{color:#82aaff}
+#tab-dbg .srctx .src-number{color:#f7c87c}
+#tab-dbg .srctx .src-string{color:#c3e88d}
+#tab-dbg .srctx .src-comment{color:#8b9bad}
+#tab-dbg .srctx .src-directive{color:#f0a5bf}
 #tab-dbg #d-src-file{font-size:var(--text-xs);color:var(--fg2)}
 
 /* 命令行：占左列下面（默认 flex-basis 28%，拖动后是 px），输出区 + 贴底输入行 */

@@ -44,6 +44,7 @@ const regIs = (name, want) => String(name ?? '').toUpperCase() === want;
 import { WatchList, resolveWatch, formatWatchValue, treeRows, summarizeTree, TREE_LIMITS } from './watch.js';
 import { completeLine } from './complete.js';
 import { SourceStore, sourceRootSuggestions } from './source.js';
+import { sourceTokens } from './source-syntax.js';
 import { hex32, parseBytes } from './fmt.js';
 import { Rtt } from '../rtt/protocol.js';
 import { parseSvdXml, decodeSvdRegister, svdSummary } from './svd.js';
@@ -1772,6 +1773,12 @@ export class DbgView {
       this.srcShown = { key, line: at.line };
       return;
     }
+    // 单文件缓存：单步时只绘制当前窗口，避免每次重新扫描整份源码。
+    const source = lines.join('\n');
+    if (this._srcSyntax?.file !== at.file || this._srcSyntax?.source !== source){
+      this._srcSyntax = { file: at.file, source, tokens: sourceTokens(lines, at.file) };
+    }
+    const syntax = this._srcSyntax.tokens;
     const frag = document.createDocumentFragment();
     for (const ln of range(from, to)){
       const row = document.createElement('div');
@@ -1783,7 +1790,16 @@ export class DbgView {
       n.title = '点一下在这行下硬件断点（要有地址信息）；再点一下删掉';
       const t = document.createElement('span');
       t.className = 'srctx';                       // 🚨 不能叫 `.tx`：那条全局规则是给"文本发送"输入框的（min-height:52px）
-      t.textContent = (lines[ln - 1] ?? '').replace(/\t/g, '    ');
+      if (syntax){
+        for (const token of syntax[ln - 1] || []){
+          const value = token.text.replace(/\t/g, '    ');
+          if (!token.kind){ t.appendChild(document.createTextNode(value)); continue; }
+          const span = document.createElement('span');
+          span.className = `src-${token.kind}`;
+          span.textContent = value;
+          t.appendChild(span);
+        }
+      } else t.textContent = (lines[ln - 1] ?? '').replace(/\t/g, '    ');
       row.append(n, t);
       frag.appendChild(row);
     }
