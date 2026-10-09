@@ -313,6 +313,10 @@ export class I2cView {
   }
   _syncButtons(st){
     const on = st.connected;
+    const pending = this._connecting || this._disconnecting || st.busy;
+    $('i2-connect').disabled = (on && !st.lost) || pending;
+    $('i2-choose').disabled = on || pending;
+    $('i2-disconnect').disabled = !this.session.hid || pending;
     // ⚠️ 「只看解析」不在列表里：解析是纯本地的，没接探针也该能用（写了半段先核语法很常见）
     for (const id of ['i2-cfg-get', 'i2-cfg-set', 'i2-enable', 'i2-disable', 'i2-reset', 'i2-scan',
       'i2-pintest', 'i2-dbg', 'i2-cmd-send', 'i2-cmd-run', 'i2-dsl-send', 'i2-dsl-run']){
@@ -330,12 +334,18 @@ export class I2cView {
 
   _bindConn(){
     $('i2-connect').addEventListener('click', async () => {
-      if ($('i2-mock').checked) return this._connect(true, true);
-      return this._connect(true, false);
+      return this._connect(null, $('i2-mock').checked);
     });
-    $('i2-reconnect').addEventListener('click', async () => {
-      if ($('i2-mock').checked) return this._connect(false, true);
-      return this.session.reacquire().catch(e => this.session.log('e', '重连失败：' + e.message));
+    $('i2-disconnect').addEventListener('click', async () => {
+      if (this.session.busy) return;
+      this._disconnecting = true; this._syncButtons(this.session.stateInfo());
+      try { await this.session.disconnect(); }
+      catch (e){ this.session.log('e', '关闭探针失败：' + e.message); this.session._setState('关闭探针失败：' + e.message, 'err'); }
+      finally { this._disconnecting = false; this._syncButtons(this.session.stateInfo()); }
+    });
+    $('i2-choose').addEventListener('click', () => {
+      $('i2-mock').checked = false;
+      return this._connect(true, false);
     });
     $('i2-mock').addEventListener('change', async e => {
       this.session.log('dim', e.target.checked ? '已切到假探针模式 —— 点「连接探针」生效' : '已取消假探针模式 —— 点「连接探针」连真探针');
@@ -343,7 +353,16 @@ export class I2cView {
   }
 
   async _connect(interactive, mock){
-    return await this.session.connect(interactive, { mock, enable: true });
+    this._connecting = true; this._syncButtons(this.session.stateInfo());
+    try {
+      if (interactive == null && !mock && this.session.lost){
+        const connected = await this.session.reacquire();
+        if (connected) this.session._setState(this.session.enabled ? '已连接（桥已使能）' : '已连接（桥未使能）');
+        return connected;
+      }
+      return await this.session.connect(interactive, { mock, enable: true });
+    } catch (e){ this.session.log('e', '连接失败：' + e.message); this.session._setState('连接失败：' + e.message, 'err'); return false; }
+    finally { this._connecting = false; this._syncButtons(this.session.stateInfo()); }
   }
 
   // ==================================================================== 配置

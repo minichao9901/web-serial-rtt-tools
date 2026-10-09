@@ -10,7 +10,7 @@ try{
  for(let i=0;i<100;i++){if(await c.eval('return !!globalThis.__tools?.spiCdc?.stream?.rx').catch(()=>false))break;await new Promise(r=>setTimeout(r,50));}
  const controls=await c.eval(`
  const t=__tools,s=t.spiCdc.session;let running=false,pending=false,rc=0,generation=0,config=0;
- s.hidFactory=()=>({connected:false,label:'SPI fixture',async reconnect(){this.connected=true;},async request(){this.connected=true;},async close(){this.connected=false;},async xfer(cmd,data){
+ s.hidFactory=()=>({connected:false,label:'SPI fixture',async connect(){this.connected=true;},async reconnect(){this.connected=true;},async request(){this.connected=true;},async close(){this.connected=false;},async xfer(cmd,data){
  const a=data[0];if(a===1){pending=true;rc=-100;generation++;config=data[1]|data[2]<<8;}if(a===2){running=false;pending=true;rc=-100;}
  if(a===0&&pending){pending=false;rc=0;running=generation>0&&running!==false?true:running;}
  // For START, pending status is produced once and becomes running next STATUS.
@@ -18,14 +18,18 @@ try{
  const p=new Uint8Array(63);p.set([54,cmd,a]);const d=new DataView(p.buffer,3);
  [0x31435053,1|(+running<<1)|(+pending<<2),rc,config,16384,4096,4096,0,0,0,0,generation,0].forEach((v,i)=>d.setUint32(i*4,v,true));return p;
  }});
- const click=async id=>{document.getElementById(id).click();for(let i=0;i<100&&(s.busy||id==='si-reconnect'&&!s.connected);i++)await new Promise(r=>setTimeout(r,10));};
- await click('si-reconnect');document.getElementById('si-mode').value='3';document.getElementById('si-lsb').value='1';await click('si-start');
+ const click=async id=>{document.getElementById(id).click();for(let i=0;i<100&&(s.busy||id==='si-connect'&&!s.connected);i++)await new Promise(r=>setTimeout(r,10));};
+ await click('si-connect');
+ const connectedButtons=document.getElementById('si-connect').disabled&&!document.getElementById('si-disconnect').disabled&&!document.getElementById('si-reconnect');
+ document.getElementById('si-mode').value='3';document.getElementById('si-lsb').value='1';await click('si-start');
  const started={running:s.running,mode:s.last?.mode,lsb:s.last?.lsb,disabled:document.getElementById('si-start').disabled,state:document.getElementById('si-state').textContent};
  await click('si-stop');const stopped=!s.running&&!document.getElementById('si-start').disabled;
  await click('si-disconnect');
- return {started,stopped,disconnected:!s.connected,tabs:[...document.querySelectorAll('#tabs [data-tab]')].map(e=>[e.dataset.tab,e.textContent.trim()]),duplicates:[...document.querySelectorAll('[id]')].map(e=>e.id).filter((x,i,a)=>a.indexOf(x)!==i),errors:t.errors};`);
+ return {started,stopped,connectedButtons,closedButtons:!document.getElementById('si-connect').disabled&&document.getElementById('si-disconnect').disabled,disconnected:!s.connected,tabs:[...document.querySelectorAll('#tabs [data-tab]')].map(e=>[e.dataset.tab,e.textContent.trim()]),duplicates:[...document.querySelectorAll('[id]')].map(e=>e.id).filter((x,i,a)=>a.indexOf(x)!==i),errors:t.errors};`);
+ assert.ok(controls.connectedButtons&&controls.closedButtons,'SPI转发连接/关闭按钮状态同步');
  assert.ok(controls.started.running&&controls.started.disabled);assert.equal(controls.started.mode,3);assert.equal(controls.started.lsb,true);assert.ok(controls.stopped&&controls.disconnected);assert.deepEqual(controls.duplicates,[]);assert.deepEqual(controls.errors,[]);
- assert.equal(controls.tabs.findIndex(x=>x[0]==='spicdc'),controls.tabs.findIndex(x=>x[0]==='rttcdc')+1);assert.equal(controls.tabs.find(x=>x[0]==='spicdc')[1],'SPI转发');assert.equal(controls.tabs.find(x=>x[0]==='spi')[1],'USB→SPI/QSPI');
+ // 当前“更多功能”顺序为 SPI 桥 → 屏 → SPI 转发；旧检查仍按早期主导航排序。
+ assert.equal(controls.tabs.findIndex(x=>x[0]==='spicdc'),controls.tabs.findIndex(x=>x[0]==='panel')+1);assert.equal(controls.tabs.find(x=>x[0]==='spicdc')[1],'SPI转发');assert.equal(controls.tabs.find(x=>x[0]==='spi')[1],'USB→SPI/QSPI');
  const pins=await c.eval(`
  document.getElementById('si-pinmap-btn').click();const m=__tools.spiCdc.pinMap;
  m.board.value='hpm5301evklite';m.board.dispatchEvent(new Event('change'));

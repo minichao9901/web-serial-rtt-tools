@@ -745,7 +745,10 @@ test-spi-cdc-page:
 spi-cdc-hw:
 	$(NODE) tools/selftest/spi-cdc-hw.mjs
 
-.PHONY: test-analog
+.PHONY: test-analog test-analog-connection-page
+test-analog-connection-page: page-prep
+	$(NODE) tools/selftest/analog-connection-page.test.mjs
+
 test-analog:
 	$(NODE) tools/selftest/analog.test.mjs
 	$(NODE) tools/selftest/analog-connect.test.mjs

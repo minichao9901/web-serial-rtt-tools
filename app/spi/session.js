@@ -15,7 +15,7 @@
  *   · 帧与应答都进日志 ring，两个页面各自渲染（切页不丢记录）；
  *   · 桥没使能时固件不 arm OUT 端点，主机写会被 NAK —— 发送会抛错，页面必须如实显示。
  */
-import { AkaLinkHid, VID, PID, USAGE_PAGE } from '../hid/probe.js';
+import { AkaLinkHid } from '../hid/probe.js';
 import * as P from './protocol.js';
 import { WebUsbSpiTransport, MockSpiTransport } from './transport.js';
 import { MockSpiProbe } from './mock.js';
@@ -112,16 +112,7 @@ export class SpiSession {
     try {
       if (this.usingMock){ await this._teardownNow(); this.usingMock = false; this.mockProbe = null; }
       this.hid = this.hid || new AkaLinkHid();
-      if (interactive === true) await this.hid.request();
-      else if (interactive === false) await this.hid.reconnect();
-      else {
-        if (!AkaLinkHid.supported()) throw new Error('这个浏览器没有 WebHID（Chrome / Edge 桌面版才有）');
-        const devices = (await navigator.hid.getDevices()).filter(d =>
-          d.vendorId === VID && d.productId === PID && d.collections?.some(c => c.usagePage === USAGE_PAGE));
-        // 多探针时由用户明确选择，不任取第一台；其它厂商的 HID 也不能自动接管。
-        if (devices.length === 1) await this.hid.open(devices[0]);
-        else await this.hid.request();
-      }
+      await this.hid.connect(interactive);
       this.log('g', `HID 已连接：${this.hid.label || 'akaLinkPro'}`);
       this.ensurePoll();
       await this.loadCfg({ quiet: true });

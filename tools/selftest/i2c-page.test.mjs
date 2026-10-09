@@ -207,8 +207,10 @@ console.log('== 3. 连接假探针 → 配置 → 使能 ==');
              scl: t.session.actualSclHz, mock: t.session.usingMock,
              state: document.getElementById('i2-state').textContent,
              info: document.getElementById('i2-info').textContent,
-             scanDisabled: document.getElementById('i2-scan').disabled };`);
+             scanDisabled: document.getElementById('i2-scan').disabled,
+             buttons: document.getElementById('i2-connect').disabled && !document.getElementById('i2-disconnect').disabled };`);
   ok(r.connected === true && r.mock === true, '假探针已连接');
+  ok(r.buttons, '连接成功后连接按钮变灰，关闭探针可用');
   ok(r.enabled === true, '连上后自动使能了（探针复位后桥是未使能状态）');
   ok(r.scl === 100000, `默认档 100 kHz（实际 ${r.scl}）`);
   ok(/已使能/.test(r.state), '状态栏说清了"桥已使能"', r.state);
@@ -674,10 +676,12 @@ console.log('== 9. 收尾：放掉探针 ==');
   const done = await ev(`
     const t = window.__tools.i2c;
     t.runner.stop();
-    await t.session.disconnect();
+    document.getElementById('i2-disconnect').click();
     await new Promise(r => setTimeout(r, 250));
-    return { s: t.summary(), state: document.getElementById('i2-state').textContent };`);
+    return { s: t.summary(), state: document.getElementById('i2-state').textContent,
+      buttons: !document.getElementById('i2-connect').disabled && document.getElementById('i2-disconnect').disabled && !document.getElementById('i2-reconnect') };`);
   ok(done.s.connected === false, 'disconnect 后已放掉 HID');
+  ok(done.buttons, '关闭探针后恢复连接按钮；已移除旧重连入口');
   ok(done.s.running === false, '定时已停');
   ok(['scan', 'cmd', 'reg', 'dsl', 'live'].includes(done.s.dock), 'summary 里能报出当前 tab', done.s.dock);
   // 把 tab 还原成默认，别给下一次测试留个"停在实时值"的状态

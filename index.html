@@ -1626,14 +1626,14 @@
   <div class="ws">
     <aside class="side">
       <fieldset><legend>探针 · SPI转发</legend>
-        <div class="row btnrow"><button id="si-connect" class="primary">连接探针</button><button id="si-reconnect">重连</button><button id="si-disconnect" disabled>断开</button></div>
+        <div class="row btnrow"><button id="si-connect" class="primary" title="自动连接唯一已授权的探针；首次或多个设备时弹框选择">连接探针</button><button id="si-disconnect" title="停止探针 SPI 转发并关闭 HID 连接；接收串口可在下方单独关闭" disabled>关闭探针</button></div>
         <p class="hint" id="si-info">未连接</p>
         <div class="row btnrow"><button id="si-pinmap-btn" title="查看 SPI 从机的 CS、SCK、MOSI 与 GND 接线">引脚分配图</button></div>
         <label class="row"><span>SPI 模式</span><select id="si-mode"><option value="0">Mode 0 · CPOL 0 / CPHA 0</option><option value="1">Mode 1 · CPOL 0 / CPHA 1</option><option value="2">Mode 2 · CPOL 1 / CPHA 0</option><option value="3">Mode 3 · CPOL 1 / CPHA 1</option></select></label>
         <label class="row"><span>位顺序</span><select id="si-lsb"><option value="0">MSB first</option><option value="1">LSB first</option></select></label>
         <div class="row btnrow"><button id="si-start" class="primary" disabled>启动转发</button><button id="si-stop" disabled>停止</button><button id="si-status" disabled>刷新状态</button></div>
         <p id="si-state" role="status" aria-live="polite">等待连接探针</p>
-        <details class="helpnote"><summary>接线与资源</summary><p class="hint">复用 SPI2：PB10 CS、PB11 SCK、PB13 MOSI；PB12 MISO 可不接。主机与探针共地，CS 低有效，8 位。时钟由外部 SPI 主机提供。</p><p class="hint">SPI 从机与 USB→SPI/QSPI、SPI/QSPI 屏及 ADC 共用缓冲与引脚。CDC 与 UART、RTT 转发共用同一个串口，启动时切换数据源。先打开下方接收串口，再启动外部发送。</p></details>
+        <details class="helpnote"><summary>接线与资源</summary><p class="hint">复用 SPI2：PB10 CS、PB11 SCK、PB13 MOSI；PB12 MISO 可不接。主机与探针共地，CS 低有效，8 位。时钟由外部 SPI 主机提供。</p><p class="hint">SPI 从机与 USB→SPI/QSPI、SPI/QSPI 屏及 ADC 共用缓冲与引脚。CDC 与 UART、RTT 转发共用同一个串口，启动时切换数据源。先打开下方接收串口，再启动外部发送。</p><p class="hint">连接时自动复用唯一已授权的探针。要更换设备，请先关闭探针，再手动选择；接收串口独立管理。</p><button id="si-choose">选择其它探针…</button></details>
       </fieldset>
       <fieldset>
         <legend>接收（探针的 CDC 口）</legend>
@@ -1699,8 +1699,8 @@
         <fieldset>
         <legend>连接</legend>
         <div class="row btnrow">
-          <button id="i2-connect" class="primary" title="授权 HID（探针的自定义 HID，usage page 0xFF00）。⚠️ 第一次点会弹出浏览器的设备选择框——那个框就是「授权」，在里面选 akaLinkPro 即可">连接探针</button>
-          <button id="i2-reconnect" title="用浏览器记住的探针直接连（不用再点弹框）">重连</button>
+          <button id="i2-connect" class="primary" title="自动连接唯一已授权的探针；首次或多个设备时弹框选择">连接探针</button>
+          <button id="i2-disconnect" title="失能 I2C 桥并关闭探针连接，不关闭目标电源" disabled>关闭探针</button>
         </div>
         <p class="hint" id="i2-info">未连接</p>
         <div class="row btnrow"><button id="i2-pinmap-btn" title="先确认板型，再查看 SDA/SCL、GND 与上拉要求">引脚分配图 / 接线</button></div>
@@ -1753,6 +1753,10 @@
       </div>
       <div id="i2-side-help-panel" class="tool-side-panel" role="tabpanel" aria-labelledby="i2-side-help-tab" data-side-panel="help" hidden>
         <div class="hint sidebar-help-intro">参数、接线与排障说明</div>
+        <details class="helpnote"><summary>选择其它探针</summary>
+          <p class="hint">自动复用唯一已授权的探针；首次使用或多个设备时弹框选择。更换设备前先关闭探针。关闭连接不切断目标电源。</p>
+          <button id="i2-choose">选择探针…</button>
+        </details>
       </div>
       <div class="tool-side-actions" aria-label="运行控制">
 <div class="row btnrow">
@@ -2112,7 +2116,7 @@
 <section class="panel" id="tab-analog">
   <div class="an-shell">
     <div class="an-toolbar">
-      <div class="row btnrow"><button id="an-connect" class="primary">连接探针</button><button id="an-disconnect">断开</button><p id="an-state" role="status" aria-live="polite">未连接</p></div>
+      <div class="row btnrow"><button id="an-connect" class="primary">连接探针</button><button id="an-disconnect" disabled>关闭探针</button><p id="an-state" role="status" aria-live="polite">未连接</p></div>
       <nav class="seg docktabs an-tabs" id="an-dock-tabs" role="tablist" aria-label="ADC / DAC 工具">
         <button id="an-tab-adc" type="button" role="tab" aria-controls="an-panel-adc" aria-selected="true" tabindex="0" data-an-tab="adc" class="on">ADC 示波器</button>
         <button id="an-tab-dac" type="button" role="tab" aria-controls="an-panel-dac" aria-selected="false" tabindex="-1" data-an-tab="dac">DAC 信号发生器</button>

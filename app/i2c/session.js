@@ -119,13 +119,13 @@ export class I2cSession {
           this.hid = new AkaLinkHid();
           this.usingMock = false;
         }
-        if (interactive) await this.hid.request(); else await this.hid.reconnect();
+        await this.hid.connect(interactive);
         this.log('g', `HID 已连接：${this.hid.label || 'akaLinkPro'}`);
       }
       this.lost = false; this.failStreak = 0;
       this.hid.onDisconnect = () => {
         this.lost = true;
-        this._setState('探针掉线了（拔插一次 USB，或点「重连」）', 'err');
+        this._setState('探针掉线了（检查 USB，再点「连接探针」）', 'err');
         this.stopPoll();
       };
       // 连接后第一件事：GET_CFG 确认桥的现状（探针复位/重烧后配置会回默认）
@@ -249,8 +249,8 @@ export class I2cSession {
       if (this.failStreak >= LOST_AFTER && !this.lost){
         this.lost = true;
         this.stopPoll();
-        this.log('e', `连续 ${this.failStreak} 次没响应 —— 探针可能已失联：先点「重连」，还不行就拔插一次 USB（已知现象，见 web-handoff §10）`);
-        this._setState('探针失联：重连 / 拔插 USB', 'err');
+        this.log('e', `连续 ${this.failStreak} 次没响应 —— 探针可能已失联：检查 USB 后点「连接探针」，还不行就拔插一次 USB（已知现象，见 web-handoff §10）`);
+        this._setState('探针失联：检查 USB 后重新连接', 'err');
       }
       throw e;
     }

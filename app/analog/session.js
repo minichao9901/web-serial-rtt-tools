@@ -13,7 +13,7 @@ const SHARED_RETIRE_ATTEMPTS = 12;
 export class AnalogSession {
   constructor(){ this.hid = null; this.caps = null; this.dac = null; this.busy = false; this.usingMock = false; }
   get connected(){ return !!this.hid?.connected; }
-  setBusy(value){ this.busy = value; }
+  setBusy(value){ this.busy = value; this.onChange?.(); }
   async connect(){
     if (this._connectPromise) return this._connectPromise;
     this._connectPromise = runProbeOperation(this, 'analog', async lease => {
@@ -44,7 +44,8 @@ export class AnalogSession {
         throw e;
       }
     }, { reason: 'ADC 页面要使用探针', recovery: true });
-    try { return await this._connectPromise; } finally { this._connectPromise = null; }
+    this.onChange?.();
+    try { return await this._connectPromise; } finally { this._connectPromise = null; this.onChange?.(); }
   }
   async acquire(options, onResult){
     if (this._adcRun) throw Error('ADC 已有采集在进行');
@@ -225,12 +226,14 @@ export class AnalogSession {
   async stop(){ await this.stopDac(); await this.stopAdc(); }
   async disconnect(){
     this.probeManager?.cancel('analog');
-    if (this._connectPromise) await this._connectPromise.catch(() => {});
+    this._disconnecting = true; this.onChange?.();
     try {
+      if (this._connectPromise) await this._connectPromise.catch(() => {});
       await this.stop(); await this.transport?.close(); this.transport = null;
       await this.hid?.close(); this.hid = null; this.caps = null; this.dac = null;
       this._connectCleanupError=null;
       this.probeManager?.forget('analog');
     } catch (e){ this.probeManager?.fail('analog', e); throw e; }
+    finally { this._disconnecting = false; this.onChange?.(); }
   }
 }

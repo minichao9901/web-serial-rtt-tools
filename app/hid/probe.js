@@ -243,6 +243,18 @@ export class AkaLinkHid {
     return this.device;
   }
 
+  /** 默认复用唯一已授权的探针；首次或多设备时选择。true 强制选择，false 只用授权设备。 */
+  async connect(interactive = null){
+    if (interactive === true) return await this.request();
+    if (interactive === false) return await this.reconnect();
+    if (!AkaLinkHid.supported()) throw new Error('这个浏览器没有 WebHID（Chrome / Edge 桌面版才有）');
+    const devices = (await navigator.hid.getDevices()).filter(d =>
+      d.vendorId === VID && d.productId === PID && d.collections?.some(c => c.usagePage === USAGE_PAGE));
+    if (devices.length !== 1) return await this.request();
+    await this.open(devices[0]);
+    return devices[0];
+  }
+
   /** 用之前授权过的探针直接连（浏览器记住过就不用再点弹框） */
   async reconnect(){
     if (!AkaLinkHid.supported()) throw new Error('这个浏览器没有 WebHID（Chrome / Edge 桌面版才有）');

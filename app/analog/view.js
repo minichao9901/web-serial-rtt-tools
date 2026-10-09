@@ -20,6 +20,7 @@ export class AnalogView {
     for (const id of ['an-adc-canvas','an-dac-canvas']) this.resizeObserver.observe($(id));
     this.pinMap=new PinMap({buttonId:'an-pinmap-btn',feature:'adc',state:()=>({connected:this.session.connected,connectionKey:this.session.hid?.device||this.session.hid,supported:!!this.session.caps})});
     this.pinMap.init();
+    this.session.onChange = () => this.updateConnectionControls();
     const bind = (id, fn) => $(id).addEventListener('click', () => { Promise.resolve().then(fn).catch(e => this.status(e.message, true)); });
     bind('an-connect', async () => {
       const c = await this.session.connect(); if (!c) return;
@@ -51,7 +52,7 @@ export class AnalogView {
     this.session.onDisconnect = () => {this.updateDacControls();this.status('探针已掉线；采集已请求取消', true);};
     for(const id of ['an-time','an-volts','an-offset','an-trigger','an-level','an-edge','an-freeze','an-reference'])$(id).addEventListener('change',()=>this.renderAdc());
     this.initAdcCursors();
-    this.updateDacControls(); this.preview(); this.renderAdc();
+    this.updateConnectionControls(); this.updateDacControls(); this.preview(); this.renderAdc();
   }
   initTabs(){
     const tabs=[...document.querySelectorAll('#an-dock-tabs [data-an-tab]')];
@@ -82,7 +83,12 @@ export class AnalogView {
     if(name==='adc')this.renderAdc();
     else if(this.wave.length===0)this.preview();
   }
-  status(text, error = false){ $('an-state').textContent = text; $('an-state').style.color = error ? '#f85149' : '';this.pinMap?.refresh(); }
+  status(text, error = false){ $('an-state').textContent = text; $('an-state').style.color = error ? '#f85149' : '';this.pinMap?.refresh();this.updateConnectionControls(); }
+  updateConnectionControls(){
+    const s = this.session, pending = !!s._connectPromise || !!s._disconnecting;
+    $('an-connect').disabled = s.connected || s.busy || pending;
+    $('an-disconnect').disabled = !(s.hid || s._connectCleanupError) || pending;
+  }
   async acquire(count){
     if(this.session.busy)throw Error('先停止当前采集');
     const options={bits:Number($('an-bits').value),rate:Number($('an-rate').value),count};

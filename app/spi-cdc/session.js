@@ -16,7 +16,8 @@ export class SpiCdcSession {
       if(this.connected)return this.status();
       const hid=this.hidFactory();
       try {
-        if(interactive)await hid.request();else await hid.reconnect();
+        if(interactive==null)await hid.connect();
+        else if(interactive)await hid.request();else await hid.reconnect();
         lease?.assert();
         const status=decodeReply(await hid.xfer(CMD,Uint8Array.of(ACT.STATUS)));
         if(!status.supported)throw Error(resultText(-1));

@@ -21,7 +21,7 @@ export class SpiCdcView {
       catch(error){setStatus($('si-info'),error.message,'err');}
       this.render();
     });
-    bind('connect',()=>this.session.connect());bind('reconnect',()=>this.session.connect(false));
+    bind('connect',()=>this.session.connect(null));bind('choose',()=>this.session.connect(true));
     bind('disconnect',()=>this.session.disconnect());
     bind('start',()=>this.session.start({mode:Number($('si-mode').value),lsb:$('si-lsb').value==='1'}));
     bind('stop',()=>this.session.stop());bind('status',()=>this.session.status());
@@ -32,8 +32,8 @@ export class SpiCdcView {
   render(){
     this.pinMap?.refresh();
     const s=this.session.last,connected=this.session.connected,busy=this.session.busy;
-    for(const id of ['connect','reconnect'])$('si-'+id).disabled=connected||busy;
-    $('si-disconnect').disabled=!connected||busy;
+    for(const id of ['connect','choose'])$('si-'+id).disabled=connected||busy;
+    $('si-disconnect').disabled=!this.session.hid||busy;
     $('si-start').disabled=!connected||busy||!!s?.running;
     $('si-stop').disabled=!connected||busy;
     $('si-status').disabled=!connected||busy;
