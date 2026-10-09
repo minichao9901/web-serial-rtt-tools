@@ -1,3 +1,4 @@
+// Historical fixture protocol; deliberately excluded from the web application.
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
 export class TargetClock {
   constructor(capture,elf){this.capture=capture;this.symbols=Object.fromEntries(elf?.symbols().filter(s=>s.isObject&&s.size===4&&s.addr>=0x20000000&&s.addr<0x20005000).map(s=>[s.name,s.addr])||[]);this.originalHz=null;}

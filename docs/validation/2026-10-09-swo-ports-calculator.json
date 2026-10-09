@@ -1,0 +1,778 @@
+{
+  "fixture": "tools/target-firmware/stm32f103cb_swo_hse/fw.elf",
+  "rows": [
+    {
+      "cfg": {
+        "period": 512,
+        "timestamps": true,
+        "itm": true,
+        "auto": true,
+        "baud": 18000000
+      },
+      "bytes": 1087628,
+      "metadata": {
+        "receiverBaseline": {
+          "overrun": 0,
+          "framing": 0,
+          "parity": 0,
+          "lineBreak": 0,
+          "droppedBytes": 0
+        },
+        "format": "swo-pc-v1",
+        "startAligned": true,
+        "plan": {
+          "coreHz": 72000000,
+          "traceHz": 72000000,
+          "baudRate": 18000000,
+          "requestedBaudRate": 18000000,
+          "baudError": 0,
+          "periodCycles": 512,
+          "seconds": 1,
+          "itm": true,
+          "exceptions": false,
+          "timestamps": true,
+          "tap": 0,
+          "post": 7,
+          "acpr": 3,
+          "samplesHz": 140625,
+          "bytesPerSample": 9,
+          "exceptionBytes": 0,
+          "itmBytes": 20000,
+          "otherBytes": 20000,
+          "estimatedBytes": 1285625,
+          "occupancy": 0.8,
+          "requiredBaud": 16070312.5,
+          "pcMinimumBaud": 7031250,
+          "wireBytes": 1800000
+        },
+        "startedAt": "2026-10-09T07:14:41.020Z",
+        "clockCheck": {
+          "registers": {
+            "cr": 50551171,
+            "cfgr": 1934346
+          },
+          "cfgr": 1934346,
+          "knownHz": 72000000,
+          "traceHz": 72000000
+        },
+        "receiver": {
+          "version": 1,
+          "rc": 0,
+          "token": 26,
+          "mode": 2,
+          "requestedBaud": 18000000,
+          "actualBaud": 18000000,
+          "uartHz": 180000000,
+          "systemDivider": 4,
+          "source": 1,
+          "osr": 10,
+          "uartDivider": 1,
+          "pll1Hz": 800000000,
+          "leaseMs": 4964,
+          "blocker": 4294967295
+        },
+        "receiverSources": {
+          "frequencies": [
+            24000000,
+            720000000,
+            600000000,
+            400000000,
+            800000000,
+            666666666,
+            500000000,
+            266666666
+          ],
+          "cpuClock": 50462977,
+          "mfi": 805306401,
+          "mfn": 80000000,
+          "mfd": 240000000
+        },
+        "target": {
+          "cpuid": 1092600369,
+          "part": 3107,
+          "core": "Cortex-M3",
+          "supportedCore": true,
+          "device": 537093136,
+          "dwt": 1073741824,
+          "profile": "stm32f1",
+          "name": "STM32F103",
+          "registers": {
+            "cr": 50551171,
+            "cfgr": 1934346
+          },
+          "cr": 50551171,
+          "cfgr": 1934346,
+          "knownHz": 72000000,
+          "knownTraceHz": 72000000,
+          "coreHz": 72000000,
+          "traceHz": 72000000,
+          "external": true,
+          "source": "HSE → PLL",
+          "path": "HSE 8 MHz ÷1 ×9 → AHB ÷1",
+          "tracePath": "HCLK → SWO 输入（与 CPU 相同）",
+          "traceReady": true,
+          "busDivider": 1,
+          "coreDivider": 1,
+          "traceRelation": "HCLK = CPU",
+          "hseHz": 8000000,
+          "swoPin": "PB3",
+          "protocol": "NRZ / 8N1",
+          "frequencyBasis": "RCC + 板级外部频率",
+          "captureSupported": true,
+          "detectionAttempts": 1,
+          "elfVerificationAttempts": 1,
+          "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+        },
+        "elfSha256": "09c7a40471f110ba1c4f828a2fb974cdb7e5fc33c54d26ce50ffcc34236cb140",
+        "transportGaps": [],
+        "configReadback": {
+          "dwt": 1073747183,
+          "itm": 65551,
+          "acpr": 3,
+          "sppr": 2,
+          "dbg": 807
+        },
+        "elapsedMs": 1000,
+        "endAligned": false,
+        "receiverDiagnostics": {
+          "overrun": 0,
+          "framing": 0,
+          "parity": 0,
+          "lineBreak": 0,
+          "droppedBytes": 0
+        },
+        "receiverErrors": {
+          "overrun": 0,
+          "framing": 0,
+          "parity": 0,
+          "lineBreak": 0,
+          "droppedBytes": 0
+        },
+        "receiverRestored": true,
+        "restored": true
+      },
+      "stats": {
+        "bytes": 1087628,
+        "packets": 286595,
+        "pc": 123679,
+        "sleep": 19585,
+        "itm": 29,
+        "exceptions": 0,
+        "sync": 4,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 123679,
+        "analyzedSamples": 123679,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "uniqueGNUChecks": 226,
+      "stage": {
+        "checked": 121474,
+        "matched": 121474,
+        "accuracy": 1,
+        "counts": {
+          "1": 19405,
+          "2": 19530,
+          "3": 23648,
+          "5": 19620,
+          "6": 19407,
+          "7": 19864
+        },
+        "mismatches": [],
+        "mismatchCount": 0,
+        "ambiguousCount": 0,
+        "ambiguous": []
+      }
+    },
+    {
+      "cfg": {
+        "period": 256,
+        "timestamps": false,
+        "itm": false,
+        "auto": true,
+        "baud": 18000000
+      },
+      "bytes": 1339406,
+      "metadata": {
+        "receiverBaseline": {
+          "overrun": 0,
+          "framing": 0,
+          "parity": 0,
+          "lineBreak": 0,
+          "droppedBytes": 0
+        },
+        "format": "swo-pc-v1",
+        "startAligned": true,
+        "plan": {
+          "coreHz": 72000000,
+          "traceHz": 72000000,
+          "baudRate": 18000000,
+          "requestedBaudRate": 18000000,
+          "baudError": 0,
+          "periodCycles": 256,
+          "seconds": 1,
+          "itm": false,
+          "exceptions": false,
+          "timestamps": false,
+          "tap": 0,
+          "post": 3,
+          "acpr": 3,
+          "samplesHz": 281250,
+          "bytesPerSample": 5,
+          "exceptionBytes": 0,
+          "itmBytes": 0,
+          "otherBytes": 0,
+          "estimatedBytes": 1406250,
+          "occupancy": 0.8,
+          "requiredBaud": 17578125,
+          "pcMinimumBaud": 14062500,
+          "wireBytes": 1800000
+        },
+        "startedAt": "2026-10-09T07:14:43.964Z",
+        "clockCheck": {
+          "registers": {
+            "cr": 50551171,
+            "cfgr": 1934346
+          },
+          "cfgr": 1934346,
+          "knownHz": 72000000,
+          "traceHz": 72000000
+        },
+        "receiver": {
+          "version": 1,
+          "rc": 0,
+          "token": 27,
+          "mode": 2,
+          "requestedBaud": 18000000,
+          "actualBaud": 18000000,
+          "uartHz": 180000000,
+          "systemDivider": 4,
+          "source": 1,
+          "osr": 10,
+          "uartDivider": 1,
+          "pll1Hz": 800000000,
+          "leaseMs": 4964,
+          "blocker": 4294967295
+        },
+        "receiverSources": {
+          "frequencies": [
+            24000000,
+            720000000,
+            600000000,
+            400000000,
+            800000000,
+            666666666,
+            500000000,
+            266666666
+          ],
+          "cpuClock": 50462977,
+          "mfi": 805306401,
+          "mfn": 80000000,
+          "mfd": 240000000
+        },
+        "target": {
+          "cpuid": 1092600369,
+          "part": 3107,
+          "core": "Cortex-M3",
+          "supportedCore": true,
+          "device": 537093136,
+          "dwt": 1073741824,
+          "profile": "stm32f1",
+          "name": "STM32F103",
+          "registers": {
+            "cr": 50551171,
+            "cfgr": 1934346
+          },
+          "cr": 50551171,
+          "cfgr": 1934346,
+          "knownHz": 72000000,
+          "knownTraceHz": 72000000,
+          "coreHz": 72000000,
+          "traceHz": 72000000,
+          "external": true,
+          "source": "HSE → PLL",
+          "path": "HSE 8 MHz ÷1 ×9 → AHB ÷1",
+          "tracePath": "HCLK → SWO 输入（与 CPU 相同）",
+          "traceReady": true,
+          "busDivider": 1,
+          "coreDivider": 1,
+          "traceRelation": "HCLK = CPU",
+          "hseHz": 8000000,
+          "swoPin": "PB3",
+          "protocol": "NRZ / 8N1",
+          "frequencyBasis": "RCC + 板级外部频率",
+          "captureSupported": true,
+          "detectionAttempts": 2,
+          "elfVerificationAttempts": 1,
+          "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+        },
+        "elfSha256": "09c7a40471f110ba1c4f828a2fb974cdb7e5fc33c54d26ce50ffcc34236cb140",
+        "transportGaps": [],
+        "configReadback": {
+          "dwt": 1073747047,
+          "itm": 65549,
+          "acpr": 3,
+          "sppr": 2,
+          "dbg": 807
+        },
+        "elapsedMs": 1000.0999999940395,
+        "receiverDiagnostics": {
+          "overrun": 0,
+          "framing": 0,
+          "parity": 0,
+          "lineBreak": 0,
+          "droppedBytes": 0
+        },
+        "receiverErrors": {
+          "overrun": 0,
+          "framing": 0,
+          "parity": 0,
+          "lineBreak": 0,
+          "droppedBytes": 0
+        },
+        "receiverRestored": true,
+        "restored": true
+      },
+      "stats": {
+        "bytes": 1339406,
+        "packets": 291394,
+        "pc": 252198,
+        "sleep": 39196,
+        "itm": 0,
+        "exceptions": 0,
+        "sync": 4,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 252198,
+        "analyzedSamples": 252198,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "uniqueGNUChecks": 236,
+      "stage": null
+    },
+    {
+      "cfg": {
+        "period": 512,
+        "timestamps": true,
+        "itm": true,
+        "auto": false,
+        "baud": 25000000
+      },
+      "bytes": 1080790,
+      "metadata": {
+        "receiverBaseline": {
+          "overrun": 0,
+          "framing": 0,
+          "parity": 0,
+          "lineBreak": 0,
+          "droppedBytes": 0
+        },
+        "format": "swo-pc-v1",
+        "startAligned": true,
+        "plan": {
+          "coreHz": 72000000,
+          "traceHz": 72000000,
+          "baudRate": 24000000,
+          "requestedBaudRate": 25000000,
+          "baudError": -0.04,
+          "periodCycles": 512,
+          "seconds": 1,
+          "itm": true,
+          "exceptions": false,
+          "timestamps": true,
+          "tap": 0,
+          "post": 7,
+          "acpr": 2,
+          "samplesHz": 140625,
+          "bytesPerSample": 9,
+          "exceptionBytes": 0,
+          "itmBytes": 20000,
+          "otherBytes": 20000,
+          "estimatedBytes": 1285625,
+          "occupancy": 0.8,
+          "requiredBaud": 16070312.5,
+          "pcMinimumBaud": 7031250,
+          "wireBytes": 2400000
+        },
+        "startedAt": "2026-10-09T07:14:47.236Z",
+        "clockCheck": {
+          "registers": {
+            "cr": 50551171,
+            "cfgr": 1934346
+          },
+          "cfgr": 1934346,
+          "knownHz": 72000000,
+          "traceHz": 72000000
+        },
+        "receiver": {
+          "version": 1,
+          "rc": 0,
+          "token": 28,
+          "mode": 2,
+          "requestedBaud": 24000000,
+          "actualBaud": 24000000,
+          "uartHz": 240000000,
+          "systemDivider": 3,
+          "source": 1,
+          "osr": 10,
+          "uartDivider": 1,
+          "pll1Hz": 800000000,
+          "leaseMs": 4964,
+          "blocker": 4294967295
+        },
+        "receiverSources": {
+          "frequencies": [
+            24000000,
+            720000000,
+            600000000,
+            400000000,
+            800000000,
+            666666666,
+            500000000,
+            266666666
+          ],
+          "cpuClock": 50462977,
+          "mfi": 805306401,
+          "mfn": 80000000,
+          "mfd": 240000000
+        },
+        "target": {
+          "cpuid": 1092600369,
+          "part": 3107,
+          "core": "Cortex-M3",
+          "supportedCore": true,
+          "device": 537093136,
+          "dwt": 1073741824,
+          "profile": "stm32f1",
+          "name": "STM32F103",
+          "registers": {
+            "cr": 50551171,
+            "cfgr": 1934346
+          },
+          "cr": 50551171,
+          "cfgr": 1934346,
+          "knownHz": 72000000,
+          "knownTraceHz": 72000000,
+          "coreHz": 72000000,
+          "traceHz": 72000000,
+          "external": true,
+          "source": "HSE → PLL",
+          "path": "HSE 8 MHz ÷1 ×9 → AHB ÷1",
+          "tracePath": "HCLK → SWO 输入（与 CPU 相同）",
+          "traceReady": true,
+          "busDivider": 1,
+          "coreDivider": 1,
+          "traceRelation": "HCLK = CPU",
+          "hseHz": 8000000,
+          "swoPin": "PB3",
+          "protocol": "NRZ / 8N1",
+          "frequencyBasis": "RCC + 板级外部频率",
+          "captureSupported": true,
+          "detectionAttempts": 1,
+          "elfVerificationAttempts": 1,
+          "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+        },
+        "elfSha256": "09c7a40471f110ba1c4f828a2fb974cdb7e5fc33c54d26ce50ffcc34236cb140",
+        "transportGaps": [],
+        "configReadback": {
+          "dwt": 1073747183,
+          "itm": 8454159,
+          "acpr": 2,
+          "sppr": 2,
+          "dbg": 807
+        },
+        "elapsedMs": 1000.0999999940395,
+        "endAligned": false,
+        "receiverDiagnostics": {
+          "overrun": 0,
+          "framing": 0,
+          "parity": 0,
+          "lineBreak": 0,
+          "droppedBytes": 0
+        },
+        "receiverErrors": {
+          "overrun": 0,
+          "framing": 0,
+          "parity": 0,
+          "lineBreak": 0,
+          "droppedBytes": 0
+        },
+        "receiverRestored": true,
+        "restored": true
+      },
+      "stats": {
+        "bytes": 1080790,
+        "packets": 286461,
+        "pc": 121509,
+        "sleep": 21688,
+        "itm": 29,
+        "exceptions": 0,
+        "sync": 4,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 121509,
+        "analyzedSamples": 121509,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "uniqueGNUChecks": 226,
+      "stage": {
+        "checked": 117496,
+        "matched": 117496,
+        "accuracy": 1,
+        "counts": {
+          "1": 19403,
+          "2": 19549,
+          "3": 19571,
+          "5": 19572,
+          "6": 19521,
+          "7": 19862,
+          "8": 18
+        },
+        "mismatches": [],
+        "mismatchCount": 0,
+        "ambiguousCount": 0,
+        "ambiguous": []
+      }
+    },
+    {
+      "cfg": {
+        "period": 512,
+        "timestamps": true,
+        "itm": true,
+        "exceptions": true,
+        "auto": false,
+        "baud": 25000000
+      },
+      "bytes": 1093958,
+      "metadata": {
+        "receiverBaseline": {
+          "overrun": 0,
+          "framing": 0,
+          "parity": 0,
+          "lineBreak": 0,
+          "droppedBytes": 0
+        },
+        "format": "swo-pc-v1",
+        "startAligned": true,
+        "plan": {
+          "coreHz": 72000000,
+          "traceHz": 72000000,
+          "baudRate": 24000000,
+          "requestedBaudRate": 25000000,
+          "baudError": -0.04,
+          "periodCycles": 512,
+          "seconds": 1,
+          "itm": true,
+          "exceptions": true,
+          "timestamps": true,
+          "tap": 0,
+          "post": 7,
+          "acpr": 2,
+          "samplesHz": 140625,
+          "bytesPerSample": 9,
+          "exceptionBytes": 3000,
+          "itmBytes": 20000,
+          "otherBytes": 23000,
+          "estimatedBytes": 1288625,
+          "occupancy": 0.8,
+          "requiredBaud": 16107812.5,
+          "pcMinimumBaud": 7031250,
+          "wireBytes": 2400000
+        },
+        "startedAt": "2026-10-09T07:14:49.940Z",
+        "clockCheck": {
+          "registers": {
+            "cr": 50551171,
+            "cfgr": 1934346
+          },
+          "cfgr": 1934346,
+          "knownHz": 72000000,
+          "traceHz": 72000000
+        },
+        "receiver": {
+          "version": 1,
+          "rc": 0,
+          "token": 29,
+          "mode": 2,
+          "requestedBaud": 24000000,
+          "actualBaud": 24000000,
+          "uartHz": 240000000,
+          "systemDivider": 3,
+          "source": 1,
+          "osr": 10,
+          "uartDivider": 1,
+          "pll1Hz": 800000000,
+          "leaseMs": 4968,
+          "blocker": 4294967295
+        },
+        "receiverSources": {
+          "frequencies": [
+            24000000,
+            720000000,
+            600000000,
+            400000000,
+            800000000,
+            666666666,
+            500000000,
+            266666666
+          ],
+          "cpuClock": 50462977,
+          "mfi": 805306401,
+          "mfn": 80000000,
+          "mfd": 240000000
+        },
+        "target": {
+          "cpuid": 1092600369,
+          "part": 3107,
+          "core": "Cortex-M3",
+          "supportedCore": true,
+          "device": 537093136,
+          "dwt": 1073741824,
+          "profile": "stm32f1",
+          "name": "STM32F103",
+          "registers": {
+            "cr": 50551171,
+            "cfgr": 1934346
+          },
+          "cr": 50551171,
+          "cfgr": 1934346,
+          "knownHz": 72000000,
+          "knownTraceHz": 72000000,
+          "coreHz": 72000000,
+          "traceHz": 72000000,
+          "external": true,
+          "source": "HSE → PLL",
+          "path": "HSE 8 MHz ÷1 ×9 → AHB ÷1",
+          "tracePath": "HCLK → SWO 输入（与 CPU 相同）",
+          "traceReady": true,
+          "busDivider": 1,
+          "coreDivider": 1,
+          "traceRelation": "HCLK = CPU",
+          "hseHz": 8000000,
+          "swoPin": "PB3",
+          "protocol": "NRZ / 8N1",
+          "frequencyBasis": "RCC + 板级外部频率",
+          "captureSupported": true,
+          "detectionAttempts": 1,
+          "elfVerificationAttempts": 1,
+          "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+        },
+        "elfSha256": "09c7a40471f110ba1c4f828a2fb974cdb7e5fc33c54d26ce50ffcc34236cb140",
+        "transportGaps": [],
+        "configReadback": {
+          "dwt": 1073812719,
+          "itm": 65551,
+          "acpr": 2,
+          "sppr": 2,
+          "dbg": 807
+        },
+        "elapsedMs": 1000,
+        "endAligned": false,
+        "receiverDiagnostics": {
+          "overrun": 0,
+          "framing": 0,
+          "parity": 0,
+          "lineBreak": 0,
+          "droppedBytes": 0
+        },
+        "receiverErrors": {
+          "overrun": 0,
+          "framing": 0,
+          "parity": 0,
+          "lineBreak": 0,
+          "droppedBytes": 0
+        },
+        "receiverRestored": true,
+        "restored": true
+      },
+      "stats": {
+        "bytes": 1093958,
+        "packets": 293144,
+        "pc": 119984,
+        "sleep": 23487,
+        "itm": 29,
+        "exceptions": 3070,
+        "sync": 4,
+        "overflow": 10,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 119984,
+        "analyzedSamples": 119984,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "uniqueGNUChecks": 222,
+      "stage": {
+        "checked": 100505,
+        "matched": 100505,
+        "accuracy": 1,
+        "counts": {
+          "1": 16566,
+          "2": 18839,
+          "3": 15374,
+          "5": 15377,
+          "6": 18055,
+          "7": 16294
+        },
+        "mismatches": [],
+        "mismatchCount": 0,
+        "ambiguousCount": 0,
+        "ambiguous": []
+      }
+    }
+  ],
+  "targetClockWrites": false,
+  "before": {
+    "40021000": 50551171,
+    "40021004": 1934346,
+    "e000edfc": 16777216,
+    "e0001000": 1073741824,
+    "e0000e80": 65545,
+    "e0000e00": 1,
+    "e0000e40": 0,
+    "e0040010": 0,
+    "e00400f0": 1,
+    "e0040304": 258,
+    "e0042004": 775
+  },
+  "after": {
+    "40021000": 50551171,
+    "40021004": 1934346,
+    "e000edfc": 16777216,
+    "e0001000": 1073741824,
+    "e0000e80": 65545,
+    "e0000e00": 1,
+    "e0000e40": 0,
+    "e0040010": 0,
+    "e00400f0": 1,
+    "e0040304": 258,
+    "e0042004": 775
+  },
+  "passed": true,
+  "checks": {
+    "offline": "make test-offline passed",
+    "browserChecks": 43,
+    "physicalBoards": [
+      "STM32F103CB"
+    ],
+    "simulatedPorts": [
+      "STM32F407",
+      "STM32H743",
+      "STM32H7B0"
+    ],
+    "modalWidths": [
+      1600,
+      600
+    ]
+  }
+}

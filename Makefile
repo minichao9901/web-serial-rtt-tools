@@ -819,6 +819,7 @@ test-hpm-porting-page: page-prep
 test-swo:
 	$(NODE) tools/selftest/swo.test.mjs
 	$(NODE) tools/selftest/swo-capture.test.mjs
+	$(NODE) tools/selftest/swo-ports.test.mjs
 	$(NODE) tools/selftest/swo-export.test.mjs
 	$(NODE) tools/selftest/swo-demo.test.mjs
 	$(NODE) tools/selftest/swo-matching.test.mjs
@@ -841,3 +842,8 @@ build-swo-f103cb-clock:
 	pwsh -NoProfile -File tools/target-firmware/stm32f103cb_swo_clock/build.ps1
 test-swo-clock-hw:
 	$(NODE) tools/selftest/swo-clock-hw.mjs
+
+# Current fixed-clock fixture acceptance; does not flash/reset/halt the target.
+.PHONY: test-swo-current-hw
+test-swo-current-hw:
+	$(NODE) tools/selftest/swo-current-hw.mjs

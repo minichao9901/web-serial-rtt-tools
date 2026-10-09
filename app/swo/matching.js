@@ -1,4 +1,5 @@
 // Read-only planner; firmware owns the clock transition and hardware readback.
+import {bandwidth,tracePlan,LEGAL_PERIODS} from './planning.js';
 export const DEFAULT_SOURCES=[24000000,720000000,600000000,400000000,800000000,666666666,500000000,266666666];
 export function receiverCandidate(baud,mode=1,sources=DEFAULT_SOURCES){
   let best=null;
@@ -12,10 +13,17 @@ export function receiverCandidate(baud,mode=1,sources=DEFAULT_SOURCES){
   return best;
 }
 export function matchedOptions(o,sources=DEFAULT_SOURCES){
-  const bytes=(o.timestamps===false?5:9)*o.coreHz/o.periodCycles,need=bytes*10/.8;
-  if(!o.autoBaud){const baud=o.coreHz/Math.max(1,Math.round(o.coreHz/o.baudRate));return {...o,receiverEstimate:receiverCandidate(baud,o.receiverMode,sources)};}
-  const choices=[];for(let d=1;d<=8192;d++){const baud=o.coreHz/d;if(baud>30e6||baud<need||baud<1)continue;const c=receiverCandidate(baud,o.receiverMode,sources);if(c&&c.error<=.005)choices.push({baud,c});}
+  const traceHz=o.traceHz??o.coreHz,need=bandwidth(o).requiredBaud,mode=o.receiverMode??2;
+  if(!o.autoBaud){const p=tracePlan({...o,traceHz});return {...o,traceHz,receiverEstimate:receiverCandidate(p.baudRate,mode,sources)};}
+  const choices=[];for(let d=1;d<=8192;d++){const baud=traceHz/d;if(baud>30e6||baud<need||baud<1)continue;const c=receiverCandidate(baud,mode,sources);if(c&&c.error<=.005)choices.push({baud,c});}
   choices.sort((a,b)=>Number(a.c.retune)-Number(b.c.retune)||a.c.error-b.c.error||a.baud-b.baud);
-  if(!choices.length)throw Error(`预计需 ${(need/1e6).toFixed(3)} Mbps（留 20% 余量），请降低目标主频、增大间隔或关闭时间戳`);
-  const {baud,c}=choices[0];return {...o,baudRate:baud,allowBaudRounding:true,receiverEstimate:c};
+  if(!choices.length)throw Error(`预计需 ${(need/1e6).toFixed(3)} Mbps，请由目标降低主频、增大间隔或减少事件`);
+  const {baud,c}=choices[0];return {...o,traceHz,baudRate:baud,allowBaudRounding:true,receiverEstimate:c};
+}
+export function simulate(o,sources=DEFAULT_SOURCES){
+  const budget=bandwidth(o),maxCoreHz=Math.max(0,(30e6*budget.occupancy/10-budget.otherBytes)/budget.bytesPerSample*o.periodCycles);
+  let matched=null,error=null;try{matched=matchedOptions({...o,seconds:1,receiverMode:2,autoBaud:true},sources);}catch(e){error=e.message;}
+  const attainableMax=o.traceHz/Math.max(1,Math.ceil(o.traceHz/30e6));
+  const nextPeriod=LEGAL_PERIODS.find(n=>bandwidth({...o,periodCycles:n}).requiredBaud<=attainableMax);
+  return {budget,maxCoreHz,nextPeriod,matched,plan:matched?tracePlan(matched):null,error};
 }

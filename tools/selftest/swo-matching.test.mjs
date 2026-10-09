@@ -4,13 +4,13 @@ import {Elf} from '../../app/elf/elf.js';
 import {tracePlan} from '../../app/swo/capture.js';
 import {receiverCandidate,matchedOptions} from '../../app/swo/matching.js';
 import {SwoReceiver,receiverWords,receiverStatus} from '../../app/swo/receiver.js';
-import {TargetClock} from '../../app/swo/target-clock.js';
+import {TargetClock} from './swo-legacy-target-clock.mjs';
 const base={coreHz:72e6,baudRate:24e6,seconds:1,periodCycles:512,autoBaud:true,receiverMode:2};
 for(const [hz,period,timestamps,expected] of [[72e6,512,true,18e6],[32e6,256,true,16e6],[24e6,128,true,24e6],[60e6,256,true,30e6],[60e6,128,false,30e6],[24e6,64,false,24e6]]){
  const o=matchedOptions({...base,coreHz:hz,periodCycles:period,timestamps}),p=tracePlan(o);assert.equal(p.baudRate,expected);assert.equal(o.receiverEstimate.error,0);assert.ok(p.estimatedBytes<=p.wireBytes*.8);assert.equal(p.coreHz/(p.acpr+1),o.receiverEstimate.actualBaud);
 }
-assert.throws(()=>matchedOptions({...base,periodCycles:64}),/降低目标主频/);
-assert.throws(()=>matchedOptions({...base,periodCycles:128}),/降低目标主频/);
+assert.throws(()=>matchedOptions({...base,periodCycles:64}),/降低主频/);
+assert.throws(()=>matchedOptions({...base,periodCycles:128}),/降低主频/);
 assert.equal(tracePlan({...base,periodCycles:64}).samplesHz,1125000);
 assert.equal(tracePlan({...base,periodCycles:64}).pcMinimumBaud,56250000);
 assert.equal(receiverCandidate(24e6,0).error,0);

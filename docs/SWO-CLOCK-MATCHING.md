@@ -1,49 +1,53 @@
-# SWO 双端时钟匹配与 240 MHz / 30 Mbaud 验收
+# SWO 双端时钟匹配与计算器
 
-2026-10-09，STM32F103CB WeAct Bluepill（HSE 8 MHz），SWO PB3 接 akaLinkPro HPM5301 的 PB07/VCOM RX。当前保留探针 **UART 240 MHz** 默认固件和目标协作测试程序；目标复位及正常停止记录后为 **HSE → PLL 72 MHz**。
+当前页面支持 F103、F407/F405、H743 型号组和 H7B0 型号组。目标 CPU / PLL 由目标程序负责；录制只设置 DWT、ITM、SWO、必要的调试门控和 PB3 路由。停止恢复原 Trace 和探针接收配置。本轮固定主频实物验收见 [型号适配与计算器](validation/2026-10-09-swo-ports-calculator.md)。
 
-## CPU、PLL 和串口的分频层
+## CPU、Trace 和板级晶振
 
-探针默认采用现有 PLL0CLK0=720 MHz。CPU 独立二分频得到 360 MHz，UART 独立三分频得到 240 MHz，SPI2 启用后也采用 720/3=240 MHz。修改 UART 的 SYSCTL 分频、OSR 或 UART divisor，不会修改 CPU 频率。修改 PLL0 的 MFI/MFN 会改变共享根时钟，CPU 和其他使用者可能一起受影响。
+识别 CPUID 可以判断 Cortex-M3/M4/M7，但不能推断芯片时钟树或外部晶振。页面按 CPUID + STM32 DEV_ID 选择适配，再读取 RCC。DEV_ID 可能由多个型号共用，不能唯一识别完整料号。使用外部时钟时，频率需按板子提供；显示值是根据寄存器推算，不是测量。
 
-本实现不调整 PLL0。自动模式先枚举现有时钟源；必须精细调频时只使用 PLL1。固件检查 CPU 和其他消费者，迁移可以保持相同频率的节点，无法迁移的活动节点拒绝执行。XIP 可临时降频到稳定 PLL0，结束恢复原配置；PLL1 模式因此可能影响 Flash 访问时序。运行中的 SPI/I²C 功能与 SWO 时钟会话互斥。
+| 常见型号 | CPU 来源 | SWO 输入来源 |
+|---|---|---|
+| F103 | SYSCLK 经 AHB 分频后的 HCLK | HCLK，与 CPU 相同 |
+| F407/F405 | SYSCLK 经 AHB 分频后的 HCLK | HCLK，与 CPU 相同 |
+| H743/H742/H750/H753 | PLL 模式为 PLL1_P 经 D1CPRE | PLL 模式为 PLL1_R；其他模式为 HSI / CSI / HSE |
+| H7B0/H7A3/H7B3 | PLL 模式为 PLL1_P 经 CDCPRE | PLL 模式为 PLL1_R；其他模式为 HSI / CSI / HSE |
 
-PLL1 标称公式为 `24 MHz × (MFI + MFN/MFD)`。默认 MFD=240,000,000，寄存器分辨率 0.1 Hz，SDK 整数 Hz API 分辨率 1 Hz；固件先验证参考源、MFD、扩频和输出分频。计算分辨率不等于晶振实际精度。参考 [SDK PLL 驱动](https://github.com/hpmicro/hpm_sdk/blob/v1.11.0/drivers/src/hpm_pllctlv2_drv.c) 与 [HPM5301 时钟驱动](https://github.com/hpmicro/hpm_sdk/blob/v1.11.0/soc/HPM5300/HPM5301/hpm_clock_drv.c)。
+H7 的 SWO 串行输出时钟由 RCC 系统时钟选择控制，但 PLL 模式取 R 输出；核心取 P 输出。Trace 组件的总线 / ATB 时钟也不是 SWO 编码时钟。PLL1_R 未启用时提示由目标程序开启，页面不修改目标 PLL。计算器选择 H7 后默认独立输入 Trace 频率，也可从当前识别结果带入。
 
-## 三个公式必须分别计算
+## 三个公式分别计算
 
-- 目标 SWO 线速：`B_target = HCLK / (TPIU_ACPR + 1)`，整数分频 1–8192。
-- 探针 UART 接收线速：`B_probe = F_uart / (OSR × UART_DIV)`；模块还有独立时钟源和 SYSCTL 分频。
-- PC 采样率：`Samples/s = HCLK / N`，N 是采样周期数，不能直接当作波特率。
+- PC 采样率：`PC/s = CPU Hz / N`；N 为 DWT 合法采样间隔。
+- 目标 SWO 线速：`B_target = Trace Hz / (ACPR 或 CODR + 1)`；整数分频 1–8192。
+- 探针接收线速：`B_probe = PLL 输出 Hz / SYSCTL分频 / OSR / UART_DIV`。
 
-8N1 每个字节需要 10 个线位。纯 PC 包按 5 字节估算，有时间戳按 9 字节估算，自动方案另留 20% 余量。同步、睡眠、ITM 和异常改变实际负载，估算不能替代实测。
+8N1 每字节占 10 线位。纯 PC 包按 5 B，带时间戳按约 9 B/PC 估算；异常按 3 B/进入或退出事件；ITM 按载荷的 2 倍估算，可填写其他字节/s。默认余量 20%，所需线速为  `预计字节/s ×10 /0.8`。这是平均预算，突发和实际时间戳开销仍需实测。
 
-72 MHz /64 = **1,125,000 samples/s**，纯 PC 最低需 **56.25 Mbaud**。/128 为 562,500 samples/s，纯 PC 最低需 28.125 Mbaud，含余量需 35.156 Mbaud。72 MHz 的整数 SWO 分频在 ≤30 Mbaud 时最高只能输出 24 Mbaud，因此不能直接在 72 MHz 下可靠使用这两档。
+72 MHz /64 = **1,125,000 PC/s**，纯 PC 最低需 **56.25 Mbaud**。/128 为 562,500 PC/s，纯 PC 最低 28.125 Mbaud，含余量需 35.156 Mbaud。72 MHz Trace 在 ≤30 Mbaud 时整数分频最高只能产生 24 Mbaud，不能直接可靠使用这两档。可增大间隔，或由目标程序使用合法的较低主频；计算器给出带宽允许的频率上界，目标合法 PLL 档位仍需由目标工程确认。
 
-| 目标主频 | PC 间隔 | 模式 | SWO 发/收 | UART 时钟 / OSR / DIV |
-|---|---|---|---|---|
-| 72 MHz | 512 | 时间戳 + ITM | 18 Mbaud | 180 MHz / 10 / 1 |
-| 32 MHz | 256 | 时间戳 + ITM | 16 Mbaud | 160 MHz / 10 / 1 |
-| 24 MHz | 128 | 时间戳 + ITM | 24 Mbaud | 240 MHz / 10 / 1 |
-| 24 MHz | 64 | 纯 PC | 24 Mbaud | 240 MHz / 10 / 1 |
-| 60 MHz | 256 | 时间戳 + ITM | 30 Mbaud | 240 MHz / 8 / 1 |
-| 60 MHz | 128 | 纯 PC | 30 Mbaud | 240 MHz / 8 / 1 |
+## 探针时钟与自动匹配
 
-自动匹配优先使用已有根时钟，再比较双方误差和满足余量的线速。页面显示实际输出、实际接收、UART 输入/OSR/divisor 和误差；准备阶段重新读取根时钟，由固件独立规划与回读。双方误差超过 0.5% 拒绝启用 trace。
+探针默认 PLL0CLK0=720 MHz，CPU 独立二分频得到 360 MHz，UART 独立三分频得到 240 MHz；SPI2 启用后也使用 720/3=240 MHz。修改 UART 的分频不会改变 CPU；修改共享 PLL0 的 MFI/MFN 则可能改变其他使用者。本实现不调整 PLL0。
 
-## 页面使用
+页面统一使用自动规划：先枚举已有根时钟和分频，必要时申请调整 PLL1。页面会显示本次实际选择，若使用 PLL0 则明确说明 PLL1 未用于接收。预览可能使用默认根频率，准备录制时重新读取根时钟，固件独立规划、校验消费者并回读实际配置。不能安全迁移共享消费者时拒绝 PLL1 调整；SPI/I²C 与 SWO 时钟会话互斥。
 
-1. 载入匹配目标的 ELF 与源文件，授权 SWD、串口和“探针时钟配置”。后者经同一探针的 WebHID 完成，核对序列号。
-2. 识别目标，填写 HSE 8 MHz，选择采样周期、时间戳和 ITM。自动匹配会配置两端；手动模式显示双方实际速率。
-3. 普通应用保持原主频。试 64 档可用 [协作调频程序](../tools/target-firmware/stm32f103cb_swo_clock/README.md)，载入该程序的 `fw.elf`，选择目标 24 MHz，关闭时间戳/ITM。试 30 Mbaud 可选目标 60 MHz、128 档纯 PC，或 256 档带时间戳。
-4. 开始时校验 ELF、保存 trace 配置、准备接收端，再配置 TPIU/DWT。串口自动请求实际目标线速，探针租约固定计算出的硬件分频；浏览器请求值不能代替读回值。
-5. 停止恢复 trace、探针时钟及原目标主频。原始 `.swopc` 含双端配置、ELF 指纹和接收错误计数，可离线载入。完整 `.c` / `.txt` 导出重新解码原始数据，不受页面事件上限影响。
+PLL1 公式为 `24 MHz × (MFI + MFN/MFD)`。默认 MFD=240,000,000 时寄存器分辨率 0.1 Hz；SDK 整数 Hz API 分辨率 1 Hz。计算分辨率不等于晶振实际精度。参考 [SDK PLL 驱动](https://github.com/hpmicro/hpm_sdk/blob/v1.11.0/drivers/src/hpm_pllctlv2_drv.c) 与 [HPM5301 时钟驱动](https://github.com/hpmicro/hpm_sdk/blob/v1.11.0/soc/HPM5300/HPM5301/hpm_clock_drv.c)。
 
-目标调频只接受已校验 ELF 的协作接口、RAM 魔数和应答序号，由程序在安全阶段边界修改 PLL、Flash 等待、APB/ADC 和 SysTick。无此接口的普通程序拒绝调频。浏览器异常退出后探针 5 秒无心跳恢复原时钟；目标协作程序可能保持最后频率，复位恢复 72 MHz。
+## 页面操作
 
-## 实测与恢复验证
+1. 在“分析”载入匹配 ELF 和源码；在“录制”选择 VCOM、识别目标并授权探针时钟。
+2. 按实际板子填写外部时钟。F103 初始按 Bluepill 8 MHz，自动识别其他型号时清除这个预设。自动推算得到 CPU 和 Trace；无法推算时可手动提供实际值，但不会因此为未知芯片启用 STM32 配置。
+3. 选择 PC 间隔、时间戳和事件预算。自动匹配填入 SWO 计算值；关闭自动匹配可输入 1–30000000 的整数。目标无法整除时可以允许近似，页面显示请求与实际值；探针始终匹配目标实际输出，而不是未实现的请求值。双方实际误差超过 0.5% 拒绝启用 Trace。
+4. 计算器允许模拟目标频率及事件开销，采用设置只复制采样和预算。目标频率改变后重新识别，录制期间应保持稳定。
+5. 记录结束恢复原 Trace 与接收配置，保存 .swopc。完整 .c / .txt 导出包含全部解码落点和缺口，.c 便于高亮阅读，不用于编译。
 
-最新探针镜像 SHA256：`660d9c60f6490eec28c4647be51d8c1f98b7b1fca67ad700aedf47b2b47247bc`。目标 ELF：`4fb488be3554e9c9713cb40a01ee7dfb94e1f6b689b188db9d0a026000d0d677`。
+F103CB 已物理验证；F407、H743、H7B0 的适配目前通过寄存器模拟与恢复测试，待对应板子验收。
+
+以下保留旧版协作测试程序的 240 MHz /30 Mbaud 历史结果。当前录制页面已移除目标调频入口，这些结果不能当作当前页面自动改变目标频率的承诺。
+
+## 历史协作调频实测（旧版页面）
+
+当时探针镜像 SHA256：`660d9c60f6490eec28c4647be51d8c1f98b7b1fca67ad700aedf47b2b47247bc`。目标 ELF：`4fb488be3554e9c9713cb40a01ee7dfb94e1f6b689b188db9d0a026000d0d677`。
 
 | 配置 | 时长 | 原始字节 | PC 样本 | 全部不同 PC 的 GNU 定位核对 |
 |---|---:|---:|---:|---:|
@@ -52,7 +56,7 @@ PLL1 标称公式为 `24 MHz × (MFI + MFN/MFD)`。默认 MFD=240,000,000，寄�
 
 均无畸形包、SWO overflow、未知 PC、末尾截断、浏览器错误或已检测 UART 接收错误。6 秒记录跨越 5 秒租约超时，验证心跳维持。所有不同 PC 均与 GNU addr2line 的函数和源码行定位独立核对；长记录额外流式解码检查完整数据的全部 PC。睡眠会产生 sleep 包，实际 PC 数少于名义上界。
 
-额外 30 Mbaud /256、带时间戳和 ITM 的 3 秒试验收到 609,785 PC、5,368,439 字节，阶段核对无冲突；另一次 24 Mbaud /64 纯 PC、6 秒试验收到 1,946,838 PC。额外结果是在最终 PLL 关闭状态等待修正前的固件运行，收发配置相同；最新固件以上表为准。
+额外 30 Mbaud /256、带时间戳和 ITM 的 3 秒试验收到 609,785 PC、5,368,439 字节，阶段核对无冲突；另一次 24 Mbaud /64 纯 PC、6 秒试验收到 1,946,838 PC。额外结果是在最终 PLL 关闭状态等待修正前的固件运行，收发配置相同；该历史固件以上表为准。
 
 独立租约测试通过固定 30/24 Mbaud、已有时钟 18 Mbaud、PLL1=920 MHz 的精确 23 Mbaud。验证 150 次心跳、错误 token 拒绝、超过 30 Mbaud 拒绝，以及无心跳 5.3 秒恢复全部 36 个时钟节点和 PLL 参数。SPI2 启用、模块 240 MHz 时 CPU/SPI 时钟保持不变；未测外部 SPI 数据吞吐。RTT、JScope、SPI 协议/生命周期回归通过，本轮没有重测三者硬件吞吐。
 
@@ -60,4 +64,4 @@ UART 240 MHz 是用户选择的超规格模式（此前核查的 HPM5300 DS Rev0
 
 PC 采样显示执行位置、热点和采样序列，不能重建每条分支或指令；纯 PC 没有 trace 时间戳，时间只可估计。导出保留间断/溢出证据。
 
-机器报告：[验收记录](../samples/swo/clock240-acceptance.json)，短原始样本：[24 MHz /64](../samples/swo/f103cb-clock240-64.swopc)。复跑：`node --test tools/selftest/swo*.test.mjs`。真机脚本 `tools/selftest/swo-clock-hw.mjs` 必须设置 `SWO_CLOCK_FLASH=1`，会备份并保留协作程序。
+机器报告：[验收记录](../samples/swo/clock240-acceptance.json)，短原始样本：[24 MHz /64](../samples/swo/f103cb-clock240-64.swopc)。复跑：`node --test tools/selftest/swo*.test.mjs`。旧真机脚本 `tools/selftest/swo-clock-hw.mjs` 已停用，任何 Flash 操作前会拒绝执行。当前固定时钟验收用 `make test-swo-current-hw`。

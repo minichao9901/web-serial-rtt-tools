@@ -1247,6 +1247,29 @@ fieldset,.toolbar,.sendbar,.stats,.an-measurements,.an-plot,
 .diag-findings p{border-left-width:2px}
 
 /* SWO capture and offline analysis */
+#tab-swo [hidden],.sw-modal [hidden]{display:none!important}
+#tab-swo .sw-side-nav{display:flex;gap:4px;border-bottom:1px solid var(--line);padding-bottom:6px;position:sticky;top:0;background:var(--bg);z-index:2}
+#tab-swo .sw-side-nav button{flex:1;border-color:transparent;background:transparent}
+#tab-swo .sw-side-nav button[aria-selected=true]{color:var(--acc);background:var(--bg2);border-color:var(--line)}
+#tab-swo .sw-side-tools{margin:9px 0 12px}
+#tab-swo .sw-elf-reminder{font-size:11px;margin-top:10px}
+.sw-modal{width:min(850px,calc(100vw - 32px));max-width:850px;max-height:calc(100dvh - 40px);overflow:auto;padding:20px;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:var(--radius-card)}
+.sw-modal::backdrop{background:#0009}
+.sw-modal-head{display:flex;align-items:center;justify-content:space-between;gap:15px;position:sticky;top:-20px;background:var(--bg);padding:8px 0;z-index:2}
+.sw-modal-head h2{font-size:18px;margin:0}
+.sw-calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.sw-modal .row>span{width:108px;flex-shrink:0;font-size:12px}
+.sw-modal .row input,.sw-modal .row select{width:100%;min-width:0;flex:1}
+.sw-modal .chk{font-size:12px;line-height:1.6}
+.sw-modal p{font-size:13px;line-height:1.75;overflow-wrap:anywhere}
+.sw-modal pre{font:12px/1.8 var(--mono);white-space:pre-wrap;overflow-wrap:anywhere;background:var(--bg2);padding:12px;border-radius:6px}
+.sw-calc-result{padding:12px;margin:12px 0;background:var(--bg2);border-left:2px solid var(--acc);font-size:13px;line-height:1.8;white-space:pre-line;overflow-wrap:anywhere}
+.sw-calc-result.bad{border-color:var(--warn)}
+.sw-help-nav{display:flex;flex-wrap:wrap;gap:12px;font-size:12px;margin:14px 0}
+.sw-help-nav a{color:var(--acc);text-decoration:none}
+.sw-help-nav a:hover,.sw-help-nav a:focus-visible{text-decoration:underline}
+.sw-modal h3{font-size:15px;margin:20px 0 8px;scroll-margin-top:60px}
+@media(max-width:650px){.sw-calc-grid{grid-template-columns:1fr}.sw-modal{padding:12px}.sw-modal-head{top:-12px}}
 #tab-swo .sw-fold{margin:7px 0 0;border-top:1px solid var(--line);padding-top:6px}
 #tab-swo .sw-fold>summary{cursor:pointer;color:var(--fg2);font-size:12px;user-select:none}
 #tab-swo .sw-fold[open]>summary{margin-bottom:8px;color:var(--fg)}

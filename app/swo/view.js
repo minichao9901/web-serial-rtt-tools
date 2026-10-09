@@ -6,16 +6,20 @@ import {selectRange} from './analyze.js';
 import {packRecording,unpackRecording,sha256,MAX_RAW,MAX_META} from './recording.js';
 import {AkaLinkHid} from '../hid/probe.js';
 import {matchedOptions} from './matching.js';
-import {stm32f1Info} from './target.js';
+import {recomputeTarget} from './target.js';
+import {COMMON_TARGETS,targetPort} from './ports.js';
+import {receiverChain,periodForRate,LEGAL_PERIODS} from './planning.js';
+import {simulate,DEFAULT_SOURCES} from './matching.js';
 const $=id=>document.getElementById(id),hex=v=>'0x'+(v>>>0).toString(16).padStart(8,'0');
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const color=s=>{let h=0;for(const c of s)h=(h*31+c.charCodeAt(0))>>>0;return `hsl(${h%360} 65% 64%)`;};
 function download(bytes,name,type='application/octet-stream'){const url=URL.createObjectURL(new Blob([bytes],{type})),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);}
 export class SwoView {
-  constructor(){this.capture=new SwoCapture();this.sources=new SourceStore();this.recording=null;this.result=null;this.elf=null;this.ports=[];this.page=0;this.cursor=0;this._analysisId=0;this._sourceId=0;}
+  constructor(){this.capture=new SwoCapture();this.sources=new SourceStore();this.recording=null;this.result=null;this.elf=null;this.ports=[];this.page=0;this.cursor=0;this._analysisId=0;this._sourceId=0;this.hsePresetF1=true;}
   get session(){return this.capture;}
   init(){
     const bind=(id,fn)=>$(id).addEventListener('click',()=>this.action(fn));
+    this.initSidebar();
     bind('sw-pick',async()=>{const port=await SerialSession.requestPort();await this.refreshPorts();$('sw-port').value=String(this.ports.indexOf(port));});
     bind('sw-clock-grant',async()=>{const h=new AkaLinkHid();await h.request();await h.close();$('sw-clock-grant').textContent='时钟已授权';$('sw-match').textContent='探针时钟配置已授权；记录开始前将读回实际配置。';});
     bind('sw-chart-toggle',()=>{const box=$('sw-chart-box');box.hidden=!box.hidden;$('sw-chart-toggle').textContent=box.hidden?'展开轨迹图':'收起轨迹图';$('sw-chart-toggle').setAttribute('aria-expanded',String(!box.hidden));if(!box.hidden)this.draw();});
@@ -28,8 +32,8 @@ export class SwoView {
     bind('sw-source-pick',()=>{$('sw-source-files').click();});
     bind('sw-save',()=>{if(this.recording)download(packRecording(this.recording.raw,this.recording.metadata),'swo-'+Date.now()+'.swopc');});
     bind('sw-demo',()=>this.loadDemo());bind('sw-analyze',()=>this.analyze());bind('sw-csv',()=>this.exportCsv());
-    for(const id of ['sw-core','sw-baud','sw-period','sw-seconds','sw-itm','sw-exceptions','sw-baud-round','sw-auto-baud','sw-receiver-mode','sw-target-hz','sw-timestamps'])$(id).addEventListener('change',()=>this.renderPlan());
-    $('sw-hse').addEventListener('change',()=>this.action(()=>this.refreshTargetClock()));
+    for(const id of ['sw-core','sw-trace','sw-baud','sw-period','sw-seconds','sw-itm','sw-exceptions','sw-exception-rate','sw-itm-rate','sw-extra','sw-margin','sw-baud-round','sw-auto-baud','sw-timestamps'])$(id).addEventListener('change',()=>this.renderPlan());
+    $('sw-hse').addEventListener('change',()=>this.action(()=>{this.hsePresetF1=false;this.refreshTargetClock();}));
     $('sw-auto-clock').addEventListener('change',()=>this.target?this.showTarget(this.target):this.renderPlan());
     $('sw-file').addEventListener('change',()=>this.action(async()=>{const f=$('sw-file').files[0];if(!f)return;if(f.size>MAX_RAW+MAX_META+12)throw Error('记录文件超过大小限制');this.recording=unpackRecording(await f.arrayBuffer());if(this.recording.metadata.format==='raw')this.recording.metadata.startAligned=$('sw-aligned').checked;await this.analyze();}));
     $('sw-elf-file').addEventListener('change',()=>this.action(async()=>{const f=$('sw-elf-file').files[0];if(f)await this.loadElf(await f.arrayBuffer(),f.name);}));
@@ -44,33 +48,73 @@ export class SwoView {
     $('sw-chart').addEventListener('click',e=>{if(!this.result?.pcSamples.length)return;const rect=$('sw-chart').getBoundingClientRect(),f=Math.max(0,Math.min(1,(e.clientX-rect.left-130)/(rect.width-142)));this.action(()=>this.selectSample(Math.round(this.from+f*(this.to-this.from))));});
     this.capture.onError=e=>{this.error(e);};
     this.capture.onChange=()=>{if(this.capture.running)this._wasRecording=true;
-      if(this._wasRecording&&!this.capture.active){this._wasRecording=false;this.recording={raw:this.capture.raw(),metadata:structuredClone(this.capture.metadata)};this.action(()=>this.analyze());}this.renderCapture();};
+      if(this._wasRecording&&!this.capture.active){this._wasRecording=false;this.recording={raw:this.capture.raw(),metadata:structuredClone(this.capture.metadata)};this.action(()=>this.analyze());}this.renderCapture();if(!this.capture.active&&this._wasRecording===false)this.selectSidebar('analysis');};
     new ResizeObserver(()=>this.draw()).observe($('sw-chart'));
     this.refreshPorts().catch(e=>this.error(e));this.renderPlan();this.renderCapture();
   }
   async action(fn){try{return await fn();}catch(e){this.error(e);}}
   error(e){$('sw-warning').textContent=e.message||String(e);$('sw-warning').classList.add('bad');}
-  options(){return {coreHz:Number($('sw-core').value)*1e6,baudRate:Number($('sw-baud').value),periodCycles:Number($('sw-period').value),seconds:Number($('sw-seconds').value),itm:$('sw-itm').checked,exceptions:$('sw-exceptions').checked,autoClock:$('sw-auto-clock').checked,hseHz:$('sw-hse').value?Number($('sw-hse').value)*1e6:null,allowBaudRounding:$('sw-baud-round').checked,autoBaud:$('sw-auto-baud').checked,receiverMode:Number($('sw-receiver-mode').value),targetClockHz:Number($('sw-target-hz').value),timestamps:$('sw-timestamps').checked};}
+  initSidebar(){
+    const on=(id,fn)=>$(id).addEventListener('click',()=>this.action(fn));
+    on('sw-record-tab',()=>this.selectSidebar('record'));on('sw-analysis-tab',()=>this.selectSidebar('analysis'));
+    for(const id of ['sw-record-tab','sw-analysis-tab'])$(id).addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();const name=e.key==='Home'?'record':e.key==='End'?'analysis':id==='sw-record-tab'?'analysis':'record';this.selectSidebar(name);$('sw-'+name+'-tab').focus();}});
+    on('sw-help-open',()=>$('sw-help').showModal());on('sw-help-close',()=>$('sw-help').close());
+    for(const a of $('sw-help').querySelectorAll('a'))a.addEventListener('click',e=>{e.preventDefault();$(a.getAttribute('href').slice(1)).scrollIntoView({block:'start',behavior:'smooth'});});
+    on('sw-calculator-open',()=>{this.fillCalculator();$('sw-calculator').showModal();this.renderCalculator();});on('sw-calculator-close',()=>$('sw-calculator').close());
+    on('sw-calc-current',()=>{this.fillCalculator(true);this.renderCalculator();});
+    on('sw-calc-help',()=>{$('sw-calculator').close();$('sw-help').showModal();});
+    on('sw-calc-copy',()=>this.applyCalculator());
+    for(const input of $('sw-calculator').querySelectorAll('input,select'))input.addEventListener('input',()=>{if(input.id==='sw-calc-model'){const port=targetPort(input.value);$('sw-calc-core').value=port?.maxCoreHz/1e6||72;$('sw-calc-relation').value=port?.traceDiv===null||!port?'manual':String(port.traceDiv);if($('sw-calc-relation').value==='manual')$('sw-calc-trace').value='';}this.renderCalculator();});
+    $('sw-model').addEventListener('change',()=>{this.target=null;this.hsePresetF1=false;$('sw-hse').value='';$('sw-core').value='';$('sw-trace').value='';$('sw-target').textContent='型号已切换，请重新识别目标';$('sw-target-path').textContent='请重新识别 CPU / Trace 时钟来源与分频。';this.renderPlan();});
+    for(const select of [$('sw-period'),$('sw-calc-period')])for(const n of LEGAL_PERIODS)if(![...select.options].some(o=>Number(o.value)===n)){const o=document.createElement('option');o.value=n;o.textContent=n+' 周期';select.append(o);}
+    for(const select of [$('sw-period'),$('sw-calc-period')]){const selected=select.value;select.replaceChildren(...[...select.options].sort((a,b)=>Number(a.value)-Number(b.value)));select.value=selected;}
+  }
+  selectSidebar(name){for(const n of ['record','analysis']){const selected=n===name;$('sw-'+n+'-panel').hidden=!selected;$('sw-'+n+'-tab').setAttribute('aria-selected',String(selected));$('sw-'+n+'-tab').tabIndex=selected?0:-1;}}
+  options(){return {profile:$('sw-model').value,hseForProfile:this.hsePresetF1?'stm32f1':null,extraBytes:Number($('sw-extra').value),occupancy:1-Number($('sw-margin').value)/100,coreHz:Number($('sw-core').value)*1e6,traceHz:Number($('sw-trace').value)*1e6,baudRate:Number($('sw-baud').value),periodCycles:Number($('sw-period').value),seconds:Number($('sw-seconds').value),itm:$('sw-itm').checked,exceptions:$('sw-exceptions').checked,exceptionEvents:Number($('sw-exception-rate').value),itmBytes:Number($('sw-itm-rate').value),autoClock:$('sw-auto-clock').checked,hseHz:$('sw-hse').value?Number($('sw-hse').value)*1e6:null,allowBaudRounding:$('sw-baud-round').checked,autoBaud:$('sw-auto-baud').checked,receiverMode:2,timestamps:$('sw-timestamps').checked};}
   renderPlan(){
-    $('sw-core').disabled=this.capture.active||$('sw-auto-clock').checked;
+    for(const id of ['sw-core','sw-trace'])$(id).disabled=this.capture.active||$('sw-auto-clock').checked;
     $('sw-baud').disabled=this.capture.active||$('sw-auto-baud').checked;
-    $('sw-target-clock-note').hidden=!Number($('sw-target-hz').value);
+    $('sw-exception-budget').hidden=!$('sw-exceptions').checked;$('sw-itm-budget').hidden=!$('sw-itm').checked;
     const summary=$('sw-match-summary');summary.classList.remove('bad');
     try{
       const o=this.options();
-      if(o.autoClock&&this.target?.external&&!o.hseHz)throw Error('请在时钟设置填写板载外晶频率');
-      if(!o.targetClockHz&&!o.coreHz){summary.textContent=o.autoClock?'先识别目标与主频':'请填写当前核心频率';$('sw-match').textContent='主频确认后计算收发配置';$('sw-plan').textContent='尚未确定采样率';return;}
-      const preview=matchedOptions({...o,coreHz:o.targetClockHz||o.coreHz},this.capture.receiverSources?.frequencies);
-      const p=this.capture.running?this.capture.metadata.plan:tracePlan(preview),r=this.capture.running?this.capture.metadata.receiver:null,c=preview.receiverEstimate;
-      $('sw-match').textContent=r?`已回读：目标 ${(p.baudRate/1e6).toFixed(6)} Mbps · 接收 ${(r.actualBaud/1e6).toFixed(6)} Mbps · UART ${(r.uartHz/1e6).toFixed(3)} MHz / OSR ${r.osr} / DIV ${r.uartDivider} · 误差 ${(Math.abs(r.actualBaud-p.baudRate)/p.baudRate*100).toFixed(5)}%`:
-        c?`计算预览：目标 ${(p.baudRate/1e6).toFixed(6)} Mbps · 接收 ${(c.actualBaud/1e6).toFixed(6)} Mbps · UART ${(c.uartHz/1e6).toFixed(3)} MHz / OSR ${c.osr} / DIV ${c.div} · 误差 ${(c.error*100).toFixed(5)}%${c.retune?' · 需 PLL1 '+(c.pllHz/1e6).toFixed(3)+' MHz；共享时钟检查通过后才生效':''}`:'该设置没有可用的探针分频';
-      const minimum=p.pcMinimumBaud/1e6,overMaximum=p.pcMinimumBaud>30000000;
-      const tight=p.estimatedBytes>p.wireBytes*.8;
-      summary.textContent=(this.capture.running?'已回读 · ':o.targetClockHz?`录制 ${p.coreHz/1e6} MHz · `:'预计 · ')+`${(p.baudRate/1e6).toLocaleString('zh-CN',{maximumFractionDigits:3})} Mbps · ${(p.samplesHz/1000).toFixed(1)}k PC/s`+(tight?' · 带宽偏紧':'');summary.classList.toggle('bad',tight);
-      $('sw-plan').textContent=`约 ${p.samplesHz.toLocaleString('zh-CN',{maximumFractionDigits:0})} PC 样本/s · 全为 PC 时最低需 ${minimum.toFixed(3)} Mbps · ${p.timestamps?'含时间戳':'仅 PC 包'}预计 ${(p.estimatedBytes/1000).toFixed(1)} KB/s / 线路 ${(p.wireBytes/1000).toFixed(0)} KB/s`
-        +(p.baudError?` · 目标实际 ${(p.baudRate/1e6).toFixed(3)} Mbps / 请求 ${(p.requestedBaudRate/1e6).toFixed(3)} Mbps · 偏差 ${(p.baudError*100).toFixed(2)}%`:'')
-        +(overMaximum?' · PC 包最低需求已超过探针 30 Mbps 上限；请降低目标主频或增大采样间隔':p.estimatedBytes>p.wireBytes*.8?' · 带宽偏紧，建议增大 PC 间隔':'');
-    }catch(e){const o=this.options(),hz=o.targetClockHz||o.coreHz,rate=hz/o.periodCycles;$('sw-plan').textContent=`约 ${rate.toLocaleString('zh-CN',{maximumFractionDigits:0})} PC 样本/s · 全为 PC 时最低需 ${(rate*50/1e6).toFixed(3)} Mbps · ${rate*50>30e6?'已超过探针 30 Mbps 上限；':''}${e.message}`;$('sw-match').textContent=e.message;summary.textContent=!o.coreHz&&this.target?.external&&!o.hseHz?'主频待确认 · 请填写外晶频率':/预计需/.test(e.message)?'带宽不足 · 增大 PC 间隔或关闭时间戳':e.message;summary.classList.add('bad');}
+      if(!o.coreHz||!o.traceHz){summary.textContent=this.target?.external&&!o.hseHz?'主频待确认 · 请填写外部时钟':'先识别目标与时钟，或填写 CPU / Trace 频率';$('sw-match').textContent='CPU 和 SWO 输入频率确认后计算收发配置';$('sw-plan').textContent='尚未确定采样率';$('sw-receiver-path')?.remove();return;}
+      if(!o.autoBaud&&!Number.isInteger(o.baudRate))throw Error('手动 SWO 波特率必须为 1–30000000 的整数');
+      const sources=this.capture.receiverSources?.frequencies||DEFAULT_SOURCES,preview=matchedOptions(o,sources);
+      const p=this.capture.running?this.capture.metadata.plan:tracePlan(preview),r=this.capture.running?this.capture.metadata.receiver:null,c=r||preview.receiverEstimate;
+      if(o.autoBaud)$('sw-baud').value=Math.round(p.baudRate);
+      const error=c?Math.abs(c.actualBaud-p.baudRate)/p.baudRate:1,tight=p.estimatedBytes>p.wireBytes*p.occupancy;
+      summary.textContent=(r?'已回读 · ':'预计 · ')+`${(p.baudRate/1e6).toLocaleString('zh-CN',{maximumFractionDigits:6})} Mbps · ${(p.samplesHz/1000).toFixed(1)}k PC/s`+(tight?' · 带宽偏紧':'')+(error>.005?' · 接收误差过大':'');summary.classList.toggle('bad',tight||error>.005);
+      $('sw-match').textContent=(r?'已回读：':'计算预览：')+`目标 Trace ${(p.traceHz/1e6).toFixed(6)} MHz ÷ ${p.acpr+1} → SWO ${(p.baudRate/1e6).toFixed(6)} Mbps\n`+receiverChain(c,sources)+`\n收发误差 ${(error*100).toFixed(6)}%`;
+      $('sw-plan').textContent=`约 ${p.samplesHz.toLocaleString('zh-CN',{maximumFractionDigits:0})} PC 样本/s · 全为 PC 时最低需 ${(p.pcMinimumBaud/1e6).toFixed(3)} Mbps · ${p.timestamps?'含时间戳':'仅 PC 包'}预计 ${(p.estimatedBytes/1000).toFixed(1)} KB/s / 线路 ${(p.wireBytes/1000).toFixed(0)} KB/s`+(p.baudError?` · 请求 ${p.requestedBaudRate} baud，目标实际 ${p.baudRate.toFixed(3)} baud`:'')+(p.pcMinimumBaud>30e6?' · PC 包需求已超过探针 30 Mbps 上限':tight?' · 带宽偏紧，建议增大 PC 间隔':'');
+      $('sw-receiver-path')?.remove();const path=document.createElement('p');path.id='sw-receiver-path';path.className='hint';path.textContent=c?`${['24M','PLL0CLK0','PLL0CLK1','PLL0CLK2','PLL1CLK0','PLL1CLK1','PLL1CLK2','PLL1CLK3'][c.source]} ÷${c.systemDivider??c.sysdiv} → UART ${c.uartHz/1e6} MHz · OSR ${c.osr} · DIV ${c.uartDivider??c.div}${c.retune?'（计划调 PLL1）':''}`:'没有可用接收分频';summary.after(path);
+    }catch(e){const o=this.options(),rate=o.coreHz/o.periodCycles;$('sw-plan').textContent=`约 ${rate.toLocaleString('zh-CN',{maximumFractionDigits:0})} PC 样本/s · 全为 PC 时最低需 ${(rate*50/1e6).toFixed(3)} Mbps · ${rate*50>30e6?'已超过探针 30 Mbps 上限；':''}${e.message}`;$('sw-match').textContent=e.message;summary.textContent=e.message;summary.classList.add('bad');$('sw-receiver-path')?.remove();}
+  }
+  fillCalculator(requireTarget=false){
+    const o=this.options();if(requireTarget&&(!o.coreHz||!o.traceHz))throw Error('请先识别目标时钟或填写当前频率');
+    if(o.coreHz&&o.traceHz){$('sw-calc-model').value=this.target?.profile==='unknown'?'custom':this.target?.profile||'custom';$('sw-calc-core').value=o.coreHz/1e6;const ratio=o.coreHz/o.traceHz;$('sw-calc-relation').value=[1,2,4].includes(ratio)?String(ratio):'manual';$('sw-calc-trace').value=o.traceHz/1e6;}
+    $('sw-calc-period').value=o.periodCycles;$('sw-calc-timestamps').checked=o.timestamps;$('sw-calc-exceptions').checked=o.exceptions;$('sw-calc-itm').checked=o.itm;$('sw-calc-exception-rate').value=o.exceptionEvents;$('sw-calc-itm-rate').value=o.itmBytes;$('sw-calc-extra').value=o.extraBytes;$('sw-calc-margin').value=Number(((1-o.occupancy)*100).toFixed(6));
+  }
+  calculatorOptions(){const coreHz=Number($('sw-calc-core').value)*1e6,relation=$('sw-calc-relation').value;
+    const traceHz=relation==='manual'?Number($('sw-calc-trace').value)*1e6:coreHz/Number(relation),periodCycles=$('sw-calc-rate-mode').value==='rate'?periodForRate(coreHz,Number($('sw-calc-rate').value)):Number($('sw-calc-period').value);
+    return {coreHz,traceHz,periodCycles,timestamps:$('sw-calc-timestamps').checked,exceptions:$('sw-calc-exceptions').checked,itm:$('sw-calc-itm').checked,exceptionEvents:Number($('sw-calc-exception-rate').value),itmBytes:Number($('sw-calc-itm-rate').value),extraBytes:Number($('sw-calc-extra').value),occupancy:1-Number($('sw-calc-margin').value)/100};
+  }
+  renderCalculator(){
+    const result=$('sw-calc-result');this.calculation=null;$('sw-calc-copy').disabled=true;
+    $('sw-calc-trace').disabled=$('sw-calc-relation').value!=='manual';$('sw-calc-rate-row').hidden=$('sw-calc-rate-mode').value!=='rate';$('sw-calc-period-row').hidden=!$('sw-calc-rate-row').hidden;
+    $('sw-calc-exception-rate').disabled=!$('sw-calc-exceptions').checked;$('sw-calc-itm-rate').disabled=!$('sw-calc-itm').checked;
+    try{const o=this.calculatorOptions(),port=targetPort($('sw-calc-model').value);
+      if(!o.coreHz||!o.traceHz||!Number.isFinite(o.coreHz)||!Number.isFinite(o.traceHz)||o.coreHz>1e9||o.traceHz>1e9)throw Error('请提供有效的 CPU 和 Trace 输入频率');
+      if(port&&o.coreHz>port.maxCoreHz)throw Error(`${port.name} 的核心频率不能超过 ${port.maxCoreHz/1e6} MHz`);
+      $('sw-calc-trace').value=o.traceHz/1e6;const s=simulate(o,this.capture.receiverSources?.frequencies||DEFAULT_SOURCES),b=s.budget,p=s.plan;
+      this.calculation={...s,options:o};result.classList.toggle('bad',!!s.error);
+      result.textContent=`CPU ${o.coreHz/1e6} MHz ÷ ${o.periodCycles} 周期 = ${b.samplesHz.toLocaleString('zh-CN',{maximumFractionDigits:2})} PC/s\nPC：${b.bytesPerSample} B/样本；异常 ${b.exceptionBytes.toFixed(0)} B/s；ITM ${b.itmBytes.toFixed(0)} B/s；总计 ${b.estimatedBytes.toFixed(0)} B/s\n所需 baud = ${b.estimatedBytes.toFixed(0)} ×10 ÷ ${b.occupancy.toFixed(2)} = ${(b.requiredBaud/1e6).toFixed(6)} Mbps\n`+(p?`Trace ${o.traceHz/1e6} MHz ÷ ${p.acpr+1} → SWO ${(p.baudRate/1e6).toFixed(6)} Mbps（ACPR / CODR ${p.acpr}）\n${receiverChain(s.matched.receiverEstimate,this.capture.receiverSources?.frequencies||DEFAULT_SOURCES)}\n误差 ${(s.matched.receiverEstimate.error*100).toFixed(6)}%；预计线路占用 ${(b.estimatedBytes/(p.baudRate/10)*100).toFixed(1)}%`:s.error)+`\n保持此采样间隔 / 事件预算，30 Mbaud 带宽允许 CPU 上界约 ${(Math.min(s.maxCoreHz,port?.maxCoreHz??1e9)/1e6).toFixed(3)} MHz（目标合法 PLL 档位须由目标程序确认）`+(s.nextPeriod?`；当前主频可尝试 ${s.nextPeriod} 周期或更大间隔`:'；当前事件预算已无法满足带宽');
+      $('sw-calc-copy').disabled=this.capture.active||!p;
+    }catch(e){result.textContent=e.message;result.classList.add('bad');}
+  }
+  applyCalculator(){const c=this.calculation;if(this.capture.active||!c?.plan)return;const o=c.options;
+    $('sw-period').value=o.periodCycles;$('sw-timestamps').checked=o.timestamps;$('sw-exceptions').checked=o.exceptions;$('sw-itm').checked=o.itm;$('sw-exception-rate').value=o.exceptionEvents;$('sw-itm-rate').value=o.itmBytes;$('sw-extra').value=o.extraBytes;$('sw-margin').value=Number(((1-o.occupancy)*100).toFixed(6));$('sw-auto-baud').checked=true;
+    $('sw-calculator').close();this.selectSidebar('record');this.renderPlan();
   }
   async refreshPorts(){const current=this.ports[Number($('sw-port').value)];this.ports=(await SerialSession.listPorts()).filter(p=>{const i=p.getInfo();return i.usbVendorId===0x0d28&&i.usbProductId===0x0204;});$('sw-port').replaceChildren();this.ports.forEach((p,i)=>{const o=document.createElement('option');o.value=i;o.textContent=`VCOM ${i+1} · ${SerialSession.describe(p)}`;$('sw-port').append(o);});if(current&&this.ports.includes(current))$('sw-port').value=this.ports.indexOf(current);}
   async loadElf(buffer,name='firmware.elf'){
@@ -91,20 +135,23 @@ export class SwoView {
     for(const s of sections){for(const offset of [...new Set([0,Math.max(0,s.size-64)])]){const n=Math.min(64,s.size-offset),expected=elf.bytesAt(s.addr+offset,n,{ro:true});if(!expected)continue;let confirmed=0;for(let i=0;i<4&&confirmed<2;i++){const actual=await probe.readMemDiagnostic(s.addr+offset,n);confirmed=actual.length===n&&!actual.some((v,i)=>v!==expected[i])?confirmed+1:0;}if(confirmed<2){const error=Error('目标代码与 ELF 不符或读回不稳定：'+s.name+' '+hex(s.addr+offset));error.code='SWO_ELF_VERIFY';throw error;}}}
   }
   showTarget(target){
-    this.target=target;if($('sw-auto-clock').checked)$('sw-core').value=target.knownHz===null?'':target.knownHz/1e6;
-    const chip=target.profile==='stm32f1'?'STM32F103':target.name,frequency=target.knownHz===null?'主频待确认':`当前 ${target.knownHz/1e6} MHz`;
-    $('sw-target').textContent=`${chip} · ${target.core} · ${frequency}\n${target.source}${target.external?' · 外晶 '+(target.hseHz===null?'未填写':target.hseHz/1e6+' MHz'):''} · SWO ${target.swoPin}`;
-    $('sw-target').title=`${target.name} · CPUID ${hex(target.cpuid)} · RCC CFGR ${hex(target.cfgr)}`;$('sw-target').classList.toggle('bad',target.knownHz===null);this.renderPlan();
+    if(this.hsePresetF1&&target.profile!=='stm32f1'){$('sw-hse').value='';this.hsePresetF1=false;target=recomputeTarget(target,null);}
+    this.target=target;if($('sw-auto-clock').checked){$('sw-core').value=target.knownHz===null?'':target.knownHz/1e6;$('sw-trace').value=target.knownTraceHz==null?'':target.knownTraceHz/1e6;}
+    const frequency=target.knownHz===null?'主频待确认':`当前 ${target.knownHz/1e6} MHz`,trace=target.knownTraceHz==null?'Trace 待确认':`Trace ${target.knownTraceHz/1e6} MHz`;
+    $('sw-target').textContent=`${target.name} · ${target.core}\nCPU ${frequency} · ${trace}\n${target.source} · SWO ${target.swoPin}`;
+    $('sw-target').title=`CPUID ${hex(target.cpuid)} · DEV_ID ${hex(target.device)}\n${target.path}\n${target.tracePath||target.traceRelation}`;
+    $('sw-target-path').textContent=`CPU：${target.path}\nSWO：${target.tracePath||target.traceRelation}`;
+    $('sw-target').classList.toggle('bad',target.knownHz===null||target.knownTraceHz==null);this.renderPlan();
   }
   refreshTargetClock(){
     if(!this.target||this.capture.active){this.renderPlan();return;}
-    try{this.showTarget({...this.target,...stm32f1Info({...this.target,hseHz:this.options().hseHz,coreHz:null,autoClock:false})});}
-    catch(e){this.showTarget({...this.target,knownHz:null,coreHz:null});throw e;}
+    try{this.showTarget(recomputeTarget(this.target,this.options().hseHz));}
+    catch(e){this.showTarget({...this.target,knownHz:null,knownTraceHz:null,coreHz:null,traceHz:null});throw e;}
   }
   async detectTarget(){
     this.capture.probeManager=this.probeManager;
     try{this.showTarget(await this.capture.inspect(this.options()));if(this.result)this.renderStats();else{$('sw-warning').textContent='';$('sw-warning').classList.remove('bad');}}
-    catch(e){this.target=null;if($('sw-auto-clock').checked)$('sw-core').value='';$('sw-target').textContent='识别失败 · 请检查 SWD 连接与外晶设置';$('sw-target').classList.add('bad');this.renderPlan();throw e;}
+    catch(e){this.target=null;if($('sw-auto-clock').checked){$('sw-core').value='';$('sw-trace').value='';}$('sw-target').textContent='识别失败 · 请检查 SWD 连接与外晶设置';$('sw-target-path').textContent='CPU / Trace 时钟来源未确认。';$('sw-target').classList.add('bad');this.renderPlan();throw e;}
   }
   async start(){
     this.pause();$('sw-warning').textContent='';$('sw-warning').classList.remove('bad');$('sw-export-status').textContent='';await this.refreshPorts();
@@ -113,7 +160,7 @@ export class SwoView {
   }
   renderCapture(){const c=this.capture,active=c.active||!!this.exporting;
     $('sw-start').disabled=active||!!this.analyzing;$('sw-stop').disabled=!c.active;
-    for(const id of ['sw-port','sw-pick','sw-core','sw-baud','sw-period','sw-seconds','sw-itm','sw-exceptions','sw-elf-pick','sw-demo','sw-import','sw-aligned','sw-detect','sw-auto-clock','sw-hse','sw-baud-round','sw-source-pick','sw-auto-baud','sw-receiver-mode','sw-target-hz','sw-timestamps','sw-clock-grant'])$(id).disabled=active;
+    for(const id of ['sw-port','sw-pick','sw-core','sw-trace','sw-baud','sw-period','sw-seconds','sw-itm','sw-exceptions','sw-elf-pick','sw-demo','sw-import','sw-aligned','sw-detect','sw-auto-clock','sw-hse','sw-baud-round','sw-source-pick','sw-auto-baud','sw-model','sw-exception-rate','sw-itm-rate','sw-extra','sw-margin','sw-timestamps','sw-clock-grant'])$(id).disabled=active;
     $('sw-status').textContent=c.running?`记录中 · ${(c.bytes/1024).toFixed(1)} KiB${this.result?" · 图表为上次分析结果":""}`:(c.busy?'正在连接并配置 SWO…':c.probe?'正在恢复 trace 配置…':c.bytes?`记录结束 · ${(c.bytes/1024).toFixed(1)} KiB · ${c.metadata.restored?'配置已恢复':'恢复未确认'}`:'尚未记录');
     $('sw-save').disabled=!this.recording||active;$('sw-analyze').disabled=!this.recording||active||this.analyzing;$('sw-csv').disabled=!this.result||active||this.analyzing;for(const id of ['sw-export-c','sw-export-txt'])$(id).disabled=!this.recording||active||this.analyzing;this.renderPlan();
   }
