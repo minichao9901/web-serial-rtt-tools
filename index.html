@@ -961,8 +961,8 @@
         <fieldset>
         <legend>连接</legend>
         <div class="row btnrow">
-          <button id="sp-connect" class="primary" title="选择探针并完成 HID 授权；配置与状态使用此连接">连接探针</button>
-          <button id="sp-reconnect" title="用浏览器记住的探针直接连（不用再点弹框）">重连</button>
+          <button id="sp-connect" class="primary" title="连接已授权的探针；首次使用或有多个探针时弹出设备选择框">连接探针</button>
+          <button id="sp-disconnect" title="关闭共享的 HID 配置连接和 USB 数据端点，不关闭目标电源" disabled>关闭探针</button>
         </div>
         <p class="hint" id="sp-info">未连接</p>
         <label class="chk" title="不需要硬件：HID 与数据面共用同一个假探针，可跑通「配置 → 使能 → 发帧 → 应答 → 统计」整条链路"><input type="checkbox" id="sp-mock"> 模拟探针</label>
@@ -1014,11 +1014,6 @@
           <label class="chk"><input type="checkbox" id="sp-al-bl"> BL 低有效</label>
         </div>
         <div class="row btnrow"><button id="sp-pin-apply">应用引脚</button></div>
-        <div class="row btnrow">
-          <button id="sp-bl-on" title="把 BL 脚置成「有效」电平（按上面的「BL 低有效」自动决定物理高低，固件负责取反）">背光开</button>
-          <button id="sp-bl-off" title="把 BL 脚置成「无效」电平 = 关背光">背光关</button>
-        </div>
-        <div class="row"><span>RST 脉冲</span><input id="sp-pin-rst-low" class="num" value="10" inputmode="numeric" title="把 RST 脚拉低几毫秒"><input id="sp-pin-rst-post" class="num" value="120" inputmode="numeric" title="释放后再等几毫秒"><button id="sp-pin-rst-send" class="mini">发</button></div>
         <div class="row btnrow"><button id="sp-pinmap-btn" title="弹出窗口显示 J3 40 针的引脚分配：桥的信号 / CDC 虚拟串口 / 能当辅助脚的 / 不能用的">引脚分配图</button></div>
         <div id="sp-pinmap" class="pinmodal" hidden>
           <div class="pinmodal-box">
@@ -1056,6 +1051,10 @@
       </div>
       <div id="sp-side-help-panel" class="tool-side-panel" role="tabpanel" aria-labelledby="sp-side-help-tab" data-side-panel="help" hidden>
         <div class="hint sidebar-help-intro">参数、接线与排障说明</div>
+        <details class="helpnote"><summary>选择其它探针</summary>
+          <p class="hint">连接时自动复用唯一已授权的探针；首次使用或有多个探针时弹出选择框。要更换设备，请先关闭探针，再手动选择。关闭连接不切断目标电源。</p>
+          <button id="sp-choose">选择探针…</button>
+        </details>
       </div>
       <div class="tool-side-actions" aria-label="运行控制">
 <div class="row btnrow">
@@ -1302,8 +1301,8 @@
         <fieldset id="pn-conn-card">
         <legend>连接</legend>
         <div class="row btnrow">
-          <button id="pn-connect" class="" title="选择探针并完成 HID 授权；与 SPI/QSPI 桥页面共用连接">连接探针</button>
-          <button id="pn-reconnect" title="用浏览器记住的探针直接连（不用再点弹框）">重连</button>
+          <button id="pn-connect" class="primary" title="连接已授权的探针；与 USB→SPI/QSPI 共用连接">连接探针</button>
+          <button id="pn-disconnect" title="关闭与 USB→SPI/QSPI 共用的配置连接和数据端点，不关闭屏电源" disabled>关闭探针</button>
         </div>
         <p class="hint" id="pn-info">未连接</p>
         <label class="chk" title="不需要硬件：与桥页共用同一个假探针实例"><input type="checkbox" id="pn-mock"> 模拟探针</label>
@@ -1363,6 +1362,10 @@
         <fieldset id="pn-power-card">
         <legend>电源与显示</legend>
         <div class="row btnrow">
+          <button id="pn-bl-on" title="将 BL 设为有效电平；按配置的 BL 极性自动取反">背光开</button>
+          <button id="pn-bl-off" title="将 BL 设为无效电平">背光关</button>
+        </div>
+        <div class="row btnrow">
           <button id="pn-pwr-on" title="发 STEP 0x11（sleep out）—— 退出睡眠，之后必须等约 120 ms 才能收下一条命令">上电 11h</button>
           <button id="pn-disp-on" title="发 STEP 0x29（display on）—— 打开显示输出；面板要初始化过才会显示内容">开显示 29h</button>
         </div>
@@ -1380,6 +1383,10 @@
       </div>
       <div id="pn-side-help-panel" class="tool-side-panel" role="tabpanel" aria-labelledby="pn-side-help-tab" data-side-panel="help" hidden>
         <div class="hint sidebar-help-intro">参数、接线与排障说明</div>
+        <details class="helpnote"><summary>选择其它探针</summary>
+          <p class="hint">与桥页共用探针。连接时自动复用唯一已授权的探针；需要更换设备时，先关闭探针再手动选择。关闭连接不切断屏电源。</p>
+          <button id="pn-choose">选择探针…</button>
+        </details>
       </div>
       <div class="tool-side-actions" aria-label="运行控制">
 <div class="row btnrow">

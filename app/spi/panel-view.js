@@ -131,8 +131,9 @@ export class SpiPanelView {
     this.syncCustomGeomInputs();
 
     // 连接（与桥页同一个会话）
-    $('pn-connect').addEventListener('click', () => s.connectHid(true));
-    $('pn-reconnect').addEventListener('click', () => s.connectHid(false));
+    $('pn-connect').addEventListener('click', () => s.connectHid());
+    $('pn-disconnect').addEventListener('click', () => s.disconnect());
+    $('pn-choose').addEventListener('click', () => s.connectHid(true));
     $('pn-usb').addEventListener('click', () => s.connectUsb(null, { inFlight: +($('pn-inflight').value || 4) }));
     $('pn-mock').addEventListener('change', e => s.setMock(e.target.checked));
     /**
@@ -312,6 +313,8 @@ export class SpiPanelView {
     // 面板电源 / 显示：4 个独立命令（上电 11h / 开显示 29h / 关显示 28h / 下电 10h）+ RST 脉冲
     $('pn-rst-send').addEventListener('click', () => this.sendResetPulse());
     $('pn-rst-bl').addEventListener('click', () => this.resetAndBacklight());
+    $('pn-bl-on').addEventListener('click', () => this.sendGpio(P.LINE.BL, 1, '背光开'));
+    $('pn-bl-off').addEventListener('click', () => this.sendGpio(P.LINE.BL, 0, '背光关'));
     for (const [id, cmd, delayMs, label] of [
       ['pn-pwr-on', 0x11, 120, '上电 11h（sleep out）'],
       ['pn-disp-on', 0x29, 0, '开显示 29h'],
@@ -555,11 +558,14 @@ export class SpiPanelView {
 
   refreshButtons(){
     const s = this.session, c = s.connected, d = s.dataReady, busy = s.busy;
+    $('pn-connect').disabled = c || busy;
+    $('pn-choose').disabled = c || d || busy;
+    $('pn-disconnect').disabled = !(c || d) || busy;
     $('pn-prof-get').disabled = !c; $('pn-prof-set').disabled = !c;
     $('pn-enable').disabled = !c; $('pn-disable').disabled = !c;
     $('pn-preset-apply').disabled = !c;
     const canSend = d && !busy;
-    for (const id of ['pn-code-play', 'pn-img-send', 'pn-rst-send', 'pn-rst-bl', 'pn-pwr-on', 'pn-disp-on', 'pn-disp-off', 'pn-pwr-off']) $(id).disabled = !canSend;
+    for (const id of ['pn-code-play', 'pn-img-send', 'pn-rst-send', 'pn-rst-bl', 'pn-bl-on', 'pn-bl-off', 'pn-pwr-on', 'pn-disp-on', 'pn-disp-off', 'pn-pwr-off']) $(id).disabled = !canSend;
     $('pn-code-stop').disabled = !busy;
     $('pn-code-parse').disabled = false;
     // 动画：有源 + 端点就绪 + 不忙 才能播；播放中「播放」变灰、「停止」可用

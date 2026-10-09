@@ -787,6 +787,25 @@ console.log('== 8. 面板电源 / 显示 4 个命令 + RST 脉冲 ==');
      `顺序与命令字对：上电 11h → 开显示 29h → 关显示 28h → 下电 10h（地址 00 XX 00）`);
   ok(disp.delays.filter(d => d === 120).length === 2, `上电/下电各带 120 ms 等待（实测 ${disp.delays.join(',')}）`);
 
+  const backlight = await ev(`
+    const s = window.__tools.spiSession, p = s.mockProbe, cfg = { ...s.cfg };
+    const levels = [];
+    for (const low of [false, true]) {
+      await s.applyConfig({ ...cfg, padActiveLow: low ? cfg.padActiveLow | 8 : cfg.padActiveLow & ~8 }, 'panel');
+      p.resetState();
+      for (const id of ['pn-bl-on', 'pn-bl-off']) {
+        document.getElementById(id).click();
+        for (let i = 0; i < 100 && s.busy; i++) await new Promise(r => setTimeout(r, 20));
+        levels.push(p.pins.bl);
+      }
+      if (p.wireLog.filter(x => /^GPIO/.test(x)).join('|') !== 'GPIO bl=1|GPIO bl=0') throw new Error('背光命令顺序错误');
+    }
+    await s.applyConfig(cfg, 'panel');
+    return { levels, owner: ['pn-bl-on', 'pn-bl-off'].every(id => document.getElementById(id).closest('#pn-power-card')),
+      bridge: !!document.querySelector('#sp-bl-on, #sp-bl-off, #sp-pin-rst-send') };`);
+  ok(backlight.levels.join(',') === '1,0,0,1', '屏页背光开/关：高有效与低有效的物理电平都正确');
+  ok(backlight.owner && !backlight.bridge, '背光按钮归属电源与显示；桥页无背光和屏复位入口');
+
   const rst = await ev(`
     const p = window.__tools.spiSession.mockProbe;
     p.delays = [];
@@ -1280,11 +1299,14 @@ console.log('== 9e. 回读：读寄存器 + 读 GRAM（假探针 GRAM → 预览
 console.log('== 10. 收尾 ==');
 {
   const done = await ev(`
-    await window.__tools.spiSession.teardown();
+    document.getElementById('pn-disconnect').click();
     await new Promise(r => setTimeout(r, 300));
     return { bus: window.__tools.spi.summary(), pn: window.__tools.panel.summary(),
+             cleared: !window.__tools.spiSession.mockProbe && !window.__tools.spiSession.pollTimer && !document.getElementById('pn-mock').checked && !document.getElementById('sp-mock').checked,
+             buttons: ['sp-disconnect', 'pn-disconnect', 'pn-bl-on', 'pn-bl-off'].every(id => document.getElementById(id).disabled) && !document.getElementById('sp-connect').disabled && !document.getElementById('pn-connect').disabled,
              pnState: document.getElementById('pn-state').textContent };`);
-  ok(done.bus.connected === false && done.pn.connected === false, 'teardown 后两页都显示未连接');
+  ok(done.bus.connected === false && done.pn.connected === false && !done.bus.dataReady, '屏页关闭探针后，两页的配置与数据连接都释放');
+  ok(done.cleared && done.buttons, '关闭后清除模拟状态及轮询，更新两页连接和背光按钮');
   ok(/未连接/.test(done.pnState), `屏页状态行 = ${done.pnState}`);
   const err = await ev(`return window.__tools.summary().errors;`);
   ok(err.length === 0, '整场跑完页面无未捕获错误', JSON.stringify(err));

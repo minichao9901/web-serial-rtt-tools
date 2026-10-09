@@ -710,6 +710,7 @@ test-probe:
 	$(NODE) tools/selftest/usb-transports.test.mjs
 	$(NODE) tools/selftest/cdc-mode.test.mjs
 	$(NODE) tools/selftest/spi-cdc.test.mjs
+	$(NODE) tools/selftest/spi-connect.test.mjs
 	$(NODE) tools/selftest/spi-teardown.test.mjs
 
 test-stability: test-probe

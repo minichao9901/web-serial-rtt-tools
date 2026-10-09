@@ -15,7 +15,7 @@
  *   · 帧与应答都进日志 ring，两个页面各自渲染（切页不丢记录）；
  *   · 桥没使能时固件不 arm OUT 端点，主机写会被 NAK —— 发送会抛错，页面必须如实显示。
  */
-import { AkaLinkHid } from '../hid/probe.js';
+import { AkaLinkHid, VID, PID, USAGE_PAGE } from '../hid/probe.js';
 import * as P from './protocol.js';
 import { WebUsbSpiTransport, MockSpiTransport } from './transport.js';
 import { MockSpiProbe } from './mock.js';
@@ -26,7 +26,7 @@ const POLL_MS = 1000;          // 状态/计数器轮询间隔（观察量，1 s
 const RING_MAX = 400;          // 日志 ring（切页时全量重放用）
 /** 未连接时的提示：**把"去哪儿授权"写清楚** —— 用户第一次打开会找不到入口
  *  （按钮叫"连接"，而浏览器弹的那个框才叫"授权"，词对不上就容易卡住）。 */
-const NOT_CONNECTED_HINT = '未连接 —— 点上面「连接探针（授权）」授权 HID，再点「连接数据端点…（授权）」授权 WebUSB';
+const NOT_CONNECTED_HINT = '未连接 —— 点「连接探针」连接 HID，再点「连接数据端点…」连接 WebUSB';
 
 export class SpiSession {
   constructor(){
@@ -96,9 +96,12 @@ export class SpiSession {
 
   // ==================================================================== 连接
 
-  async connectHid(interactive){
+  /** 默认复用唯一已授权的探针；true 强制选择，false 只使用已授权设备。 */
+  async connectHid(interactive = null){
     if (this._hidConnectPromise) return await this._hidConnectPromise;
     if (this._teardownPromise) return false;
+    // 已连接时不重复选择 HID；更换设备要先关闭共享会话。
+    if (this.connected) return true;
     this._hidConnectPromise = runProbeOperation(this, 'spi', () => this._connectHidNow(interactive), { reason: 'SPI/QSPI 要连接探针', recovery: true });
     try { return await this._hidConnectPromise; }
     catch (e){ this.log('e', e.message); return false; }
@@ -109,7 +112,16 @@ export class SpiSession {
     try {
       if (this.usingMock){ await this._teardownNow(); this.usingMock = false; this.mockProbe = null; }
       this.hid = this.hid || new AkaLinkHid();
-      if (interactive) await this.hid.request(); else await this.hid.reconnect();
+      if (interactive === true) await this.hid.request();
+      else if (interactive === false) await this.hid.reconnect();
+      else {
+        if (!AkaLinkHid.supported()) throw new Error('这个浏览器没有 WebHID（Chrome / Edge 桌面版才有）');
+        const devices = (await navigator.hid.getDevices()).filter(d =>
+          d.vendorId === VID && d.productId === PID && d.collections?.some(c => c.usagePage === USAGE_PAGE));
+        // 多探针时由用户明确选择，不任取第一台；其它厂商的 HID 也不能自动接管。
+        if (devices.length === 1) await this.hid.open(devices[0]);
+        else await this.hid.request();
+      }
       this.log('g', `HID 已连接：${this.hid.label || 'akaLinkPro'}`);
       this.ensurePoll();
       await this.loadCfg({ quiet: true });
@@ -225,6 +237,22 @@ export class SpiSession {
     finally { this._teardownPromise = null; }
   }
 
+  /** 页面“关闭探针”：结束共享会话；传输中先由对应操作的停止按钮收尾。 */
+  async disconnect(){
+    if (this.busy) return false;
+    this.setBusy(true);
+    try {
+      await this.teardown();
+      this.log('g', '探针连接已关闭');
+      return true;
+    } catch (e){
+      const message = '关闭探针失败：' + (e?.message || e);
+      this.log('e', message);
+      this._setState(message, 'err');
+      return false;
+    } finally { this.setBusy(false); }
+  }
+
   async _teardownNow(){
     await this.stopPeriodic();
     if (this.pollTimer){ clearInterval(this.pollTimer); this.pollTimer = null; }   // 会话没了就别空转（重连时 ensurePoll 会再拉起）
@@ -243,6 +271,8 @@ export class SpiSession {
       catch (e){ this.probeManager?.fail('spi', e); throw e; }
     }
     this.hid = null;
+    this.usingMock = false;
+    this.mockProbe = null;
     this.stream?.reset();
     this.lastStatus = null;
     this._setState(NOT_CONNECTED_HINT);

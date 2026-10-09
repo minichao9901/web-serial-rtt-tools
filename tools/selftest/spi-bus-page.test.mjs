@@ -856,10 +856,18 @@ console.log('== 10c. 定时采集：loop + as 解码 + 实时值 ==');
 console.log('== 11. 收尾：放掉探针（别的页签要用）==');
 {
   const done = await ev(`
-    await window.__tools.spiSession.teardown();
+    const s = window.__tools.spiSession;
+    s.setBusy(true);
+    const protectedDuringSend = document.getElementById('sp-disconnect').disabled && document.getElementById('pn-disconnect').disabled;
+    const rejected = (await s.disconnect()) === false && s.connected;
+    s.setBusy(false);
+    document.getElementById('sp-disconnect').click();
     await new Promise(r => setTimeout(r, 200));
-    return window.__tools.spi.summary();`);
-  ok(done.connected === false && done.dataReady === false, 'teardown 后 HID 与数据面都放掉了');
+    return { ...window.__tools.spi.summary(), protectedDuringSend, rejected,
+      peerClosed: !window.__tools.panel.session.connected && !window.__tools.panel.session.dataReady,
+      cleared: !s.usingMock && !s.mockProbe && !s.pollTimer };`);
+  ok(done.connected === false && done.dataReady === false && done.peerClosed && done.cleared, '桥页关闭探针后，两页共用的连接与模拟状态全部释放');
+  ok(done.protectedDuringSend && done.rejected, '传输中禁用关闭按钮，直接关闭调用也会拒绝');
   const err = await ev(`return window.__tools.summary().errors;`);
   ok(err.length === 0, '整场跑完页面无未捕获错误', JSON.stringify(err));
 }

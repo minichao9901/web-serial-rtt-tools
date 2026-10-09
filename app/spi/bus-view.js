@@ -115,8 +115,9 @@ export class SpiBusView {
     $('sp-dsl-text').value = D.DSL_SAMPLES[0].text;
 
     // 连接（两页共用一次会话，所以这里和屏页都能连）
-    $('sp-connect').addEventListener('click', () => s.connectHid(true));
-    $('sp-reconnect').addEventListener('click', () => s.connectHid(false));
+    $('sp-connect').addEventListener('click', () => s.connectHid());
+    $('sp-disconnect').addEventListener('click', () => s.disconnect());
+    $('sp-choose').addEventListener('click', () => s.connectHid(true));
     $('sp-usb').addEventListener('click', () => s.connectUsb(null, { inFlight: +($('sp-inflight').value || 4) }));
     $('sp-mock').addEventListener('change', e => s.setMock(e.target.checked, { device: $('sp-mock-device').value }));
     // 假探针的"末级器件"：SPI 没有器件地址，所以是**换一个末级**（NOR / 寄存器器件 / 命令型 ADC）
@@ -137,9 +138,6 @@ export class SpiBusView {
     $('sp-get').addEventListener('click', () => this.loadCfg());
     $('sp-set').addEventListener('click', () => this.applyCfg());
     $('sp-pin-apply').addEventListener('click', () => this.applyCfg());
-    $('sp-bl-on').addEventListener('click', () => this.sendGpio(P.LINE.BL, 1, '背光开'));
-    $('sp-bl-off').addEventListener('click', () => this.sendGpio(P.LINE.BL, 0, '背光关'));
-    $('sp-pin-rst-send').addEventListener('click', () => this.sendRstPulse());
     /* 引脚分配图：点一下弹出 J3 40 针的分配（桥的信号 / CDC 串口 / 可当辅助脚的 / 不能用的）*/
     $('sp-pinmap-btn').addEventListener('click', () => this.togglePinMap());
     $('sp-pinmap-close').addEventListener('click', () => { $('sp-pinmap').hidden = true; });
@@ -385,6 +383,9 @@ export class SpiBusView {
 
   refreshButtons(){
     const s = this.session, c = s.connected, d = s.dataReady, busy = s.busy;
+    $('sp-connect').disabled = c || busy;
+    $('sp-choose').disabled = c || d || busy;
+    $('sp-disconnect').disabled = !(c || d) || busy;
     $('sp-get').disabled = !c; $('sp-set').disabled = !c; $('sp-pin-apply').disabled = !c;
     $('sp-enable').disabled = !c; $('sp-disable').disabled = !c;
     $('sp-reset').disabled = !c; $('sp-abort').disabled = !c; $('sp-status').disabled = !c;
@@ -393,7 +394,6 @@ export class SpiBusView {
     // 「中止」在 tab 栏上（切到任何 tab 都能停）—— 它的可用性由 renderRunPill 统一管，
     // 因为**只有回环可中止**：擦/写中途停会把 flash 留在半擦状态，按钮必须保持灰
     this.syncRunPill();
-    for (const id of ['sp-bl-on', 'sp-bl-off', 'sp-pin-rst-send']) $(id).disabled = !d || busy;
     // 通用命令（文本）/ flash：没数据端点或正忙时不能发
     for (const id of ['sp-dsl-parse', 'sp-dsl-send']) $(id).disabled = !d || busy;
     // 「寄存器」面板：连上就能读（它自己还会管"有没有改动"）
@@ -712,26 +712,6 @@ export class SpiBusView {
       s.setBusy(false); this.refreshButtons();
       await s.pollStatus(true);
     }
-  }
-
-  async simpleFrame(type, payload, label){
-    try { return await this.session.sendFrames([{ type, payload, flags: P.F.RSP, label }], { tag: this.tag }); }
-    catch (e){ this.session.log('e', `${label} 失败：` + (e?.message || e), this.tag); return null; }
-  }
-
-  /**
-   * 辅助脚写。`level` 是**逻辑**电平（1 = 有效）：极性的取反在固件里做
-   * （`sb_pad_write(pad, active_low ? !lvl : lvl)`），页面只管语义。
-   */
-  async sendGpio(line, level, label){
-    await this.simpleFrame(P.T.GPIO, P.gpioPayload(line, level), label);
-  }
-
-  /** RST 脉冲（拉低 low ms + 等 post ms，固件侧非阻塞、有序）*/
-  async sendRstPulse(){
-    const low = Math.max(0, +$('sp-pin-rst-low').value || 0);
-    const post = Math.max(0, +$('sp-pin-rst-post').value || 0);
-    await this.simpleFrame(P.T.RESET, P.resetPayload(low, post), `RST 脉冲 ${low}+${post}ms`);
   }
 
   // ==================================================================== 手写多帧（DSL）
