@@ -18,6 +18,11 @@ export class SwoView {
     const bind=(id,fn)=>$(id).addEventListener('click',()=>this.action(fn));
     bind('sw-pick',async()=>{const port=await SerialSession.requestPort();await this.refreshPorts();$('sw-port').value=String(this.ports.indexOf(port));});
     bind('sw-clock-grant',async()=>{const h=new AkaLinkHid();await h.request();await h.close();$('sw-clock-grant').textContent='时钟已授权';$('sw-match').textContent='探针时钟配置已授权；记录开始前将读回实际配置。';});
+    bind('sw-chart-toggle',()=>{const box=$('sw-chart-box');box.hidden=!box.hidden;$('sw-chart-toggle').textContent=box.hidden?'展开轨迹图':'收起轨迹图';$('sw-chart-toggle').setAttribute('aria-expanded',String(!box.hidden));if(!box.hidden)this.draw();});
+    const popovers=[$('sw-boundary-help'),$('sw-transition-help')];
+    for(const details of popovers)details.addEventListener('toggle',()=>{if(details.open)for(const other of popovers)if(other!==details)other.open=false;});
+    $('tab-swo').addEventListener('pointerdown',e=>{for(const details of popovers)if(!details.contains(e.target))details.open=false;});
+    $('tab-swo').addEventListener('keydown',e=>{if(e.key==='Escape')for(const details of popovers)details.open=false;});
     bind('sw-detect',()=>this.detectTarget());bind('sw-export-c',()=>this.exportText('c'));bind('sw-export-txt',()=>this.exportText('txt'));bind('sw-start',()=>this.start());bind('sw-stop',()=>this.capture.stop());
     bind('sw-import',()=>$('sw-file').click());bind('sw-elf-pick',()=>$('sw-elf-file').click());
     bind('sw-source-pick',()=>{$('sw-source-files').click();});

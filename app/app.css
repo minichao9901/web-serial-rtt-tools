@@ -1256,13 +1256,19 @@ fieldset,.toolbar,.sendbar,.stats,.an-measurements,.an-plot,
 #tab-swo .sw-match-summary.bad{color:var(--warn)}
 #tab-swo #sw-files{overflow-wrap:anywhere}
 #tab-swo .sw-main{gap:7px;overflow:hidden}
-#tab-swo .sw-boundary{margin:0;padding:7px 10px;color:#d4b777;background:#d299220d;border-left:2px solid #d29922;font-size:12px;line-height:1.5;flex:none}
-#tab-swo .sw-toolbar{gap:12px;flex-wrap:wrap}
+#tab-swo .sw-toolbar{gap:12px;flex-wrap:wrap;position:relative}
+#tab-swo .sw-display-controls{display:flex;align-items:center;gap:9px;margin-left:auto}
+#tab-swo .sw-display-controls>button{font-size:12px;white-space:nowrap}
+#tab-swo .sw-toolbar-help>summary{cursor:pointer;color:var(--fg2);font-size:12px;white-space:nowrap;user-select:none}
+#tab-swo .sw-toolbar-help[open]>summary{color:var(--acc)}
+#tab-swo .sw-toolbar-popover{position:absolute;top:calc(100% + 5px);left:0;right:0;z-index:5;margin:0;padding:10px 12px;border:1px solid var(--line);border-radius:var(--radius-card);background:var(--bg2);box-shadow:0 5px 18px #0005;font-size:12px;line-height:1.6;overflow-wrap:anywhere}
+#tab-swo .sw-boundary{color:#d4b777;border-left:2px solid #d29922}
 #tab-swo .sw-range{flex:none;margin:0}
 #tab-swo .sw-range input[type=number]{width:85px;max-width:110px;flex:none}
 #tab-swo .sw-range>span{width:auto;flex:none}
 #tab-swo .sw-range input[type=text],#sw-filter{min-width:100px;flex:1}
 #tab-swo .sw-chart-box{height:235px;min-height:150px;flex:0 1 235px;background:var(--bg);border-bottom:1px solid var(--line)}
+#tab-swo .sw-chart-box[hidden]{display:none}
 #sw-chart{display:block;width:100%;height:100%}
 #tab-swo .sw-play{flex:none;flex-wrap:wrap;margin:0;gap:6px}
 #tab-swo .sw-play input{min-width:80px;flex:1}
@@ -1286,7 +1292,7 @@ fieldset,.toolbar,.sendbar,.stats,.an-measurements,.an-plot,
 #tab-swo .sw-hot-row{display:block;text-align:left;font:11px/1.6 var(--mono);white-space:nowrap;border:0;border-left:3px solid var(--hot);background:transparent;padding:3px 7px}
 #tab-swo .sw-hot-row:hover{background:var(--bg3)}
 #sw-warning.bad{color:var(--warn)}
-#sw-edges{flex:none;margin:0;max-height:35px;overflow:auto}
+#sw-edges{max-height:min(260px,50vh);overflow:auto}
 @media(max-width:1000px){#tab-swo .sw-detail{grid-template-columns:1fr}#tab-swo .sw-source{min-height:130px}#tab-swo .sw-detail{overflow:auto}#tab-swo .sw-events{min-height:200px}#tab-swo .sw-chart-box{flex-basis:170px}}
 @media(max-width:860px){#tab-swo{overflow:auto}#tab-swo .sw-main{min-height:820px}#tab-swo .ws{height:auto;min-height:100%}}
 

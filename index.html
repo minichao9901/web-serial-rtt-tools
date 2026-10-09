@@ -2191,16 +2191,21 @@
       <fieldset><legend>函数热点 · PC 样本占比</legend><div id="sw-hot" class="sw-hot"><span class="dim">载入记录后显示</span></div></fieldset>
     </aside>
     <div class="main sw-main">
-      <div class="toolbar sw-toolbar"><strong>SWO 执行轨迹</strong><span id="sw-counts" class="dim">先记录，也可直接打开离线文件</span></div>
-      <p class="sw-boundary">PC 采样是离散执行落点。相邻样本的跳转不代表直接调用，无法还原中间指令、完整分支或调用栈；缺口不会被补成执行路径。核心周期时间不是录制墙钟时间，睡眠可停止计数。</p>
+      <div class="toolbar sw-toolbar">
+        <strong>SWO 执行轨迹</strong><span id="sw-counts" class="dim">先记录，也可直接打开离线文件</span>
+        <div class="sw-display-controls">
+          <button id="sw-chart-toggle" aria-controls="sw-chart-box" aria-expanded="true">收起轨迹图</button>
+          <details id="sw-boundary-help" class="sw-toolbar-help"><summary>采样说明</summary><p class="sw-toolbar-popover sw-boundary">PC 采样是离散执行落点。相邻样本的跳转不代表直接调用，无法还原中间指令、完整分支或调用栈；缺口不会被补成执行路径。核心周期时间不是录制墙钟时间，睡眠可停止计数。</p></details>
+          <details id="sw-transition-help" class="sw-toolbar-help"><summary>跳转统计</summary><p id="sw-edges" class="sw-toolbar-popover hint">观察到的相邻函数跳转将显示在这里</p></details>
+        </div>
+      </div>
       <div class="row wrap sw-range"><span>样本区间</span><input id="sw-from" type="number" min="0" value="0" aria-label="区间开始样本"><span>至</span><input id="sw-to" type="number" min="0" value="0" aria-label="区间结束样本"><button id="sw-range-apply">应用</button><button id="sw-range-reset">全部</button><input id="sw-filter" placeholder="筛选函数 / 事件" aria-label="筛选轨迹"></div>
-      <div class="sw-chart-box"><canvas id="sw-chart" tabindex="0" aria-label="按样本序号排列的函数执行落点，点击定位源码"></canvas></div>
+      <div id="sw-chart-box" class="sw-chart-box"><canvas id="sw-chart" tabindex="0" aria-label="按样本序号排列的函数执行落点，点击定位源码"></canvas></div>
       <div class="row sw-play"><button id="sw-prev" aria-label="上一个 PC 样本">←</button><button id="sw-play">逐样本回放</button><button id="sw-next" aria-label="下一个 PC 样本">→</button><input id="sw-cursor" type="range" min="0" max="0" value="0" aria-label="选择 PC 样本"><span id="sw-cursor-text">未选择</span></div>
       <div class="sw-detail">
         <div class="sw-events"><div class="row sw-pages"><button id="sw-page-prev">上一页</button><span id="sw-page-info">0 条事件</span><button id="sw-page-next">下一页</button></div><div class="sw-table-scroll"><table class="sw-table"><thead><tr><th>样本 / 事件</th><th>段内核心时间</th><th>执行落点</th><th>源码</th></tr></thead><tbody id="sw-rows"></tbody></table></div></div>
         <div class="sw-source"><div id="sw-source-title">点击轨迹或热点查看源码</div><pre id="sw-source" tabindex="0">未选择采样位置</pre></div>
       </div>
-      <p id="sw-edges" class="hint">观察到的相邻函数跳转将显示在这里</p>
     </div>
   </div>
 </section>
