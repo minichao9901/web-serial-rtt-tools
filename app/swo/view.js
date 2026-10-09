@@ -57,7 +57,7 @@ export class SwoView {
     if(!this.elf)return;const elf=this.elf.elf;
     const sections=elf.sections().filter(s=>(s.flags&2)&&(s.flags&4)&&s.size).slice(0,32);
     if(!sections.length)throw Error('ELF 没有可校验的执行段');
-    for(const s of sections){for(const offset of [...new Set([0,Math.max(0,s.size-64)])]){const n=Math.min(64,s.size-offset),expected=elf.bytesAt(s.addr+offset,n,{ro:true});if(!expected)continue;let confirmed=0;for(let i=0;i<4&&confirmed<2;i++){const actual=await probe.readMemDiagnostic(s.addr+offset,n);confirmed=actual.length===n&&!actual.some((v,i)=>v!==expected[i])?confirmed+1:0;}if(confirmed<2)throw Error('目标代码与 ELF 不符或读回不稳定：'+s.name+' '+hex(s.addr+offset));}}
+    for(const s of sections){for(const offset of [...new Set([0,Math.max(0,s.size-64)])]){const n=Math.min(64,s.size-offset),expected=elf.bytesAt(s.addr+offset,n,{ro:true});if(!expected)continue;let confirmed=0;for(let i=0;i<4&&confirmed<2;i++){const actual=await probe.readMemDiagnostic(s.addr+offset,n);confirmed=actual.length===n&&!actual.some((v,i)=>v!==expected[i])?confirmed+1:0;}if(confirmed<2){const error=Error('目标代码与 ELF 不符或读回不稳定：'+s.name+' '+hex(s.addr+offset));error.code='SWO_ELF_VERIFY';throw error;}}}
   }
   showTarget(target){
     this.target=target;if($('sw-auto-clock').checked&&target.knownHz!==null)$('sw-core').value=target.knownHz/1e6;

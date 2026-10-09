@@ -1,0 +1,648 @@
+{
+  "startedAt": "2026-10-09T01:18:44.719Z",
+  "board": "STM32F103CB",
+  "fixture": "tools/target-firmware/stm32f103cb_swo_hse/fw.elf",
+  "elfSha256": "09c7a40471f110ba1c4f828a2fb974cdb7e5fc33c54d26ce50ffcc34236cb140",
+  "frontend": true,
+  "rows": [
+    {
+      "label": "step-00",
+      "core": 72,
+      "baud": 500000,
+      "period": 16384,
+      "seconds": 2,
+      "requestedBaud": 500000,
+      "autoClock": true,
+      "round": false,
+      "startedAt": "2026-10-09T01:18:49.911Z",
+      "clockCfgr": "firmware HSE 8 MHz / PLL x9",
+      "web": {
+        "stats": {
+          "bytes": 67491,
+          "packets": 17778,
+          "pc": 7609,
+          "sleep": 1223,
+          "itm": 57,
+          "exceptions": 0,
+          "sync": 8,
+          "overflow": 0,
+          "malformed": 0,
+          "skippedBytes": 0,
+          "truncated": 0,
+          "mapped": 7609,
+          "analyzedSamples": 7609,
+          "droppedEvents": 0,
+          "unmapped": 0
+        },
+        "errors": [],
+        "warning": ""
+      },
+      "metadata": {
+        "format": "swo-pc-v1",
+        "startAligned": true,
+        "plan": {
+          "coreHz": 72000000,
+          "baudRate": 500000,
+          "requestedBaudRate": 500000,
+          "baudError": 0,
+          "periodCycles": 16384,
+          "seconds": 2,
+          "itm": true,
+          "exceptions": false,
+          "tap": 1,
+          "post": 15,
+          "acpr": 143,
+          "samplesHz": 4394.53125,
+          "estimatedBytes": 39550.78125,
+          "wireBytes": 50000
+        },
+        "startedAt": "2026-10-09T01:18:50.475Z",
+        "clockCheck": {
+          "cfgr": 1934346,
+          "knownHz": 72000000
+        },
+        "target": {
+          "profile": "stm32f1",
+          "name": "STM32F1 (DEV 0x410)",
+          "core": "Cortex-M3",
+          "cpuid": 1092600369,
+          "device": 537093136,
+          "cfgr": 1934346,
+          "cr": 50551171,
+          "dwt": 1073741824,
+          "source": "HSE → PLL",
+          "external": true,
+          "hseHz": 8000000,
+          "knownHz": 72000000,
+          "coreHz": 72000000,
+          "frequencyBasis": "RCC + user HSE",
+          "swoPin": "PB3",
+          "protocol": "NRZ / 8N1",
+          "detectionAttempts": 2,
+          "elfVerificationAttempts": 1,
+          "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+        },
+        "elfSha256": "09c7a40471f110ba1c4f828a2fb974cdb7e5fc33c54d26ce50ffcc34236cb140",
+        "transportGaps": [],
+        "configReadback": {
+          "dwt": 1073747967,
+          "itm": 65551,
+          "acpr": 143,
+          "sppr": 2,
+          "dbg": 807
+        },
+        "elapsedMs": 2000.199999988079,
+        "restored": true
+      },
+      "errors": [],
+      "bytes": 67491,
+      "stats": {
+        "bytes": 67491,
+        "packets": 17778,
+        "pc": 7609,
+        "sleep": 1223,
+        "itm": 57,
+        "exceptions": 0,
+        "sync": 8,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 7609,
+        "analyzedSamples": 7609,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "sourceOracle": {
+        "uniquePcs": 160,
+        "checked": 160,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 7409,
+        "matched": 7409,
+        "accuracy": 1,
+        "counts": {
+          "1": 1213,
+          "2": 1225,
+          "3": 1219,
+          "5": 1221,
+          "6": 1286,
+          "7": 1242,
+          "8": 3
+        },
+        "mismatches": [],
+        "mismatchCount": 0,
+        "ambiguousCount": 0,
+        "ambiguous": []
+      },
+      "markers": {
+        "total": 57,
+        "valid": 57,
+        "sequenceJumps": 0
+      },
+      "nominalSamples": 8789.0625,
+      "sampleRatio": 1.0048853333333334,
+      "sampleHz": 4415.5584441819,
+      "bytesPerSecond": 33742.12578762235,
+      "wireUtilization": 0.674842515752447,
+      "receiver": {
+        "version": 1,
+        "clockHz": 200000000,
+        "requestedBaud": 500000,
+        "appliedBaud": 500000,
+        "osr": 8,
+        "maxBaud": 25000000,
+        "initStatus": 0,
+        "clockRegister": 152044547
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "label": "step-01",
+      "core": 72,
+      "baud": 1000000,
+      "period": 8192,
+      "seconds": 2,
+      "requestedBaud": 1000000,
+      "autoClock": true,
+      "round": false,
+      "startedAt": "2026-10-09T01:18:52.896Z",
+      "clockCfgr": "firmware HSE 8 MHz / PLL x9",
+      "web": {
+        "stats": {
+          "bytes": 134660,
+          "packets": 35488,
+          "pc": 15241,
+          "sleep": 2446,
+          "itm": 57,
+          "exceptions": 0,
+          "sync": 8,
+          "overflow": 0,
+          "malformed": 0,
+          "skippedBytes": 0,
+          "truncated": 0,
+          "mapped": 15241,
+          "analyzedSamples": 15241,
+          "droppedEvents": 0,
+          "unmapped": 0
+        },
+        "errors": [],
+        "warning": ""
+      },
+      "metadata": {
+        "format": "swo-pc-v1",
+        "startAligned": true,
+        "plan": {
+          "coreHz": 72000000,
+          "baudRate": 1000000,
+          "requestedBaudRate": 1000000,
+          "baudError": 0,
+          "periodCycles": 8192,
+          "seconds": 2,
+          "itm": true,
+          "exceptions": false,
+          "tap": 1,
+          "post": 7,
+          "acpr": 71,
+          "samplesHz": 8789.0625,
+          "estimatedBytes": 79101.5625,
+          "wireBytes": 100000
+        },
+        "startedAt": "2026-10-09T01:18:53.392Z",
+        "clockCheck": {
+          "cfgr": 1934346,
+          "knownHz": 72000000
+        },
+        "target": {
+          "profile": "stm32f1",
+          "name": "STM32F1 (DEV 0x410)",
+          "core": "Cortex-M3",
+          "cpuid": 1092600369,
+          "device": 537093136,
+          "cfgr": 1934346,
+          "cr": 50551171,
+          "dwt": 1073741824,
+          "source": "HSE → PLL",
+          "external": true,
+          "hseHz": 8000000,
+          "knownHz": 72000000,
+          "coreHz": 72000000,
+          "frequencyBasis": "RCC + user HSE",
+          "swoPin": "PB3",
+          "protocol": "NRZ / 8N1",
+          "detectionAttempts": 1,
+          "elfVerificationAttempts": 1,
+          "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+        },
+        "elfSha256": "09c7a40471f110ba1c4f828a2fb974cdb7e5fc33c54d26ce50ffcc34236cb140",
+        "transportGaps": [],
+        "configReadback": {
+          "dwt": 1073747695,
+          "itm": 65551,
+          "acpr": 71,
+          "sppr": 2,
+          "dbg": 807
+        },
+        "elapsedMs": 2000,
+        "restored": true
+      },
+      "errors": [],
+      "bytes": 134660,
+      "stats": {
+        "bytes": 134660,
+        "packets": 35488,
+        "pc": 15241,
+        "sleep": 2446,
+        "itm": 57,
+        "exceptions": 0,
+        "sync": 8,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 15241,
+        "analyzedSamples": 15241,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "sourceOracle": {
+        "uniquePcs": 172,
+        "checked": 172,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 14967,
+        "matched": 14967,
+        "accuracy": 1,
+        "counts": {
+          "1": 2421,
+          "2": 2441,
+          "3": 2448,
+          "5": 2737,
+          "6": 2433,
+          "7": 2487
+        },
+        "mismatches": [],
+        "mismatchCount": 0,
+        "ambiguousCount": 0,
+        "ambiguous": []
+      },
+      "markers": {
+        "total": 57,
+        "valid": 57,
+        "sequenceJumps": 0
+      },
+      "nominalSamples": 17578.125,
+      "sampleRatio": 1.0061937777777779,
+      "sampleHz": 8843.5,
+      "bytesPerSecond": 67330,
+      "wireUtilization": 0.6733,
+      "receiver": {
+        "version": 1,
+        "clockHz": 200000000,
+        "requestedBaud": 1000000,
+        "appliedBaud": 1000000,
+        "osr": 8,
+        "maxBaud": 25000000,
+        "initStatus": 0,
+        "clockRegister": 152044547
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "label": "step-02",
+      "core": 72,
+      "baud": 8000000,
+      "period": 1024,
+      "seconds": 2,
+      "requestedBaud": 8000000,
+      "autoClock": true,
+      "round": false,
+      "startedAt": "2026-10-09T01:18:55.955Z",
+      "clockCfgr": "firmware HSE 8 MHz / PLL x9",
+      "web": {
+        "stats": {
+          "bytes": 1071569,
+          "packets": 283020,
+          "pc": 121270,
+          "sleep": 20182,
+          "itm": 58,
+          "exceptions": 0,
+          "sync": 8,
+          "overflow": 0,
+          "malformed": 0,
+          "skippedBytes": 0,
+          "truncated": 0,
+          "mapped": 121270,
+          "analyzedSamples": 121270,
+          "droppedEvents": 0,
+          "unmapped": 0
+        },
+        "errors": [],
+        "warning": ""
+      },
+      "metadata": {
+        "format": "swo-pc-v1",
+        "startAligned": true,
+        "plan": {
+          "coreHz": 72000000,
+          "baudRate": 8000000,
+          "requestedBaudRate": 8000000,
+          "baudError": 0,
+          "periodCycles": 1024,
+          "seconds": 2,
+          "itm": true,
+          "exceptions": false,
+          "tap": 0,
+          "post": 15,
+          "acpr": 8,
+          "samplesHz": 70312.5,
+          "estimatedBytes": 632812.5,
+          "wireBytes": 800000
+        },
+        "startedAt": "2026-10-09T01:18:56.449Z",
+        "clockCheck": {
+          "cfgr": 1934346,
+          "knownHz": 72000000
+        },
+        "target": {
+          "profile": "stm32f1",
+          "name": "STM32F1 (DEV 0x410)",
+          "core": "Cortex-M3",
+          "cpuid": 1092600369,
+          "device": 537093136,
+          "cfgr": 1934346,
+          "cr": 50551171,
+          "dwt": 1073741824,
+          "source": "HSE → PLL",
+          "external": true,
+          "hseHz": 8000000,
+          "knownHz": 72000000,
+          "coreHz": 72000000,
+          "frequencyBasis": "RCC + user HSE",
+          "swoPin": "PB3",
+          "protocol": "NRZ / 8N1",
+          "detectionAttempts": 1,
+          "elfVerificationAttempts": 1,
+          "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+        },
+        "elfSha256": "09c7a40471f110ba1c4f828a2fb974cdb7e5fc33c54d26ce50ffcc34236cb140",
+        "transportGaps": [],
+        "configReadback": {
+          "dwt": 1073747455,
+          "itm": 65551,
+          "acpr": 8,
+          "sppr": 2,
+          "dbg": 807
+        },
+        "elapsedMs": 2000.0999999940395,
+        "restored": true
+      },
+      "errors": [],
+      "bytes": 1071569,
+      "stats": {
+        "bytes": 1071569,
+        "packets": 283020,
+        "pc": 121270,
+        "sleep": 20182,
+        "itm": 58,
+        "exceptions": 0,
+        "sync": 8,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 121270,
+        "analyzedSamples": 121270,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "sourceOracle": {
+        "uniquePcs": 228,
+        "checked": 228,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 120497,
+        "matched": 120497,
+        "accuracy": 1,
+        "counts": {
+          "1": 19962,
+          "2": 19548,
+          "3": 19568,
+          "5": 19601,
+          "6": 19446,
+          "7": 22355,
+          "8": 17
+        },
+        "mismatches": [],
+        "mismatchCount": 0,
+        "ambiguousCount": 0,
+        "ambiguous": []
+      },
+      "markers": {
+        "total": 58,
+        "valid": 58,
+        "sequenceJumps": 0
+      },
+      "nominalSamples": 140625,
+      "sampleRatio": 1.0058808888888888,
+      "sampleHz": 70722.46387701691,
+      "bytesPerSecond": 535757.7121159908,
+      "wireUtilization": 0.6696971401449885,
+      "receiver": {
+        "version": 1,
+        "clockHz": 200000000,
+        "requestedBaud": 8000000,
+        "appliedBaud": 7692307,
+        "osr": 26,
+        "maxBaud": 25000000,
+        "initStatus": 0,
+        "clockRegister": 152044547
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "label": "step-03",
+      "core": 72,
+      "baud": 24000000,
+      "period": 1024,
+      "seconds": 2,
+      "requestedBaud": 25000000,
+      "autoClock": true,
+      "round": true,
+      "startedAt": "2026-10-09T01:18:59.530Z",
+      "clockCfgr": "firmware HSE 8 MHz / PLL x9",
+      "web": {
+        "stats": {
+          "bytes": 1074317,
+          "packets": 283264,
+          "pc": 121983,
+          "sleep": 19591,
+          "itm": 58,
+          "exceptions": 0,
+          "sync": 8,
+          "overflow": 0,
+          "malformed": 0,
+          "skippedBytes": 0,
+          "truncated": 0,
+          "mapped": 121983,
+          "analyzedSamples": 121983,
+          "droppedEvents": 0,
+          "unmapped": 0
+        },
+        "errors": [],
+        "warning": ""
+      },
+      "metadata": {
+        "format": "swo-pc-v1",
+        "startAligned": true,
+        "plan": {
+          "coreHz": 72000000,
+          "baudRate": 24000000,
+          "requestedBaudRate": 25000000,
+          "baudError": -0.04,
+          "periodCycles": 1024,
+          "seconds": 2,
+          "itm": true,
+          "exceptions": false,
+          "tap": 0,
+          "post": 15,
+          "acpr": 2,
+          "samplesHz": 70312.5,
+          "estimatedBytes": 632812.5,
+          "wireBytes": 2400000
+        },
+        "startedAt": "2026-10-09T01:19:00.025Z",
+        "clockCheck": {
+          "cfgr": 1934346,
+          "knownHz": 72000000
+        },
+        "target": {
+          "profile": "stm32f1",
+          "name": "STM32F1 (DEV 0x410)",
+          "core": "Cortex-M3",
+          "cpuid": 1092600369,
+          "device": 537093136,
+          "cfgr": 1934346,
+          "cr": 50551171,
+          "dwt": 1073741824,
+          "source": "HSE → PLL",
+          "external": true,
+          "hseHz": 8000000,
+          "knownHz": 72000000,
+          "coreHz": 72000000,
+          "frequencyBasis": "RCC + user HSE",
+          "swoPin": "PB3",
+          "protocol": "NRZ / 8N1",
+          "detectionAttempts": 1,
+          "elfVerificationAttempts": 1,
+          "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+        },
+        "elfSha256": "09c7a40471f110ba1c4f828a2fb974cdb7e5fc33c54d26ce50ffcc34236cb140",
+        "transportGaps": [],
+        "configReadback": {
+          "dwt": 1073747455,
+          "itm": 65551,
+          "acpr": 2,
+          "sppr": 2,
+          "dbg": 807
+        },
+        "elapsedMs": 2000.2000000178814,
+        "restored": true
+      },
+      "errors": [],
+      "bytes": 1074317,
+      "stats": {
+        "bytes": 1074317,
+        "packets": 283264,
+        "pc": 121983,
+        "sleep": 19591,
+        "itm": 58,
+        "exceptions": 0,
+        "sync": 8,
+        "overflow": 0,
+        "malformed": 0,
+        "skippedBytes": 0,
+        "truncated": 0,
+        "mapped": 121983,
+        "analyzedSamples": 121983,
+        "droppedEvents": 0,
+        "unmapped": 0
+      },
+      "sourceOracle": {
+        "uniquePcs": 225,
+        "checked": 225,
+        "mismatches": 0
+      },
+      "stageOracle": {
+        "checked": 121020,
+        "matched": 121020,
+        "accuracy": 1,
+        "counts": {
+          "1": 19406,
+          "2": 19546,
+          "3": 19574,
+          "5": 22032,
+          "6": 20595,
+          "7": 19867
+        },
+        "mismatches": [],
+        "mismatchCount": 0,
+        "ambiguousCount": 0,
+        "ambiguous": []
+      },
+      "markers": {
+        "total": 58,
+        "valid": 58,
+        "sequenceJumps": 0
+      },
+      "nominalSamples": 140625,
+      "sampleRatio": 1.0067484444444443,
+      "sampleHz": 70779.92200716646,
+      "bytesPerSecond": 537104.7895162463,
+      "wireUtilization": 0.22379366229843597,
+      "receiver": {
+        "version": 1,
+        "clockHz": 200000000,
+        "requestedBaud": 25000000,
+        "appliedBaud": 25000000,
+        "osr": 8,
+        "maxBaud": 25000000,
+        "initStatus": 0,
+        "clockRegister": 152044547
+      },
+      "passed": true,
+      "reasons": []
+    }
+  ],
+  "devices": {
+    "usb": [
+      {
+        "vid": 3368,
+        "pid": 516,
+        "product": "akaLinkPro CMSIS-DAP",
+        "serial": "B4444F2110DDDAFE44800BBB0AE800E0"
+      }
+    ],
+    "ports": [
+      {
+        "usbProductId": 516,
+        "usbVendorId": 3368
+      }
+    ]
+  },
+  "originalSha256": "5c54ac4301861d8827a31bbaf2d995f6fd2e2b58a845e706a4d367d352adce40",
+  "originalDemcr": 16777216,
+  "target": "STM32F1 (DEV 0x410) · Cortex-M3 · HSE → PLL · 72 MHz · SWO PB3",
+  "completed": true,
+  "restore": {
+    "passed": true,
+    "sha256": "5c54ac4301861d8827a31bbaf2d995f6fd2e2b58a845e706a4d367d352adce40",
+    "bytes": 131072
+  }
+}

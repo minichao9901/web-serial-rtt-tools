@@ -825,6 +825,10 @@ test-swo-page:
 	$(NODE) tools/selftest/swo-page.test.mjs
 build-swo-f103cb:
 	pwsh -NoProfile -File tools/target-firmware/stm32f103cb_swo/build.ps1
+
+.PHONY: build-swo-f103cb-hse
+build-swo-f103cb-hse:
+	pwsh -NoProfile -File tools/target-firmware/stm32f103cb_swo_hse/build.ps1
 test-swo-hw:
 	$(NODE) tools/selftest/swo-hw.mjs
 

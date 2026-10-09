@@ -49,6 +49,18 @@ export class SwoCapture {
       }
     }
   }
+  async verifiedTarget(options,alive){
+    for(let attempt=1;attempt<=2;attempt++){
+      const target=await this.identifyTarget(options,alive);
+      try{if(options.verifyElf)await options.verifyElf(this.probe);alive();return {...target,elfVerificationAttempts:options.verifyElf?attempt:0};}
+      catch(error){
+        if(attempt===2||error.code!=='SWO_ELF_VERIFY')throw error;
+        // A transport handoff can produce persistent stale Flash reads. Reconnect
+        // once before any trace writes; still reject genuinely different code.
+        alive();await this.probe.disconnect();this.probe=null;alive();await this.openProbe();alive();
+      }
+    }
+  }
   async inspect(options={}){
     if(this.active||this._startTask||this._stopTask)throw Error('请先停止记录再识别目标');
     this.busy=true;this.onChange();
@@ -63,12 +75,11 @@ export class SwoCapture {
     const setup=async lease=>{const alive=()=>{lease?.assert();if(token!==this._epoch)throw Error('记录启动已取消');};
       try{
         alive();await this.openProbe();alive();
-        const target=await this.identifyTarget(options,alive),{cpuid,device}=target;
+        const target=await this.verifiedTarget(options,alive),{cpuid,device}=target;
         if(options.autoClock)plan=tracePlan({...options,coreHz:target.coreHz});
         if(await this.probe.isHalted())throw Error('目标处于暂停状态，请先继续运行再记录');
         this.clockCheck={cfgr:target.cfgr,knownHz:target.knownHz};
         options.onTarget?.(target);
-        if(options.verifyElf)await options.verifyElf(this.probe);alive();
         const saved={};for(const [name,addr] of Object.entries(R))saved[name]=await this.read(addr);
         this.wasLocked=!!((await this.read(0xe0000fb4))&2);this.saved=saved;
         await this.write(R.demcr,this.saved.demcr|0x01000000);await this.write(0xe0000fb0,0xc5acce55);

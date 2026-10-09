@@ -13,3 +13,11 @@ assert.equal(stageOracle({events:[mark(3,100),mark(5,200),pc(300)]}).mismatchCou
 assert.equal(stageOracle({events:[mark(3,100),mark(5,200),{...pc(200),fn:'branch_leaf_b'}]}).mismatchCount,1,'wrong branch is never hidden as ambiguity');
 
 const boundary=JSON.parse(readFileSync("samples/swo/delayed-boundary.json"));assert.equal(stageOracle(boundary).ambiguousCount,1,"real delayed boundary is preserved as unordered");assert.equal(stageOracle(boundary).mismatchCount,0);
+
+// Keep the independently built HSE image paired with its real hardware recording.
+const hseElf=readFileSync('tools/target-firmware/stm32f103cb_swo_hse/fw.elf'),hseRecord=unpackRecording(readFileSync('samples/swo/f103cb-hse72-1m.swopc'));
+assert.equal(hseRecord.metadata.elfSha256,createHash('sha256').update(hseElf).digest('hex'));
+assert.equal(hseRecord.metadata.target.source,'HSE → PLL');assert.equal(hseRecord.metadata.target.coreHz,72000000);assert.equal(hseRecord.metadata.plan.baudRate,1000000);assert.equal(hseRecord.metadata.configReadback.acpr,71);
+const hseModel=analyzeTrace(hseRecord.raw,hseRecord.metadata,hseElf),hseStages=stageOracle(hseModel);
+assert.equal(hseModel.stats.pc,15241);assert.equal(hseModel.stats.unmapped,0);assert.equal(hseModel.stats.overflow,0);assert.equal(hseModel.stats.malformed,0);assert.equal(hseModel.stats.truncated,0);assert.equal(hseStages.mismatchCount,0);assert.equal(hseStages.checked,14967);
+console.log('f103cb-hse72-1m: real HSE 72 MHz record/ELF and 14967 stage checks PASS');
