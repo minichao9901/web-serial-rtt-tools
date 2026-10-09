@@ -13,7 +13,7 @@ export function tracePlan({coreHz,baudRate,periodCycles=4096,seconds=5,itm=false
   if(!Number.isInteger(divider)||divider<1||divider>8192)throw Error('核心时钟必须能整除 SWO 波特率（分频 1–8192）');
   baudRate=coreHz/divider;const baudError=(baudRate-requestedBaudRate)/requestedBaudRate;
   if(Math.abs(baudError)>.05)throw Error('目标 SWO 与请求波特率偏差超过 5%，请降低波特率或调整目标主频');
-  return {coreHz,baudRate,requestedBaudRate,baudError,periodCycles,seconds,itm:!!itm,exceptions:!!exceptions,tap,post:n-1,acpr:divider-1,samplesHz:coreHz/periodCycles,estimatedBytes:9*coreHz/periodCycles,wireBytes:baudRate/10};
+  return {coreHz,baudRate,requestedBaudRate,baudError,periodCycles,seconds,itm:!!itm,exceptions:!!exceptions,tap,post:n-1,acpr:divider-1,samplesHz:coreHz/periodCycles,pcMinimumBaud:50*coreHz/periodCycles,estimatedBytes:9*coreHz/periodCycles,wireBytes:baudRate/10};
 }
 export class SwoCapture {
   constructor(){this.serial=new SerialSession();this.probe=null;this.running=false;this.busy=false;this.saved=null;this.chunks=[];this.bytes=0;this.metadata={};this.onChange=()=>{};this.collecting=false;this._epoch=0;

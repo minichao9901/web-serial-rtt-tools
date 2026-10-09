@@ -25,3 +25,6 @@ console.log('SWO protocol/recording: split boundaries, PC/ITM/exceptions, timest
 assert.equal(decode(Uint8Array.from([0x17,0,0,0,0])).stats.pc,1,'zero address PC is distinct from a one-byte sleep packet');
 const rebase=decode(Uint8Array.from([0x70,...pc,0x10,...pc,0x10]));assert.equal(rebase.events.filter(e=>e.kind==='pc')[0].cycles,null);assert.equal(rebase.events.filter(e=>e.kind==='pc')[1].cycles,1);
 const selectedModel={events:[{kind:'pc',fn:'a',sample:0,segment:0},{kind:'pc',fn:'b',sample:1,segment:0},{kind:'pc',fn:'a',sample:2,segment:0},{kind:'pc',fn:'c',sample:3,segment:0}]};assert.equal(selectRange(selectedModel,0,3,'a').transitions.length,0,'filter cannot bridge through excluded PCs');assert.equal(selectRange(selectedModel,1,2).transitions.length,1,'edges limited to current range');
+
+const dense64=tracePlan({coreHz:72000000,baudRate:24000000,periodCycles:64});assert.equal(dense64.samplesHz,1125000);assert.equal(dense64.pcMinimumBaud,56250000);assert.equal(dense64.tap,0);assert.equal(dense64.post,0);
+const dense128=tracePlan({coreHz:72000000,baudRate:24000000,periodCycles:128});assert.equal(dense128.samplesHz,562500);assert.equal(dense128.pcMinimumBaud,28125000);assert.equal(dense128.post,1);

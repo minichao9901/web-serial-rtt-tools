@@ -40,7 +40,16 @@ export class SwoView {
   async action(fn){try{return await fn();}catch(e){this.error(e);}}
   error(e){$('sw-warning').textContent=e.message||String(e);$('sw-warning').classList.add('bad');}
   options(){return {coreHz:Number($('sw-core').value)*1e6,baudRate:Number($('sw-baud').value),periodCycles:Number($('sw-period').value),seconds:Number($('sw-seconds').value),itm:$('sw-itm').checked,exceptions:$('sw-exceptions').checked,autoClock:$('sw-auto-clock').checked,hseHz:$('sw-hse').value?Number($('sw-hse').value)*1e6:null,allowBaudRounding:$('sw-baud-round').checked};}
-  renderPlan(){$('sw-core').disabled=this.capture.active||$('sw-auto-clock').checked;try{const p=tracePlan(this.options());$('sw-plan').textContent=`约 ${p.samplesHz.toFixed(0)} PC 样本/s · 预计 ${(p.estimatedBytes/1000).toFixed(1)} KB/s / 线路 ${(p.wireBytes/1000).toFixed(0)} KB/s`+(p.baudError?` · 目标实际 ${(p.baudRate/1e6).toFixed(3)} Mbps / 请求 ${(p.requestedBaudRate/1e6).toFixed(3)} Mbps · 偏差 ${(p.baudError*100).toFixed(2)}%`:'')+(p.estimatedBytes>p.wireBytes*.8?' · 带宽偏紧，建议增大 PC 间隔':'');}catch(e){$('sw-plan').textContent=e.message;}}
+  renderPlan(){
+    $('sw-core').disabled=this.capture.active||$('sw-auto-clock').checked;
+    try{
+      const p=tracePlan(this.options());
+      const minimum=p.pcMinimumBaud/1e6,overMaximum=p.pcMinimumBaud>25000000;
+      $('sw-plan').textContent=`约 ${p.samplesHz.toLocaleString('zh-CN',{maximumFractionDigits:0})} PC 样本/s · 全为 PC 时最低需 ${minimum.toFixed(3)} Mbps · 含时间戳预计 ${(p.estimatedBytes/1000).toFixed(1)} KB/s / 线路 ${(p.wireBytes/1000).toFixed(0)} KB/s`
+        +(p.baudError?` · 目标实际 ${(p.baudRate/1e6).toFixed(3)} Mbps / 请求 ${(p.requestedBaudRate/1e6).toFixed(3)} Mbps · 偏差 ${(p.baudError*100).toFixed(2)}%`:'')
+        +(overMaximum?' · PC 包最低需求已超过探针 25 Mbps 上限；请降低目标主频或增大采样间隔':p.estimatedBytes>p.wireBytes*.8?' · 带宽偏紧，建议增大 PC 间隔':'');
+    }catch(e){$('sw-plan').textContent=e.message;}
+  }
   async refreshPorts(){const current=this.ports[Number($('sw-port').value)];this.ports=(await SerialSession.listPorts()).filter(p=>{const i=p.getInfo();return i.usbVendorId===0x0d28&&i.usbProductId===0x0204;});$('sw-port').replaceChildren();this.ports.forEach((p,i)=>{const o=document.createElement('option');o.value=i;o.textContent=`VCOM ${i+1} · ${SerialSession.describe(p)}`;$('sw-port').append(o);});if(current&&this.ports.includes(current))$('sw-port').value=this.ports.indexOf(current);}
   async loadElf(buffer,name='firmware.elf'){
     if(this.capture.active)throw Error('记录期间不能切换 ELF');if(buffer.byteLength>128*1024*1024)throw Error('ELF 超过 128 MiB');
