@@ -24,6 +24,8 @@
 | 2026-10-09 | [RTT/JScope/SPI 性能对照](2026-10-09-transfer-performance.md) | 同一 F103ZE 的交替速率与数据质量对照，原固件恢复 |
 | 2026-10-09 | [三个 worktree 合并验收](2026-10-09-worktree-merge.md) | 全量离线、十组页面、F103ZE 八异常与转发复核，备份归档及其它 worktree 清理 |
 
+| 2026-10-09 | [主线 F103CB 实机回归](2026-10-09-mainline-hardware.md) | 调试、烧录、ADC、连接按钮、RTT/JScope、SWO 与时钟租约；速率边界和完整固件恢复 |
+
 ## 当前推荐顺序
 
 1. `make check` + `make test-board-matrix`

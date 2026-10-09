@@ -28,7 +28,7 @@ F407、H743、H7B0 的上述结果是软件与寄存器模拟测试，尚未做�
 
 ## F103CB 实物检查
 
-链路：目标 PB3 → 探针 PB07 → VCOM → Web Serial → 解码 → ELF / 源码。每组录制 1 秒，目标 CPU 与 Trace 均为 72 MHz。目标 ELF SHA256 为 `09c7a40471f110ba1c4f828a2fb974cdb7e5fc33c54d26ce50ffcc34236cb140`。
+链路：目标 PB3 → HPM5301 EVKLite 探针 PB09 / J3[3] → VCOM → Web Serial → 解码 → ELF / 源码（更正此前 PB07 标注）。每组录制 1 秒，目标 CPU 与 Trace 均为 72 MHz。目标 ELF SHA256 为 `09c7a40471f110ba1c4f828a2fb974cdb7e5fc33c54d26ce50ffcc34236cb140`。
 
 | PC 间隔与事件 | 配置方式 | 实际收发 | 原始字节 | PC 样本 | 不同 PC 的 GNU 核对 | 溢出 |
 |---|---|---:|---:|---:|---:|---:|

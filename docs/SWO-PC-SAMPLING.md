@@ -28,7 +28,7 @@ DWT PC 采样能回答「程序主要运行在哪些函数/源码行」「一段
 
 本次已实测 STM32F103CB，128 KiB Flash / 20 KiB SRAM，Cortex-M3 r1p1，DP IDCODE `0x1BA01477`、CPUID `0x411FC231`、DBGMCU DEV_ID `0x410`。
 
-1. 目标 **PB3 / SWO → probe PB07 / VCOM RX**，另接 SWDIO、SWCLK 和 GND。这里使用 UART 接收原始 SWO，不依赖探针的 CMSIS-DAP SWO 专用命令。
+1. 目标 **PB3 / SWO → HPM5301 EVKLite probe PB09 / J3[3] / VCOM RX**，另接 SWDIO、SWCLK 和 GND。此前写作 PB07 有误；其他探针板型请以其引脚分配图为准。这里使用 UART 接收原始 SWO，不依赖探针的 CMSIS-DAP SWO 专用命令。
 2. 用桌面 Chrome / Edge 打开本地服务或 HTTPS 页面，选择探针 VCOM 串口，并授权 CMSIS-DAP WebUSB。
 3. 识别目标与时钟，按板子填写实际外部晶振频率。当前 HSE 例程为 **72 MHz**；历史离线示例为 HSI **8 MHz**。SWO 输入频率必须能按整数分频产生目标波特率，CPU 频率用于 PC/s 计算。两种时钟均应在记录中保持稳定。
 4. 载入与目标代码匹配、保留函数符号及 DWARF 行号的 ELF，以及源码目录。开始前比对最多 32 个执行段的首尾各 64 字节，拒绝明显不匹配的代码；这是局部代码检查，不是整个 Flash 哈希校验。

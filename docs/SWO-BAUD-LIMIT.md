@@ -23,7 +23,7 @@ HPM5300 数据手册 Rev0.11 的**表 17，PDF 第 44 页**将 `clk_top_urt0` �
 
 ## 实测链路与逐档结果
 
-STM32F103CB PB3 SWO → probe PB07 VCOM RX → Chrome Web Serial。使用与已发布示例相同的复杂测试 ELF，主频由 HSI/PLL 设为 36–64 MHz，APB1 降为一半；未超出 F103 额定核心频率。SWO 波特率来自核心时钟整数分频，实读 RCC 配置并回读 TPIU ACPR。低负载阶段使用 8192 周期采样间隔，将位速率是否匹配与字节吞吐能力分开验证。
+STM32F103CB PB3 SWO → HPM5301 EVKLite probe PB09 / J3[3] VCOM RX → Chrome Web Serial（此前 PB07 标注有误）。使用与已发布示例相同的复杂测试 ELF，主频由 HSI/PLL 设为 36–64 MHz，APB1 降为一半；未超出 F103 额定核心频率。SWO 波特率来自核心时钟整数分频，实读 RCC 配置并回读 TPIU ACPR。低负载阶段使用 8192 周期采样间隔，将位速率是否匹配与字节吞吐能力分开验证。
 
 | SWO / VCOM 请求波特率 | 有效录制结果 |
 | ---: | --- |
