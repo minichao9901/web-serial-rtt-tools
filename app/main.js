@@ -6,6 +6,7 @@
 import { installProbeManager } from './core/probe-users.js';
 import { initTabs } from './ui/tabs.js';
 import { initWorkspaces } from './ui/workspace.js';
+import { initSidebarTabs } from './ui/sidebar-tabs.js';
 import { initProbeStatus } from './ui/probe-status.js';
 import { initEventLogs } from './ui/event-logs.js';
 import { SerialSession } from './serial/session.js';
@@ -64,6 +65,7 @@ initProbeStatus(tools);
 initEventLogs();
 window.__tools = tools;
 const workspace = initWorkspaces();
+initSidebarTabs();
 
 assistant.init();
 terminal.init();

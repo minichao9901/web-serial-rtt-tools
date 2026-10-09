@@ -306,7 +306,9 @@ export class I2cView {
   }
 
   _setState(text, kind){
-    setStatus($('i2-state'), text, kind === 'err' ? 'err' : kind === 'warn' ? 'warn' : this.session.connected ? 'ok' : '');
+    const state = $('i2-state');
+    setStatus(state, text.startsWith('未连接 ——') && !kind ? '未连接' : text, kind === 'err' ? 'err' : kind === 'warn' ? 'warn' : this.session.connected ? 'ok' : '');
+    if (state) state.title = text;
     this.pinMap?.refresh();
   }
   _syncButtons(st){

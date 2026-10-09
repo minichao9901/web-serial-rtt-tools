@@ -370,6 +370,10 @@ test-flash:
 test-spi-page: page-prep
 	$(NODE) tools/selftest/spi-bus-page.test.mjs && $(NODE) tools/selftest/spi-panel-page.test.mjs
 
+.PHONY: test-tool-sidebar-page
+test-tool-sidebar-page: page-prep
+	$(NODE) tools/selftest/tool-sidebar-page.test.mjs
+
 # 「SPI/QSPI 屏」真机验收（探针 + 真屏）：默认 AXS15352/40MHz
 #   make spi-hw                                  # 一屏一套：连接 → 推荐值 → 面板初始化 → 刷图
 #   make spi-hw ARGS="--panel=st77916"           # 换 ST77916（档 2，QSPI）

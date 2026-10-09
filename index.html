@@ -513,23 +513,54 @@
 <!-- ============================ J-Scope 波形 ============================ -->
 <section class="panel" id="tab-scope" data-workspace="scope">
   <div class="ws">
-    <aside class="side">
-      <fieldset>
-        <legend>探针 · 采样</legend>
+    <aside class="side tool-side" data-sidebar-tabs="scope">
+      <nav class="tool-side-tabs" role="tablist" aria-label="侧栏设置">
+        <button type="button" id="sc-side-capture-tab" role="tab" aria-controls="sc-side-capture-panel" aria-selected="true" tabindex="0" data-side-tab="capture">采集</button>
+        <button type="button" id="sc-side-variables-tab" role="tab" aria-controls="sc-side-variables-panel" aria-selected="false" tabindex="-1" data-side-tab="variables">变量</button>
+        <button type="button" id="sc-side-trigger-tab" role="tab" aria-controls="sc-side-trigger-panel" aria-selected="false" tabindex="-1" data-side-tab="trigger">触发</button>
+        <button type="button" id="sc-side-help-tab" role="tab" aria-controls="sc-side-help-panel" aria-selected="false" tabindex="-1" data-side-tab="help">帮助</button>
+      </nav>
+      <div id="sc-side-capture-panel" class="tool-side-panel" role="tabpanel" aria-labelledby="sc-side-capture-tab" data-side-panel="capture">
+        <fieldset>
+        <legend>连接</legend>
         <div class="row btnrow">
           <button id="sc-connect" class="primary" title="走探针的自定义 HID（usage page 0xFF00）选设备：配置与状态走这条">连接探针</button>
           <button id="sc-reconnect" title="用浏览器记住的探针直接连（不用再点弹框）">重连</button>
         </div>
         <p class="hint" id="sc-info">未连接</p>
-        <label class="chk" title="不需要硬件：波形由页面确定性生成（f32 正弦 / i32 计数 / i16 方波 / f64 斜坡…），用来看界面、试触发、试导出"><input type="checkbox" id="sc-mock"> 用假探针（无需硬件）</label>
+        <label class="chk" title="不需要硬件：波形由页面确定性生成（f32 正弦 / i32 计数 / i16 方波 / f64 斜坡…），用来看界面、试触发、试导出"><input type="checkbox" id="sc-mock"> 模拟探针</label>
         <div class="row btnrow">
           <button id="sc-usb" title="WebUSB 认领 interface 0，走那个空闲的 bulk IN 端点 0x83">连接数据端点…</button>
         </div>
         <p class="hint" id="sc-usbinfo">未连接数据端点（假探针模式不需要）</p>
       </fieldset>
 
-      <fieldset>
-        <legend>变量（1~8 个）</legend>
+        <fieldset>
+        <legend>采样</legend>
+        <label class="row"><span>周期</span><input id="sc-period" class="num" value="100" inputmode="decimal" title="µs，可填 2.25 / 2.5 / 2.75；小数周期需新版探针固件，按 24 MHz tick 量化"><em class="unit">µs</em></label>
+        <label class="row"><span>时长</span><input id="sc-seconds" class="num" value="20" inputmode="numeric" title="缓冲容量 = 实测速率 × 时长（页面会显示占多少内存）"><em class="unit">s</em></label>
+        <label class="row" id="sc-target-row"><span>目标类型</span>
+          <select id="sc-target" title="探针的全局目标类型（HID 0x31 action 10，与 RTT-over-JTAG 共用同一个开关）。粘性：设一次就一直有效。切到 RISC-V/JTAG 后本页后端也跟着换（探针侧采样器的传输后端 = 全局目标类型）">
+            <option value="swd">SWD / ARM</option>
+            <option value="riscv">RISC-V / JTAG</option>
+          </select></label>
+        <p class="hint" id="sc-backend">生效后端：未开始（采样后由探针回报）</p>
+        <label class="row" id="sc-clock-row"><span>SWD 时钟</span><select id="sc-clock" title="与 RTT Viewer 同款档位；固件自带失败自动降档"></select></label>
+        <label class="chk" title="采样期间自动暂停 CDC/串口桥（HID 0x32 flags bit5）。探针主循环每轮服务那个桥要花几百周期，关掉能多出约 8% 采样带宽；代价是采样时探针的 COM 口不通（停采样自动恢复，只恢复自己关过的那一次）"><input type="checkbox" id="sc-cdcoff" checked> 采样时暂停串口桥</label>
+        <label class="chk" title="SWD 单字 span：2µs 档每次最多64拍并可跨包；其他≤3µs 档最多16拍、包边界返回。取消可做 A/B 测试，旧固件按自身能力处理"><input type="checkbox" id="sc-batch" checked> 单字短批次</label>
+
+        <div class="row btnrow">
+          <button id="sc-bench" title="让探针用当前计划空跑一段，回报真实 µs/样本（M0 标定；假探针会假装一个结果）">标定真实速率</button>
+          <button id="sc-recc" title="按当前计划的有效标定：SWD 取读取耗时×1.15+1µs，JTAG 取×1.5，向上取整且不小于3µs；这是起始建议，稳定性以实采计数为准">用建议周期</button>
+        </div>
+        <p class="hint" id="sc-rate-advice" role="status" aria-live="polite">选好变量后会显示建议起始频率</p>
+        <details class="helpnote"><summary>读计划与速率估算</summary><p class="hint" id="sc-rate-detail"></p><p class="hint" id="sc-plan">选好变量后会显示读计划与预计上限</p></details>
+
+      </fieldset>
+      </div>
+      <div id="sc-side-variables-panel" class="tool-side-panel" role="tabpanel" aria-labelledby="sc-side-variables-tab" data-side-panel="variables" hidden>
+        <fieldset>
+        <legend>变量 · 最多 8 路</legend>
         <div class="row btnrow">
           <button id="sc-elf" title="解析 .elf 的 DWARF：全局/静态变量、结构体成员，以及按下标添加数组元素">载入 ELF…</button>
           <button id="sc-varclear">清空勾选</button>
@@ -545,35 +576,10 @@
         <div class="varlist" id="sc-vars"></div>
         <p class="hint" id="sc-count">已选 0 / 8</p>
       </fieldset>
-
-      <fieldset>
-        <legend>采样</legend>
-        <label class="row"><span>周期</span><input id="sc-period" class="num" value="100" inputmode="decimal" title="µs，可填 2.25 / 2.5 / 2.75；小数周期需新版探针固件，按 24 MHz tick 量化"><em class="unit">µs</em></label>
-        <label class="row"><span>时长</span><input id="sc-seconds" class="num" value="20" inputmode="numeric" title="缓冲容量 = 实测速率 × 时长（页面会显示占多少内存）"><em class="unit">s</em></label>
-        <label class="row" id="sc-target-row"><span>目标类型</span>
-          <select id="sc-target" title="探针的全局目标类型（HID 0x31 action 10，与 RTT-over-JTAG 共用同一个开关）。粘性：设一次就一直有效。切到 RISC-V/JTAG 后本页后端也跟着换（探针侧采样器的传输后端 = 全局目标类型）">
-            <option value="swd">SWD / ARM</option>
-            <option value="riscv">RISC-V / JTAG</option>
-          </select></label>
-        <p class="hint" id="sc-backend">生效后端：未开始（采样后由探针回报）</p>
-        <label class="row" id="sc-clock-row"><span>SWD 时钟</span><select id="sc-clock" title="与 RTT Viewer 同款档位；固件自带失败自动降档"></select></label>
-        <label class="chk" title="采样期间自动暂停 CDC/串口桥（HID 0x32 flags bit5）。探针主循环每轮服务那个桥要花几百周期，关掉能多出约 8% 采样带宽；代价是采样时探针的 COM 口不通（停采样自动恢复，只恢复自己关过的那一次）"><input type="checkbox" id="sc-cdcoff" checked> 采样时暂停串口桥（推荐）</label>
-        <label class="chk" title="SWD 单字 span：2µs 档每次最多64拍并可跨包；其他≤3µs 档最多16拍、包边界返回。取消可做 A/B 测试，旧固件按自身能力处理"><input type="checkbox" id="sc-batch" checked> 单字短批次（实验）</label>
-        <div class="row btnrow">
-          <button id="sc-start" class="primary">开始采样</button>
-          <button id="sc-stop" disabled>停止</button>
-        </div>
-        <div class="row btnrow">
-          <button id="sc-bench" title="让探针用当前计划空跑一段，回报真实 µs/样本（M0 标定；假探针会假装一个结果）">标定真实速率</button>
-          <button id="sc-recc" title="按当前计划的有效标定：SWD 取读取耗时×1.15+1µs，JTAG 取×1.5，向上取整且不小于3µs；这是起始建议，稳定性以实采计数为准">用建议周期</button>
-        </div>
-        <p class="hint" id="sc-rate-advice" role="status" aria-live="polite">选好变量后会显示建议起始频率</p>
-        <details class="helpnote"><summary>读计划与速率估算</summary><p class="hint" id="sc-plan">选好变量后会显示读计划与预计上限</p></details>
-        <p class="hint" id="sc-state">未开始</p>
-      </fieldset>
-
-      <fieldset>
-        <legend>触发（主机侧）</legend>
+      </div>
+      <div id="sc-side-trigger-panel" class="tool-side-panel" role="tabpanel" aria-labelledby="sc-side-trigger-tab" data-side-panel="trigger" hidden>
+        <fieldset>
+        <legend>触发</legend>
         <label class="row"><span>模式</span><select id="sc-trig-mode"></select></label>
         <label class="row"><span>通道</span><select id="sc-trig-ch"></select></label>
         <label class="row"><span>阈值</span><input id="sc-trig-level" class="num" value="0"></label>
@@ -586,6 +592,17 @@
         </div>
         <p class="hint" id="sc-trig-state">未命中</p>
       </fieldset>
+      </div>
+      <div id="sc-side-help-panel" class="tool-side-panel" role="tabpanel" aria-labelledby="sc-side-help-tab" data-side-panel="help" hidden>
+        <div class="hint sidebar-help-intro">参数、接线与排障说明</div>
+      </div>
+      <div class="tool-side-actions" aria-label="运行控制">
+<div class="row btnrow">
+          <button id="sc-start" class="primary">开始采样</button>
+          <button id="sc-stop" disabled>停止</button>
+        </div>
+<p class="hint" id="sc-state">未开始</p>
+      </div>
     </aside>
 
     <section class="main">
@@ -933,15 +950,22 @@
 <!-- ============================ SPI / QSPI 屏（探针的 USB→SPI 桥） ============================ -->
 <section class="panel" id="tab-spi">
   <div class="ws">
-    <aside class="side">
-      <fieldset>
-        <legend>探针 · SPI 桥</legend>
+    <aside class="side tool-side" data-sidebar-tabs="spi">
+      <nav class="tool-side-tabs" role="tablist" aria-label="侧栏设置">
+        <button type="button" id="sp-side-connect-tab" role="tab" aria-controls="sp-side-connect-panel" aria-selected="true" tabindex="0" data-side-tab="connect">连接</button>
+        <button type="button" id="sp-side-bus-tab" role="tab" aria-controls="sp-side-bus-panel" aria-selected="false" tabindex="-1" data-side-tab="bus">总线</button>
+        <button type="button" id="sp-side-status-tab" role="tab" aria-controls="sp-side-status-panel" aria-selected="false" tabindex="-1" data-side-tab="status">状态</button>
+        <button type="button" id="sp-side-help-tab" role="tab" aria-controls="sp-side-help-panel" aria-selected="false" tabindex="-1" data-side-tab="help">帮助</button>
+      </nav>
+      <div id="sp-side-connect-panel" class="tool-side-panel" role="tabpanel" aria-labelledby="sp-side-connect-tab" data-side-panel="connect">
+        <fieldset>
+        <legend>连接</legend>
         <div class="row btnrow">
-          <button id="sp-connect" class="primary" title="授权 HID（走探针的自定义 HID，usage page 0xFF00）：配置 / 状态 / 面板档走这条。⚠️ 第一次点会弹出浏览器的设备选择框——那个框就是"授权"，在里面选 akaLinkPro 即可">连接探针（授权）</button>
+          <button id="sp-connect" class="primary" title="选择探针并完成 HID 授权；配置与状态使用此连接">连接探针</button>
           <button id="sp-reconnect" title="用浏览器记住的探针直接连（不用再点弹框）">重连</button>
         </div>
         <p class="hint" id="sp-info">未连接</p>
-        <label class="chk" title="不需要硬件：HID 与数据面共用同一个假探针，可跑通「配置 → 使能 → 发帧 → 应答 → 统计」整条链路"><input type="checkbox" id="sp-mock"> 用假探针（无需硬件）</label>
+        <label class="chk" title="不需要硬件：HID 与数据面共用同一个假探针，可跑通「配置 → 使能 → 发帧 → 应答 → 统计」整条链路"><input type="checkbox" id="sp-mock"> 模拟探针</label>
         <label class="row" title="假探针的末级器件：SPI 总线上没有器件地址，所以同一时刻只挂一个 —— NOR（回环 + 一颗 W25Q128 模型）/ 寄存器器件（BMP280 风格，给寄存器面板与传感器采集用）/ 命令型 ADC（MCP3008 风格，10 位 8 通道，采样值是活的）"><span>假器件</span>
           <select id="sp-mock-device">
             <option value="flash">回环 + NOR（W25Q128）</option>
@@ -949,16 +973,18 @@
             <option value="adc">命令型 ADC（MCP3008 风格）</option>
           </select></label>
         <div class="row btnrow">
-          <button id="sp-usb" title="授权 WebUSB 并认领 SPI 桥接口（class 0xFF + EP11 双向）：OUT 0x0B 发帧、IN 0x8B 收应答。⚠️ 第一次点会弹出浏览器的设备选择框（HID 与 WebUSB 要各授权一次）">连接数据端点…（授权）</button>
+          <button id="sp-usb" title="授权 WebUSB 并认领 SPI 桥接口（class 0xFF + EP11 双向）：OUT 0x0B 发帧、IN 0x8B 收应答。⚠️ 第一次点会弹出浏览器的设备选择框（HID 与 WebUSB 要各授权一次）">连接数据端点…</button>
         </div>
         <label class="row"><span>在飞读</span><input id="sp-inflight" class="num" value="4" inputmode="numeric" title="同时在飞的 IN 读条数（连接数据端点时生效）"></label>
         <p class="hint" id="sp-usbinfo">未连接数据端点（假探针模式不需要）</p>
-        <p class="hint" id="sp-state">未连接</p>
-      </fieldset>
 
-      <fieldset>
-        <legend>桥配置（HID 0x35）</legend>
+      </fieldset>
+      </div>
+      <div id="sp-side-bus-panel" class="tool-side-panel" role="tabpanel" aria-labelledby="sp-side-bus-tab" data-side-panel="bus" hidden>
+        <fieldset>
+        <legend>总线配置</legend>
         <label class="row"><span>SCLK</span><select id="sp-sclk" title="5301EVKLite 上限 75 MHz。固件按模块时钟整数分频，实际生效值可能不等于请求值 —— 下面「实际 SCLK」会回读"></select></label>
+        <p class="hint">实际 SCLK <b id="sp-sclk-actual">—</b></p>
         <label class="row"><span>模式</span><select id="sp-mode" title="标准 SPI 模式号 = CPOL&lt;&lt;1 | CPHA。CPHA=0 在前导沿采样（SCLK 空闲低时=上升沿）；屏一般要 mode 0">
           <option value="0">0 · 低空闲 · 前沿采样</option>
           <option value="1">1 · 低空闲 · 后沿采样</option>
@@ -975,7 +1001,7 @@
         <p class="hint" id="sp-ring">OUT/IN 环大小：连接后回读</p>
       </fieldset>
 
-      <fieldset>
+        <fieldset>
         <legend>引脚设置</legend>
         <label class="row"><span>DC</span><select id="sp-pad-dc"></select></label>
         <label class="row"><span>RST</span><select id="sp-pad-rst"></select></label>
@@ -1011,23 +1037,33 @@
         </div>
         <details class="helpnote"><summary>辅助引脚限制</summary><p class="hint" id="sp-pad-note">TE 撕裂信号暂不暴露（TBD）。灰掉的脚固件会拒：PY00/PY01 在 v1 不支持；PB10~PB13 是 SPI2 的 CS/SCLK/MISO/MOSI；PA30 被板上 Q1 短到地拉不动。</p></details>
       </fieldset>
+      </div>
+      <div id="sp-side-status-panel" class="tool-side-panel" role="tabpanel" aria-labelledby="sp-side-status-tab" data-side-panel="status" hidden>
+        <fieldset>
+        <legend>状态</legend>
 
-      <fieldset>
-        <legend>使能与状态</legend>
-        <div class="row btnrow">
-          <button id="sp-enable" class="primary">使能</button>
-          <button id="sp-disable">失能</button>
-        </div>
         <div class="row btnrow">
           <button id="sp-reset" title="清环、复位状态机、清计数器（不动配置）">复位桥</button>
           <button id="sp-abort" title="丢弃未处理帧与 IN 队列">中止</button>
           <button id="sp-status">读状态</button>
         </div>
         <p class="hint">状态字 <b id="sp-word">—</b> <span id="sp-word-text"></span></p>
-        <p class="hint">实际 SCLK <b id="sp-sclk-actual">—</b>（固件分频后的真实值）</p>
+        <details class="helpnote sidebar-note"><summary>详细计数</summary>
         <p class="hint">帧 ok <b id="sp-c-ok">0</b> · err <b id="sp-c-err">0</b> · tx <b id="sp-c-tx">0 B</b> · rx <b id="sp-c-rx">0 B</b> · 单笔 <b id="sp-last-us">—</b> µs<br>
           轮询 <b id="sp-c-poll">0</b> · DMA <b id="sp-c-dma">0</b> · IN 丢弃 <b id="sp-c-in">0</b> · OUT 溢出 <b id="sp-c-ovf">0</b></p>
+        </details>
       </fieldset>
+      </div>
+      <div id="sp-side-help-panel" class="tool-side-panel" role="tabpanel" aria-labelledby="sp-side-help-tab" data-side-panel="help" hidden>
+        <div class="hint sidebar-help-intro">参数、接线与排障说明</div>
+      </div>
+      <div class="tool-side-actions" aria-label="运行控制">
+<div class="row btnrow">
+          <button id="sp-enable" class="primary">使能</button>
+          <button id="sp-disable">失能</button>
+        </div>
+<p class="hint" id="sp-state">未连接</p>
+      </div>
     </aside>
 
     <section class="main">
@@ -1255,47 +1291,55 @@
 <!-- ============================ SPI / QSPI 屏（面板档 · 初始化步 · 刷图） ============================ -->
 <section class="panel" id="tab-panel">
   <div class="ws">
-    <aside class="side">
-      <fieldset id="pn-conn-card">
-        <legend>探针（与「USB→SPI/QSPI」页共用同一次连接）</legend>
+    <aside class="side tool-side" data-sidebar-tabs="panel">
+      <nav class="tool-side-tabs" role="tablist" aria-label="侧栏设置">
+        <button type="button" id="pn-side-connect-tab" role="tab" aria-controls="pn-side-connect-panel" aria-selected="true" tabindex="0" data-side-tab="connect">连接</button>
+        <button type="button" id="pn-side-display-tab" role="tab" aria-controls="pn-side-display-panel" aria-selected="false" tabindex="-1" data-side-tab="display">屏配置</button>
+        <button type="button" id="pn-side-control-tab" role="tab" aria-controls="pn-side-control-panel" aria-selected="false" tabindex="-1" data-side-tab="control">控制</button>
+        <button type="button" id="pn-side-help-tab" role="tab" aria-controls="pn-side-help-panel" aria-selected="false" tabindex="-1" data-side-tab="help">帮助</button>
+      </nav>
+      <div id="pn-side-connect-panel" class="tool-side-panel" role="tabpanel" aria-labelledby="pn-side-connect-tab" data-side-panel="connect">
+        <fieldset id="pn-conn-card">
+        <legend>连接</legend>
         <div class="row btnrow">
-          <button id="pn-connect" class="" title="授权 HID：配置 / 状态 / 面板档走这条。⚠️ 第一次点会弹出浏览器的设备选择框——那个框就是"授权"，选 akaLinkPro 即可">连接探针（授权）</button>
+          <button id="pn-connect" class="" title="选择探针并完成 HID 授权；与 SPI/QSPI 桥页面共用连接">连接探针</button>
           <button id="pn-reconnect" title="用浏览器记住的探针直接连（不用再点弹框）">重连</button>
         </div>
         <p class="hint" id="pn-info">未连接</p>
-        <label class="chk" title="不需要硬件：与桥页共用同一个假探针实例"><input type="checkbox" id="pn-mock"> 用假探针（无需硬件）</label>
+        <label class="chk" title="不需要硬件：与桥页共用同一个假探针实例"><input type="checkbox" id="pn-mock"> 模拟探针</label>
         <div class="row btnrow">
-          <button id="pn-usb" title="授权 WebUSB 并认领 SPI 桥接口（刷图/发帧的数据走这条）。⚠️ 第一次点会弹出浏览器的设备选择框（HID 与 WebUSB 要各授权一次）">连接数据端点…（授权）</button>
+          <button id="pn-usb" title="授权 WebUSB 并认领 SPI 桥接口（刷图/发帧的数据走这条）。⚠️ 第一次点会弹出浏览器的设备选择框（HID 与 WebUSB 要各授权一次）">连接数据端点…</button>
         </div>
         <label class="row"><span>在飞读</span><input id="pn-inflight" class="num" value="4" inputmode="numeric" title="同时在飞的 IN 读条数（连接数据端点时生效）"></label>
         <!-- 攒批：一次 transferOut 带多个 512 B 包。固件仍按 512 B 槽解析（设备看到的包序列不变），
              只是主机少喊几次 —— 60 MHz 单线刷一帧只要 18.9 ms，而"每片一次调用"的固定开销
              （~150 µs × 290 片 ≈ 44 ms）才是帧率的真正瓶颈。512 = 老行为。 -->
         <label class="row"><span>攒批</span><select id="pn-batch" title="一次 USB 传输带多少字节。固件按 512 B 槽解析，所以攒批不改变设备看到的东西，只减少主机侧的调用次数；512 B = 老行为（每片一次 transferOut）。真机实测（AXS15352 · 档 1 · 60 MHz）：512 B → 25.7 fps / 3.6 MB/s，8 KB → 35.3 fps / 4.9 MB/s，再往上没差别">
-          <option value="512">512 B（一片一次调用 · 老行为）</option>
-          <option value="4096">4 KB（8 片 / 次）</option>
-          <option value="8192" selected>8 KB（16 片 / 次 · 实测最优）</option>
-          <option value="16384">16 KB（32 片 / 次）</option>
-          <option value="32768">32 KB（64 片 / 次）</option>
+          <option value="512">512 B</option>
+          <option value="4096">4 KB</option>
+          <option value="8192" selected>8 KB（推荐）</option>
+          <option value="16384">16 KB</option>
+          <option value="32768">32 KB</option>
         </select></label>
         <p class="hint" id="pn-usbinfo">未连接数据端点</p>
-        <p class="hint" id="pn-state">未连接</p>
-      </fieldset>
 
-      <fieldset id="pn-model-card">
-        <legend>屏型号与推荐值</legend>
+      </fieldset>
+      </div>
+      <div id="pn-side-display-panel" class="tool-side-panel" role="tabpanel" aria-labelledby="pn-side-display-tab" data-side-panel="display" hidden>
+        <fieldset id="pn-model-card">
+        <legend>屏型号</legend>
         <label class="row"><span>型号</span><select id="pn-preset"></select></label>
-        <p class="hint" id="pn-preset-note"></p>
+        <details class="helpnote sidebar-note"><summary>型号说明</summary><p class="hint" id="pn-preset-note"></p></details>
         <div class="row btnrow"><button id="pn-preset-apply">套用推荐值</button></div>
         <p class="hint">只改"屏相关"的字段（档位 / SCLK / DC / RST / BL），CS 策略等保持桥页里的设置；写入后照样回读对账。</p>
       </fieldset>
 
-      <fieldset>
-        <legend>面板档（profile）</legend>
+        <fieldset>
+        <legend>通信档位</legend>
         <label class="row"><span>档位</span><select id="pn-profile"></select></label>
         <label class="row"><span>默认线数</span><select id="pn-deflines"><option>1</option><option>2</option><option>4</option></select></label>
-        <label class="chk"><input type="checkbox" id="pn-dcactive" checked> DC 高 = 数据（AXS15352 就是这样）</label>
-        <label class="chk"><input type="checkbox" id="pn-cshold" checked> 翻 DC 时保持 CS（复刻 ESP-IDF 行为）</label>
+        <label class="chk"><input type="checkbox" id="pn-dcactive" checked> DC 高 = 数据</label>
+        <label class="chk"><input type="checkbox" id="pn-cshold" checked> 翻 DC 时保持 CS</label>
         <label class="row"><span>QSPI 写</span><input id="pn-qspiwr" class="num" value="0x02"></label>
         <label class="row"><span>QSPI 像素</span><input id="pn-qspicolor" class="num" value="0x32"></label>
         <label class="row"><span>地址字节</span><input id="pn-qspiaddr" class="num" value="3" inputmode="numeric"></label>
@@ -1304,22 +1348,20 @@
           <button id="pn-prof-set" class="">写入档位</button>
         </div>
       </fieldset>
-
-      <fieldset>
-        <legend>当前生效（只读）</legend>
+      </div>
+      <div id="pn-side-control-panel" class="tool-side-panel" role="tabpanel" aria-labelledby="pn-side-control-tab" data-side-panel="control" hidden>
+        <fieldset>
+        <legend>当前配置</legend>
         <p class="hint">SCLK <b id="pn-sum-sclk">—</b> · 实际 <b id="pn-sclk-actual">—</b></p>
         <p class="hint">CS <b id="pn-sum-cs">—</b></p>
         <p class="hint">辅助脚 <b id="pn-sum-pads">—</b></p>
         <p class="hint">档位 <b id="pn-sum-profile">—</b></p>
-        <div class="row btnrow">
-          <button id="pn-enable" class="primary">使能</button>
-          <button id="pn-disable">失能</button>
-        </div>
+
         <p class="hint">基础配置（SCLK / 模式 / CS 策略 / 通用辅助脚 / 回环自检）在「USB→SPI/QSPI」页；这边只做屏相关的事。</p>
       </fieldset>
 
-      <fieldset id="pn-power-card">
-        <legend>面板电源 / 显示</legend>
+        <fieldset id="pn-power-card">
+        <legend>电源与显示</legend>
         <div class="row btnrow">
           <button id="pn-pwr-on" title="发 STEP 0x11（sleep out）—— 退出睡眠，之后必须等约 120 ms 才能收下一条命令">上电 11h</button>
           <button id="pn-disp-on" title="发 STEP 0x29（display on）—— 打开显示输出；面板要初始化过才会显示内容">开显示 29h</button>
@@ -1335,6 +1377,17 @@
         <label class="chk" title="勾上后：任何「重放 / 单发 / 从此重放」在真正发数据之前，都先按上面的数字补一个 RST 脉冲，再开背光 —— 面板每次重放都从确定的复位态起步（多数屏厂初始化时序的第一个要求）。没配 RST 脚时自动跳过并告警，不挡重放"><input type="checkbox" id="pn-replay-prereset" checked> 重放前先复位 + 开背光</label>
         <p class="hint"><b>RST 脉冲</b>两个数字：<b>前一个</b> = 把面板 RST 脚拉低几毫秒，<b>后一个</b> = 释放之后再多等几毫秒（默认 10 / 120，多数屏厂规值）。走辅助 RST 脚（pad 与有效电平在桥页配），全程非阻塞。这段时间计在重放耗时之外。</p>
       </fieldset>
+      </div>
+      <div id="pn-side-help-panel" class="tool-side-panel" role="tabpanel" aria-labelledby="pn-side-help-tab" data-side-panel="help" hidden>
+        <div class="hint sidebar-help-intro">参数、接线与排障说明</div>
+      </div>
+      <div class="tool-side-actions" aria-label="运行控制">
+<div class="row btnrow">
+          <button id="pn-enable" class="primary">使能</button>
+          <button id="pn-disable">失能</button>
+        </div>
+<p class="hint" id="pn-state">未连接</p>
+      </div>
     </aside>
 
     <section class="main">
@@ -1628,22 +1681,30 @@
 <!-- ============================ USB → I2C 转发桥（HID 0x36） ============================ -->
 <section class="panel" id="tab-i2c">
   <div class="ws">
-    <aside class="side">
-      <fieldset>
-        <legend>探针 · I2C 桥</legend>
+    <aside class="side tool-side" data-sidebar-tabs="i2c">
+      <nav class="tool-side-tabs" role="tablist" aria-label="侧栏设置">
+        <button type="button" id="i2-side-connect-tab" role="tab" aria-controls="i2-side-connect-panel" aria-selected="true" tabindex="0" data-side-tab="connect">连接</button>
+        <button type="button" id="i2-side-bus-tab" role="tab" aria-controls="i2-side-bus-panel" aria-selected="false" tabindex="-1" data-side-tab="bus">总线</button>
+        <button type="button" id="i2-side-diagnostics-tab" role="tab" aria-controls="i2-side-diagnostics-panel" aria-selected="false" tabindex="-1" data-side-tab="diagnostics">诊断</button>
+        <button type="button" id="i2-side-help-tab" role="tab" aria-controls="i2-side-help-panel" aria-selected="false" tabindex="-1" data-side-tab="help">帮助</button>
+      </nav>
+      <div id="i2-side-connect-panel" class="tool-side-panel" role="tabpanel" aria-labelledby="i2-side-connect-tab" data-side-panel="connect">
+        <fieldset>
+        <legend>连接</legend>
         <div class="row btnrow">
-          <button id="i2-connect" class="primary" title="授权 HID（探针的自定义 HID，usage page 0xFF00）。⚠️ 第一次点会弹出浏览器的设备选择框——那个框就是「授权」，在里面选 akaLinkPro 即可">连接探针（授权）</button>
+          <button id="i2-connect" class="primary" title="授权 HID（探针的自定义 HID，usage page 0xFF00）。⚠️ 第一次点会弹出浏览器的设备选择框——那个框就是「授权」，在里面选 akaLinkPro 即可">连接探针</button>
           <button id="i2-reconnect" title="用浏览器记住的探针直接连（不用再点弹框）">重连</button>
         </div>
         <p class="hint" id="i2-info">未连接</p>
         <div class="row btnrow"><button id="i2-pinmap-btn" title="先确认板型，再查看 SDA/SCL、GND 与上拉要求">引脚分配图 / 接线</button></div>
-        <label class="chk" title="不需要硬件：内置 AT24C02@0x50 / MPU6050@0x68 / ADS1115@0x48 / Si5351@0x60 四个假器件，传感器数据是活的（会动的正弦），示例脚本能直接看出效果"><input type="checkbox" id="i2-mock"> 用假探针（无需硬件）</label>
-        <p class="hint" id="i2-state">未连接</p>
+        <label class="chk" title="不需要硬件：内置 AT24C02@0x50 / MPU6050@0x68 / ADS1115@0x48 / Si5351@0x60 四个假器件，传感器数据是活的（会动的正弦），示例脚本能直接看出效果"><input type="checkbox" id="i2-mock"> 模拟探针</label>
+
         <p class="hint">一个探针同时只能被一个页签占着 —— 本页连接前会请别的页签让出（RTT 转发 / J-Scope / SPI 桥 / 调试器）。</p>
       </fieldset>
-
-      <fieldset>
-        <legend>桥配置（HID 0x36 · SET_CFG / GET_CFG）</legend>
+      </div>
+      <div id="i2-side-bus-panel" class="tool-side-panel" role="tabpanel" aria-labelledby="i2-side-bus-tab" data-side-panel="bus" hidden>
+        <fieldset>
+        <legend>总线配置</legend>
         <label class="row"><span>SCL 档</span><select id="i2-scl" title="HPM 的 I2C 只有 100k / 400k / 1M 三个标准档，固件挑「不超过请求值」的最高档，实际值回在下面">
           <option value="100000">100 kHz（标准，最稳）</option>
           <option value="400000">400 kHz（快速）</option>
@@ -1657,20 +1718,20 @@
         </div>
         <p class="hint" id="i2-scl-actual">实际生效：—</p>
       </fieldset>
+      </div>
+      <div id="i2-side-diagnostics-panel" class="tool-side-panel" role="tabpanel" aria-labelledby="i2-side-diagnostics-tab" data-side-panel="diagnostics" hidden>
+        <fieldset>
+        <legend>状态</legend>
+        <div class="row btnrow"><button id="i2-reset" title="总线被拉死（SDA/SCL 常低）时的解药：9 个 SCL 脉冲 + STOP + 控制器复位。会清计数器、保配置">总线恢复</button></div>
 
-      <fieldset>
-        <legend>使能与状态</legend>
-        <div class="row btnrow">
-          <button id="i2-enable" class="primary" title="配置 PA28=SDA / PA29=SCL 并初始化 I2C3。⚠️ 使能期间 SPI 桥的辅助脚 pad16/17（就是这两根）会被拒">使能</button>
-          <button id="i2-disable" title="把两根脚放成高阻输入（不还原成 SPI 复用）">失能</button>
-          <button id="i2-reset" title="总线被拉死（SDA/SCL 常低）时的解药：9 个 SCL 脉冲 + STOP + 控制器复位。会清计数器、保配置">总线恢复</button>
-        </div>
         <p class="hint">状态字 <b id="i2-word">—</b> <span id="i2-word-text"></span></p>
+        <details class="helpnote sidebar-note"><summary>详细计数</summary>
         <p class="hint">ok <b id="i2-c-ok">0</b> · err <b id="i2-c-err">0</b> · tx <b id="i2-c-tx">0 B</b> · rx <b id="i2-c-rx">0 B</b> · nack地址 <b id="i2-c-na">0</b> · nack数据 <b id="i2-c-nd">0</b><br>
           超时 <b id="i2-c-to">0</b> · 总线恢复 <b id="i2-c-rec">0</b> · 单笔耗时 <b id="i2-last-us">—</b> µs</p>
+        </details>
       </fieldset>
 
-      <fieldset>
+        <fieldset>
         <legend>接线与排障</legend>
         <p class="hint"><b>SDA = PA28 = J3[21]</b>（板丝印 SPI_MISO，板上没有上拉）<br>
           <b>SCL = PA29 = J3[19]</b>（板丝印 SPI_MOSI，有 R6 10k；与 USB0_OC 网络共用）<br>
@@ -1682,6 +1743,18 @@
         <details class="helpnote"><summary>接线自检结果判读</summary><p class="hint">判读口诀：<b>事务中曾拉低 SCL=1 且问题位图=0 ⇒ 桥这一侧没问题</b>，没 ACK 就往器件侧查（接线 / 供电 / 地址 / 上拉）。</p></details>
         <p class="hint">⚠️ 探针复位或重烧固件后，桥回到未使能、配置回默认（100 kHz、上拉关）—— 每次连接后先「读取配置」核一眼。</p>
       </fieldset>
+      </div>
+      <div id="i2-side-help-panel" class="tool-side-panel" role="tabpanel" aria-labelledby="i2-side-help-tab" data-side-panel="help" hidden>
+        <div class="hint sidebar-help-intro">参数、接线与排障说明</div>
+      </div>
+      <div class="tool-side-actions" aria-label="运行控制">
+<div class="row btnrow">
+          <button id="i2-enable" class="primary" title="配置 PA28=SDA / PA29=SCL 并初始化 I2C3。⚠️ 使能期间 SPI 桥的辅助脚 pad16/17（就是这两根）会被拒">使能</button>
+          <button id="i2-disable" title="把两根脚放成高阻输入（不还原成 SPI 复用）">失能</button>
+
+        </div>
+<p class="hint" id="i2-state">未连接</p>
+      </div>
     </aside>
 
     <section class="main">

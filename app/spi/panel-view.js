@@ -486,7 +486,9 @@ export class SpiPanelView {
   }
 
   renderState(st){
-    setStatus($('pn-state'), st.text, st.kind || '');
+    const state = $('pn-state');
+    setStatus(state, st.text.startsWith('未连接 ——') && !st.kind ? '未连接' : st.text, st.kind || '');
+    if (state) state.title = st.text;
     $('pn-info').textContent = st.mock ? '假探针（无需硬件）' : (st.hidLabel || '未连接');
     $('pn-usbinfo').textContent = st.dataReady ? st.transportLabel : '未连接数据端点';
     $('pn-mock').checked = !!st.mock;

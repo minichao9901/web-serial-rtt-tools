@@ -646,7 +646,12 @@ export class ScopeView {
           `读取耗时上界 ≤${fmtHz(advice.readCeilingHz)}，不代表持续采样能力。` +
           (fresh ? '依据当前标定。' : '依据粗估，建议先标定。') + (slow ? ` ${slow}` : '稳定性以实采跳拍/USB计数为准。')
         : '采样周期必须是大于 0 的有限数值。';
-      setStatus(rateHint, text, !advice.valid ? 'err' : slow ? 'warn' : '');
+      const short = advice.valid
+        ? `建议起始：${advice.recommendedUs} µs（${fmtHz(advice.recommendedHz)}）` + (slow ? `；${slow}` : fresh ? ' · 已标定' : ' · 待标定')
+        : text;
+      setStatus(rateHint, short, !advice.valid ? 'err' : slow ? 'warn' : '');
+      rateHint.title = text;
+      const detail = $('sc-rate-detail'); if (detail) detail.textContent = text;
     }
     const benchTxt = this.benchUs
       ? (fresh

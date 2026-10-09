@@ -88,6 +88,29 @@ main{flex:1;min-height:0;position:relative}
 .side>fieldset{min-width:0;flex:none}
 .side .hint,.side p,.side .chk,.side label,.side .row>span{overflow-wrap:anywhere;min-width:0}
 .side select,.side input{max-width:100%}
+/* 工具侧栏：顶部 tab、独立滚动的设置、底部常驻运行控制。 */
+.side.tool-side{overflow:hidden;min-height:0;gap:0}
+.tool-side [hidden]{display:none!important}
+.tool-side-tabs{display:flex;flex:none;gap:4px;padding-bottom:10px;border-bottom:1px solid var(--line);margin-bottom:10px}
+.tool-side-tabs button{flex:1;min-width:0;padding:6px 3px;background:transparent;border-color:transparent;color:var(--fg2)}
+.tool-side-tabs button[aria-selected=true]{background:var(--bg2);border-color:var(--line);color:var(--acc)}
+.tool-side-panel{flex:1 1 0;min-height:0;min-width:0;overflow:auto;padding-right:2px}
+.tool-side-panel>fieldset{min-width:0;border:0;border-bottom:1px solid var(--line);border-radius:0;background:transparent;padding:4px 2px 12px;margin-bottom:12px}
+.tool-side-panel>fieldset:last-child{border-bottom:0;margin-bottom:0}
+.tool-side-panel>fieldset>legend{padding:0;font-weight:600;color:var(--fg)}
+.tool-side-actions{flex:none;border-top:1px solid var(--line);padding:8px 2px 2px;margin-top:10px}
+.tool-side-actions .hint{margin-top:5px}
+.tool-side-actions p{font-size:var(--text-xs);line-height:1.5;margin:5px 0 0}
+.tool-side-panel .chk{white-space:normal}
+.tool-side-panel .row>input,.tool-side-panel .row>select{min-width:0}
+.tool-side-panel .sidebar-note>summary{display:flex;justify-content:space-between;align-items:center;list-style:none}
+.tool-side-panel .sidebar-note>summary::after{content:'▸'}
+.tool-side-panel .sidebar-note[open]>summary::after{content:'▾'}
+.sidebar-help-section{border-bottom:1px solid var(--line);padding:9px 2px;margin:0}
+.sidebar-help-section>summary{font-weight:600}
+.sidebar-parameter-help{font-size:var(--text-xs);line-height:1.6;margin:10px 0}
+.sidebar-parameter-help dt{color:var(--fg);margin-top:10px}
+.sidebar-parameter-help dd{margin:3px 0 0;overflow-wrap:anywhere}
 .main{display:flex;flex-direction:column;gap:8px;min-width:0;min-height:0}
 fieldset{border:1px solid var(--line);border-radius:var(--radius-card);padding:6px 10px 9px;margin:0;background:var(--bg2)}
 legend{font-size:var(--text-xs);color:var(--fg2);padding:0 5px;letter-spacing:.4px}
@@ -280,6 +303,7 @@ dialog form{margin-top:16px;text-align:right}
 @media (max-width:860px){
   body{overflow:auto}
   .ws{grid-template-columns:1fr;height:auto}
+  .panel:not([data-workspace])>.ws>.side.tool-side{height:36vh;min-height:220px}
   .panel{position:static}
   main{min-height:0}
   .panel.active{display:block}
@@ -1153,6 +1177,7 @@ body.workspace-focused>.topbar{display:none}
 @media(max-width:600px){
   .panel[data-workspace]>.ws{grid-template-columns:minmax(0,1fr);overflow:auto}
   .panel[data-workspace]>.ws>.side{max-height:36vh;border-right:0;border-bottom:1px solid var(--line)}
+  .panel[data-workspace]>.ws>.side.tool-side{height:36vh;min-height:220px}
   .panel[data-workspace] .main{min-height:400px}
 }
 

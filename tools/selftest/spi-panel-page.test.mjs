@@ -223,16 +223,18 @@ console.log('== 1b. 布局（用户 2026-10 定稿）：右列 tab 化（刷屏 
     const wrap = document.getElementById('pn-code-wrap'), ta = document.getElementById('pn-code-text');
     const pg = document.querySelector('#pn-box-dock .dockpage.on').getBoundingClientRect();
     return { tableH: Math.round(wrap.getBoundingClientRect().height), rows: document.querySelectorAll('#pn-code-body tr').length,
-             taH: Math.round(ta.getBoundingClientRect().height), grow: getComputedStyle(wrap).flexGrow,
+             taH: Math.round(ta.getBoundingClientRect().height), taMin: parseFloat(getComputedStyle(ta).minHeight), grow: getComputedStyle(wrap).flexGrow,
              pageH: Math.round(pg.height), grip: !!document.getElementById('pn-grip-code') };`);
   ok(tb.grow === '1' && tb.tableH >= 120,
      `解析表是**弹性**的那一块（flex-grow=1：${tb.tableH}px / ${tb.pageH}px 页高 / ${tb.rows} 行）—— 不再是写死的 360px`);
-  ok(tb.taH >= 70 && tb.grip, `源码文本框 ${tb.taH}px + 中间有可拖分隔条（70~400px）`);
+  ok(tb.taH >= tb.taMin && tb.taMin >= 56 && tb.grip, `源码文本框 ${tb.taH}px ≥ CSS 下限 ${tb.taMin}px，保留可拖分隔条`);
 
   // 拖分隔条：文本框长高 → **表格同步变矮**（这条才是"吃剩余高度"的功能性证据，与窗口尺寸无关）
   const drag = await ev(`
     const wrap = document.getElementById('pn-code-wrap');
     const grip = document.getElementById('pn-grip-code'), ta = document.getElementById('pn-code-text');
+    // 自动高度可低于手动拖动下限；从范围内的 100px 验证往返，避免把下限钳制误判成布局失败。
+    ta.style.height = '100px';
     const before = Math.round(ta.getBoundingClientRect().height);
     const tableBefore = Math.round(wrap.getBoundingClientRect().height);
     const r = grip.getBoundingClientRect();
