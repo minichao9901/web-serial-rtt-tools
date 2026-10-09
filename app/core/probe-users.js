@@ -20,7 +20,7 @@ export const PROBE_FEATURES = Object.freeze([
   },
   {
     id: 'swo', label: 'SWO 记录', client: t => t.swo?.capture, view: t => t.swo, usbKind: 'dap',
-    resources: ['target-engine', 'debug-pins', 'dap-bulk', 'cdc-mode', 'cdc-port'],
+    resources: ['target-engine', 'debug-pins', 'dap-bulk', 'cdc-mode', 'cdc-port', 'probe-clock'],
     active: t => !!t.swo?.capture?.active, release: t => t.swo.capture.stop(),
   },
   {
@@ -48,7 +48,7 @@ export const PROBE_FEATURES = Object.freeze([
   },
   {
     id: 'spi', label: 'SPI/QSPI', client: t => t.spiSession, usbKind: 'spi',
-    resources: ['spi-bulk', 'spi-pins', 'i2c-pins', 'periodic-engine'],
+    resources: ['spi-bulk', 'spi-pins', 'i2c-pins', 'periodic-engine', 'probe-clock'],
     active: t => !t.spiSession?.usingMock && !!(t.spiSession?.connected || t.spiSession?.dataReady),
     release: async t => { t.spi?.abortLoop?.(); t.panel?.anim?.stop?.(); await t.spiSession.teardown(); },
     guarded: t => !t.spiSession?.usingMock && !!t.spiSession?.busy,
@@ -61,7 +61,7 @@ export const PROBE_FEATURES = Object.freeze([
   },
   {
     id: 'i2c', label: 'I2C', client: t => t.i2c?.session, view: t => t.i2c,
-    resources: ['i2c-pins', 'periodic-engine'],
+    resources: ['i2c-pins', 'periodic-engine', 'probe-clock'],
     active: t => !t.i2c?.session?.usingMock && !!t.i2c?.session?.connected,
     release: async t => { t.i2c?.runner?.stop(); await t.i2c.session.disconnect(); },
   },

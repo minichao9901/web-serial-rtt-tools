@@ -21,3 +21,12 @@ assert.equal(hseRecord.metadata.target.source,'HSE → PLL');assert.equal(hseRec
 const hseModel=analyzeTrace(hseRecord.raw,hseRecord.metadata,hseElf),hseStages=stageOracle(hseModel);
 assert.equal(hseModel.stats.pc,15241);assert.equal(hseModel.stats.unmapped,0);assert.equal(hseModel.stats.overflow,0);assert.equal(hseModel.stats.malformed,0);assert.equal(hseModel.stats.truncated,0);assert.equal(hseStages.mismatchCount,0);assert.equal(hseStages.checked,14967);
 console.log('f103cb-hse72-1m: real HSE 72 MHz record/ELF and 14967 stage checks PASS');
+
+// Dense 64-cycle trace stays paired with the cooperative clock fixture.
+const clockElf=readFileSync('tools/target-firmware/stm32f103cb_swo_clock/fw.elf'),clockRecord=unpackRecording(readFileSync('samples/swo/f103cb-clock240-64.swopc'));
+assert.equal(clockRecord.metadata.elfSha256,createHash('sha256').update(clockElf).digest('hex'));
+assert.equal(clockRecord.metadata.plan.periodCycles,64);assert.equal(clockRecord.metadata.plan.timestamps,false);assert.equal(clockRecord.metadata.target.coreHz,24000000);assert.equal(clockRecord.metadata.receiver.uartHz,240000000);assert.equal(clockRecord.metadata.receiver.actualBaud,24000000);assert.equal(clockRecord.metadata.receiver.osr,10);
+assert.equal(clockRecord.metadata.restored,true);assert.equal(clockRecord.metadata.receiverRestored,true);assert.equal(clockRecord.metadata.targetClockRestored,true);assert.ok(Object.values(clockRecord.metadata.receiverErrors).every(n=>n===0));
+const clockModel=analyzeTrace(clockRecord.raw,clockRecord.metadata,clockElf);
+assert.equal(clockModel.stats.pc,105557);assert.equal(clockModel.stats.mapped,105557);assert.equal(clockModel.stats.unmapped,0);assert.equal(clockModel.stats.malformed,0);assert.equal(clockModel.stats.overflow,0);assert.equal(clockModel.stats.truncated,0);assert.equal(clockModel.stats.itm,0);assert.ok(clockModel.hotspots.some(x=>x.fn==='branch_leaf_a'));assert.ok(!clockModel.hotspots.some(x=>x.fn==='branch_leaf_b'||x.fn==='never_path'));
+console.log('f103cb-clock240-64: 105557 real dense PCs, exact 24 Mbaud /240 MHz, receiver/target restored PASS');

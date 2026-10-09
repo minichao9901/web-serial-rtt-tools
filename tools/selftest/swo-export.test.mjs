@@ -14,7 +14,7 @@ assert.equal(tracePlan({coreHz:50000000,baudRate:25000000}).acpr,1);
 const rounded=tracePlan({coreHz:48000000,baudRate:25000000,allowBaudRounding:true});assert.equal(rounded.baudRate,24000000);assert.equal(rounded.requestedBaudRate,25000000);
 assert.throws(()=>tracePlan({coreHz:8000000,baudRate:25000000,allowBaudRounding:true}),/整除/);
 assert.throws(()=>tracePlan({coreHz:48000000,baudRate:20000000,allowBaudRounding:true}),/偏差/);
-assert.throws(()=>tracePlan({coreHz:72000000,baudRate:26000000}),/25 Mbps/);
+assert.throws(()=>tracePlan({coreHz:72000000,baudRate:31000000}),/30 Mbps/);
 const pc=[0x17,0x40,0,0,8];let raw=Uint8Array.from([...pc,0x70,...pc]);
 const text=[...traceTextChunks(raw,{startAligned:true},null)].join('');assert.match(text,/GAP/);assert.match(text,/PC#1/);assert.match(text,/segment=1/);assert.match(text,/未知|无源码|未载入/);
 raw=new Uint8Array(260000*pc.length);for(let i=0;i<260000;i++)raw.set(pc,i*pc.length);

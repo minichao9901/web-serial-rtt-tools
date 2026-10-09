@@ -4,6 +4,8 @@ import {SourceStore} from '../dbg/source.js';
 import {Elf} from '../elf/elf.js';
 import {selectRange} from './analyze.js';
 import {packRecording,unpackRecording,sha256,MAX_RAW,MAX_META} from './recording.js';
+import {AkaLinkHid} from '../hid/probe.js';
+import {matchedOptions} from './matching.js';
 const $=id=>document.getElementById(id),hex=v=>'0x'+(v>>>0).toString(16).padStart(8,'0');
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const color=s=>{let h=0;for(const c of s)h=(h*31+c.charCodeAt(0))>>>0;return `hsl(${h%360} 65% 64%)`;};
@@ -14,12 +16,13 @@ export class SwoView {
   init(){
     const bind=(id,fn)=>$(id).addEventListener('click',()=>this.action(fn));
     bind('sw-pick',async()=>{const port=await SerialSession.requestPort();await this.refreshPorts();$('sw-port').value=String(this.ports.indexOf(port));});
+    bind('sw-clock-grant',async()=>{const h=new AkaLinkHid();await h.request();await h.close();$('sw-match').textContent='探针时钟配置已授权；记录开始前将读回实际配置。';});
     bind('sw-detect',()=>this.detectTarget());bind('sw-export-c',()=>this.exportText('c'));bind('sw-export-txt',()=>this.exportText('txt'));bind('sw-start',()=>this.start());bind('sw-stop',()=>this.capture.stop());
     bind('sw-import',()=>$('sw-file').click());bind('sw-elf-pick',()=>$('sw-elf-file').click());
     bind('sw-source-pick',()=>{$('sw-source-files').click();});
     bind('sw-save',()=>{if(this.recording)download(packRecording(this.recording.raw,this.recording.metadata),'swo-'+Date.now()+'.swopc');});
     bind('sw-demo',()=>this.loadDemo());bind('sw-analyze',()=>this.analyze());bind('sw-csv',()=>this.exportCsv());
-    for(const id of ['sw-core','sw-baud','sw-period','sw-seconds','sw-itm','sw-exceptions','sw-auto-clock','sw-hse','sw-baud-round'])$(id).addEventListener('change',()=>this.renderPlan());
+    for(const id of ['sw-core','sw-baud','sw-period','sw-seconds','sw-itm','sw-exceptions','sw-auto-clock','sw-hse','sw-baud-round','sw-auto-baud','sw-receiver-mode','sw-target-hz','sw-timestamps'])$(id).addEventListener('change',()=>this.renderPlan());
     $('sw-file').addEventListener('change',()=>this.action(async()=>{const f=$('sw-file').files[0];if(!f)return;if(f.size>MAX_RAW+MAX_META+12)throw Error('记录文件超过大小限制');this.recording=unpackRecording(await f.arrayBuffer());if(this.recording.metadata.format==='raw')this.recording.metadata.startAligned=$('sw-aligned').checked;await this.analyze();}));
     $('sw-elf-file').addEventListener('change',()=>this.action(async()=>{const f=$('sw-elf-file').files[0];if(f)await this.loadElf(await f.arrayBuffer(),f.name);}));
     $('sw-source-files').addEventListener('change',()=>this.action(async()=>{this.sources.indexFileList($('sw-source-files').files);this.renderFiles();if(this.result)await this.selectSample(this.cursor);}));
@@ -39,16 +42,20 @@ export class SwoView {
   }
   async action(fn){try{return await fn();}catch(e){this.error(e);}}
   error(e){$('sw-warning').textContent=e.message||String(e);$('sw-warning').classList.add('bad');}
-  options(){return {coreHz:Number($('sw-core').value)*1e6,baudRate:Number($('sw-baud').value),periodCycles:Number($('sw-period').value),seconds:Number($('sw-seconds').value),itm:$('sw-itm').checked,exceptions:$('sw-exceptions').checked,autoClock:$('sw-auto-clock').checked,hseHz:$('sw-hse').value?Number($('sw-hse').value)*1e6:null,allowBaudRounding:$('sw-baud-round').checked};}
+  options(){return {coreHz:Number($('sw-core').value)*1e6,baudRate:Number($('sw-baud').value),periodCycles:Number($('sw-period').value),seconds:Number($('sw-seconds').value),itm:$('sw-itm').checked,exceptions:$('sw-exceptions').checked,autoClock:$('sw-auto-clock').checked,hseHz:$('sw-hse').value?Number($('sw-hse').value)*1e6:null,allowBaudRounding:$('sw-baud-round').checked,autoBaud:$('sw-auto-baud').checked,receiverMode:Number($('sw-receiver-mode').value),targetClockHz:Number($('sw-target-hz').value),timestamps:$('sw-timestamps').checked};}
   renderPlan(){
     $('sw-core').disabled=this.capture.active||$('sw-auto-clock').checked;
+    $('sw-baud').disabled=this.capture.active||$('sw-auto-baud').checked;
     try{
-      const p=tracePlan(this.options());
-      const minimum=p.pcMinimumBaud/1e6,overMaximum=p.pcMinimumBaud>25000000;
-      $('sw-plan').textContent=`约 ${p.samplesHz.toLocaleString('zh-CN',{maximumFractionDigits:0})} PC 样本/s · 全为 PC 时最低需 ${minimum.toFixed(3)} Mbps · 含时间戳预计 ${(p.estimatedBytes/1000).toFixed(1)} KB/s / 线路 ${(p.wireBytes/1000).toFixed(0)} KB/s`
+      const o=this.options(),preview=matchedOptions({...o,coreHz:o.targetClockHz||o.coreHz},this.capture.receiverSources?.frequencies);
+      const p=this.capture.running?this.capture.metadata.plan:tracePlan(preview),r=this.capture.running?this.capture.metadata.receiver:null,c=preview.receiverEstimate;
+      $('sw-match').textContent=r?`已回读：目标 ${(p.baudRate/1e6).toFixed(6)} Mbps · 接收 ${(r.actualBaud/1e6).toFixed(6)} Mbps · UART ${(r.uartHz/1e6).toFixed(3)} MHz / OSR ${r.osr} / DIV ${r.uartDivider} · 误差 ${(Math.abs(r.actualBaud-p.baudRate)/p.baudRate*100).toFixed(5)}%`:
+        c?`计算预览：目标 ${(p.baudRate/1e6).toFixed(6)} Mbps · 接收 ${(c.actualBaud/1e6).toFixed(6)} Mbps · UART ${(c.uartHz/1e6).toFixed(3)} MHz / OSR ${c.osr} / DIV ${c.div} · 误差 ${(c.error*100).toFixed(5)}%${c.retune?' · 需 PLL1 '+(c.pllHz/1e6).toFixed(3)+' MHz；共享时钟检查通过后才生效':''}`:'该设置没有可用的探针分频';
+      const minimum=p.pcMinimumBaud/1e6,overMaximum=p.pcMinimumBaud>30000000;
+      $('sw-plan').textContent=`约 ${p.samplesHz.toLocaleString('zh-CN',{maximumFractionDigits:0})} PC 样本/s · 全为 PC 时最低需 ${minimum.toFixed(3)} Mbps · ${p.timestamps?'含时间戳':'仅 PC 包'}预计 ${(p.estimatedBytes/1000).toFixed(1)} KB/s / 线路 ${(p.wireBytes/1000).toFixed(0)} KB/s`
         +(p.baudError?` · 目标实际 ${(p.baudRate/1e6).toFixed(3)} Mbps / 请求 ${(p.requestedBaudRate/1e6).toFixed(3)} Mbps · 偏差 ${(p.baudError*100).toFixed(2)}%`:'')
-        +(overMaximum?' · PC 包最低需求已超过探针 25 Mbps 上限；请降低目标主频或增大采样间隔':p.estimatedBytes>p.wireBytes*.8?' · 带宽偏紧，建议增大 PC 间隔':'');
-    }catch(e){$('sw-plan').textContent=e.message;}
+        +(overMaximum?' · PC 包最低需求已超过探针 30 Mbps 上限；请降低目标主频或增大采样间隔':p.estimatedBytes>p.wireBytes*.8?' · 带宽偏紧，建议增大 PC 间隔':'');
+    }catch(e){const o=this.options(),hz=o.targetClockHz||o.coreHz,rate=hz/o.periodCycles;$('sw-plan').textContent=`约 ${rate.toLocaleString('zh-CN',{maximumFractionDigits:0})} PC 样本/s · 全为 PC 时最低需 ${(rate*50/1e6).toFixed(3)} Mbps · ${rate*50>30e6?'已超过探针 30 Mbps 上限；':''}${e.message}`;$('sw-match').textContent='当前设置无法完成带宽匹配';}
   }
   async refreshPorts(){const current=this.ports[Number($('sw-port').value)];this.ports=(await SerialSession.listPorts()).filter(p=>{const i=p.getInfo();return i.usbVendorId===0x0d28&&i.usbProductId===0x0204;});$('sw-port').replaceChildren();this.ports.forEach((p,i)=>{const o=document.createElement('option');o.value=i;o.textContent=`VCOM ${i+1} · ${SerialSession.describe(p)}`;$('sw-port').append(o);});if(current&&this.ports.includes(current))$('sw-port').value=this.ports.indexOf(current);}
   async loadElf(buffer,name='firmware.elf'){
@@ -75,12 +82,12 @@ export class SwoView {
   async detectTarget(){this.capture.probeManager=this.probeManager;this.showTarget(await this.capture.inspect(this.options()));}
   async start(){
     this.pause();$('sw-warning').textContent='';$('sw-warning').classList.remove('bad');await this.refreshPorts();
-    const options={...this.options(),port:this.ports[Number($('sw-port').value)],elfSha256:this.elf?.sha256,verifyElf:p=>this.verifyElf(p),onTarget:t=>this.showTarget(t)};
+    const options={...this.options(),port:this.ports[Number($('sw-port').value)],elfSha256:this.elf?.sha256,elf:this.elf?.elf,verifyElf:p=>this.verifyElf(p),onTarget:t=>this.showTarget(t)};
     this.capture.probeManager=this.probeManager;await this.capture.start(options);
   }
   renderCapture(){const c=this.capture,active=c.active||!!this.exporting;
     $('sw-start').disabled=active||!!this.analyzing;$('sw-stop').disabled=!c.active;
-    for(const id of ['sw-port','sw-pick','sw-core','sw-baud','sw-period','sw-seconds','sw-itm','sw-exceptions','sw-elf-pick','sw-demo','sw-import','sw-aligned','sw-detect','sw-auto-clock','sw-hse','sw-baud-round','sw-source-pick'])$(id).disabled=active;
+    for(const id of ['sw-port','sw-pick','sw-core','sw-baud','sw-period','sw-seconds','sw-itm','sw-exceptions','sw-elf-pick','sw-demo','sw-import','sw-aligned','sw-detect','sw-auto-clock','sw-hse','sw-baud-round','sw-source-pick','sw-auto-baud','sw-receiver-mode','sw-target-hz','sw-timestamps','sw-clock-grant'])$(id).disabled=active;
     $('sw-status').textContent=c.running?`记录中 · ${(c.bytes/1024).toFixed(1)} KiB${this.result?" · 图表为上次分析结果":""}`:(c.busy?'正在连接并配置 SWO…':c.probe?'正在恢复 trace 配置…':c.bytes?`记录结束 · ${(c.bytes/1024).toFixed(1)} KiB · ${c.metadata.restored?'配置已恢复':'恢复未确认'}`:'尚未记录');
     $('sw-save').disabled=!this.recording||active;$('sw-analyze').disabled=!this.recording||active||this.analyzing;$('sw-csv').disabled=!this.result||active||this.analyzing;for(const id of ['sw-export-c','sw-export-txt'])$(id).disabled=!this.recording||active||this.analyzing;this.renderPlan();
   }
@@ -95,9 +102,9 @@ export class SwoView {
   }
   clearResult(){this._sourceId++;for(const id of ['sw-hot','sw-rows','sw-source','sw-source-title','sw-edges','sw-page-info','sw-cursor-text'])$(id).replaceChildren();const canvas=$('sw-chart');canvas.getContext('2d').clearRect(0,0,canvas.width,canvas.height);$('sw-counts').textContent='尚无分析结果';$('sw-cursor').value=0;}
   renderStats(){const r=this.result,s=r.stats;$('sw-counts').textContent=`${s.analyzedSamples.toLocaleString()} PC · ${r.hotspots.length} 个位置 · 缺口 ${r.events.filter(e=>e.kind==='gap').length} · 睡眠包 ${s.sleep} · 中断 ${s.exceptions}`;
-    const notes=[];if(r.metadata.limitReached)notes.push('达到 32 MiB 上限，记录已停止');if(r.metadata.errorLimitReached)notes.push('传输错误过多，记录已停止');if(this.elf?.name==='F103CB 实测示例 ELF')notes.push('正在查看 F103CB 离线实测示例');if(r.metadata.clockCheck?.knownHz===null)notes.push('外部时钟无法由 RCC 单独确定，波特率与时间换算使用填写的核心频率');if(!this.elf)notes.push('未载入 ELF，只显示原始地址');else if(!r.metadata.elfSha256)notes.push('记录未保存 ELF 指纹，映射依赖所选 ELF 与实际固件一致');
+    const notes=[];if(Object.values(r.metadata.receiverErrors||{}).some(v=>v))notes.push('探针接收诊断：'+Object.entries(r.metadata.receiverErrors).filter(([,v])=>v).map(([k,v])=>k+'='+v).join('、'));if(r.metadata.limitReached)notes.push('达到 32 MiB 上限，记录已停止');if(r.metadata.errorLimitReached)notes.push('传输错误过多，记录已停止');if(this.elf?.name==='F103CB 实测示例 ELF')notes.push('正在查看 F103CB 离线实测示例');if(r.metadata.clockCheck?.knownHz===null)notes.push('外部时钟无法由 RCC 单独确定，波特率与时间换算使用填写的核心频率');if(!this.elf)notes.push('未载入 ELF，只显示原始地址');else if(!r.metadata.elfSha256)notes.push('记录未保存 ELF 指纹，映射依赖所选 ELF 与实际固件一致');
     if(s.unmapped)notes.push(`${s.unmapped} 个 PC 未精确落入函数符号`);if(s.skippedBytes)notes.push(`同步前跳过 ${s.skippedBytes} 字节`);if(s.overflow)notes.push(`ITM 溢出 ${s.overflow} 次`);if(s.malformed)notes.push(`未知/损坏数据包 ${s.malformed} 次`);if(s.truncated)notes.push('末尾存在截断包');if(s.droppedEvents)notes.push(`仅分析前 250000 条事件，另有 ${s.droppedEvents} 条未展开（原始记录保留）`);if(r.metadata.transportGaps?.length)notes.push(`传输错误 ${r.metadata.transportGaps.length} 次`);if(r.symbolNote)notes.push(r.symbolNote);
-    $('sw-warning').textContent=notes.join('；');$('sw-warning').classList.toggle('bad',!!(s.overflow||s.malformed||s.droppedEvents||r.metadata.transportGaps?.length));
+    $('sw-warning').textContent=notes.join('；');$('sw-warning').classList.toggle('bad',!!(s.overflow||s.malformed||s.droppedEvents||r.metadata.transportGaps?.length||Object.values(r.metadata.receiverErrors||{}).some(v=>v)));
   }
   fullRange(){if(!this.result)return;$('sw-from').value=0;$('sw-to').value=Math.max(0,this.result.pcSamples.length-1);$('sw-filter').value='';}
   renderRange(){if(!this.result)return;const max=Math.max(0,this.result.pcSamples.length-1);this.from=Math.max(0,Math.min(max,Number($('sw-from').value)||0));this.to=Math.max(this.from,Math.min(max,Number($('sw-to').value)||0));$('sw-from').value=this.from;$('sw-to').value=this.to;this.selection=selectRange(this.result,this.from,this.to,$('sw-filter').value);this.page=0;this.renderRows();this.renderHot();this.draw();$('sw-edges').textContent='当前区间的相邻采样跳转（不是调用关系）：'+this.selection.transitions.slice(0,6).map(e=>`${e.from} → ${e.to} (${e.count})`).join(' · ');}

@@ -821,6 +821,7 @@ test-swo:
 	$(NODE) tools/selftest/swo-capture.test.mjs
 	$(NODE) tools/selftest/swo-export.test.mjs
 	$(NODE) tools/selftest/swo-demo.test.mjs
+	$(NODE) tools/selftest/swo-matching.test.mjs
 test-swo-page:
 	$(NODE) tools/selftest/swo-page.test.mjs
 build-swo-f103cb:
@@ -834,3 +835,9 @@ test-swo-hw:
 
 test-swo-baud-hw:
 	$(NODE) tools/selftest/swo-baud-hw.mjs
+
+.PHONY: build-swo-f103cb-clock test-swo-clock-hw
+build-swo-f103cb-clock:
+	pwsh -NoProfile -File tools/target-firmware/stm32f103cb_swo_clock/build.ps1
+test-swo-clock-hw:
+	$(NODE) tools/selftest/swo-clock-hw.mjs

@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';import {WebUsbDapProbe} from '../../app/rtt/dap-webusb.js';import {SwoCapture} from '../../app/swo/capture.js';
+import {DEFAULT_SOURCES,receiverCandidate} from '../../app/swo/matching.js';
 const savedMethods={authorized:WebUsbDapProbe.authorized,open:WebUsbDapProbe.open};
 const addr=[0xe000edfc,0xe0001000,0xe0001004,0xe0000e80,0xe0000e00,0xe0000e40,0xe0040010,0xe00400f0,0xe0040304,0xe0042004];
 function rig(){const values=new Map(addr.map((a,i)=>[a,i===1?0x40000000:i===4?3:0]));values.set(0xe000ed00,0x411fc231);values.set(0xe0042000,0x20036410);values.set(0x40021004,0);values.set(0x40021000,0x03000083);values.set(0xe0000fb4,1);const before=new Map(values),writes=[];let fail=false,ignore=false,closed=0;
@@ -8,6 +9,11 @@ function rig(){const values=new Map(addr.map((a,i)=>[a,i===1?0x40000000:i===4?3:
  return {c,values,before,writes,probe,get closed(){return closed},set fail(v){fail=v},set ignore(v){ignore=v}};
 }
 const options={coreHz:8000000,baudRate:1000000,periodCycles:4096,seconds:5,port:{}};
+function leased(r){
+ let state,closes=0,reads=0,prepareError=false,releaseError=false;
+ const receiver={open:async serial=>assert.equal(serial,'test'),sources:async()=>({frequencies:DEFAULT_SOURCES}),prepare:async(baud,mode)=>{const p=receiverCandidate(baud,mode);state={actualBaud:p.actualBaud,uartHz:p.uartHz,osr:p.osr};if(prepareError)throw Error('injected receiver prepare failure');return state;},heartbeat:async()=>state,diagnostics:async()=>({overrun:0,framing:++reads>1?1:0,parity:0,lineBreak:0,droppedBytes:0}),close:async()=>{closes++;if(releaseError)throw Error('injected receiver release failure');},hid:{xfer:async()=>{const b=new Uint8Array(34),v=new DataView(b.buffer,2);v.setUint32(12,state.actualBaud,true);v.setUint32(16,state.osr,true);return b;}}};
+ r.c.createReceiver=()=>receiver;return {get closes(){return closes},set prepareError(v){prepareError=v},set releaseError(v){releaseError=v}};
+}
 try{
  let r=rig();await r.c.start(options);assert.equal(r.c.running,true);assert.equal(r.c.metadata.configReadback.acpr,7);await r.c.stop();for(const a of addr)assert.equal(r.values.get(a),r.before.get(a),'restore '+a.toString(16));assert.equal(r.closed,1);assert.equal(r.c.serial.isOpen,false);assert.equal(r.c.metadata.restored,true);
  r=rig();r.values.set(0x40021004,0x34040a);const peripheralRead=r.probe.readMemDiagnostic;let clockReads=0;r.probe.readMemDiagnostic=async a=>{if(a===0x40021004&&++clockReads===1)return new Uint8Array(4);return peripheralRead(a)};await r.c.start({...options,coreHz:60000000,baudRate:10000000,periodCycles:512});assert.equal(r.c.metadata.clockCheck.knownHz,60000000);assert.equal(clockReads,4,'stale clock read discarded; three matching reads required');await r.c.stop();
@@ -25,5 +31,8 @@ try{
  r=rig();const target=await r.c.inspect({autoClock:true});assert.equal(target.coreHz,8000000);assert.equal(target.core,'Cortex-M3');assert.equal(r.writes.length,0,'target detection is read-only');assert.equal(r.c.active,false);
  r=rig();r.values.set(0x40021004,0x34040a);await r.c.start({...options,autoClock:true,coreHz:8000000,baudRate:10000000});assert.equal(r.c.metadata.plan.coreHz,60000000);await r.c.stop();
  r=rig();const staleCr=r.probe.readMemDiagnostic;let crReads=0;r.probe.readMemDiagnostic=async a=>a===0x40021000&&++crReads===1?new Uint8Array(4):staleCr(a);await r.c.start({...options,autoClock:true});assert.equal(r.c.metadata.target.detectionAttempts,2);await r.c.stop();assert.equal(r.closed,2,'read-only connection retry and final close');
- console.log('SWO capture: register restoration, clock/ELF rejection, failed cleanup retry and cancelled setup PASS');
+ r=rig();let rx=leased(r);await r.c.start({...options,autoBaud:true,receiverMode:2,timestamps:false});assert.equal(r.c.metadata.plan.timestamps,false);assert.equal(r.values.get(0xe0000e80),0x1000d);await r.c.stop();assert.equal(rx.closes,1);assert.equal(r.c.metadata.receiverRestored,true);assert.equal(r.c.metadata.receiverErrors.framing,1,'RX diagnostics retained even when decoding could look valid');assert.equal(r.closed,1);
+ r=rig();rx=leased(r);rx.prepareError=true;await assert.rejects(r.c.start({...options,receiverMode:2}),/prepare failure/);assert.equal(rx.closes,1,'partial receiver setup released');assert.equal(r.c.active,false);for(const a of addr)assert.equal(r.values.get(a),r.before.get(a));
+ r=rig();rx=leased(r);await r.c.start({...options,receiverMode:2});rx.releaseError=true;await assert.rejects(r.c.stop(),/恢复失败/);assert.equal(r.closed,0,'failed clock restoration retains probe ownership');assert.ok(r.c.receiver);rx.releaseError=false;await r.c.stop();assert.equal(r.c.receiver,null);assert.equal(r.c.metadata.receiverRestored,true);assert.equal(r.c.active,false);assert.equal(r.closed,1);
+ console.log('SWO capture: register/receiver restoration, RX errors, clock/ELF rejection, failed cleanup retry and cancelled setup PASS');
 }finally{Object.assign(WebUsbDapProbe,savedMethods);}

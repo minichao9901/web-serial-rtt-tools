@@ -13,7 +13,7 @@ export function* traceTextChunks(raw,metadata={},elf=null,{format='c',sources={}
   const symbols=elf?symbolIndex(elf):null,comment=text=>format==='c'?'/* '+clean(text)+' */\n':clean(text)+'\n';
   let text='',event=0,sample=0;const sourceCache=new Map();
   const lines=path=>{if(!sourceCache.has(path))sourceCache.set(path,typeof sources[path]==='string'?sources[path].split(/\r?\n/):null);return sourceCache.get(path);};
-  yield comment('SWO PC 采样执行落点 · 完整原始记录解码 · '+raw.length+' bytes')+comment('本文件用于阅读，非可编译程序；相邻落点不是直接调用，未观测指令与分支不会被补齐。')+comment('段内周期来自 ITM 时间戳；未知/延迟时间明确保留，睡眠可能停止周期计数。')+comment('ELF SHA256: '+(metadata.elfSha256||'未保存'))+comment('参数: '+JSON.stringify(metadata.plan||{}));
+  yield comment('SWO PC 采样执行落点 · 完整原始记录解码 · '+raw.length+' bytes')+comment('本文件用于阅读，非可编译程序；相邻落点不是直接调用，未观测指令与分支不会被补齐。')+comment('段内周期来自 ITM 时间戳；未知/延迟时间明确保留，睡眠可能停止周期计数。')+comment('ELF SHA256: '+(metadata.elfSha256||'未保存'))+comment('参数: '+JSON.stringify(metadata.plan||{}))+comment('探针实际接收: '+JSON.stringify(metadata.receiver||{}))+comment('接收错误统计: '+JSON.stringify(metadata.receiverErrors||{}));
   const d=new SwoDecoder({aligned:metadata.startAligned===true,emit:e=>{
     const id=event++,time=e.cycles==null?'time=unknown':'cycles='+e.cycles+' ('+e.timeQuality+')',prefix='event='+id+' segment='+e.segment+' offset='+e.offset+' '+time;
     if(e.kind==='pc'){

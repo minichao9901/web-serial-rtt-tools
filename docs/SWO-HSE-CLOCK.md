@@ -1,5 +1,7 @@
 # Bluepill 外晶时钟与两端 SWO 波特率
 
+本页保留早期 200 MHz 接收端与目标恢复试验。当前为 240 MHz /30 Mbaud 默认，目标保留协作 HSE 程序，最新状态见 [双端匹配与验收](SWO-CLOCK-MATCHING.md)。
+
 WeAct 官方 BluePill-Plus 资料标注系统晶振为 8 MHz。当前用户程序选择 HSI 8 MHz，RCC 识别结果反映的是实际配置；有外晶并不代表程序已启用。新增独立的 HSE 8 MHz → PLL ×9 → 72 MHz 测试靶子，旧 HSI 离线示例及 ELF 保持匹配。
 
 ## 两端配置

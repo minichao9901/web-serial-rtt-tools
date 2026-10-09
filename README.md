@@ -27,7 +27,7 @@
 | SPI转发 | 外部 SPI 主机数据经探针从机 DMA 转为 CDC；附引脚分配图 |
 | J-Scope 波形 | 1–8 通道变量采集、速率标定、触发、游标、CSV / 原始包与分项质量报告 |
 | 烧录器 | ELF / HEX / BIN 的擦除、编程、校验和复位；按支持的目标算法工作 |
-| SWO PC 采样 | F103 经 SWO→VCOM 记录，ELF/源码离线定位、热点、样本序列与回放；[实测与使用说明](docs/SWO-PC-SAMPLING.md) |
+| SWO PC 采样 | F103 经 SWO→VCOM 记录，ELF/源码离线定位、热点、样本序列与完整导出；[使用说明](docs/SWO-PC-SAMPLING.md)、[240 MHz / 30 Mbaud 双端匹配](docs/SWO-CLOCK-MATCHING.md) |
 | 调试器 | 源码断点、单步、变量、调用栈与 RTT；ARM / RV32 异常诊断及现场报告 |
 | USB→SPI/QSPI | 单/双/四线事务、命令表、寄存器、脚本、实时值、NOR Flash 与回环测试 |
 | SPI/QSPI 屏 | 初始化表解析与重放、图案 / 图片 / 动画 / 视频、局部刷新及支持的读回模式 |

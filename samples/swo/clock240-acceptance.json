@@ -1,0 +1,631 @@
+{
+  "date": "2026-10-09",
+  "probeFirmwareSha256": "660d9c60f6490eec28c4647be51d8c1f98b7b1fca67ad700aedf47b2b47247bc",
+  "targetElfSha256": "4fb488be3554e9c9713cb40a01ee7dfb94e1f6b689b188db9d0a026000d0d677",
+  "originalTargetFullFlashSha256": "5c54ac4301861d8827a31bbaf2d995f6fd2e2b58a845e706a4d367d352adce40",
+  "hardware": {
+    "rows": [
+      {
+        "fullUniqueOracle": 285,
+        "fullUnmapped": 0,
+        "cfg": {
+          "hz": 60000000,
+          "period": 128,
+          "timestamps": false,
+          "itm": false,
+          "seconds": 6
+        },
+        "bytes": 12916276,
+        "metadata": {
+          "receiverBaseline": {
+            "overrun": 0,
+            "framing": 0,
+            "parity": 0,
+            "lineBreak": 0,
+            "droppedBytes": 0
+          },
+          "format": "swo-pc-v1",
+          "startAligned": true,
+          "plan": {
+            "coreHz": 60000000,
+            "baudRate": 30000000,
+            "requestedBaudRate": 30000000,
+            "baudError": 0,
+            "periodCycles": 128,
+            "seconds": 6,
+            "itm": false,
+            "exceptions": false,
+            "timestamps": false,
+            "tap": 0,
+            "post": 1,
+            "acpr": 1,
+            "samplesHz": 468750,
+            "pcMinimumBaud": 23437500,
+            "estimatedBytes": 2343750,
+            "wireBytes": 3000000
+          },
+          "startedAt": "2026-10-09T03:13:34.744Z",
+          "clockCheck": {
+            "cfgr": 3638282,
+            "knownHz": 60000000
+          },
+          "receiver": {
+            "version": 1,
+            "rc": 0,
+            "token": 11,
+            "mode": 2,
+            "requestedBaud": 30000000,
+            "actualBaud": 30000000,
+            "uartHz": 240000000,
+            "systemDivider": 3,
+            "source": 1,
+            "osr": 8,
+            "uartDivider": 1,
+            "pll1Hz": 800000000,
+            "leaseMs": 4964,
+            "blocker": 4294967295
+          },
+          "receiverSources": {
+            "frequencies": [
+              24000000,
+              720000000,
+              600000000,
+              400000000,
+              800000000,
+              666666666,
+              500000000,
+              266666666
+            ],
+            "cpuClock": 50462977,
+            "mfi": 805306401,
+            "mfn": 80000000,
+            "mfd": 240000000
+          },
+          "targetClockOriginalHz": 72000000,
+          "target": {
+            "profile": "stm32f1",
+            "name": "STM32F1 (DEV 0x410)",
+            "core": "Cortex-M3",
+            "cpuid": 1092600369,
+            "device": 537093136,
+            "cfgr": 3638282,
+            "cr": 50551171,
+            "dwt": 1073741824,
+            "source": "HSE → PLL",
+            "external": true,
+            "hseHz": 8000000,
+            "knownHz": 60000000,
+            "coreHz": 60000000,
+            "frequencyBasis": "RCC + user HSE",
+            "swoPin": "PB3",
+            "protocol": "NRZ / 8N1",
+            "detectionAttempts": 1,
+            "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+          },
+          "elfSha256": "4fb488be3554e9c9713cb40a01ee7dfb94e1f6b689b188db9d0a026000d0d677",
+          "transportGaps": [],
+          "configReadback": {
+            "dwt": 1073746979,
+            "itm": 65549,
+            "acpr": 1,
+            "sppr": 2,
+            "dbg": 807
+          },
+          "elapsedMs": 6000.300000011921,
+          "receiverDiagnostics": {
+            "overrun": 0,
+            "framing": 0,
+            "parity": 0,
+            "lineBreak": 0,
+            "droppedBytes": 0
+          },
+          "receiverErrors": {
+            "overrun": 0,
+            "framing": 0,
+            "parity": 0,
+            "lineBreak": 0,
+            "droppedBytes": 0
+          },
+          "receiverRestored": true,
+          "targetClockRestored": true,
+          "restored": true
+        },
+        "errors": [],
+        "stats": {
+          "bytes": 12916276,
+          "packets": 2820923,
+          "pc": 2424768,
+          "sleep": 396155,
+          "itm": 0,
+          "exceptions": 0,
+          "sync": 21,
+          "overflow": 0,
+          "malformed": 0,
+          "skippedBytes": 0,
+          "truncated": 0,
+          "mapped": 217359,
+          "analyzedSamples": 217359,
+          "droppedEvents": 2570944,
+          "unmapped": 0
+        },
+        "oracle": 245,
+        "stage": {
+          "checked": 0,
+          "matched": 0,
+          "accuracy": null,
+          "counts": {},
+          "mismatches": [],
+          "mismatchCount": 0,
+          "ambiguousCount": 0,
+          "ambiguous": []
+        }
+      },
+      {
+        "fullUniqueOracle": 233,
+        "fullUnmapped": 0,
+        "cfg": {
+          "hz": 24000000,
+          "period": 64,
+          "timestamps": false,
+          "itm": false,
+          "seconds": 0.3
+        },
+        "bytes": 553493,
+        "metadata": {
+          "receiverBaseline": {
+            "overrun": 0,
+            "framing": 0,
+            "parity": 0,
+            "lineBreak": 0,
+            "droppedBytes": 0
+          },
+          "format": "swo-pc-v1",
+          "startAligned": true,
+          "plan": {
+            "coreHz": 24000000,
+            "baudRate": 24000000,
+            "requestedBaudRate": 24000000,
+            "baudError": 0,
+            "periodCycles": 64,
+            "seconds": 0.3,
+            "itm": false,
+            "exceptions": false,
+            "timestamps": false,
+            "tap": 0,
+            "post": 0,
+            "acpr": 0,
+            "samplesHz": 375000,
+            "pcMinimumBaud": 18750000,
+            "estimatedBytes": 1875000,
+            "wireBytes": 2400000
+          },
+          "startedAt": "2026-10-09T03:13:45.808Z",
+          "clockCheck": {
+            "cfgr": 361482,
+            "knownHz": 24000000
+          },
+          "receiver": {
+            "version": 1,
+            "rc": 0,
+            "token": 12,
+            "mode": 2,
+            "requestedBaud": 24000000,
+            "actualBaud": 24000000,
+            "uartHz": 240000000,
+            "systemDivider": 3,
+            "source": 1,
+            "osr": 10,
+            "uartDivider": 1,
+            "pll1Hz": 800000000,
+            "leaseMs": 4964,
+            "blocker": 4294967295
+          },
+          "receiverSources": {
+            "frequencies": [
+              24000000,
+              720000000,
+              600000000,
+              400000000,
+              800000000,
+              666666666,
+              500000000,
+              266666666
+            ],
+            "cpuClock": 50462977,
+            "mfi": 805306401,
+            "mfn": 80000000,
+            "mfd": 240000000
+          },
+          "targetClockOriginalHz": 72000000,
+          "target": {
+            "profile": "stm32f1",
+            "name": "STM32F1 (DEV 0x410)",
+            "core": "Cortex-M3",
+            "cpuid": 1092600369,
+            "device": 537093136,
+            "cfgr": 361482,
+            "cr": 50551171,
+            "dwt": 1073741824,
+            "source": "HSE → PLL",
+            "external": true,
+            "hseHz": 8000000,
+            "knownHz": 24000000,
+            "coreHz": 24000000,
+            "frequencyBasis": "RCC + user HSE",
+            "swoPin": "PB3",
+            "protocol": "NRZ / 8N1",
+            "detectionAttempts": 1,
+            "probe": "B4444F2110DDDAFE44800BBB0AE800E0"
+          },
+          "elfSha256": "4fb488be3554e9c9713cb40a01ee7dfb94e1f6b689b188db9d0a026000d0d677",
+          "transportGaps": [],
+          "configReadback": {
+            "dwt": 1073746945,
+            "itm": 65549,
+            "acpr": 0,
+            "sppr": 2,
+            "dbg": 807
+          },
+          "elapsedMs": 300.09999999403954,
+          "receiverDiagnostics": {
+            "overrun": 0,
+            "framing": 0,
+            "parity": 0,
+            "lineBreak": 0,
+            "droppedBytes": 0
+          },
+          "receiverErrors": {
+            "overrun": 0,
+            "framing": 0,
+            "parity": 0,
+            "lineBreak": 0,
+            "droppedBytes": 0
+          },
+          "receiverRestored": true,
+          "targetClockRestored": true,
+          "restored": true
+        },
+        "errors": [],
+        "stats": {
+          "bytes": 553493,
+          "packets": 118411,
+          "pc": 105557,
+          "sleep": 12854,
+          "itm": 0,
+          "exceptions": 0,
+          "sync": 0,
+          "overflow": 0,
+          "malformed": 0,
+          "skippedBytes": 0,
+          "truncated": 0,
+          "mapped": 105557,
+          "analyzedSamples": 105557,
+          "droppedEvents": 0,
+          "unmapped": 0
+        },
+        "oracle": 233,
+        "stage": {
+          "checked": 0,
+          "matched": 0,
+          "accuracy": null,
+          "counts": {},
+          "mismatches": [],
+          "mismatchCount": 0,
+          "ambiguousCount": 0,
+          "ambiguous": []
+        }
+      }
+    ],
+    "fixture": "tools/target-firmware/stm32f103cb_swo_clock/fw.elf",
+    "passed": true
+  },
+  "clockLease": {
+    "serial": "B4444F2110DDDAFE44800BBB0AE800E0",
+    "rows": [
+      {
+        "mode": 0,
+        "baud": 30000000,
+        "status": [
+          1,
+          0,
+          13,
+          1,
+          30000000,
+          30000000,
+          240000000,
+          3,
+          1,
+          8,
+          1,
+          800000000,
+          4976,
+          4294967295
+        ],
+        "restoredAllClocks": true
+      },
+      {
+        "mode": 0,
+        "baud": 24000000,
+        "status": [
+          1,
+          0,
+          14,
+          1,
+          24000000,
+          24000000,
+          240000000,
+          3,
+          1,
+          10,
+          1,
+          800000000,
+          4976,
+          4294967295
+        ],
+        "restoredAllClocks": true
+      },
+      {
+        "mode": 1,
+        "baud": 18000000,
+        "status": [
+          1,
+          0,
+          15,
+          2,
+          18000000,
+          18000000,
+          180000000,
+          4,
+          1,
+          10,
+          1,
+          800000000,
+          4976,
+          4294967295
+        ],
+        "restoredAllClocks": true
+      },
+      {
+        "mode": 2,
+        "baud": 23000000,
+        "status": [
+          1,
+          0,
+          16,
+          3,
+          23000000,
+          23000000,
+          230000000,
+          4,
+          4,
+          10,
+          1,
+          920000000,
+          4976,
+          4294967295
+        ],
+        "restoredAllClocks": true
+      }
+    ],
+    "before": [
+      [
+        16842752,
+        134218761,
+        134218761,
+        134218761,
+        134218761,
+        134218761,
+        134218761,
+        134218761,
+        134218761,
+        152044551,
+        152044551,
+        134218759
+      ],
+      [
+        134218759,
+        134218761,
+        134218761,
+        134218761,
+        152044553,
+        152044553,
+        152044553,
+        50462978,
+        134218761,
+        152044553,
+        134218761,
+        50462978
+      ],
+      [
+        134218761,
+        134218761,
+        134218761,
+        134218761,
+        134218761,
+        152044550,
+        134218755,
+        134218755,
+        134218755,
+        134218755,
+        201328137,
+        201328137
+      ]
+    ],
+    "sources": [
+      1,
+      0,
+      24000000,
+      720000000,
+      600000000,
+      400000000,
+      800000000,
+      666666666,
+      500000000,
+      266666666,
+      50462977,
+      805306401,
+      80000000,
+      240000000
+    ],
+    "passed": true,
+    "heartbeat150Checks": true,
+    "timeoutRestored": true,
+    "cpuUnchanged": true,
+    "spiClockUnchanged": true
+  },
+  "clockLeaseSpiEnabled": {
+    "serial": "B4444F2110DDDAFE44800BBB0AE800E0",
+    "rows": [
+      {
+        "mode": 0,
+        "baud": 30000000,
+        "status": [
+          1,
+          0,
+          5,
+          1,
+          30000000,
+          30000000,
+          240000000,
+          3,
+          1,
+          8,
+          1,
+          800000000,
+          4976,
+          4294967295
+        ],
+        "restoredAllClocks": true
+      },
+      {
+        "mode": 0,
+        "baud": 24000000,
+        "status": [
+          1,
+          0,
+          6,
+          1,
+          24000000,
+          24000000,
+          240000000,
+          3,
+          1,
+          10,
+          1,
+          800000000,
+          4976,
+          4294967295
+        ],
+        "restoredAllClocks": true
+      },
+      {
+        "mode": 1,
+        "baud": 18000000,
+        "status": [
+          1,
+          0,
+          7,
+          2,
+          18000000,
+          18000000,
+          180000000,
+          4,
+          1,
+          10,
+          1,
+          800000000,
+          4976,
+          4294967295
+        ],
+        "restoredAllClocks": true
+      },
+      {
+        "mode": 2,
+        "baud": 23000000,
+        "status": [
+          1,
+          0,
+          8,
+          3,
+          23000000,
+          23000000,
+          230000000,
+          4,
+          4,
+          10,
+          1,
+          920000000,
+          4976,
+          4294967295
+        ],
+        "restoredAllClocks": true
+      }
+    ],
+    "before": [
+      [
+        16842752,
+        134218761,
+        134218761,
+        134218761,
+        134218761,
+        134218761,
+        134218761,
+        134218761,
+        134218761,
+        152044551,
+        152044551,
+        134218759
+      ],
+      [
+        134218759,
+        134218761,
+        134218761,
+        134218761,
+        152044553,
+        152044553,
+        152044553,
+        50462978,
+        134218761,
+        152044553,
+        134218761,
+        50462978
+      ],
+      [
+        134218761,
+        134218761,
+        134218761,
+        134218761,
+        134218761,
+        152044550,
+        134218755,
+        134218755,
+        134218755,
+        134218755,
+        201328137,
+        201328137
+      ]
+    ],
+    "sources": [
+      1,
+      0,
+      24000000,
+      720000000,
+      600000000,
+      400000000,
+      800000000,
+      666666666,
+      500000000,
+      266666666,
+      50462977,
+      805306401,
+      80000000,
+      240000000
+    ],
+    "passed": true,
+    "heartbeat150Checks": true,
+    "timeoutRestored": true,
+    "cpuUnchanged": true,
+    "spiClockUnchanged": true
+  },
+  "limits": "One probe / F103CB / finite windows. SPI clock only; no external SPI throughput measurement. PC samples are statistical trace. UART LSR counters record observed flags, not exact damaged byte count."
+}
