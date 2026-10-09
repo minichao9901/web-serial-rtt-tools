@@ -304,7 +304,7 @@ export class DbgView {
   renderElfInfo(){
     const el=$('d-elf-info');if(!el)return;
     if(!this.sym){el.textContent='未载入 ELF';el.title='';return;}
-    el.textContent=`${baseName(this.elfName)||'ELF'} · ${this.sym.size} 符号`+(this.sym.note?' · ⚠':'');
+    el.textContent=`${baseName(this.elfName)||'ELF'}：${this.sym.summary()}`;
     el.title=`${this.elfName||'ELF'}：${this.sym.summary()}`;
   }
 

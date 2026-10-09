@@ -829,7 +829,7 @@ fieldset.folded > legend::after{content:' · 已折叠';color:var(--fg2);font-si
 #tab-dbg .d-side-tabs button{flex:1;min-width:0;padding:6px 4px;color:var(--fg2);background:transparent;border-color:transparent}
 #tab-dbg .d-side-tabs button[aria-selected=true]{color:var(--acc);background:var(--bg2);border-color:var(--line)}
 #tab-dbg .d-side-count{font-size:11px;color:var(--fg2)}
-#tab-dbg #d-elf-info{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#tab-dbg #d-elf-info{white-space:normal;overflow-wrap:anywhere}
 #tab-dbg #d-bp-cap{font-size:11px;margin-left:6px;font-weight:normal}
 #tab-dbg #d-bt-status:empty{display:none}
 #tab-dbg .side .row>span:first-child{width:var(--label-w)}
@@ -1203,8 +1203,8 @@ body.workspace-focused>.topbar{display:none}
 #tab-dbg .inspector-table .ty,#tab-dbg .inspector-table .ad{color:var(--fg2)}
 #tab-dbg .inspector-table .ad{text-align:right}
 #tab-dbg .inspector-table .regrow input.rv{width:100%;text-align:right;color:var(--fg);border-radius:2px}
-#tab-dbg .inspector-table .regrow.chg input.rv{color:var(--fg)}
-#tab-dbg .inspector-table .regrow.chg{background:transparent}
+#tab-dbg .inspector-table .regrow.chg input.rv{color:#ffd479}
+#tab-dbg .inspector-table .regrow.chg{background:#3a2f12}
 #tab-dbg .inspector-table .regrow:hover,#tab-dbg .inspector-table .wrow:hover,#tab-dbg .inspector-table .wkid:hover,#tab-dbg .inspector-table .symrow:hover{background:var(--bg3)}
 #tab-dbg .inspector-table .hint,#tab-dbg .inspector-table .symmore{padding:4px;white-space:normal}
 
