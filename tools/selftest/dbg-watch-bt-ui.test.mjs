@@ -29,7 +29,7 @@ view.presentLocals({rows:[{name:'<script>',type:{name:'int'},value:'42'}]},0);as
 view._syncButtons();assert.equal(nodes.get('d-bt').disabled,false);
 view.session.halted=false;view._syncButtons();
 assert.equal(nodes.get('d-bt').disabled,true);assert.equal(view._btSnapshotValid,false);
-assert.match(nodes.get('d-bt-list').textContent,/重新回溯/);
+assert.match(nodes.get('d-bt-list').textContent,/栈帧已失效/);
 view.session.connected=false;view._syncButtons();assert.equal(nodes.get('d-wp-add').disabled,true);
 assert.equal(completeLine('wp variable rw').value,'wp variable rw');
 assert.equal(completeLine('wp variable w 6').value,'wp variable w 64');

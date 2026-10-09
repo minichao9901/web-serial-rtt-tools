@@ -325,7 +325,7 @@ console.log('== 6. 断点：继续 → 命中 → 再继续（跨过断点）=='
     document.querySelector('#d-bp-list .bprow button').click();
     await new Promise(r=>setTimeout(r, 250));
     return { n: window.__tools.dbg.session.bps.length, text: document.getElementById('d-bp-list').textContent };`);
-  ok(after.n === 0 && /还没有断点/.test(after.text), '点断点列表里的 × 能删掉', JSON.stringify(after));
+  ok(after.n === 0 && /无断点/.test(after.text), '点断点列表里的 × 能删掉', JSON.stringify(after));
 }
 
 // ==================================================================== 7

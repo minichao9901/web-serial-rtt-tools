@@ -705,38 +705,43 @@
 <section class="panel" id="tab-dbg" data-workspace="dbg">
   <div class="ws">
     <aside class="side">
+      <nav class="d-side-tabs" role="tablist" aria-label="调试器侧栏">
+        <button id="d-side-session-tab" role="tab" aria-selected="true" aria-controls="d-side-session-panel">会话</button>
+        <button id="d-side-breaks-tab" role="tab" aria-selected="false" aria-controls="d-side-breaks-panel" tabindex="-1">断点 <span id="d-side-break-count" class="d-side-count" hidden></span></button>
+        <button id="d-side-frames-tab" role="tab" aria-selected="false" aria-controls="d-side-frames-panel" tabindex="-1">栈帧</button>
+      </nav>
+      <div id="d-side-session-panel" role="tabpanel" aria-labelledby="d-side-session-tab">
       <fieldset>
         <legend>连接</legend>
         <label class="row"><span>后端</span>
-          <select id="d-backend" title="WebUSB：与 RTT/烧录共用同一支探针，零安装。模拟目标：内置的假 Cortex-M（有寄存器/内存/FPB 断点），不需要硬件，用来试界面。RISC-V/JTAG：走探针的 JTAG 引擎调 RISC-V 目标（HPM 等），硬件断点用核里的触发器（tselect/tdata）。">
-            <option value="webusb">WebUSB · SWD/ARM（默认）</option>
-            <option value="riscv">WebUSB · RISC-V/JTAG（HPM 等）</option>
-            <option value="mock">模拟目标（不需要硬件）</option>
+          <select id="d-backend" title="调试连接方式">
+            <option value="webusb">SWD / ARM</option>
+            <option value="riscv">JTAG / RISC-V</option>
+            <option value="mock">模拟目标</option>
           </select>
         </label>
         <label class="row" id="d-hpm-target-row" hidden style="display:none"><span>目标板卡</span>
           <select id="d-hpm-target" title="选择板卡以使用对应的内存与复位配置"></select>
         </label>
         <label class="row"><span>SWD 时钟</span>
-          <select id="d-clock" title="SWD 时钟。2026-10 真机实测（akaLinkPro + STM32F103ZE）：10 / 20 / 30 MHz 下寄存器（PPB）、FPB、内存全都正确，内存读比 1 MHz 快 3~4 倍 —— 所以默认 10 MHz。若换了探针固件发现寄存器读回 0/0xFFFFFFFF，连接时会自动退回 1 MHz 并在日志里说明原因（历史上这颗固件高时钟读 PPB 会回 0）。切到 RISC-V/JTAG 后这一格是 JTAG TCK。">
-            <option value="10000">10000（10 MHz，默认）</option>
-            <option value="20000">20000（20 MHz，实测最快）</option>
-            <option value="5000">5000（5 MHz）</option>
-            <option value="2000">2000（2 MHz）</option>
-            <option value="1000">1000（1 MHz，PPB 保守档）</option>
-            <option value="500">500</option>
-            <option value="200">200</option>
+          <select id="d-clock" title="连接后校验通信，必要时降频">
+            <option value="10000">10 MHz（默认）</option>
+            <option value="20000">20 MHz</option>
+            <option value="5000">5 MHz</option>
+            <option value="2000">2 MHz</option>
+            <option value="1000">1 MHz</option>
+            <option value="500">500 kHz</option>
+            <option value="200">200 kHz</option>
           </select>
         </label>
         <div class="row btnrow">
           <button id="d-connect" class="primary">连接</button>
           <button id="d-disconnect" disabled>断开</button>
         </div>
-        <p class="hint">连接前会请别的页签让出探针，并停掉「RTT 转发」的探针桥（它在探针侧一直轮询目标内存，会跟调试抢同一条 SWD）。</p>
       </fieldset>
 
       <fieldset>
-        <legend>符号（.elf）</legend>
+        <legend>符号文件</legend>
         <div class="row btnrow">
           <button id="d-elf-pick">载入 ELF…</button>
           <input type="file" id="d-elf-file" accept=".elf,.axf,.out,.bin" hidden>
@@ -745,42 +750,42 @@
       </fieldset>
 
       <fieldset>
-        <legend>目标</legend>
+        <legend>目标复位</legend>
         <div class="row btnrow">
           <button id="d-reset-halt">复位并停</button>
           <button id="d-reset-run">复位并跑</button>
         </div>
-        <p class="hint">走 AIRCR.SYSRESETREQ（软件复位）：本机好几块板没把 NRST 接到探针，拉复位线看着成功其实没动。</p>
       </fieldset>
-
+      </div>
+      <div id="d-side-breaks-panel" role="tabpanel" aria-labelledby="d-side-breaks-tab" hidden>
       <fieldset>
-        <legend>断点（硬件 FPB）</legend>
+        <legend>硬件断点 <span id="d-bp-cap" class="hint">未连接</span></legend>
         <div id="d-bp-list" class="bplist"></div>
         <div class="row btnrow"><button id="d-bp-clear">清空断点</button></div>
-        <p class="hint" id="d-bp-cap">—</p>
       </fieldset>
       <fieldset>
-        <legend>数据观察点（DWT）</legend>
-        <input id="d-wp-addr" placeholder="变量名 / 0x20000000" aria-label="观察地址或变量">
+        <legend>数据观察点</legend>
+        <input id="d-wp-addr" placeholder="变量名 / 地址" aria-label="观察地址或变量">
         <div class="row btnrow">
           <select id="d-wp-mode" aria-label="观察访问类型"><option value="w">写入</option><option value="r">读取</option><option value="rw">读写</option></select>
-          <select id="d-wp-size" aria-label="观察字节范围"><option>1</option><option>2</option><option selected>4</option><option>8</option><option>16</option><option>32</option><option>64</option></select>
+          <select id="d-wp-size" aria-label="观察字节范围" title="字节范围；地址需按范围对齐"><option>1</option><option>2</option><option selected>4</option><option>8</option><option>16</option><option>32</option><option>64</option></select>
           <button id="d-wp-add">添加</button><button id="d-wp-clear">清空</button>
         </div>
         <div id="d-wp-list" class="bplist"></div>
-        <p class="hint">M3/M4/M7 数据访问时停止；范围须对齐。原有变量监视保持独立。</p>
       </fieldset>
+      </div>
+      <div id="d-side-frames-panel" role="tabpanel" aria-labelledby="d-side-frames-tab" hidden>
       <fieldset>
         <legend>调用栈</legend>
         <div class="row btnrow"><button id="d-bt">栈回溯</button><button id="d-bt-scan">扫描候选地址</button></div>
-        <div id="d-bt-list" class="bplist" aria-live="polite">暂停后点击回溯；需要匹配的 ELF。</div>
-        <p class="hint" id="d-bt-status">点击帧切换源码和局部变量；扫描结果不是已证实调用链。</p>
+        <div id="d-bt-list" class="bplist" aria-live="polite">未回溯</div>
+        <p class="hint" id="d-bt-status"></p>
       </fieldset>
       <fieldset>
         <legend>局部变量 / 参数</legend>
-        <div id="d-locals" class="bplist" aria-live="polite">暂停后回溯，再选择栈帧</div>
-        <p class="hint">只读当前作用域；优化掉或无法恢复的值会标明原因。</p>
+        <div id="d-locals" class="bplist" aria-live="polite">未选择栈帧</div>
       </fieldset>
+      </div>
     </aside>
 
     <section class="main">

@@ -94,6 +94,7 @@ export class DbgView {
     this._bindSessionLog();
     this.faultPanel.init();
     this.session.sym = null;
+    this.initSidebar();
 
     // ---- 侧栏 ----
     fillHpmSelect($('d-hpm-target'), store.get('dbg.rvTarget') === 'riscv-other' ? 'riscv-other' : selectedHpmBoard(), true);
@@ -278,6 +279,33 @@ export class DbgView {
     if (!DbgView.supported()) this._out('这个浏览器没有 WebUSB（桌面版 Chrome/Edge 才有）—— 可以选「模拟目标」体验界面', 'warn');
     this._out('调试器就绪。连上目标后按 h 看命令，Tab 补全、↑↓ 翻历史、Ctrl+C 中断。', 'dim');
     return this;
+  }
+
+  initSidebar(){
+    const names=['session','breaks','frames'];
+    for(const name of names){
+      const button=$(`d-side-${name}-tab`);
+      button?.addEventListener('click',()=>this.selectSidebar(name));
+      button?.addEventListener('keydown',e=>{
+        if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;
+        e.preventDefault();const index=names.indexOf(name),next=e.key==='Home'?0:e.key==='End'?names.length-1:(index+(e.key==='ArrowRight'?1:-1)+names.length)%names.length;
+        this.selectSidebar(names[next]);$(`d-side-${names[next]}-tab`)?.focus();
+      });
+    }
+    this.selectSidebar(store.get('dbg.sideTab','session'));
+  }
+
+  selectSidebar(name){
+    const names=['session','breaks','frames'];if(!names.includes(name))name='session';
+    for(const n of names){const selected=n===name,button=$(`d-side-${n}-tab`),panel=$(`d-side-${n}-panel`);if(panel)panel.hidden=!selected;if(button){button.setAttribute('aria-selected',String(selected));button.tabIndex=selected?0:-1;}}
+    store.set('dbg.sideTab',name);
+  }
+
+  renderElfInfo(){
+    const el=$('d-elf-info');if(!el)return;
+    if(!this.sym){el.textContent='未载入 ELF';el.title='';return;}
+    el.textContent=`${baseName(this.elfName)||'ELF'} · ${this.sym.size} 符号`+(this.sym.note?' · ⚠':'');
+    el.title=`${this.elfName||'ELF'}：${this.sym.summary()}`;
   }
 
   static supported(){ return typeof navigator !== 'undefined' && 'usb' in navigator; }
@@ -536,9 +564,7 @@ export class DbgView {
     this.mem = new Uint8Array(0);
     this.renderRegs(); this.renderMem(); this.renderBps();
     this._syncButtons(false);
-    const info = $('d-elf-info');
-    if (info && this.sym) info.textContent = `已断开（符号表还在：${this.sym.summary()}）`;
-    else if (info) info.textContent = '已断开。';
+    this.renderElfInfo();
   }
 
   /** 一次用户动作的统一包装：忙碌标记 + **独占 SWD** + 错误回显（别让异常静默消失） */
@@ -575,10 +601,6 @@ export class DbgView {
     if (!diagnosis?.error) await this._readMemLocked({ silent: true, auto: true });
     this.renderBps();
     this._syncButtons(true);
-    const cap = $('d-bp-cap');
-    if (cap) cap.textContent = this.session.bpCapacity
-      ? `硬件断点上限 ${this.session.bpCapacity} 个（FPB rev${this.session.caps.rev}）—— 命令 b <地址|符号> 添加，点列表里的 × 删除`
-      : '这颗内核没报告可用的 FPB 比较器（读 FP_CTRL 说 0 个）';
     if (this.session.halted && !diagnosis?.error) await this.afterStop();
     else this._updatePcStrip();
     return true;
@@ -723,14 +745,15 @@ export class DbgView {
 
   _invalidateBacktrace(){
     this.session.clearFrames?.();
-    const locals=$('d-locals');if(locals)locals.textContent='暂停后回溯，再选择栈帧';
+    const locals=$('d-locals');if(locals)locals.textContent='未选择栈帧';
     if(!this._btSnapshotValid) return;
     this._btSnapshotValid=false;
-    const box=$('d-bt-list'); if(box) box.textContent='目标状态已变化，请重新回溯';
+    const box=$('d-bt-list'); if(box) box.textContent='栈帧已失效';
     const status=$('d-bt-status'); if(status) status.textContent='';
   }
 
   presentBacktrace(result){
+    this.selectSidebar('frames');
     const box=$('d-bt-list'); if(!box) return;
     box.textContent='';
     const locals=$('d-locals');if(locals)locals.textContent=result.scan?'候选地址没有可靠帧上下文，不能读取局部变量':result.frames[0]?.regs?'正在读取当前帧变量…':'当前架构或 ELF 没有可靠的栈帧上下文';
@@ -738,8 +761,8 @@ export class DbgView {
     for(const [i,frame] of result.frames.entries()){
       const row=document.createElement('button'); row.className='mono';
       const loc=frame.loc;
-      row.textContent=`#${i} ${frame.name||hex32(frame.pc)} [${frame.kind}]${loc?' '+loc.file+':'+loc.line:''}`;
-      row.title=`PC ${hex32(frame.pc)} · SP ${hex32(frame.sp)}`;
+      row.textContent=`#${i} ${frame.name||hex32(frame.pc)}${loc?' '+baseName(loc.file)+':'+loc.line:''}${frame.kind==='candidate'?' [候选]':''}`;
+      row.title=`PC ${hex32(frame.pc)} · SP ${hex32(frame.sp)} · ${frame.kind}${loc?'\n'+loc.file+':'+loc.line:''}`;
       row.disabled=frame.kind==='candidate'&&!loc;row.dataset.frame=String(i);
       if(!result.scan)row.setAttribute('aria-pressed',String(i===0));
       row.addEventListener('click',()=>result.scan?this.showSource(loc.file,loc.line):this.runLine(`frame ${i}`));
@@ -778,11 +801,14 @@ export class DbgView {
       const del=document.createElement('button'); del.textContent='×'; del.title='删除数据观察点';
       del.addEventListener('click',()=>this.runLine(`wpd ${item.slot+1}`)); row.append(text,del); box.append(row);
     }
-    if(!this.session.dwt.items.length) box.textContent='尚无数据观察点';
+    if(!this.session.dwt.items.length) box.textContent='无观察点';
   }
 
   renderBps(){
     this.renderDwt();
+    const used=this.session.bps.length,cap=$('d-bp-cap'),badge=$('d-side-break-count'),total=used+this.session.dwt.items.length;
+    if(cap){cap.textContent=this.session.connected?this.session.bpCapacity?`${used} / ${this.session.bpCapacity}`:'不可用':'未连接';cap.title=this.session.connected?`${this.session.arch.name==='riscv'?'硬件触发器':`FPB rev${this.session.caps.rev}`} · ${used} / ${this.session.bpCapacity} 个硬件断点`:'';}
+    if(badge){badge.textContent=String(total);badge.hidden=!total;}
     const box = $('d-bp-list');
     if (!box) return;
     box.textContent = '';
@@ -790,7 +816,7 @@ export class DbgView {
     if (!list.length){
       const d = document.createElement('div');
       d.className = 'hint';
-      d.textContent = '还没有断点（命令 b main / b 0x08000123，或点源码行号）';
+      d.textContent = '无断点';
       box.appendChild(d);
       return;
     }
@@ -1184,8 +1210,7 @@ export class DbgView {
         .catch(() => {})
         .finally(() => this._renderSrcSuggest());
       const info = st.summary();
-      const el = $('d-elf-info');
-      if (el) el.textContent = `${name || 'ELF'}：${info}`;
+      this.renderElfInfo();
       this._out(`已载入符号：${name || 'ELF'} —— ${info}`, st.note ? 'warn' : 'ok');
       if (st.lines) this._out(`　${st.lines.summary()}`, 'dim');
       // 监视项重新解析一遍（换了 ELF 之后地址/类型都可能变）

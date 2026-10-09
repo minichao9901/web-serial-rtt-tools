@@ -820,6 +820,18 @@ fieldset.folded > legend::after{content:' · 已折叠';color:var(--fg2);font-si
  *   左右之间也有分隔条。两处尺寸都记在 localStorage（dbg.dockW / dbg.termH）。
  */
 #tab-dbg .mono{font-family:var(--mono)}
+#tab-dbg .side [hidden]{display:none!important}
+#tab-dbg .side>[role=tabpanel]{flex:none;min-width:0;display:flex;flex-direction:column;gap:12px}
+#tab-dbg .side [role=tabpanel]>fieldset{min-width:0;border:0;border-bottom:1px solid var(--line);border-radius:0;background:transparent;padding:4px 2px 8px}
+#tab-dbg .side [role=tabpanel]>fieldset:last-child{border-bottom:0}
+#tab-dbg .side [role=tabpanel]>fieldset>legend{padding:0;font-weight:600;color:var(--fg)}
+#tab-dbg .d-side-tabs{display:flex;flex:none;gap:5px;position:sticky;top:0;z-index:3;background:var(--bg);padding:0 0 10px;margin-bottom:12px;border-bottom:1px solid var(--line)}
+#tab-dbg .d-side-tabs button{flex:1;min-width:0;padding:6px 4px;color:var(--fg2);background:transparent;border-color:transparent}
+#tab-dbg .d-side-tabs button[aria-selected=true]{color:var(--acc);background:var(--bg2);border-color:var(--line)}
+#tab-dbg .d-side-count{font-size:11px;color:var(--fg2)}
+#tab-dbg #d-elf-info{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#tab-dbg #d-bp-cap{font-size:11px;margin-left:6px;font-weight:normal}
+#tab-dbg #d-bt-status:empty{display:none}
 #tab-dbg .side .row>span:first-child{width:var(--label-w)}
 #tab-dbg .main{gap:8px;min-height:0}
 #tab-dbg .toolbar{flex:none}
