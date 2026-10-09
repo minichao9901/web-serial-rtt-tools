@@ -6,6 +6,7 @@ import {selectRange} from './analyze.js';
 import {packRecording,unpackRecording,sha256,MAX_RAW,MAX_META} from './recording.js';
 import {AkaLinkHid} from '../hid/probe.js';
 import {matchedOptions} from './matching.js';
+import {stm32f1Info} from './target.js';
 const $=id=>document.getElementById(id),hex=v=>'0x'+(v>>>0).toString(16).padStart(8,'0');
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const color=s=>{let h=0;for(const c of s)h=(h*31+c.charCodeAt(0))>>>0;return `hsl(${h%360} 65% 64%)`;};
@@ -16,13 +17,15 @@ export class SwoView {
   init(){
     const bind=(id,fn)=>$(id).addEventListener('click',()=>this.action(fn));
     bind('sw-pick',async()=>{const port=await SerialSession.requestPort();await this.refreshPorts();$('sw-port').value=String(this.ports.indexOf(port));});
-    bind('sw-clock-grant',async()=>{const h=new AkaLinkHid();await h.request();await h.close();$('sw-match').textContent='探针时钟配置已授权；记录开始前将读回实际配置。';});
+    bind('sw-clock-grant',async()=>{const h=new AkaLinkHid();await h.request();await h.close();$('sw-clock-grant').textContent='时钟已授权';$('sw-match').textContent='探针时钟配置已授权；记录开始前将读回实际配置。';});
     bind('sw-detect',()=>this.detectTarget());bind('sw-export-c',()=>this.exportText('c'));bind('sw-export-txt',()=>this.exportText('txt'));bind('sw-start',()=>this.start());bind('sw-stop',()=>this.capture.stop());
     bind('sw-import',()=>$('sw-file').click());bind('sw-elf-pick',()=>$('sw-elf-file').click());
     bind('sw-source-pick',()=>{$('sw-source-files').click();});
     bind('sw-save',()=>{if(this.recording)download(packRecording(this.recording.raw,this.recording.metadata),'swo-'+Date.now()+'.swopc');});
     bind('sw-demo',()=>this.loadDemo());bind('sw-analyze',()=>this.analyze());bind('sw-csv',()=>this.exportCsv());
-    for(const id of ['sw-core','sw-baud','sw-period','sw-seconds','sw-itm','sw-exceptions','sw-auto-clock','sw-hse','sw-baud-round','sw-auto-baud','sw-receiver-mode','sw-target-hz','sw-timestamps'])$(id).addEventListener('change',()=>this.renderPlan());
+    for(const id of ['sw-core','sw-baud','sw-period','sw-seconds','sw-itm','sw-exceptions','sw-baud-round','sw-auto-baud','sw-receiver-mode','sw-target-hz','sw-timestamps'])$(id).addEventListener('change',()=>this.renderPlan());
+    $('sw-hse').addEventListener('change',()=>this.action(()=>this.refreshTargetClock()));
+    $('sw-auto-clock').addEventListener('change',()=>this.target?this.showTarget(this.target):this.renderPlan());
     $('sw-file').addEventListener('change',()=>this.action(async()=>{const f=$('sw-file').files[0];if(!f)return;if(f.size>MAX_RAW+MAX_META+12)throw Error('记录文件超过大小限制');this.recording=unpackRecording(await f.arrayBuffer());if(this.recording.metadata.format==='raw')this.recording.metadata.startAligned=$('sw-aligned').checked;await this.analyze();}));
     $('sw-elf-file').addEventListener('change',()=>this.action(async()=>{const f=$('sw-elf-file').files[0];if(f)await this.loadElf(await f.arrayBuffer(),f.name);}));
     $('sw-source-files').addEventListener('change',()=>this.action(async()=>{this.sources.indexFileList($('sw-source-files').files);this.renderFiles();if(this.result)await this.selectSample(this.cursor);}));
@@ -46,16 +49,23 @@ export class SwoView {
   renderPlan(){
     $('sw-core').disabled=this.capture.active||$('sw-auto-clock').checked;
     $('sw-baud').disabled=this.capture.active||$('sw-auto-baud').checked;
+    $('sw-target-clock-note').hidden=!Number($('sw-target-hz').value);
+    const summary=$('sw-match-summary');summary.classList.remove('bad');
     try{
-      const o=this.options(),preview=matchedOptions({...o,coreHz:o.targetClockHz||o.coreHz},this.capture.receiverSources?.frequencies);
+      const o=this.options();
+      if(o.autoClock&&this.target?.external&&!o.hseHz)throw Error('请在时钟设置填写板载外晶频率');
+      if(!o.targetClockHz&&!o.coreHz){summary.textContent=o.autoClock?'先识别目标与主频':'请填写当前核心频率';$('sw-match').textContent='主频确认后计算收发配置';$('sw-plan').textContent='尚未确定采样率';return;}
+      const preview=matchedOptions({...o,coreHz:o.targetClockHz||o.coreHz},this.capture.receiverSources?.frequencies);
       const p=this.capture.running?this.capture.metadata.plan:tracePlan(preview),r=this.capture.running?this.capture.metadata.receiver:null,c=preview.receiverEstimate;
       $('sw-match').textContent=r?`已回读：目标 ${(p.baudRate/1e6).toFixed(6)} Mbps · 接收 ${(r.actualBaud/1e6).toFixed(6)} Mbps · UART ${(r.uartHz/1e6).toFixed(3)} MHz / OSR ${r.osr} / DIV ${r.uartDivider} · 误差 ${(Math.abs(r.actualBaud-p.baudRate)/p.baudRate*100).toFixed(5)}%`:
         c?`计算预览：目标 ${(p.baudRate/1e6).toFixed(6)} Mbps · 接收 ${(c.actualBaud/1e6).toFixed(6)} Mbps · UART ${(c.uartHz/1e6).toFixed(3)} MHz / OSR ${c.osr} / DIV ${c.div} · 误差 ${(c.error*100).toFixed(5)}%${c.retune?' · 需 PLL1 '+(c.pllHz/1e6).toFixed(3)+' MHz；共享时钟检查通过后才生效':''}`:'该设置没有可用的探针分频';
       const minimum=p.pcMinimumBaud/1e6,overMaximum=p.pcMinimumBaud>30000000;
+      const tight=p.estimatedBytes>p.wireBytes*.8;
+      summary.textContent=(this.capture.running?'已回读 · ':o.targetClockHz?`录制 ${p.coreHz/1e6} MHz · `:'预计 · ')+`${(p.baudRate/1e6).toLocaleString('zh-CN',{maximumFractionDigits:3})} Mbps · ${(p.samplesHz/1000).toFixed(1)}k PC/s`+(tight?' · 带宽偏紧':'');summary.classList.toggle('bad',tight);
       $('sw-plan').textContent=`约 ${p.samplesHz.toLocaleString('zh-CN',{maximumFractionDigits:0})} PC 样本/s · 全为 PC 时最低需 ${minimum.toFixed(3)} Mbps · ${p.timestamps?'含时间戳':'仅 PC 包'}预计 ${(p.estimatedBytes/1000).toFixed(1)} KB/s / 线路 ${(p.wireBytes/1000).toFixed(0)} KB/s`
         +(p.baudError?` · 目标实际 ${(p.baudRate/1e6).toFixed(3)} Mbps / 请求 ${(p.requestedBaudRate/1e6).toFixed(3)} Mbps · 偏差 ${(p.baudError*100).toFixed(2)}%`:'')
         +(overMaximum?' · PC 包最低需求已超过探针 30 Mbps 上限；请降低目标主频或增大采样间隔':p.estimatedBytes>p.wireBytes*.8?' · 带宽偏紧，建议增大 PC 间隔':'');
-    }catch(e){const o=this.options(),hz=o.targetClockHz||o.coreHz,rate=hz/o.periodCycles;$('sw-plan').textContent=`约 ${rate.toLocaleString('zh-CN',{maximumFractionDigits:0})} PC 样本/s · 全为 PC 时最低需 ${(rate*50/1e6).toFixed(3)} Mbps · ${rate*50>30e6?'已超过探针 30 Mbps 上限；':''}${e.message}`;$('sw-match').textContent='当前设置无法完成带宽匹配';}
+    }catch(e){const o=this.options(),hz=o.targetClockHz||o.coreHz,rate=hz/o.periodCycles;$('sw-plan').textContent=`约 ${rate.toLocaleString('zh-CN',{maximumFractionDigits:0})} PC 样本/s · 全为 PC 时最低需 ${(rate*50/1e6).toFixed(3)} Mbps · ${rate*50>30e6?'已超过探针 30 Mbps 上限；':''}${e.message}`;$('sw-match').textContent=e.message;summary.textContent=!o.coreHz&&this.target?.external&&!o.hseHz?'主频待确认 · 请填写外晶频率':/预计需/.test(e.message)?'带宽不足 · 增大 PC 间隔或关闭时间戳':e.message;summary.classList.add('bad');}
   }
   async refreshPorts(){const current=this.ports[Number($('sw-port').value)];this.ports=(await SerialSession.listPorts()).filter(p=>{const i=p.getInfo();return i.usbVendorId===0x0d28&&i.usbProductId===0x0204;});$('sw-port').replaceChildren();this.ports.forEach((p,i)=>{const o=document.createElement('option');o.value=i;o.textContent=`VCOM ${i+1} · ${SerialSession.describe(p)}`;$('sw-port').append(o);});if(current&&this.ports.includes(current))$('sw-port').value=this.ports.indexOf(current);}
   async loadElf(buffer,name='firmware.elf'){
@@ -76,12 +86,23 @@ export class SwoView {
     for(const s of sections){for(const offset of [...new Set([0,Math.max(0,s.size-64)])]){const n=Math.min(64,s.size-offset),expected=elf.bytesAt(s.addr+offset,n,{ro:true});if(!expected)continue;let confirmed=0;for(let i=0;i<4&&confirmed<2;i++){const actual=await probe.readMemDiagnostic(s.addr+offset,n);confirmed=actual.length===n&&!actual.some((v,i)=>v!==expected[i])?confirmed+1:0;}if(confirmed<2){const error=Error('目标代码与 ELF 不符或读回不稳定：'+s.name+' '+hex(s.addr+offset));error.code='SWO_ELF_VERIFY';throw error;}}}
   }
   showTarget(target){
-    this.target=target;if($('sw-auto-clock').checked&&target.knownHz!==null)$('sw-core').value=target.knownHz/1e6;
-    $('sw-target').textContent=`${target.name} · ${target.core} · ${target.source} · ${target.knownHz===null?'主频需要填写 HSE':target.knownHz/1e6+' MHz'} · SWO ${target.swoPin}`;this.renderPlan();
+    this.target=target;if($('sw-auto-clock').checked)$('sw-core').value=target.knownHz===null?'':target.knownHz/1e6;
+    const chip=target.profile==='stm32f1'?'STM32F103':target.name,frequency=target.knownHz===null?'主频待确认':`当前 ${target.knownHz/1e6} MHz`;
+    $('sw-target').textContent=`${chip} · ${target.core} · ${frequency}\n${target.source}${target.external?' · 外晶 '+(target.hseHz===null?'未填写':target.hseHz/1e6+' MHz'):''} · SWO ${target.swoPin}`;
+    $('sw-target').title=`${target.name} · CPUID ${hex(target.cpuid)} · RCC CFGR ${hex(target.cfgr)}`;$('sw-target').classList.toggle('bad',target.knownHz===null);this.renderPlan();
   }
-  async detectTarget(){this.capture.probeManager=this.probeManager;this.showTarget(await this.capture.inspect(this.options()));}
+  refreshTargetClock(){
+    if(!this.target||this.capture.active){this.renderPlan();return;}
+    try{this.showTarget({...this.target,...stm32f1Info({...this.target,hseHz:this.options().hseHz,coreHz:null,autoClock:false})});}
+    catch(e){this.showTarget({...this.target,knownHz:null,coreHz:null});throw e;}
+  }
+  async detectTarget(){
+    this.capture.probeManager=this.probeManager;
+    try{this.showTarget(await this.capture.inspect(this.options()));if(this.result)this.renderStats();else{$('sw-warning').textContent='';$('sw-warning').classList.remove('bad');}}
+    catch(e){this.target=null;if($('sw-auto-clock').checked)$('sw-core').value='';$('sw-target').textContent='识别失败 · 请检查 SWD 连接与外晶设置';$('sw-target').classList.add('bad');this.renderPlan();throw e;}
+  }
   async start(){
-    this.pause();$('sw-warning').textContent='';$('sw-warning').classList.remove('bad');await this.refreshPorts();
+    this.pause();$('sw-warning').textContent='';$('sw-warning').classList.remove('bad');$('sw-export-status').textContent='';await this.refreshPorts();
     const options={...this.options(),port:this.ports[Number($('sw-port').value)],elfSha256:this.elf?.sha256,elf:this.elf?.elf,verifyElf:p=>this.verifyElf(p),onTarget:t=>this.showTarget(t)};
     this.capture.probeManager=this.probeManager;await this.capture.start(options);
   }

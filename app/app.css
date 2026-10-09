@@ -1247,6 +1247,14 @@ fieldset,.toolbar,.sendbar,.stats,.an-measurements,.an-plot,
 .diag-findings p{border-left-width:2px}
 
 /* SWO capture and offline analysis */
+#tab-swo .sw-fold{margin:7px 0 0;border-top:1px solid var(--line);padding-top:6px}
+#tab-swo .sw-fold>summary{cursor:pointer;color:var(--fg2);font-size:12px;user-select:none}
+#tab-swo .sw-fold[open]>summary{margin-bottom:8px;color:var(--fg)}
+#tab-swo .sw-target-info{margin:8px 0;padding:7px 9px;background:var(--bg2);border-left:2px solid var(--acc);white-space:pre-line;font-size:12px;line-height:1.6;overflow-wrap:anywhere}
+#tab-swo .sw-target-info.bad{border-color:var(--warn);color:var(--warn)}
+#tab-swo .sw-match-summary{margin:8px 0;font-size:12px;color:var(--acc);line-height:1.6;overflow-wrap:anywhere}
+#tab-swo .sw-match-summary.bad{color:var(--warn)}
+#tab-swo #sw-files{overflow-wrap:anywhere}
 #tab-swo .sw-main{gap:7px;overflow:hidden}
 #tab-swo .sw-boundary{margin:0;padding:7px 10px;color:#d4b777;background:#d299220d;border-left:2px solid #d29922;font-size:12px;line-height:1.5;flex:none}
 #tab-swo .sw-toolbar{gap:12px;flex-wrap:wrap}
