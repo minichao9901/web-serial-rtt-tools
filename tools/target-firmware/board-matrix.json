@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "description": "四块可直接跑完整流程的板卡，以及每个例程的唯一构建产物入口。路径相对于仓库根。",
+  "description": "活动板卡与每个测试例程的唯一构建产物入口。路径相对于仓库根。",
   "generatedDirectoryPattern": "tools/target-firmware/**/(build|build-*)",
   "boards": {
     "f103cb": {
@@ -138,6 +138,58 @@
           "args": ["-BuildType", "flash_xip"],
           "buildArtifact": "tools/target-firmware/hpm6800evk_dbgstress/build/flash_xip/output/demo.elf",
           "publishedArtifact": "tools/target-firmware/hpm6800evk_dbgstress/fw.elf"
+        }
+      }
+    },
+    "5301evklite": {
+      "status": "active",
+      "label": "HPM5301EVKLite",
+      "chip": "hpm5301evklite",
+      "target": "riscv",
+      "memory": { "flash": null, "ram": null },
+      "viewerRange": "0x00080000-0x00090000",
+      "examples": {
+        "rtt": {
+          "project": "tools/target-firmware/hpm5301evklite_rtt_flood",
+          "script": "tools/target-firmware/hpm5301evklite_rtt_flood/build.ps1",
+          "args": ["-BuildType", "flash_xip"],
+          "buildArtifact": "tools/target-firmware/hpm5301evklite_rtt_flood/build/flash_xip/output/demo.elf",
+          "publishedArtifact": "tools/target-firmware/hpm5301evklite_rtt_flood/fw.elf"
+        },
+        "scope": {
+          "project": "tools/target-firmware/hpm5301evklite_scope",
+          "script": "tools/target-firmware/hpm5301evklite_scope/build.ps1",
+          "args": ["-BuildType", "flash_xip"],
+          "buildArtifact": "tools/target-firmware/hpm5301evklite_scope/build/flash_xip/output/demo.elf",
+          "publishedArtifact": "tools/target-firmware/hpm5301evklite_scope/fw.elf"
+        },
+        "dbgstress": {
+          "project": "tools/target-firmware/hpm5301evklite_dbgstress",
+          "script": "tools/target-firmware/hpm5301evklite_dbgstress/build.ps1",
+          "args": ["-BuildType", "flash_xip"],
+          "buildArtifact": "tools/target-firmware/hpm5301evklite_dbgstress/build/flash_xip/output/demo.elf",
+          "publishedArtifact": "tools/target-firmware/hpm5301evklite_dbgstress/fw.elf"
+        },
+        "spi-echo": {
+          "project": "tools/target-firmware/hpm5301evklite_spi_echo",
+          "script": "tools/target-firmware/hpm5301evklite_spi_echo/build.ps1",
+          "args": ["-BuildType", "flash_xip"],
+          "buildArtifact": "tools/target-firmware/hpm5301evklite_spi_echo/build/flash_xip/output/demo.elf",
+          "publishedArtifact": "tools/target-firmware/hpm5301evklite_spi_echo/fw.elf"
+        },
+        "spi-dma": {
+          "project": "tools/target-firmware/hpm5301evklite_spi_dma",
+          "script": "tools/target-firmware/hpm5301evklite_spi_dma/build.ps1",
+          "args": ["-BuildType", "flash_xip"],
+          "buildArtifact": "tools/target-firmware/hpm5301evklite_spi_dma/build/flash_xip/output/demo.elf",
+          "publishedArtifact": "tools/target-firmware/hpm5301evklite_spi_dma/fw.elf"
+          },
+          "spi-master-dma": {
+            "project": "tools/target-firmware/hpm5301evklite_spi_master",
+            "script": "tools/target-firmware/hpm5301evklite_spi_master/build.ps1",
+            "args": [],
+            "buildArtifact": "tools/target-firmware/hpm5301evklite_spi_master/build/flash_xip/output/demo.elf",
+            "publishedArtifact": "tools/target-firmware/hpm5301evklite_spi_master/fw.elf"
         }
       }
     }

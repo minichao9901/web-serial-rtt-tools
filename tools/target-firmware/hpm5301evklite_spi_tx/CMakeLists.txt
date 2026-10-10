@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.13)
+set(CONFIG_DMA_MGR 1)
+set(SPI_TEST_MODE 0 CACHE STRING "SPI mode 0..3")
+find_package(hpm-sdk REQUIRED HINTS $ENV{HPM_SDK_BASE})
+project(hpm5301evklite_spi_tx)
+sdk_compile_definitions(-DCONFIG_NDEBUG_CONSOLE=1 -DSPI_TEST_MODE=${SPI_TEST_MODE})
+sdk_app_src(src/main.c)

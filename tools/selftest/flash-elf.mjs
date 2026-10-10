@@ -36,6 +36,7 @@ const BOARDS = {
   f103cb:  { label: 'STM32F103CB', chip: 'stm32f103',  backend: 'webusb', target: 'swd',   elf: flowElf('f103cb'), waitMs: 120000 },
   h743:    { label: 'STM32H743',   chip: 'stm32h7',    backend: 'webusb', target: 'swd',   elf: flowElf('h743'),  waitMs: 120000 },
   '6800evk': { label: 'HPM6800EVK', chip: 'hpm6800evk', backend: 'webusb', target: 'riscv', elf: flowElf('6800evk'), waitMs: 360000 },
+  '5301evklite': { label: 'HPM5301EVKLite', chip: 'hpm5301evklite', backend: 'webusb', target: 'riscv', elf: flowElf('5301evklite'), waitMs: 360000 },
 };
 const BOARD_ID = String(arg('board', 'f103ze'));
 const BOARD = BOARDS[BOARD_ID];

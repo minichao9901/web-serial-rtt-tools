@@ -1,0 +1,122 @@
+{
+ "at": "2026-10-09T23:50:22.957Z",
+ "board": "5301evklite",
+ "elf": "/tools/target-firmware/hpm5301evklite_dbgstress/fw.elf",
+ "pass": 61,
+ "fail": 0,
+ "failures": [],
+ "oracle": {
+  "elf": "/tools/target-firmware/hpm5301evklite_dbgstress/fw.elf",
+  "arch": "riscv",
+  "linear": [
+   {
+    "pc": 2147505160,
+    "line": 22,
+    "halted": true
+   },
+   {
+    "pc": 2147505168,
+    "line": 23,
+    "halted": true
+   },
+   {
+    "pc": 2147505174,
+    "line": 24,
+    "halted": true
+   },
+   {
+    "pc": 2147505180,
+    "line": 25,
+    "halted": true
+   },
+   {
+    "pc": 2147505194,
+    "line": 26,
+    "halted": true
+   },
+   {
+    "pc": 2147505198,
+    "line": 26,
+    "halted": true
+   },
+   {
+    "pc": 2147505202,
+    "line": 27,
+    "halted": true
+   },
+   {
+    "pc": 2147505216,
+    "line": 28,
+    "halted": true
+   },
+   {
+    "pc": 2147505220,
+    "line": 28,
+    "halted": true
+   },
+   {
+    "pc": 2147505224,
+    "line": 29,
+    "halted": true
+   },
+   {
+    "pc": 2147505232,
+    "line": 30,
+    "halted": true
+   },
+   {
+    "pc": 2147505236,
+    "line": 30,
+    "halted": true
+   },
+   {
+    "pc": 2147505240,
+    "line": 31,
+    "halted": true
+   },
+   {
+    "pc": 2147505250,
+    "line": 32,
+    "halted": true
+   },
+   {
+    "pc": 2147505254,
+    "line": 32,
+    "halted": true
+   },
+   {
+    "pc": 2147505258,
+    "line": 33,
+    "halted": true
+   },
+   {
+    "pc": 2147505264,
+    "line": 33,
+    "halted": true
+   },
+   {
+    "pc": 2147505270,
+    "line": 34,
+    "halted": true
+   },
+   {
+    "pc": 2147505274,
+    "line": 34,
+    "halted": true
+   },
+   {
+    "pc": 2147505278,
+    "line": 35,
+    "halted": true
+   }
+  ],
+  "bpAddr": {
+   "engine.c:22": 2147505160,
+   "model.c:127": 2147506736
+  },
+  "struct": {},
+  "steps": {
+   "intoLeaf": 2147505418
+  }
+ }
+}

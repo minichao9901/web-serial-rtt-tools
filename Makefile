@@ -244,6 +244,7 @@ test-dbg-stress-f103cb: page-prep flash-dbgstress-f103cb
 # 调试器的靶子固件（就是各自 target-firmware/*_dbgstress 那份）烧进板子 —— 页面 WebUSB 烧录。
 # 为什么要有这一步：跑完 hw-campaign 的板子上是"狂发/scope"固件，不换靶子压测必然连不上；
 # 以前这一步藏在 tmp/ 的脚手架里（tmp/ 不进仓库，新克隆根本没有）。
+.PHONY: flash-dbgstress-5301evklite build-dbgstress-5301evklite flash-spi-5301evklite build-spi-5301evklite flash-spi-dma-5301evklite build-spi-dma-5301evklite build-spi-master-5301evklite flash-spi-master-5301evklite spi-cdc-hpm5301-master-hw test-dbg-riscv-5301evklite hw-campaign-hpm-5301evklite build-5301evklite-examples board-check-5301evklite spi-hpm5301-hw spi-hpm5301-dma-hw
 flash-dbgstress-f103ze:
 	$(NODE) tools/selftest/flash-elf.mjs --board=f103ze $(ARGS)
 
@@ -256,6 +257,18 @@ flash-dbgstress-h743:
 flash-dbgstress-6800evk:
 	$(NODE) tools/selftest/flash-elf.mjs --board=6800evk $(ARGS)
 
+build-dbgstress-5301evklite:
+	pwsh -NoProfile -File tools/target-firmware/hpm5301evklite_dbgstress/build.ps1 -BuildType flash_xip
+
+flash-dbgstress-5301evklite: build-dbgstress-5301evklite
+	$(NODE) tools/selftest/flash-elf.mjs --board=5301evklite $(ARGS)
+
+build-spi-5301evklite:
+	 pwsh -NoProfile -File tools/target-firmware/hpm5301evklite_spi_echo/build.ps1 -BuildType flash_xip
+
+flash-spi-5301evklite: build-spi-5301evklite
+	$(NODE) tools/selftest/flash-elf.mjs --board=5301evklite --elf=tools/target-firmware/hpm5301evklite_spi_echo/fw.elf $(ARGS)
+
 # 调试器 **RISC-V 真机验收**（HPM6800EVK 靶子 + akaLinkPro 的 JTAG 通路，约 53 项断言）：
 #   断点（文件:行 / 符号 / static / 多断点轮转）/ 代码同步 / 单步 n·si·fin（RV32 解码 + dcsr.step）/
 #   复位重跑（复位会清掉 hart 的触发器 → 必须重新下发）/ 结构体树与位域（含 flash 里的 const）/
@@ -265,6 +278,9 @@ flash-dbgstress-6800evk:
 #   生成 gdb 对照：node tmp/probe-free.mjs --blank && node tmp/rv-gdb-oracle.mjs
 test-dbg-riscv: page-prep
 	$(NODE) tools/selftest/dbg-hw-riscv.mjs $(ARGS)
+
+test-dbg-riscv-5301evklite: page-prep flash-dbgstress-5301evklite
+	$(NODE) tools/selftest/dbg-hw-riscv.mjs --board=5301evklite $(ARGS)
 
 # HPM6800EVK + lwip_tcpecho 例程专用的调试器真机压测（穷举运行控制/内存/断点/回栈/RTT/复位组合）
 #   make test-dbg-tcpecho            # 全量
@@ -521,10 +537,25 @@ build-h743-examples:
 hw-campaign-hpm: page-prep build-6800evk-examples
 	$(NODE) tools/selftest/hw-campaign-hpm.mjs $(FLOW_LOCAL) $(ARGS)
 
+# HPM5301EVKLite uses the same RTT/J-Scope campaign and records its own baseline.
+#   make hw-campaign-hpm-5301evklite ARGS="--record --cycles=1 --alt=1"
+hw-campaign-hpm-5301evklite: page-prep build-5301evklite-examples
+	$(NODE) tools/selftest/hw-campaign-hpm.mjs --board=5301evklite --chip=hpm5301evklite $(FLOW_LOCAL) $(ARGS)
+
+hw-campaign-hpm-5301evklite: FLOW_LOCAL = --local
+
 build-6800evk-examples:
 	pwsh -NoProfile -File tools/target-firmware/hpm6800evk_rtt_flood/build.ps1 -BuildType flash_xip
 	pwsh -NoProfile -File tools/target-firmware/hpm6800evk_scope/build.ps1 -BuildType flash_xip
 	pwsh -NoProfile -File tools/target-firmware/hpm6800evk_dbgstress/build.ps1 -BuildType flash_xip
+
+build-5301evklite-examples:
+	pwsh -NoProfile -File tools/target-firmware/hpm5301evklite_rtt_flood/build.ps1 -BuildType flash_xip
+	pwsh -NoProfile -File tools/target-firmware/hpm5301evklite_scope/build.ps1 -BuildType flash_xip
+	pwsh -NoProfile -File tools/target-firmware/hpm5301evklite_dbgstress/build.ps1 -BuildType flash_xip
+	pwsh -NoProfile -File tools/target-firmware/hpm5301evklite_spi_echo/build.ps1 -BuildType flash_xip
+	pwsh -NoProfile -File tools/target-firmware/hpm5301evklite_spi_dma/build.ps1 -BuildType flash_xip
+	pwsh -NoProfile -File tools/target-firmware/hpm5301evklite_spi_master/build.ps1
 
 # 别名（用户口径叫"RISC-V 那条"）：就是上面 hw-campaign-hpm（脚本名按探针/芯片叫 hpm）
 hw-campaign-riscv: hw-campaign-hpm
@@ -544,7 +575,7 @@ hw-random-flow-6800evk: page-prep board-check-6800evk build-6800evk-examples
 	$(NODE) tools/selftest/hw-random-flow.mjs --board=6800evk $(ARGS)
 
 # 四块活动板卡的全量固件构建。每个例程的唯一产物见 board-matrix.json。
-build-all-examples: build-f103cb-examples build-f103ze-examples build-h743-examples build-6800evk-examples
+build-all-examples: build-f103cb-examples build-f103ze-examples build-h743-examples build-6800evk-examples build-5301evklite-examples
 	REQUIRE_BUILDS=1 $(NODE) tools/selftest/board-matrix.test.mjs
 
 # 清掉所有被忽略的旧 build/build-* 目录后再从源码全量重建。
@@ -574,6 +605,30 @@ board-check-h743: page-prep
 
 board-check-6800evk: page-prep
 	$(NODE) tools/selftest/read-idcode.mjs --board=6800evk
+
+board-check-5301evklite: page-prep
+	$(NODE) tools/selftest/read-idcode.mjs --board=5301evklite
+
+spi-hpm5301-hw: page-prep flash-spi-5301evklite
+	$(NODE) tools/selftest/spi-hpm5301-hw.mjs $(ARGS)
+
+build-spi-dma-5301evklite:
+	pwsh -NoProfile -File tools/target-firmware/hpm5301evklite_spi_dma/build.ps1 -BuildType flash_xip
+
+flash-spi-dma-5301evklite: page-prep build-spi-dma-5301evklite
+	$(NODE) tools/selftest/flash-elf.mjs --board=5301evklite --chip=hpm5301evklite --elf=/tools/target-firmware/hpm5301evklite_spi_dma/fw.elf
+
+build-spi-master-5301evklite:
+	pwsh -NoProfile -File tools/target-firmware/hpm5301evklite_spi_master/build.ps1
+
+flash-spi-master-5301evklite: page-prep build-spi-master-5301evklite
+	$(NODE) tools/selftest/flash-elf.mjs --board=5301evklite --chip=hpm5301evklite --elf=/tools/target-firmware/hpm5301evklite_spi_master/fw.elf
+
+spi-cdc-hpm5301-master-hw: page-prep flash-spi-master-5301evklite
+	$(NODE) tools/selftest/spi-cdc-hpm-sweep.mjs --rates=20000000,40000000,60000000,80000000 --seconds=10 --out=tmp/hpm5301-spi-cdc-sweep.json $(ARGS)
+
+spi-hpm5301-dma-hw: page-prep flash-spi-dma-5301evklite
+	$(NODE) tools/selftest/spi-hpm5301-hw.mjs $(ARGS)
 
 # ---------------------------------------------------------------- 全流程（一块板一条命令）
 # 当前三块活动板的流程在固定验收后再随机交错运行功能基准与调试压测；

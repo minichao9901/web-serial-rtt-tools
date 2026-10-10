@@ -1,0 +1,211 @@
+{
+  "method": "Probe TX-only word DMA -> independent target RX-only byte circular DMA",
+  "at": "2026-10-10T00:48:35.197Z",
+  "rows": [
+    {
+      "requestedMHz": 10,
+      "actualHz": 10000000,
+      "csPolicy": 3,
+      "bytes": 32768,
+      "target": {
+        "g_rx_ready": 1,
+        "g_verified": 1,
+        "g_rx_bytes": 32768,
+        "g_rx_laps": 1,
+        "g_rx_errors": 0,
+        "g_rx_fifo_errors": 0,
+        "g_rx_bad_bytes": 0,
+        "g_rx_bad_bits": 0,
+        "g_rx_first_bad": 4294967295,
+        "g_rx_module_hz": 240000000
+      },
+      "probe": {
+        "sent": 128,
+        "failed": 0,
+        "replyErrors": 0,
+        "ms": 31.30000001192093,
+        "counters": {
+          "action": 0,
+          "status": 1,
+          "framesOk": 526,
+          "bytesTx": 134656,
+          "bytesRx": 101888,
+          "txPoll": 0,
+          "txDma": 526,
+          "outOverrun": 0,
+          "inDrop": 0,
+          "actualSclkHz": 10000000,
+          "framesErr": 0,
+          "lastTicks": 5070,
+          "lastUs": 211.25
+        }
+      },
+      "bitErrorRatio": 0,
+      "clean": true
+    },
+    {
+      "requestedMHz": 20,
+      "actualHz": 20000000,
+      "csPolicy": 3,
+      "bytes": 32768,
+      "target": {
+        "g_rx_ready": 1,
+        "g_verified": 1,
+        "g_rx_bytes": 32768,
+        "g_rx_laps": 1,
+        "g_rx_errors": 0,
+        "g_rx_fifo_errors": 0,
+        "g_rx_bad_bytes": 0,
+        "g_rx_bad_bits": 0,
+        "g_rx_first_bad": 4294967295,
+        "g_rx_module_hz": 240000000
+      },
+      "probe": {
+        "sent": 128,
+        "failed": 0,
+        "replyErrors": 0,
+        "ms": 19,
+        "counters": {
+          "action": 0,
+          "status": 1,
+          "framesOk": 654,
+          "bytesTx": 167424,
+          "bytesRx": 101888,
+          "txPoll": 0,
+          "txDma": 654,
+          "outOverrun": 0,
+          "inDrop": 0,
+          "actualSclkHz": 20000000,
+          "framesErr": 0,
+          "lastTicks": 2601,
+          "lastUs": 108.375
+        }
+      },
+      "bitErrorRatio": 0,
+      "clean": true
+    },
+    {
+      "requestedMHz": 30,
+      "actualHz": 30000000,
+      "csPolicy": 3,
+      "bytes": 32768,
+      "target": {
+        "g_rx_ready": 1,
+        "g_verified": 1,
+        "g_rx_bytes": 32768,
+        "g_rx_laps": 1,
+        "g_rx_errors": 0,
+        "g_rx_fifo_errors": 0,
+        "g_rx_bad_bytes": 0,
+        "g_rx_bad_bits": 0,
+        "g_rx_first_bad": 4294967295,
+        "g_rx_module_hz": 240000000
+      },
+      "probe": {
+        "sent": 128,
+        "failed": 0,
+        "replyErrors": 0,
+        "ms": 21.200000017881393,
+        "counters": {
+          "action": 0,
+          "status": 1,
+          "framesOk": 782,
+          "bytesTx": 200192,
+          "bytesRx": 101888,
+          "txPoll": 0,
+          "txDma": 782,
+          "outOverrun": 0,
+          "inDrop": 0,
+          "actualSclkHz": 30000000,
+          "framesErr": 0,
+          "lastTicks": 1716,
+          "lastUs": 71.5
+        }
+      },
+      "bitErrorRatio": 0,
+      "clean": true
+    },
+    {
+      "requestedMHz": 40,
+      "actualHz": 40000000,
+      "csPolicy": 3,
+      "bytes": 32768,
+      "target": {
+        "g_rx_ready": 1,
+        "g_verified": 1,
+        "g_rx_bytes": 32768,
+        "g_rx_laps": 1,
+        "g_rx_errors": 0,
+        "g_rx_fifo_errors": 0,
+        "g_rx_bad_bytes": 0,
+        "g_rx_bad_bits": 0,
+        "g_rx_first_bad": 4294967295,
+        "g_rx_module_hz": 240000000
+      },
+      "probe": {
+        "sent": 128,
+        "failed": 0,
+        "replyErrors": 0,
+        "ms": 20.5,
+        "counters": {
+          "action": 0,
+          "status": 1,
+          "framesOk": 910,
+          "bytesTx": 232960,
+          "bytesRx": 101888,
+          "txPoll": 0,
+          "txDma": 910,
+          "outOverrun": 0,
+          "inDrop": 0,
+          "actualSclkHz": 40000000,
+          "framesErr": 0,
+          "lastTicks": 1304,
+          "lastUs": 54.333333333333336
+        }
+      },
+      "bitErrorRatio": 0,
+      "clean": true
+    },
+    {
+      "requestedMHz": 60,
+      "actualHz": 60000000,
+      "csPolicy": 3,
+      "bytes": 32768,
+      "target": {
+        "g_rx_ready": 1,
+        "g_verified": 1,
+        "g_rx_bytes": 32768,
+        "g_rx_laps": 1,
+        "g_rx_errors": 0,
+        "g_rx_fifo_errors": 0,
+        "g_rx_bad_bytes": 0,
+        "g_rx_bad_bits": 0,
+        "g_rx_first_bad": 4294967295,
+        "g_rx_module_hz": 240000000
+      },
+      "probe": {
+        "sent": 128,
+        "failed": 0,
+        "replyErrors": 0,
+        "ms": 22,
+        "counters": {
+          "action": 0,
+          "status": 1,
+          "framesOk": 1038,
+          "bytesTx": 265728,
+          "bytesRx": 101888,
+          "txPoll": 0,
+          "txDma": 1038,
+          "outOverrun": 0,
+          "inDrop": 0,
+          "actualSclkHz": 60000000,
+          "framesErr": 0,
+          "lastTicks": 897,
+          "lastUs": 37.375
+        }
+      },
+      "bitErrorRatio": 0,
+      "clean": true
+    }
+  ]
+}

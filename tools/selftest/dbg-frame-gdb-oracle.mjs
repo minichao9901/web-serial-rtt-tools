@@ -12,17 +12,18 @@ const pyLiteral=value=>value===null?'None':typeof value==='boolean'?(value?'True
  Array.isArray(value)?'['+value.map(pyLiteral).join(',')+']':
  value&&typeof value==='object'?'{'+Object.entries(value).map(([k,v])=>'u'+JSON.stringify(k)+':'+pyLiteral(v)).join(',')+'}':
  (()=>{throw new Error('不能注入 GDB 配置值：'+typeof value)})();
-if(args.includes('--help')){console.log('node tools/selftest/dbg-frame-gdb-oracle.mjs --elf=.../fw.elf --board=f103cb|h743|6800evk --remote=127.0.0.1:3333 --out=tmp/frame-oracle.json [--gdb=<matching-gdb>]');process.exit(0);}
+if(args.includes('--help')){console.log('node tools/selftest/dbg-frame-gdb-oracle.mjs --elf=.../fw.elf --board=f103cb|h743|6800evk|5301evklite --remote=127.0.0.1:3333 --out=tmp/frame-oracle.json [--gdb=<matching-gdb>]');process.exit(0);}
 const elfPath=arg('elf');if(!elfPath)throw new Error('--elf 必须明确指定最终构建 ELF');
 const board=arg('board','f103cb'),remote=arg('remote','127.0.0.1:3333');
-if(!['f103cb','f103ze','h743','6800evk'].includes(board)||!/^[-\w.]+:\d+$/.test(remote))throw new Error('board 或 remote 格式无效');
+if(!['f103cb','f103ze','h743','6800evk','5301evklite'].includes(board)||!/^[-\w.]+:\d+$/.test(remote))throw new Error('board 或 remote 格式无效');
 const bytes=new Uint8Array(readFileSync(elfPath)),elf=new Elf(bytes),build=readJson(arg('build',join(dirname(elfPath),'build-info.json')));
 validateBuild(build,bytes,board);
 const symbols=elf.symbols(true),cases=FRAME_CASES.map(c=>{
  const symbol=symbols.find(s=>s.name===c.checkpoint);if(!symbol)throw new Error('ELF 缺少测试检查点 '+c.checkpoint);
  return {...c,address:(symbol.addr&0xfffffffe)>>>0};
 });
-const [codeStart,codeEnd]=board==='6800evk'?[0x80000000,0x81000000]:[0x08000000,0x09000000];
+const isRiscv=board==='6800evk'||board==='5301evklite';
+const [codeStart,codeEnd]=isRiscv?[0x80000000,0x81000000]:[0x08000000,0x09000000];
 const code=elf.sections().filter(s=>(s.flags&2)&&!(s.flags&1)&&s.type===1&&s.addr>=codeStart&&s.addr<codeEnd).map(s=>({name:s.name,addr:s.addr,hex:Buffer.from(elf.data(s.name)).toString('hex')}));
 if(!code.some(s=>s.name==='.text'))throw new Error('ELF 缺少可验证目标代码');
 const out=resolve(arg('out','tmp/frame-oracle-'+board+'.json'));
@@ -37,7 +38,7 @@ try{
  // Keep the collector independent of a separately installed Python stdlib: some
  // embedded cross-GDB builds expose only their _gdb extension and builtins.
  writeFileSync(script,`python\nCONFIG = ${pyLiteral(config)}\nexec(compile(open(${JSON.stringify(py)}).read(), ${JSON.stringify(py)}, "exec"))\nend\n`);
- const defaultGdb=board==='6800evk'?'riscv32-unknown-elf-gdb':'arm-none-eabi-gdb';
+ const defaultGdb=isRiscv?'riscv32-unknown-elf-gdb':'arm-none-eabi-gdb';
  const child=spawn(arg('gdb',defaultGdb),['-q','-nx','-batch',resolve(elfPath),'-x',script],{stdio:'inherit',env:{...process.env}});
  const timeout=setTimeout(()=>child.kill(),180000);
  const status=await new Promise((res,rej)=>{child.once('error',rej);child.once('exit',res);}).finally(()=>clearTimeout(timeout));

@@ -22,9 +22,10 @@
 import { spawn } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
+import { createHash } from 'node:crypto';
 import { findSymbol } from '../../app/rtt/elf.js';
 import { printSummary } from './campaign-summary.mjs';
-import { artifact } from './board-matrix.mjs';
+import { artifact, getBoard } from './board-matrix.mjs';
 import { waitForFirstRttData, waitForNextRttPoll } from './rtt-campaign-wait.mjs';
 
 const arg = k => process.argv.find(a => a.startsWith(`--${k}=`));
@@ -37,21 +38,36 @@ const REMOTE = 'https://minichao9901.github.io/web-serial-rtt-tools/';
 const APP = (LOCAL ? (process.env.APP || 'http://127.0.0.1:8899/index.html') : REMOTE) + '?t=' + Date.now() + '#flash';
 const ORIGIN = LOCAL ? 'http://127.0.0.1:8899' : 'https://minichao9901.github.io:443';
 const PROFILE = path.join(process.env.TEMP, 'chrome-rtt-authorized');
-const CHIP = (arg('chip') || '--chip=hpm6800evk').split('=')[1];
+const BOARD_ID = (arg('board') || '--board=6800evk').split('=')[1];
+const BOARD = getBoard(BOARD_ID);
+if (BOARD.target !== 'riscv') throw new Error(`HPM campaign 只支持 RISC-V 板卡，${BOARD_ID} 的 target=${BOARD.target}`);
+const CHIP = (arg('chip') || `--chip=${BOARD.chip}`).split('=')[1];
 const FW = {
-  flood: artifact('6800evk', 'rtt'),       // RTT flood（AXI SRAM 里的 RTT 环）
-  scope: artifact('6800evk', 'scope'),     // J-Scope 靶子（契约变量块 g_v）
+  flood: artifact(BOARD_ID, 'rtt'),        // RTT flood（ELF 符号定位控制块）
+  scope: artifact(BOARD_ID, 'scope'),      // J-Scope 靶子（契约变量块 g_v）
 };
 const COM = (arg('com') || '--com=COM5').split('=')[1];
 const CYCLES = argN('cycles', 2);
 const ALT = argN('alt', 5);
-const OUT = arg('out') ? arg('out').split('=').slice(1).join('=') : 'tmp/hpm-campaign-result.json';
+const OUT = arg('out') ? arg('out').split('=').slice(1).join('=')
+  : BOARD_ID === '6800evk' ? 'tmp/hpm-campaign-result.json' : `tmp/hpm-${BOARD_ID}-campaign-result.json`;
 const KEEP_GOING = has('keep-going');
 const RECORD_ONLY = has('record');
 const VIEWER_SECS = 8;
 const FWD_SECS = 8;
 const REC_SECS = 10;
 const SCOPE_SECS = 3;
+const SCOPE_MATRIX = has('scope-matrix');
+const MATRIX_SECONDS = Math.max(1, Math.min(30, argN('matrix-seconds', 3)));
+const MATRIX_PERIODS = (arg('matrix-periods') || '2,5,10,20,30,50,100').split(',').map(Number);
+const MATRIX_COUNTS = (arg('matrix-vars') || '1,2,3,4,8').split(',').map(Number);
+const MATRIX_PATH = arg('matrix-out')
+  ? arg('matrix-out').split('=').slice(1).join('=')
+  : `docs/validation/2026-10-10-hpm-${BOARD_ID}-jscope-matrix.json`;
+if (SCOPE_MATRIX && (!MATRIX_PERIODS.length || MATRIX_PERIODS.some(n => !Number.isFinite(n) || n <= 0)
+    || !MATRIX_COUNTS.length || MATRIX_COUNTS.some(n => !Number.isInteger(n) || n < 1 || n > 8))) {
+  throw new Error('--matrix-periods 必须是正数，--matrix-vars 仅支持 1..8');
+}
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 /**
@@ -67,7 +83,7 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
  *   线定 12 s 仍能抓住真正的回归（当年后台页限速那次是 17 s → 47 s）。
  * 一致性/错位读这类"正确性"项直接钉死。
  */
-const SPEC = {
+const HPM6800_SPEC = {
   flashFloodS: 12.0,     // 实测 8.4~10.5 s（最坏值 + 15%）
   flashScopeS: 12.0,     // 实测 8.4~10.3 s
   viewerKBps: 56.5,      // RTT Viewer（RISC-V）：实测均 70.6 KB/s × 80%
@@ -77,6 +93,23 @@ const SPEC = {
   j1kHz: 206.6,          // J-Scope 1 变量：实测均 258.3 kHz × 80%
   j3kHz: 32.6,           // J-Scope 3 变量：实测均 40.8 kHz × 80%
   j50k: true,            // 低速率档（1 变量 @20µs = 50 kHz · 3 变量 @30µs）必须零丢样本
+};
+// HPM5301EVKLite 独立基线：2026-10-09 首轮实测，速度按实测 × 80%，烧录耗时留 15% 调度余量。
+// RTT Viewer 44.5 KB/s；转发 1.384 MB/s；J-Scope 1/3 变量 308/52.1 kHz。
+const HPM5301_SPEC = {
+  flashFloodS: 5.3,
+  flashScopeS: 5.3,
+  viewerKBps: 35.6,
+  viewerCorrupt: 0,
+  fwdMBps: 1.107,
+  recordBytesRatio: 0.98,
+  j1kHz: 246.7,
+  j3kHz: 41.7,
+  j50k: true,
+};
+const SPEC = BOARD_ID === '6800evk' ? HPM6800_SPEC : BOARD_ID === '5301evklite' ? HPM5301_SPEC : {
+  flashFloodS: null, flashScopeS: null, viewerKBps: null, viewerCorrupt: 0,
+  fwdMBps: null, recordBytesRatio: null, j1kHz: null, j3kHz: null, j50k: true,
 };
 
 const WD = setTimeout(() => { console.log('!! 看门狗超时（25 分钟），退出'); process.exit(9); }, 25 * 60 * 1000);
@@ -261,7 +294,7 @@ function judge(name, key, ok, detail = '', raw = null){
 /* ================================================================== 主流程 */
 await ensureBrowser();
 cdp = await new Cdp().connect();
-console.log(`== HPM6800EVK 场景基准 ==  ${LOCAL ? '本地' : '线上'}页面 ${APP.split('?')[0]}  芯片 ${CHIP}`);
+console.log(`== ${BOARD.label} 场景基准 ==  ${LOCAL ? '本地' : '线上'}页面 ${APP.split('?')[0]}  芯片 ${CHIP}`);
 console.log(`   口径：烧 flood → RTT Viewer（RISC-V 新通路，判决）→ RTT 转发（判决+10s 存盘）→ 烧 scope → J-Scope 1/3 变量；重复 ${CYCLES} 轮 + 交替 ${ALT} 遍`);
 console.log(RECORD_ONLY || SPEC.fwdMBps == null ? '   模式：**只记录不判决**（跑完给出"实测 × 80%"的 spec 建议）' : '   模式：按 SPEC 判决');
 
@@ -716,7 +749,7 @@ async function scopeEnsureElf(){
   if (!r.n) throw new Error('scope 固件里没解析出变量（ELF 载入失败？）');
   return r;
 }
-async function scopeRun({ idxs, periodUs, secs, label, specKey }){
+async function scopeRun({ idxs, periodUs, secs, label, specKey, judgeResult = true }){
   await cdp.eval(`document.querySelector('.tab[data-tab="scope"]').click()`);
   const conn = await scopeConnect();
   if (!conn.hid || !conn.usb) throw new Error(`J-Scope 链路没连上（hid=${conn.hid} usb=${conn.usb}）`);
@@ -727,6 +760,7 @@ async function scopeRun({ idxs, periodUs, secs, label, specKey }){
       s.updatePlan();
       return { vars: s.selected.map(v => v.name + '@0x' + v.addr.toString(16)), spans: s.plan.spans.length,
                frameBytes: s.plan.frameBytes, estUs: +s.plan.estUs.toFixed(2), estHz: s.plan.estHz }; })()`);
+  const startedAt = Date.now();
   await cdp.eval(`window.__tools.scope.start()`);
   let autoStopped = false;
   for (let i = 0; i < (secs + 15) * 5; i++){
@@ -742,12 +776,14 @@ async function scopeRun({ idxs, periodUs, secs, label, specKey }){
   const sum = await cdp.evalJson(`window.__tools.scope.summary()`);
   const out = { label, periodUs, wantHz: Math.round(1e6 / periodUs), vars: sel.vars, spans: sel.spans, frameBytes: sel.frameBytes,
                 samples: sum.samples, rateHz: sum.rateHz, lostProbe: sum.lostProbe, lostUsb: sum.lostUsb, lostGap: sum.lostGap,
-                state: sum.state, autoStopped };
+                state: sum.state, autoStopped, elapsedMs: Date.now() - startedAt };
   const kHz = out.rateHz / 1000;
   console.log(`   [J-Scope] ${label}：${sel.vars.length} 变量 ${sel.spans} span/${sel.frameBytes}B · 实测 ${kHz.toFixed(2)} kHz`
     + `（名义 ${(out.wantHz / 1000).toFixed(1)} kHz）· ${out.samples} 样本 · 丢：探针 ${out.lostProbe}/USB ${out.lostUsb}/缺口 ${out.lostGap}`);
-  if (specKey) judge(`J-Scope ${label}`, specKey, SPEC[specKey] == null || kHz >= SPEC[specKey], `${kHz.toFixed(2)} kHz`, +kHz.toFixed(2));
-  else judge(`J-Scope ${label} 零丢样本`, 'j50k', out.lostProbe === 0 && out.lostUsb === 0, `探针 ${out.lostProbe}/USB ${out.lostUsb}/缺口 ${out.lostGap}`, out.lostProbe + out.lostUsb);
+  if (judgeResult){
+    if (specKey) judge(`J-Scope ${label}`, specKey, SPEC[specKey] == null || kHz >= SPEC[specKey], `${kHz.toFixed(2)} kHz`, +kHz.toFixed(2));
+    else judge(`J-Scope ${label} 零丢样本`, 'j50k', out.lostProbe === 0 && out.lostUsb === 0, `探针 ${out.lostProbe}/USB ${out.lostUsb}/缺口 ${out.lostGap}`, out.lostProbe + out.lostUsb);
+  }
   await cdp.eval(`window.__tools.scope.stop('下一步')`).catch(() => {});
   await nap(400);
   return out;
@@ -777,6 +813,25 @@ function chooseVars(meta){
   const three = [one];
   for (const v of pool){ if (three.length >= 3) break; if (v.i !== one.i && v.addr !== one.addr) three.push(v); }
   return { one: [one.i], three: three.map(v => v.i), oneName: one.name, threeNames: three.map(v => v.name), from: '顶层标量' };
+}
+
+function writeScopeMatrix(rows, info){
+  const totalLost = r => r.lostProbe + r.lostUsb + r.lostGap;
+  const denominator = r => Math.max(1, r.samples + totalLost(r));
+  for (const r of rows){
+    r.probeDropPct = +(100 * r.lostProbe / denominator(r)).toFixed(4);
+    r.usbDropPct = +(100 * r.lostUsb / denominator(r)).toFixed(4);
+    r.sequenceGapPct = +(100 * r.lostGap / denominator(r)).toFixed(4);
+    r.totalLossPct = +(100 * totalLost(r) / denominator(r)).toFixed(4);
+  }
+  const output = path.resolve(MATRIX_PATH);
+  fs.mkdirSync(path.dirname(output), { recursive: true });
+  fs.writeFileSync(output, JSON.stringify({ ...info, results: rows }, null, 2));
+  const csvPath = output.replace(/\.json$/i, '.csv');
+  const columns = ['periodUs','wantHz','varsCount','frameBytes','spans','samples','rateHz','lostProbe','lostUsb','lostGap','probeDropPct','usbDropPct','sequenceGapPct','totalLossPct','elapsedMs'];
+  const csv = [columns.join(','), ...rows.map(r => [r.periodUs,r.wantHz,r.vars.length,r.frameBytes,r.spans,r.samples,r.rateHz,r.lostProbe,r.lostUsb,r.lostGap,r.probeDropPct,r.usbDropPct,r.sequenceGapPct,r.totalLossPct,r.elapsedMs].join(','))].join('\n') + '\n';
+  fs.writeFileSync(csvPath, csv);
+  console.log(`   J-Scope 矩阵已保存：${output} 和 ${csvPath}`);
 }
 
 /* ================================================================== 跑起来 */
@@ -819,6 +874,26 @@ try {
      *    （F103 那边 3 变量 @20µs 能跑（60 MHz 档 3 span 也有 ~60 kHz 能力），所以那边不用改。）
      */
     rec.j50k3 = await scopeRun({ idxs: picks.three, periodUs: 30, secs: SCOPE_SECS, label: '3 变量 @30µs' });
+    if (SCOPE_MATRIX){
+      const members = meta.filter(v => v.scalar && /^g_v\./.test(v.name) && !/_cached$/i.test(v.name)).sort((a, b) => a.addr - b.addr);
+      if (members.length < Math.max(...MATRIX_COUNTS)) throw new Error(`J-Scope 矩阵需要 ${Math.max(...MATRIX_COUNTS)} 个连续标量变量，ELF 只有 ${members.length}`);
+      console.log(`\n========== J-Scope 跳拍矩阵：${MATRIX_COUNTS.join('/')} 个变量 × ${MATRIX_PERIODS.join('/')} µs × ${MATRIX_SECONDS}s ==========`);
+      rec.scopeMatrix = [];
+      for (const count of MATRIX_COUNTS){
+        const idxs = members.slice(0, count).map(v => v.i);
+        for (const periodUs of MATRIX_PERIODS){
+          const cell = await scopeRun({ idxs, periodUs, secs: MATRIX_SECONDS, label: `${count}变量 @${periodUs}µs`, judgeResult: false });
+          rec.scopeMatrix.push(cell);
+          writeScopeMatrix(rec.scopeMatrix, {
+            schema: 1, board: CHIP, firmware: path.relative(process.cwd(), FW.scope).replaceAll('\\','/'),
+            elfSha256: createHash('sha256').update(fs.readFileSync(FW.scope)).digest('hex'),
+            startedAt: report.startedAt, updatedAt: new Date().toISOString(),
+            method: '页面 J-Scope summary；总丢失率=(probe+USB+序号缺口)/(录制样本+三类丢失)，各类按同一分母计算。',
+            requestedPeriodsUs: MATRIX_PERIODS, requestedVariableCounts: MATRIX_COUNTS, durationSeconds: MATRIX_SECONDS,
+          });
+        }
+      }
+    }
     dump();
   }
 
@@ -900,7 +975,7 @@ if (RECORD_ONLY || SPEC.fwdMBps == null || SPEC.viewerKBps == null){
   console.log('（把这几行抄回 tools/selftest/hw-campaign-hpm.mjs 的 SPEC 表，再跑一遍就是正式判决）');
 }
 dump();
-printSummary({ ...report, boardLabel: 'HPM6800EVK（HPM6880 / RISC-V + JTAG）' });
+printSummary({ ...report, boardLabel: `${BOARD.label}（${CHIP} / RISC-V + JTAG）` });
 console.log(`\n判决：${pass} 通过 / ${fail} 失败`);
 if (report.errors.length) console.log('错误：' + JSON.stringify(report.errors));
 console.log('结果已写 ' + OUT);

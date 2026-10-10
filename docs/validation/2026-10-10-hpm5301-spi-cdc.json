@@ -1,0 +1,100 @@
+{
+  "clocks": {
+    "role": "HPM5301EVKLite SPI2 Master / DMA",
+    "g_spi_hz": 10000000,
+    "automatic": true
+  },
+  "finalClocks": {
+    "role": "HPM5301EVKLite SPI2 Master / DMA",
+    "g_spi_hz": 10000000,
+    "automatic": true
+  },
+  "serialBuffer": 4096,
+  "seconds": 10.01290000000596,
+  "MBps": 1.2009170170472934,
+  "payloadBitErrors": 0,
+  "comparedBits": 84172928,
+  "payloadBER": 0,
+  "before": {
+    "bytes": 609573,
+    "frames": 9523,
+    "gaps": 0,
+    "badFrames": 0,
+    "bitErrors": 0,
+    "comparedBits": 4266304,
+    "unalignedBytes": 59,
+    "reversed": 0,
+    "time": 1568.0999999940395,
+    "status": {
+      "supported": true,
+      "running": true,
+      "pending": false,
+      "rc": 0,
+      "mode": 0,
+      "lsb": false,
+      "bufferBytes": 16384,
+      "received": 643421,
+      "forwarded": 643421,
+      "dropped": 0,
+      "fifoOverflows": 0,
+      "pendingBytes": 0,
+      "cdcQueued": 84,
+      "generation": 4,
+      "dmaErrors": 0
+    }
+  },
+  "after": {
+    "bytes": 12634235,
+    "time": 11581,
+    "frames": 197409,
+    "gaps": 0,
+    "badFrames": 0,
+    "bitErrors": 0,
+    "comparedBits": 88439232,
+    "unalignedBytes": 59,
+    "reversed": 0,
+    "maxGap": 39.400000005960464,
+    "beats": 524,
+    "high": true,
+    "raw": 0,
+    "chars": 0,
+    "errors": [],
+    "status": {
+      "supported": true,
+      "running": true,
+      "pending": false,
+      "rc": 0,
+      "mode": 0,
+      "lsb": false,
+      "bufferBytes": 16384,
+      "received": 12667260,
+      "forwarded": 12667260,
+      "dropped": 0,
+      "fifoOverflows": 0,
+      "pendingBytes": 0,
+      "cdcQueued": 46,
+      "generation": 4,
+      "dmaErrors": 0
+    }
+  },
+  "stopped": {
+    "status": {
+      "supported": true,
+      "running": false,
+      "pending": false,
+      "rc": 0,
+      "mode": 0,
+      "lsb": false,
+      "bufferBytes": 16384,
+      "received": 12796962,
+      "forwarded": 12796950,
+      "dropped": 12,
+      "fifoOverflows": 0,
+      "pendingBytes": 0,
+      "cdcQueued": 0,
+      "generation": 4,
+      "dmaErrors": 0
+    },
+    "portOpen": true
+  }
+}

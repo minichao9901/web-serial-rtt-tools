@@ -1,0 +1,63 @@
+{
+  "board": "HPM5301EVKLite",
+  "method": "32 KiB TX-only circular word DMA / held CS / changing SPIC sequence",
+  "at": "2026-10-10T00:39:58.803Z",
+  "rows": [
+    {
+      "requestedHz": 20000000,
+      "actualHz": 20000000,
+      "seconds": 3.020199999988079,
+      "MBps": 2.5001307860505277,
+      "serialBuffer": 65536,
+      "targetStart": {
+        "run": 1,
+        "active": 1,
+        "request_hz": 20000000,
+        "clock_hz": 240000000,
+        "sclk_hz": 20000000,
+        "source_hz": 720000000,
+        "clock_source": 1,
+        "module_div": 3,
+        "sclk_div": 12,
+        "errors": 0,
+        "refill_late": 0,
+        "chunks": 56,
+        "frames": 15360
+      },
+      "targetStop": {
+        "run": 0,
+        "active": 0,
+        "request_hz": 20000000,
+        "clock_hz": 240000000,
+        "sclk_hz": 20000000,
+        "source_hz": 720000000,
+        "clock_source": 1,
+        "module_div": 3,
+        "sclk_div": 12,
+        "errors": 0,
+        "refill_late": 0,
+        "chunks": 601,
+        "frames": 154368
+      },
+      "host": {
+        "bytes": 7550895,
+        "frames": 117983,
+        "gaps": 0,
+        "reverse": 0,
+        "badFrames": 0,
+        "bitErrors": 0,
+        "comparedBits": 52856384,
+        "unaligned": 0
+      },
+      "probeWindow": {
+        "received": 7550127,
+        "forwarded": 7550132,
+        "dropped": 0,
+        "fifoOverflows": 0,
+        "dmaErrors": 0
+      },
+      "payloadBER": 0,
+      "clean": true
+    }
+  ]
+}

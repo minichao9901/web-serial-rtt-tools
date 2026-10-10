@@ -1,0 +1,60 @@
+{
+  "board": "HPM5301EVKLite",
+  "target": "SPI2 DMA Slave",
+  "probe": "akaLinkPro SPI Master",
+  "wiring": "PB10/11/12/13 one-to-one + GND",
+  "frameBytes": 256,
+  "framesPerRate": 128,
+  "batchFrames": 1,
+  "results": [
+    {
+      "requestedMHz": 10,
+      "actualHz": 10000000,
+      "frames": 128,
+      "failed": 0,
+      "statusErr": 0,
+      "byteErr": 0,
+      "bitErrors": 0,
+      "comparedBits": 262144,
+      "ber": 0,
+      "noReply": 0,
+      "elapsedMs": 176.29660000000013,
+      "oneWayMBps": 0.18586858736924008,
+      "counters": {
+        "framesOk": 128,
+        "framesErr": 0,
+        "bytesTx": 32768,
+        "bytesRx": 32768,
+        "lastTicks": 5075,
+        "lastUs": 211.45833333333334,
+        "probeBusMBps": 1.2106403940886699
+      }
+    },
+    {
+      "requestedMHz": 20,
+      "actualHz": 20000000,
+      "frames": 128,
+      "failed": 0,
+      "statusErr": 0,
+      "byteErr": 0,
+      "bitErrors": 0,
+      "comparedBits": 262144,
+      "ber": 0,
+      "noReply": 0,
+      "elapsedMs": 171.0596999999998,
+      "oneWayMBps": 0.19155885342953388,
+      "counters": {
+        "framesOk": 128,
+        "framesErr": 0,
+        "bytesTx": 32768,
+        "bytesRx": 32768,
+        "lastTicks": 2614,
+        "lastUs": 108.91666666666667,
+        "probeBusMBps": 2.3504208110175973
+      }
+    }
+  ],
+  "pass": 11,
+  "fail": 0,
+  "at": "2026-10-09T23:51:40.843Z"
+}

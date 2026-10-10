@@ -1,0 +1,175 @@
+{
+  "board": "HPM5301EVKLite",
+  "method": "32 KiB TX-only circular word DMA / held CS / changing SPIC sequence",
+  "at": "2026-10-10T00:41:57.158Z",
+  "rows": [
+    {
+      "requestedHz": 80000000,
+      "actualHz": 80000000,
+      "seconds": 10.010699999988079,
+      "MBps": 9.999856553499676,
+      "serialBuffer": 65536,
+      "targetStart": {
+        "run": 1,
+        "active": 1,
+        "request_hz": 80000000,
+        "clock_hz": 160000000,
+        "sclk_hz": 80000000,
+        "source_hz": 800000000,
+        "clock_source": 4,
+        "module_div": 5,
+        "sclk_div": 2,
+        "errors": 0,
+        "refill_late": 0,
+        "chunks": 198,
+        "frames": 55552
+      },
+      "targetStop": {
+        "run": 0,
+        "active": 0,
+        "request_hz": 80000000,
+        "clock_hz": 160000000,
+        "sclk_hz": 80000000,
+        "source_hz": 800000000,
+        "clock_source": 4,
+        "module_div": 5,
+        "sclk_div": 2,
+        "errors": 0,
+        "refill_late": 0,
+        "chunks": 6655,
+        "frames": 1704192
+      },
+      "host": {
+        "bytes": 100105564,
+        "frames": 1564150,
+        "gaps": 0,
+        "reverse": 0,
+        "badFrames": 0,
+        "bitErrors": 0,
+        "comparedBits": 700739200,
+        "unaligned": 0
+      },
+      "probeWindow": {
+        "received": 100161767,
+        "forwarded": 100161770,
+        "dropped": 0,
+        "fifoOverflows": 0,
+        "dmaErrors": 0
+      },
+      "payloadBER": 0,
+      "clean": true
+    },
+    {
+      "requestedHz": 83333334,
+      "actualHz": 83333333,
+      "seconds": 10.003200000017882,
+      "MBps": 10.416548304523925,
+      "serialBuffer": 65536,
+      "targetStart": {
+        "run": 1,
+        "active": 1,
+        "request_hz": 83333334,
+        "clock_hz": 166666666,
+        "sclk_hz": 83333333,
+        "source_hz": 500000000,
+        "clock_source": 6,
+        "module_div": 3,
+        "sclk_div": 2,
+        "errors": 0,
+        "refill_late": 0,
+        "chunks": 192,
+        "frames": 51968
+      },
+      "targetStop": {
+        "run": 0,
+        "active": 0,
+        "request_hz": 83333334,
+        "clock_hz": 166666666,
+        "sclk_hz": 83333333,
+        "source_hz": 500000000,
+        "clock_source": 6,
+        "module_div": 3,
+        "sclk_div": 2,
+        "errors": 0,
+        "refill_late": 0,
+        "chunks": 6902,
+        "frames": 1767424
+      },
+      "host": {
+        "bytes": 104198816,
+        "frames": 1628106,
+        "gaps": 0,
+        "reverse": 0,
+        "badFrames": 0,
+        "bitErrors": 0,
+        "comparedBits": 729391488,
+        "unaligned": 0
+      },
+      "probeWindow": {
+        "received": 104210207,
+        "forwarded": 104210197,
+        "dropped": 0,
+        "fifoOverflows": 0,
+        "dmaErrors": 0
+      },
+      "payloadBER": 0,
+      "clean": true
+    },
+    {
+      "requestedHz": 90000000,
+      "actualHz": 90000000,
+      "seconds": 10.015099999994039,
+      "MBps": 10.720805982972102,
+      "serialBuffer": 65536,
+      "targetStart": {
+        "run": 1,
+        "active": 1,
+        "request_hz": 90000000,
+        "clock_hz": 180000000,
+        "sclk_hz": 90000000,
+        "source_hz": 720000000,
+        "clock_source": 1,
+        "module_div": 4,
+        "sclk_div": 2,
+        "errors": 0,
+        "refill_late": 0,
+        "chunks": 191,
+        "frames": 51200
+      },
+      "targetStop": {
+        "run": 0,
+        "active": 0,
+        "request_hz": 90000000,
+        "clock_hz": 180000000,
+        "sclk_hz": 90000000,
+        "source_hz": 720000000,
+        "clock_source": 1,
+        "module_div": 4,
+        "sclk_div": 2,
+        "errors": 0,
+        "refill_late": 0,
+        "chunks": 7438,
+        "frames": 1904640
+      },
+      "host": {
+        "bytes": 107369944,
+        "frames": 26,
+        "gaps": 1846771,
+        "reverse": 118994,
+        "badFrames": 26,
+        "bitErrors": 5314,
+        "comparedBits": 11648,
+        "unaligned": 107368280
+      },
+      "probeWindow": {
+        "received": 107381249,
+        "forwarded": 107381249,
+        "dropped": 0,
+        "fifoOverflows": 0,
+        "dmaErrors": 0
+      },
+      "payloadBER": null,
+      "clean": false
+    }
+  ]
+}

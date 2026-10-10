@@ -1,0 +1,34 @@
+{
+  "board": "HPM5301EVKLite",
+  "target": "SPI2 DMA Slave",
+  "probe": "akaLinkPro SPI Master",
+  "wiring": "PB10/11/12/13 one-to-one + GND",
+  "frameBytes": 256,
+  "framesPerRate": 128,
+  "batchFrames": 16,
+  "results": [
+    {
+      "requestedMHz": 20,
+      "actualHz": 20000000,
+      "frames": 8,
+      "failed": 120,
+      "statusErr": 0,
+      "byteErr": 120,
+      "bitErrors": 124638,
+      "comparedBits": 262144,
+      "ber": 0.47545623779296875,
+      "noReply": 0,
+      "elapsedMs": 39.853399999999965,
+      "oneWayMBps": 0.05138833825972193,
+      "counters": {
+        "framesOk": 128,
+        "framesErr": 0,
+        "bytesTx": 32768,
+        "bytesRx": 32768
+      }
+    }
+  ],
+  "pass": 7,
+  "fail": 1,
+  "at": "2026-10-09T23:37:38.557Z"
+}

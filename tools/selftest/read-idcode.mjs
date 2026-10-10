@@ -61,6 +61,14 @@ const BOARDS = {
     flash: null,
     note: 'RISC-V · 走 JTAG + DMI/SBA；探针的 output_mode 必须是 SWD+JTAG',
   },
+  '5301evklite': {
+    label: 'HPM5301EVKLite（RISC-V/JTAG）',
+    chip: 'hpm5301evklite', target: 'riscv',
+    idcode: /1000563D/i,                 // HPM RISC-V TAP IDCODE；不能单独区分具体 HPM 型号
+    dev: null,
+    flash: null,
+    note: 'RISC-V · JTAG + DMI/SBA；IDCODE 确认 TAP 通路，型号由板卡配置档指定',
+  },
 };
 const BOARD_ID = argV('board', '');
 const BOARD = BOARD_ID ? BOARDS[BOARD_ID] : null;

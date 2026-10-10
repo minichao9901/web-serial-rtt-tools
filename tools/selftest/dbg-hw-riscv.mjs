@@ -1,11 +1,11 @@
 /**
- * 调试器页 **RISC-V / JTAG 真机压力测试**（HPM6800EVK + akaLinkPro，2026-10）
+ * 调试器页 **RISC-V / JTAG 真机压力测试**（HPM 系列 + akaLinkPro，2026-10）
  *
  *   node tools/selftest/dbg-hw-riscv.mjs
  *   node tools/selftest/dbg-hw-riscv.mjs --oracle=tmp/rv-gdb-oracle.json     # 与 riscv gdb 逐地址比对
  *
  * 前置：
- *   1) 靶子固件已烧进板子（tools/target-firmware/hpm6800evk_dbgstress/fw.elf）：
+ *   1) 靶子固件已烧进板子（对应板卡的 dbgstress/fw.elf）：
  *      node tmp/rv-flash-and-smoke.mjs
  *   2) 8899 静态服务 + 9333 调试浏览器在跑（make page-prep）
  *   3) 探针没被别的东西占着（OpenOCD/pyOCD 要先退）
@@ -20,7 +20,7 @@
 import { Cdp, sleep, DEV_RE } from './cdp-lib.mjs';
 import { writeFileSync, existsSync, readFileSync, readdirSync, mkdirSync } from 'node:fs';
 import { dirname, join, relative, resolve, sep } from 'node:path';
-import { artifact, repoRoot } from './board-matrix.mjs';
+import { artifact, getBoard, getExample, repoRoot } from './board-matrix.mjs';
 import { Elf } from '../../app/elf/elf.js';
 import { readJson, validateOracle } from './dbg-frame-contract.mjs';
 import { runFrameStress } from './dbg-frame-hw-runner.mjs';
@@ -29,10 +29,13 @@ const argv = process.argv.slice(2);
 const arg = (k, d = null) => { const h = argv.find(a => a.startsWith('--' + k + '=')); return h ? h.split('=').slice(1).join('=') : (argv.includes('--' + k) ? true : d); };
 
 const APP = 'http://127.0.0.1:8899/index.html';
-const ELF = String(arg('elf', '/' + artifact('6800evk', 'dbgstress')));
-const SRCDIR = String(arg('src', resolve(repoRoot, 'tools', 'target-firmware', 'hpm6800evk_dbgstress', 'src')));
-const ORACLE = String(arg('oracle', 'tmp/rv-gdb-oracle.json'));
-const JSON_OUT = String(arg('out', 'tmp/rv-stress-page.json'));
+const BOARD_ID = String(arg('board', '6800evk'));
+const BOARD = getBoard(BOARD_ID);
+if (BOARD.target !== 'riscv') throw new Error(`RISC-V 测试要求 RISC-V 板卡，${BOARD_ID} 的 target=${BOARD.target}`);
+const ELF = String(arg('elf', '/' + artifact(BOARD_ID, 'dbgstress')));
+const SRCDIR = String(arg('src', resolve(repoRoot, getExample(BOARD_ID, 'dbgstress').project, 'src')));
+const ORACLE = String(arg('oracle', BOARD_ID === '6800evk' ? 'tmp/rv-gdb-oracle.json' : `tmp/rv-gdb-oracle-${BOARD_ID}.json`));
+const JSON_OUT = String(arg('out', BOARD_ID === '6800evk' ? 'tmp/rv-stress-page.json' : `tmp/rv-stress-page-${BOARD_ID}.json`));
 const FRAME_ONLY=!!arg('frames-only',false),FRAME_ORACLE=arg('frame-oracle');
 const FRAME_ROUNDS=Number(arg('frame-rounds',200));
 if(!Number.isInteger(FRAME_ROUNDS)||FRAME_ROUNDS<1||FRAME_ROUNDS>2000)throw new Error('--frame-rounds 必须为1..2000');
@@ -49,7 +52,7 @@ let frameOracle=null,frameBuild=null,frameCode=[];
 if(FRAME_ONLY){
   if(!FRAME_ORACLE)throw new Error('栈帧验收必须指定 --frame-oracle');
   const elfDisk=resolve(ROOT,ELF.replace(/^\//,'')),bytes=readFileSync(elfDisk),buildPath=String(arg('build',join(dirname(elfDisk),'build-info.json')));
-  frameBuild=readJson(buildPath);frameOracle=readJson(String(FRAME_ORACLE));validateOracle(frameOracle,frameBuild,bytes,'6800evk');
+  frameBuild=readJson(buildPath);frameOracle=readJson(String(FRAME_ORACLE));validateOracle(frameOracle,frameBuild,bytes,BOARD_ID);
   const image=new Elf(new Uint8Array(bytes));
   frameCode=image.sections().filter(s=>(s.flags&2)&&!(s.flags&1)&&s.type===1&&s.addr>=0x80000000&&s.addr<0x81000000)
     .map(s=>({name:s.name,addr:s.addr,bytes:[...image.data(s.name)]}));
@@ -144,7 +147,7 @@ await cdp.eval(`
  * 现在改成：页面里 fetch 这些 .c/.h（就在静态服务根下）→ 造 `File` → `_indexSrcFiles()`，
  * 与用户手选目录走的是同一条索引/反查路径。喂源码并进下面那次求值（跟载 ELF 一起）。
  */
-sec('== 0. 前置：ELF + 源码目录 + RISC-V 后端 + 连接 ==');
+sec(`== 0. 前置：${BOARD.label} ELF + 源码目录 + RISC-V 后端 + 连接 ==`);
 const elfInfo = await cdp.json(`(async () => {
     const d = window.__tools.dbg;
     const r = await fetch(${JSON.stringify(ELF)} + '?t=' + Date.now());
@@ -196,13 +199,13 @@ ok(/\.c:\d+|\+\d/.test(env.pos || ''), 'PC 能映射到源码位置：' + env.po
 
 if(FRAME_ONLY){
   sec('== RISC-V CFI / DWARF 局部变量：GDB oracle 对照与严格压力 ==');
-  const frameResults=await runFrameStress({cdp,oracle:frameOracle,code:frameCode,board:'6800evk',rounds:FRAME_ROUNDS,ok,log,disconnectOnFinish:false});
+  const frameResults=await runFrameStress({cdp,oracle:frameOracle,code:frameCode,board:BOARD_ID,rounds:FRAME_ROUNDS,ok,log,disconnectOnFinish:false});
   const finalLeak=await cdp.json(`(async()=>{const d=window.__tools.dbg;if(!d.session.connected)await d.connect();await d.session.bpClear();return await window.__S.leak();})()`);
   ok(finalLeak.used===0&&finalLeak.bps===0&&finalLeak.extra===0,'栈帧检查点全部清理后触发器为空',JSON.stringify(finalLeak));
   const recov=await cdp.eval('return window.__S.recoveries || [];');
   ok(recov.length===0,'严格栈帧验收期间没有目标意外复位/自动恢复',JSON.stringify(recov));
   mkdirSync(dirname(resolve(JSON_OUT)),{recursive:true});
-  writeFileSync(JSON_OUT,JSON.stringify({at:new Date().toISOString(),board:'6800evk',elf:ELF,elfSha256:frameOracle.elfSha256,build:frameBuild,pass,fail,failures,frameResults},null,2));
+  writeFileSync(JSON_OUT,JSON.stringify({at:new Date().toISOString(),board:BOARD_ID,elf:ELF,elfSha256:frameOracle.elfSha256,build:frameBuild,pass,fail,failures,frameResults},null,2));
   await cdp.eval(`if(window.__tools.dbg.session.connected)await window.__tools.dbg.disconnect();return true;`).catch(()=>{});
   log(`\n== RISC-V 栈帧汇总：${pass} 通过 / ${fail} 失败 ==`);
   cdp.close();process.exit(fail?1:0);
@@ -569,8 +572,42 @@ sec('== 7. 收尾 + 与 riscv gdb 对照 ==');
     log('   （没有 ' + ORACLE + '，跳过 gdb 对照 —— 先跑 node tmp/rv-gdb-oracle.mjs）');
   }
 
+  if (BOARD_ID === '5301evklite'){
+    sec('== 8. RISC-V 异常：注入非法指令并与 trap CSR 核对 ==');
+    const trap = await cdp.json(`(async()=>{
+      const d=window.__tools.dbg, S=window.__S;
+      const trigger=d.sym.find('g_fault_trigger'), stall=d.sym.find('g_exception_stall'), inject=d.sym.find('inject_illegal_instruction');
+      if(!trigger||!stall||!inject)throw Error('异常测试固件缺少注入/停留符号');
+      await d.session.bpClear(); await S.cmd('b g_exception_stall');
+      const bp=d.session.bpList()[0];
+      const bytes=new Uint8Array(4); new DataView(bytes.buffer).setUint32(0,1,true);
+      await d.session.memWrite(trigger.addr,bytes);
+      const stopped=await S.go(5000);
+      const read32=async name=>{const f=d.sym.find(name);if(!f)throw Error('缺少现场符号 '+name);const b=await d.session.memRead(f.addr,4);return new DataView(b.buffer,b.byteOffset,4).getUint32(0,true);};
+      const words={count:await read32('g_trap_count'),cause:await read32('g_trap_cause'),
+                   epc:await read32('g_trap_epc'),mtval:await read32('g_trap_mtval')};
+      const illegal=d.sym.find('g_illegal_instruction_pc');
+      if(!illegal)throw Error('异常测试固件缺少非法指令定位符号');
+      d._dockSelect('fault');
+      d.faultPanel.snapshot=null;
+      document.getElementById('d-fault-read')?.click();
+      const t0=Date.now();
+      while(!d.faultPanel?.snapshot && Date.now()-t0<5000)await new Promise(r=>setTimeout(r,50));
+      const snapshot=d.faultPanel?.snapshot;
+      return {pc:stopped.pc>>>0,halted:stopped.halted,bp:bp?.addr>>>0,stall:stall.addr>>>0,illegal:illegal.addr>>>0,inject:inject.addr>>>0,
+              words,raw:snapshot?.raw||null,error:snapshot?.error||null,findings:snapshot?.findings||[]};
+    })()`);
+    log('   固件备份：' + JSON.stringify(trap.words) + '；异常面板 CSR：' + JSON.stringify(trap.raw));
+    ok(trap.halted && trap.pc === trap.bp && trap.bp === trap.stall, '目标在异常现场保存完成后由硬件断点停住');
+    ok(trap.words.count === 1 && trap.words.cause === 2 && trap.words.epc === trap.illegal,
+      '固件 trap 处理器记录到非法指令异常（mcause=2）', JSON.stringify(trap.words));
+    ok(trap.raw?.mcause === 2 && trap.raw?.mepc === trap.words.epc,
+      '异常面板读取的 mcause/mepc 与固件备份一致', JSON.stringify(trap.raw));
+    ok(!trap.error && trap.findings.some(f=>/非法指令/.test(f.text||f.message||'')), '异常面板成功解码非法指令原因', trap.error||'');
+  }
+
   await cdp.eval(`await window.__tools.dbg.session.bpClear(); await window.__tools.dbg.disconnect(); return true;`);
-  writeFileSync(JSON_OUT, JSON.stringify({ at: new Date().toISOString(), elf: ELF, pass, fail, failures, oracle }, null, 1));
+  writeFileSync(JSON_OUT, JSON.stringify({ at: new Date().toISOString(), board: BOARD_ID, elf: ELF, pass, fail, failures, oracle }, null, 1));
   log('   测量结果已写入 ' + JSON_OUT);
 }
 

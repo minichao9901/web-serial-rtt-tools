@@ -83,7 +83,8 @@ async function staleChecks(){
  return failures;
 }
 export async function runFrameStress({cdp,oracle,board,rounds=200,code,ok,log,disconnectOnFinish=true}){
- const profile=board==='6800evk'?{ramStart:0x00084000,ramEnd:0x00088000,entry:'riscv'}:
+ const profile=(board==='6800evk')?{ramStart:0x00084000,ramEnd:0x00088000,entry:'riscv'}:
+  board==='5301evklite'?{ramStart:0x00080300,ramEnd:0x000a0000,entry:'riscv'}:
   board==='h743'?{ramStart:0x20000000,ramEnd:0x20020000,entry:'arm'}:
   board==='f103cb'?{ramStart:0x20000000,ramEnd:0x20005000,entry:'arm'}:
   {ramStart:0x20000000,ramEnd:0x20010000,entry:'arm'};
