@@ -1425,8 +1425,6 @@
         <div class="dockhead">
           <span class="seg docktabs" id="pn-dock-tabs">
             <button data-dock="img" class="on">刷屏</button>
-            <button data-dock="img-settings">图片设置</button>
-            <button data-dock="anim">动画 / 视频</button>
             <button data-dock="code">面板初始化</button>
             <button data-dock="read">读回</button>
           </span>
@@ -1444,16 +1442,14 @@
         </div>
         <input type="file" id="pn-img-file" accept="image/*,.bmp" hidden>
         <div class="imgrow canvasrow">
-          <div class="canvasbox" id="pn-image-drop" title="可拖入 BMP / PNG / JPEG"><canvas id="pn-canvas" width="240" height="296"></canvas></div>
-        </div>
-        <details class="pn-image-help"><summary>窗口与传输详情</summary>
-          <p class="flush hint" id="pn-img-sum"></p>
-          <p class="hint">预览里的<b>橙色虚线</b>是探针真正下发的对齐窗口（列地址按 4 像素对齐，多出来的列用边缘填充）。每片 492 B，一屏 ST77916 是 <b>527 片</b>；只有最后一片要应答。</p>
-        </details>
-      </div><!-- /dockpage 刷屏 -->
-
-      <div class="dockpage" data-dock="img-settings" id="pn-img-settings-card">
-          <div class="imginfo">
+          <div class="canvasbox" id="pn-image-drop" title="可拖入 BMP / PNG / JPEG"><canvas id="pn-canvas" width="240" height="296"></canvas><video id="pn-anim-video" muted playsinline></video></div>
+          <div class="imginfo pn-image-settings">
+            <label class="row wide"><span>屏幕</span><select id="pn-geom" title="屏几何：两款内置屏，或选「自定义…」自己填宽高（协议参数沿用当前档的）"></select></label>
+            <label class="row wide"><span>开窗 x/y</span><input id="pn-x" class="num" value="0" inputmode="numeric"><input id="pn-y" class="num" value="0" inputmode="numeric"></label>
+            <label class="row wide" id="pn-custom-size" hidden><span>分辨率</span>
+              <input id="pn-w" class="num" value="240" inputmode="numeric" title="自定义宽度（像素）。选「自定义…」时生效">
+              <span class="label-auto">×</span>
+              <input id="pn-h" class="num" value="240" inputmode="numeric" title="自定义高度（像素）。选「自定义…」时生效"></label>
             <label class="row"><span>缩放</span>
               <select id="pn-fit">
                 <option value="fill">铺满（裁剪）</option>
@@ -1461,20 +1457,14 @@
                 <option value="stretch">拉伸</option>
                 <option value="none">原始尺寸</option>
               </select></label>
-            <label class="row"><span>开窗 x/y</span><input id="pn-x" class="num" value="0" inputmode="numeric"><input id="pn-y" class="num" value="0" inputmode="numeric"></label>
-            <label class="row"><span>屏幕</span><select id="pn-geom" title="屏几何：两款内置屏，或选「自定义…」自己填宽高（协议参数沿用当前档的）"></select></label>
-            <label class="row" id="pn-custom-size" hidden><span>分辨率</span>
-              <input id="pn-w" class="num" value="240" inputmode="numeric" title="自定义宽度（像素）。选「自定义…」时生效">
-              <span class="label-auto">×</span>
-              <input id="pn-h" class="num" value="240" inputmode="numeric" title="自定义高度（像素）。选「自定义…」时生效"></label>
             <label class="row"><span>字节序</span>
               <select id="pn-byteorder" title="RGB565 的字节序。默认「高字节在前」与 MADCTL=0x00(RGB) 是正确组合；颜色不对时只翻一个开关（先试 R/B 交换，再试低字节在前）">
-                <option value="be">高字节在前（默认）</option>
+                <option value="be">高字节在前</option>
                 <option value="le">低字节在前</option>
               </select></label>
-            <label class="chk"><input type="checkbox" id="pn-swap"> R/B 交换（等价 MADCTL 的 BGR 位）</label>
+            <label class="chk" title="等价于 MADCTL 的 BGR 位"><input type="checkbox" id="pn-swap"> R/B 交换</label>
             <label class="row"><span>电平</span><input id="pn-level" class="num" value="255" inputmode="numeric" title="255 = 不改；把满量程分量压到这个值，用来做灰阶测试"></label>
-            <label class="chk" title="只把与上一帧不同的那块包围盒发出去（静止区域完全不碰面板）。勾上后：连刷同一张图第二次会「整帧跳过」；播放动画时按变化面积提速。开窗坐标会按 4 像素对齐。与动画行那个开关是同一个状态。"><input type="checkbox" id="pn-partial" checked> 局部刷新（只发变化区）</label>
+            <label class="chk" title="只把与上一帧不同的那块包围盒发出去（静止区域完全不碰面板）。勾上后：连刷同一张图第二次会「整帧跳过」；播放动画时按变化面积提速。开窗坐标会按 4 像素对齐。与动画行那个开关是同一个状态。"><input type="checkbox" id="pn-partial" checked> 局部刷新</label>
             <label class="row"><span>容差</span>
               <select id="pn-partial-tol" title="比较两帧时每个颜色分量丢弃的低位数。视频/JPEG 每帧都有量化噪声，精确比较会导致「整屏都算变了」而失去意义 —— 丢掉最低 1~2 位即可判出真正的静止区；代价是颜色量化到 4~5 bit/分量（屏本身就是 RGB565，肉眼无差）">
                 <option value="0">0 位（逐位精确）</option>
@@ -1482,9 +1472,8 @@
                 <option value="2">2 位（噪声大时）</option>
               </select></label>
           </div>
-      </div><!-- /dockpage 图片设置 -->
+        </div>
 
-      <div class="dockpage" data-dock="anim" id="pn-anim-card">
         <div class="animbox">
           <div class="row"><span>动画 / 视频</span>
             <button id="pn-anim-file" class="mini" title="MP4 / WebM / GIF / APNG —— 浏览器原生解码，零依赖">选择文件…</button>
@@ -1492,15 +1481,17 @@
             <button id="pn-anim-play" class="mini" disabled title="按当前屏几何 / 面板档把每一帧发出去（与「刷这一张」同一条路；勾了局部刷新就只发变化区）">播放到屏</button>
             <button id="pn-anim-stop" class="mini" disabled>停止</button>
             <label class="chk"><input type="checkbox" id="pn-anim-loop" checked> 循环</label>
-            <label class="chk" title="与「图片设置」页里的开关同步：勾上 = 只发与上一帧不同的包围盒"><input type="checkbox" id="pn-anim-partial" checked> 局部刷新</label>
+            <label class="chk" title="与上方图片设置开关同步：勾上 = 只发与上一帧不同的包围盒"><input type="checkbox" id="pn-anim-partial" checked> 局部刷新</label>
           </div>
           <div class="animrow">
-            <video id="pn-anim-video" muted playsinline></video>
-            <p class="flush hint" id="pn-anim-info">逐帧整屏刷：发送多快就播多快，解码更快时丢帧（不堆延迟）。
-              选 MP4 / WebM 或 GIF —— 帧率上限由链路决定（AXS15352 实测 ~20 fps、ST77916 ~13 fps）。</p>
+            <p class="flush hint" id="pn-anim-info" title="逐帧刷屏：解码更快时丢帧，不堆积延迟；支持 MP4 / WebM / GIF / APNG。">选择动画或视频</p>
           </div>
         </div><!-- /animbox -->
-      </div><!-- /dockpage 动画 -->
+        <details class="pn-image-help"><summary>窗口与传输详情</summary>
+          <p class="flush hint" id="pn-img-sum"></p>
+          <p class="hint">预览里的<b>橙色虚线</b>是探针真正下发的对齐窗口（列地址按 4 像素对齐，多出来的列用边缘填充）。每片 492 B，一屏 ST77916 是 <b>527 片</b>；只有最后一片要应答。</p>
+        </details>
+      </div><!-- /dockpage 刷屏 -->
 
       <div class="dockpage" data-dock="code" id="pn-code-card">
           <div class="toolrow">

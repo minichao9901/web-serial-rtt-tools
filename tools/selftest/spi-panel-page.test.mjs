@@ -143,8 +143,8 @@ console.log('== 1b. 布局（用户 2026-10 定稿）：右列 tab 化（刷屏 
       logGrip: !!document.getElementById('pn-grip-log'),
       fold: document.querySelectorAll('#tab-panel .foldbtn').length,
       docOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1 };`);
-  ok(L.tabs.join(',') === 'img,img-settings,anim,code,read', `tab 段 = 刷屏 / 图片设置 / 动画 / 面板初始化 / 读回（实测 ${L.tabs.join(' / ')}）`);
-  ok(L.pages.join(',') === 'img,img-settings,anim,code,read' && L.onPages.join(',') === 'img',
+  ok(L.tabs.join(',') === 'img,code,read', `tab 段 = 刷屏 / 面板初始化 / 读回（实测 ${L.tabs.join(' / ')}）`);
+  ok(L.pages.join(',') === 'img,code,read' && L.onPages.join(',') === 'img',
      `三个 tab 页按序排、默认停在「刷屏」（本页最高频的动作；实测 ${L.pages.join(' → ')} / 亮着 ${L.onPages}）`);
   ok(L.mainOver === 'hidden' && L.mainScroll <= 1,
      `右列**自己不再滚动**（overflow-y=${L.mainOver}，差 ${L.mainScroll}px）—— 高度交给当前 tab（原来要滚 761px）`);
@@ -219,8 +219,8 @@ console.log('== 1b. 布局（用户 2026-10 定稿）：右列 tab 化（刷屏 
 
   const sendVisible = await ev(`const b=document.getElementById('pn-img-send'),r=b.getBoundingClientRect(),p=document.getElementById('pn-img-card').getBoundingClientRect();return !!b.closest('.pn-image-tools')&&!b.closest('.imginfo')&&r.top>=p.top&&r.bottom<=p.bottom&&document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)?.closest('button')===b;`);
   ok(sendVisible, '刷图按钮独立于预览设置滚动区，完整可见且未被遮挡');
-  const previewLayout=await ev(`const p=document.getElementById('pn-img-card'),c=document.getElementById('pn-canvas').getBoundingClientRect(),box=document.getElementById('pn-image-drop').getBoundingClientRect();return p.scrollHeight<=p.clientHeight+1&&Math.abs(c.width-box.width)<=1&&document.querySelectorAll('#pn-patterns .pattern-group').length===2;`);
-  ok(previewLayout, '刷屏页无纵向滚动，预览占满区域，图案分为两组');
+  const previewLayout=await ev(`const p=document.getElementById('pn-img-card'),c=document.getElementById('pn-canvas').getBoundingClientRect(),box=document.getElementById('pn-image-drop').getBoundingClientRect();return p.scrollHeight<=p.clientHeight+1&&Math.abs(c.width-box.width)<=1&&document.querySelectorAll('#pn-patterns .pattern-group').length===2&&['pn-geom','pn-fit','pn-anim-file','pn-anim-play'].every(id=>p.contains(document.getElementById(id)));`);
+  ok(previewLayout, '刷图、设置和动画同页，无纵向滚动，预览占满区域，图案分为两组');
 
   // 面板初始化 tab：解析表**不再写死 360px**，改为吃剩余高度 + 一条可拖的分隔条
   await selectDock('code');
@@ -910,7 +910,7 @@ console.log('== 9. 两页联动：屏页失能 → 桥页立刻看到 ==');
 // ==================================================================== 9b
 console.log('== 9b. 动画 / 视频：录一段 WebM 当源 → 逐帧整屏刷（假探针对账）==');
 {
-  await selectDock('anim');            // 动画有独立页签，视频元素必须显示才能解码推进
+  await selectDock('img');             // 动画与静图、图片设置在同一个刷屏页
   // ① 源：页面里现录一段（canvas.captureStream + MediaRecorder），不依赖任何外部素材
   //    🚨 用 `captureStream(0)` + `track.requestFrame()` 手动推帧：自动帧率那条路在
   //    "画布不在 DOM 里 / 窗口被遮住"时会一帧都录不到（实测只录出 110 字节的裸头）。
@@ -1247,7 +1247,7 @@ console.log('== 9e. 回读：读寄存器 + 读 GRAM（假探针 GRAM → 预览
     return { pages: [...dock.querySelectorAll('.dockpage')].map(p => p.dataset.dock),
              ids: [...dock.querySelectorAll('.dockpage')].map(p => p.id),
              logOutside: !dock.contains(document.getElementById('pn-logbox')) };`);
-  ok(order.pages.join(',') === 'img,img-settings,anim,code,read' && order.ids.join(',') === 'pn-img-card,pn-img-settings-card,pn-anim-card,pn-code-card,pn-read-card',
+  ok(order.pages.join(',') === 'img,code,read' && order.ids.join(',') === 'pn-img-card,pn-code-card,pn-read-card',
      `屏页三块 = 刷屏 → 面板初始化 → 读回（${order.ids.join(' → ')}）`);
   ok(order.logOutside === true, '日志在 dock 之外（常驻）—— 读回 / 重放完第一眼就能看到它有没有报错');
 

@@ -545,7 +545,7 @@ fieldset[disabled] legend::after{content:' · 未实现';color:var(--warn)}
 #tab-panel #pn-code-text{height:11%;min-height:56px;max-height:200px;flex:none}
 #tab-panel #pn-code-card{gap:3px}
 /* 日志常驻：高度落在 #pn-logbox 上（`.log` 自己按 30% 算会因为父高为 0 而塌掉），可拖 + 记 store */
-#tab-panel #pn-logbox{flex:0 0 auto;height:150px;min-height:72px;display:flex;flex-direction:column}
+#tab-panel #pn-logbox{flex:0 0 auto;height:110px;min-height:72px;display:flex;flex-direction:column}
 #tab-panel #pn-logbox .log{height:100%;min-height:0;flex:1 1 auto}
 /* 预览画布：**填满所在行**（object-fit:contain 保比例、绝不拉变形；image-rendering:pixelated
    保证放大后仍是硬边）。原来是 max-height:170px 写死 —— 360×360 的屏缩到 138×170 根本看不清。
@@ -569,24 +569,47 @@ fieldset[disabled] legend::after{content:' · 未实现';color:var(--warn)}
 #tab-panel .animbox{flex:none}
 /* 拖放区压扁一点：它只是"选图入口"，别占掉命令区的高度（图案按钮就在上面一行） */
 #tab-panel .drop{padding:5px 9px;margin:4px 0;font-size:var(--text-xs)}
-/* 刷屏只保留图案、发送操作和预览，参数与动画分别放在页签中。 */
+/* 刷图、参数、动画在同一页：大预览 + 紧凑参数列 + 底部播放工具条。 */
 #tab-panel #pn-img-card{overflow:hidden;gap:5px}
 #tab-panel .pn-image-tools{display:flex;align-items:center;gap:8px;min-width:0;background:var(--bg2)}
 #tab-panel .pn-image-tools>button{flex:none}
 #tab-panel #pn-img-info{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin:0}
-#tab-panel #pn-img-card .canvasrow{min-height:120px;margin:0;flex-wrap:nowrap}
-#tab-panel #pn-img-card .canvasrow>.canvasbox{width:100%;flex:1;min-width:0}
+#tab-panel #pn-img-card .canvasrow{min-height:205px;margin:0;flex-wrap:nowrap;gap:16px}
+#tab-panel #pn-img-card .canvasrow>.canvasbox{width:auto;flex:1;min-width:0}
 #tab-panel #pn-img-card #pn-canvas{max-width:none}
 #tab-panel #pn-image-drop.hot{outline:2px dashed var(--acc);outline-offset:-3px}
-#tab-panel #pn-img-settings-card>.imginfo{width:min(100%,760px);min-width:0;flex:none}
+#tab-panel #pn-img-card .pn-image-settings{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px 12px;align-content:start;flex:0 0 340px;min-width:0;max-height:none;overflow:visible;padding:4px 0}
+#tab-panel .pn-image-settings .wide{grid-column:1/-1}
+#tab-panel .pn-image-settings .row{margin:0;gap:6px;min-width:0;flex-wrap:nowrap}
+#tab-panel .pn-image-settings .row>span:first-child{width:48px;font-size:var(--text-xs)}
+#tab-panel .pn-image-settings .row.wide>span:first-child{width:64px}
+#tab-panel .pn-image-settings .row>select{min-width:0;width:0;flex:1}
+#tab-panel .pn-image-settings .num{width:56px;padding:3px 6px}
+#tab-panel .pn-image-settings .chk{font-size:var(--text-xs);white-space:nowrap;min-width:0}
 #tab-panel #pn-custom-size[hidden]{display:none}
 #tab-panel .pn-image-help{font-size:var(--text-xs);color:var(--fg2)}
 #tab-panel .pn-image-help summary{cursor:pointer}
 #tab-panel .pn-image-help[open]{max-height:130px;overflow:auto}
 #tab-panel .pn-image-help p{margin:4px 0}
-#tab-panel #pn-anim-card .animbox{margin:0;padding:0;border:0}
-#tab-panel #pn-anim-card .animrow{flex-direction:column}
-#tab-panel #pn-anim-card video{width:min(100%,640px);max-height:320px}
+#tab-panel #pn-img-card .animbox{display:flex;align-items:center;gap:10px;margin:0;padding:6px 0 0;border-top:1px solid var(--line);min-width:0}
+#tab-panel #pn-img-card .animbox>.row{margin:0;gap:6px;flex:none;flex-wrap:wrap}
+#tab-panel #pn-img-card .animbox>.row>span:first-child{width:auto;font-size:var(--text-xs)}
+#tab-panel #pn-img-card .animrow{margin:0;flex:1;min-width:0}
+#tab-panel #pn-anim-info{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0}
+#tab-panel #pn-image-drop video{position:absolute;top:6px;right:6px;width:96px;max-height:60px;z-index:1}
+@media(max-width:1100px){
+  #tab-panel #pn-img-card .pn-image-settings{flex-basis:300px;gap:7px 8px}
+  #tab-panel #pn-patterns button{font-size:11px;padding:2px 5px}
+  #tab-panel #pn-patterns .pattern-label{width:32px}
+  #tab-panel #pn-img-card .animbox>.row{gap:4px}
+}
+@media(max-width:700px){
+  #tab-panel #pn-img-card{overflow:visible}
+  #tab-panel #pn-img-card .canvasrow{flex-direction:column;flex:none;min-height:0}
+  #tab-panel #pn-img-card .canvasrow>.canvasbox{flex:none;height:220px}
+  #tab-panel #pn-img-card .pn-image-settings{flex:none}
+  #tab-panel #pn-img-card .animbox{flex-wrap:wrap}
+}
 #tab-panel .toolrow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:0 0 7px}
 /* 初始化卡片里的固定行压紧一点：矮窗口下这些"工具条"加起来能吃掉 150px，
    压紧后省下来的高度全给文本框和表格（用户："初始化部分被压缩得太厉害了"）。 */
