@@ -1,10 +1,10 @@
 # 串口 / RTT 工具箱
 
-**面向嵌入式开发的浏览器工作台：调试、烧录、日志、波形与总线测试。**
+**面向嵌入式开发的浏览器工作台：调试、烧录、SWO 采样、日志、波形与总线测试。**
 
 [打开在线工作台](https://minichao9901.github.io/web-serial-rtt-tools/) · [akaLinkPro 探针](https://github.com/minichao9901/5301evk_akaLinkPro) · [快速开始](#快速开始) · [实测性能](#实测性能) · [Apache-2.0](LICENSE)
 
-把串口终端、RTT、源码调试器、变量示波器和外设调试工具放到一个网页里。使用桌面版 Chrome / Edge，通过 Web Serial、WebHID 和 WebUSB 直接连接设备；零安装通路无需启动本地调试服务。
+把串口终端、RTT、源码调试器、SWO 执行轨迹、变量示波器和外设调试工具放到一个网页里。使用桌面版 Chrome / Edge，通过 Web Serial、WebHID 和 WebUSB 直接连接设备；零安装通路无需启动本地调试服务。
 
 本仓库是 **Web 上位机**。通用串口和 CMSIS-DAP 基础功能可配合兼容设备使用；探针端 RTT 转发、HSS、SPI/QSPI、I2C 和高速 ADC 等扩展由 [akaLinkPro 固件](https://github.com/minichao9901/5301evk_akaLinkPro) 提供。
 
@@ -12,6 +12,7 @@
 
 - **从日志到源码，一处完成。** 查看串口与 RTT、载入 ELF、下断点、看变量和调用栈，无需在多个专用上位机之间切换。
 - **直接观察目标变量。** J-Scope 从 ELF / DWARF 解析地址，支持标量、结构体成员和数组元素；探针周期采样，网页绘图与导出。
+- **记录后回看程序执行落点。** SWO PC 采样配合 ELF / 源码定位，查看函数热点、逐样本回放，并完整导出 `.c` / `.txt`。
 - **把外设协议变成可操作工具。** SPI/QSPI、I2C 提供命令表、寄存器编辑、脚本和实时值；屏幕初始化、发图及 NOR Flash 测试共用同一通路。
 - **采集与显示分开。** 高流量时限制渲染开销，接收计数与已开启的记录继续；采样同时显示跳拍、USB 丢样和读取错误。
 - **静态部署，开放扩展。** 无需前端打包即可运行，可部署到 HTTPS 静态站点，也可本地启动；附带演示目标和自动验收入口。
@@ -27,13 +28,27 @@
 | SPI转发 | 外部 SPI 主机数据经探针从机 DMA 转为 CDC；附引脚分配图 |
 | J-Scope 波形 | 1–8 通道变量采集、速率标定、触发、游标、CSV / 原始包与分项质量报告 |
 | 烧录器 | ELF / HEX / BIN 的擦除、编程、校验和复位；按支持的目标算法工作 |
-| SWO PC 采样 | F103 经 SWO→VCOM 记录，ELF/源码离线定位、热点、样本序列与完整导出；[使用说明](docs/SWO-PC-SAMPLING.md)、[240 MHz / 30 Mbaud 双端匹配](docs/SWO-CLOCK-MATCHING.md) |
+| SWO PC 采样 | SWO→VCOM 录制、CPU / Trace 时钟识别与收发匹配、带宽计算器；ELF / 源码离线分析、热点、逐样本回放与完整导出 |
 | 调试器 | 源码断点、单步、变量、调用栈与 RTT；ARM / RV32 异常诊断及现场报告 |
 | USB→SPI/QSPI | 单/双/四线事务、命令表、寄存器、脚本、实时值、NOR Flash 与回环测试 |
 | SPI/QSPI 屏 | 初始化表解析与重放、图案 / 图片 / 动画 / 视频、局部刷新及支持的读回模式 |
 | USB→I2C | 总线扫描、寄存器编辑、命令表、周期脚本和数据解码 |
 | USB→ADC / DAC | ADC 示波器、时间 / 电压游标与自动测量；DAC 波形预览和导出 |
 | 工程生成 | 从 Keil `.uvprojx` 生成调试 Makefile、脚本及可选本地桥包 |
+
+## SWO：记录、离线分析与源码回放
+
+打开 [SWO 执行轨迹](https://minichao9901.github.io/web-serial-rtt-tools/#swo)，录制一段目标的 DWT PC 采样数据，停止后用匹配的 ELF 和源码分析。也可直接载入 [F103CB 实测示例](samples/swo/README.md)，无需连接硬件。
+
+- **配置与计算。** 识别内核及已适配芯片的 CPU / Trace 时钟，选择 PC 间隔（含 64 / 128 周期）、时间戳、异常与 ITM 事件。独立计算器展示 PC/s、带宽预算、SWO 波特率和探针接收分频；支持自动匹配及手动输入最高 30 Mbaud 的请求值，以双端实际回读为准。
+- **回放与定位。** 函数热点、样本区间和函数筛选、逐样本源码回放；溢出与已知传输缺口显式分段，时间戳质量单独标明。
+- **保存与分享。** `.swopc` 保存原始数据、配置和 ELF 指纹；CSV 导出区间事件，完整 `.c` / `.txt` 导出全部解码事件和对应源码行，便于在 VS Code 阅读。`.c` 是阅读报告，不能作为程序编译。
+
+EVKLite 接线为 **目标 SWO → 探针 PB09 / J3[3]（VCOM RX）**，另接 SWD 和 GND；F103 的 SWO 引脚为 PB3。页面只配置 Trace 与探针接收端，目标主频由目标程序管理，外部晶振频率需按板子填写。停止录制后恢复原 Trace 和接收配置。
+
+已加入 STM32F103、F407/F405、H743 型号组及 H7B0 型号组的时钟与 Trace 适配；**F103CB 已完成实机验收**，其余上述型号目前通过寄存器模拟与恢复测试。PC 是离散采样落点，不能还原每条指令、完整分支和调用栈。
+
+[操作与分析说明](docs/SWO-PC-SAMPLING.md) · [双端时钟与带宽计算](docs/SWO-CLOCK-MATCHING.md) · [固定主频实机验收](docs/validation/2026-10-09-swo-ports-calculator.md)
 
 ## 界面预览
 
@@ -97,6 +112,7 @@ ST77916 的四线协议配置与 360×360 色条图案，完整发送到内置�
 | RTT 转发接收 | 约 **2.90 MiB/s**（约 3.04 MB/s） | F103ZE、真实 Web 页面，[场景验证](docs/validation/2026-10-05-hardware-test-results.md)；原脚本按 2²⁰ B/s 计量 |
 | J-Scope / SWD 单 u32 | 名义 400 kHz 实得约 **399.97 kHz**，跳拍约 **0.008%**；500 kHz 档实得约 **496 kHz**，跳拍约 **0.8%** | F103CB @72 MHz、SWD 60 MHz、绘图开启，[优化验证](docs/validation/2026-10-07-f103cb-hss-optimization.md) |
 | J-Scope / RISC-V | 单 u32 名义 200 kHz 实得约 **200 kHz**；8 个连续 u32 在 **25 kHz** 窗口内跳拍与 USB 丢样均为 0 | HPM6800EVK，[采样验证](docs/validation/2026-10-07-hpm6800-hss-rate.md) |
+| SWO PC 采样 | **252,198 PC / 1 秒**，236 个不同 PC 的函数 / 文件 / 行号与 GNU `addr2line` 全部一致 | F103CB @72 MHz、256 周期、纯 PC、实际 18 Mbaud；SWO 溢出和已检测 UART 错误均为 0，[实机验收](docs/validation/2026-10-09-swo-ports-calculator.md) |
 | SPI / QSPI 发图 | 单线 **6.29 MB/s**、四线 **16.77 MB/s** | 实际 SCK 60 MHz、32 KiB 批次，仅测传输执行、未接屏；[探针报告](https://github.com/minichao9901/5301evk_akaLinkPro/blob/main/docs/validation/2026-10-08-spi-fixed240.md) |
 | SPI转发接收 | 60 MHz 档约 **7.53 MB/s** | H743、默认 4 KiB WebSerial 缓冲、30 秒稳定窗口校验通过；[高速转发验证](https://github.com/minichao9901/5301evk_akaLinkPro/blob/main/docs/validation/2026-10-08-h743-spi-cdc.md) |
 | ADC 持续采集 | **1 / 2 MSa/s**，8/10/12/16 位各 30 秒计数一致、无溢出 | EVKLite、硬件触发与 DMA，含网页卡顿注入；[采集验证](docs/validation/2026-10-05-hardware-test-results.md#2026-10-06-补充adc-worker-流水线与-12-msas-持续采集) |
@@ -155,6 +171,7 @@ node tools/dev/serve-nocache.mjs 8899
 | 2026-10-07 | HSS 标定与预读优化、数组元素采样及高流量日志修复；建立双仓库标签 [`milestone-2026-10-07`](https://github.com/minichao9901/web-serial-rtt-tools/tree/milestone-2026-10-07) |
 | 2026-10-08 | SPI转发页面、引脚图与 H743 高速接收验证，配合探针统一 240 MHz 模块时钟 |
 | 2026-10-08 | 加入异常诊断和 J-Scope / RTT 质量报告；开发前双仓库基线标签 [`milestone-2026-10-08-pre-diagnostics`](https://github.com/minichao9901/web-serial-rtt-tools/tree/milestone-2026-10-08-pre-diagnostics) |
+| 2026-10-09 | SWO PC 采样、离线源码回放与完整文本导出合入主线；加入双端时钟匹配和带宽计算器，完成 F103CB 实机验收 |
 
 ## 文档与贡献入口
 
@@ -164,6 +181,7 @@ node tools/dev/serve-nocache.mjs 8899
 | [调试器](docs/dbg-page.md) / [栈帧与局部变量](docs/debug-frame-locals.md) | 调试功能和信息恢复范围 |
 | [异常诊断与采集质量](docs/diagnostics.md) | ARM / RV32 现场、分项计数、证据等级和 JSON / Markdown 报告 |
 | [J-Scope](docs/scope-page.md) / [HSS 性能](docs/hss-performance.md) | 变量采集、标定和性能口径 |
+| [SWO PC 采样](docs/SWO-PC-SAMPLING.md) / [时钟匹配与计算器](docs/SWO-CLOCK-MATCHING.md) | 目标配置、录制、离线源码回放、完整导出与实测示例 |
 | [RTT 转发](docs/rtt-cdc.md) / [SPI转发](docs/spi-cdc.md) | 高速接收、共享串口和记录 |
 | [SPI/QSPI](docs/spi-bridge-page.md) / [I2C](docs/i2c-page.md) / [ADC / DAC](docs/usb-analog-page.md) | 外设工具与接线 |
 | [工程生成](docs/gen-page.md) | Keil 工程与调试配套文件 |
