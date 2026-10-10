@@ -596,7 +596,8 @@ fieldset[disabled] legend::after{content:' · 未实现';color:var(--warn)}
 #tab-panel #pn-img-card .animbox>.row>span:first-child{width:auto;font-size:var(--text-xs)}
 #tab-panel #pn-img-card .animrow{margin:0;flex:1;min-width:0}
 #tab-panel #pn-anim-info{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0}
-#tab-panel #pn-image-drop video{position:absolute;top:6px;right:6px;width:96px;max-height:60px;z-index:1}
+/* 视频元素仅用于浏览器解码；所有画面统一显示在主画布中。 */
+#tab-panel #pn-image-drop video{position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;pointer-events:none}
 @media(max-width:1100px){
   #tab-panel #pn-img-card .canvasrow>.canvasbox{flex:1}
   #tab-panel #pn-img-card .pn-image-settings{flex:0 0 300px;gap:7px 8px}

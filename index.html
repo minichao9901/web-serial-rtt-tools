@@ -13,7 +13,7 @@
   var mode = new URLSearchParams(location.search).get('modules');
   var local = ['localhost', '127.0.0.1', '[::1]'].indexOf(location.hostname) !== -1;
   window.__useWebBundle = mode === 'bundle' || (mode !== 'source' && !local);
-  window.__webBundleUrl = 'app/site/main.js?v=1280542be786002b';
+  window.__webBundleUrl = 'app/site/main.js?v=d5cbe34ac843232d';
   var preload = document.createElement('link');
   preload.rel = 'modulepreload';
   preload.href = window.__useWebBundle ? window.__webBundleUrl : 'app/main.js';
@@ -1490,6 +1490,7 @@
         <details class="pn-image-help"><summary>窗口与传输详情</summary>
           <p class="flush hint" id="pn-img-sum"></p>
           <p class="hint">预览里的<b>橙色虚线</b>是探针真正下发的对齐窗口（列地址按 4 像素对齐，多出来的列用边缘填充）。每片 492 B，一屏 ST77916 是 <b>527 片</b>；只有最后一片要应答。</p>
+          <p class="hint">局部刷新发送所有变化像素的一个包围矩形，矩形超过整屏 60% 就整帧发送。适合静止背景上的小范围运动；镜头移动、花草摇动等视频通常省不下数据。MP4/WebM 按视频时间播放，传输更快也不会自动超过原视频帧率；GIF 按发送速度播放。效果以“局部 / 整帧 / 像素省”统计为准。</p>
         </details>
       </div><!-- /dockpage 刷屏 -->
 

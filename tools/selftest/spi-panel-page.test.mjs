@@ -971,11 +971,13 @@ console.log('== 9b. 动画 / 视频：录一段 WebM 当源 → 逐帧整屏刷�
     for (let i = 0; i < 40 && !window.__tools.panel.summary().anim.src; i++) await new Promise(r => setTimeout(r, 100));
     const s = window.__tools.panel.summary();
     return { anim: s.anim, videoOn: document.getElementById('pn-anim-video').classList.contains('on'),
+             decoderHidden: getComputedStyle(document.getElementById('pn-anim-video')).opacity==='0',
+             previewName: window.__tools.panel.src?.name,previewInfo:document.getElementById('pn-img-info').textContent,
              playDisabled: document.getElementById('pn-anim-play').disabled,
              info: document.getElementById('pn-anim-info').textContent.slice(0, 80) };`);
   ok(loaded.anim?.src && /selftest\.webm/.test(loaded.anim.src) && loaded.anim.src.includes('video'),
      `源已装载：${loaded.anim?.src}`);
-  ok(loaded.videoOn === true && loaded.playDisabled === false, '源片段预览出现、「播放到屏」可用');
+  ok(loaded.videoOn === true && loaded.decoderHidden&&loaded.previewName==='selftest.webm'&&loaded.previewInfo.includes('selftest.webm')&&loaded.playDisabled === false, '视频加载后直接显示在主预览，隐藏解码元素，「播放到屏」可用');
 
   // ② 播放：先定死 AXS15352（档 1）+ 使能，再开播 ~2 s
   const played = await ev(`

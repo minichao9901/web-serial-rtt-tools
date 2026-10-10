@@ -172,6 +172,29 @@ export class PanelAnim {
     return this.src;
   }
 
+  /** Read the first decoded image for the shared preview, without starting playback or sending data. */
+  async previewImage(){
+    const src=this.src;if(!src)return null;
+    let image;
+    try{
+      if(src.kind==='gif')({image}=await src.dec.decode({frameIndex:0}));
+      else{
+        const v=this.video;
+        if(v.readyState<2)await new Promise((resolve,reject)=>{
+          const cleanup=()=>{clearTimeout(timer);v.removeEventListener('loadeddata',ready);v.removeEventListener('error',bad);};
+          const ready=()=>{cleanup();resolve();},bad=()=>{cleanup();reject(Error('视频首帧解码失败'));};
+          const timer=setTimeout(()=>{cleanup();reject(Error('视频首帧解码超时'));},8000);
+          v.addEventListener('loadeddata',ready);v.addEventListener('error',bad);
+        });
+        image=v;
+      }
+      if(this.src!==src)return null;
+      const canvas=document.createElement('canvas');canvas.width=src.w;canvas.height=src.h;
+      const ctx=canvas.getContext('2d');ctx.drawImage(image,0,0);
+      return {w:src.w,h:src.h,rgba:new Uint8Array(ctx.getImageData(0,0,src.w,src.h).data),name:src.name};
+    }finally{if(src.kind==='gif')image?.close();}
+  }
+
   /** 建/复用捕获画布（尺寸 = 开窗后的窗口，和静图那条路一致）*/
   _prep(){
     const g = this.geometry();

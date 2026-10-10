@@ -822,6 +822,7 @@ export class SpiPanelView {
   }
 
   setPattern(kind){
+    this.anim?.stop();
     const g = this.geometry();
     const p = I.makePattern(kind, g.w, g.h);
     this.patternKind = kind;
@@ -845,6 +846,7 @@ export class SpiPanelView {
 
   async pickImage(file){
     if (!file) return;
+    this.anim?.stop();
     try {
       const buf = new Uint8Array(await file.arrayBuffer());
       let src;
@@ -991,6 +993,7 @@ export class SpiPanelView {
     const x = Math.max(0, +$('pn-x').value || 0), y = Math.max(0, +$('pn-y').value || 0);
     const cw = I.composeWindow(this.src.rgba, this.src.w, this.src.h, {
       geometry: g, x, y, fit: $('pn-fit').value,
+      w:this.src.fullScreen?g.w:undefined,h:this.src.fullScreen?g.h:undefined,
       swap: $('pn-swap').checked,
       littleEndian: $('pn-byteorder').value === 'le',
       level: Math.max(0, Math.min(255, +$('pn-level').value || 255)),
@@ -1046,6 +1049,7 @@ export class SpiPanelView {
     const x = Math.max(0, +$('pn-x').value || 0), y = Math.max(0, +$('pn-y').value || 0);
     const opt = {
       geometry: g, x, y, fit: $('pn-fit').value,
+      w:this.src.fullScreen?g.w:undefined,h:this.src.fullScreen?g.h:undefined,
       profile: s.profile?.profile ?? 0, lines: g.lines,
       swap: $('pn-swap').checked,
       littleEndian: $('pn-byteorder').value === 'le',
@@ -1122,6 +1126,11 @@ export class SpiPanelView {
     if (!file) return;
     try {
       const src = await this.anim.load(file);
+      const preview=await this.anim.previewImage();
+      if(!preview||this.anim.src!==src)return;
+      this.src={...preview,fullScreen:true};this.patternKind=null;
+      for(const b of $('pn-patterns').querySelectorAll('button'))b.classList.remove('on');
+      this.resetPartial('换动画源');this.renderPreview();this.revealCanvas();
       // ImageDecoder 那条路能吃的其实有 GIF / APNG / 动画 WebP，别一律写成"（GIF）"——
       // 用户看到「rgb-ramp.webp · 36 帧（GIF）」会以为选错文件了。
       const ext = (/\.([a-z0-9]+)$/i.exec(src.name || '')?.[1] || 'gif').toUpperCase();
@@ -1131,6 +1140,7 @@ export class SpiPanelView {
         (src.kind === 'gif' ? ` · ${src.frames} 帧（${ext}）` : ` · ${(src.duration || 0).toFixed(1)} s（视频）`) +
         `　→ 开窗后整帧 ${this.geometry().w * this.geometry().h * 2} 字节，` +
         (po.enabled ? `局部刷新（只发变化区，容差 ${po.tolerance} 位）` : '整帧刷');
+      $('pn-anim-info').title=$('pn-anim-info').textContent;
       this.session.log('g', `动画已就绪：${src.name}（${src.w}×${src.h}）—— 点「播放到屏」开播`, this.tag);
     } catch (e){
       this.session.log('e', '动画源加载失败：' + (e?.message || e), this.tag);
@@ -1172,8 +1182,8 @@ export class SpiPanelView {
     // 「调用」= 这一帧喊了几次 transferOut（`st.calls/frames`）：攒批档位有没有生效，看这个数最直接
     const calls = st.frames ? ` · USB 调用 ${(st.calls / st.frames).toFixed(1)} 次/帧` : '';
     /* 局部刷新的战果：省下的像素比例 = 1 - 实发/整帧等效 —— 「帧率为什么涨了」的答案就在这个数里 */
-    const part = (st.partial || st.skipped)
-      ? ` · 局部 ${st.partial} / 跳过 ${st.skipped} · 像素省 ${st.savePct.toFixed(1)}%`
+    const part = (this.partialOpts().enabled || st.partial || st.skipped)
+      ? ` · 局部 ${st.partial} / 整帧 ${st.frames-st.partial-st.skipped} / 跳过 ${st.skipped} · 像素省 ${st.savePct.toFixed(1)}%`
       : '';
     if (el){
       if (st.running){
@@ -1183,6 +1193,7 @@ export class SpiPanelView {
         el.textContent = `上次：${st.frames} 帧 · ${(st.bytes / 1024).toFixed(0)} KB · ${(st.ms / 1000).toFixed(1)} s · ` +
           `实测 ${st.fps.toFixed(1)} fps · ${st.kbs.toFixed(0)} KB/s` + part + calls + (st.dropped ? ` · 丢帧 ${st.dropped}` : '');
       }
+      el.title=el.textContent;
     }
     // 运行胶囊（在 tab 栏上，切到别的 tab 也看得见）：动画这桩的进度只有这里能跨 tab 看到
     if (st.running) this._act = { kind: '播放中', done: st.frames, note: `${st.fps.toFixed(1)} fps`, abortable: true };

@@ -116,7 +116,7 @@
     "app/spi-cdc/session.js": "41ff93cf8f47669984bfd1c2a8231e02fb4209fd281f7cf044dfcc9138b1edb1",
     "app/spi-cdc/view.js": "be4280d299bc75529a188e9190637a13a259b95985c55b237391973f2e39123e",
     "app/spi/acq-view.js": "0a677d655b598122a760b43be211a9a50198152ad22319a5748e1078d3706d95",
-    "app/spi/anim.js": "e98e89ff770d28e8b4f876c1327154ada12095f0cb96cd9bb64d9838f202c180",
+    "app/spi/anim.js": "4886e057f08b39d057dfa831353f86ffa9e61bdd1960d8975079d3d05e80557b",
     "app/spi/bit-editor.js": "22205eb9b0beee954b4e05c1838e622775b9fece0c4175fd5cd1f7fa80591b30",
     "app/spi/bus-view.js": "254975494f4a14bd73ecfe93ce9e6c8fc765c9c06b04b97cff3d98bd376070c1",
     "app/spi/flash.js": "f0eed312750b6e2e9b29bad6b50b54f0ec1d264dbcc8ff7a61fe221a17b670f5",
@@ -125,7 +125,7 @@
     "app/spi/mock.js": "641d0f5a0e6e85ada69a06a2c92c329e131f362478bdb443edcfb421c46958b2",
     "app/spi/panel-code.js": "1883f01db0a454bff7fa12739858348779dd065a21b3c0546c51209cc8335f4d",
     "app/spi/panel-read.js": "2e8f06955afa5cddcfc4805197d12ec129971d96654674eeaa10db8c654a4f47",
-    "app/spi/panel-view.js": "057d44b1b2633444842e5d25eb07bb558d29ae4fab8b8de951700c5202e84684",
+    "app/spi/panel-view.js": "d990f19e46df90115dbf2a8bc399d50e653d2d0ea8a8b2f96772e94d34ac37a3",
     "app/spi/panels-data.js": "e058988159a236de3ab2e3c1a4bca0e9491c4aa6f512fb8478abb5fc98b8a6b9",
     "app/spi/protocol.js": "19cd44c9f859f0b9cde6bdb5dd7ec4015485c93a9a2f2cd11203bbb92cd109d5",
     "app/spi/reg-view.js": "0aee8c3ec10d27e33e7f8210944752a637d008377d5e70993909ddaa9598fa8f",
@@ -160,6 +160,6 @@
     "app/ui/toast.js": "4ad6d90a90cfba752b324500e14324808305b8927b32a887ddbb736a4d9d2ae2",
     "app/ui/workspace.js": "25b6ce94e5d90302a37e6cec2b7e35c975af95ce29bef1094a4493f3890fc0b7"
   },
-  "outputSha256": "1280542be786002b1ccf5092691e8d894a7cc1e16ab62b561a1ed632257c0453",
-  "outputBytes": 1259760
+  "outputSha256": "d5cbe34ac843232dcf350ebe169ceeb5552b10d90ee6f592eb4fdf9c8e3cff6c",
+  "outputBytes": 1261138
 }
