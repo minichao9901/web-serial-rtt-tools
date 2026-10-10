@@ -134,7 +134,7 @@ SPI转发原生 CDC 曾在 H743 标称 67 MHz 达到约 8.41 MB/s，但 Web 默�
 
 ### 本地运行与演示
 
-无需前端构建。安装 Node.js 18+ 后，在仓库根目录运行：
+本地直接加载源码，无需前端构建。安装 Node.js 18+ 后，在仓库根目录运行：
 
 ```sh
 node tools/dev/serve-nocache.mjs 8899
@@ -143,6 +143,8 @@ node tools/dev/serve-nocache.mjs 8899
 浏览器打开 `http://127.0.0.1:8899/`。HTTPS 与 localhost 提供硬件 API 所需的安全上下文；建议通过 HTTP 服务运行，不以直接双击 HTML 文件作为使用入口。
 
 尚未连接硬件时，可使用 [演示串口](https://minichao9901.github.io/web-serial-rtt-tools/?demo=serial) 或页面内置模拟目标了解界面。模拟结果不用于真实性能判断。
+
+线上静态站使用合并脚本，减少首屏模块请求；本地仍直接加载源码，修改后刷新即可。维护者更新应用源码后运行 `npm ci`、`npm run build:web`，将生成的 `app/site/` 与源码一起提交；`make check` 会检查发布脚本是否与源码一致。需要本地验证线上模式时，地址附加 `?modules=bundle`。
 
 ## 设备与使用边界
 

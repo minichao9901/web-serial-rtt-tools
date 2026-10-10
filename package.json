@@ -1,0 +1,12 @@
+{
+  "name": "web-serial-rtt-tools",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:web": "node tools/dev/build-web.mjs",
+    "check:web": "node tools/dev/build-web.mjs --check"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.12"
+  }
+}

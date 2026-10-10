@@ -744,7 +744,16 @@ git-log:
 check:
 	$(NODE) tools/dev/check-syntax.mjs
 	$(NODE) tools/dev/check-liquid.mjs
+	$(NODE) tools/dev/build-web.mjs --check
 	pwsh -NoProfile -Command "Write-Host 'syntax + liquid check ok'"
+
+# Only maintainers need npm/esbuild; serving the source or published bundle is static.
+.PHONY: build-web check-web
+build-web:
+	npm run build:web
+
+check-web:
+	$(NODE) tools/dev/build-web.mjs --check
 
 clean: clean-firmware
 	pwsh -NoProfile -Command "Remove-Item -Recurse -Force -ErrorAction SilentlyContinue tmp/*.csv, tmp/*.bin, tools/la/__pycache__"

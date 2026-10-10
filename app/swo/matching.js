@@ -17,7 +17,16 @@ export function matchedOptions(o,sources=DEFAULT_SOURCES){
   if(!o.autoBaud){const p=tracePlan({...o,traceHz});return {...o,traceHz,receiverEstimate:receiverCandidate(p.baudRate,mode,sources)};}
   const choices=[];for(let d=1;d<=8192;d++){const baud=traceHz/d;if(baud>30e6||baud<need||baud<1)continue;const c=receiverCandidate(baud,mode,sources);if(c&&c.error<=.005)choices.push({baud,c});}
   choices.sort((a,b)=>Number(a.c.retune)-Number(b.c.retune)||a.c.error-b.c.error||a.baud-b.baud);
-  if(!choices.length)throw Error(`预计需 ${(need/1e6).toFixed(3)} Mbps，请由目标降低主频、增大间隔或减少事件`);
+  if(!choices.length){
+    const maxTargetBaud=traceHz/Math.max(1,Math.ceil(traceHz/30e6));
+    const detail=`预计需 ${(need/1e6).toFixed(3)} Mbps；Trace ${traceHz/1e6} MHz 下目标最高 ${(maxTargetBaud/1e6).toFixed(3)} Mbps，探针上限 30 Mbps。`;
+    if(need>30e6)throw Error(detail+'请由目标降低主频、增大间隔或减少事件。');
+    if(need>maxTargetBaud){
+      const nextPeriod=LEGAL_PERIODS.find(n=>bandwidth({...o,periodCycles:n}).requiredBaud<=maxTargetBaud);
+      throw Error(detail+(nextPeriod?`可尝试 ${nextPeriod} 周期；`:'')+'请增大间隔、减少时间戳 / 事件，或由目标调整 CPU / Trace 时钟。');
+    }
+    throw Error(detail+'当前探针时钟无法匹配可用的目标分频，请检查接收时钟与分频配置。');
+  }
   const {baud,c}=choices[0];return {...o,traceHz,baudRate:baud,allowBaudRounding:true,receiverEstimate:c};
 }
 export function simulate(o,sources=DEFAULT_SOURCES){

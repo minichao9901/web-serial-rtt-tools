@@ -11,6 +11,12 @@ for(const [hz,period,timestamps,expected] of [[72e6,512,true,18e6],[32e6,256,tru
 }
 assert.throws(()=>matchedOptions({...base,periodCycles:64}),/降低主频/);
 assert.throws(()=>matchedOptions({...base,periodCycles:128}),/降低主频/);
+// A receiver's 30 Mbaud ceiling cannot raise an 8 MHz target's SWO output.
+const hsi8={...base,coreHz:8e6,traceHz:8e6,periodCycles:64,timestamps:true};
+assert.throws(()=>matchedOptions(hsi8),error=>/14\.063 Mbps/.test(error.message)&&/Trace 8 MHz.*目标最高 8\.000 Mbps/.test(error.message)&&/探针上限 30 Mbps/.test(error.message)&&/128 周期/.test(error.message));
+assert.equal(matchedOptions({...hsi8,periodCycles:128}).baudRate,8e6);
+assert.equal(matchedOptions({...hsi8,timestamps:false}).baudRate,8e6);
+assert.throws(()=>matchedOptions({...base,coreHz:72e6,traceHz:72e6,periodCycles:256,timestamps:true}),/31\.641 Mbps.*目标最高 24\.000 Mbps/);
 assert.equal(tracePlan({...base,periodCycles:64}).samplesHz,1125000);
 assert.equal(tracePlan({...base,periodCycles:64}).pcMinimumBaud,56250000);
 assert.equal(receiverCandidate(24e6,0).error,0);
