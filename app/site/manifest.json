@@ -125,7 +125,7 @@
     "app/spi/mock.js": "641d0f5a0e6e85ada69a06a2c92c329e131f362478bdb443edcfb421c46958b2",
     "app/spi/panel-code.js": "1883f01db0a454bff7fa12739858348779dd065a21b3c0546c51209cc8335f4d",
     "app/spi/panel-read.js": "2e8f06955afa5cddcfc4805197d12ec129971d96654674eeaa10db8c654a4f47",
-    "app/spi/panel-view.js": "d990f19e46df90115dbf2a8bc399d50e653d2d0ea8a8b2f96772e94d34ac37a3",
+    "app/spi/panel-view.js": "a149565450a94b0608e921acba77e379d798d3a1d6e6d7eb0bcb4c22abea3b19",
     "app/spi/panels-data.js": "e058988159a236de3ab2e3c1a4bca0e9491c4aa6f512fb8478abb5fc98b8a6b9",
     "app/spi/protocol.js": "19cd44c9f859f0b9cde6bdb5dd7ec4015485c93a9a2f2cd11203bbb92cd109d5",
     "app/spi/reg-view.js": "0aee8c3ec10d27e33e7f8210944752a637d008377d5e70993909ddaa9598fa8f",
@@ -154,12 +154,12 @@
     "app/ui/pin-map.js": "657e4ce5082a2f6bfc5fb275d2ffc6f7f1be4440ea05e4d6364170c566a53234",
     "app/ui/probe-status.js": "c8666f31d5030fbb2e09a83e64fd3ce15486806860e427fad6135d6b56c607ef",
     "app/ui/reg-grid.js": "7bc5102a621ee5dbd1585ff52dd6f44d849ba48578563e5deb65911307ec3871",
-    "app/ui/sidebar-tabs.js": "e5cfd2a842aff84490d598fd8ae39be60013c833b668cb9a429043f9c5578bcd",
+    "app/ui/sidebar-tabs.js": "c4dd213fe9afa6bb2fb7ccdcc36591a5ef85d205e919f7044934de71dccfda27",
     "app/ui/spark.js": "0a752a6b30f7875759749df5b7fdb5c15337c3c011b1eab61a4c8741888ec4ea",
     "app/ui/tabs.js": "8f35f91a26803a9eea4633a53ee441d60dc73d7c83166e00fea1a05caffbe803",
     "app/ui/toast.js": "4ad6d90a90cfba752b324500e14324808305b8927b32a887ddbb736a4d9d2ae2",
     "app/ui/workspace.js": "25b6ce94e5d90302a37e6cec2b7e35c975af95ce29bef1094a4493f3890fc0b7"
   },
-  "outputSha256": "d5cbe34ac843232dcf350ebe169ceeb5552b10d90ee6f592eb4fdf9c8e3cff6c",
-  "outputBytes": 1261138
+  "outputSha256": "2e18ae3cd7624c497ad8854a07368b776f181f60fcae7908e84ca9cf959d845c",
+  "outputBytes": 1262064
 }

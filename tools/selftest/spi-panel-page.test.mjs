@@ -399,6 +399,24 @@ console.log('== 4. 按屏套用推荐值（档位 + SCLK + 引脚）==');
 }
 
 // ==================================================================== 4b
+console.log('== 4a. 屏页 SCLK：配置共享、只修改频率、忙时禁止写入 ==');
+{
+  const clock=await ev(`
+    const s=__tools.spiSession,v=__tools.panel,$=id=>document.getElementById(id),wasEnabled=s.enabled;
+    $('pn-side-display-tab').click();const placement=$('pn-side-display-panel').contains($('pn-sclk'))&&!document.querySelector('#tab-panel .main').contains($('pn-sclk'));
+    await s.setEnabled(true,'panel');const before={...s.cfg},profile={...s.profile};
+    const initial=$('pn-sclk').value===$('sp-sclk').value;s.setBusy(true);
+    const disabled=$('pn-sclk').disabled&&$('pn-sclk-set').disabled;await v.applySclk();
+    const unchanged=JSON.stringify(before)===JSON.stringify(s.cfg);s.setBusy(false);
+    $('pn-sclk').value='60000000';$('pn-sclk-set').click();
+    for(let n=0;n<100&&(s.busy||s.cfg.sclkHz!==60000000);n++)await new Promise(r=>setTimeout(r,20));
+    const panel=s.cfg.sclkHz===60000000&&$('sp-sclk').value==='60000000'&&$('pn-sclk-live').textContent.includes('60 MHz');
+    const preserved=Object.keys(before).filter(k=>!['sclkHz','raw'].includes(k)).every(k=>s.cfg[k]===before[k])&&before.raw.slice(4).every((b,i)=>s.cfg.raw[i+4]===b)&&JSON.stringify(s.profile)===JSON.stringify(profile)&&$('pn-profile').value===String(profile.profile);
+    $('sp-sclk').value='20000000';await __tools.spi.applyCfg();const bridge=$('pn-sclk').value==='20000000';
+    await s.applyConfig(before,'panel');await s.setEnabled(wasEnabled,'panel');return {placement,initial,disabled:disabled&&unchanged,panel,preserved,bridge};`);
+  for(const [name,passed]of Object.entries(clock))ok(passed,'screen SCLK '+name);
+}
+
 console.log('== 4b. 自定义分辨率（内置两款之外的屏，如 240×240 的 GC9A01）==');
 {
   const list = await ev(`return [...document.querySelectorAll('#pn-geom option')].map(o => o.value);`);

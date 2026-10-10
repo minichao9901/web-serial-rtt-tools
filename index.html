@@ -13,7 +13,7 @@
   var mode = new URLSearchParams(location.search).get('modules');
   var local = ['localhost', '127.0.0.1', '[::1]'].indexOf(location.hostname) !== -1;
   window.__useWebBundle = mode === 'bundle' || (mode !== 'source' && !local);
-  window.__webBundleUrl = 'app/site/main.js?v=d5cbe34ac843232d';
+  window.__webBundleUrl = 'app/site/main.js?v=2e18ae3cd7624c49';
   var preload = document.createElement('link');
   preload.rel = 'modulepreload';
   preload.href = window.__useWebBundle ? window.__webBundleUrl : 'app/main.js';
@@ -1347,6 +1347,8 @@
         <label class="row"><span>型号</span><select id="pn-preset"></select></label>
         <details class="helpnote sidebar-note"><summary>型号说明</summary><p class="hint" id="pn-preset-note"></p></details>
         <div class="row btnrow"><button id="pn-preset-apply">套用推荐值</button></div>
+        <label class="row"><span>SCLK</span><select id="pn-sclk" aria-label="屏幕 SCLK" title="请求频率；探针按模块时钟整数分频，实际频率由状态回读"></select><button id="pn-sclk-set" class="mini">应用</button></label>
+        <output id="pn-sclk-live" class="pn-clock-live" title="探针状态回读的实际 SCLK">实际 —</output>
         <p class="hint">只改"屏相关"的字段（档位 / SCLK / DC / RST / BL），CS 策略等保持桥页里的设置；写入后照样回读对账。</p>
       </fieldset>
 
@@ -1373,7 +1375,7 @@
         <p class="hint">辅助脚 <b id="pn-sum-pads">—</b></p>
         <p class="hint">档位 <b id="pn-sum-profile">—</b></p>
 
-        <p class="hint">基础配置（SCLK / 模式 / CS 策略 / 通用辅助脚 / 回环自检）在「USB→SPI/QSPI」页；这边只做屏相关的事。</p>
+        <p class="hint">SCLK 可在左侧“屏配置”中直接调整；模式、CS 策略、通用辅助脚及回环自检在「USB→SPI/QSPI」页。</p>
       </fieldset>
 
         <fieldset id="pn-power-card">

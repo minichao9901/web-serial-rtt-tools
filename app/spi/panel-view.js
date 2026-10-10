@@ -2,7 +2,7 @@
  * 「SPI/QSPI 屏」页（`#panel`）—— 把屏点亮那一页：**面板初始化代码** + **图片/图案刷屏**。
  *
  * 与「SPI/QSPI 桥」页（`#spi`）共用同一个 `SpiSession`（一次连接，两页共用）：
- * 基础配置（SCLK / CS 策略 / 通用辅助脚）归桥页；这里只做屏相关的事，并且能按屏型号**一键套用推荐值**。
+ * 与桥页共用基础配置；屏页可直接调整 SCLK，并按屏型号一键套用推荐值。
  *
  * 三块内容：
  *   1. **面板初始化**：一个大文本框 —— 把 C 数组贴进来（或载入内置示例 / 文件）→ 解析成步骤表 →
@@ -119,6 +119,9 @@ export class SpiPanelView {
   init(){
     const s = this.session;
     this._booting = true;      // 初始化期间别让 revealCanvas() 把 dock 顶回刷屏 tab（见该函数注释）
+
+    for(const c of P.SCLK_CHOICES)$('pn-sclk').appendChild(new Option(c.label,String(c.hz)));
+    $('pn-sclk-set').addEventListener('click',()=>this.applySclk());
 
     for (const [v, label] of Object.entries(P.PROFILE_SHORT || P.PROFILE_NAME)) $('pn-profile').appendChild(new Option(label, v));
     for (const [k, p] of Object.entries(PANEL_PRESETS)) $('pn-preset').appendChild(new Option(p.short || p.label, k));
@@ -471,7 +474,8 @@ export class SpiPanelView {
     if (type === 'log') this.appendLog(payload);
     else if (type === 'state'){ this.renderState(payload); this.refreshButtons(); }
     else if (type === 'busy') this.refreshButtons();
-    else if (type === 'cfg' || type === 'profile'){ this.renderSummary(); this.fillProfile(payload); }
+    else if (type === 'cfg'){ this.renderSummary(); this.fillClock(payload); this.refreshButtons(); }
+    else if (type === 'profile'){ this.renderSummary(); this.fillProfile(payload); }
     else if (type === 'counters') this.renderCounters(payload.counters);
   }
 
@@ -506,6 +510,7 @@ export class SpiPanelView {
     $('pn-c-tx').textContent = fmtBytes(c.bytesTx ?? 0);
     $('pn-c-rx').textContent = fmtBytes(c.bytesRx ?? 0);
     $('pn-sclk-actual').textContent = c.actualSclkHz ? P.sclkLabel(c.actualSclkHz) : '—';
+    $('pn-sclk-live').textContent = '实际 '+(c.actualSclkHz?P.sclkLabel(c.actualSclkHz):'—');
   }
 
   renderSummary(){
@@ -518,6 +523,24 @@ export class SpiPanelView {
         ((c.padActiveLow & 0x06) ? '（RST/CS 低有效）' : '')
       : '—';
     $('pn-sum-profile').textContent = p ? `${P.PROFILE_NAME[p.profile]} · 线数 ${p.defLines}` : '—';
+  }
+
+  fillClock(c){
+    const select=$('pn-sclk'),value=String(c.sclkHz);
+    select.querySelector('option[data-current]')?.remove();
+    if(![...select.options].some(o=>o.value===value)){const option=new Option(P.sclkLabel(c.sclkHz)+'（当前）',value);option.dataset.current='true';select.appendChild(option);}
+    select.value=value;
+  }
+
+  async applySclk(){
+    const s=this.session;if(!s.connected||s.busy)return;
+    const sclkHz=Number($('pn-sclk').value);if(!Number.isInteger(sclkHz)||sclkHz<0)return;
+    s.setBusy(true);
+    try{await this.wrap(async()=>{
+      const cfg=await s.loadCfg({quiet:true,tag:this.tag});
+      await s.applyConfig({...cfg,sclkHz},this.tag);
+      await s.pollStatus(true);
+    });}finally{s.setBusy(false);}
   }
 
   fillProfile(p){
@@ -566,6 +589,7 @@ export class SpiPanelView {
     $('pn-prof-get').disabled = !c; $('pn-prof-set').disabled = !c;
     $('pn-enable').disabled = !c; $('pn-disable').disabled = !c;
     $('pn-preset-apply').disabled = !c;
+    $('pn-sclk').disabled=$('pn-sclk-set').disabled=!c||!s.cfg||busy;
     const canSend = d && !busy;
     for (const id of ['pn-code-play', 'pn-img-send', 'pn-rst-send', 'pn-rst-bl', 'pn-bl-on', 'pn-bl-off', 'pn-pwr-on', 'pn-disp-on', 'pn-disp-off', 'pn-pwr-off']) $(id).disabled = !canSend;
     $('pn-code-stop').disabled = !busy;
