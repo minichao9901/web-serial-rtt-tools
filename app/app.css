@@ -1075,6 +1075,9 @@ fieldset.folded > legend::after{content:' · 已折叠';color:var(--fg2);font-si
 
 /* SVD 外设寄存器解码页 */
 #tab-dbg .svdtools{align-items:center}
+#tab-dbg .svdvalue.chg,#tab-dbg .svdfield.chg .fv{color:#ffb86c}
+#tab-dbg .svdfield.chg{background:#39281c}
+#tab-dbg #d-svd-auto-note:empty{display:none}
 #tab-dbg #d-svd-info{flex:1 1 auto;min-width:0;margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:var(--text-xs);line-height:1.5}
 #tab-dbg #d-svd-periph{flex:1 1 88px;min-width:72px}
 #tab-dbg #d-svd-reg{flex:1 1 120px;min-width:92px}

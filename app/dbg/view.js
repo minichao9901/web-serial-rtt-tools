@@ -48,6 +48,8 @@ import { sourceTokens } from './source-syntax.js';
 import { hex32, parseBytes } from './fmt.js';
 import { Rtt } from '../rtt/protocol.js';
 import { parseSvdXml, decodeSvdRegister, svdSummary } from './svd.js';
+import { SvdValueState, svdAutoReadReason } from './svd-state.js';
+import { BUNDLED_SVDS } from './svd/bundled.js';
 import { FaultPanel } from './fault-panel.js';
 
 const on = (id, ev, fn) => { const el = $(id); if (el) el.addEventListener(ev, fn); return el; };
@@ -81,6 +83,9 @@ export class DbgView {
     this.svd = null;                       // 当前 SVD 模型（用户选择或内置 F103）
     this.svdName = '';
     this.svdRaw = null;
+    this.svdValues = new SvdValueState();
+    this._svdRevision = 0;
+    this._svdNextReadAt = 0;
     this.faultPanel = new FaultPanel(this);
   }
 
@@ -130,6 +135,9 @@ export class DbgView {
     on('d-svd-pick', 'click', () => $('d-svd-file')?.click());
     on('d-svd-file', 'change', e => this._loadSvdFile(e.target.files?.[0]));
     on('d-svd-default', 'click', () => this.loadBundledSvd());
+    on('d-svd-bundled', 'change', () => this.loadBundledSvd());
+    const svdLive=on('d-svd-live','change',()=>{this._svdNextReadAt=0;store.set('dbg.svdLive',!!$('d-svd-live')?.checked);});
+    if(svdLive)svdLive.checked=!!store.get('dbg.svdLive',false);
     on('d-svd-periph', 'change', () => { this._renderSvdRegisters(); this._renderSvdRegister(); });
     on('d-svd-reg', 'change', () => this._renderSvdRegister());
     on('d-svd-read', 'click', () => this._act('读取 SVD 寄存器', () => this._readSvdRegister()));
@@ -371,6 +379,7 @@ export class DbgView {
     if (save) store.set('dbg.dock', name);
     // 内存页刚露出来时按当前宽度决定一行几个字节（面板是隐藏的时候量不到宽度）
     if (name === 'mem' && this.mem.length) this.renderMem();
+    if(name==='svd'&&this.svd&&this.session.connected&&this.session.halted)this._act('刷新 SVD',()=>this._readSvdRegister({automatic:true}));
   }
 
   /** 通用分隔条拖拽（不用 setPointerCapture：合成的 CDP 事件也能驱动它） */
@@ -558,6 +567,7 @@ export class DbgView {
 
   async _disconnectNow(){
     this._stopWatch();
+    this._resetSvdSamples();
     this.rttStop();
     if (this._connectionTask) await this._connectionTask.catch(() => {});
     await this.session.exclusive(async () => { await this.faultPanel?.restoreCatchLocked(); await this.session.disconnect(); });
@@ -613,6 +623,7 @@ export class DbgView {
     this._updatePcStrip();
     if (diagnosis?.error) return;
     await this._refreshWatchLocked();
+    if(this.svd)await this._refreshSvdLocked();
     await this.renderSource();
   }
 
@@ -1124,6 +1135,7 @@ export class DbgView {
    *    150 ms 的观察间隔变成 1 s，用户看到的是"点了继续半天不更新"。
    */
   _startWatch(){
+    this._applySvdHighlights();
     this.faultPanel?.invalidate('目标继续运行，现场转为历史记录');
     this._invalidateBacktrace();
     if (this.watching) return;
@@ -1149,6 +1161,10 @@ export class DbgView {
         if (this.rtt && polls % 2 === 0) await this.session.tryExclusive(() => this._rttPump());
         // 「运行中也刷新」开关（默认关）：直接读 RAM，目标照跑
         if ($('d-watch-live')?.checked && polls % 2 === 0) await this.session.tryExclusive(() => this._refreshWatchLocked());
+        if(!this.session.halted&&$('d-svd-live')?.checked&&this.dockTab==='svd'&&$('tab-dbg')?.classList.contains('active')&&performance.now()>=this._svdNextReadAt){
+          this._svdNextReadAt=performance.now()+500;
+          await this.session.tryExclusive(()=>this._refreshSvdLocked());
+        }
       } catch (e){
         this._out('✗ 观察目标时出错（继续试）：' + (e?.message || e), 'err');
         await waitMs(600);
@@ -1252,35 +1268,49 @@ export class DbgView {
 
   async _loadSvdFile(file){
     if (!file) return false;
+    const generation=(this._svdLoadGeneration || 0)+1;this._svdLoadGeneration=generation;this._svdLoading=true;
     try {
       const text = await file.text();
+      if(generation!==this._svdLoadGeneration)return false;
       return this.loadSvdText(text, file.name || 'SVD');
     } catch (e){
       this._out('✗ 读取 SVD 失败：' + (e?.message || e), 'err');
       toast('读取 SVD 失败：' + (e?.message || e), 'err', 6000);
       return false;
-    }
+    }finally{if(generation===this._svdLoadGeneration)this._svdLoading=false;}
   }
 
-  /** 供页面自测和「内置 F103」按钮使用；用户选择的任意 .svd 也走同一入口。 */
-  async loadBundledSvd(){
+  /** Built-in data is fetched only when selected, never on the startup path. */
+  async loadBundledSvd(id=$('d-svd-bundled')?.value || 'STM32F103xx'){
+    const asset=BUNDLED_SVDS.find(s=>s.id===id);if(!asset)throw Error('未知的内置 SVD');
+    if($('d-svd-bundled'))$('d-svd-bundled').value=id;
+    const generation=(this._svdLoadGeneration || 0)+1;this._svdLoadGeneration=generation;this._svdLoading=true;
+    if($('d-svd-info'))$('d-svd-info').textContent='正在载入 '+asset.label+'…';
     try {
       // GitHub Pages 以仓库名作为站点前缀（/web-serial-rtt-tools/），不能从域名根目录取文件。
       // 以当前 ES 模块为基准后，本地 127.0.0.1 和项目站点都会落到同一个 SVD 文件。
-      const url = new URL('./svd/STM32F103xx.svd?t=' + Date.now(), import.meta.url);
-      const r = await fetch(url, { cache: 'no-store' });
+      const compressed=typeof DecompressionStream==='function';
+      const url = new URL('./svd/'+asset.file+(compressed?'.gz':'')+'?v='+asset.version, import.meta.url);
+      const r = await fetch(url);
       if (!r.ok) throw new Error('HTTP ' + r.status);
-      return this.loadSvdText(await r.text(), 'STM32F103xx.svd（内置）');
+      const bytes=new Uint8Array(await r.arrayBuffer());
+      // Some hosts already decode a Content-Encoding response in fetch().
+      const zipped=compressed&&bytes[0]===0x1f&&bytes[1]===0x8b;
+      const text=zipped?await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).text():new TextDecoder().decode(bytes);
+      if(generation!==this._svdLoadGeneration)return false;
+      return this.loadSvdText(text,asset.label+'（内置）');
     } catch (e){
-      this._out('✗ 载入内置 F103 SVD 失败：' + (e?.message || e), 'err');
-      toast('载入内置 F103 SVD 失败：' + (e?.message || e), 'err', 6000);
+      if(generation!==this._svdLoadGeneration)return false;
+      this._out('✗ 载入内置 '+asset.label+' SVD 失败：' + (e?.message || e), 'err');
+      toast('载入内置 '+asset.label+' SVD 失败：' + (e?.message || e), 'err', 6000);
       return false;
-    }
+    }finally{if(generation===this._svdLoadGeneration)this._svdLoading=false;}
   }
 
   loadSvdText(text, name = 'SVD'){
     try {
       const model = parseSvdXml(text);
+      this._resetSvdSamples();
       this.svd = model;
       this.svdName = String(name || 'SVD');
       this.svdRaw = String(text || '');
@@ -1290,6 +1320,7 @@ export class DbgView {
       this._renderSvdPeripherals();
       return model;
     } catch (e){
+      this._resetSvdSamples();
       this.svd = null; this.svdRaw = null;
       this._renderSvdPeripherals();
       this._out('✗ 解析 SVD 失败：' + (e?.message || e), 'err');
@@ -1347,18 +1378,21 @@ export class DbgView {
     const p = this._svdPeripheral(), r = this._svdRegister();
     const info = $('d-svd-reg-info'), value = $('d-svd-value'), fields = $('d-svd-fields');
     if (!p || !r){
+      if(value)value.classList.remove('chg');
       if (info) info.textContent = '载入 SVD 后选择外设和寄存器；读取会使用当前调试会话的 SWD 内存读。';
       if (value) value.textContent = '—';
       if (fields) fields.innerHTML = '<div class="hint">（寄存器位域会显示在这里）</div>';
       return;
     }
     const addr = (p.baseAddress + r.addressOffset) >>> 0;
+    const last=this.svdValues.entries.get(this._svdKey())?.last;
+    if(!decoded&&last!=null)decoded=decodeSvdRegister(r,last);
     if (info) info.textContent = `${p.name}.${r.name}  @  ${hex32(addr)}  · ${r.size} bit · ${r.access || 'read-write'}${r.description ? '\n' + r.description : ''}`;
     if (value) value.textContent = decoded ? `${decoded.valueHex}  （${r.size} bit）` : `复位值 ${'0x' + (r.resetValue >>> 0).toString(16).toUpperCase()}  · 点击「读取」获取目标当前值`;
-    if (!fields) return;
+    if (!fields){this._applySvdHighlights();return;}
     fields.textContent = '';
     if (!r.fields.length){
-      const d = document.createElement('div'); d.className = 'hint'; d.textContent = '（该寄存器没有字段描述）'; fields.appendChild(d); return;
+      const d = document.createElement('div'); d.className = 'hint'; d.textContent = '（该寄存器没有字段描述）'; fields.appendChild(d); this._applySvdHighlights(); return;
     }
     for (const f of r.fields){
       const row = document.createElement('div'); row.className = 'svdfield';
@@ -1367,20 +1401,62 @@ export class DbgView {
       const got = decoded?.fields?.find(x => x.name === f.name);
       v.textContent = got ? `${got.valueHex}${got.enumName ? ' · ' + got.enumName : ''}` : '—';
       const b = document.createElement('span'); b.className = 'fb'; b.textContent = `[${f.lsb + f.width - 1}:${f.lsb}] ${f.access || ''}`;
+      row.dataset.mask='0x'+(((1n<<BigInt(f.width))-1n)<<BigInt(f.lsb)).toString(16);
       row.append(n, v, b); fields.appendChild(row);
+    }
+    this._applySvdHighlights();
+  }
+
+  _svdKey(){const p=this._svdPeripheral(),r=this._svdRegister();return p&&r?`${this._svdRevision}:${p.name}:${r.name}:${p.baseAddress+r.addressOffset}`:'';}
+
+  _resetSvdSamples(){
+    this._svdRevision++;this.svdValues.clear();clearTimeout(this._svdHighlightTimer);
+    if($('d-svd-auto-note'))$('d-svd-auto-note').textContent='';
+    $('d-svd-value')?.classList.remove('chg');
+    for(const row of $('d-svd-fields')?.querySelectorAll('.chg') || [])row.classList.remove('chg');
+  }
+
+  _applySvdHighlights(){
+    clearTimeout(this._svdHighlightTimer);
+    const h=this.svdValues.highlight(this._svdKey(),{running:!this.session.halted});
+    $('d-svd-value')?.classList.toggle('chg',h.mask!==0n);
+    for(const row of $('d-svd-fields')?.querySelectorAll('[data-mask]') || [])row.classList.toggle('chg',!!(h.mask&BigInt(row.dataset.mask)));
+    if(h.nextExpiry!==null)this._svdHighlightTimer=setTimeout(()=>this._applySvdHighlights(),Math.max(1,h.nextExpiry-performance.now()+10));
+  }
+
+  async _refreshSvdLocked(){
+    if(!this.session.connected||this._svdLoading||!this._svdRegister())return;
+    const key=this._svdKey(),session=this.session;
+    try{await this._readSvdRegister({automatic:true});}
+    catch(e){
+      if(key!==this._svdKey()||session!==this.session||!session.connected)return;
+      if($('d-svd-live'))$('d-svd-live').checked=false;
+      store.set('dbg.svdLive',false);
+      if($('d-svd-auto-note'))$('d-svd-auto-note').textContent='自动读取已停止：'+(e?.message || e);
     }
   }
 
-  async _readSvdRegister(){
+  async _readSvdRegister({automatic=false}={}){
     const p = this._svdPeripheral(), r = this._svdRegister();
     if (!p || !r) throw new Error('请先载入 SVD 并选择寄存器');
     if (!this.session.connected) throw new Error('还没连接目标');
+    const reason=this.session.arch?.name==='riscv'&&/^STM32/.test(this.svd?.name || '')?'STM32 SVD 不适用于当前 RISC-V 目标':svdAutoReadReason(r);
+    if(automatic&&reason){
+      if($('d-svd-auto-note'))$('d-svd-auto-note').textContent=reason;
+      return null;
+    }
+    if(!automatic&&this.session.arch?.name==='riscv'&&/^STM32/.test(this.svd?.name || ''))throw Error(reason);
+    const key=this._svdKey(),session=this.session;
     const bytes = Math.max(1, Math.min(8, Math.ceil((r.size || 32) / 8)));
     const addr = (p.baseAddress + r.addressOffset) >>> 0;
     const rawBytes = await this.session.memRead(addr, bytes);
     let raw = 0n;
     for (let i = 0; i < rawBytes.length; i++) raw |= BigInt(rawBytes[i]) << BigInt(i * 8);
-    this._renderSvdRegister(decodeSvdRegister(r, raw));
+    if(key!==this._svdKey()||session!==this.session||!session.connected)return raw;
+    const decoded=decodeSvdRegister(r,raw);
+    this.svdValues.sample(key,decoded.value,{running:!session.halted,stopToken:session.regs});
+    if($('d-svd-auto-note'))$('d-svd-auto-note').textContent=automatic?'':svdAutoReadReason(r);
+    this._renderSvdRegister(decoded);
     return raw;
   }
 

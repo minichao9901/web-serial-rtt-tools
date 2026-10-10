@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build:web": "node tools/dev/build-web.mjs",
+    "build:web": "node tools/dev/build-svd.mjs && node tools/dev/build-web.mjs",
     "check:web": "node tools/dev/build-web.mjs --check"
   },
   "devDependencies": {

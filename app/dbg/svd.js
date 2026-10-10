@@ -59,6 +59,25 @@ const val = (n, name, fallback = '') => {
   return x ? clean(x.text) : fallback;
 };
 
+// Vendor files reuse whole peripherals (GPIOB from GPIOA, TIM8 from TIM1, ...).
+// Resolve before decoding so a derived instance keeps its own base address.
+function resolvePeripherals(nodes){
+  const names=new Map(nodes.map(n=>[val(n,'name'),n])),resolved=new Map(),visiting=new Set();
+  const resolve=n=>{
+    if(resolved.has(n))return resolved.get(n);
+    if(visiting.has(n))throw Error('SVD 外设继承循环：'+val(n,'name'));
+    visiting.add(n);let result=n;
+    if(n.attrs.derivedFrom){
+      const parent=names.get(n.attrs.derivedFrom);
+      if(!parent)throw Error('SVD 找不到继承外设：'+n.attrs.derivedFrom);
+      const base=resolve(parent),ownNames=new Set(n.children.map(c=>c.name));
+      result={...n,children:[...base.children.filter(c=>!ownNames.has(c.name)),...n.children]};
+    }
+    visiting.delete(n);resolved.set(n,result);return result;
+  };
+  return nodes.map(resolve);
+}
+
 export function svdNumber(value, fallback = 0){
   const s = clean(value);
   if (!s) return fallback;
@@ -107,7 +126,7 @@ function parseField(n, inheritedAccess){
   const ev = kid(n, 'enumeratedValues');
   for (const e of kids(ev, 'enumeratedValue')) enums.push({ name: val(e, 'name'), value: svdNumber(val(e, 'value'), 0), description: val(e, 'description') });
   return { name: val(n, 'name', '(未命名)'), description: val(n, 'description'), lsb, width,
-           access: val(n, 'access', inheritedAccess || ''), enumeratedValues: enums };
+           access: val(n, 'access', inheritedAccess || ''), readAction: val(n,'readAction'), enumeratedValues: enums };
 }
 
 function parseRegister(n, inherited){
@@ -120,7 +139,7 @@ function parseRegister(n, inherited){
     const fields = kids(kid(n, 'fields'), 'field').map(f => parseField(f, access)).filter(Boolean);
     return { name, description: val(n, 'description'), addressOffset: offset >>> 0,
       size: svdNumber(val(n, 'size'), inherited.size || 32), resetValue: svdNumber(val(n, 'resetValue'), 0) >>> 0,
-      access, fields };
+      access, readAction: val(n,'readAction',inherited.readAction || ''), fields };
   });
 }
 
@@ -131,7 +150,8 @@ function parsePeripheral(n, defaults){
     const baseAddress = (svdNumber(val(n, 'baseAddress'), 0) + (idx == null ? 0 : i * step)) >>> 0;
     const registers = [];
     const rn = kid(n, 'registers');
-    for (const r of kids(rn, 'register')) registers.push(...parseRegister(r, defaults));
+    const inherited={...defaults,size:svdNumber(val(n,'size'),defaults.size),access:val(n,'access',defaults.access),readAction:val(n,'readAction',defaults.readAction || '')};
+    for (const r of kids(rn, 'register')) registers.push(...parseRegister(r, inherited));
     return { name, description: val(n, 'description'), groupName: val(n, 'groupName'), baseAddress,
       registers: registers.sort((a, b) => a.addressOffset - b.addressOffset || a.name.localeCompare(b.name)) };
   });
@@ -144,7 +164,7 @@ export function parseSvdXml(text){
   const defaults = { size: svdNumber(val(device, 'size'), 32), access: val(device, 'access', 'read-write') };
   const pn = kid(device, 'peripherals');
   const peripherals = [];
-  for (const p of kids(pn, 'peripheral')) peripherals.push(...parsePeripheral(p, defaults));
+  for (const p of resolvePeripherals(kids(pn, 'peripheral'))) peripherals.push(...parsePeripheral(p, defaults));
   if (!peripherals.length) throw new Error('SVD 没有可用的 <peripheral>');
   return { name: val(device, 'name', 'SVD'), version: val(device, 'version'), description: val(device, 'description'),
            width: svdNumber(val(device, 'width'), 32), peripherals };

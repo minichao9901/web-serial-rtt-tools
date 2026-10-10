@@ -206,6 +206,10 @@ test-dbg-features:
 test-dbg-page: page-prep
 	$(NODE) tools/selftest/dbg-page.test.mjs
 
+.PHONY: test-dbg-svd-page
+test-dbg-svd-page: page-prep
+	$(NODE) tools/selftest/dbg-svd-page.test.mjs
+
 # 调试器页的真机冒烟（真探针 + 真目标板；只读为主，跑完把目标放回运行状态）
 # ⚠️ 探针接口同时只能被一个程序占着：别的浏览器/页签还连着就得先让它断开，否则会报
 #    "Unable to claim interface"（脚本会明确提示，不会假装成功）

@@ -17,3 +17,7 @@ samples/anim/*.webm binary
 samples/test_images/**/*.bmp binary
 
 *.bat -text
+
+# Keep the official Keil XML byte-for-byte, including vendor formatting.
+app/dbg/svd/STM32H7*.svd -text -whitespace
+app/dbg/svd/*.svd.gz binary

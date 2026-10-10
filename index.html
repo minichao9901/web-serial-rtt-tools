@@ -13,7 +13,7 @@
   var mode = new URLSearchParams(location.search).get('modules');
   var local = ['localhost', '127.0.0.1', '[::1]'].indexOf(location.hostname) !== -1;
   window.__useWebBundle = mode === 'bundle' || (mode !== 'source' && !local);
-  window.__webBundleUrl = 'app/site/main.js?v=8437dfcbb81d750b';
+  window.__webBundleUrl = 'app/site/main.js?v=ec412a3b921d2d9a';
   var preload = document.createElement('link');
   preload.rel = 'modulepreload';
   preload.href = window.__useWebBundle ? window.__webBundleUrl : 'app/main.js';
@@ -926,7 +926,8 @@
 
           <div class="dockpage" data-dock="svd">
             <div class="toolrow nw svdtools">
-              <button id="d-svd-default" class="mini">内置 F103</button>
+              <select id="d-svd-bundled" aria-label="内置 SVD 型号"><option value="STM32F103xx">STM32F103</option><option value="STM32H743">STM32H743</option><option value="STM32H750">STM32H750</option></select>
+              <button id="d-svd-default" class="mini">载入内置</button>
               <button id="d-svd-pick" class="mini">选择 .svd…</button>
               <input id="d-svd-file" type="file" accept=".svd,.xml,application/xml,text/xml" hidden>
               <span id="d-svd-info" class="hint">尚未载入 SVD</span>
@@ -935,6 +936,10 @@
               <span>外设</span><select id="d-svd-periph" class="mono"><option value="">—</option></select>
               <span>寄存器</span><select id="d-svd-reg" class="mono"><option value="">—</option></select>
               <button id="d-svd-read" class="mini">读取</button>
+            </div>
+            <div class="toolrow">
+              <label class="chk"><input id="d-svd-live" type="checkbox" title="仅刷新当前 SVD 寄存器，约每 500 ms；变化约 2 秒后恢复颜色">运行中也刷新</label>
+              <span id="d-svd-auto-note" class="hint" aria-live="polite"></span>
             </div>
             <div id="d-svd-reg-info" class="hint mono">载入 SVD 后选择外设和寄存器；读取会使用当前调试会话的 SWD 内存读。</div>
             <div id="d-svd-value" class="svdvalue mono">—</div>

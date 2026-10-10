@@ -45,10 +45,12 @@
     "app/dbg/session.js": "e1671858f6ae0ba3b41eb78faf64cd141b73699624353ff22eca3edb37632fc8",
     "app/dbg/source-syntax.js": "91f2c67733931f051511371a20bb93aa9aebfd17018db5e331a4638accde197c",
     "app/dbg/source.js": "a50f0f7a29dbce9dd016ba711c905ef0070c110e729d291d6cf950cea9590063",
-    "app/dbg/svd.js": "633a84d384ea66ade1fc7fc4367d0d8ef0178e67b451ea4e13a347b08335619d",
+    "app/dbg/svd-state.js": "5a286b059a073e7693d77fba2d0b3452f263ceccd4994b8238c77ecedd7381c5",
+    "app/dbg/svd.js": "d0775c6408af0ca8deefb1a6291bd2b54c8c7c6ebe0164813953e63c88e963fb",
+    "app/dbg/svd/bundled.js": "96f4f99097cf46ab497215dbe749a07ad25c3291c68fa28801858f6b982f38f5",
     "app/dbg/symbols.js": "f51436dc46679caa5847ae66c1e9bca6bc28d6272c943deee555ec5ef2457e8b",
     "app/dbg/thumb.js": "e754ad0e14768098cc032736bbab46cbe527108f00317d70a43b34bd38139d6c",
-    "app/dbg/view.js": "0b087e5ca393a7f740724ed0b6ffa561fdd6e3e98a5e75ce051b4cb1a6fbcfbd",
+    "app/dbg/view.js": "681cf459a994b4ac31a596117e0a3367c84179c261573c283950833baaa29428",
     "app/dbg/watch.js": "c7522b76f24fbaaa8718bd85a7e2d59f94e91408ba6af771c9913eb987136657",
     "app/diagnostics/acquisition.js": "3b905182a8447b3d2a59d4e62ef7ba92ef126545ae85a25d6a1bba3aad5dee7a",
     "app/diagnostics/drawer.js": "c64d07834228a1190580aca5428f8076091ca83720f14adc590b17c2050c4e7f",
@@ -158,6 +160,6 @@
     "app/ui/toast.js": "4ad6d90a90cfba752b324500e14324808305b8927b32a887ddbb736a4d9d2ae2",
     "app/ui/workspace.js": "25b6ce94e5d90302a37e6cec2b7e35c975af95ce29bef1094a4493f3890fc0b7"
   },
-  "outputSha256": "8437dfcbb81d750beacb1fe622788f9698045ad424a72cb28400976befdb55f0",
-  "outputBytes": 1253208
+  "outputSha256": "ec412a3b921d2d9a5743d3f45c71ad3d3dd8e8d7ab017d63cf7bf652f9ef0b3e",
+  "outputBytes": 1259143
 }
