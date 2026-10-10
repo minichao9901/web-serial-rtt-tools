@@ -44,7 +44,17 @@ const complete=[...traceTextChunks(record.raw,record.metadata,elf,{format:'c',so
 const iterator=traceTextChunks(record.raw,record.metadata,elf,{format:'simple-c',sources});let simple='',stats;
 for(;;){const step=iterator.next();if(step.done){stats=step.value;break;}simple+=step.value;}
 assert.equal(stats.pcs,8432);assert.equal(stats.skipped,0);assert.ok(stats.removed>1000);assert.ok(simple.length<complete.length/4);
-assert.doesNotMatch(simple,/event=|segment=|PC#|ELF SHA256|\/\*/);
+assert.doesNotMatch(simple,/event=|segment=|PC#|ELF SHA256/);
+assert.match(simple,/\/\* 函数: recursive_mix · .*pipeline\.c:\d+ \*\//);
+assert.ok(stats.sections>1);assert.equal((simple.match(/\/\* 函数:/g)||[]).length,stats.sections);
+let headed='';const headings=new CodeOutline(s=>headed+=s),context=fn=>({key:fn,header:'/* 函数: '+fn+' */'});
+for(const fn of ['A','A','B','A'])headings.push(fn+':1','return x;',context(fn));headings.flush();
+assert.equal(headed,'/* 函数: A */\nreturn x;\n\n/* 函数: B */\nreturn x;\n\n/* 函数: A */\nreturn x;\n','headings follow retained function transitions, including returns');
+headings.boundary();headings.push('A:1','return x;',context('A'));headings.flush();
+assert.ok(headed.endsWith('\n\n/* 函数: A */\nreturn x;\n'),'same function gets a fresh heading after a gap');
+let folded='';const blocks=new CodeOutline(s=>folded+=s);
+for(let n=0;n<100;n++)for(const fn of ['A','B'])blocks.push(fn+':1',fn+'();',context(fn));blocks.flush();
+assert.equal(folded,'/* 函数: A */\nA();\n\n/* 函数: B */\nB();\n','repeated blocks do not leave orphaned headings');
 assert.throws(()=>[...traceTextChunks(record.raw,record.metadata,elf,{format:'simple-c'})],/没有可导出/);
 console.log(`SWO simplified sample: ${stats.pcs} PCs -> ${stats.lines} source lines, ${stats.removed} repeats merged, ${simple.length}/${complete.length} chars`);
 console.log('SWO target/complete export: HSI/HSE, unsupported cores, baud rounding, explicit gaps, >250k full events PASS');

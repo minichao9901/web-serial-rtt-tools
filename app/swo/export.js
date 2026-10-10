@@ -1,6 +1,7 @@
 import {SwoDecoder} from './decoder.js';
 import {symbolIndex} from './analyze.js';
-import {CodeOutline,codeLines} from './simplify.js';
+const exportVersion=new URL(import.meta.url).searchParams.get('v');
+const {CodeOutline,codeLines}=await import(new URL('./simplify.js'+(exportVersion?'?v='+encodeURIComponent(exportVersion):''),import.meta.url));
 const hex=v=>'0x'+(v>>>0).toString(16).padStart(8,'0');
 const clean=v=>String(v??'').replaceAll('*/','* /').replace(/[\r\n\u0000]/g,' ');
 function gaps(metadata,raw){return (metadata.transportGaps||[]).filter(g=>Number.isInteger(g.offset)&&g.offset>=0&&g.offset<=raw.length).sort((a,b)=>a.offset-b.offset);}
@@ -36,7 +37,7 @@ export function* traceTextChunks(raw,metadata={},elf=null,{format='c',sources={}
   yield comment('END 完整解码事件='+event+' PC='+sample+' stats='+JSON.stringify(stats));
 }
 
-/** Source-only outline of all decoded PCs; do not invent lines or cross gaps. */
+/** Source outline with function headings; do not invent lines or cross gaps. */
 export function* traceSimpleCodeChunks(raw,metadata={},elf=null,{sources={}}={}){
   if(!elf)throw Error('导出简化 .c 需要匹配的 ELF 和源码');
   const symbols=symbolIndex(elf),cache=new Map();let text='',pcs=0,skipped=0,blank=0;
@@ -44,10 +45,11 @@ export function* traceSimpleCodeChunks(raw,metadata={},elf=null,{sources={}}={})
   const source=path=>{if(!cache.has(path))cache.set(path,typeof sources[path]==='string'?codeLines(sources[path],path):null);return cache.get(path);};
   const d=new SwoDecoder({aligned:metadata.startAligned===true,emit:e=>{
     if(e.kind==='gap'){outline.boundary();return;}if(e.kind!=='pc')return;pcs++;
-    const where=symbols.lookup(e.pc).location,line=where&&source(where.file)?.[where.line-1];
+    const symbol=symbols.lookup(e.pc),where=symbol.location,line=where&&source(where.file)?.[where.line-1];
     if(typeof line!=='string'){skipped++;outline.boundary();return;}
     if(!line.trim()){blank++;return;}
-    outline.push(where.file+'\u0000'+where.line,line);
+    const contextKey=where.file+'\u0000'+symbol.funcAddr+'\u0000'+symbol.fn;
+    outline.push(contextKey+'\u0000'+where.line,line,{key:contextKey,header:'/* 函数: '+clean(symbol.exact?symbol.fn:'未知函数')+' · '+clean(where.file)+':'+where.line+' */'});
   }});
   let offset=0;for(const g of [...gaps(metadata,raw),{offset:raw.length,final:true}]){
     while(offset<g.offset){const end=Math.min(offset+16384,g.offset);d.feed(raw.subarray(offset,end));offset=end;if(text){yield text;text='';}}
@@ -56,5 +58,5 @@ export function* traceSimpleCodeChunks(raw,metadata={},elf=null,{sources={}}={})
   d.finish();outline.flush();
   if(!outline.emitted)throw Error('没有可导出的源码行，请载入与 ELF 匹配的源码目录');
   if(text)yield text;
-  return {pcs,skipped,blank,lines:outline.emitted,removed:outline.removed};
+  return {pcs,skipped,blank,lines:outline.emitted,removed:outline.removed,sections:outline.sections};
 }

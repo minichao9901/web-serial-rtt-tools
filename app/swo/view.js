@@ -234,7 +234,7 @@ export class SwoView {
         worker.postMessage({kind:'prepare',raw:this.recording.raw,metadata:this.recording.metadata,elf:this.elf?.buffer||null});
       });
       if(stream)await stream.close();else download(new Blob(chunks),name,'text/plain;charset=utf-8');
-      status(simple?`简化代码已导出 · ${stats.lines} 行 · 合并 ${stats.removed} 条重复源码行`+(stats.skipped?` · 跳过 ${stats.skipped} 条无 C 源码样本`:''):
+      status(simple?`简化代码已导出 · ${stats.lines} 行 · ${stats.sections} 个函数片段 · 合并 ${stats.removed} 条重复源码行`+(stats.skipped?` · 跳过 ${stats.skipped} 条无 C 源码样本`:''):
         `完整轨迹已导出 · ${(bytes/1048576).toFixed(1)} MiB`+(this._exportMissing?` · ${this._exportMissing} 个源文件未提供，保留 PC/位置`:''));
     }catch(e){if(stream)await stream.abort().catch(()=>{});status('导出未完成：'+e.message);throw e;}
     finally{worker?.terminate();this.exporting=false;this.renderCapture();}
