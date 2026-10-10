@@ -575,10 +575,10 @@ fieldset[disabled] legend::after{content:' · 未实现';color:var(--warn)}
 #tab-panel .pn-image-tools>button{flex:none}
 #tab-panel #pn-img-info{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin:0}
 #tab-panel #pn-img-card .canvasrow{min-height:205px;margin:0;flex-wrap:nowrap;gap:16px}
-#tab-panel #pn-img-card .canvasrow>.canvasbox{width:auto;flex:1;min-width:0}
+#tab-panel #pn-img-card .canvasrow>.canvasbox{width:auto;flex:0 0 55%;min-width:0}
 #tab-panel #pn-img-card #pn-canvas{max-width:none}
 #tab-panel #pn-image-drop.hot{outline:2px dashed var(--acc);outline-offset:-3px}
-#tab-panel #pn-img-card .pn-image-settings{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px 12px;align-content:start;flex:0 0 340px;min-width:0;max-height:none;overflow:visible;padding:4px 0}
+#tab-panel #pn-img-card .pn-image-settings{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px 12px;align-content:start;flex:1;min-width:0;max-height:none;overflow:visible;padding:4px 0}
 #tab-panel .pn-image-settings .wide{grid-column:1/-1}
 #tab-panel .pn-image-settings .row{margin:0;gap:6px;min-width:0;flex-wrap:nowrap}
 #tab-panel .pn-image-settings .row>span:first-child{width:48px;font-size:var(--text-xs)}
@@ -598,7 +598,8 @@ fieldset[disabled] legend::after{content:' · 未实现';color:var(--warn)}
 #tab-panel #pn-anim-info{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0}
 #tab-panel #pn-image-drop video{position:absolute;top:6px;right:6px;width:96px;max-height:60px;z-index:1}
 @media(max-width:1100px){
-  #tab-panel #pn-img-card .pn-image-settings{flex-basis:300px;gap:7px 8px}
+  #tab-panel #pn-img-card .canvasrow>.canvasbox{flex:1}
+  #tab-panel #pn-img-card .pn-image-settings{flex:0 0 300px;gap:7px 8px}
   #tab-panel #pn-patterns button{font-size:11px;padding:2px 5px}
   #tab-panel #pn-patterns .pattern-label{width:32px}
   #tab-panel #pn-img-card .animbox>.row{gap:4px}
