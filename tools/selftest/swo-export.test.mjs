@@ -2,6 +2,11 @@ import assert from 'node:assert/strict';
 import {traceTextChunks} from '../../app/swo/export.js';
 import {stm32f1Info} from '../../app/swo/target.js';
 import {tracePlan} from '../../app/swo/capture.js';
+import {CodeOutline,codeLines} from '../../app/swo/simplify.js';
+import {readFileSync} from 'node:fs';
+import {basename} from 'node:path';
+import {unpackRecording} from '../../app/swo/recording.js';
+import {traceSourcePaths} from '../../app/swo/export.js';
 const base={cpuid:0x411fc231,device:0x20036410,cr:0x03000083,cfgr:0,autoClock:true};
 assert.equal(stm32f1Info(base).coreHz,8000000);
 assert.equal(stm32f1Info({...base,cfgr:0x34040a}).coreHz,60000000);
@@ -20,4 +25,26 @@ const text=[...traceTextChunks(raw,{startAligned:true},null)].join('');assert.ma
 raw=new Uint8Array(260000*pc.length);for(let i=0;i<260000;i++)raw.set(pc,i*pc.length);
 let tail='',pcs=0,largest=0;for(const chunk of traceTextChunks(raw,{startAligned:true},null,{format:'txt'})){pcs+=(chunk.match(/PC#/g)||[]).length;tail=chunk;largest=Math.max(largest,chunk.length);}
 assert.equal(pcs,260000,'full export exceeds UI expansion limit without dropping events');assert.match(tail,/PC=260000/);assert.ok(largest<3e6,'bounded export chunks');
+const outline=(items,boundary=-1)=>{let text='';const c=new CodeOutline(s=>text+=s);items.forEach((key,i)=>{if(i===boundary)c.boundary();c.push(key,key+'();');assert.ok(c.pending.length<=128);});c.flush();return {text,removed:c.removed};};
+assert.equal(outline(['A','A','A','B']).text,'A();\nB();\n');
+assert.equal(outline(['A','B','C','A','B','C','A','B','C']).text,'A();\nB();\nC();\n');
+assert.equal(outline(['A','B','A']).text,'A();\nB();\nA();\n','nonconsecutive returns remain visible');
+assert.equal(outline(['A','B','A','B'],2).text,'A();\nB();\n\nA();\nB();\n','never merge across a trace gap');
+const repeated=Array.from({length:100000},(_,i)=>['A','B','C'][i%3]);assert.ok(outline(repeated).text.length<100);
+const unique=Array.from({length:300},(_,i)=>'L'+i);assert.equal(outline([...unique,'X','Y','X','Y']).text.split('\n').filter(Boolean).length,302,'streaming preserves unique lines and folds suffix blocks across flushes');
+let sameText='';const differentSources=new CodeOutline(s=>sameText+=s);differentSources.push('a.c:10','return x;');differentSources.push('b.c:10','return x;');differentSources.flush();assert.equal(sameText,'return x;\nreturn x;\n');
+const cleaned=codeLines('/* header\ncomment */\nint/**/x=1; // tail\nconst char *s="http://x/*literal*/";\nconst char *r=R"tag(/* literal */)tag";','test.c');
+assert.equal(cleaned.length,5);assert.equal(cleaned[0].trim(),'');assert.equal(cleaned[1].trim(),'');assert.equal(cleaned[2],'int x=1;');
+assert.ok(cleaned[3].includes('http://x/*literal*/'));assert.ok(cleaned[4].includes('/* literal */'));
+assert.throws(()=>[...traceTextChunks(pc,{startAligned:true},null,{format:'simple-c'})],/需要匹配/);
+const fixture='tools/target-firmware/stm32f103cb_swo/',record=unpackRecording(readFileSync('samples/swo/f103cb-route-b.swopc'));
+const elfBytes=readFileSync(fixture+'fw.elf'),elf=elfBytes.buffer.slice(elfBytes.byteOffset,elfBytes.byteOffset+elfBytes.byteLength);
+const sources=Object.fromEntries(traceSourcePaths(record.raw,record.metadata,elf).map(path=>[path,readFileSync(fixture+'src/'+basename(path.replaceAll('\\','/')),'utf8')]));
+const complete=[...traceTextChunks(record.raw,record.metadata,elf,{format:'c',sources})].join('');
+const iterator=traceTextChunks(record.raw,record.metadata,elf,{format:'simple-c',sources});let simple='',stats;
+for(;;){const step=iterator.next();if(step.done){stats=step.value;break;}simple+=step.value;}
+assert.equal(stats.pcs,8432);assert.equal(stats.skipped,0);assert.ok(stats.removed>1000);assert.ok(simple.length<complete.length/4);
+assert.doesNotMatch(simple,/event=|segment=|PC#|ELF SHA256|\/\*/);
+assert.throws(()=>[...traceTextChunks(record.raw,record.metadata,elf,{format:'simple-c'})],/没有可导出/);
+console.log(`SWO simplified sample: ${stats.pcs} PCs -> ${stats.lines} source lines, ${stats.removed} repeats merged, ${simple.length}/${complete.length} chars`);
 console.log('SWO target/complete export: HSI/HSE, unsupported cores, baud rounding, explicit gaps, >250k full events PASS');

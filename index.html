@@ -13,7 +13,7 @@
   var mode = new URLSearchParams(location.search).get('modules');
   var local = ['localhost', '127.0.0.1', '[::1]'].indexOf(location.hostname) !== -1;
   window.__useWebBundle = mode === 'bundle' || (mode !== 'source' && !local);
-  window.__webBundleUrl = 'app/site/main.js?v=ec412a3b921d2d9a';
+  window.__webBundleUrl = 'app/site/main.js?v=a66baa40afa951e8';
   var preload = document.createElement('link');
   preload.rel = 'modulepreload';
   preload.href = window.__useWebBundle ? window.__webBundleUrl : 'app/main.js';
@@ -2283,7 +2283,7 @@
         <div class="row btnrow"><button id="sw-import">打开记录…</button><button id="sw-save" disabled>保存记录</button></div>
         <input id="sw-file" type="file" accept=".swopc,.bin" hidden>
         <div class="row btnrow"><button id="sw-analyze" disabled>重新分析</button><button id="sw-csv" disabled>导出区间 CSV</button></div>
-        <div class="row btnrow"><button id="sw-export-c" disabled>完整导出 .c</button><button id="sw-export-txt" disabled>完整导出 .txt</button></div>
+        <div class="row btnrow"><button id="sw-export-c" disabled>完整导出 .c</button><button id="sw-export-txt" disabled>导出简化.c</button></div>
         <div class="row btnrow"><button id="sw-demo">载入配套实测示例</button></div>
         <details class="sw-fold"><summary>原始 .bin 导入选项</summary><label class="chk"><input id="sw-aligned" type="checkbox">确认从数据包边界开始</label></details>
         <p id="sw-export-status" class="hint" role="status"></p>
@@ -2360,7 +2360,7 @@ ITM 字节/s ≈ 有效载荷字节/s × 2（按单字节包估算）
 probe baud = UART Hz ÷ OSR ÷ UART DIV
 误差 % = |probe baud − 目标 SWO baud| ÷ 目标 SWO baud × 100%</pre><p>自动匹配先选择当前时钟源与分频；必要时调整 PLL1。默认 UART 240 MHz，最高 30 Mbaud。软件不会调整承载 CPU 的 PLL0；PLL1 调整须经过共享消费者检查，最终以探针回读为准。下方显示实际使用 PLL0 或 PLL1 的完整路径。“授权时钟”是浏览器对探针 HID 接口的访问授权。</p>
   <div id="sw-match" class="sw-calc-result">尚无匹配配置</div><p id="sw-plan" class="hint"></p>
-  <h3 id="sw-help-files">5. 记录、ELF、源码与实测示例</h3><p>“打开记录”打开自己的 .swopc 或原始 .bin；“载入配套实测示例”同时载入仓库内的实测记录、匹配 ELF 和源码，不连接硬件。.swopc 保存采样配置、ELF 指纹和错误信息；原始 .bin 只有数据，只有确定数据包边界时才勾选导入选项。</p><p>完整 .c / .txt 导出重新解码全部原始记录，不受页面区间和 250000 条事件上限影响。.c 含源码行及采样注释，方便编辑器高亮阅读，不用于编译。相邻采样落点不代表直接调用，中间路径和缺口不会被补全。</p>
+  <h3 id="sw-help-files">5. 记录、ELF、源码与实测示例</h3><p>“打开记录”打开自己的 .swopc 或原始 .bin；“载入配套实测示例”同时载入仓库内的实测记录、匹配 ELF 和源码，不连接硬件。.swopc 保存采样配置、ELF 指纹和错误信息；原始 .bin 只有数据，只有确定数据包边界时才勾选导入选项。</p><p>完整 .c 保留源码行和采样注释；“导出简化.c”只保留 C/C++ 源码，去掉注释，合并连续重复的行及代码片段，缺口以空行分开。两种导出均重新解码全部原始记录，不受区间和 250000 条事件上限影响。简化导出需匹配的 ELF 与源码；未采样代码不会补齐，文件用于阅读而非编译。</p>
 </dialog>
 
 

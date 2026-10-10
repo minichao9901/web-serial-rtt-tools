@@ -27,7 +27,7 @@ export class SwoView {
     for(const details of popovers)details.addEventListener('toggle',()=>{if(details.open)for(const other of popovers)if(other!==details)other.open=false;});
     $('tab-swo').addEventListener('pointerdown',e=>{for(const details of popovers)if(!details.contains(e.target))details.open=false;});
     $('tab-swo').addEventListener('keydown',e=>{if(e.key==='Escape')for(const details of popovers)details.open=false;});
-    bind('sw-detect',()=>this.detectTarget());bind('sw-export-c',()=>this.exportText('c'));bind('sw-export-txt',()=>this.exportText('txt'));bind('sw-start',()=>this.start());bind('sw-stop',()=>this.capture.stop());
+    bind('sw-detect',()=>this.detectTarget());bind('sw-export-c',()=>this.exportText('c'));bind('sw-export-txt',()=>this.exportText('simple-c'));bind('sw-start',()=>this.start());bind('sw-stop',()=>this.capture.stop());
     bind('sw-import',()=>$('sw-file').click());bind('sw-elf-pick',()=>$('sw-elf-file').click());
     bind('sw-source-pick',()=>{$('sw-source-files').click();});
     bind('sw-save',()=>{if(this.recording)download(packRecording(this.recording.raw,this.recording.metadata),'swo-'+Date.now()+'.swopc');});
@@ -205,31 +205,37 @@ export class SwoView {
   }
   async exportText(format){
     if(!this.recording||this.capture.active||this.exporting)return;
+    const simple=format==='simple-c',extension=simple?'c':format,name=simple?'swo-simplified.c':'swo-execution.'+extension;
+    if(simple&&!this.elf)throw Error('导出简化 .c 需要匹配的 ELF 和源码');
     // Start the picker synchronously within the click's user gesture.
-    let handle;try{if(window.showSaveFilePicker)handle=await window.showSaveFilePicker({suggestedName:'swo-execution.'+format,types:[{description:'完整 SWO 采样轨迹',accept:{'text/plain':['.'+format]}}]});}catch(e){if(e.name==='AbortError')return;throw e;}
-    this.exporting=true;this.renderCapture();let stream,worker,bytes=0,chunks=[];
+    let handle;try{if(window.showSaveFilePicker)handle=await window.showSaveFilePicker({suggestedName:name,types:[{description:simple?'简化 SWO 源码轮廓':'完整 SWO 采样轨迹',accept:{'text/plain':['.'+extension]}}]});}catch(e){if(e.name==='AbortError')return;throw e;}
+    this.exporting=true;this.renderCapture();let stream,worker,bytes=0,chunks=[],stats;
     const status=text=>$('sw-export-status').textContent=text;
     try{
       if(handle)stream=await handle.createWritable();
-      worker=new Worker(new URL('./export-worker.js',import.meta.url),{type:'module'});
+      const workerUrl=new URL('./export-worker.js',import.meta.url);
+      workerUrl.searchParams.set('v',new URL(window.__webBundleUrl||location.href,location.href).searchParams.get('v')||String(Date.now()));
+      worker=new Worker(workerUrl,{type:'module'});
       await new Promise((resolve,reject)=>{
         worker.onerror=e=>reject(Error(e.message));
         worker.onmessage=async({data})=>{try{
           if(data.kind==='error')throw Error(data.error);
           if(data.kind==='sources'){
+            if(simple&&!data.paths.length)throw Error('ELF 中没有可定位的源码行，无法导出简化 .c');
             status('正在读取轨迹涉及的源码…');const sources={};let sourceBytes=0,missing=0;
             for(const path of data.paths){try{const text=await this.sources.read(path);if(sourceBytes+text.length*2>32*1024*1024){missing++;continue;}sourceBytes+=text.length*2;sources[path]=text;}catch{missing++;}}
             this._exportMissing=missing;worker.postMessage({kind:'export',format,sources});
           }else if(data.kind==='chunk'){
             const part=new TextEncoder().encode(data.text);bytes+=part.length;
             if(stream)await stream.write(part);else{if(bytes>128*1024*1024)throw Error('浏览器下载缓存超过 128 MiB；请使用支持直接保存文件的 Chrome/Edge 导出完整记录');chunks.push(part);}
-            status(`正在导出完整轨迹 · ${(bytes/1048576).toFixed(1)} MiB`);worker.postMessage({kind:'ack'});
-          }else if(data.kind==='done')resolve();
+            status(`正在导出${simple?'简化代码':'完整轨迹'} · ${(bytes/1048576).toFixed(1)} MiB`);worker.postMessage({kind:'ack'});
+          }else if(data.kind==='done'){stats=data.stats;resolve();}
         }catch(e){reject(e);}};
         worker.postMessage({kind:'prepare',raw:this.recording.raw,metadata:this.recording.metadata,elf:this.elf?.buffer||null});
       });
-      if(stream)await stream.close();else download(new Blob(chunks),'swo-execution.'+format,'text/plain;charset=utf-8');
-      status(`完整轨迹已导出 · ${(bytes/1048576).toFixed(1)} MiB`+(this._exportMissing?` · ${this._exportMissing} 个源文件未提供，保留 PC/位置`:''));
+      if(stream)await stream.close();else download(new Blob(chunks),name,'text/plain;charset=utf-8');
+      status(simple?`简化代码已导出 · ${stats.lines} 行 · 合并 ${stats.removed} 条重复源码行`+(stats.skipped?` · 跳过 ${stats.skipped} 条无 C 源码样本`:''):
+        `完整轨迹已导出 · ${(bytes/1048576).toFixed(1)} MiB`+(this._exportMissing?` · ${this._exportMissing} 个源文件未提供，保留 PC/位置`:''));
     }catch(e){if(stream)await stream.abort().catch(()=>{});status('导出未完成：'+e.message);throw e;}
     finally{worker?.terminate();this.exporting=false;this.renderCapture();}
   }

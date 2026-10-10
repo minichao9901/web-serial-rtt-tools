@@ -143,7 +143,7 @@
     "app/swo/recording.js": "4974ad114486791e7d5fe226691eac00e1eafb3facf0c87b0b57fb49f4e35f63",
     "app/swo/route.js": "a36c02a06db886551993ad62b576c925e7ac945c4ec221ef8dee92b238f1b321",
     "app/swo/target.js": "7ce94e7cdabd6495ce4d00090b8bbf41b5d939206c1a308d65dae26050e669e1",
-    "app/swo/view.js": "5cadd787408055da6807bc26dabdd5b35a853255d8ba530681b8c08628750509",
+    "app/swo/view.js": "68de4284653c34425659132d058114fae927d2bddb5059c49228ffe15778e00a",
     "app/targets/hpm/porting.js": "e67565bc13b011b282b860a957901b44263967a1f71e449cf08cb525cf1a4f48",
     "app/targets/hpm/select.js": "934f49c3a82f0bd03a9a77e6b207ce2fa5dc202fce632666e99010b6595eb43c",
     "app/ui/board-pinout.js": "cc5dc2a077ee78b44d80ceb9496f0b028d2810e30351b179e9c2cbde5a1207c8",
@@ -160,6 +160,6 @@
     "app/ui/toast.js": "4ad6d90a90cfba752b324500e14324808305b8927b32a887ddbb736a4d9d2ae2",
     "app/ui/workspace.js": "25b6ce94e5d90302a37e6cec2b7e35c975af95ce29bef1094a4493f3890fc0b7"
   },
-  "outputSha256": "ec412a3b921d2d9a5743d3f45c71ad3d3dd8e8d7ab017d63cf7bf652f9ef0b3e",
-  "outputBytes": 1259143
+  "outputSha256": "a66baa40afa951e85c801e2ba08869fae897cee7b444f5b690a895559c021035",
+  "outputBytes": 1259707
 }
