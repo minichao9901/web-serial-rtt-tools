@@ -3,13 +3,13 @@ import {Cdp,sleep} from './cdp-lib.mjs';
 import {mkdirSync,writeFileSync} from 'node:fs';
 import {dirname,resolve} from 'node:path';
 const args=process.argv.slice(2),arg=(name,fallback)=>args.find(s=>s.startsWith('--'+name+'='))?.slice(name.length+3)??fallback;
-if(args.includes('--help')){console.log('node tools/selftest/page-load-bench.mjs --url=https://.../index.html [--compare --runs=2 --latency=200 --mbps=8 --warm --out=tmp/page-load.json]');process.exit(0);}
+if(args.includes('--help')){console.log('node tools/selftest/page-load-bench.mjs --url=https://.../index.html [--compare --runs=2 --latency=200 --mbps=8 --warm --background --out=tmp/page-load.json]');process.exit(0);}
 const url=arg('url','https://minichao9901.github.io/web-serial-rtt-tools/index.html'),out=resolve(arg('out','tmp/page-load.json'));
 const runs=Number(arg('runs','1')),latency=Number(arg('latency','0')),mbps=Number(arg('mbps','0'));
 if(!Number.isInteger(runs)||runs<1||runs>10||!Number.isFinite(latency)||latency<0||!Number.isFinite(mbps)||mbps<0)throw Error('Invalid run count or network settings');
 const c=new Cdp(process.env.CDP||'http://127.0.0.1:9333',20000),rows=[];let targetId;
 try{
- await c.connect();({targetId}=await c.sendBrowser('Target.createTarget',{url:'about:blank'}));
+ await c.connect();({targetId}=await c.sendBrowser('Target.createTarget',{url:'about:blank',background:args.includes('--background')}));
  const tab=(await(await fetch(c.base+'/json/list')).json()).find(t=>t.id===targetId);
  c.ws.close();c.ws=await c._open(tab.webSocketDebuggerUrl,(ws,m)=>c._dispatch(m));
  await c.send('Page.enable');await c.send('Runtime.enable');await c.send('Network.enable');
@@ -27,7 +27,7 @@ try{
   if(mode!=='auto')destination.searchParams.set('modules',mode);
   const failures=[];c.onEvent=m=>{if(m.method==='Network.loadingFailed')failures.push({url:m.params.requestId,error:m.params.errorText});};
   await c.send('Network.setCacheDisabled',{cacheDisabled:!warm});if(!warm)await c.send('Network.clearBrowserCache');
-  await c.send('Page.bringToFront');await c.send('Page.navigate',{url:destination.href});
+  if(!args.includes('--background'))await c.send('Page.bringToFront');await c.send('Page.navigate',{url:destination.href});
   console.log(`Loading ${mode} / ${warm?'warm':'cold'} / run ${run+1}`);
   let ready=false;for(let n=0;n<480;n++){ready=await c.eval('return window.__loadBench?.ready!=null;').catch(()=>false);if(ready)break;if(n&&n%80===0)console.log(`Still waiting: ${n/4}s`);await sleep(250);}
   if(ready)await sleep(600);

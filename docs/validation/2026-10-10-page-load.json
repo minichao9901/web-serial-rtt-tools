@@ -768,5 +768,368 @@
       "error": "完整轨迹已导出 · 1.8 MiB"
     }
   },
-  "onlineAfter": null
+  "onlineAfter": {
+    "initialBundle": [
+      {
+        "warm": false,
+        "entry": "bundle",
+        "visibility": "visible",
+        "readyMs": 15030.699999988079,
+        "domMs": 1843.7999999523163,
+        "loadMs": 1845.699999988079,
+        "ttfbMs": 798.5,
+        "jsRequests": 3,
+        "resourceRequests": 5,
+        "transferBytes": 547000,
+        "decodedBytes": 1649027,
+        "errors": [],
+        "failures": [],
+        "slowest": [
+          {
+            "url": "https://minichao9901.github.io/web-serial-rtt-tools/app/site/main.js?v=e6d2bfd19c4c9073",
+            "start": 1539.199999988079,
+            "ms": 13341,
+            "transfer": 446443,
+            "encoded": 446143,
+            "decoded": 1253235,
+            "protocol": "h2"
+          },
+          {
+            "url": "https://minichao9901.github.io/web-serial-rtt-tools/app/vendor/xterm/addon-fit.js",
+            "start": 1038.8999999761581,
+            "ms": 792.8999999761581,
+            "transfer": 941,
+            "encoded": 641,
+            "decoded": 1497,
+            "protocol": "h2"
+          },
+          {
+            "url": "https://minichao9901.github.io/web-serial-rtt-tools/app/vendor/xterm/xterm.js",
+            "start": 1038.7999999523163,
+            "ms": 792.6000000238419,
+            "transfer": 68821,
+            "encoded": 68521,
+            "decoded": 289441,
+            "protocol": "h2"
+          },
+          {
+            "url": "https://minichao9901.github.io/web-serial-rtt-tools/app/vendor/xterm/xterm.css",
+            "start": 804.6999999880791,
+            "ms": 729.1999999880791,
+            "transfer": 2385,
+            "encoded": 2085,
+            "decoded": 5559,
+            "protocol": "h2"
+          },
+          {
+            "url": "https://minichao9901.github.io/web-serial-rtt-tools/app/app.css",
+            "start": 804.7999999523163,
+            "ms": 727.3000000119209,
+            "transfer": 28410,
+            "encoded": 28110,
+            "decoded": 99295,
+            "protocol": "h2"
+          }
+        ]
+      },
+      {
+        "warm": true,
+        "entry": "bundle",
+        "visibility": "visible",
+        "readyMs": 113.5,
+        "domMs": 67.69999998807907,
+        "loadMs": 72,
+        "ttfbMs": 1.399999976158142,
+        "jsRequests": 4,
+        "resourceRequests": 6,
+        "transferBytes": 1126,
+        "decodedBytes": 1650099,
+        "errors": [],
+        "failures": [],
+        "slowest": [
+          {
+            "url": "https://minichao9901.github.io/web-serial-rtt-tools/app/core/build.js?t=1791620752410",
+            "start": 109,
+            "ms": 609.6999999880791,
+            "transfer": 1126,
+            "encoded": 826,
+            "decoded": 1072,
+            "protocol": "h2"
+          },
+          {
+            "url": "https://minichao9901.github.io/web-serial-rtt-tools/app/vendor/xterm/xterm.css",
+            "start": 40.39999997615814,
+            "ms": 0,
+            "transfer": 0,
+            "encoded": 2085,
+            "decoded": 5559,
+            "protocol": "h2"
+          },
+          {
+            "url": "https://minichao9901.github.io/web-serial-rtt-tools/app/app.css",
+            "start": 40.39999997615814,
+            "ms": 0,
+            "transfer": 0,
+            "encoded": 28110,
+            "decoded": 99295,
+            "protocol": "h2"
+          },
+          {
+            "url": "https://minichao9901.github.io/web-serial-rtt-tools/app/vendor/xterm/xterm.js",
+            "start": 40.5,
+            "ms": 0,
+            "transfer": 0,
+            "encoded": 68521,
+            "decoded": 289441,
+            "protocol": "h2"
+          },
+          {
+            "url": "https://minichao9901.github.io/web-serial-rtt-tools/app/vendor/xterm/addon-fit.js",
+            "start": 40.59999996423721,
+            "ms": 0,
+            "transfer": 0,
+            "encoded": 641,
+            "decoded": 1497,
+            "protocol": "h2"
+          },
+          {
+            "url": "https://minichao9901.github.io/web-serial-rtt-tools/app/site/main.js?v=e6d2bfd19c4c9073",
+            "start": 43.30000001192093,
+            "ms": 0,
+            "transfer": 0,
+            "encoded": 446143,
+            "decoded": 1253235,
+            "protocol": "h2"
+          }
+        ]
+      }
+    ],
+    "finalPublished": [
+      {
+        "warm": false,
+        "entry": "bundle",
+        "visibility": "visible",
+        "readyMs": 13862.199999988079,
+        "domMs": 3482,
+        "loadMs": 3484,
+        "ttfbMs": 274.5,
+        "jsRequests": 4,
+        "resourceRequests": 6,
+        "transferBytes": 548124,
+        "decodedBytes": 1650072,
+        "errors": [],
+        "failures": [],
+        "slowest": [
+          {
+            "url": "https://minichao9901.github.io/web-serial-rtt-tools/app/site/main.js?v=8437dfcbb81d750b",
+            "start": 1776.199999988079,
+            "ms": 11973.5,
+            "transfer": 446441,
+            "encoded": 446141,
+            "decoded": 1253208,
+            "protocol": "h2"
+          },
+          {
+            "url": "https://minichao9901.github.io/web-serial-rtt-tools/app/vendor/xterm/xterm.js",
+            "start": 1218.199999988079,
+            "ms": 2249.099999964237,
+            "transfer": 68821,
+            "encoded": 68521,
+            "decoded": 289441,
+            "protocol": "h2"
+          },
+          {
+            "url": "https://minichao9901.github.io/web-serial-rtt-tools/app/app.css",
+            "start": 282.19999998807907,
+            "ms": 1490.3999999761581,
+            "transfer": 28410,
+            "encoded": 28110,
+            "decoded": 99295,
+            "protocol": "h2"
+          },
+          {
+            "url": "https://minichao9901.github.io/web-serial-rtt-tools/app/vendor/xterm/xterm.css",
+            "start": 281.7999999523163,
+            "ms": 1092.800000011921,
+            "transfer": 2385,
+            "encoded": 2085,
+            "decoded": 5559,
+            "protocol": "h2"
+          },
+          {
+            "url": "https://minichao9901.github.io/web-serial-rtt-tools/app/vendor/xterm/addon-fit.js",
+            "start": 1218.2999999523163,
+            "ms": 554.5,
+            "transfer": 941,
+            "encoded": 641,
+            "decoded": 1497,
+            "protocol": "h2"
+          },
+          {
+            "url": "https://minichao9901.github.io/web-serial-rtt-tools/app/core/build.js?t=1791621118264",
+            "start": 13861.799999952316,
+            "ms": 435.2000000476837,
+            "transfer": 1126,
+            "encoded": 826,
+            "decoded": 1072,
+            "protocol": "h2"
+          }
+        ]
+      },
+      {
+        "warm": true,
+        "entry": "bundle",
+        "visibility": "visible",
+        "readyMs": 92,
+        "domMs": 44,
+        "loadMs": 48.19999998807907,
+        "ttfbMs": 1.5999999642372131,
+        "jsRequests": 4,
+        "resourceRequests": 6,
+        "transferBytes": 1126,
+        "decodedBytes": 1650072,
+        "errors": [],
+        "failures": [],
+        "slowest": [
+          {
+            "url": "https://minichao9901.github.io/web-serial-rtt-tools/app/core/build.js?t=1791621119104",
+            "start": 91.69999998807907,
+            "ms": 171.5,
+            "transfer": 1126,
+            "encoded": 826,
+            "decoded": 1072,
+            "protocol": "h2"
+          },
+          {
+            "url": "https://minichao9901.github.io/web-serial-rtt-tools/app/vendor/xterm/xterm.css",
+            "start": 13.800000011920929,
+            "ms": 0,
+            "transfer": 0,
+            "encoded": 2085,
+            "decoded": 5559,
+            "protocol": "h2"
+          },
+          {
+            "url": "https://minichao9901.github.io/web-serial-rtt-tools/app/app.css",
+            "start": 13.899999976158142,
+            "ms": 0,
+            "transfer": 0,
+            "encoded": 28110,
+            "decoded": 99295,
+            "protocol": "h2"
+          },
+          {
+            "url": "https://minichao9901.github.io/web-serial-rtt-tools/app/vendor/xterm/xterm.js",
+            "start": 13.899999976158142,
+            "ms": 0,
+            "transfer": 0,
+            "encoded": 68521,
+            "decoded": 289441,
+            "protocol": "h2"
+          },
+          {
+            "url": "https://minichao9901.github.io/web-serial-rtt-tools/app/vendor/xterm/addon-fit.js",
+            "start": 14,
+            "ms": 0,
+            "transfer": 0,
+            "encoded": 641,
+            "decoded": 1497,
+            "protocol": "h2"
+          },
+          {
+            "url": "https://minichao9901.github.io/web-serial-rtt-tools/app/site/main.js?v=8437dfcbb81d750b",
+            "start": 17.099999964237213,
+            "ms": 0,
+            "transfer": 0,
+            "encoded": 446141,
+            "decoded": 1253208,
+            "protocol": "h2"
+          }
+        ]
+      }
+    ],
+    "rejectedBackgroundRun": {
+      "readyMs": null,
+      "tools": true,
+      "visibility": "hidden",
+      "errors": [],
+      "reason": "Resources and initialization finished, but background requestAnimationFrame delayed mask removal; fixed in 5ee7e98."
+    },
+    "backgroundFixed": {
+      "warm": false,
+      "entry": "bundle",
+      "visibility": "hidden",
+      "readyMs": 336.30000001192093,
+      "domMs": 65.30000001192093,
+      "loadMs": 206,
+      "ttfbMs": 4,
+      "jsRequests": 4,
+      "resourceRequests": 6,
+      "transferBytes": 1653253,
+      "decodedBytes": 1651453,
+      "errors": [],
+      "failures": [],
+      "slowest": [
+        {
+          "url": "http://127.0.0.1:8899/app/site/main.js?v=8437dfcbb81d750b",
+          "start": 26.700000047683716,
+          "ms": 38,
+          "transfer": 1253508,
+          "encoded": 1253208,
+          "decoded": 1253208,
+          "protocol": "http/1.0"
+        },
+        {
+          "url": "http://127.0.0.1:8899/app/vendor/xterm/xterm.js",
+          "start": 14.100000023841858,
+          "ms": 18.19999998807907,
+          "transfer": 289741,
+          "encoded": 289441,
+          "decoded": 289441,
+          "protocol": "http/1.0"
+        },
+        {
+          "url": "http://127.0.0.1:8899/app/vendor/xterm/addon-fit.js",
+          "start": 14.200000047683716,
+          "ms": 13,
+          "transfer": 1797,
+          "encoded": 1497,
+          "decoded": 1497,
+          "protocol": "http/1.0"
+        },
+        {
+          "url": "http://127.0.0.1:8899/app/app.css",
+          "start": 14.100000023841858,
+          "ms": 7.399999976158142,
+          "transfer": 100961,
+          "encoded": 100661,
+          "decoded": 100661,
+          "protocol": "http/1.0"
+        },
+        {
+          "url": "http://127.0.0.1:8899/app/vendor/xterm/xterm.css",
+          "start": 13.800000011920929,
+          "ms": 4.5,
+          "transfer": 5859,
+          "encoded": 5559,
+          "decoded": 5559,
+          "protocol": "http/1.0"
+        },
+        {
+          "url": "http://127.0.0.1:8899/app/core/build.js?t=1791621078196",
+          "start": 335.9000000357628,
+          "ms": 3,
+          "transfer": 1387,
+          "encoded": 1087,
+          "decoded": 1087,
+          "protocol": "http/1.0"
+        }
+      ]
+    },
+    "implementationCommits": [
+      "2820af8",
+      "1b0453f",
+      "5ee7e98"
+    ]
+  }
 }
