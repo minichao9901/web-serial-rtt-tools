@@ -503,7 +503,7 @@ fieldset[disabled] legend::after{content:' · 未实现';color:var(--warn)}
    而且三处高度写死（解析表 360 / 日志 190 / 预览画布 170），矮窗口里三块互相挤。
    现在每块**吃满整块高度**，日志与运行状态常驻 —— tab 化不该把过程视图藏起来。
    侧栏卡片按 DOM 顺序排（探针 → 屏型号 → 面板档 → 当前生效 → 面板电源/显示）。 */
-#tab-panel .main{gap:8px;overflow:hidden;padding-right:3px}
+#tab-panel .main{gap:3px;overflow:hidden;padding-right:3px}
 /* 🚨 flex 子项的 min-width 默认是 auto：卡片里只要有不肯收缩的东西（.toolrow.nw 不换行、表格的
    最小内容宽），fieldset 就会被撑到 ~713px —— 920px 视口下整页冒横向滚动条（实测定位）。
    桥页的 .busstack>fieldset 早已加了同款纪律，这里对齐它。 */
@@ -536,6 +536,7 @@ fieldset[disabled] legend::after{content:' · 未实现';color:var(--warn)}
 #tab-panel .grip:hover::after{background:var(--acc);opacity:1}
 #tab-panel .grip-h{height:9px;margin:0;cursor:row-resize}
 #tab-panel .grip-h::after{left:35%;right:35%;top:3px;height:3px}
+#tab-panel #pn-grip-log{height:5px}
 /* 解析表：**不再写死 360px** —— tab 化之后它吃满剩余高度（文本框那截用 #pn-grip-code 拖）。
    矮窗口下也不再被别的卡挤扁（用户："初始化部分被压缩得太厉害了"）。 */
 #tab-panel #pn-code-wrap{flex:1 1 auto;min-height:120px;height:auto;max-height:none}
@@ -568,6 +569,24 @@ fieldset[disabled] legend::after{content:' · 未实现';color:var(--warn)}
 #tab-panel .animbox{flex:none}
 /* 拖放区压扁一点：它只是"选图入口"，别占掉命令区的高度（图案按钮就在上面一行） */
 #tab-panel .drop{padding:5px 9px;margin:4px 0;font-size:var(--text-xs)}
+/* 刷屏只保留图案、发送操作和预览，参数与动画分别放在页签中。 */
+#tab-panel #pn-img-card{overflow:hidden;gap:5px}
+#tab-panel .pn-image-tools{display:flex;align-items:center;gap:8px;min-width:0;background:var(--bg2)}
+#tab-panel .pn-image-tools>button{flex:none}
+#tab-panel #pn-img-info{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin:0}
+#tab-panel #pn-img-card .canvasrow{min-height:120px;margin:0;flex-wrap:nowrap}
+#tab-panel #pn-img-card .canvasrow>.canvasbox{width:100%;flex:1;min-width:0}
+#tab-panel #pn-img-card #pn-canvas{max-width:none}
+#tab-panel #pn-image-drop.hot{outline:2px dashed var(--acc);outline-offset:-3px}
+#tab-panel #pn-img-settings-card>.imginfo{width:min(100%,760px);min-width:0;flex:none}
+#tab-panel #pn-custom-size[hidden]{display:none}
+#tab-panel .pn-image-help{font-size:var(--text-xs);color:var(--fg2)}
+#tab-panel .pn-image-help summary{cursor:pointer}
+#tab-panel .pn-image-help[open]{max-height:130px;overflow:auto}
+#tab-panel .pn-image-help p{margin:4px 0}
+#tab-panel #pn-anim-card .animbox{margin:0;padding:0;border:0}
+#tab-panel #pn-anim-card .animrow{flex-direction:column}
+#tab-panel #pn-anim-card video{width:min(100%,640px);max-height:320px}
 #tab-panel .toolrow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:0 0 7px}
 /* 初始化卡片里的固定行压紧一点：矮窗口下这些"工具条"加起来能吃掉 150px，
    压紧后省下来的高度全给文本框和表格（用户："初始化部分被压缩得太厉害了"）。 */

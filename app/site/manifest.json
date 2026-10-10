@@ -125,7 +125,7 @@
     "app/spi/mock.js": "641d0f5a0e6e85ada69a06a2c92c329e131f362478bdb443edcfb421c46958b2",
     "app/spi/panel-code.js": "1883f01db0a454bff7fa12739858348779dd065a21b3c0546c51209cc8335f4d",
     "app/spi/panel-read.js": "2e8f06955afa5cddcfc4805197d12ec129971d96654674eeaa10db8c654a4f47",
-    "app/spi/panel-view.js": "6f6f0c936d4b13a55d81935927444897a2a485fba0311477b27918e7238b3eee",
+    "app/spi/panel-view.js": "057d44b1b2633444842e5d25eb07bb558d29ae4fab8b8de951700c5202e84684",
     "app/spi/panels-data.js": "e058988159a236de3ab2e3c1a4bca0e9491c4aa6f512fb8478abb5fc98b8a6b9",
     "app/spi/protocol.js": "19cd44c9f859f0b9cde6bdb5dd7ec4015485c93a9a2f2cd11203bbb92cd109d5",
     "app/spi/reg-view.js": "0aee8c3ec10d27e33e7f8210944752a637d008377d5e70993909ddaa9598fa8f",
@@ -160,6 +160,6 @@
     "app/ui/toast.js": "4ad6d90a90cfba752b324500e14324808305b8927b32a887ddbb736a4d9d2ae2",
     "app/ui/workspace.js": "25b6ce94e5d90302a37e6cec2b7e35c975af95ce29bef1094a4493f3890fc0b7"
   },
-  "outputSha256": "bde05006ddba31a150d05c2a0a028295d93742d778f171791965cd375debea31",
-  "outputBytes": 1259740
+  "outputSha256": "1280542be786002b1ccf5092691e8d894a7cc1e16ab62b561a1ed632257c0453",
+  "outputBytes": 1259760
 }

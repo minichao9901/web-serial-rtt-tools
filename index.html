@@ -13,7 +13,7 @@
   var mode = new URLSearchParams(location.search).get('modules');
   var local = ['localhost', '127.0.0.1', '[::1]'].indexOf(location.hostname) !== -1;
   window.__useWebBundle = mode === 'bundle' || (mode !== 'source' && !local);
-  window.__webBundleUrl = 'app/site/main.js?v=bde05006ddba31a1';
+  window.__webBundleUrl = 'app/site/main.js?v=1280542be786002b';
   var preload = document.createElement('link');
   preload.rel = 'modulepreload';
   preload.href = window.__useWebBundle ? window.__webBundleUrl : 'app/main.js';
@@ -1425,6 +1425,8 @@
         <div class="dockhead">
           <span class="seg docktabs" id="pn-dock-tabs">
             <button data-dock="img" class="on">刷屏</button>
+            <button data-dock="img-settings">图片设置</button>
+            <button data-dock="anim">动画 / 视频</button>
             <button data-dock="code">面板初始化</button>
             <button data-dock="read">读回</button>
           </span>
@@ -1434,13 +1436,24 @@
         </div>
 
       <div class="dockpage on" data-dock="img" id="pn-img-card">
-        <div class="row"><span>内置图案</span><div class="chips" id="pn-patterns"></div></div>
-        <div id="pn-drop" class="drop">把 <b>BMP / PNG / JPEG</b> 拖到这里，或点击选择</div>
+        <div class="chips" id="pn-patterns"></div>
+        <div class="pn-image-tools">
+          <button id="pn-drop" title="BMP / PNG / JPEG；也可拖到预览区">选择图片…</button>
+          <button id="pn-img-send" class="primary">刷这一张</button>
+          <span class="hint" id="pn-img-info">（还没选图 / 图案）</span>
+        </div>
         <input type="file" id="pn-img-file" accept="image/*,.bmp" hidden>
         <div class="imgrow canvasrow">
-          <div class="canvasbox"><canvas id="pn-canvas" width="240" height="296"></canvas></div>
+          <div class="canvasbox" id="pn-image-drop" title="可拖入 BMP / PNG / JPEG"><canvas id="pn-canvas" width="240" height="296"></canvas></div>
+        </div>
+        <details class="pn-image-help"><summary>窗口与传输详情</summary>
+          <p class="flush hint" id="pn-img-sum"></p>
+          <p class="hint">预览里的<b>橙色虚线</b>是探针真正下发的对齐窗口（列地址按 4 像素对齐，多出来的列用边缘填充）。每片 492 B，一屏 ST77916 是 <b>527 片</b>；只有最后一片要应答。</p>
+        </details>
+      </div><!-- /dockpage 刷屏 -->
+
+      <div class="dockpage" data-dock="img-settings" id="pn-img-settings-card">
           <div class="imginfo">
-            <p class="hint" id="pn-img-info" style="margin-top:0">（还没选图 / 图案）</p>
             <label class="row"><span>缩放</span>
               <select id="pn-fit">
                 <option value="fill">铺满（裁剪）</option>
@@ -1449,7 +1462,8 @@
                 <option value="none">原始尺寸</option>
               </select></label>
             <label class="row"><span>开窗 x/y</span><input id="pn-x" class="num" value="0" inputmode="numeric"><input id="pn-y" class="num" value="0" inputmode="numeric"></label>
-            <label class="row"><span>屏幕</span><select id="pn-geom" title="屏几何：两款内置屏，或选「自定义…」自己填宽高（协议参数沿用当前档的）"></select>
+            <label class="row"><span>屏幕</span><select id="pn-geom" title="屏几何：两款内置屏，或选「自定义…」自己填宽高（协议参数沿用当前档的）"></select></label>
+            <label class="row" id="pn-custom-size" hidden><span>分辨率</span>
               <input id="pn-w" class="num" value="240" inputmode="numeric" title="自定义宽度（像素）。选「自定义…」时生效">
               <span class="label-auto">×</span>
               <input id="pn-h" class="num" value="240" inputmode="numeric" title="自定义高度（像素）。选「自定义…」时生效"></label>
@@ -1467,15 +1481,10 @@
                 <option value="1" selected>1 位（推荐）</option>
                 <option value="2">2 位（噪声大时）</option>
               </select></label>
-            <div class="row btnrow"><button id="pn-img-send" class="primary">刷这一张</button></div>
-            <p class="flush hint" id="pn-img-sum"></p>
           </div>
-        </div>
-        <p class="hint">预览里的<b>橙色虚线</b>是探针真正下发的对齐窗口（列地址按 4 像素对齐，多出来的列用边缘填充）。
-          每片 492 B，一屏 ST77916 是 <b>527 片</b>；只有最后一片要应答。</p>
+      </div><!-- /dockpage 图片设置 -->
 
-        <!-- 动画 / 视频：整帧刷，或勾「局部刷新」后按差异包围盒只发变化区（开关在右上「刷屏」页里）。
-             发送是节拍器：解码跟得上就丢帧，绝不在 USB 队列里堆延迟。 -->
+      <div class="dockpage" data-dock="anim" id="pn-anim-card">
         <div class="animbox">
           <div class="row"><span>动画 / 视频</span>
             <button id="pn-anim-file" class="mini" title="MP4 / WebM / GIF / APNG —— 浏览器原生解码，零依赖">选择文件…</button>
@@ -1483,7 +1492,7 @@
             <button id="pn-anim-play" class="mini" disabled title="按当前屏几何 / 面板档把每一帧发出去（与「刷这一张」同一条路；勾了局部刷新就只发变化区）">播放到屏</button>
             <button id="pn-anim-stop" class="mini" disabled>停止</button>
             <label class="chk"><input type="checkbox" id="pn-anim-loop" checked> 循环</label>
-            <label class="chk" title="与右上「刷屏」页里的那个是同一个开关：勾上 = 只发与上一帧不同的包围盒"><input type="checkbox" id="pn-anim-partial" checked> 局部刷新</label>
+            <label class="chk" title="与「图片设置」页里的开关同步：勾上 = 只发与上一帧不同的包围盒"><input type="checkbox" id="pn-anim-partial" checked> 局部刷新</label>
           </div>
           <div class="animrow">
             <video id="pn-anim-video" muted playsinline></video>
@@ -1491,7 +1500,7 @@
               选 MP4 / WebM 或 GIF —— 帧率上限由链路决定（AXS15352 实测 ~20 fps、ST77916 ~13 fps）。</p>
           </div>
         </div><!-- /animbox -->
-      </div><!-- /dockpage 刷屏 -->
+      </div><!-- /dockpage 动画 -->
 
       <div class="dockpage" data-dock="code" id="pn-code-card">
           <div class="toolrow">

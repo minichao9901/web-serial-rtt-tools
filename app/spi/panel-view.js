@@ -217,9 +217,11 @@ export class SpiPanelView {
     this.buildPatternChips();
     $('pn-drop').addEventListener('click', () => $('pn-img-file').click());
     $('pn-img-file').addEventListener('change', e => this.pickImage(e.target.files[0]));
-    for (const ev of ['dragenter', 'dragover']) $('pn-drop').addEventListener(ev, e => { e.preventDefault(); $('pn-drop').classList.add('hot'); });
-    for (const ev of ['dragleave', 'drop']) $('pn-drop').addEventListener(ev, e => { e.preventDefault(); $('pn-drop').classList.remove('hot'); });
-    $('pn-drop').addEventListener('drop', e => this.pickImage(e.dataTransfer.files[0]));
+    for(const target of [$('pn-drop'),$('pn-image-drop')]){
+      for (const ev of ['dragenter', 'dragover']) target.addEventListener(ev, e => { e.preventDefault(); target.classList.add('hot'); });
+      for (const ev of ['dragleave', 'drop']) target.addEventListener(ev, e => { e.preventDefault(); target.classList.remove('hot'); });
+      target.addEventListener('drop', e => this.pickImage(e.dataTransfer.files[0]));
+    }
     for (const id of ['pn-fit', 'pn-x', 'pn-y', 'pn-level']) $(id).addEventListener('change', () => { this.resetPartial('摆放/电平变了'); this.renderPreview(); });
     for (const id of ['pn-fit', 'pn-x', 'pn-y', 'pn-level']) $(id).addEventListener('input', () => { this.resetPartial('摆放/电平变了'); this.renderPreview(); });
     /* 两个"显示开关"（字节序 / R-B 交换）在**读回 tab 里也有一份**（#pn-read-byteorder / #pn-read-swap）：
@@ -800,7 +802,7 @@ export class SpiPanelView {
     box.classList.add('pattern-groups');
     const colors = {R:'#f85149',G:'#3fb950',B:'#58a6ff',MRG:'#e3b341',MRB:'#db61a2',MGB:'#39c5cf',W:'#fff',K:'#000',GY:'#808080'};
     const groups = {};
-    for (const name of ['纯色','对比','测试图']){
+    for (const name of ['纯色','图案']){
       const row = document.createElement('div'); row.className = 'pattern-group';
       const title = document.createElement('span'); title.className = 'pattern-label'; title.textContent = name;
       row.append(title); groups[name] = row; box.append(row);
@@ -815,7 +817,7 @@ export class SpiPanelView {
       }
       b.dataset.kind = kind;
       b.addEventListener('click', () => this.setPattern(kind));
-      groups[colors[kind] ? '纯色' : ['RG','GB','RB'].includes(kind) ? '对比' : '测试图'].appendChild(b);
+      groups[colors[kind] ? '纯色' : '图案'].appendChild(b);
     }
   }
 
@@ -880,6 +882,7 @@ export class SpiPanelView {
    */
   syncCustomGeomInputs(){
     const custom = ($('pn-geom')?.value === 'custom');
+    if($('pn-custom-size'))$('pn-custom-size').hidden=!custom;
     for (const id of ['pn-w', 'pn-h']){ const el = $(id); if (el) el.disabled = !custom; }
   }
 
@@ -1418,7 +1421,7 @@ export class SpiPanelView {
         await s.applyConfig({ ...cur, ...preset.cfg }, this.tag);
         await s.pollStatus(true);
       }
-      if (preset.geom && GEOMETRY_SRC[preset.geom]){ $('pn-geom').value = preset.geom; this.applyGeometry(); }
+      if (preset.geom && GEOMETRY_SRC[preset.geom]){ $('pn-geom').value = preset.geom; this.syncCustomGeomInputs(); this.applyGeometry(); }
       this.fillProfile(s.profile);
     });
   }
