@@ -91,7 +91,7 @@
     "app/i2c/runner.js": "75b765d6f84a314fa6cabb3d0d8f3a38637a364c6e9d40eb7b9d63cf41e4df88",
     "app/i2c/session.js": "d139098f2794e67b641cd560f45f3a646faf6b2f236b7f35c738d9d4b7504a60",
     "app/i2c/view.js": "014c10bd58c87887d2731481ec2a546f9a5775e7550a58ab6e19edf2e9b31d74",
-    "app/main.js": "f346725201a499191702cb1e6cb7015834ea3fb8912f4d0970fede370149401a",
+    "app/main.js": "9653b8cb460cc35bedf7a8db3ca7b054b20b3650d6329b57c0c466ca0b4f9b5a",
     "app/rtt/bridge.js": "483cdf7c69882f63b3930619a8a9b78fefc38f2e3c079b64b167918e560d567e",
     "app/rtt/dap-webusb.js": "3df7810ee13fd255dca0887553de5a01e94df6424cbccfb57c33ad4a00630776",
     "app/rtt/elf.js": "76a6278965724f52133467f8f07d4472077c5a9c35ca187fece59abad42405c7",
@@ -158,6 +158,6 @@
     "app/ui/toast.js": "4ad6d90a90cfba752b324500e14324808305b8927b32a887ddbb736a4d9d2ae2",
     "app/ui/workspace.js": "25b6ce94e5d90302a37e6cec2b7e35c975af95ce29bef1094a4493f3890fc0b7"
   },
-  "outputSha256": "e6d2bfd19c4c9073b00ddcb97dfbc196d3234e3fe7ea5907c4cb4817abad0070",
-  "outputBytes": 1253235
+  "outputSha256": "8437dfcbb81d750beacb1fe622788f9698045ad424a72cb28400976befdb55f0",
+  "outputBytes": 1253208
 }

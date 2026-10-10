@@ -155,7 +155,9 @@ document.body.appendChild(box);
  */
 {
   const mask = document.getElementById('boot-mask');
-  if (mask) requestAnimationFrame(() => mask.remove());
+  // A background/minimized tab may suspend animation frames indefinitely.
+  // All handlers are ready here; remove the mask without waiting for a paint.
+  if (mask) mask.remove();
 }
 
 /**
