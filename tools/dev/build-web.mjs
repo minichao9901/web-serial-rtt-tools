@@ -5,7 +5,8 @@ import {fileURLToPath} from 'node:url';
 import {createHash} from 'node:crypto';
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'../..'),out=resolve(root,'app/site');
 const manifestPath=resolve(out,'manifest.json'),entryPath=resolve(out,'main.js');
-const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+// Git may check text out with CRLF on Windows and LF on Linux. Hash canonical text.
+const sha=bytes=>createHash('sha256').update(Buffer.from(bytes).toString('utf8').replace(/\r\n/g,'\n')).digest('hex');
 if(process.argv.includes('--check')){
  const manifest=JSON.parse(await readFile(manifestPath,'utf8'));
  for(const [path,hash]of Object.entries(manifest.inputs))if(sha(await readFile(resolve(root,path)))!==hash)throw Error(`线上脚本未更新：${path}，请运行 npm run build:web`);
