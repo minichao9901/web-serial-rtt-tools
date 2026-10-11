@@ -16,7 +16,7 @@ assert.equal(decode(Uint8Array.from([0x17,1,2])).stats.truncated,1);
 const bounded=decode(Uint8Array.from([0xc0,0x80,0x80,0x80,0x80,0x80,...pc,...sync,...pc]));assert.equal(bounded.stats.malformed,1);assert.equal(bounded.stats.pc,1);
 const blob=packRecording(raw,{startAligned:true,plan:{coreHz:8000000}}),r=unpackRecording(blob);assert.deepEqual(r.raw,raw);assert.equal(r.metadata.plan.coreHz,8000000);assert.equal(unpackRecording(raw).metadata.startAligned,false);
 assert.throws(()=>unpackRecording(blob.slice(0,-1)),/字节数/);const huge=blob.slice();new DataView(huge.buffer).setUint32(8,999999,true);assert.throws(()=>unpackRecording(huge),/头长度/);
-const model=analyzeTrace(raw,{startAligned:true,transportGaps:[{offset:6+pc.length,reason:'UART framing'}]});assert.ok(model.events.some(x=>x.kind==='gap'&&x.reason.includes('UART')));
+const model=analyzeTrace(raw,{startAligned:true,transportGaps:[{offset:6+pc.length,reason:'UART framing'}]});assert.ok(model.events.some(x=>x.kind==='gap'&&x.reason.includes('UART')));assert.deepEqual(model.events.map(e=>e.index),model.events.map((_,i)=>i));assert.deepEqual(model.pcSamples.map(e=>e.sample),model.pcSamples.map((_,i)=>i));
 const limited=analyzeTrace(raw,{startAligned:true},null,{maxEvents:2});assert.equal(limited.events.length,2);assert.ok(limited.stats.droppedEvents);
 assert.equal(selectRange(analyzeTrace(Uint8Array.from([...pc,...pc]),{startAligned:true}),1,1).samples,1);
 assert.equal(tracePlan({coreHz:8000000,baudRate:1000000,periodCycles:4096}).samplesHz,1953.125);assert.throws(()=>tracePlan({coreHz:8000000,baudRate:3000000}),/整除/);assert.throws(()=>tracePlan({coreHz:8000000,baudRate:1000000,periodCycles:2000}),/采样间隔/);
