@@ -42,7 +42,7 @@ try{for(const id of ['stm32f4','stm32h743','stm32h7b0']){
   const probe={device:{serialNumber:'test'},isHalted:async()=>false,readMemDiagnostic:read,writeMem:async(a,b)=>{if(failed&&a===(h?0x5c003010:0xe0040010))throw Error('injected restore failure');writes.push(a);memory.set(a,new DataView(b.buffer,b.byteOffset,4).getUint32(0,true));},disconnect:async()=>closed++};
   WebUsbDapProbe.authorized=async()=>[{}];WebUsbDapProbe.open=async()=>probe;
   const capture=new SwoCapture();capture.serial.open=async()=>capture.serial.isOpen=true;capture.serial.close=async()=>capture.serial.isOpen=false;
-  await capture.start({autoClock:true,hseHz:id==='stm32h7b0'?25e6:8e6,baudRate:h?20e6:14e6,periodCycles:4096,seconds:1,port:{}});
+  await capture.start({autoClock:true,hseHz:id==='stm32h7b0'?25e6:8e6,baudRate:h?20e6:14e6,periodCycles:4096,seconds:1,port:{},allowUnboundedStart:true});
   assert.equal(capture.running,true);assert.equal(capture.metadata.plan.traceHz,id==='stm32h7b0'?140e6:id==='stm32h743'?160e6:168e6);
   assert.ok(!writes.some(a=>Object.values(port.clockRegisters).some(off=>a===port.rcc+off)),'target CPU/PLL configuration is read-only');
   assert.equal(writes.includes(0x5c004000),id==='stm32h743','H7B0 has no SWO funnel');

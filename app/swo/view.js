@@ -2,6 +2,7 @@ import {SwoCapture,tracePlan} from './capture.js';
 import {SerialSession} from '../serial/session.js';
 import {SourceStore} from '../dbg/source.js';
 import {Elf} from '../elf/elf.js';
+import {SymTab} from '../dbg/symbols.js';
 import {selectRange} from './analyze.js';
 import {packRecording,unpackRecording,sha256,MAX_RAW,MAX_META} from './recording.js';
 import {AkaLinkHid} from '../hid/probe.js';
@@ -17,7 +18,7 @@ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const color=s=>{let h=0;for(const c of s)h=(h*31+c.charCodeAt(0))>>>0;return `hsl(${h%360} 65% 64%)`;};
 function download(bytes,name,type='application/octet-stream'){const url=URL.createObjectURL(new Blob([bytes],{type})),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);}
 export class SwoView {
-  constructor(){this.capture=new SwoCapture();this.sources=new SourceStore();this.recording=null;this.result=null;this.elf=null;this.ports=[];this.page=0;this.cursor=0;this._analysisId=0;this._sourceId=0;this.hsePresetF1=true;this.chartLayout=null;this.chartDrag=null;this.zoomControls=null;}
+  constructor(){this.capture=new SwoCapture();this.sources=new SourceStore();this.recording=null;this.result=null;this.elf=null;this.symTab=null;this.entryBreakpoints=[];this.entryBreakpoint=null;this.haltedEntry=null;this.ports=[];this.page=0;this.cursor=0;this._analysisId=0;this._sourceId=0;this.hsePresetF1=true;this.chartLayout=null;this.chartDrag=null;this.zoomControls=null;}
   get session(){return this.capture;}
   init(){
     const bind=(id,fn)=>$(id).addEventListener('click',()=>this.action(fn));
@@ -32,7 +33,7 @@ export class SwoView {
     $('tab-swo').addEventListener('pointerdown',e=>{for(const details of popovers)if(!details.contains(e.target))details.open=false;});
     $('tab-swo').addEventListener('keydown',e=>{if(e.key==='Escape')for(const details of popovers)details.open=false;});
     bind('sw-detect',()=>this.detectTarget());bind('sw-export-c',()=>this.exportText('c'));bind('sw-export-txt',()=>this.exportText('simple-c'));bind('sw-start',()=>this.start());bind('sw-stop',()=>this.capture.stop());
-    bind('sw-import',()=>$('sw-file').click());bind('sw-elf-pick',()=>$('sw-elf-file').click());
+    bind('sw-import',()=>$('sw-file').click());bind('sw-elf-pick',()=>$('sw-elf-file').click());bind('sw-entry-elf-pick',()=>$('sw-elf-file').click());
     bind('sw-source-pick',()=>{$('sw-source-files').click();});
     bind('sw-save',()=>{if(this.recording)download(packRecording(this.recording.raw,this.recording.metadata),'swo-'+Date.now()+'.swopc');});
     bind('sw-demo',()=>this.loadDemo());bind('sw-analyze',()=>this.analyze());bind('sw-csv',()=>this.exportCsv());
@@ -41,6 +42,9 @@ export class SwoView {
     $('sw-auto-clock').addEventListener('change',()=>this.target?this.showTarget(this.target):this.renderPlan());
     $('sw-file').addEventListener('change',()=>this.action(async()=>{const f=$('sw-file').files[0];if(!f)return;if(f.size>MAX_RAW+MAX_META+12)throw Error('记录文件超过大小限制');this.recording=unpackRecording(await f.arrayBuffer());if(this.recording.metadata.format==='raw')this.recording.metadata.startAligned=$('sw-aligned').checked;await this.analyze();}));
     $('sw-elf-file').addEventListener('change',()=>this.action(async()=>{const f=$('sw-elf-file').files[0];if(f)await this.loadElf(await f.arrayBuffer(),f.name);}));
+    bind('sw-entry-set',()=>this.addEntryBreakpoint());bind('sw-entry-clear',()=>this.clearEntryBreakpoint());bind('sw-reset-entry',()=>this.resetAndHaltAtEntry());
+    $('sw-symbol-search').addEventListener('input',()=>this.renderEntrySymbols());
+    $('sw-entry-spec').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();this.action(()=>this.addEntryBreakpoint());}});
     $('sw-source-files').addEventListener('change',()=>this.action(async()=>{this.sources.indexFileList($('sw-source-files').files);this.renderFiles();if(this.result)await this.selectSample(this.cursor);}));
     $('sw-aligned').addEventListener('change',()=>this.action(async()=>{if(this.recording?.metadata.format==='raw'){this.recording.metadata.startAligned=$('sw-aligned').checked;await this.analyze();}}));
     bind('sw-range-apply',()=>this.renderRange());bind('sw-range-reset',()=>{this.fullRange();this.renderRange();});
@@ -55,10 +59,10 @@ export class SwoView {
     chart.addEventListener('wheel',e=>{if(!e.ctrlKey||!this.result?.pcSamples.length)return;e.preventDefault();this.zoomChart(e.deltaY<0);},{passive:false});
     chart.addEventListener('keydown',e=>{if(!this.result?.pcSamples.length)return;if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();this.action(()=>this.selectSample(this.cursor+(e.key==='ArrowLeft'?-1:1)));}else if(e.key==='Home'){e.preventDefault();this.action(()=>this.selectSample(this.from));}else if(e.key==='End'){e.preventDefault();this.action(()=>this.selectSample(this.to));}});
     this.capture.onError=e=>{this.error(e);};
-    this.capture.onChange=()=>{if(this.capture.running)this._wasRecording=true;
-      if(this._wasRecording&&!this.capture.active){this._wasRecording=false;this.recording={raw:this.capture.raw(),metadata:structuredClone(this.capture.metadata)};this.action(()=>this.analyze());}this.renderCapture();if(!this.capture.active&&this._wasRecording===false)this.selectSidebar('analysis');};
+    this.capture.onChange=()=>{if(this.capture.running){this._wasRecording=true;if(this.haltedEntry){this.haltedEntry=null;this.renderEntryState();}}
+      if(this._wasRecording&&!this.capture.active){this._wasRecording=false;this.haltedEntry=null;this.renderEntryState();this.recording={raw:this.capture.raw(),metadata:structuredClone(this.capture.metadata)};this.action(()=>this.analyze());}this.renderCapture();if(!this.capture.active&&this._wasRecording===false)this.selectSidebar('analysis');};
     new ResizeObserver(()=>this.draw()).observe($('sw-chart'));
-    this.refreshPorts().catch(e=>this.error(e));this.renderPlan();this.renderCapture();
+    this.refreshPorts().catch(e=>this.error(e));this.renderEntrySymbols();this.renderEntryState();this.renderPlan();this.renderCapture();
   }
   async action(fn){try{return await fn();}catch(e){this.error(e);}}
   error(e){$('sw-warning').textContent=e.message||String(e);$('sw-warning').classList.add('bad');}
@@ -127,7 +131,56 @@ export class SwoView {
   async refreshPorts(){const current=this.ports[Number($('sw-port').value)];this.ports=(await SerialSession.listPorts()).filter(p=>{const i=p.getInfo();return i.usbVendorId===0x0d28&&i.usbProductId===0x0204;});$('sw-port').replaceChildren();this.ports.forEach((p,i)=>{const o=document.createElement('option');o.value=i;o.textContent=`VCOM ${i+1} · ${SerialSession.describe(p)}`;$('sw-port').append(o);});if(current&&this.ports.includes(current))$('sw-port').value=this.ports.indexOf(current);}
   async loadElf(buffer,name='firmware.elf'){
     if(this.capture.active)throw Error('记录期间不能切换 ELF');if(buffer.byteLength>128*1024*1024)throw Error('ELF 超过 128 MiB');
-    const elf=new Elf(buffer);this.elf={buffer,elf,name,sha256:await sha256(buffer)};this.renderFiles();if(this.recording)await this.analyze();
+    const elf=new Elf(buffer),symTab=SymTab.fromBuffer(elf);this.elf={buffer,elf,name,sha256:await sha256(buffer)};this.symTab=symTab;this.entryBreakpoints=[];this.entryBreakpoint=null;this.haltedEntry=null;$('sw-symbol-search').value='';$('sw-entry-spec').value='';this.renderEntrySymbols();this.renderEntryState();this.renderFiles();this.renderCapture();if(this.recording)await this.analyze();
+  }
+  renderEntrySymbols(){
+    const list=$('sw-entry-functions'),query=$('sw-symbol-search').value.trim().toLowerCase(),seen=new Set(),rows=[];
+    for(const fn of [...(this.symTab?.funcs||[])].sort((a,b)=>a.name.localeCompare(b.name)||a.addr-b.addr)){
+      const address=(fn.addr&~1)>>>0,key=fn.name+'\0'+address;if(!fn.name||seen.has(key))continue;seen.add(key);
+      if(query&&!(fn.name+' '+hex(address)).toLowerCase().includes(query))continue;
+      const existing=this.entryBreakpoints.find(bp=>bp.address===address),row=document.createElement('div');row.className='sw-symbol-row';
+      const add=document.createElement('button');add.type='button';add.textContent=existing?'●':'＋';add.title=existing?'已添加；选择为采集起点':'添加 '+fn.name+' 断点';add.setAttribute('aria-label',(existing?'选择断点 ':'添加断点 ')+fn.name);add.disabled=this.capture.active;
+      add.addEventListener('click',()=>this.action(()=>{if(existing)this.selectEntryBreakpoint(address);else this.setEntryBreakpoint('*'+hex(address),{select:!this.entryBreakpoint,label:fn.name});$('sw-entry-spec').value='';}));
+      const name=document.createElement('span');name.className='sw-symbol-name';name.textContent=fn.name;name.title=fn.name+' · '+hex(address);const pc=document.createElement('small');pc.textContent=hex(address);row.append(add,name,pc);rows.push(row);
+    }
+    list.replaceChildren(...rows);if(!rows.length)list.textContent=this.symTab?'没有匹配函数':'先浏览载入 ELF';
+  }
+  renderEntryState(){
+    $('sw-entry-elf-info').textContent=this.elf?`${this.elf.name}\nELF ${this.elf.sha256.slice(0,12)} · ${this.symTab.funcs.length} 个函数`:'尚未载入 ELF';$('sw-entry-elf-info').title=this.elf?this.elf.sha256:'';
+    const rows=this.entryBreakpoints.map(bp=>{
+      const row=document.createElement('div');row.className='sw-breakpoint-row'+(bp===this.entryBreakpoint?' selected':'');
+      const select=document.createElement('input');select.type='radio';select.name='sw-capture-entry';select.checked=bp===this.entryBreakpoint;select.disabled=this.capture.active;select.setAttribute('aria-label','采集起点 '+bp.label);select.addEventListener('change',()=>this.action(()=>this.selectEntryBreakpoint(bp.address)));
+      const description=document.createElement('span');description.className='sw-breakpoint-description';description.textContent=bp.label;description.title=bp.file||bp.label;const pc=document.createElement('small');pc.textContent=hex(bp.address)+(bp===this.entryBreakpoint?' · 采集起点':'');description.append(pc);
+      const del=document.createElement('button');del.type='button';del.textContent='×';del.disabled=this.capture.active;del.setAttribute('aria-label','删除断点 '+bp.label);del.addEventListener('click',()=>this.action(()=>this.removeEntryBreakpoint(bp.address)));row.append(select,description,del);return row;
+    });
+    $('sw-breakpoint-list').replaceChildren(...rows);if(!rows.length)$('sw-breakpoint-list').textContent='无断点；从函数前 ＋ 或命令添加。';
+    $('sw-entry-state').textContent=this.entryBreakpoint?`采集起点：${this.entryBreakpoint.label} · ${hex(this.entryBreakpoint.address)}`:'请选择一个断点作为采集起点';
+    const control=$('sw-entry-control-status');if(this.haltedEntry)control.textContent=this.entryBreakpoint?.address===this.haltedEntry.address?`目标已复位并停在起点 ${hex(this.haltedEntry.address)}`:`目标目前停在 ${this.haltedEntry.label} · ${hex(this.haltedEntry.address)}；采集时会运行到新起点`;
+    else control.textContent=this.target?'目标已识别；可复位并停到所选起点。':'识别目标并选择断点后，可复位并停在起点。';
+    $('sw-entry-clear').disabled=!this.entryBreakpoints.length||this.capture.active;
+  }
+  setEntryBreakpoint(spec=$('sw-entry-spec').value,{select=true,label=null}={}){
+    if(this.capture.active)throw Error('采集期间不能更改起点断点');
+    if(!this.symTab||!this.elf)throw Error('请先载入与目标固件匹配的 ELF');
+    const text=String(spec||'').trim(),command=text.replace(/^(?:b|break)\s+/i,'');
+    if(!command)throw Error('输入函数名或 b 文件:行，例如 pipeline_scan 或 b main.c:199');
+    const resolved=this.symTab.breakSpec(command);if(resolved.error)throw Error(resolved.error);
+    const address=(Number(resolved.addr)>>>0)&~1,executable=this.symTab.elf.sections().some(s=>(s.flags&4)&&s.size&&address>=s.addr&&address<s.addr+s.size);
+    if(!executable)throw Error('采集断点必须落在 ELF 的可执行代码段');
+    let bp=this.entryBreakpoints.find(item=>item.address===address);
+    if(!bp){bp={address,label:label||resolved.label||resolved.sym?.name||command,requested:text,file:resolved.file||'',line:resolved.line||0};this.entryBreakpoints.push(bp);}
+    if(select)this.entryBreakpoint=bp;
+    this.renderEntrySymbols();this.renderEntryState();this.renderCapture();return bp;
+  }
+  addEntryBreakpoint(){const bp=this.setEntryBreakpoint($('sw-entry-spec').value,{select:!this.entryBreakpoint});$('sw-entry-spec').value='';return bp;}
+  selectEntryBreakpoint(address){if(this.capture.active)throw Error('采集期间不能更改起点断点');const bp=this.entryBreakpoints.find(item=>item.address===address);if(!bp)throw Error('此断点已被删除');this.entryBreakpoint=bp;this.renderEntryState();this.renderCapture();}
+  removeEntryBreakpoint(address){if(this.capture.active)throw Error('采集期间不能更改起点断点');this.entryBreakpoints=this.entryBreakpoints.filter(item=>item.address!==address);if(this.entryBreakpoint?.address===address)this.entryBreakpoint=null;this.renderEntrySymbols();this.renderEntryState();this.renderCapture();}
+  clearEntryBreakpoint(){if(this.capture.active)throw Error('采集期间不能更改起点断点');this.entryBreakpoints=[];this.entryBreakpoint=null;this.renderEntrySymbols();this.renderEntryState();this.renderCapture();}
+  async resetAndHaltAtEntry(){
+    if(!this.target)throw Error('请先连接探针并识别目标');if(!this.elf||!this.entryBreakpoint)throw Error('请先载入匹配 ELF 并选择采集起点');
+    this.haltedEntry=null;this.renderEntryState();this.capture.probeManager=this.probeManager;
+    const entry=this.entryBreakpoint,result=await this.capture.resetToEntry({...this.options(),entryAddress:entry.address,entryLabel:entry.label,elfSha256:this.elf.sha256,verifyElf:probe=>this.verifyElf(probe),onTarget:target=>this.showTarget(target)});
+    this.haltedEntry={address:result.hitPc,label:entry.label};this.renderEntryState();this.renderCapture();return result;
   }
   async loadDemo(){
     if(this.capture.active)throw Error('请先停止记录再载入示例');this.pause();
@@ -163,13 +216,16 @@ export class SwoView {
   }
   async start(){
     this.pause();$('sw-warning').textContent='';$('sw-warning').classList.remove('bad');$('sw-export-status').textContent='';await this.refreshPorts();
-    const options={...this.options(),port:this.ports[Number($('sw-port').value)],elfSha256:this.elf?.sha256,elf:this.elf?.elf,verifyElf:p=>this.verifyElf(p),onTarget:t=>this.showTarget(t)};
+    if(!this.elf||!this.entryBreakpoint)throw Error('SWO 采集必须先载入匹配 ELF 并设置函数/源码行断点');
+    const options={...this.options(),port:this.ports[Number($('sw-port').value)],elfSha256:this.elf.sha256,elf:this.elf.elf,verifyElf:p=>this.verifyElf(p),entryAddress:this.entryBreakpoint.address,entryLabel:this.entryBreakpoint.label,onTarget:t=>this.showTarget(t)};
     this.capture.probeManager=this.probeManager;await this.capture.start(options);
   }
   renderCapture(){const c=this.capture,active=c.active||!!this.exporting;
-    $('sw-start').disabled=active||!!this.analyzing;$('sw-stop').disabled=!c.active;
-    for(const id of ['sw-port','sw-pick','sw-core','sw-trace','sw-baud','sw-period','sw-seconds','sw-itm','sw-exceptions','sw-elf-pick','sw-demo','sw-import','sw-aligned','sw-detect','sw-auto-clock','sw-hse','sw-baud-round','sw-source-pick','sw-auto-baud','sw-model','sw-exception-rate','sw-itm-rate','sw-extra','sw-margin','sw-timestamps','sw-clock-grant'])$(id).disabled=active;
-    $('sw-status').textContent=c.running?`记录中 · ${(c.bytes/1024).toFixed(1)} KiB${this.result?" · 图表为上次分析结果":""}`:(c.busy?'正在连接并配置 SWO…':c.probe?'正在恢复 trace 配置…':c.bytes?`记录结束 · ${(c.bytes/1024).toFixed(1)} KiB · ${c.metadata.restored?'配置已恢复':'恢复未确认'}`:'尚未记录');
+    $('sw-start').disabled=active||!!this.analyzing||!this.elf||!this.entryBreakpoint;$('sw-stop').disabled=!c.active;$('sw-reset-entry').disabled=active||!this.target||!this.elf||!this.entryBreakpoint;
+    for(const id of ['sw-port','sw-pick','sw-core','sw-trace','sw-baud','sw-period','sw-seconds','sw-itm','sw-exceptions','sw-elf-pick','sw-entry-elf-pick','sw-entry-spec','sw-entry-set','sw-entry-clear','sw-demo','sw-import','sw-aligned','sw-detect','sw-auto-clock','sw-hse','sw-baud-round','sw-source-pick','sw-auto-baud','sw-model','sw-exception-rate','sw-itm-rate','sw-extra','sw-margin','sw-timestamps','sw-clock-grant'])$(id).disabled=active;
+    $('sw-symbol-search').disabled=active||!this.symTab;$('sw-entry-spec').disabled=active||!this.symTab;$('sw-entry-set').disabled=active||!this.symTab;$('sw-entry-clear').disabled=active||!this.entryBreakpoints.length;
+    for(const control of document.querySelectorAll('#sw-entry-functions button,#sw-breakpoint-list input,#sw-breakpoint-list button'))control.disabled=active;
+    $('sw-status').textContent=c.running?`记录中 · ${(c.bytes/1024).toFixed(1)} KiB${this.result?" · 图表为上次分析结果":""}`:(c.busy?(c.startPhase||'正在连接并配置 SWO…'):c.probe?'正在恢复 trace 配置…':c.bytes?`记录结束 · ${(c.bytes/1024).toFixed(1)} KiB · ${c.metadata.restored?'配置已恢复':'恢复未确认'}`:'尚未记录');
     $('sw-save').disabled=!this.recording||active;$('sw-analyze').disabled=!this.recording||active||this.analyzing;$('sw-csv').disabled=!this.result||active||this.analyzing;for(const id of ['sw-export-c','sw-export-txt'])$(id).disabled=!this.recording||active||this.analyzing;this.renderPlan();
   }
   renderFiles(){$('sw-files').textContent=(this.elf?`${this.elf.name} · ELF SHA256 ${this.elf.sha256.slice(0,12)}`:'未载入 ELF')+' · '+this.sources.summary();}
@@ -184,7 +240,7 @@ export class SwoView {
   clearResult(){this._sourceId++;for(const id of ['sw-hot','sw-rows','sw-source','sw-source-title','sw-edges','sw-page-info','sw-cursor-text'])$(id).replaceChildren();const canvas=$('sw-chart');canvas.getContext('2d').clearRect(0,0,canvas.width,canvas.height);$('sw-counts').textContent='尚无分析结果';$('sw-cursor').max=0;$('sw-cursor').value=0;this.from=0;this.to=0;this.cursor=0;this.chartDrag=null;this.chartLayout=null;this.zoomControls?.setDisabled({zoomOut:true,zoomIn:true,fit:true});}
   renderStats(){const r=this.result,s=r.stats;$('sw-counts').textContent=`${s.analyzedSamples.toLocaleString()} PC · ${r.hotspots.length} 个位置 · 缺口 ${r.events.filter(e=>e.kind==='gap').length} · 睡眠包 ${s.sleep} · 中断 ${s.exceptions}`;
     const notes=[];if(Object.values(r.metadata.receiverErrors||{}).some(v=>v))notes.push('探针接收诊断：'+Object.entries(r.metadata.receiverErrors).filter(([,v])=>v).map(([k,v])=>k+'='+v).join('、'));if(r.metadata.limitReached)notes.push('达到 32 MiB 上限，记录已停止');if(r.metadata.errorLimitReached)notes.push('传输错误过多，记录已停止');if(this.elf?.name==='F103CB 实测示例 ELF')notes.push('正在查看 F103CB 离线实测示例');if(r.metadata.clockCheck?.knownHz===null)notes.push('外部时钟无法由 RCC 单独确定，波特率与时间换算使用填写的核心频率');if(!this.elf)notes.push('未载入 ELF，只显示原始地址');else if(!r.metadata.elfSha256)notes.push('记录未保存 ELF 指纹，映射依赖所选 ELF 与实际固件一致');
-    if(s.unmapped)notes.push(`${s.unmapped} 个 PC 未精确落入函数符号`);if(s.skippedBytes)notes.push(`同步前跳过 ${s.skippedBytes} 字节`);if(s.overflow)notes.push(`ITM 溢出 ${s.overflow} 次`);if(s.malformed)notes.push(`未知/损坏数据包 ${s.malformed} 次`);if(s.truncated)notes.push('末尾存在截断包');if(s.droppedEvents)notes.push(`仅分析前 250000 条事件，另有 ${s.droppedEvents} 条未展开（原始记录保留）`);if(r.metadata.transportGaps?.length)notes.push(`传输错误 ${r.metadata.transportGaps.length} 次`);if(r.symbolNote)notes.push(r.symbolNote);
+    if(r.metadata.entryBreakpoint)notes.push(`断点起点：${r.metadata.entryBreakpoint.label} · 命中 ${hex(r.metadata.entryBreakpoint.hitPc)}`);if(s.unmapped)notes.push(`${s.unmapped} 个 PC 未精确落入函数符号`);if(s.skippedBytes)notes.push(`同步前跳过 ${s.skippedBytes} 字节`);if(s.overflow)notes.push(`ITM 溢出 ${s.overflow} 次`);if(s.malformed)notes.push(`未知/损坏数据包 ${s.malformed} 次`);if(s.truncated)notes.push('末尾存在截断包');if(s.droppedEvents)notes.push(`仅分析前 250000 条事件，另有 ${s.droppedEvents} 条未展开（原始记录保留）`);if(r.metadata.transportGaps?.length)notes.push(`传输错误 ${r.metadata.transportGaps.length} 次`);if(r.symbolNote)notes.push(r.symbolNote);
     $('sw-warning').textContent=notes.join('；');$('sw-warning').classList.toggle('bad',!!(s.overflow||s.malformed||s.droppedEvents||r.metadata.transportGaps?.length||Object.values(r.metadata.receiverErrors||{}).some(v=>v)));
   }
   fullRange(){if(!this.result)return;$('sw-from').value=0;$('sw-to').value=Math.max(0,this.result.pcSamples.length-1);$('sw-filter').value='';}

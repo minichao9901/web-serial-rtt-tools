@@ -8,7 +8,7 @@ function rig(){const values=new Map(addr.map((a,i)=>[a,i===1?0x40000000:i===4?3:
  const c=new SwoCapture();c.serial.open=async()=>c.serial.isOpen=true;c.serial.close=async()=>c.serial.isOpen=false;
  return {c,values,before,writes,probe,get closed(){return closed},set fail(v){fail=v},set ignore(v){ignore=v}};
 }
-const options={coreHz:8000000,baudRate:1000000,periodCycles:4096,seconds:5,port:{}};
+const options={coreHz:8000000,baudRate:1000000,periodCycles:4096,seconds:5,port:{},allowUnboundedStart:true};
 function leased(r){
  let state,closes=0,reads=0,prepareError=false,releaseError=false;
  const receiver={open:async serial=>assert.equal(serial,'test'),sources:async()=>({frequencies:DEFAULT_SOURCES}),prepare:async(baud,mode)=>{const p=receiverCandidate(baud,mode);state={actualBaud:p.actualBaud,uartHz:p.uartHz,osr:p.osr};if(prepareError)throw Error('injected receiver prepare failure');return state;},heartbeat:async()=>state,diagnostics:async()=>({overrun:0,framing:++reads>1?1:0,parity:0,lineBreak:0,droppedBytes:0}),close:async()=>{closes++;if(releaseError)throw Error('injected receiver release failure');},hid:{xfer:async()=>{const b=new Uint8Array(34),v=new DataView(b.buffer,2);v.setUint32(12,state.actualBaud,true);v.setUint32(16,state.osr,true);return b;}}};

@@ -13,7 +13,7 @@
   var mode = new URLSearchParams(location.search).get('modules');
   var local = ['localhost', '127.0.0.1', '[::1]'].indexOf(location.hostname) !== -1;
   window.__useWebBundle = mode === 'bundle' || (mode !== 'source' && !local);
-  window.__webBundleUrl = 'app/site/main.js?v=b18907a4c9d0e440';
+  window.__webBundleUrl = 'app/site/main.js?v=d56dc332c616b520';
   var preload = document.createElement('link');
   preload.rel = 'modulepreload';
   preload.href = window.__useWebBundle ? window.__webBundleUrl : 'app/main.js';
@@ -2243,29 +2243,52 @@
 
 <section id="tab-swo" class="panel" aria-label="SWO 执行轨迹">
   <div class="ws sw-workspace">
-    <aside class="side">
+    <aside class="side tool-side">
       <div class="sw-side-nav" role="tablist" aria-label="SWO 工作区"><button id="sw-record-tab" role="tab" aria-selected="true" aria-controls="sw-record-panel">录制</button><button id="sw-analysis-tab" role="tab" aria-selected="false" aria-controls="sw-analysis-panel" tabindex="-1">分析</button></div>
       <div class="row btnrow sw-side-tools"><button id="sw-calculator-open">时钟计算器</button><button id="sw-help-open">使用帮助</button></div>
-      <div id="sw-record-panel" role="tabpanel" aria-labelledby="sw-record-tab">
-      <fieldset><legend>录制 SWO</legend>
+      <div id="sw-record-panel" class="sw-record-layout" role="tabpanel" aria-labelledby="sw-record-tab">
+      <div class="tool-side-panel" id="sw-record-steps">
+      <fieldset><legend>① 载入目标 ELF</legend>
+        <button id="sw-entry-elf-pick" class="sw-wide primary" title="载入与目标固件匹配的 ELF">浏览载入 ELF…</button>
+        <p id="sw-entry-elf-info" class="hint sw-elf-info" role="status">尚未载入 ELF</p>
+      </fieldset>
+      <fieldset><legend>② 连接与识别目标</legend>
         <div class="row"><span>VCOM 串口</span><select id="sw-port" aria-label="SWO VCOM 串口"></select><button id="sw-pick">选择…</button></div>
         <div class="row btnrow"><button id="sw-detect">识别目标与时钟</button><button id="sw-clock-grant" title="允许通过同一探针配置接收时钟">授权时钟</button></div>
         <p id="sw-target" class="sw-target-info" role="status">尚未识别目标</p>
-        <div class="row"><span>PC 间隔</span><select id="sw-period"><option value="64">64 周期</option><option value="128">128 周期</option><option value="256">256 周期</option><option value="512">512 周期</option><option value="1024">1024 周期</option><option value="2048">2048 周期</option><option value="4096" selected>4096 周期</option><option value="8192">8192 周期</option><option value="16384">16384 周期</option></select></div>
-        <div class="row"><span>记录秒数</span><input id="sw-seconds" type="number" min="0.1" max="120" step="0.1" value="5"></div>
-        <label class="chk"><input id="sw-timestamps" type="checkbox" checked>带时间戳</label>
-        <label class="chk"><input id="sw-auto-baud" type="checkbox" checked>自动匹配收发波特率</label>
-        <div class="row"><span>SWO baud</span><input id="sw-baud" type="number" min="1" max="30000000" step="1" value="1000000" list="sw-baud-suggestions" aria-label="SWO 波特率"><datalist id="sw-baud-suggestions"><option value="500000"><option value="1000000"><option value="2000000"><option value="4000000"><option value="8000000"><option value="10000000"><option value="18000000"><option value="24000000"><option value="25000000"><option value="30000000"></datalist></div>
-        <p id="sw-match-summary" class="sw-match-summary" role="status">先识别目标与时钟</p>
-        <div class="row btnrow"><button id="sw-start" class="primary">开始录制</button><button id="sw-stop" disabled>停止并分析</button></div>
-        <p id="sw-status" role="status" class="hint">尚未录制</p>
-        <details id="sw-advanced" class="sw-fold"><summary>目标时钟与事件</summary>
+        <details class="sw-fold"><summary>目标型号与板载时钟</summary>
           <div class="row"><span>常见型号</span><select id="sw-model" aria-label="目标型号"><option value="auto">自动识别</option><option value="stm32f1">STM32F103</option><option value="stm32f4">STM32F407 / F405</option><option value="stm32h743">STM32H743 / H750</option><option value="stm32h7b0">STM32H7B0 / H7A3 / H7B3</option></select></div>
           <div class="row"><span>外部 MHz</span><input id="sw-hse" type="number" min="1" max="50" step="any" value="8" aria-label="板载外部时钟 MHz" title="初始按 Bluepill 8 MHz；其他板子必须提供实际值"></div>
           <label class="chk"><input id="sw-auto-clock" type="checkbox" checked>从目标配置计算 CPU / Trace 时钟</label>
           <div class="row"><span>CPU MHz</span><input id="sw-core" type="number" min="0.001" max="1000" step="any" placeholder="待识别"></div>
           <div class="row"><span>Trace MHz</span><input id="sw-trace" type="number" min="0.001" max="1000" step="any" placeholder="待识别" title="SWO 编码器的输入时钟，不是 SWO 波特率"></div>
           <p id="sw-target-path" class="hint">识别后显示 CPU / Trace 时钟来源与分频。</p>
+          <p class="hint">目标主频由固件配置；外部晶振按实际板子填写。</p>
+        </details>
+      </fieldset>
+      <fieldset><legend>③ 添加断点</legend>
+        <input id="sw-symbol-search" class="sw-wide" placeholder="搜索 ELF 函数…" aria-label="搜索 SWO ELF 函数" disabled>
+        <div id="sw-entry-functions" class="sw-symbol-list" role="group" aria-label="SWO ELF 函数列表">先浏览载入 ELF</div>
+        <p class="hint sw-break-hint">＋ 添加断点，圆点选择采集起点。</p>
+        <div class="row sw-break-command"><input id="sw-entry-spec" placeholder="b main:199" aria-label="SWO 断点命令" disabled><button id="sw-entry-set" disabled>添加</button></div>
+        <details class="sw-fold"><summary>断点命令格式</summary><p class="hint">b 函数、b 文件:行、b 函数:行、b *0x地址；行号是文件绝对行号。</p></details>
+      </fieldset>
+      <fieldset><legend>④ 断点与采集起点</legend>
+        <div id="sw-breakpoint-list" class="sw-breakpoint-list" role="group" aria-label="SWO 采集断点列表">无断点；从函数前 ＋ 或命令添加。</div>
+        <p id="sw-entry-state" class="hint" role="status">请选择一个断点作为采集起点</p>
+        <button id="sw-reset-entry" class="sw-wide" title="软件复位目标，运行到所选断点后暂停" disabled>复位并停在起点</button>
+        <p id="sw-entry-control-status" class="hint sw-break-hint" role="status">识别目标并选择断点后，可复位并停在起点。</p>
+        <button id="sw-entry-clear" class="sw-wide" disabled>清空断点</button>
+        <p class="hint sw-break-hint">采集前运行至所选起点；采集时仅临时下发该硬件断点。</p>
+      </fieldset>
+      <fieldset><legend>⑤ 配置 SWO 采集</legend>
+        <div class="row"><span>PC 间隔</span><select id="sw-period"><option value="64">64 周期</option><option value="128">128 周期</option><option value="256">256 周期</option><option value="512">512 周期</option><option value="1024">1024 周期</option><option value="2048">2048 周期</option><option value="4096" selected>4096 周期</option><option value="8192">8192 周期</option><option value="16384">16384 周期</option></select></div>
+        <div class="row"><span>记录秒数</span><input id="sw-seconds" type="number" min="0.1" max="120" step="0.1" value="5"></div>
+        <label class="chk"><input id="sw-timestamps" type="checkbox" checked>带时间戳</label>
+        <label class="chk"><input id="sw-auto-baud" type="checkbox" checked>自动匹配收发波特率</label>
+        <div class="row"><span>SWO baud</span><input id="sw-baud" type="number" min="1" max="30000000" step="1" value="1000000" list="sw-baud-suggestions" aria-label="SWO 波特率"><datalist id="sw-baud-suggestions"><option value="500000"><option value="1000000"><option value="2000000"><option value="4000000"><option value="8000000"><option value="10000000"><option value="18000000"><option value="24000000"><option value="25000000"><option value="30000000"></datalist></div>
+        <p id="sw-match-summary" class="sw-match-summary" role="status">先识别目标与时钟</p>
+        <details id="sw-advanced" class="sw-fold"><summary>事件与带宽设置</summary>
           <label class="chk"><input id="sw-exceptions" type="checkbox">异常进入 / 退出事件</label>
           <div class="row sw-event-input" id="sw-exception-budget" hidden><span>预计事件/s</span><input id="sw-exception-rate" type="number" min="0" value="1000" aria-label="每秒异常进入退出事件总数"></div>
           <label class="chk"><input id="sw-itm" type="checkbox">ITM 软件事件</label>
@@ -2275,10 +2298,14 @@
           <label class="chk"><input id="sw-baud-round" type="checkbox">允许目标分频近似（≤ 5%）</label>
           <p class="hint">这里只配置 Trace。目标主频由目标程序管理。</p>
         </details>
-        <p class="hint sw-elf-reminder">录制前可到“分析”载入匹配 ELF 与源码。</p>
       </fieldset>
       </div>
-      <div id="sw-analysis-panel" role="tabpanel" aria-labelledby="sw-analysis-tab" hidden>
+      <div class="tool-side-actions sw-capture-actions">
+        <div class="row btnrow"><button id="sw-start" class="primary">运行至断点并录制</button><button id="sw-stop" disabled>停止并分析</button></div>
+        <p id="sw-status" role="status" class="hint">尚未录制</p>
+      </div>
+      </div>
+      <div id="sw-analysis-panel" class="tool-side-panel" role="tabpanel" aria-labelledby="sw-analysis-tab" hidden>
       <fieldset><legend>文件与离线分析</legend>
         <div class="row btnrow"><button id="sw-elf-pick">载入 ELF…</button><button id="sw-source-pick">源码目录…</button></div>
         <input id="sw-elf-file" type="file" accept=".elf,.axf" hidden><input id="sw-source-files" type="file" webkitdirectory multiple hidden>
@@ -2350,20 +2377,21 @@
 </dialog>
 <dialog id="sw-help" class="sw-modal" aria-labelledby="sw-help-title">
   <div class="sw-modal-head"><h2 id="sw-help-title">SWO 使用帮助</h2><button id="sw-help-close" aria-label="关闭帮助">关闭</button></div>
-  <nav class="sw-help-nav"><a href="#sw-help-wiring">接线与上手</a><a href="#sw-help-clocks">目标时钟</a><a href="#sw-help-math">带宽计算</a><a href="#sw-help-probe">探针匹配</a><a href="#sw-help-files">文件与示例</a></nav>
-  <h3 id="sw-help-wiring">1. 接线与上手</h3><p>连接目标 PB3 / SWO → 探针 PB07 / VCOM RX，并连接 SWD 和 GND。使用 NRZ / 8N1。选择 VCOM、授权探针时钟、识别目标；在“分析”载入匹配的 ELF 与源码，再回到“录制”开始。停止后自动分析并恢复 Trace / 探针接收配置。</p>
-  <h3 id="sw-help-clocks">2. CPU、Trace 与外部晶振</h3><p>CPU 频率决定 PC 采样率和周期时间；Trace 输入频率决定 SWO 编码器的分频。读取 RCC 可以得到时钟源和 PLL / 总线分频，板上外部晶振或有源时钟的频率仍需提供。标注“自动推算”表示根据配置计算，不是测量晶振。</p><p>F103 / F407 的 SWO 输入来自 HCLK，与 CPU 频率相同。H743 / H7B0 在 PLL 模式下使用 PLL1 R 输出作为 SWO 输入，CPU 使用 PLL1 P 输出并另经核心分频；不能直接拿 CPU 或 HCLK 替代。页面读取 PLL1 的 M、N、FRACN、P、R 和核心分频，分别计算两者。调试组件的总线时钟和 SWO 引脚编码时钟也需区分。常见型号的 DEV_ID 可能由多个芯片共用，页面显示型号组，不能保证识别到封装和完整料号。未知型号只识别内核并提示未适配，不套用 F103 配置。</p><p>本页不修改目标 PLL、核心分频和 SysTick。目标程序需要保持录制期间的时钟稳定；改变时钟后应停止并重新识别。</p>
-  <h3 id="sw-help-math">3. 从采样密度计算带宽</h3><pre>PC/s = CPU Hz ÷ PC 周期间隔
+  <nav class="sw-help-nav"><a href="#sw-help-wiring">接线与上手</a><a href="#sw-help-breakpoints">断点与重复采集</a><a href="#sw-help-clocks">目标时钟</a><a href="#sw-help-math">带宽计算</a><a href="#sw-help-probe">探针匹配</a><a href="#sw-help-files">文件与示例</a></nav>
+  <h3 id="sw-help-wiring">1. 接线与上手</h3><p>连接目标 PB3 / SWO → 探针 PB07 / VCOM RX，并连接 SWD 和 GND。使用 NRZ / 8N1。按录制侧栏从上到下操作：载入目标 ELF、选择 VCOM 并识别目标、添加并选择断点、设置 SWO 参数，最后运行至断点并录制。初次使用还需授权探针时钟；停止后页面自动分析并恢复 Trace / 探针接收配置。</p>
+  <h3 id="sw-help-breakpoints">2. 断点起点与重复采集</h3><p>在“① 载入目标 ELF”选择与板上程序完全匹配的 ELF，确认文件名和指纹。载入后，“③ 添加断点”会列出函数：点击函数前的“＋”添加；也可以输入 <code>b main</code>、<code>b main.c:81</code>、<code>b 函数名:行号</code> 或地址，再点击“添加”。源码行按 DWARF 行号解析，空行或没有机器指令的行不能作为断点。可添加多个候选，在“④ 断点与采集起点”用圆点选择本次起点。</p><p>“复位并停在起点”会先做 AIRCR 软件复位，再运行到所选断点并暂停；它只复位并暂停，不会开始采集。目标停住后点击“运行至断点并录制”，页面会从当前起点准备并启动 SWO。若不先复位，开始采集会让正在运行的目标继续执行，等它下一次到达所选断点；默认等待 15 秒，选到已经执行过且不会再调用的启动函数会超时。采集正常停止后目标继续运行；想从程序开头再采一轮，先点“复位并停在起点”，再开始采集。</p><p>断点列表是本页的采集候选。采集时页面临时设置所选起点的硬件断点，命中后清除；原有 FPB 状态会保留。</p>
+  <h3 id="sw-help-clocks">3. CPU、Trace 与外部晶振</h3><p>CPU 频率决定 PC 采样率和周期时间；Trace 输入频率决定 SWO 编码器的分频。读取 RCC 可以得到时钟源和 PLL / 总线分频，板上外部晶振或有源时钟的频率仍需提供。标注“自动推算”表示根据配置计算，不是测量晶振。</p><p>F103 / F407 的 SWO 输入来自 HCLK，与 CPU 频率相同。H743 / H7B0 在 PLL 模式下使用 PLL1 R 输出作为 SWO 输入，CPU 使用 PLL1 P 输出并另经核心分频；不能直接拿 CPU 或 HCLK 替代。页面读取 PLL1 的 M、N、FRACN、P、R 和核心分频，分别计算两者。调试组件的总线时钟和 SWO 引脚编码时钟也需区分。常见型号的 DEV_ID 可能由多个芯片共用，页面显示型号组，不能保证识别到封装和完整料号。未知型号只识别内核并提示未适配，不套用 F103 配置。</p><p>本页不修改目标 PLL、核心分频和 SysTick。目标程序需要保持录制期间的时钟稳定；改变时钟后应停止并重新识别。</p>
+  <h3 id="sw-help-math">4. 从采样密度计算带宽</h3><pre>PC/s = CPU Hz ÷ PC 周期间隔
 PC 字节/s ≈ PC/s × (无时间戳 5 B；带时间戳约 9 B)
 异常字节/s = 进入 / 退出事件总数/s × 3 B
 ITM 字节/s ≈ 有效载荷字节/s × 2（按单字节包估算）
 所需 baud = (PC + 异常 + ITM + 其他 字节/s) × 10 ÷ (1 − 余量)
 目标实际 SWO baud = Trace 输入 Hz ÷ (ACPR / CODR + 1)</pre><p>72 MHz ÷64 = 1,125,000 PC/s。仅 5 B 的 PC 包就需 56.25 Mbaud，超过探针 30 Mbaud。间隔越小，采样越密，但需更多带宽，依然不能还原 ETM 的逐指令分支流。DWT 合法间隔是 64 或 1024 周期的 1–16 倍；输入期望 PC/s 时选择不超过期望值的合法采样率。</p><p>时间戳长度和频率可变，实际带宽还包含同步、睡眠等包；这里给出规划估算，溢出和接收错误仍以实测为准。</p>
-  <h3 id="sw-help-probe">4. 探针接收波特率与时钟</h3><pre>UART Hz = 选定 PLL 输出 Hz ÷ SYSCTL 分频
+  <h3 id="sw-help-probe">5. 探针接收波特率与时钟</h3><pre>UART Hz = 选定 PLL 输出 Hz ÷ SYSCTL 分频
 probe baud = UART Hz ÷ OSR ÷ UART DIV
 误差 % = |probe baud − 目标 SWO baud| ÷ 目标 SWO baud × 100%</pre><p>自动匹配先选择当前时钟源与分频；必要时调整 PLL1。默认 UART 240 MHz，最高 30 Mbaud。软件不会调整承载 CPU 的 PLL0；PLL1 调整须经过共享消费者检查，最终以探针回读为准。下方显示实际使用 PLL0 或 PLL1 的完整路径。“授权时钟”是浏览器对探针 HID 接口的访问授权。</p>
   <div id="sw-match" class="sw-calc-result">尚无匹配配置</div><p id="sw-plan" class="hint"></p>
-  <h3 id="sw-help-files">5. 记录、ELF、源码与实测示例</h3><p>“打开记录”打开自己的 .swopc 或原始 .bin；“载入配套实测示例”同时载入仓库内的实测记录、匹配 ELF 和源码，不连接硬件。.swopc 保存采样配置、ELF 指纹和错误信息；原始 .bin 只有数据，只有确定数据包边界时才勾选导入选项。</p><p>完整 .c 保留源码行和采样注释；“导出简化.c”只保留 C/C++ 源码，去掉注释，合并连续重复的行及代码片段，缺口以空行分开。两种导出均重新解码全部原始记录，不受区间和 250000 条事件上限影响。简化导出需匹配的 ELF 与源码；未采样代码不会补齐，文件用于阅读而非编译。</p>
+  <h3 id="sw-help-files">6. 记录、ELF、源码与实测示例</h3><p>“打开记录”打开自己的 .swopc 或原始 .bin；“载入配套实测示例”同时载入仓库内的实测记录、匹配 ELF 和源码，不连接硬件。.swopc 保存采样配置、ELF 指纹和错误信息；原始 .bin 只有数据，只有确定数据包边界时才勾选导入选项。</p><p>完整 .c 保留源码行和采样注释；“导出简化.c”只保留 C/C++ 源码，去掉注释，合并连续重复的行及代码片段，缺口以空行分开。两种导出均重新解码全部原始记录，不受区间和 250000 条事件上限影响。简化导出需匹配的 ELF 与源码；未采样代码不会补齐，文件用于阅读而非编译。</p>
 </dialog>
 
 

@@ -134,7 +134,7 @@
     "app/spi/session.js": "243088145c3b8a1af38604b27f1bf011350c1c5a65ac9f3ff97f030bf64ec9f8",
     "app/spi/transport.js": "28ee75a77396dd55853c48f0b2432512bd864ccc5f0035412911ca3940228031",
     "app/swo/analyze.js": "fa698e417c96dec9fc571c830c3bbac2e2df7f5354462f9e425fd7f37655029a",
-    "app/swo/capture.js": "1f65a052ecf8577e5e3381fe4cdc3b4f162a9da87e9bf3f3da3b0f9ae1bcf01e",
+    "app/swo/capture.js": "7fa22cc8a4f27a18bdc14b526ff73a78134be7f2e44f3adf0b7c5fbd9e50b5ce",
     "app/swo/decoder.js": "d4737f0d0f02c87651757961199778fb1a04cef66ae1e02a60915741fd6c5970",
     "app/swo/matching.js": "b5883373e5b69f966de831c9073598785802c852f5c809de02ade856a8c7392a",
     "app/swo/planning.js": "a7db1f4c2f58b0a132e5b01b8d034cf65e3e2f25a8dfb864d0a54a03217615ab",
@@ -143,7 +143,7 @@
     "app/swo/recording.js": "4974ad114486791e7d5fe226691eac00e1eafb3facf0c87b0b57fb49f4e35f63",
     "app/swo/route.js": "a36c02a06db886551993ad62b576c925e7ac945c4ec221ef8dee92b238f1b321",
     "app/swo/target.js": "7ce94e7cdabd6495ce4d00090b8bbf41b5d939206c1a308d65dae26050e669e1",
-    "app/swo/view.js": "ead383f899b9f66124ef67f2e8df6cd90832f540a7f33c25969419f42c3d5e9d",
+    "app/swo/view.js": "f514dc3774df569d8e0b195019cdcfbc2393773da56fbfa6e8e5962cba88cb63",
     "app/swo/window.js": "7ccbd7e82ca72c32d78a72a5a9ecaa95ac9ff8de71582fe290673241696be18f",
     "app/targets/hpm/porting.js": "e67565bc13b011b282b860a957901b44263967a1f71e449cf08cb525cf1a4f48",
     "app/targets/hpm/select.js": "934f49c3a82f0bd03a9a77e6b207ce2fa5dc202fce632666e99010b6595eb43c",
@@ -162,6 +162,6 @@
     "app/ui/workspace.js": "25b6ce94e5d90302a37e6cec2b7e35c975af95ce29bef1094a4493f3890fc0b7",
     "app/ui/zoom-controls.js": "d7520d813135941c8b0e8f5601722c45f53d2d2ed8a940f789bc032da0180ff9"
   },
-  "outputSha256": "b18907a4c9d0e440eb20d704b1715278abc866a37de74a37a9086a96aa37802d",
-  "outputBytes": 1267638
+  "outputSha256": "d56dc332c616b5205a5212c10feb14e48cd75126d5d603c4bf719e27a1bb6f85",
+  "outputBytes": 1283187
 }
