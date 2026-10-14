@@ -13,6 +13,7 @@ def main():
     commands=[['node','--test',*[str(p.relative_to(ROOT)) for p in sorted((ROOT/'tools/selftest').glob('etm-*.test.mjs'))]],
               [sys.executable,'-m','unittest','discover','-s','tools/selftest','-p','test_etm_server.py','-v'],
               [sys.executable,'-m','unittest','discover','-s','tools/selftest','-p','test_etm_lifecycle.py','-v']]
+    commands.append([sys.executable,'-m','unittest','discover','-s','tools/selftest','-p','test_etm_seed.py','-v'])
     if args.portable:commands.append([sys.executable,'-m','unittest','discover','-s','tools/selftest','-p','test_etm_portable.py','-v'])
     rows=[]
     for index,command in enumerate(commands):

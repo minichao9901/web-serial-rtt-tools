@@ -5,6 +5,7 @@ VALIDATION_DIR selects a persistent run; this test does not touch SWD or flash.
 import hashlib,json,os,socket,subprocess,time,unittest,uuid,zipfile
 from pathlib import Path
 from urllib.request import Request,urlopen
+from urllib.error import HTTPError
 ROOT=Path(__file__).resolve().parents[2]
 
 @unittest.skipUnless(os.name=='nt' and os.environ.get('VALIDATION_DIR'),'Windows portable validation requires VALIDATION_DIR')
@@ -44,6 +45,7 @@ class PortableTests(unittest.TestCase):
         self.results.append(dict(command=command,exitCode=result.returncode,stdout=result.stdout,stderr=result.stderr));return result
     def test_independent_startup_and_assets(self):
         self.assertTrue(self.metadata['portable']);self.assertEqual(self.api('etm/integration.json')['protocol'],1)
+        manifest=json.loads((self.home/'package-manifest.json').read_text(encoding='utf8'));self.assertEqual(self.metadata['version'],manifest['version'])
         with urlopen(self.base) as response:html=response.read().decode()
         self.assertNotIn('id="g-etm-root"',html);self.assertNotIn('id="g-etm-serial-root"',html)
         self.assertIn('下载完整 ETM 桥包',html)
@@ -55,6 +57,15 @@ class PortableTests(unittest.TestCase):
             with urlopen(self.base+path) as response:driver=response.read().decode()
             for method in ['writeMemDiagnostic','recoverDebugPort']:self.assertIn(method,driver)
         self.assertEqual(self.run_exe('--check').returncode,0)
+    def test_optional_firmware_and_interrupted_demo_repair_in_compiled_exe(self):
+        for path in ['etm/api/default-elf','etm/api/firmware','etm/api/profile-firmware/spi-280']:
+            with self.assertRaises(HTTPError) as caught:self.api(path)
+            self.assertEqual(caught.exception.code,404);self.assertIn('未随',json.loads(caught.exception.read())['error'])
+        isolated=self.root/'中断播种 恢复/data';folder=isolated/'records/demo-spi-70-35-v1';folder.mkdir(parents=True)
+        (folder/'session.json').write_text('{broken');(folder/'user-evidence.txt').write_text('preserve')
+        result=self.run_exe('--check','--data-dir',str(isolated));self.assertEqual(result.returncode,0,result.stdout+result.stderr)
+        self.assertTrue(json.loads((folder/'decoded.json').read_text(encoding='utf8'))['events'])
+        backups=list(isolated.glob('demo-recovery-*'));self.assertEqual(len(backups),1);self.assertEqual((backups[0]/'user-evidence.txt').read_text(),'preserve')
     def test_reuse_and_invalid_ports(self):
         self.assertEqual(self.run_exe('--no-browser').returncode,0)
         self.assertEqual(self.run_exe('--port','70000','--check').returncode,1)

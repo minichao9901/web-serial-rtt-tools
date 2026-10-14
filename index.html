@@ -13,7 +13,7 @@
   var mode = new URLSearchParams(location.search).get('modules');
   var local = ['localhost', '127.0.0.1', '[::1]'].indexOf(location.hostname) !== -1;
   window.__useWebBundle = mode === 'bundle' || (mode !== 'source' && !local);
-  window.__webBundleUrl = 'app/site/main.js?v=bf7038384033a677';
+  window.__webBundleUrl = 'app/site/main.js?v=3b5e01c2a10c87bf';
   var preload = document.createElement('link');
   preload.rel = 'modulepreload';
   preload.href = window.__useWebBundle ? window.__webBundleUrl : 'app/main.js';
@@ -75,13 +75,13 @@
 
 <main>
 
-<!-- ============================ 串口助手 ============================ -->
+<!-- ============================ ETM 执行轨迹 ============================ -->
 <section class="panel" id="tab-etm">
   <div id="etm-notice">
     <h2>ETM 执行轨迹</h2>
     <p id="etm-status">ETM 采集与解码需要本地工作台及 KingstVIS。</p>
     <p>请使用本地启动入口打开工具箱；载入 ELF、选择断点起点后，即可采集并对照源码分析。</p>
-    <div class="etm-actions"><button id="etm-retry">重新检测服务</button><a href="http://127.0.0.1:8878/#etm" target="_blank" rel="noopener">打开本地 ETM 工作台</a><a href="docs/etm-integration.md" target="_blank" rel="noopener">启动与使用说明</a></div>
+    <div class="etm-actions"><button id="etm-retry">重新检测服务</button><a id="etm-open" href="http://127.0.0.1:8878/#etm" target="_blank" rel="noopener">打开本地 ETM 工作台</a><a href="docs/etm-integration.md" target="_blank" rel="noopener">启动与使用说明</a></div>
   </div>
   <iframe id="etm-frame" title="ETM 执行轨迹" allow="usb" hidden></iframe>
 </section>

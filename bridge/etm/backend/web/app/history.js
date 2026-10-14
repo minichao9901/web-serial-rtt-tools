@@ -27,7 +27,7 @@ export class HistoryView{
     this.recordRevision=(this.recordRevision||0)+1;this.revision++;this.selectRevision++;
     this.sid=sid;this.result=null;this.range=null;this.rangeHistory=[];this.window=null;
     this.timelineKey=null;this.timelineData=null;this.selected=null;this.selectedFunction=null;
-    this.offset=0;this.view='instructions';this.sources.clear();this.scopeBusy=false;this.rows=[];
+    this.offset=0;this.view='instructions';this.sources.clear();this.sourceDomFile=null;this.scopeBusy=false;this.rows=[];
     this.timelineChart.setData(null);$('execution-timeline-panel').hidden=true;
     $('analysis-panes').classList.remove('flame-layout','flame-source-collapsed');
     $('scope-state').hidden=$('clear-scope').hidden=true;
@@ -130,6 +130,7 @@ export class HistoryView{
     if(!detail.callPath.length)stack.append(make('span','该事件没有可证实的历史调用栈','dim'));
     const sourceName=(e.file||'').split(/[\\/]/).pop()||(e.kind==='instruction'?'机器码 / 无源码行号':'事件 / 无源码位置'),sourceLocation=(e.function||'')+(e.line?' · 第 '+e.line+' 行':'');$('source-name').textContent=sourceName;$('source-name').title=e.file||sourceName;$('source-location').textContent=sourceLocation;$('source-location').title=sourceLocation;
     if(!e.file){
+      this.sourceDomFile=null;
       const box=$('source-code');
       if(e.kind==='instruction'){
         box.replaceChildren(make('div',`${e.function||'该函数'} 的当前指令在 ELF 中没有 DWARF 文件/行号；选择源码目录无法补出缺失行号。可查看上方机器码，或定位相邻的带源码指令。`,'empty'));
@@ -140,11 +141,15 @@ export class HistoryView{
       if(this.view==='flame')await this.render();return;
     }
     if(!this.sources.has(e.file)){const source=await this.api(this.path('source?file='+encodeURIComponent(e.file)));if(revision!==this.selectRevision)return;this.sources.set(e.file,source.text);}
-    const source=this.sources.get(e.file);if(!source){$('source-code').textContent='尚未载入配套源码，可在文件页选择目录。';if(this.view==='flame')await this.render();return;}
-    const fragment=document.createDocumentFragment();source.split(/\r?\n/).forEach((text,i)=>{const line=make('div',null,'source-line'+(i+1===e.line?' highlight':''));line.append(make('span',i+1,'line-number'),make('span',text||' ','line-text'));fragment.append(line);});$('source-code').replaceChildren(fragment);const active=$('source-code').querySelector('.highlight');if(active)$('source-code').scrollTop=active.offsetTop-$('source-code').offsetTop-100;if(this.view==='flame')await this.render();
+    const source=this.sources.get(e.file);if(!source){this.sourceDomFile=null;$('source-code').textContent='尚未载入配套源码，可在文件页选择目录。';if(this.view==='flame')await this.render();return;}
+    const box=$('source-code');
+    if(this.sourceDomFile!==e.file||this.sourceDomText!==source){
+      const fragment=document.createDocumentFragment();source.split(/\r?\n/).forEach((text,i)=>{const line=make('div',null,'source-line');line.append(make('span',i+1,'line-number'),make('span',text||' ','line-text'));fragment.append(line);});box.replaceChildren(fragment);this.sourceDomFile=e.file;this.sourceDomText=source;
+    }
+    box.querySelector('.highlight')?.classList.remove('highlight');const active=box.children[e.line-1];if(active){active.classList.add('highlight');box.scrollTop=active.offsetTop-box.offsetTop-100;}if(this.view==='flame')await this.render();
   }
   async navigate(direction,mode=$('nav-mode').value){if(!this.result)return;const generation=this.recordRevision;const q=new URLSearchParams({seq:this.selected??0,direction,mode});this.scopeParams(q);const found=await this.api(this.path('navigate?'+q));if(generation!==this.recordRevision)return;if(found.seq===null){$('cursor-state').textContent='该方向已无符合条件的历史位置';return;}await this.select(found.seq,true);}
-  async refreshSources(){this.sources.clear();if(this.selected!==null)await this.select(this.selected);}
+  async refreshSources(){this.sources.clear();this.sourceDomFile=null;if(this.selected!==null)await this.select(this.selected);}
   async locatePC(pc){const generation=this.recordRevision;const q=new URLSearchParams({seq:this.selected??-1,pc:'0x'+pc.toString(16)});this.scopeParams(q);const found=await this.api(this.path('navigate?'+q));if(generation!==this.recordRevision)return;if(found.seq===null)throw Error('记录中未找到该 PC');await this.select(found.seq,true);if(found.wrapped)$('cursor-state').textContent+=' · 已回到首个匹配';}
   async jump(){if(!this.result)throw Error('记录索引仍在载入，请稍候');const value=$('jump-value').value.trim();if(/^0x[0-9a-f]+$/i.test(value))return this.locatePC(Number(value));if(!/^\d+$/.test(value))throw Error('请输入历史序号或 0x 开头的 PC');return this.select(Number(value),true);}
 }

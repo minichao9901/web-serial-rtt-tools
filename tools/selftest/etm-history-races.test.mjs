@@ -37,3 +37,11 @@ test('wheel and drag range callbacks keep an existing cursor when it remains in 
   h.select=async seq=>{selected=seq;};await h.setRange({start:25,end:75});assert.equal(selected,50);
  }finally{u.close();}
 });
+test('mapped source selection preserves DOM nodes and moves the highlight; unloading invalidates them',async()=>{
+ const u=await ui();try{const h=u.history,file='src/main.c';h.sid='record-a';h.result={};h.sources.set(file,'first\nsecond\nthird');
+  h.api=async path=>path.includes('source?')?{text:'first\nsecond\nthird'}:{stackBasis:'trace',callPath:['main'],event:{kind:'instruction',pc:0x8000000,function:'main',file,line:path.endsWith('/1')?1:2,bytes:'00',mnemonic:'nop',operands:'',executed:true}};
+  await h.select(1);const box=u.$('source-code'),line=box.children[0];assert.equal(box.querySelector('.highlight'),line);
+  await h.select(2);assert.equal(box.children[0],line);assert.equal(box.querySelector('.highlight'),box.children[1]);
+  h.unload('record-b');h.result={};await h.select(1);assert.notEqual(box.children[0],line);assert.equal(box.querySelector('.highlight'),box.children[0]);
+ }finally{u.close();}
+});

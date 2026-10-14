@@ -51,6 +51,18 @@ class LifecycleTests(unittest.TestCase):
             a=server.app.test_client().post('/api/decode/record-a').json
             b=server.app.test_client().post('/api/decode/record-a').json
         self.assertEqual(a['job'],b['job']);self.assertEqual(len(server.jobs),1)
+    def test_missing_optional_firmware_has_actionable_404_without_creating_records(self):
+        with patch.object(server,'ROOT',Path(self.tmp.name)):
+            client=server.app.test_client()
+            for path,method in [('/api/default-elf','get'),('/api/firmware','get'),('/api/profile-firmware/spi-280','get'),('/api/profiles/spi-280','post'),('/api/profiles/unknown','post')]:
+                response=getattr(client,method)(path);self.assertEqual(response.status_code,404,response.json);self.assertIn('固件',response.json['error'])
+        self.assertEqual([p.name for p in server.RECORDS.iterdir()],[self.elf])
+    def test_terminal_jobs_are_bounded_but_active_and_failed_cleanup_are_retained(self):
+        active=server.new_job('active','armed');failed=server.new_job('failed','error');server.change(failed,cleanupPending=True)
+        for i in range(350):
+            jid=server.new_job(str(i),'queued');server.change(jid,state='done')
+        server.prune_jobs();self.assertLessEqual(len(server.jobs),258);self.assertIn(active,server.jobs);self.assertIn(failed,server.jobs)
+        server.prune_jobs(now=time.time()+86401);self.assertEqual(set(server.jobs),{active,failed})
     def test_nonfinite_threshold_is_rejected_before_job(self):
         for value in [float('nan'),float('inf'),-float('inf'),-5,5]:
             with self.subTest(value=value),patch.object(server.threading,'Thread'):

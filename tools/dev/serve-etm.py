@@ -8,6 +8,8 @@ import importlib.util
 import mimetypes
 import re
 import sys
+from html import escape
+from html.parser import HTMLParser
 from urllib.parse import urlsplit
 from pathlib import Path
 from flask import Flask,abort,jsonify,request,send_from_directory
@@ -15,6 +17,56 @@ from werkzeug.middleware.dispatcher import DispatcherMiddleware
 from werkzeug.serving import run_simple
 
 ROOT=Path(__file__).resolve().parents[2]
+
+class EmbeddedDocument(HTMLParser):
+    """Rewrite parsed attributes; quote style/order must not affect embedding."""
+    def __init__(self,text):
+        super().__init__(convert_charrefs=False);self.tokens=[];self.feed(text);self.close()
+    def handle_starttag(self,tag,attrs):self.tokens.append(('start',tag,attrs))
+    def handle_startendtag(self,tag,attrs):self.tokens.append(('empty',tag,attrs))
+    def handle_endtag(self,tag):self.tokens.append(('end',tag,None))
+    def handle_data(self,text):self.tokens.append(('raw',text,None))
+    def handle_entityref(self,name):self.handle_data('&'+name+';')
+    def handle_charref(self,name):self.handle_data('&#'+name+';')
+    def handle_comment(self,text):self.handle_data('<!--'+text+'-->')
+    def handle_decl(self,text):self.handle_data('<!'+text+'>')
+    @staticmethod
+    def render(token):
+        kind,tag,attrs=token
+        if kind=='raw':return tag
+        if kind=='end':return '</'+tag+'>'
+        return '<'+tag+''.join(' '+key+('="'+escape(value,quote=True)+'"' if value is not None else '') for key,value in attrs)+(' />' if kind=='empty' else '>')
+    def mounted(self,embedded):
+        moved=[];removed=set();body=False;toolbar=False;head=False
+        if embedded:
+            for identifier in ('toggle-settings','help'):
+                indices=[i for i,(kind,tag,attrs) in enumerate(self.tokens) if kind=='start' and tag=='button' and dict(attrs).get('id')==identifier]
+                if len(indices)!=1:raise ValueError('ETM 内嵌页缺少或重复控件：'+identifier)
+                start=indices[0];end=next((i for i in range(start+1,len(self.tokens)) if self.tokens[i][:2]==('end','button')),None)
+                if end is None:raise ValueError('ETM 内嵌按钮标签未闭合：'+identifier)
+                moved.extend(self.tokens[start:end+1]);removed.update(range(start,end+1))
+        output=[]
+        for i,token in enumerate(self.tokens):
+            if i in removed:continue
+            kind,tag,attrs=token
+            if kind in ('start','empty'):
+                attrs=[(key,'/etm'+value if key in ('href','src') and value and value.startswith('/') and not value.startswith(('//','/etm/')) else value) for key,value in attrs]
+                if tag=='body' and dict(attrs).get('id')=='etm-app':
+                    body=True;attrs=[(k,v) for k,v in attrs if k not in ('data-api-base','data-embedded')]+[('data-api-base','/etm/api/')]
+                    if embedded:attrs.append(('data-embedded','1'))
+                token=(kind,tag,attrs)
+            if kind=='end' and tag=='head':
+                head=True
+                if embedded:output.append(EMBEDDED_STYLE+EMBEDDED_DIAGNOSTICS)
+            output.append(self.render(token))
+            if embedded and kind=='start' and tag=='div' and 'record-toolbar' in dict(attrs).get('class','').split():
+                if toolbar:raise ValueError('ETM 内嵌页出现重复记录工具栏')
+                toolbar=True;output.append('<div class="embedded-actions">'+''.join(map(self.render,moved))+'</div>')
+        if not body or embedded and not (head and toolbar):raise ValueError('ETM 网页结构与内嵌协议不匹配，请同时更新完整桥包和主页面')
+        return ''.join(output)
+
+EMBEDDED_STYLE='<style>body#etm-app[data-embedded]{min-height:0}body#etm-app[data-embedded]>header{display:none}body#etm-app[data-embedded]>.workspace{height:100vh}body#etm-app .embedded-actions{display:flex;gap:4px}</style>'
+EMBEDDED_DIAGNOSTICS="""<script>function etmPageError(message){var el=document.getElementById('job-state');if(el){el.textContent='页面发生错误：'+message;el.classList.add('bad');}}window.addEventListener('error',function(e){etmPageError(e.message);});window.addEventListener('unhandledrejection',function(e){etmPageError(e.reason&&e.reason.message||e.reason);});</script>"""
 
 
 def create_application(etm_root,serial_root=ROOT):
@@ -29,21 +81,7 @@ def create_application(etm_root,serial_root=ROOT):
     # A separate backend namespace preserves standalone ETM /api and records.
     def embedded_index():
         text=(etm_root/'web/index.html').read_text(encoding='utf8')
-        text=text.replace('href="/','href="/etm/').replace('src="/','src="/etm/')
-        if request.args.get('embedded')=='1':
-            buttons=[]
-            for identifier in ('toggle-settings','help'):
-                match=re.search(r'<button id="'+identifier+r'"[^>]*>.*?</button>',text)
-                if match:buttons.append(match[0]);text=text.replace(match[0],'',1)
-            text=text.replace('<div class="record-toolbar">','<div class="record-toolbar"><div class="embedded-actions">'+''.join(buttons)+'</div>',1)
-            text=text.replace('<body id="etm-app">','<body id="etm-app" data-embedded="1" data-api-base="/etm/api/">')
-            style='<style>body#etm-app[data-embedded]{min-height:0}body#etm-app[data-embedded]>header{display:none}body#etm-app[data-embedded]>.workspace{height:100vh}body#etm-app .embedded-actions{display:flex;gap:4px}</style>'
-            text=text.replace('</head>',style+'</head>')
-            diagnostics="""<script>window.addEventListener('error',function(e){var el=document.getElementById('job-state');if(el){el.textContent='页面初始化失败：'+e.message;el.classList.add('bad');}});window.addEventListener('unhandledrejection',function(e){var el=document.getElementById('job-state');if(el){el.textContent='页面初始化失败：'+(e.reason&&e.reason.message||e.reason);el.classList.add('bad');}});</script>"""
-            text=text.replace('<script type="module"',diagnostics+'<script type="module"',1)
-        else:
-            text=text.replace('<body id="etm-app">','<body id="etm-app" data-api-base="/etm/api/">')
-        return text
+        return EmbeddedDocument(text).mounted(request.args.get('embedded')=='1')
     backend.app.view_functions['index']=embedded_index
     backend.app.add_url_rule('/integration.json','toolbox_integration',lambda:jsonify(protocol=1,backend='kingst',embedded=True))
     @backend.app.after_request

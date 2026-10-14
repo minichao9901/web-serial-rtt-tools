@@ -90,7 +90,8 @@ async function commandBreakpoint(){const data=await api('elf/'+state.elfId+'/bre
   const box=$('break-candidates');box.hidden=false;box.textContent='对应多个指令位置，请选择：';for(const item of data.candidates){const button=document.createElement('button');button.textContent=item.file+':'+item.line+' · '+item.function+' · '+hex(item.address);button.onclick=()=>perform(async()=>{await addBreakpoint(item);box.hidden=true;$('break-command').value='';});box.append(button);}}
 $('break-command-form').onsubmit=e=>{e.preventDefault();perform(commandBreakpoint);};
 function setElf(info,id=null,file=null){if(state.elfInfo&&state.elfInfo.sha256!==info.sha256)state.lastTraceConfig=null;state.pendingBreakpointRestore=[];state.elfInfo=info;state.elfId=id||info.elfId;state.elfFile=file;state.entryAddress=null;state.symbolAddress=null;state.sourceFiles={};state.sourceSnapshot=null;state.sources=new SourceStore();$('symbol-search').value='';$('elf-label').textContent=(file?.name||info.name)+' · '+info.sha256.slice(0,12);$('sources-label').textContent='目标源码尚未选择；历史记录使用自身快照';$('break-candidates').hidden=true;renderSymbols();renderBreakpoints();}
-$('symbol-search').oninput=renderSymbols;
+let symbolTimer;
+$('symbol-search').oninput=()=>{clearTimeout(symbolTimer);symbolTimer=setTimeout(renderSymbols,120);};
 for(const p of COMMON_TARGETS)$('target-profile').append(new Option(p.name,p.id));
 $('target-profile').onchange=()=>{target.profile=$('target-profile').value;state.lastTraceConfig=null;const value=state.hseValues[target.profile];$('hse').value=value??'';target.hseHz=value?value*1e6:null;showClocks();};
 $('next-clock').onclick=()=>panel('clock');$('next-trace').onclick=()=>panel('trace');
@@ -256,7 +257,7 @@ $('toggle-source').onclick=()=>{const open=document.body.classList.toggle('sourc
 const divider=document.querySelector('.pane-divider');function setRatio(percent){const value=Math.max(25,Math.min(75,percent));$('analysis-panes').style.setProperty('--trace-width',value+'%');divider.setAttribute('aria-valuenow',String(Math.round(value)));}
 divider.onpointerdown=e=>{divider.setPointerCapture(e.pointerId);divider.onpointermove=v=>{if(divider.hasPointerCapture(v.pointerId)){const box=$('analysis-panes').getBoundingClientRect();setRatio((v.clientX-box.left)/box.width*100);}};divider.onpointerup=v=>divider.releasePointerCapture(v.pointerId);};divider.onkeydown=e=>{if(['ArrowLeft','ArrowRight'].includes(e.key)){e.preventDefault();const value=parseFloat($('analysis-panes').style.getPropertyValue('--trace-width'))||52;setRatio(value+(e.key==='ArrowLeft'?-3:3));}};
 async function init(){state.operation=true;controls();history.setLoading(true);renderSymbols();renderBreakpoints();try{await refreshRecords();$('service-state').textContent='本地服务在线';$('service-state').className='status good';showClocks();}catch(e){error(e);}finally{state.operation=false;history.setLoading(false);controls();}}
-const embeddedBridge={probe:()=>target.probe,busy:()=>!!(state.hardwareOperation||target.probe&&(state.job||state.waiting)),
+const embeddedBridge={probe:()=>target.probe,busy:()=>!!(state.hardwareOperation||state.jobKind==='capture'||target.probe&&(state.job||state.waiting)),
   requestStop:async()=>{
     target.cancelEntry=true;state.captureCancelled=true;
     if(state.jobKind==='decode')throw Error('正在解码，等待结束或超时后再重新检测');
@@ -265,12 +266,15 @@ const embeddedBridge={probe:()=>target.probe,busy:()=>!!(state.hardwareOperation
     while(state.operation||state.job){if(Date.now()>until)throw Error('旧任务尚未完成清理，保留探针；请等待结束后重试');await sleep(50);}
   },
   release:async()=>{if(target.transportFault)throw Error('旧调试口仍故障；先点击恢复调试口，避免丢失待恢复的配置');if(embeddedBridge.busy())throw Error('ETM正在操作或采集，请先停止');await disconnectTarget();},
-  summary:()=>({record:state.current,job:state.job,target:target.info?.name||null})};
+  recoverForRelease:async()=>{if(embeddedBridge.busy())throw Error('旧任务仍在清理，不能恢复或释放探针');await target.recoverDebugPort();},
+  summary:()=>({record:state.current,job:state.job,target:target.info?.name||null,transportFault:target.transportFault})};
 window.__etmBridge=embeddedBridge;
-if(host)host.attach(embeddedBridge,window);
+target.canRelease=()=>!embeddedBridge.busy()&&!target.transportFault;
+let attached=true;
+try{if(host)host.attach(embeddedBridge,window);}catch(e){attached=false;state.operation=true;error(e);controls();}
 // Developer diagnostics also used by the integrated page acceptance tests.
 window.__etm={target,state,history,api};
-init();
+if(attached)init();
 
 // 与操作互斥的轻量状态回读，实际命中后刷新 PC 和断点标记。
 setInterval(async()=>{if(!target.probe||state.operation||state.job||!target.breakpoints.items.some(b=>b.lease)||target.info?.halted||target.transportFault)return;

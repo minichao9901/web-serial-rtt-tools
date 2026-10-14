@@ -23,7 +23,7 @@ test('hovering an ETM marker works at original and resized plot geometry',()=>{
 });
 
 class Element{
-  constructor(){this.children=[];this.value='instruction';this.offsetTop=0;this.classList={toggle(){}};this._text='';}
+  constructor(){this.children=[];this.value='instruction';this.offsetTop=0;this.classList={toggle(){},add(){},remove(){}};this._text='';}
   set textContent(text){this._text=text;this.children=[];}get textContent(){return this._text+this.children.map(c=>c.textContent).join('');}
   append(...children){this.children.push(...children);}replaceChildren(...children){this._text='';this.children=children.flatMap(c=>c.fragment?c.children:[c]);}
   querySelectorAll(){return [];}querySelector(){return null;}
@@ -40,7 +40,14 @@ test('selected mapped source refreshes from an empty cache; libc remains unmappe
   }});
   await history.select(1);assert.match(elements.get('source-code').textContent,/尚未载入/);
   available='int main(void) {\n  return 0;\n}';await history.refreshSources();assert.match(elements.get('source-code').textContent,/return 0/);
+  const firstLine=elements.get('source-code').children[0];await history.select(1);assert.equal(elements.get('source-code').children[0],firstLine);
   await history.select(0);const box=elements.get('source-code');assert.match(box.textContent,/memset.*没有 DWARF/);assert.doesNotMatch(box.textContent,/return 0/);
   await box.children[1].children[1].onclick();assert.match(calls.findLast(path=>path.includes('/navigate?')),/mode=source/);assert.match(box.textContent,/return 0/);
   assert.equal(elements.get('nav-mode').value,'instruction');
+});
+test('hidden timeline skips drawing and a cursor move reuses its canvas allocation',()=>{
+ globalThis.window={devicePixelRatio:1};globalThis.ResizeObserver=class{observe(){}disconnect(){}};
+ let hidden=false,allocations=0,draws=0,w=0,h=0;const canvas={hidden:false,dataset:{},style:{},closest:()=>hidden?{}:null,getContext:()=>new Proxy({},{get:(_,k)=>k==='clearRect'?()=>draws++:()=>{}}),getBoundingClientRect:()=>({left:0,width:800}),setAttribute(){},addEventListener(){},get width(){return w;},set width(v){w=v;allocations++;},get height(){return h;},set height(v){h=v;allocations++;}};
+ const chart=bindFunctionTimeline(canvas,{onRange(){},onSelect(){},onError:e=>{throw e;}});chart.setData({range:{start:0,end:10},lanes:[],markers:[],binCount:1});const count=allocations;chart.setCursor(4);assert.equal(allocations,count);assert.ok(draws>1);
+ hidden=true;const before=draws;chart.redraw();assert.equal(draws,before);chart.destroy();
 });

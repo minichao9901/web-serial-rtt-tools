@@ -1233,8 +1233,12 @@ export class WebUsbDapProbe {
    *    里的屏障读，否则 TAR 竞态会让写丢失/读回 0（烧录器的寄存器访问曾栽在这里）。
    */
   async _dhcsr(value){
-    await this._setTAR(0xE000EDF0);
-    await this._transferBlock(false, 1, AP_DRW, Uint32Array.of(value >>> 0));
+    // TAR and its following DRW transfer are one transaction. A concurrent
+    // memory read must not redirect this control write to a different address.
+    return this._withLock(async()=>{
+      await this._setTAR(0xE000EDF0);
+      await this._transferBlock(false, 1, AP_DRW, Uint32Array.of(value >>> 0));
+    });
   }
 
   /** 读一个 32 位字（内部用；地址已归一化） */

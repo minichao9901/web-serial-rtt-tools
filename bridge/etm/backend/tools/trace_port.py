@@ -16,8 +16,10 @@ def read_tracks(path):
     with path.open('rb') as stream:
         header_bytes = stream.readline()
     try:
-        header_bytes.decode('utf-8-sig')
-        encoding = 'utf-8-sig'
+        if header_bytes.startswith((b'\xff\xfe',b'\xfe\xff')):encoding='utf-16'
+        else:
+            header_bytes.decode('utf-8-sig')
+            encoding = 'utf-8-sig'
     except UnicodeDecodeError:
         # 中文 KingstVIS 使用 Windows 本地编码导出“通道 N”表头。
         header_bytes.decode('gb18030')

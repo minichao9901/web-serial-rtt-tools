@@ -41,5 +41,23 @@ class IntegratedServerTests(unittest.TestCase):
             self.assertEqual(self.get(path).status_code,404)
         self.assertEqual(self.client.get('/',environ_overrides={'REMOTE_ADDR':'192.0.2.5'}).status_code,403)
         self.assertEqual(self.client.get('/',headers={'Host':'attacker.example:8878'},environ_overrides={'REMOTE_ADDR':'127.0.0.1'}).status_code,403)
+    def test_quote_style_attribute_order_and_nested_labels(self):
+        text="<html><head></head><body class='x' id='etm-app'><button class='mini' id='help'><span>help</span></button><button title='settings' id='toggle-settings'>settings</button><div data-extra='x' class='row record-toolbar other'></div><script src='/app/view.js' type='module'></script><a href='//cdn.example/x'>external</a><link href='/etm/already.css'></body></html>"
+        mounted=launcher.EmbeddedDocument(text).mounted(True)
+        self.assertIn('data-api-base="/etm/api/"',mounted);self.assertIn('src="/etm/app/view.js"',mounted)
+        self.assertIn('href="//cdn.example/x"',mounted);self.assertIn('href="/etm/already.css"',mounted)
+        self.assertIn('<span>help</span>',mounted);self.assertEqual(mounted.count('id="help"'),1)
+        self.assertGreater(mounted.index('id="help"'),mounted.index('class="row record-toolbar other"'))
+    def test_actual_runtime_document_embeds_all_controls_once(self):
+        text=(ROOT/'bridge/etm/backend/web/index.html').read_text(encoding='utf8')
+        for embedded in (False,True):
+            mounted=launcher.EmbeddedDocument(text).mounted(embedded)
+            for identifier in ('toggle-settings','help','start','stop','job-state'):
+                self.assertEqual(mounted.count('id="'+identifier+'"'),1)
+            self.assertIn('data-api-base="/etm/api/"',mounted)
+            self.assertIn('src="/etm/app/view.js"',mounted)
+    def test_missing_embedding_contract_is_an_explicit_error(self):
+        for text in ('<head></head><body id="etm-app"></body>','<head></head><body></body>'):
+            with self.assertRaises(ValueError):launcher.EmbeddedDocument(text).mounted(True)
 
 if __name__=='__main__':unittest.main()

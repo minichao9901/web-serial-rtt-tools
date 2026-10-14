@@ -15,11 +15,11 @@ export function bindFunctionTimeline(canvas,{onRange,onSelect,onError}){
   const context=canvas.getContext('2d');
   const safe=fn=>{try{Promise.resolve(fn()).catch(onError);}catch(error){onError(error);}};
   const frame=()=>{
-    if(!data||canvas.hidden)return;
+    if(!data||canvas.hidden||canvas.closest?.('[hidden]'))return;
     const rect=canvas.getBoundingClientRect(),width=Math.max(300,rect.width),dpr=window.devicePixelRatio||1;
     const lanes=data.lanes||[],rowHeight=20,top=9,axisHeight=27,height=Math.max(74,top+lanes.length*rowHeight+axisHeight);
     const left=Math.min(190,Math.max(116,width*.2)),right=76,plotWidth=Math.max(1,width-left-right),plotBottom=top+lanes.length*rowHeight;
-    canvas.style.height=height+'px';canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);context.setTransform(dpr,0,0,dpr,0,0);
+    canvas.style.height=height+'px';const pixelsWide=Math.round(width*dpr),pixelsHigh=Math.round(height*dpr);if(canvas.width!==pixelsWide)canvas.width=pixelsWide;if(canvas.height!==pixelsHigh)canvas.height=pixelsHigh;context.setTransform(dpr,0,0,dpr,0,0);
     context.clearRect(0,0,width,height);context.fillStyle='#0d1117';context.fillRect(0,0,width,height);
     context.font='11px "Cascadia Mono",Consolas,monospace';context.textBaseline='middle';
     const range=data.range||{start:0,end:0},span=Math.max(1,range.end-range.start+1),bins=Math.max(1,data.binCount||1),binWidth=plotWidth/bins;

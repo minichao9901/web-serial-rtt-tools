@@ -41,3 +41,14 @@ test('unexpected halt reports addresses and register reasons',async()=>{
   const t=new EtmTarget(()=>{},{host:{}});const values=new Map([[0xe000edf0,0x30003],[0xe000ed30,8],[0xe000edfc,0x1000400]]);t.read=async a=>values.get(a);
   const e=await t.unexpectedHalt(0x08000494,0x080004d0,'复位后');assert.match(e.message,/0x08000494.*0x080004d0.*异常捕获.*DFSR 0x00000008.*目标保持暂停/);
 });
+test('standalone release callback cannot disconnect while a hardware operation is busy',async()=>{
+ const t=new EtmTarget(()=>{},{host:{}});let releases=0;t.disconnect=async()=>releases++;t.canRelease=()=>false;
+ await assert.rejects(Promise.resolve().then(()=>t.bus.onRelease()),/正在操作/);assert.equal(releases,0);
+ t.canRelease=()=>true;await t.bus.onRelease();assert.equal(releases,1);
+});
+test('DHCSR write keeps TAR and DRW together while another memory read queues',async()=>{
+ const p=new WebUsbDapProbe(),writes=[];let address,unblock,arrived;const ready=new Promise(r=>arrived=r),blocked=new Promise(r=>unblock=r);
+ p._setTAR=async a=>{address=a;arrived();await blocked;};p._transferBlock=async()=>writes.push(address);
+ p._readMemLocked=async a=>{address=a;return new Uint8Array(4);};
+ const control=p._dhcsr(0xa05f0003);await ready;const read=p.readMem(0x20000000,4);await new Promise(r=>setImmediate(r));unblock();await Promise.all([control,read]);assert.deepEqual(writes,[0xe000edf0]);
+});

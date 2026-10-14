@@ -1,11 +1,11 @@
 """Portable ETM workbench. Runtime and assets are bundled; user data stays beside the EXE."""
-import argparse,gzip,hashlib,importlib.util,json,os,socket,sys,threading,time,webbrowser,zipfile
+import argparse,gzip,hashlib,importlib.util,json,os,socket,sys,tempfile,threading,time,uuid,webbrowser,zipfile
 from pathlib import Path
 from urllib.request import urlopen
 from flask import send_file
 from werkzeug.serving import make_server
 
-VERSION='1.0.3'
+VERSION='1.0.4'
 HERE=Path(__file__).resolve().parent
 for stream in (sys.stdout,sys.stderr):
     if hasattr(stream,'reconfigure'):stream.reconfigure(encoding='utf8',errors='replace')
@@ -14,16 +14,35 @@ def load_module(name,path):
     spec=importlib.util.spec_from_file_location(name,path);module=importlib.util.module_from_spec(spec)
     sys.modules[name]=module;spec.loader.exec_module(module);return module
 
+_seed_guard=threading.Lock()
+def valid_demo(folder):
+    try:
+        if not all((folder/name).is_file() for name in ('session.json','capture.csv','firmware.elf','sources.json','decoded.json')):return False
+        for name in ('session.json','sources.json','decoded.json'):
+            if not isinstance(json.loads((folder/name).read_text(encoding='utf8')),dict):return False
+        return True
+    except (OSError,ValueError):return False
+
 def seed_demo(backend,records):
+    # Publish a complete directory only; retain any interrupted old seed outside
+    # the record list instead of deleting potentially useful user evidence.
     folder=records/'demo-spi-70-35-v1'
-    if folder.exists():return
-    folder.mkdir()
-    with zipfile.ZipFile(backend/'demo/sample.etmrecord') as archive:
-        for name in ['session.json','capture.csv','capture.kvdat','firmware.elf','sources.json','spi-validation.json']:
-            if name in archive.namelist():(folder/name).write_bytes(archive.read(name))
-    (folder/'decoded.json').write_bytes(gzip.decompress((backend/'demo/decoded.json.gz').read_bytes()))
-    metadata=json.loads((folder/'session.json').read_text(encoding='utf8'));metadata['name']='Demo · CPU 70 / Trace 35 MHz · 1 ms'
-    (folder/'session.json').write_text(json.dumps(metadata,ensure_ascii=False),encoding='utf8')
+    with _seed_guard:
+        if valid_demo(folder):return
+        with tempfile.TemporaryDirectory(prefix='.etm-demo-',dir=records.parent) as temporary:
+            staging=Path(temporary)/folder.name;staging.mkdir()
+            with zipfile.ZipFile(backend/'demo/sample.etmrecord') as archive:
+                for name in ['session.json','capture.csv','capture.kvdat','firmware.elf','sources.json','spi-validation.json']:
+                    if name in archive.namelist():(staging/name).write_bytes(archive.read(name))
+            (staging/'decoded.json').write_bytes(gzip.decompress((backend/'demo/decoded.json.gz').read_bytes()))
+            metadata=json.loads((staging/'session.json').read_text(encoding='utf8'));metadata['name']='Demo · CPU 70 / Trace 35 MHz · 1 ms'
+            (staging/'session.json').write_text(json.dumps(metadata,ensure_ascii=False),encoding='utf8')
+            if not valid_demo(staging):raise ValueError('随包 Demo 不完整；原有记录未修改，请重新下载完整桥包')
+            if valid_demo(folder):return  # Another workbench may share this data directory.
+            if folder.exists():folder.rename(records.parent/('demo-recovery-'+uuid.uuid4().hex))
+            try:staging.rename(folder)
+            except FileExistsError:
+                if not valid_demo(folder):raise
 
 def package_archive(home,data):
     # Re-download the runtime without copying user captures or records.

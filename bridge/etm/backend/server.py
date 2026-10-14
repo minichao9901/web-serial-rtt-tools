@@ -109,7 +109,7 @@ def result(sid):
     r = load_json(folder/'decoded.json')
     if r.get('version', 1) < 3:
         enrich(r, Image(folder / 'firmware.elf'))
-        (folder / 'decoded.json').write_text(json.dumps(r, ensure_ascii=False), encoding='utf-8')
+        save_json(folder/'decoded.json',r)
     metadata=meta(sid)
     verify_record_inputs(sid,r,metadata)
     if (folder/'etm.bin').exists() and r.get('quality') and 'processedBytes' in r['quality']:
@@ -226,12 +226,12 @@ def status():
 
 @app.get('/api/default-elf')
 def default_elf():
-    return jsonify(elf_info(ROOT / 'firmware/stm32h7b0_etm_board_v1/fw.elf'))
+    return jsonify(elf_info(firmware_path('fixture')))
 
 
 @app.get('/api/firmware')
 def firmware():
-    return send_file(ROOT / 'firmware/stm32h7b0_etm_board_v1/fw.elf', as_attachment=True)
+    return send_file(firmware_path('fixture'), as_attachment=True)
 
 
 PROFILES = {
@@ -244,6 +244,12 @@ PROFILES = {
     'spi-280-r6': ('SPI · 280 MHz CPU / 46.667 MHz trace', 'stm32h7b0_spi_trace/fw-280-r6.elf'),
     'spi-280-r8': ('SPI · 280 MHz CPU / 35 MHz trace · 历史验收档', 'stm32h7b0_spi_trace/fw-280-r8.elf'),
 }
+
+def firmware_path(key):
+    if key not in PROFILES:abort(404,description='未知固件档位，请先查询可用固件列表')
+    title,path=PROFILES[key];source=ROOT/'firmware'/path
+    if not source.is_file():abort(404,description='该固件档位未随当前工程或便携包提供：'+title+'；请浏览载入自己的 ELF')
+    return source
 
 
 @app.get('/api/profiles')
@@ -292,8 +298,7 @@ def record_firmware(sid):
 
 @app.post('/api/profiles/<key>')
 def select_profile(key):
-    title,path=PROFILES[key]
-    source=ROOT/'firmware'/path
+    source=firmware_path(key);title=PROFILES[key][0]
     info=elf_info(source)
     sid='elf-'+uuid.uuid4().hex
     folder=directory(sid)
@@ -304,7 +309,7 @@ def select_profile(key):
 
 @app.get('/api/profile-firmware/<key>')
 def profile_firmware(key):
-    return send_file(ROOT/'firmware'/PROFILES[key][1],as_attachment=True)
+    return send_file(firmware_path(key),as_attachment=True)
 
 
 @app.post('/api/elf')
@@ -416,9 +421,19 @@ def job_state(jid):
         return jsonify({k: v for k, v in job.items() if not k.startswith('_')})
 
 
+def prune_jobs(now=None):
+    # Keep active tasks and failed LA cleanup leases regardless of age/count.
+    # Records and raw evidence are independent and are never removed here.
+    now=time.time() if now is None else now
+    with lock:
+        terminal=sorted((j for j in jobs.values() if j['state'] not in ACTIVE and not j.get('cleanupPending') and not j.get('_socket')),key=lambda j:j.get('_finished',now),reverse=True)
+        for index,job in enumerate(terminal):
+            if index>=256 or now-job.get('_finished',now)>86400:jobs.pop(job['id'],None)
+
 def new_job(sid, state, kind='capture'):
     jid = uuid.uuid4().hex
     with lock:
+        prune_jobs()
         jobs[jid] = dict(id=jid, record=sid, state=state, kind=kind, error=None)
     return jid
 
@@ -426,6 +441,7 @@ def new_job(sid, state, kind='capture'):
 def change(jid, **fields):
     with lock:
         jobs[jid].update(fields)
+        if fields.get('state') and fields['state'] not in ACTIVE:jobs[jid]['_finished']=time.time()
 
 def record_failure(sid,error,stage):
     try:
@@ -613,8 +629,10 @@ def capture_job(jid, sid, options):
             except (Exception,SystemExit) as cleanup:cleanup_error=str(cleanup)
         change(jid, state='error', error=str(error),cleanupPending=bool(cleanup_error),cleanupError=cleanup_error)
     finally:
-        if v:
-            v.close()
+        try:
+            if v:v.close()
+        finally:
+            with lock:jobs[jid].pop('_socket',None)
 
 
 @app.post('/api/capture')

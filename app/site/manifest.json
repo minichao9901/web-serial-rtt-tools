@@ -59,7 +59,7 @@
     "app/elf/dwarf.js": "5cedbe0b976a6e85a0bfefc434dce89f774e2cb226885774b78a4041b953a564",
     "app/elf/elf.js": "01906fc7a926c2c51f69d3240b28a8484d90542f50a8c63d4aa70b6d201d158e",
     "app/elf/lines.js": "eb2a9815d75c298981ec9c830b9d94058f4757a59064c9d0ee9d2d09763bdd7c",
-    "app/etm/view.js": "5e5d6ca62f7eb4a8e7afa4f6a848d9f001b519c25a461688faea5dc1cd5be682",
+    "app/etm/view.js": "bc68126f9d2b2c30e669bdbe68a293a0f1210a90af310b50baf3947c49f6da8f",
     "app/flash/algos.js": "eaf20e3215338cb40e897932ef67d2ae2b1f914cdbfe83655c4ce0f087a17064",
     "app/flash/devid.js": "4a98855b9cec59eb1290f512952031d7372d346f1488d351f0c4f78b4a43c538",
     "app/flash/hpm/algo.js": "9e32e2f3b636be95048d05116b91391fba325b996e99373022246285aa06422b",
@@ -98,7 +98,7 @@
     "app/i2c/view.js": "014c10bd58c87887d2731481ec2a546f9a5775e7550a58ab6e19edf2e9b31d74",
     "app/main.js": "4f0543eefe54538d09c29b6cc4248effe1c350402bec481d9508c1d7c8efbb56",
     "app/rtt/bridge.js": "483cdf7c69882f63b3930619a8a9b78fefc38f2e3c079b64b167918e560d567e",
-    "app/rtt/dap-webusb.js": "d44606c05d120b3a12a257c421b54f343c07a05b4fbea56a982329bd00643066",
+    "app/rtt/dap-webusb.js": "d2884d86308961b7a55ad3c244889c262a828639924883a6d5a5534a4966bb76",
     "app/rtt/elf.js": "76a6278965724f52133467f8f07d4472077c5a9c35ca187fece59abad42405c7",
     "app/rtt/mock.js": "713da5c0c48d4a912ed9da57dbaf5decf824e57be3b185adc70023e02a1c072d",
     "app/rtt/protocol.js": "40cf4c4e729349ef046426686bea9eb341f74b5262050c8f677cad844916b4f6",
@@ -165,6 +165,6 @@
     "app/ui/workspace.js": "25b6ce94e5d90302a37e6cec2b7e35c975af95ce29bef1094a4493f3890fc0b7",
     "app/ui/zoom-controls.js": "d7520d813135941c8b0e8f5601722c45f53d2d2ed8a940f789bc032da0180ff9"
   },
-  "outputSha256": "bf7038384033a6778455020040a07331bcd5c76eda835923f8133fff4b95a7a2",
-  "outputBytes": 1293234
+  "outputSha256": "3b5e01c2a10c87bff552aac722e5bad29ec1c34e5b684407198a20e66a8fb5ab",
+  "outputBytes": 1295085
 }

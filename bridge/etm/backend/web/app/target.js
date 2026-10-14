@@ -12,7 +12,7 @@ const ETM=0xe0041000,FUNNEL=0x5c013000,ETF=0x5c014000,TPIU=0x5c015000;
 const hex=n=>'0x'+(n>>>0).toString(16).padStart(8,'0');
 
 export class EtmTarget {
-  constructor(log=()=>{},{host=null}={}){this.probe=null;this.log=log;this.Probe=host?.probeType||WebUsbDapProbe;this.bus=host?{requestRelease:async()=>{},close:()=>{}}:new ProbeBus('etm');this.bus.onRelease=()=>this.disconnect();this.config=null;this.saved=new Map();this.locks=new Map();this.hseHz=null;this.osLocked=null;this.info=null;this.profile='auto';this.breakpoints=new Breakpoints(this);}
+  constructor(log=()=>{},{host=null}={}){this.probe=null;this.log=log;this.embedded=!!host;this.canRelease=()=>true;this.Probe=host?.probeType||WebUsbDapProbe;this.bus=host?{requestRelease:async()=>{},close:()=>{}}:new ProbeBus('etm');this.bus.onRelease=()=>{if(!this.canRelease())throw Error('ETM 正在操作目标或采集，请先停止后再切换探针');return this.disconnect();};this.config=null;this.saved=new Map();this.locks=new Map();this.hseHz=null;this.osLocked=null;this.info=null;this.profile='auto';this.breakpoints=new Breakpoints(this);}
   async connect(){
     if(this.probe)return this.inspect();
     await this.bus.requestRelease({why:'ETM 页面连接'});
@@ -29,7 +29,7 @@ export class EtmTarget {
   assertTransport(){if(this.transportFault)throw Error('SWD 已故障，已保留现场；请点击“恢复调试口”后重试');}
   accessError(e,operation,address){if(e.ack===4||this.probe?._faulted)this.debugFault=true;const wrapped=new Error(`${operation} ${hex(address)}：${e.message}`,{cause:e});wrapped.ack=e.ack;return wrapped;}
   async read(addr){if(!this.probe)throw Error('请先连接探针');this.assertTransport();try{const bytes=await this.probe.readMemDiagnostic(addr>>>0,4);return new DataView(bytes.buffer,bytes.byteOffset,4).getUint32(0,true);}catch(e){throw this.accessError(e,'读寄存器',addr);}}
-  async write(addr,value,verify=true){this.assertTransport();if(!this.probe?.writeMemDiagnostic)throw Error('探针驱动缺少安全控制写接口，请更新完整 ETM 桥包后重试');const bytes=new Uint8Array(4);new DataView(bytes.buffer).setUint32(0,value>>>0,true);try{await this.probe.writeMemDiagnostic(addr>>>0,bytes);}catch(e){throw this.accessError(e,'写寄存器',addr);}if(verify&&await this.read(addr)!==(value>>>0))throw Error(`寄存器回读不匹配 ${hex(addr)}`);}
+  async write(addr,value,verify=true){this.assertTransport();if(!this.probe?.writeMemDiagnostic)throw Error(this.embedded?'主页面探针驱动缺少安全控制写接口，请先刷新整个主页面；仍缺少时更新完整 ETM 桥包':'探针驱动缺少安全控制写接口，请更新完整 ETM 桥包后重试');const bytes=new Uint8Array(4);new DataView(bytes.buffer).setUint32(0,value>>>0,true);try{await this.probe.writeMemDiagnostic(addr>>>0,bytes);}catch(e){throw this.accessError(e,'写寄存器',addr);}if(verify&&await this.read(addr)!==(value>>>0))throw Error(`寄存器回读不匹配 ${hex(addr)}`);}
   async recoverDebugPort(){
     if(!this.probe?.recoverDebugPort)throw Error('当前连接不支持调试口恢复，请重新连接探针');
     this.log('正在恢复 SWD 调试口；不复位、不自动继续 CPU');

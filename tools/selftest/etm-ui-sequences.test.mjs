@@ -65,6 +65,16 @@ test('background halt polling uses the parent probe queue',async()=>{
   await assert.rejects(u.manager.run('dbg',async()=>{}),/正在使用/);block.resolve(false);await polling;assert.equal(u.state.hardwareOperation,false);
  }finally{u.close();}
 });
+test('direct LA capture remains busy even after disconnecting the SWD probe',async()=>{
+ const u=await ui(),d=deferred();let pending;
+ try{
+  await u.upload();await u.click('connect');await u.select();await u.click('disconnect');u.$('sync').checked=false;u.$('sync').onchange();
+  u.model.block={path:'jobs/capture-a',promise:d.promise};u.model.jobStates=['cancelled'];pending=u.click('start');
+  for(let i=0;i<40&&!u.state.job;i++)await new Promise(r=>setImmediate(r));
+  assert.equal(u.target.probe,null);assert.equal(u.state.jobKind,'capture');assert.equal(u.window.__etmBridge.busy(),true);
+  d.resolve();await pending;assert.equal(u.window.__etmBridge.busy(),false);
+ }finally{d.resolve();if(pending)await pending;u.close();}
+});
 test('200 repeat operation orders recover from validation/entry errors and never keep controls busy',async()=>{
  let cases=0;
  for(const order of ['elf-first','connect-first']){
