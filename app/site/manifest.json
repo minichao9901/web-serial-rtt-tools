@@ -75,12 +75,12 @@
     "app/flash/view.js": "d55802c213d461b8e54bc720be18910b51d8350da513fc2e61bb07753dcf43c7",
     "app/gen/bridge-kit.js": "ff664ad92bdbceb2e3251e4398edc80511a2d8b5c10d6d0595fa22e1f23dd3d7",
     "app/gen/bridge-src.js": "fb03778c2ab9493e9e9cd6f9394232c43129871b20147be9027bdca4d4bdfa2c",
-    "app/gen/etm-kit-src.js": "1e5948ac1f4273d8a7f4df000e80ee7c50433d002946960c33e48d704da06356",
-    "app/gen/etm-kit.js": "a0e3ea4ff36f3f68e78132b9cdefcf19d336f39b686ceee22a2d71a798a1d952",
+    "app/gen/etm-kit-src.js": "97fb8184723d159fde6ae7908a7c4c619e422bf6d5c03215806ec0b2331ca515",
+    "app/gen/etm-kit.js": "87e6708fdcf379722642957c3be763dc5c3975e82163394d255dc7a2e9dcb470",
     "app/gen/fixes.js": "3360f40e10765cc7b338b00c4a4b8686b488bbb0061ba465e370a90e54ab299c",
     "app/gen/model.js": "c506cdf7e8a09c2ea890eca63a09eec6c785211671baa61c72c10ea5b0f74687",
     "app/gen/templates.js": "f3ca98800fb32d41bcb729c977097be22b141ca864e7f1b8070fbb62ccc15322",
-    "app/gen/view.js": "62e957eb4675f2633cf73553be912de20f2d978728aae9c5e438a27884b0433b",
+    "app/gen/view.js": "0fb6b618c24e5d535fa53a2aad8f3117df2c60fd49596e553615888e0e0a28b8",
     "app/gen/zip.js": "0f33d3f4d52b08813715608d838c16c4ddc705abc98bf2b03f3f3decfc2d4200",
     "app/hid/mock.js": "b37788033bc12dfc5febb3beaaa20f6b293bdaa83dba9898df1c693b94d832d5",
     "app/hid/probe.js": "46ac4d9bcff8b645e24c662d3ea8e10f83d6699ea1de50dee758ac75f298b177",
@@ -165,6 +165,6 @@
     "app/ui/workspace.js": "25b6ce94e5d90302a37e6cec2b7e35c975af95ce29bef1094a4493f3890fc0b7",
     "app/ui/zoom-controls.js": "d7520d813135941c8b0e8f5601722c45f53d2d2ed8a940f789bc032da0180ff9"
   },
-  "outputSha256": "882af034e279cdec65ef116e9fce6d66a6b4b8d335ca5dbd1eea4d9eeb57115c",
-  "outputBytes": 1299816
+  "outputSha256": "4381492748911daf70558c9af7cf13054f2e249a38e57f1a920c814a73188211",
+  "outputBytes": 1292021
 }

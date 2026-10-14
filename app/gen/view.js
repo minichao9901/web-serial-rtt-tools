@@ -22,7 +22,7 @@ import {
   parseUvprojx, suggestFromDevice, matchFamily, buildOutputs, appliedFixes,
 } from './model.js';
 import { bridgeKitFiles as kitFiles, kitBytes, KIT_DIR } from './bridge-kit.js';
-import { etmKitFiles, etmKitConfig, ETM_KIT_DIR } from './etm-kit.js';
+import { etmKitFiles, etmKitConfig, ETM_KIT_DIR, ETM_PACKAGE_URL, ETM_PACKAGE_MANIFEST_URL } from './etm-kit.js';
 
 const FIELDS = [
   ['g-project', 'gen.project'],
@@ -57,8 +57,6 @@ const FIELDS = [
   ['g-bk-nodever', 'gen.bkNodeVer'],
   ['g-bk-mirror', 'gen.bkMirror'],
   ['g-bk-autonode', 'gen.bkAutoNode', 'checked'],
-  ['g-etm-serial-root', 'gen.etmSerialRoot'],
-  ['g-etm-root', 'gen.etmRoot'],
   ['g-etm-port', 'gen.etmPort'],
   ['g-newline', 'gen.newline'],
   ['g-force', 'gen.force', 'checked'],
@@ -132,6 +130,7 @@ export class GenView {
     $('g-etm-copy').addEventListener('click', () => this.copyCurrent());
     $('g-etm-dl').addEventListener('click', () => this.downloadCurrent());
     $('g-zip-etm').addEventListener('click', () => this.downloadEtmZip());
+    $('g-etm-full').addEventListener('click', () => this.downloadEtmPackage());
     $('g-etm-open').addEventListener('click', () => {
       try { window.location.assign(`http://127.0.0.1:${etmKitConfig({port:$('g-etm-port').value}).port}/#etm`); }
       catch(e) { toast(e.message,'err'); }
@@ -152,11 +151,8 @@ export class GenView {
       const info = await response.json();
       if (info.protocol !== 1) return;
       if (store.get('gen.etmPort',null) === null && location.port && $('g-etm-port').value === '8878') $('g-etm-port').value=location.port;
-      for (const [id,key,value] of [['g-etm-serial-root','gen.etmSerialRoot',info.serialRoot],['g-etm-root','gen.etmRoot',info.etmRoot]]) {
-        if (!$(id).value && typeof value === 'string') { $(id).value=value; store.set(key,value); }
-      }
       this.refresh();
-    } catch {} // 普通静态站点没有此接口：路径留空供用户填写。
+    } catch {} // 普通静态站点没有本地服务信息。
   }
 
   onShow(){ this.refresh(); }
@@ -268,7 +264,7 @@ export class GenView {
     this.projFiles = buildOutputs(this.p);
     this.kitFiles = this.kitOut;
     this.etmError = '';
-    try { this.etmFiles = etmKitFiles({serialRoot:$('g-etm-serial-root').value,etmRoot:$('g-etm-root').value,port:$('g-etm-port').value}); }
+    try { this.etmFiles = etmKitFiles({port:$('g-etm-port').value}); }
     catch(e) { this.etmFiles=[]; this.etmError=e.message; }
     $('g-zip-etm').disabled = !!this.etmError;
     $('g-etm-open').disabled = !!this.etmError;
@@ -552,8 +548,25 @@ export class GenView {
     this.refresh();
     if (!this.etmFiles.length) return toast(this.etmError || 'ETM 启动包未生成','err');
     const zip=zipStore(this.etmFiles.map(f=>({name:f.name,data:f.data})));
-    saveBlob(new Blob([zip],{type:'application/zip'}),`${ETM_KIT_DIR}.zip`);
-    toast('已下载 ETM 桥包：解压后双击 start-etm-bridge.bat，启动成功再打开工作台','ok',6000);
+    saveBlob(new Blob([zip],{type:'application/zip'}),'etm-bridge-launchers.zip');
+    toast('已下载启动文件：放到已解压完整包目录，覆盖同名文件后双击 BAT','ok',6000);
+  }
+
+  async downloadEtmPackage(){
+    const button=$('g-etm-full');button.disabled=true;
+    try {
+      $('g-etm-package-info').textContent='正在下载完整包并校验…';
+      const response=await fetch(ETM_PACKAGE_MANIFEST_URL);if(!response.ok)throw Error('完整包清单不可用，请更新网页发布文件');
+      const manifest=await response.json();
+      const archive=await fetch(ETM_PACKAGE_URL);if(!archive.ok)throw Error('完整包不可用，请检查下载链接');
+      const bytes=await archive.arrayBuffer();
+      const sha=[...new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))].map(n=>n.toString(16).padStart(2,'0')).join('');
+      if(sha!==manifest.sha256)throw Error('完整包校验失败，请重试下载');
+      saveBlob(new Blob([bytes],{type:'application/zip'}),'etm-bridge-win64.zip');
+      $('g-etm-package-info').textContent=`Windows 64 位 · v${manifest.version} · ${(bytes.byteLength/1048576).toFixed(1)} MB · 校验通过`;
+      toast('完整包已下载：解压整个文件夹，双击 start-etm-bridge.bat，无需安装 Python','ok',6000);
+    } catch(e) { $('g-etm-package-info').textContent=e.message;toast(e.message,'err'); }
+    finally {button.disabled=false;}
   }
 
   downloadCurrent(){

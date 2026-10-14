@@ -12,9 +12,9 @@ for(const [name,embedded] of Object.entries(ETM_SCRIPTS)){
 }
 for(const port of ['evil & calc',-1,1023,65536,8878.5])assert.throws(()=>etmKitConfig({port}));
 assert.equal(etmKitConfig({port:8878}).port,8878);
-const config={serialRoot:'E:/web-serial-rtt-tools',etmRoot:'E:/web-etm-trace',port:8880};
+const config={port:8880};
 const files=etmKitFiles(config);
-assert.equal(files.length,6);
+assert.equal(files.length,5);
 const ps=files.find(f=>f.name.endsWith('.ps1'));
 assert.equal(new TextDecoder('utf8',{ignoreBOM:true}).decode(ps.data).charCodeAt(0),0xfeff,'Windows PowerShell requires UTF8 BOM');
 for(const f of files.filter(f=>f.name.endsWith('.bat')))assert(!/[^\r]\n/.test(f.text));
@@ -26,4 +26,4 @@ if(process.env.VALIDATION_DIR){
   }
   writeFileSync(join(root,'etm-bridge-kit.zip'),zipStore(files.map(f=>({name:f.name,data:f.data}))));
 }
-console.log('PASS: script identity, configuration validation, Windows encoding and downloadable ZIP (6 files)');
+console.log('PASS: portable launchers, no project paths, script identity, encoding and ZIP (5 files)');

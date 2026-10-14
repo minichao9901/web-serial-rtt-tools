@@ -4,15 +4,17 @@
 
 ## 启动
 
-推荐从 **工程生成 → ETM 桥** 填写两个工程目录和端口，点击“下载 ETM 桥包（ZIP）”。解压后双击 `check-tools.bat` 预检，再双击 `start-etm-bridge.bat`：服务准备就绪后自动打开 ETM 页面。也可用页面的“打开 ETM 工作台”按钮打开已运行的桥。
+推荐从 **工程生成 → ETM 桥** 点击“下载完整 ETM 桥包”。解压整个文件夹，双击 `check-tools.bat` 预检，再双击 `start-etm-bridge.bat`：服务准备就绪后自动打开 ETM 页面。也可用页面的“打开 ETM 工作台”按钮打开已运行的桥。
 
-启动包含 BAT、PowerShell 启动器、同源服务脚本、JSON 配置和中文说明；两个工程、Python 依赖与解码器仍需在本机。包可放在中文或含空格的路径中；更换电脑时修改 `etm.config.json`。同一工作台已运行时复用；端口被其他服务占用时报错，不结束已有进程。启动器不自动安装依赖、不修改系统设置。
+完整包支持 Windows 64 位，包含 Python、Python 依赖、工具箱/ETM 网页、Kingst 采集分析服务和 OpenCSD 解码器；无需安装 Python、下载两个工程或构建解码器。KingstVIS 及其驱动仍需安装并打开 Socket。包可放在中文或含空格的路径中；端口在 `etm.config.json` 中修改，默认 8878。记录保存在包内 `data/records`，升级前请保留 data。
 
-维护下载包：修改 `tools/dev/etm-launcher.ps1` 或 `serve-etm.py` 后，运行 `node tools/dev/embed-etm-kit.mjs` 更新嵌入副本，再运行 `npm run build:web`。`make test-gen` 会检查下载脚本与维护脚本是否一致；启动器的 Windows 集成检查见 `tools/selftest/test_etm_launcher.py`。
+“仅下载启动文件”提供 BAT、PowerShell、端口配置和说明，适合已有完整包时覆盖同名启动文件。它不包含运行环境；第一次使用请选择完整包。完整包下载时校验 SHA256；仓库中的运行快照、来源清单、许可证和构建方法见 `bridge/etm/README.md`。
 
 ETM的逻辑分析仪采集和OpenCSD解码需要本地服务；串口、RTT、SWO等原有静态网页功能仍可独立使用。
 
-将 `web-serial-rtt-tools` 与更新后的 `web-etm-trace` 放在同一父目录。使用Chrome/Edge，在串口工具仓库运行：
+### 开发源码运行（开发者选用）
+
+普通使用无需下面的工具链。开发两个原始仓库时，将更新后的 `web-serial-rtt-tools` 与 `web-etm-trace` 放在同一父目录，在串口工具仓库运行：
 
 ```powershell
 python -m pip install -r ../web-etm-trace/requirements.txt
@@ -21,7 +23,7 @@ pwsh -NoProfile -File tools/dev/start-etm.ps1
 
 打开 `http://127.0.0.1:8878/#etm`。两个仓库的目录不相邻时，可传 `-EtmRoot '你的ETM工程路径'`；端口可用 `-Port` 调整。本地启动脚本在缺少解码器时调用ETM工程的构建脚本，需要其CMake/Ninja/MinGW工具链。已经构建好的解码器会直接复用。
 
-普通静态站点的ETM菜单显示本地启动说明；从本地集成入口打开，才能使用同源内嵌和探针共享。请更新两个仓库，不把不同版本的前端和后台混用。
+普通静态站点的ETM菜单显示本地启动说明；下载并启动完整桥包，再从本地集成入口打开，即可使用同源内嵌和探针共享。
 
 ## 操作顺序
 
@@ -38,7 +40,7 @@ pwsh -NoProfile -File tools/dev/start-etm.ps1
 
 内嵌ETM复用主工具的USB驱动、USB租约和ProbeManager。连接ETM时先释放冲突的RTT/调试器/SWO资源；正在采集或控制目标时拒绝其它功能抢占。操作结束后，切到其它功能并连接时会先恢复ETM资源并断开它。普通历史浏览不申请探针。
 
-ETM业务界面、后端、解码器和记录保存在 `web-etm-trace`，无需把另一个工程或全部SDK复制到本仓库。独立ETM页面仍能单独启动。PXLogic实验分支未纳入此集成。
+ETM 原始工程仍在 `web-etm-trace` 维护；本仓库 `bridge/etm` 保存受审查的运行快照及下载包。完整包不包含 SDK、编译工具链或用户历史记录，只带一个 Demo。独立ETM页面仍能单独启动。PXLogic实验分支未纳入此集成。
 
 ## 当前验收
 

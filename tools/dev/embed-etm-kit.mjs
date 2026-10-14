@@ -2,7 +2,7 @@
 import {readFileSync,writeFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 const root=new URL('../../',import.meta.url);
-const entries=['etm-launcher.ps1','serve-etm.py'].map(name=>{
+const entries=['etm-launcher.ps1'].map(name=>{
   const src=readFileSync(new URL('tools/dev/'+name,root),'utf8').replace(/\r\n/g,'\n');
   return [name,{src,sha256:createHash('sha256').update(src).digest('hex')}];
 });

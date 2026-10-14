@@ -1,0 +1,207 @@
+/* 对齐 E:/web-serial-rtt-tools/app/app.css。
+   只作用于 ETM 根节点；将来可随面板迁移，不覆盖宿主的其它工具。 */
+#etm-app{
+  --bg:#0d1117;--bg2:#161b22;--bg3:#1c232c;--bg4:#232c38;
+  --fg:#e6edf3;--fg2:#9aa4af;--line:#28313b;
+  --acc:#58a6ff;--ok:#3fb950;--warn:#d29922;--err:#f85149;
+  --text-xs:12px;--text-sm:13px;--text-md:14px;--text-lg:16px;--text-xl:20px;
+  --radius-sm:3px;--radius-control:5px;--radius-card:8px;--label-w:88px;
+  --space-sm:6px;--space-md:10px;
+  --mono:"Cascadia Mono","JetBrains Mono",Consolas,"DejaVu Sans Mono","Courier New",monospace;
+  --ui:-apple-system,"Segoe UI","Microsoft YaHei","PingFang SC","Noto Sans SC",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --border:var(--line);--blue:#1f6feb;--muted:var(--fg2);
+  font:var(--text-sm)/1.5 var(--ui);color:var(--fg);background:var(--bg);color-scheme:dark;
+}
+#etm-app button,#etm-app input,#etm-app select,#etm-app textarea{font-family:var(--ui);font-size:var(--text-sm);color:var(--fg)}
+#etm-app button{background:var(--bg3);border:1px solid var(--line);border-radius:var(--radius-control);padding:4px 10px}
+#etm-app button:hover{background:var(--bg4);border-color:#3d4855}
+#etm-app button:active{transform:translateY(1px)}
+#etm-app button:disabled{opacity:.45;cursor:not-allowed}
+#etm-app button.primary{background:#1f6feb;border-color:#2b7cf5;color:#fff}
+#etm-app button.primary:hover{background:#2b7cf5}
+#etm-app button.primary:disabled{background:var(--bg3);border-color:var(--line);color:var(--fg2)}
+#etm-app button.danger{color:var(--err);border-color:#f8514966}
+#etm-app button.danger:hover:enabled{background:#f851491a;border-color:var(--err)}
+#etm-app input,#etm-app select,#etm-app textarea{background:var(--bg3);border:1px solid var(--line);border-radius:var(--radius-control);padding:3px 6px}
+#etm-app input[type=checkbox]{accent-color:var(--acc);vertical-align:-1px}
+#etm-app input::placeholder{color:var(--fg2);opacity:.8}
+#etm-app input:focus,#etm-app select:focus{outline:none;border-color:var(--acc)}
+#etm-app :focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+#etm-app a{color:var(--acc)}
+#etm-app header{height:38px;background:var(--bg2);border-bottom:1px solid #222a33;padding:3px 10px}
+#etm-app .brand{font-weight:600;letter-spacing:.2px;gap:0}
+#etm-app .brand-mark,#etm-app .brand small{display:none}
+#etm-app .brand strong{font-size:var(--text-sm);font-weight:600;color:var(--fg)}
+#etm-app .header-right{gap:8px}
+#etm-app .header-right button{background:transparent;color:var(--fg2);border-color:transparent;font-size:var(--text-xs);padding:2px 7px}
+#etm-app .header-right button:hover{background:var(--bg3);color:var(--fg);border-color:var(--line)}
+#etm-app .status{font-size:var(--text-xs);padding:2px 8px;border:1px solid var(--line);color:var(--fg2);background:transparent}
+#etm-app .status.good{color:var(--bg);background:var(--ok);border-color:var(--ok);font-weight:600}
+#etm-app .status.bad{color:var(--err);border-color:var(--err);background:transparent}
+#etm-app .workspace{grid-template-columns:308px minmax(0,1fr);gap:10px;padding:8px 10px 6px;height:calc(100vh - 38px);background:var(--bg)}
+#etm-app aside{padding:0 2px 0 0;border:0;background:transparent}
+#etm-app .aside-title{font-size:var(--text-xs);font-weight:600;margin:0 0 5px;padding:2px}
+#etm-app .aside-title .dim{font-size:11px}
+#etm-app .sidebar-tabs{display:flex;gap:4px;padding:0 0 6px;border-bottom:1px solid var(--line);border-radius:0;background:transparent}
+#etm-app .sidebar-tabs button{flex:1;min-width:0;padding:5px 3px;border-color:transparent;background:transparent;color:var(--fg2);box-shadow:none}
+#etm-app .sidebar-tabs button[aria-selected=true]{background:var(--bg2);border-color:var(--line);color:var(--acc);font-weight:400}
+#etm-app .sidebar-content{padding:8px 2px 0 0}
+#etm-app .responsibility{font-size:var(--text-xs);color:var(--fg2);border-left-color:var(--acc);margin:0 0 9px;padding-left:7px}
+#etm-app .control{padding:4px 2px 12px;margin:0 0 12px;border-bottom:1px solid var(--line);background:transparent}
+#etm-app .control:last-child{border-bottom:0;margin-bottom:0}
+#etm-app .control h2{font-size:var(--text-xs);color:var(--fg);font-weight:600;margin:0 0 8px}
+#etm-app .control label{font-size:var(--text-xs);color:var(--fg2);margin:5px 0;gap:6px}
+#etm-app .control label>input:not([type=checkbox]),#etm-app .control label>select{width:150px}
+#etm-app .hint{font-size:12.5px;line-height:1.6;color:var(--fg2);margin:7px 0 0}
+#etm-app .check{color:var(--fg2);font-size:var(--text-xs)}
+#etm-app .control select.wide{font:var(--text-xs)/1.5 var(--mono)}
+#etm-app .control select option{background:var(--bg3);color:var(--fg)}
+#etm-app .control select option:disabled{color:var(--fg2)}
+#etm-app .control details{margin:7px 0 0;padding-top:6px;border-top:1px solid var(--line);font-size:var(--text-xs)}
+#etm-app summary{color:var(--fg2)}
+#etm-app .control pre,#etm-app .formula-box{background:var(--bg2);color:var(--fg2);border-radius:var(--radius-control);font:var(--text-xs)/1.6 var(--mono)}
+#etm-app .capture-footer{border-top:1px solid var(--line);background:var(--bg);padding:7px 2px 2px}
+#etm-app .capture-footer button{padding:4px 10px}
+#etm-app .capture-footer .hint{font-size:var(--text-xs);line-height:1.5;margin:0 0 6px}
+#etm-app main{padding:0;gap:3px;background:var(--bg)}
+#etm-app .record-toolbar{background:var(--bg2);border:1px solid var(--line);border-radius:var(--radius-card);padding:3px 7px;margin:0;gap:6px}
+#etm-app .record-toolbar select{font-size:var(--text-xs);padding:2px 5px}
+#etm-app .record-toolbar button{font-size:var(--text-xs);padding:2px 7px}
+#etm-app .compact-metrics,#etm-app .dim{color:var(--fg2);font-size:var(--text-xs)}
+#etm-app .quality{color:var(--fg2);background:transparent;border-left:2px solid var(--acc);font-size:11px;line-height:16px;margin:0;padding:0 6px}
+#etm-app .quality.warn{color:var(--warn);background:#d2992210;border-color:var(--warn)}
+#etm-app #trace-config-state.pending{color:var(--warn)}
+#etm-app .analysis-toolbar{gap:4px;min-height:0}
+#etm-app .tabs{gap:2px}
+#etm-app .tabs button{font-size:var(--text-xs);padding:2px 7px;background:transparent;border:1px solid transparent;border-radius:var(--radius-control);color:var(--fg2)}
+#etm-app .tabs button:hover{color:var(--fg);background:var(--bg3)}
+#etm-app .tabs button.active{background:var(--bg3);border-color:var(--line);color:var(--fg);font-weight:600}
+#etm-app #toggle-stack,#etm-app #toggle-source{font-size:var(--text-xs);padding:2px 7px}
+#etm-app .history-tools{gap:6px;padding:1px 0 3px}
+#etm-app .history-tools button{padding:2px 7px;font-size:var(--text-xs)}
+#etm-app .history-tools select,#etm-app .history-tools input#jump-value,#etm-app .history-tools input#search{font-size:var(--text-xs);padding:2px 5px}
+#etm-app .history-tools .check,#etm-app #filter-count{font-size:11px}
+#etm-app #cursor-state{font:11px/1.5 var(--mono);color:var(--fg2)}
+#etm-app .execution-timeline-panel{flex:0 0 auto;min-width:0;overflow:hidden;border:1px solid var(--line);border-radius:var(--radius-card);background:var(--bg)}
+#etm-app .execution-timeline-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;min-width:0;padding:3px 7px;background:var(--bg2);border-bottom:1px solid var(--line)}
+#etm-app .execution-timeline-heading>div{display:flex;align-items:center;gap:9px;min-width:0;overflow:hidden}
+#etm-app .execution-timeline-heading strong{font-size:11px;font-weight:600;white-space:nowrap}
+#etm-app #execution-timeline-summary{font:10px/1.4 var(--mono);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#etm-app .execution-timeline-actions{display:flex;align-items:center;gap:5px;flex:none;min-width:0;overflow:visible}
+#etm-app #toggle-execution-timeline{flex:none;font-size:10px;padding:1px 6px}
+#etm-app #execution-timeline-body[hidden]{display:none}
+#etm-app #execution-timeline-body{padding:2px 5px 3px}
+#etm-app #execution-timeline-canvas{display:block;width:100%;min-height:74px;margin:0;cursor:crosshair;user-select:none;outline:none}
+#etm-app #execution-timeline-canvas:focus-visible{outline:1px solid var(--acc);outline-offset:-1px}
+#etm-app .execution-timeline-note{padding:1px 2px 0;color:var(--fg2);font-size:10px;line-height:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#etm-app .analysis-panes{border:1px solid var(--line);border-radius:var(--radius-card);background:var(--bg);min-height:200px}
+#etm-app .trace-pane,#etm-app .source-pane,#etm-app .table-container{background:var(--bg)}
+#etm-app .pane-divider{background:var(--bg2);border-left:1px solid var(--line);border-right:1px solid var(--line)}
+#etm-app .pane-divider:hover,#etm-app .pane-divider:focus{background:var(--acc)}
+#etm-app table{font:11px/1.5 var(--mono);color:var(--fg)}
+#etm-app td,#etm-app th{padding:4px 6px;border-bottom:1px solid #242c35}
+#etm-app th{background:var(--bg2);color:var(--fg2);font-weight:400}
+#etm-app td.pc,#etm-app td.asm{font:11px/1.5 var(--mono)}
+#etm-app tr.instruction:hover,#etm-app tr.function-row:hover{background:var(--bg3)}
+#etm-app tr.selected{background:#5bae441f;color:#d9efc8;box-shadow:inset 2px 0 #5bae44}
+#etm-app tr.event,#etm-app tr.unknown{background:#d2992210;color:var(--warn)}
+#etm-app tr.skipped{color:#788490}
+#etm-app tr.selected.unknown{background:#d2992228;color:#e2bf75}
+#etm-app .issue-row{color:var(--warn)}
+#etm-app .packet-problem{background:#f8514912;color:var(--err)}
+#etm-app .pagination{border-top:1px solid var(--line);font-size:11px;padding:3px 6px;color:var(--fg2)}
+#etm-app .pagination button{padding:1px 7px;font-size:var(--text-xs)}
+#etm-app .source-title{display:flex;flex-direction:row;flex-wrap:nowrap;align-items:center;justify-content:space-between;min-width:0;background:var(--bg2);border-bottom:1px solid var(--line);padding:2px 8px;gap:8px;line-height:15px}
+#etm-app .source-title strong,#etm-app .source-title .dim{font:11px/1.4 var(--mono);color:var(--acc);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+#etm-app .source-title strong{flex:0 1 48%}
+#etm-app .source-title .dim{flex:1 1 52%;text-align:right}
+#etm-app .selected-instruction{font:11px/1.5 var(--mono);background:var(--bg);color:var(--fg2);padding:3px 8px;border-bottom:1px solid var(--line);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;overflow-wrap:normal}
+#etm-app .selected-instruction.unknown{background:#d2992210;color:var(--warn)}
+#etm-app .source-code{background:var(--bg);color:var(--fg);font:12px/1.65 var(--mono)}
+#etm-app .source-line .line-number{width:40px;background:var(--bg2);color:#71808f;padding-right:9px}
+#etm-app .source-line .line-text{padding-left:10px}
+#etm-app .source-line.highlight{background:#5bae441f;color:#d9efc8}
+#etm-app .source-line.highlight .line-number{background:#5bae441f;color:#d9efc8}
+#etm-app .stack-panel{padding-top:2px;border-top:1px solid var(--line)}
+#etm-app .stack-panel>div:first-child{font-size:11px;color:var(--fg2)}
+#etm-app .stack-frame{font:11px/1.5 var(--mono);color:var(--acc);background:var(--bg2);padding:1px 5px;border-radius:var(--radius-sm)}
+#etm-app .stack-frame.uncertain{color:var(--fg2);background:var(--bg2)}
+#etm-app .log-box{border-color:var(--line)}
+#etm-app .log-box pre{color:var(--fg2);font:var(--text-xs)/1.5 var(--mono)}
+#etm-app .empty{color:var(--fg2);font:var(--text-sm)/1.6 var(--ui)}
+#etm-app main .hint{font-size:10.5px;line-height:14px;margin:2px 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#etm-app #summary-panel{background:var(--bg2);border-color:var(--line)}
+#etm-app .integrity-row{border-color:var(--line);font-size:var(--text-xs)}
+#etm-app .integrity-row>span{color:var(--fg2)}
+#etm-app .integrity-panel h3,#etm-app .flame-panel h3{font-size:var(--text-sm);color:var(--fg)}
+#etm-app .flame-panel svg{font-family:var(--mono)}
+#etm-app dialog{background:var(--bg);color:var(--fg);border-color:var(--line);border-radius:var(--radius-card);font:var(--text-sm)/1.75 var(--ui)}
+#etm-app dialog::backdrop{background:#0009}
+#etm-app .bad{color:var(--err)!important}
+#etm-app .symbol-list{max-height:148px;overflow:auto;border:1px solid var(--line);border-radius:4px;margin-top:6px}
+#etm-app .execution-chart{padding:10px;min-height:100%;overflow:auto}
+#etm-app .window-tools{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+#etm-app .window-actions,#etm-app .window-range{display:flex;align-items:center;gap:4px;flex-wrap:nowrap;flex-shrink:0;white-space:nowrap}
+#etm-app .zoom-controls{display:inline-flex;align-items:center;gap:2px;flex:none}
+#etm-app .zoom-controls .zoom-button{display:grid;place-items:center;width:23px;height:22px;min-width:23px;padding:2px 3px;line-height:1;color:var(--fg2)}
+#etm-app .zoom-controls .zoom-button:hover{color:var(--acc)}
+#etm-app .zoom-controls .zoom-button svg{display:block;width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+#etm-app .window-tools button{font-size:11px;padding:3px 6px}
+#etm-app .window-range input{width:74px;min-width:50px;font:11px var(--mono);padding:3px 4px}
+#etm-app .window-range{margin-left:auto}
+#etm-app .execution-timeline{display:block;width:100%;min-height:150px;margin-top:10px;cursor:crosshair;user-select:none}
+#etm-app .execution-timeline .execution-cursor{stroke:#f0f6fc;stroke-width:1.5;opacity:.95}
+#etm-app .execution-timeline .execution-cursor-marker{fill:#f0f6fc;stroke:#0d1117;stroke-width:.7}
+#etm-app #scope-state{font:11px var(--mono);white-space:nowrap}
+#etm-app #panel-target>.control{padding-bottom:8px;margin-bottom:7px}
+#etm-app .symbol-row{display:flex;gap:5px;align-items:center;border-bottom:1px solid var(--line);padding:2px 4px}
+#etm-app .symbol-row button{padding:0 5px;min-width:23px;color:var(--acc)}
+#etm-app .symbol-label{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:11px/1.6 var(--mono)}
+#etm-app .symbol-row:hover{background:var(--bg3)}
+#etm-app #break-command{flex:1;width:0;font:12px var(--mono)}
+#etm-app #break-command-form{margin-top:6px}
+#etm-app .breakpoint-row{display:flex;gap:5px;align-items:center;border-bottom:1px solid var(--line);padding:4px 0}
+#etm-app .breakpoint-row input{width:13px;margin:0;flex:none}
+#etm-app .breakpoint-row .bp-description{flex:1;min-width:0;overflow-wrap:anywhere;font:11px/1.5 var(--mono)}
+#etm-app .breakpoint-row small{display:block;color:var(--fg2);font:11px var(--ui)}
+#etm-app .breakpoint-row button{padding:0 5px}
+#etm-app .breakpoint-row.selected{background:#5bae441f}
+#etm-app #break-capacity{font-size:11px;font-weight:400}
+#etm-app #break-candidates{border:1px solid var(--warn);padding:5px;margin-top:6px}
+#etm-app #break-candidates button{display:block;width:100%;white-space:normal;text-align:left;margin-top:3px;font:11px/1.6 var(--mono)}
+#etm-app .record-toolbar{display:flex;flex-wrap:nowrap;align-items:center;min-width:0;gap:6px}
+#etm-app .record-picker{display:flex;align-items:center;gap:4px;flex:0 1 280px;min-width:140px;max-width:34%}
+#etm-app .record-picker select{width:0;min-width:0;flex:1}
+#etm-app .record-toolbar .compact-metrics{font-size:11px;white-space:nowrap;flex-shrink:0}
+#etm-app .record-toolbar .quality{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:18px;padding-left:6px}
+#etm-app .record-toolbar>button{flex-shrink:0}
+@media(max-width:1050px){#etm-app .record-toolbar .compact-metrics{display:none}#etm-app .record-picker{max-width:46%}}
+#etm-app .analysis-panes.flame-layout{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(230px,50%) minmax(180px,1fr)}
+#etm-app .analysis-panes.flame-layout .trace-pane{grid-column:1;grid-row:1;min-height:0;border:0;border-bottom:1px solid var(--line)}
+#etm-app .analysis-panes.flame-layout .table-container{flex:1;min-height:0;height:auto;overflow:auto}
+#etm-app .analysis-panes.flame-layout .pagination,#etm-app .analysis-panes.flame-layout .pane-divider{display:none}
+#etm-app .analysis-panes.flame-layout svg.execution-timeline{min-height:0;margin-top:5px}
+#etm-app .analysis-panes.flame-layout .source-pane{grid-column:1;grid-row:2;display:flex;min-height:0;border:0}
+#etm-app .analysis-panes.flame-layout .source-code{flex:1;height:auto;min-height:0}
+#etm-app .analysis-panes.flame-layout.flame-source-collapsed{grid-template-rows:minmax(0,1fr)}
+#etm-app .analysis-panes.flame-layout.flame-source-collapsed .trace-pane{grid-row:1;border-bottom:0}
+#etm-app .analysis-panes.flame-layout.flame-source-collapsed .source-pane{display:none}
+#etm-app ::-webkit-scrollbar{width:9px;height:9px}
+#etm-app ::-webkit-scrollbar-track{background:var(--bg)}
+#etm-app ::-webkit-scrollbar-thumb{background:#35404d;border:2px solid var(--bg);border-radius:4px}
+#etm-app ::-webkit-scrollbar-thumb:hover{background:#536172}
+@media(max-width:780px){#etm-app .analysis-panes.flame-layout{grid-template-rows:minmax(160px,52%) minmax(140px,1fr)}}
+@media(min-width:781px){#etm-app.side-hidden .workspace{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:1050px){#etm-app .workspace{grid-template-columns:278px minmax(0,1fr)}}
+@media(max-width:780px){
+  #etm-app .workspace{display:block;padding:6px 8px}
+  #etm-app aside{top:38px;background:var(--bg);padding:8px 10px;border-right:1px solid var(--line);box-shadow:5px 0 20px #0008}
+  #etm-app .header-right{gap:4px}
+  #etm-app .history-tools{flex-wrap:wrap}
+  #etm-app .control label>input:not([type=checkbox]),#etm-app .control label>select{width:150px}
+}
+
+#etm-app .trace-option-checks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:8px}
+#etm-app .trace-option-checks label{justify-content:flex-start;margin:4px 0;gap:5px}
+
+#etm-app #trace-config-state{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:var(--text-xs);line-height:16px}

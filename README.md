@@ -39,7 +39,7 @@
 
 ## SWO：记录、离线分析与源码回放
 
-ETM使用 [本地集成入口与说明](docs/etm-integration.md)：`pwsh -File tools/dev/start-etm.ps1`，打开 `http://127.0.0.1:8878/#etm`。需要同级的更新版 `web-etm-trace` 工程及KingstVIS。
+ETM使用 [完整便携桥包与说明](docs/etm-integration.md)：在“工程生成 → ETM 桥”下载完整 Windows 64 位包，解压后双击 `start-etm-bridge.bat`，打开 `http://127.0.0.1:8878/#etm`。包已包含运行环境与解码器，只需另行准备 KingstVIS；无需配置两个工程目录。
 
 打开 [SWO 执行轨迹](https://minichao9901.github.io/web-serial-rtt-tools/#swo)，录制一段目标的 DWT PC 采样数据，停止后用匹配的 ELF 和源码分析。也可直接载入 [F103CB 实测示例](samples/swo/README.md)，无需连接硬件。
 

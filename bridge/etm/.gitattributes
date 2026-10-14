@@ -1,0 +1,3 @@
+# Runtime snapshot hashes describe exact bytes. Preserve them across clone/EOL settings.
+backend/** -text whitespace=cr-at-eol
+downloads/*.zip -text
