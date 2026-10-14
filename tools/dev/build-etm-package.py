@@ -59,13 +59,13 @@ def main():
     shutil.copyfile(ROOT/'bridge/etm/provenance.json',package/'source-provenance.json')
     files=[dict(name=p.relative_to(package).as_posix(),bytes=p.stat().st_size,sha256=sha(p)) for p in sorted(package.rglob('*')) if p.is_file()]
     identity=hashlib.sha256(json.dumps(files,sort_keys=True).encode()).hexdigest()
-    manifest=dict(version='1.0.1',platform='windows-x64',packageId=identity,sourceRevision=provenance['sourceRevision'],python=sys.version,dependencies=distributions,files=files)
+    manifest=dict(version='1.0.2',platform='windows-x64',packageId=identity,sourceRevision=provenance['sourceRevision'],python=sys.version,dependencies=distributions,files=files)
     (package/'package-manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf8')
     args.output.mkdir(parents=True,exist_ok=True);archive=args.output/'etm-bridge-win64.zip'
     with zipfile.ZipFile(archive,'w',zipfile.ZIP_DEFLATED) as zip:
         for file in sorted(package.rglob('*')):
             if file.is_file():zip.write(file,'etm-bridge-kit/'+file.relative_to(package).as_posix())
-    download=dict(version='1.0.1',platform='windows-x64',file=archive.name,bytes=archive.stat().st_size,sha256=sha(archive),packageId=identity,sourceRevision=provenance['sourceRevision'])
+    download=dict(version='1.0.2',platform='windows-x64',file=archive.name,bytes=archive.stat().st_size,sha256=sha(archive),packageId=identity,sourceRevision=provenance['sourceRevision'])
     (args.output/'manifest.json').write_text(json.dumps(download,ensure_ascii=False,indent=2)+'\n',encoding='utf8')
     print(json.dumps(dict(package=str(package),archive=str(archive),**download),ensure_ascii=False))
 if __name__=='__main__':main()

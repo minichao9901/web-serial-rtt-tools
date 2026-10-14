@@ -1,6 +1,6 @@
 {
   "sourceRepository": "web-etm-trace",
-  "sourceRevision": "657caee48c33e05be71391725ce6d3ac050c74c9",
+  "sourceRevision": "f12351ad003ac6dafe03fb37e841a7db6818b58d",
   "sourceHashes": {
     "server.py": "4ea87e406f61effd8188069a64504e923448ba798d5c6a3745ca998b36cbce29",
     "requirements.txt": "b27aa32a35a280eeb7d5144a5fc51574c9a7f82b765017b660515066dac99af2",
@@ -25,7 +25,7 @@
     "web/app/operation.js": "31f8e1b679a0d4543a1fffb10d992d95048162c04f0166a3f254e910558147e3",
     "web/app/source-snapshot.js": "49019fe34e2adc07c6be49a38649ccac322a56c8fbc59838614064ceeaede539",
     "web/app/target-f103.js": "2758e8cfa98749d1b9e5abc8fa467bfcd40f14c9e32d4c61dac2500497cdb82e",
-    "web/app/target.js": "133e5f88def94c544cb2f11e2029c837496f8d572623f264aca2b9b7bd5d127d",
+    "web/app/target.js": "06d22803df6dbea5295f9da5d2a5efa5a3e6a6b627bd5ea18a3e04b1b2e6e315",
     "web/app/trace-options.js": "861e5e8329ca10551f1480493018549e8413ef787b38df841046bdeafbf466e8",
     "web/app/view.js": "81ee28bccb78d18f7ae72ad10ce6a05b5b0543fb18cc721b0ce38dd82e1076bc",
     "web/app/zoom-controls.js": "3a6028535017b11c778537d966a53c5134988497da97abc24a368cae8d378167",
@@ -73,7 +73,7 @@
     "web/app/operation.js": "31f8e1b679a0d4543a1fffb10d992d95048162c04f0166a3f254e910558147e3",
     "web/app/source-snapshot.js": "49019fe34e2adc07c6be49a38649ccac322a56c8fbc59838614064ceeaede539",
     "web/app/target-f103.js": "2758e8cfa98749d1b9e5abc8fa467bfcd40f14c9e32d4c61dac2500497cdb82e",
-    "web/app/target.js": "133e5f88def94c544cb2f11e2029c837496f8d572623f264aca2b9b7bd5d127d",
+    "web/app/target.js": "06d22803df6dbea5295f9da5d2a5efa5a3e6a6b627bd5ea18a3e04b1b2e6e315",
     "web/app/trace-options.js": "861e5e8329ca10551f1480493018549e8413ef787b38df841046bdeafbf466e8",
     "web/app/view.js": "81ee28bccb78d18f7ae72ad10ce6a05b5b0543fb18cc721b0ce38dd82e1076bc",
     "web/app/zoom-controls.js": "3a6028535017b11c778537d966a53c5134988497da97abc24a368cae8d378167",

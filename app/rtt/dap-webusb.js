@@ -995,6 +995,24 @@ export class WebUsbDapProbe {
     });
   }
 
+  /** Keyed/self-clearing control writes: one send, no readback retry or healing. */
+  async writeMemDiagnostic(addr, bytes){
+    if(this._faulted||this._recovering)throw new Error('调试口已有 FAULT；控制写未自动重初始化目标');
+    return this._withLock(()=>{
+      if(this._faulted||this._recovering)throw new Error('调试口已有 FAULT；控制写未自动重初始化目标');
+      return this._writeMemOnce(addr,bytes,0);
+    });
+  }
+
+  /** Explicit recovery preserves CPU execution state; the caller decides what follows. */
+  async recoverDebugPort(){
+    if(this._recovering)throw new Error('调试口正在恢复');
+    this._recovering=true;this._faulted=false;
+    try{await this._targetInit({clock:this.clockHz||null});return true;}
+    catch(e){this._faulted=true;throw e;}
+    finally{this._recovering=false;}
+  }
+
   async regReadDiagnostic(regsel){
     if (this._faulted || this._recovering) throw new Error('调试口已有 FAULT／正在恢复；诊断未重新初始化目标');
     return this._withLock(async () => {

@@ -29,7 +29,7 @@ export class EtmTarget {
   assertTransport(){if(this.transportFault)throw Error('SWD 已故障，已保留现场；请点击“恢复调试口”后重试');}
   accessError(e,operation,address){if(e.ack===4||this.probe?._faulted)this.debugFault=true;const wrapped=new Error(`${operation} ${hex(address)}：${e.message}`,{cause:e});wrapped.ack=e.ack;return wrapped;}
   async read(addr){if(!this.probe)throw Error('请先连接探针');this.assertTransport();try{const bytes=await this.probe.readMemDiagnostic(addr>>>0,4);return new DataView(bytes.buffer,bytes.byteOffset,4).getUint32(0,true);}catch(e){throw this.accessError(e,'读寄存器',addr);}}
-  async write(addr,value,verify=true){this.assertTransport();const bytes=new Uint8Array(4);new DataView(bytes.buffer).setUint32(0,value>>>0,true);try{await (this.probe.writeMemDiagnostic?this.probe.writeMemDiagnostic(addr>>>0,bytes):this.probe.writeMem(addr>>>0,bytes));}catch(e){throw this.accessError(e,'写寄存器',addr);}if(verify&&await this.read(addr)!==(value>>>0))throw Error(`寄存器回读不匹配 ${hex(addr)}`);}
+  async write(addr,value,verify=true){this.assertTransport();if(!this.probe?.writeMemDiagnostic)throw Error('探针驱动缺少安全控制写接口，请更新完整 ETM 桥包后重试');const bytes=new Uint8Array(4);new DataView(bytes.buffer).setUint32(0,value>>>0,true);try{await this.probe.writeMemDiagnostic(addr>>>0,bytes);}catch(e){throw this.accessError(e,'写寄存器',addr);}if(verify&&await this.read(addr)!==(value>>>0))throw Error(`寄存器回读不匹配 ${hex(addr)}`);}
   async recoverDebugPort(){
     if(!this.probe?.recoverDebugPort)throw Error('当前连接不支持调试口恢复，请重新连接探针');
     this.log('正在恢复 SWD 调试口；不复位、不自动继续 CPU');
@@ -150,6 +150,11 @@ export class EtmTarget {
     }
   }
   async pc(){await this.write(0xe000edf4,15,false);await this.wait(0xe000edf0,1<<16,1<<16);return (await this.read(0xe000edf8))&~1;}
+  async unexpectedHalt(pc,address,label){
+    const dhcsr=await this.read(0xe000edf0),dfsr=await this.read(0xe000ed30),demcr=await this.read(0xe000edfc);
+    const reasons=['暂停请求/单步','断点','数据观察点','异常捕获','外部调试请求'].filter((_,i)=>dfsr&(1<<i));
+    return Error(`${label}停在 ${hex(pc)}，未到达起点 ${hex(address)}；停机原因：${reasons.join('、')||'未记录'}（DHCSR ${hex(dhcsr)}，DFSR ${hex(dfsr)}，DEMCR ${hex(demcr)}）。目标保持暂停`);
+  }
   async clearEntryBreak(){
     if(!this.entryBreak)return;
     const owned=this.entryBreak;await this.halt();
@@ -176,7 +181,7 @@ export class EtmTarget {
     return withCleanup(async()=>{
       await this.write(slot,encoded);await this.write(0xe0002000,3,false);await this.probe.run();const until=Date.now()+timeout;
       while(!(await this.isHalted())){if(this.cancelEntry)throw Error('已取消运行至函数');if(Date.now()>until)throw Error('运行至函数超时；已暂停并清理本次起点断点');await sleep(25);}
-      const pc=await this.pc();if(pc!==address)throw Error(`目标停在 ${hex(pc)}，未命中所选函数 ${hex(address)}`);
+      const pc=await this.pc();if(pc!==address)throw await this.unexpectedHalt(pc,address,'目标');
       await this.clearEntryBreak();const info=await this.inspect();info.entryPC=pc;this.log(`已停在函数入口 ${hex(pc)}，一次性断点已移除`);return info;
     },async()=>{if(this.entryBreak)await this.clearEntryBreak();},e=>this.log('起点清理失败（保留首次错误）：'+e.message));
   }
@@ -202,7 +207,7 @@ export class EtmTarget {
       await this.write(0xe000ed0c,0x05fa0004,false);await sleep(60);
       const until=Date.now()+timeout;
       while(!(await this.read(0xe000edf0)&(1<<17))){if(this.cancelEntry)throw Error('已取消等待起点');if(Date.now()>until)throw Error('复位后未命中业务起点；目标将暂停');await sleep(25);}
-      const pc=await this.pc();if(pc!==address)throw Error(`复位后停在 ${hex(pc)}，未到达业务起点 ${hex(address)}`);
+      const pc=await this.pc();if(pc!==address)throw await this.unexpectedHalt(pc,address,'复位后');
       const info=await this.inspect();info.entryPC=pc;return info;
     },async()=>{await this.clearEntryBreak();await this.write(0xe000edfc,demcr);},e=>this.log('复位后的清理失败（保留首次错误）：'+e.message));
   }

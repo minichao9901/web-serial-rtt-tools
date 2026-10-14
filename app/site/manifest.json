@@ -98,7 +98,7 @@
     "app/i2c/view.js": "014c10bd58c87887d2731481ec2a546f9a5775e7550a58ab6e19edf2e9b31d74",
     "app/main.js": "4f0543eefe54538d09c29b6cc4248effe1c350402bec481d9508c1d7c8efbb56",
     "app/rtt/bridge.js": "483cdf7c69882f63b3930619a8a9b78fefc38f2e3c079b64b167918e560d567e",
-    "app/rtt/dap-webusb.js": "3df7810ee13fd255dca0887553de5a01e94df6424cbccfb57c33ad4a00630776",
+    "app/rtt/dap-webusb.js": "d44606c05d120b3a12a257c421b54f343c07a05b4fbea56a982329bd00643066",
     "app/rtt/elf.js": "76a6278965724f52133467f8f07d4472077c5a9c35ca187fece59abad42405c7",
     "app/rtt/mock.js": "713da5c0c48d4a912ed9da57dbaf5decf824e57be3b185adc70023e02a1c072d",
     "app/rtt/protocol.js": "40cf4c4e729349ef046426686bea9eb341f74b5262050c8f677cad844916b4f6",
@@ -165,6 +165,6 @@
     "app/ui/workspace.js": "25b6ce94e5d90302a37e6cec2b7e35c975af95ce29bef1094a4493f3890fc0b7",
     "app/ui/zoom-controls.js": "d7520d813135941c8b0e8f5601722c45f53d2d2ed8a940f789bc032da0180ff9"
   },
-  "outputSha256": "4381492748911daf70558c9af7cf13054f2e249a38e57f1a920c814a73188211",
-  "outputBytes": 1292021
+  "outputSha256": "3590cec3b5ba17f49c0d517d0107b51bf6d36ff18faca8e816fd6ffd956bea33",
+  "outputBytes": 1292594
 }

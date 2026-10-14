@@ -49,6 +49,11 @@ class PortableTests(unittest.TestCase):
         self.assertIn('下载完整 ETM 桥包',html)
         for path in ['etm/?embedded=1','etm/app/view.js','app/site/main.js','app/app.css']:
             with urlopen(self.base+path) as response:self.assertEqual(response.status,200)
+        # The embedded page injects the toolbox driver, not ETM's standalone copy.
+        # Both source mode and the default bundle must contain the control contract.
+        for path in ['app/rtt/dap-webusb.js','app/site/main.js']:
+            with urlopen(self.base+path) as response:driver=response.read().decode()
+            for method in ['writeMemDiagnostic','recoverDebugPort']:self.assertIn(method,driver)
         self.assertEqual(self.run_exe('--check').returncode,0)
     def test_reuse_and_invalid_ports(self):
         self.assertEqual(self.run_exe('--no-browser').returncode,0)
