@@ -13,7 +13,7 @@
   var mode = new URLSearchParams(location.search).get('modules');
   var local = ['localhost', '127.0.0.1', '[::1]'].indexOf(location.hostname) !== -1;
   window.__useWebBundle = mode === 'bundle' || (mode !== 'source' && !local);
-  window.__webBundleUrl = 'app/site/main.js?v=d56dc332c616b520';
+  window.__webBundleUrl = 'app/site/main.js?v=a9e2119f4335d6ea';
   var preload = document.createElement('link');
   preload.rel = 'modulepreload';
   preload.href = window.__useWebBundle ? window.__webBundleUrl : 'app/main.js';
@@ -2258,12 +2258,12 @@
         <p id="sw-target" class="sw-target-info" role="status">尚未识别目标</p>
         <details class="sw-fold"><summary>目标型号与板载时钟</summary>
           <div class="row"><span>常见型号</span><select id="sw-model" aria-label="目标型号"><option value="auto">自动识别</option><option value="stm32f1">STM32F103</option><option value="stm32f4">STM32F407 / F405</option><option value="stm32h743">STM32H743 / H750</option><option value="stm32h7b0">STM32H7B0 / H7A3 / H7B3</option></select></div>
-          <div class="row"><span>外部 MHz</span><input id="sw-hse" type="number" min="1" max="50" step="any" value="8" aria-label="板载外部时钟 MHz" title="初始按 Bluepill 8 MHz；其他板子必须提供实际值"></div>
+          <div class="row"><span>外部 MHz</span><input id="sw-hse" type="number" min="1" max="50" step="any" value="8" aria-label="板载外部时钟 MHz" title="F103 默认 8 MHz；识别或选择 H7B0 时预填本例程板卡的 25 MHz。请按板载实际值核对"></div>
           <label class="chk"><input id="sw-auto-clock" type="checkbox" checked>从目标配置计算 CPU / Trace 时钟</label>
           <div class="row"><span>CPU MHz</span><input id="sw-core" type="number" min="0.001" max="1000" step="any" placeholder="待识别"></div>
           <div class="row"><span>Trace MHz</span><input id="sw-trace" type="number" min="0.001" max="1000" step="any" placeholder="待识别" title="SWO 编码器的输入时钟，不是 SWO 波特率"></div>
           <p id="sw-target-path" class="hint">识别后显示 CPU / Trace 时钟来源与分频。</p>
-          <p class="hint">目标主频由固件配置；外部晶振按实际板子填写。</p>
+          <p class="hint">外部晶振频率不能从 RCC 自动读出。H7B0 例程预填 25 MHz；其他板卡请按实际值修改。</p>
         </details>
       </fieldset>
       <fieldset><legend>③ 添加断点</legend>
@@ -2380,7 +2380,7 @@
   <nav class="sw-help-nav"><a href="#sw-help-wiring">接线与上手</a><a href="#sw-help-breakpoints">断点与重复采集</a><a href="#sw-help-clocks">目标时钟</a><a href="#sw-help-math">带宽计算</a><a href="#sw-help-probe">探针匹配</a><a href="#sw-help-files">文件与示例</a></nav>
   <h3 id="sw-help-wiring">1. 接线与上手</h3><p>连接目标 PB3 / SWO → 探针 PB07 / VCOM RX，并连接 SWD 和 GND。使用 NRZ / 8N1。按录制侧栏从上到下操作：载入目标 ELF、选择 VCOM 并识别目标、添加并选择断点、设置 SWO 参数，最后运行至断点并录制。初次使用还需授权探针时钟；停止后页面自动分析并恢复 Trace / 探针接收配置。</p>
   <h3 id="sw-help-breakpoints">2. 断点起点与重复采集</h3><p>在“① 载入目标 ELF”选择与板上程序完全匹配的 ELF，确认文件名和指纹。载入后，“③ 添加断点”会列出函数：点击函数前的“＋”添加；也可以输入 <code>b main</code>、<code>b main.c:81</code>、<code>b 函数名:行号</code> 或地址，再点击“添加”。源码行按 DWARF 行号解析，空行或没有机器指令的行不能作为断点。可添加多个候选，在“④ 断点与采集起点”用圆点选择本次起点。</p><p>“复位并停在起点”会先做 AIRCR 软件复位，再运行到所选断点并暂停；它只复位并暂停，不会开始采集。目标停住后点击“运行至断点并录制”，页面会从当前起点准备并启动 SWO。若不先复位，开始采集会让正在运行的目标继续执行，等它下一次到达所选断点；默认等待 15 秒，选到已经执行过且不会再调用的启动函数会超时。采集正常停止后目标继续运行；想从程序开头再采一轮，先点“复位并停在起点”，再开始采集。</p><p>断点列表是本页的采集候选。采集时页面临时设置所选起点的硬件断点，命中后清除；原有 FPB 状态会保留。</p>
-  <h3 id="sw-help-clocks">3. CPU、Trace 与外部晶振</h3><p>CPU 频率决定 PC 采样率和周期时间；Trace 输入频率决定 SWO 编码器的分频。读取 RCC 可以得到时钟源和 PLL / 总线分频，板上外部晶振或有源时钟的频率仍需提供。标注“自动推算”表示根据配置计算，不是测量晶振。</p><p>F103 / F407 的 SWO 输入来自 HCLK，与 CPU 频率相同。H743 / H7B0 在 PLL 模式下使用 PLL1 R 输出作为 SWO 输入，CPU 使用 PLL1 P 输出并另经核心分频；不能直接拿 CPU 或 HCLK 替代。页面读取 PLL1 的 M、N、FRACN、P、R 和核心分频，分别计算两者。调试组件的总线时钟和 SWO 引脚编码时钟也需区分。常见型号的 DEV_ID 可能由多个芯片共用，页面显示型号组，不能保证识别到封装和完整料号。未知型号只识别内核并提示未适配，不套用 F103 配置。</p><p>本页不修改目标 PLL、核心分频和 SysTick。目标程序需要保持录制期间的时钟稳定；改变时钟后应停止并重新识别。</p>
+  <h3 id="sw-help-clocks">3. CPU、Trace 与外部晶振</h3><p>CPU 频率决定 PC 采样率和周期时间；Trace 输入频率决定 SWO 编码器的分频。读取 RCC 可以得到时钟源和 PLL / 总线分频，板上外部晶振或有源时钟的频率仍需提供。标注“自动推算”表示根据配置计算，不是测量晶振。</p><p>F103 / F407 的 SWO 输入来自 HCLK，与 CPU 频率相同。H743 / H7B0 在 PLL 模式下使用 PLL1 R 输出作为 SWO 输入，CPU 使用 PLL1 P 输出并另经核心分频；不能直接拿 CPU 或 HCLK 替代。页面读取 PLL1 的 M、N、FRACN、P、R 和核心分频，分别计算两者。调试组件的总线时钟和 SWO 引脚编码时钟也需区分。常见型号的 DEV_ID 可能由多个芯片共用，页面显示型号组，不能保证识别到封装和完整料号。未知型号只识别内核并提示未适配，不套用 F103 配置。</p><p><strong>配置分工：</strong>目标固件决定 CPU 与 Trace 输入时钟，包括 H7 的 PLL1 P/R 分频；网页读取 RCC，并配置 SWO 输出波特率、PC 采样间隔及 ITM/DWT 等采集参数；时钟计算器只模拟频率、采样密度和带宽。计算器中的“与 CPU 相同”“CPU ÷2”等选项不会改动目标 PLL。目标程序需在录制期间保持时钟稳定；改变时钟后应停止并重新识别。</p>
   <h3 id="sw-help-math">4. 从采样密度计算带宽</h3><pre>PC/s = CPU Hz ÷ PC 周期间隔
 PC 字节/s ≈ PC/s × (无时间戳 5 B；带时间戳约 9 B)
 异常字节/s = 进入 / 退出事件总数/s × 3 B

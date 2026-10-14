@@ -16,9 +16,11 @@ import {sampleRangeFromPixels,zoomRangeAroundCursor} from './window.js';
 const $=id=>document.getElementById(id),hex=v=>'0x'+(v>>>0).toString(16).padStart(8,'0');
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const color=s=>{let h=0;for(const c of s)h=(h*31+c.charCodeAt(0))>>>0;return `hsl(${h%360} 65% 64%)`;};
+// Board values for the bundled fixtures; editable inputs, never measured by RCC.
+const BOARD_HSE_PRESETS_MHZ={stm32f1:8,stm32h7b0:25};
 function download(bytes,name,type='application/octet-stream'){const url=URL.createObjectURL(new Blob([bytes],{type})),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);}
 export class SwoView {
-  constructor(){this.capture=new SwoCapture();this.sources=new SourceStore();this.recording=null;this.result=null;this.elf=null;this.symTab=null;this.entryBreakpoints=[];this.entryBreakpoint=null;this.haltedEntry=null;this.ports=[];this.page=0;this.cursor=0;this._analysisId=0;this._sourceId=0;this.hsePresetF1=true;this.chartLayout=null;this.chartDrag=null;this.zoomControls=null;}
+  constructor(){this.capture=new SwoCapture();this.sources=new SourceStore();this.recording=null;this.result=null;this.elf=null;this.symTab=null;this.entryBreakpoints=[];this.entryBreakpoint=null;this.haltedEntry=null;this.ports=[];this.page=0;this.cursor=0;this._analysisId=0;this._sourceId=0;this.hsePresetProfile='stm32f1';this.chartLayout=null;this.chartDrag=null;this.zoomControls=null;}
   get session(){return this.capture;}
   init(){
     const bind=(id,fn)=>$(id).addEventListener('click',()=>this.action(fn));
@@ -38,7 +40,7 @@ export class SwoView {
     bind('sw-save',()=>{if(this.recording)download(packRecording(this.recording.raw,this.recording.metadata),'swo-'+Date.now()+'.swopc');});
     bind('sw-demo',()=>this.loadDemo());bind('sw-analyze',()=>this.analyze());bind('sw-csv',()=>this.exportCsv());
     for(const id of ['sw-core','sw-trace','sw-baud','sw-period','sw-seconds','sw-itm','sw-exceptions','sw-exception-rate','sw-itm-rate','sw-extra','sw-margin','sw-baud-round','sw-auto-baud','sw-timestamps'])$(id).addEventListener('change',()=>this.renderPlan());
-    $('sw-hse').addEventListener('change',()=>this.action(()=>{this.hsePresetF1=false;this.refreshTargetClock();}));
+    $('sw-hse').addEventListener('change',()=>this.action(()=>{this.hsePresetProfile=null;this.refreshTargetClock();}));
     $('sw-auto-clock').addEventListener('change',()=>this.target?this.showTarget(this.target):this.renderPlan());
     $('sw-file').addEventListener('change',()=>this.action(async()=>{const f=$('sw-file').files[0];if(!f)return;if(f.size>MAX_RAW+MAX_META+12)throw Error('记录文件超过大小限制');this.recording=unpackRecording(await f.arrayBuffer());if(this.recording.metadata.format==='raw')this.recording.metadata.startAligned=$('sw-aligned').checked;await this.analyze();}));
     $('sw-elf-file').addEventListener('change',()=>this.action(async()=>{const f=$('sw-elf-file').files[0];if(f)await this.loadElf(await f.arrayBuffer(),f.name);}));
@@ -77,12 +79,12 @@ export class SwoView {
     on('sw-calc-help',()=>{$('sw-calculator').close();$('sw-help').showModal();});
     on('sw-calc-copy',()=>this.applyCalculator());
     for(const input of $('sw-calculator').querySelectorAll('input,select'))input.addEventListener('input',()=>{if(input.id==='sw-calc-model'){const port=targetPort(input.value);$('sw-calc-core').value=port?.maxCoreHz/1e6||72;$('sw-calc-relation').value=port?.traceDiv===null||!port?'manual':String(port.traceDiv);if($('sw-calc-relation').value==='manual')$('sw-calc-trace').value='';}this.renderCalculator();});
-    $('sw-model').addEventListener('change',()=>{this.target=null;this.hsePresetF1=false;$('sw-hse').value='';$('sw-core').value='';$('sw-trace').value='';$('sw-target').textContent='型号已切换，请重新识别目标';$('sw-target-path').textContent='请重新识别 CPU / Trace 时钟来源与分频。';this.renderPlan();});
+    $('sw-model').addEventListener('change',()=>{this.target=null;const profile=$('sw-model').value,hse=BOARD_HSE_PRESETS_MHZ[profile];this.hsePresetProfile=hse===undefined?null:profile;$('sw-hse').value=hse??'';$('sw-core').value='';$('sw-trace').value='';$('sw-target').textContent='型号已切换，请重新识别目标';$('sw-target-path').textContent='请重新识别 CPU / Trace 时钟来源与分频。';this.renderPlan();});
     for(const select of [$('sw-period'),$('sw-calc-period')])for(const n of LEGAL_PERIODS)if(![...select.options].some(o=>Number(o.value)===n)){const o=document.createElement('option');o.value=n;o.textContent=n+' 周期';select.append(o);}
     for(const select of [$('sw-period'),$('sw-calc-period')]){const selected=select.value;select.replaceChildren(...[...select.options].sort((a,b)=>Number(a.value)-Number(b.value)));select.value=selected;}
   }
   selectSidebar(name){for(const n of ['record','analysis']){const selected=n===name;$('sw-'+n+'-panel').hidden=!selected;$('sw-'+n+'-tab').setAttribute('aria-selected',String(selected));$('sw-'+n+'-tab').tabIndex=selected?0:-1;}}
-  options(){return {profile:$('sw-model').value,hseForProfile:this.hsePresetF1?'stm32f1':null,extraBytes:Number($('sw-extra').value),occupancy:1-Number($('sw-margin').value)/100,coreHz:Number($('sw-core').value)*1e6,traceHz:Number($('sw-trace').value)*1e6,baudRate:Number($('sw-baud').value),periodCycles:Number($('sw-period').value),seconds:Number($('sw-seconds').value),itm:$('sw-itm').checked,exceptions:$('sw-exceptions').checked,exceptionEvents:Number($('sw-exception-rate').value),itmBytes:Number($('sw-itm-rate').value),autoClock:$('sw-auto-clock').checked,hseHz:$('sw-hse').value?Number($('sw-hse').value)*1e6:null,allowBaudRounding:$('sw-baud-round').checked,autoBaud:$('sw-auto-baud').checked,receiverMode:2,timestamps:$('sw-timestamps').checked};}
+  options(){return {profile:$('sw-model').value,hseForProfile:this.hsePresetProfile,extraBytes:Number($('sw-extra').value),occupancy:1-Number($('sw-margin').value)/100,coreHz:Number($('sw-core').value)*1e6,traceHz:Number($('sw-trace').value)*1e6,baudRate:Number($('sw-baud').value),periodCycles:Number($('sw-period').value),seconds:Number($('sw-seconds').value),itm:$('sw-itm').checked,exceptions:$('sw-exceptions').checked,exceptionEvents:Number($('sw-exception-rate').value),itmBytes:Number($('sw-itm-rate').value),autoClock:$('sw-auto-clock').checked,hseHz:$('sw-hse').value?Number($('sw-hse').value)*1e6:null,allowBaudRounding:$('sw-baud-round').checked,autoBaud:$('sw-auto-baud').checked,receiverMode:2,timestamps:$('sw-timestamps').checked};}
   renderPlan(){
     for(const id of ['sw-core','sw-trace'])$(id).disabled=this.capture.active||$('sw-auto-clock').checked;
     $('sw-baud').disabled=this.capture.active||$('sw-auto-baud').checked;
@@ -196,12 +198,15 @@ export class SwoView {
     for(const s of sections){for(const offset of [...new Set([0,Math.max(0,s.size-64)])]){const n=Math.min(64,s.size-offset),expected=elf.bytesAt(s.addr+offset,n,{ro:true});if(!expected)continue;let confirmed=0;for(let i=0;i<4&&confirmed<2;i++){const actual=await probe.readMemDiagnostic(s.addr+offset,n);confirmed=actual.length===n&&!actual.some((v,i)=>v!==expected[i])?confirmed+1:0;}if(confirmed<2){const error=Error('目标代码与 ELF 不符或读回不稳定：'+s.name+' '+hex(s.addr+offset));error.code='SWO_ELF_VERIFY';throw error;}}}
   }
   showTarget(target){
-    if(this.hsePresetF1&&target.profile!=='stm32f1'){$('sw-hse').value='';this.hsePresetF1=false;target=recomputeTarget(target,null);}
+    if(this.hsePresetProfile&&target.profile!==this.hsePresetProfile){const hse=BOARD_HSE_PRESETS_MHZ[target.profile];$('sw-hse').value=hse??'';this.hsePresetProfile=hse===undefined?null:target.profile;target=recomputeTarget(target,hse===undefined?null:hse*1e6);}
     this.target=target;if($('sw-auto-clock').checked){$('sw-core').value=target.knownHz===null?'':target.knownHz/1e6;$('sw-trace').value=target.knownTraceHz==null?'':target.knownTraceHz/1e6;}
     const frequency=target.knownHz===null?'主频待确认':`当前 ${target.knownHz/1e6} MHz`,trace=target.knownTraceHz==null?'Trace 待确认':`Trace ${target.knownTraceHz/1e6} MHz`;
-    $('sw-target').textContent=`${target.name} · ${target.core}\nCPU ${frequency} · ${trace}\n${target.source} · SWO ${target.swoPin}`;
+    const missingHse=target.external&&target.hseHz==null;
+    const source=target.external&&this.hsePresetProfile===target.profile&&!missingHse?target.source.replace(/^HSE/,`HSE ${target.hseHz/1e6} MHz（预设）`):target.source;
+    $('sw-target').textContent=`${target.name} · ${target.core}\nCPU ${frequency} · ${trace}\n${missingHse?'已识别 HSE 路径；请填写板载 HSE MHz':`${source} · SWO ${target.swoPin}`}`;
     $('sw-target').title=`CPUID ${hex(target.cpuid)} · DEV_ID ${hex(target.device)}\n${target.path}\n${target.tracePath||target.traceRelation}`;
     $('sw-target-path').textContent=`CPU：${target.path}\nSWO：${target.tracePath||target.traceRelation}`;
+    if(missingHse){const clocks=[...document.querySelectorAll('#sw-record-steps details')].find(details=>details.querySelector('#sw-hse'));if(clocks)clocks.open=true;}
     $('sw-target').classList.toggle('bad',target.knownHz===null||target.knownTraceHz==null);this.renderPlan();
   }
   refreshTargetClock(){

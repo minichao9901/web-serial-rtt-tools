@@ -913,6 +913,10 @@ build-swo-f103cb-hse:
 .PHONY: build-swo-f103cb-hse-24
 build-swo-f103cb-hse-24:
 	pwsh -NoProfile -File tools/target-firmware/stm32f103cb_swo_hse/build.ps1 -CoreMHz 24
+
+.PHONY: build-swo-h7b0-hse
+build-swo-h7b0-hse:
+	pwsh -NoProfile -File tools/target-firmware/stm32h7b0_swo_hse/build.ps1
 test-swo-hw:
 	$(NODE) tools/selftest/swo-hw.mjs
 

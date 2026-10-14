@@ -6,6 +6,32 @@ try{await c.connect();await c.send('Page.bringToFront');await c.send('Page.navig
  ok(await c.eval(`return document.getElementById('sw-hse').value==='8'&&document.getElementById('sw-core').value===''&&document.getElementById('sw-analysis-panel').hidden&&!document.getElementById('sw-advanced').open&&document.getElementById('sw-start').getBoundingClientRect().bottom<innerHeight;`),'record tab compact with folded settings and visible start');
  const targetUi=await c.eval(`const v=__tools.swo,{stm32f1Info}=await import('./app/swo/target.js'),inspect=v.capture.inspect;let reads=0;v.capture.inspect=async options=>{reads++;return stm32f1Info({cpuid:0x411fc231,device:0x20036410,cr:0x03020000,cfgr:0x1d000a,hseHz:options.hseHz});};try{document.getElementById('sw-detect').click();await new Promise(r=>setTimeout(r,10));const detected=document.getElementById('sw-core').value==='72'&&document.getElementById('sw-trace').value==='72';document.getElementById('sw-hse').value='';document.getElementById('sw-hse').dispatchEvent(new Event('change'));const missing=document.getElementById('sw-core').value===''&&document.getElementById('sw-trace').value===''&&document.getElementById('sw-target').textContent.includes('主频待确认');document.getElementById('sw-hse').value='4';document.getElementById('sw-hse').dispatchEvent(new Event('change'));const recalculated=document.getElementById('sw-core').value==='36'&&document.getElementById('sw-trace').value==='36'&&reads===1;document.getElementById('sw-hse').value='8';document.getElementById('sw-hse').dispatchEvent(new Event('change'));const filled=document.getElementById('sw-core').value==='72';const removed=!document.getElementById('sw-target-hz')&&!document.getElementById('sw-receiver-mode');v.capture.inspect=async()=>{throw Error('injected connection failure')};await v.detectTarget().catch(()=>{});const failed=document.getElementById('sw-core').value===''&&document.getElementById('sw-trace').value===''&&v.target===null;return {detected,missing,recalculated,filled,removed,failed};}finally{v.capture.inspect=inspect;v.target=null;document.getElementById('sw-hse').value='8';document.getElementById('sw-core').value='';document.getElementById('sw-trace').value='';document.getElementById('sw-target').textContent='尚未识别目标';v.renderPlan();}`);
  for(const [name,passed]of Object.entries(targetUi))ok(passed,'target frequency UI '+name);
+ const h7Ui=await c.eval(`
+   const v=__tools.swo,$=id=>document.getElementById(id),{targetInfo}=await import('./app/swo/target.js'),inspect=v.capture.inspect;
+   const preset=v.hsePresetProfile,fold=$('sw-hse').closest('details'),wasOpen=fold.open;
+   const registers={cr:0x03020005,cfgr:0x1b,domain:0x40,pllSource:2|(5<<4),pllConfig:0x70008,pllDiv:111|(1<<9)|(1<<16)|(1<<24),pllFrac:0};
+   try {
+     $('sw-model').value='auto';$('sw-hse').value='8';v.hsePresetProfile='stm32f1';
+     v.capture.inspect=async options=>targetInfo({cpuid:0x410fc271,device:0x480,registers,hseHz:options.hseForProfile&&options.hseForProfile!=='stm32h7b0'?null:options.hseHz,profile:options.profile});
+     await v.detectTarget();
+     const automatic=$('sw-hse').value==='25'&&v.hsePresetProfile==='stm32h7b0'&&$('sw-core').value==='280'&&$('sw-trace').value==='280';
+     v.fillCalculator(true);v.renderCalculator();
+     const calculator=$('sw-calc-core').value==='280'&&$('sw-calc-trace').value==='280';
+     $('sw-hse').value='24';$('sw-hse').dispatchEvent(new Event('change'));await v.detectTarget();
+     const manual=v.hsePresetProfile===null&&Number($('sw-core').value)===268.8&&Number($('sw-trace').value)===268.8;
+     $('sw-hse').value='';$('sw-hse').dispatchEvent(new Event('change'));
+     const missing=fold.open&&$('sw-core').value===''&&$('sw-trace').value===''&&$('sw-target').textContent.includes('请填写板载 HSE');
+     $('sw-model').value='stm32h7b0';$('sw-model').dispatchEvent(new Event('change'));await v.detectTarget();
+     const explicit=$('sw-hse').value==='25'&&$('sw-core').value==='280'&&$('sw-trace').value==='280';
+     $('sw-model').value='stm32f4';$('sw-model').dispatchEvent(new Event('change'));
+     const isolated=$('sw-hse').value===''&&v.hsePresetProfile===null;
+     return {automatic,calculator,manual,missing,explicit,isolated};
+   } finally {
+     v.capture.inspect=inspect;v.target=null;v.hsePresetProfile=preset;fold.open=wasOpen;
+     $('sw-model').value='auto';$('sw-hse').value='8';$('sw-core').value='';$('sw-trace').value='';$('sw-target').textContent='尚未识别目标';v.renderPlan();
+   }
+ `);
+ for(const [name,passed]of Object.entries(h7Ui))ok(passed,'H7B0 frequency UI '+name);
  ok(await c.eval(`const v=__tools.swo;v.selectSidebar('analysis');const a=document.getElementById('sw-record-panel').hidden&&!document.getElementById('sw-analysis-panel').hidden;v.selectSidebar('record');return a&&document.getElementById('sw-record-tab').getAttribute('aria-selected')==='true';`),'sidebar tabs preserve session and analysis objects');
  ok(await c.eval(`return ['stm32f1','stm32f4','stm32h743','stm32h7b0'].every(value=>document.querySelector('#sw-calc-model option[value="'+value+'"]'))&&document.getElementById('sw-baud').type==='number'&&document.getElementById('sw-baud').max==='30000000';`),'common STM32 models and arbitrary integer baud input');
  const calculator=await c.eval(`const v=__tools.swo,$=id=>document.getElementById(id);$('sw-calculator-open').click();$('sw-calc-model').value='stm32f1';$('sw-calc-core').value=72;$('sw-calc-relation').value='1';$('sw-calc-period').value=512;$('sw-calc-timestamps').checked=true;v.renderCalculator();const ts=v.calculation.plan.baudRate===18000000&&$('sw-calc-result').textContent.includes('PLL0CLK0');const bytes=v.calculation.budget.estimatedBytes;$('sw-calc-timestamps').checked=false;v.renderCalculator();const pure=v.calculation.budget.estimatedBytes<bytes;$('sw-calc-exceptions').checked=true;$('sw-calc-itm').checked=true;v.renderCalculator();const events=v.calculation.budget.otherBytes===23000;$('sw-calc-exceptions').checked=false;$('sw-calc-itm').checked=false;$('sw-calc-rate-mode').value='rate';$('sw-calc-rate').value=100000;v.renderCalculator();const desired=v.calculation.plan.samplesHz<=100000;const before=[$('sw-core').value,$('sw-trace').value];v.applyCalculator();const noClockChange=before[0]===$('sw-core').value&&before[1]===$('sw-trace').value&&!$('sw-calculator').open;$('sw-calc-rate-mode').value='period';return {ts,pure,events,desired,noClockChange};`);

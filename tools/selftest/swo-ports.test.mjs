@@ -15,6 +15,10 @@ assert.equal(decodeClocks(targetPort('stm32h743'),{...h7,domain:8|(8<<8)},8e6).t
 const frac=decodeClocks(targetPort('stm32h743'),{...h7,pllDiv:399|(1<<9)|(5<<24),pllConfig:h7.pllConfig|1,pllFrac:4096<<3},8e6);assert.equal(frac.coreHz,400500000);assert.equal(frac.traceHz,133500000);
 const b0={...h7,pllSource:2|(5<<4),pllDiv:111|(1<<9)|(3<<24)};
 assert.equal(decodeClocks(targetPort('stm32h7b0'),b0,25e6).coreHz,280e6);assert.equal(decodeClocks(targetPort('stm32h7b0'),b0,25e6).traceHz,140e6);
+const b0Trace280={...b0,pllDiv:111|(1<<9)|(1<<24)};
+assert.equal(decodeClocks(targetPort('stm32h7b0'),b0Trace280).knownHz,null,'an external HSE rate must be supplied');
+assert.equal(decodeClocks(targetPort('stm32h7b0'),b0Trace280,25e6).coreHz,280e6);
+assert.equal(decodeClocks(targetPort('stm32h7b0'),b0Trace280,25e6).traceHz,280e6,'H7B0 fixture PLL1_R is 280 MHz');
 assert.equal(decodeClocks(targetPort('stm32h743'),h7).knownHz,null);assert.equal(decodeClocks(targetPort('stm32h743'),{...h7,pllConfig:1<<16},8e6).traceReady,false);
 assert.throws(()=>decodeClocks(targetPort('stm32h743'),{...h7,cfgr:0x18},8e6),/尚未稳定/);
 assert.throws(()=>targetInfo({cpuid:0x410fc241,device:0x413,registers:f4,hseHz:8e6,traceHz:84e6}),/Trace频率与 RCC/);
