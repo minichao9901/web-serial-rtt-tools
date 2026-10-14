@@ -209,7 +209,7 @@ async function saveSourceStore(store){
   log(store.summary()+'；按需读取 '+count+' 个配套文件，采集请求只传快照编号');
   for(const failure of failed)log(failure.error);
   if(state.current&&history.result&&info.sha256===history.result.elf.sha256){
-    await api('sources/'+state.current,{elfId:info.elfId,sourceSnapshot:saved.snapshot});history.sources.clear();if(history.selected!==null)await history.select(history.selected);
+    await api('sources/'+state.current,{elfId:info.elfId,sourceSnapshot:saved.snapshot});await history.refreshSources();
   }
   $('job-state').classList.remove('bad');$('job-state').textContent='配套源码已保存，可继续采集';
 }

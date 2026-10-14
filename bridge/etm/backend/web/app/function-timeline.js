@@ -58,7 +58,7 @@ export function bindFunctionTimeline(canvas,{onRange,onSelect,onError}){
     const rect=canvas.getBoundingClientRect(),x=Math.max(0,Math.min(rect.width,event.clientX-rect.left));
     const left=Number(canvas.dataset.plotLeft||0),plotWidth=Number(canvas.dataset.plotWidth||1),range=data?.range||{start:0,end:0};
     const pct=Math.max(0,Math.min(1,(x-left)/plotWidth));
-    return {x,seq:Math.min(range.end,Math.max(range.start,range.start+Math.floor(pct*(range.end-range.start+1)))),pct,rect};
+    return {x,seq:Math.min(range.end,Math.max(range.start,range.start+Math.floor(pct*(range.end-range.start+1)))),pct,rect,left,plotWidth};
   };
   canvas.tabIndex=0;canvas.setAttribute('role','slider');canvas.setAttribute('aria-label','执行序号函数轨迹；左右键定位，拖动选择区间');canvas.style.touchAction='none';
   canvas.addEventListener('pointerdown',event=>{
@@ -71,7 +71,7 @@ export function bindFunctionTimeline(canvas,{onRange,onSelect,onError}){
     if(p.x<Number(canvas.dataset.plotLeft||0)){canvas.title='';return;}
     const index=Math.max(0,Math.min((data.binCount||1)-1,Math.floor(p.pct*(data.binCount||1))));
     const occupied=(data.lanes||[]).filter(lane=>lane.bins?.[index]).map(lane=>lane.name+' '+number(lane.bins[index])+' 条');
-    const span=Math.max(1,data.range.end-data.range.start+1),marker=(data.markers||[]).map(item=>({item,distance:Math.abs(left+(item.seq-data.range.start)/span*plotWidth-p.x)})).filter(entry=>entry.distance<=8).sort((a,b)=>a.distance-b.distance)[0]?.item;
+    const span=Math.max(1,data.range.end-data.range.start+1),marker=(data.markers||[]).map(item=>({item,distance:Math.abs(p.left+(item.seq-data.range.start)/span*p.plotWidth-p.x)})).filter(entry=>entry.distance<=8).sort((a,b)=>a.distance-b.distance)[0]?.item;
     const markerTypes=marker?.types||((marker?.type!==undefined)?{[marker.type]:1}:null);
     const markerDetail=marker&&markerTypes?Object.entries(markerTypes).map(([type,count])=>`${eventNames[type]||'ETM 事件'} ${number(count)} 个`).join('；'):'';
     canvas.title='#'+number(p.seq)+(occupied.length?' · '+occupied.join('；'):' · 当前分辨率下无路径记录')+(marker?` · #${number(marker.startSeq??marker.seq)}～#${number(marker.endSeq??marker.seq)} ${markerDetail}`:'');

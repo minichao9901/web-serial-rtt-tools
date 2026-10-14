@@ -80,5 +80,32 @@ class PortableTests(unittest.TestCase):
             manifest=json.loads(archive.read('etm-bridge-kit/package-manifest.json'))
             for item in manifest['files']:
                 self.assertEqual(hashlib.sha256(archive.read('etm-bridge-kit/'+item['name'])).hexdigest(),item['sha256'])
+    def test_source_snapshot_refreshes_an_already_built_index(self):
+        import io
+        sample=self.home/'runtime/backend/demo/sample.etmrecord'
+        buffer=io.BytesIO()
+        with zipfile.ZipFile(sample) as original,zipfile.ZipFile(buffer,'w',zipfile.ZIP_DEFLATED) as copy:
+            sources=json.loads(original.read('sources.json'))
+            for name in original.namelist():copy.writestr(name,b'{}' if name=='sources.json' else original.read(name))
+        boundary='portable-source-regression'
+        body=(f'--{boundary}\r\nContent-Disposition: form-data; name="capture"; filename="without-sources.etmrecord"\r\nContent-Type: application/octet-stream\r\n\r\n'.encode()+buffer.getvalue()+f'\r\n--{boundary}--\r\n'.encode())
+        request=Request(self.base+'etm/api/import',data=body,headers={'Content-Type':'multipart/form-data; boundary='+boundary})
+        with urlopen(request,timeout=90) as response:sid=json.load(response)['record']
+        job=self.api('etm/api/decode/'+sid,{})['job']
+        for attempt in range(180):
+            state=self.api('etm/api/jobs/'+job)
+            if state['state'] in ['done','error']:break
+            time.sleep(.2)
+        self.assertEqual(state['state'],'done',state.get('error'))
+        overview=self.api('etm/api/browse/'+sid+'/overview')
+        file=next(name for name in overview['sourceFiles'] if name.endswith('/main.c') and sources.get(name))
+        from urllib.parse import quote
+        source_route='etm/api/browse/'+sid+'/source?file='+quote(file,safe='')
+        self.assertFalse(self.api(source_route)['text'])
+        elf=self.api('etm/api/record-elf/'+sid)
+        saved=self.api('etm/api/source-snapshots',dict(elfId=elf['elfId'],sources={name:text for name,text in sources.items() if name in elf['sourceFiles']},complete=True))
+        self.api('etm/api/sources/'+sid,dict(elfId=elf['elfId'],sourceSnapshot=saved['snapshot']))
+        self.assertEqual(self.api(source_route)['text'],sources[file])
+        self.results.append(dict(sourceRefreshRecord=sid,sourceFile=file,bytes=len(sources[file].encode()),indexRebuilt=True))
 
 if __name__=='__main__':unittest.main()

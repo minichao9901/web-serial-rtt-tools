@@ -1,0 +1,38 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {bindFunctionTimeline} from '../../bridge/etm/backend/web/app/function-timeline.js';
+import {HistoryView} from '../../bridge/etm/backend/web/app/history.js';
+
+test('hovering an ETM marker works at original and resized plot geometry',()=>{
+  globalThis.window={devicePixelRatio:1};globalThis.ResizeObserver=class{observe(){}disconnect(){}};
+  const events=new Map();let width=800;
+  const canvas={hidden:false,dataset:{},style:{},getContext:()=>new Proxy({},{get:()=>()=>{}}),getBoundingClientRect:()=>({left:40,width}),setAttribute(){},addEventListener:(name,fn)=>events.set(name,fn)};
+  const plot=bindFunctionTimeline(canvas,{onRange(){},onSelect(){},onError:error=>{throw error;}});
+  plot.setData({range:{start:0,end:100,totalStart:0,totalEnd:100},binCount:2,lanes:[{name:'main',records:10,bins:[5,5]}],markers:[{seq:50,type:9}]});
+  const hoverMarker=()=>events.get('pointermove')({clientX:40+Number(canvas.dataset.plotLeft)+50/101*Number(canvas.dataset.plotWidth)});
+  assert.doesNotThrow(hoverMarker);assert.match(canvas.title,/中断进入/);
+  width=400;plot.redraw();assert.doesNotThrow(hoverMarker);assert.match(canvas.title,/中断进入/);plot.destroy();
+});
+
+class Element{
+  constructor(){this.children=[];this.value='instruction';this.offsetTop=0;this.classList={toggle(){}};this._text='';}
+  set textContent(text){this._text=text;this.children=[];}get textContent(){return this._text+this.children.map(c=>c.textContent).join('');}
+  append(...children){this.children.push(...children);}replaceChildren(...children){this._text='';this.children=children.flatMap(c=>c.fragment?c.children:[c]);}
+  querySelectorAll(){return [];}querySelector(){return null;}
+}
+test('selected mapped source refreshes from an empty cache; libc remains unmapped and can navigate to source',async()=>{
+  const elements=new Map();globalThis.document={getElementById:id=>{if(!elements.has(id))elements.set(id,new Element());return elements.get(id);},createElement:()=>new Element(),createDocumentFragment:()=>Object.assign(new Element(),{fragment:true})};
+  document.getElementById('nav-mode');
+  let available='';const file='E:/build/src/main.c';const calls=[];
+  const history=Object.assign(Object.create(HistoryView.prototype),{range:null,view:'instructions',result:{},sid:'sample',selectRevision:0,sources:new Map(),timelineChart:{setCursor(){}},render:async()=>{},onError:error=>{throw error;},api:async path=>{
+    calls.push(path);
+    if(path.includes('/navigate?'))return {seq:1};
+    if(path.includes('/source?'))return {text:available};
+    const mapped=path.endsWith('/1');return {stackBasis:'trace',callPath:[],event:{seq:mapped?1:0,kind:'instruction',pc:mapped?0x8000802:0x8003d86,function:mapped?'main':'memset',file:mapped?file:'',line:mapped?2:null,bytes:'00',mnemonic:'nop',operands:'',executed:true}};
+  }});
+  await history.select(1);assert.match(elements.get('source-code').textContent,/尚未载入/);
+  available='int main(void) {\n  return 0;\n}';await history.refreshSources();assert.match(elements.get('source-code').textContent,/return 0/);
+  await history.select(0);const box=elements.get('source-code');assert.match(box.textContent,/memset.*没有 DWARF/);assert.doesNotMatch(box.textContent,/return 0/);
+  await box.children[1].children[1].onclick();assert.match(calls.findLast(path=>path.includes('/navigate?')),/mode=source/);assert.match(box.textContent,/return 0/);
+  assert.equal(elements.get('nav-mode').value,'instruction');
+});
