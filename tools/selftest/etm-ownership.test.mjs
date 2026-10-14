@@ -1,0 +1,17 @@
+import assert from 'node:assert/strict';
+import {createProbeManager} from '../../app/core/probe-users.js';
+import {EtmView} from '../../app/etm/view.js';
+const view=new EtmView();let connected=false,busy=false,releases=0,rttActive=true,rttReleased=0;
+view.bridge={probe:()=>connected?{}:null,busy:()=>busy,release:async()=>{connected=false;releases++;},summary:()=>({})};
+const tools={etm:view,rtt:{probe:{},disconnect:async()=>{rttActive=false;rttReleased++;}}};
+const manager=createProbeManager(tools,{locks:null});view.probeManager=manager;
+await view.run(async()=>{connected=true;});
+assert.equal(rttReleased,1);assert.equal(rttActive,false);assert.ok(manager.leases.has('etm'));
+busy=true;
+await assert.rejects(manager.run('dbg',async()=>{}),/ETM.*正在使用/);
+assert.equal(connected,true);assert.equal(releases,0);
+busy=false;
+await manager.run('dbg',async()=>{});
+assert.equal(connected,false);assert.equal(releases,1);assert.equal(manager.leases.has('etm'),false);
+connected=true;busy=true;await assert.rejects(view.releaseProbe(),/先停止采集/);assert.equal(connected,true);
+console.log('ETM ownership: RTT handoff, active capture protection and confirmed disconnect PASS');

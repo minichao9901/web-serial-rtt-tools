@@ -29,6 +29,7 @@
 | J-Scope 波形 | 1–8 通道变量采集、速率标定、触发、游标、CSV / 原始包与分项质量报告 |
 | 烧录器 | ELF / HEX / BIN 的擦除、编程、校验和复位；按支持的目标算法工作 |
 | SWO PC 采样 | SWO→VCOM 录制、CPU / Trace 时钟识别与收发匹配、带宽计算器；ELF / 源码离线分析、热点、逐样本回放与完整导出 |
+| ETM 执行轨迹 | 更多功能中的完整内嵌页面；断点起点、Kingst联动采集、OpenCSD指令解码、Timeline/火焰图与源码对照；需要本地服务 |
 | 调试器 | 源码断点、单步、变量、调用栈与 RTT；ARM / RV32 异常诊断及现场报告 |
 | USB→SPI/QSPI | 单/双/四线事务、命令表、寄存器、脚本、实时值、NOR Flash 与回环测试 |
 | SPI/QSPI 屏 | 初始化表解析与重放、图案 / 图片 / 动画 / 视频、局部刷新及支持的读回模式 |
@@ -37,6 +38,8 @@
 | 工程生成 | 从 Keil `.uvprojx` 生成调试 Makefile、脚本及可选本地桥包 |
 
 ## SWO：记录、离线分析与源码回放
+
+ETM使用 [本地集成入口与说明](docs/etm-integration.md)：`pwsh -File tools/dev/start-etm.ps1`，打开 `http://127.0.0.1:8878/#etm`。需要同级的更新版 `web-etm-trace` 工程及KingstVIS。
 
 打开 [SWO 执行轨迹](https://minichao9901.github.io/web-serial-rtt-tools/#swo)，录制一段目标的 DWT PC 采样数据，停止后用匹配的 ELF 和源码分析。也可直接载入 [F103CB 实测示例](samples/swo/README.md)，无需连接硬件。
 

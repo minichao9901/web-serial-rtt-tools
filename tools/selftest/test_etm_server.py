@@ -1,0 +1,40 @@
+import importlib.util
+import tempfile
+import unittest
+from pathlib import Path
+from werkzeug.test import Client
+from werkzeug.wrappers import Response
+ROOT=Path(__file__).resolve().parents[2]
+spec=importlib.util.spec_from_file_location('toolbox_etm_launcher',ROOT/'tools/dev/serve-etm.py')
+launcher=importlib.util.module_from_spec(spec);spec.loader.exec_module(launcher)
+
+class IntegratedServerTests(unittest.TestCase):
+    def setUp(self):
+        self.tmp=tempfile.TemporaryDirectory();root=Path(self.tmp.name)
+        self.main=root/'main';self.main.mkdir();(self.main/'index.html').write_text('toolbox')
+        self.etm=root/'trace';(self.etm/'web/app').mkdir(parents=True)
+        (self.etm/'web/index.html').write_text('<head><link href="/style.css"></head><body id="etm-app"><header><button id="toggle-settings">settings</button><button id="help">help</button></header><div class="record-toolbar"></div><script type="module" src="/app/view.js"></script></body>')
+        (self.etm/'web/app/embedding.js').write_text('export const protocol=1;')
+        (self.etm/'web/app/view.js').write_text('export const view=1;')
+        (self.etm/'server.py').write_text('from flask import Flask,jsonify,request\napp=Flask(__name__,static_folder="web",static_url_path="")\n@app.get("/")\ndef index():return "old"\n@app.get("/api/elf")\ndef elf():return jsonify(download=request.script_root+"/api/record-firmware/test")\n')
+        self.client=Client(launcher.create_application(self.etm,self.main),Response)
+    def tearDown(self):self.tmp.cleanup()
+    def get(self,path):return self.client.get(path,environ_overrides={'REMOTE_ADDR':'127.0.0.1'})
+    def test_root_and_embedded_same_origin(self):
+        r=self.get('/');self.assertEqual(r.text,'toolbox');r.close()
+        r=self.get('/etm/?embedded=1');self.assertEqual(r.status_code,200)
+        self.assertIn('data-api-base="/etm/api/"',r.text);self.assertIn('src="/etm/app/view.js"',r.text)
+        self.assertEqual(r.text.count('id="toggle-settings"'),1)
+        self.assertGreater(r.text.index('id="toggle-settings"'),r.text.index('class="record-toolbar"'))
+        self.assertEqual(self.get('/etm/integration.json').json['protocol'],1)
+    def test_etm_assets_resolve_to_trace_repository_not_process_cwd(self):
+        r=self.get('/etm/app/view.js');self.assertEqual(r.status_code,200);self.assertEqual(r.text,'export const view=1;')
+        self.assertIn('javascript',r.content_type);self.assertEqual(r.headers['Cache-Control'],'no-store');r.close()
+    def test_download_urls_keep_mount_prefix(self):
+        self.assertEqual(self.get('/etm/api/elf').json['download'],'/etm/api/record-firmware/test')
+    def test_private_root_files_and_remote_clients_are_rejected(self):
+        for path in ['/.git/config','/records/private.json','/tmp/secret.txt']:
+            self.assertEqual(self.get(path).status_code,404)
+        self.assertEqual(self.client.get('/',environ_overrides={'REMOTE_ADDR':'192.0.2.5'}).status_code,403)
+
+if __name__=='__main__':unittest.main()

@@ -34,6 +34,11 @@ export const PROBE_FEATURES = Object.freeze([
     },
   },
   {
+    id:'etm',label:'ETM 执行轨迹',client:t=>t.etm,usbKind:'dap',
+    resources:['target-engine','debug-pins','dap-bulk','probe-clock'],
+    active:t=>!!t.etm?.probe,release:t=>t.etm?.releaseProbe(),guarded:t=>!!t.etm?.busy,
+  },
+  {
     id: 'scope', label: 'J-Scope', client: t => t.scope, usbKind: 'scope',
     resources: ['target-engine', 'debug-pins', 'scope-stream'],
     active: t => !!(t.scope && !t.scope.usingMock &&

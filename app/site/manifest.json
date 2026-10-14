@@ -25,7 +25,7 @@
     "app/core/pace.js": "ac27d5db130cc32033221c5b96c1f2fa5c108450a8ddbc706a174dc6c2ab1b8e",
     "app/core/probe-bus.js": "b222ae8ec9d964368c49a1a8c160835a5441430eb763da697e5a94f2670dbed0",
     "app/core/probe-manager.js": "8165fde566e8f90e137b83bd6deac3afede1989342ce968c32868093eac637a9",
-    "app/core/probe-users.js": "9044711aa6e8125da1fb8451da664084691c205188f868d035e6453a29e85330",
+    "app/core/probe-users.js": "33dab8d6b86d9d031176dbcfd7cc7e24fbe882d1b19c3f5488d9e72eacc331aa",
     "app/core/recorder.js": "19d4988d29036d2463cadf98a60e4e0eb212441fb3f7cf4c68e8f9f3cdc14c8d",
     "app/core/rxview.js": "61c48066e9d895222e38869a4147b0e8b2bc26ed8a84bbd435f8cf042c7a26c5",
     "app/core/stats.js": "08525d1f3e7da711f5d56d1525af18dfe1d893708d8a8d51638b2892881542b2",
@@ -59,6 +59,7 @@
     "app/elf/dwarf.js": "5cedbe0b976a6e85a0bfefc434dce89f774e2cb226885774b78a4041b953a564",
     "app/elf/elf.js": "01906fc7a926c2c51f69d3240b28a8484d90542f50a8c63d4aa70b6d201d158e",
     "app/elf/lines.js": "eb2a9815d75c298981ec9c830b9d94058f4757a59064c9d0ee9d2d09763bdd7c",
+    "app/etm/view.js": "c837bbed78f8ed8fd8e81b17ddfaf1046f05d88e30328b7d64d9501d4901939d",
     "app/flash/algos.js": "eaf20e3215338cb40e897932ef67d2ae2b1f914cdbfe83655c4ce0f087a17064",
     "app/flash/devid.js": "4a98855b9cec59eb1290f512952031d7372d346f1488d351f0c4f78b4a43c538",
     "app/flash/hpm/algo.js": "9e32e2f3b636be95048d05116b91391fba325b996e99373022246285aa06422b",
@@ -93,7 +94,7 @@
     "app/i2c/runner.js": "75b765d6f84a314fa6cabb3d0d8f3a38637a364c6e9d40eb7b9d63cf41e4df88",
     "app/i2c/session.js": "d139098f2794e67b641cd560f45f3a646faf6b2f236b7f35c738d9d4b7504a60",
     "app/i2c/view.js": "014c10bd58c87887d2731481ec2a546f9a5775e7550a58ab6e19edf2e9b31d74",
-    "app/main.js": "9653b8cb460cc35bedf7a8db3ca7b054b20b3650d6329b57c0c466ca0b4f9b5a",
+    "app/main.js": "4f0543eefe54538d09c29b6cc4248effe1c350402bec481d9508c1d7c8efbb56",
     "app/rtt/bridge.js": "483cdf7c69882f63b3930619a8a9b78fefc38f2e3c079b64b167918e560d567e",
     "app/rtt/dap-webusb.js": "3df7810ee13fd255dca0887553de5a01e94df6424cbccfb57c33ad4a00630776",
     "app/rtt/elf.js": "76a6278965724f52133467f8f07d4472077c5a9c35ca187fece59abad42405c7",
@@ -162,6 +163,6 @@
     "app/ui/workspace.js": "25b6ce94e5d90302a37e6cec2b7e35c975af95ce29bef1094a4493f3890fc0b7",
     "app/ui/zoom-controls.js": "d7520d813135941c8b0e8f5601722c45f53d2d2ed8a940f789bc032da0180ff9"
   },
-  "outputSha256": "a9e2119f4335d6ea5bc0be18d51794ab3c65fddba0bce9a427ed15f7dc5ceae3",
-  "outputBytes": 1283689
+  "outputSha256": "77fb971e4ae7faae81e2d33118f5919b0e5f32937d1827b46631f274f3cb5e28",
+  "outputBytes": 1285886
 }

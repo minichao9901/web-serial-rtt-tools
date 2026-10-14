@@ -37,6 +37,12 @@ HSS_CPU     ?= 72
 HSS_PERIODS ?= 2,2.25,2.5,3
 
 .DEFAULT_GOAL := help
+.PHONY: serve-etm test-etm-integration
+serve-etm:
+	pwsh -NoProfile -File tools/dev/start-etm.ps1
+test-etm-integration:
+	$(NODE) tools/selftest/etm-ownership.test.mjs
+	python -m unittest discover -s tools/selftest -p test_etm_server.py
 .PHONY: test-hss-rate
 # 真机 HSS/JScope 测速：备份原 Flash，烧录额定主频测试固件，再跑真实网页。
 # make test-hss-rate BOARD=ze；依赖探针、匹配的 F103 板和已授权浏览器。
