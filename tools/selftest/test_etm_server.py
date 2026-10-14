@@ -40,5 +40,6 @@ class IntegratedServerTests(unittest.TestCase):
         for path in ['/.git/config','/records/private.json','/tmp/secret.txt']:
             self.assertEqual(self.get(path).status_code,404)
         self.assertEqual(self.client.get('/',environ_overrides={'REMOTE_ADDR':'192.0.2.5'}).status_code,403)
+        self.assertEqual(self.client.get('/',headers={'Host':'attacker.example:8878'},environ_overrides={'REMOTE_ADDR':'127.0.0.1'}).status_code,403)
 
 if __name__=='__main__':unittest.main()

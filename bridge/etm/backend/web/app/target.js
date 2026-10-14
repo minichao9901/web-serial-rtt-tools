@@ -6,9 +6,9 @@ import {withCleanup} from './operation.js';
 import {decodeFpCtrl,encodeComparator,canBreak,compAddr} from './shared/dbg/bp.js';
 import {inspectF103,stopF103,configureF103,restoreF103} from './target-f103.js';
 import {traceCapabilities} from './trace-options.js';
+import {waitMs as sleep} from './shared/core/pace.js';
 
 const ETM=0xe0041000,FUNNEL=0x5c013000,ETF=0x5c014000,TPIU=0x5c015000;
-const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 const hex=n=>'0x'+(n>>>0).toString(16).padStart(8,'0');
 
 export class EtmTarget {

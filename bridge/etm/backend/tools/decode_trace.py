@@ -40,6 +40,9 @@ def decoder_config(config=None):
         raise ValueError('不支持的 Trace 协议：' + str(protocol))
     if not 1 <= int(config['traceid']) <= 0x6F:
         raise ValueError('无效 trace ID。')
+    for key in V3_REG_ORDER if protocol=='ETMv3' else REG_ORDER:
+        if isinstance(config[key],bool) or not isinstance(config[key],int) or not 0<=config[key]<=0xffffffff:
+            raise ValueError('ETM 寄存器必须是 32 位无符号整数：'+key)
     return config
 
 

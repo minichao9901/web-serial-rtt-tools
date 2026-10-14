@@ -1,16 +1,17 @@
 import {SourceStore} from './shared/dbg/source.js';
 import {readReferencedSources,sourceBatches} from './source-snapshot.js';
 import {withCleanup} from './operation.js';
+import {requestJson,pollJob} from './jobs.js';
 import {embeddedHost,runEmbedded,PROBE_ACTIONS} from './embedding.js';
 import {EtmTarget} from './target.js';
 import {traceSettings,traceSettingsText} from './trace-options.js';
 import {HistoryView} from './history.js';
 import {COMMON_TARGETS,completeClocks,targetPort} from './clock.js';
 const $=id=>document.getElementById(id),hex=n=>'0x'+(n>>>0).toString(16).padStart(8,'0'),sleep=ms=>new Promise(r=>setTimeout(r,ms));
-const state={records:[],current:null,job:null,operation:false,elfInfo:null,elfId:null,elfFile:null,sourceFiles:{},sourceSnapshot:null,sourceCompat:false,sources:new SourceStore(),entryAddress:null,hseValues:{stm32h7b0:25},symbolAddress:null,waiting:false,traceConfigDirty:false};
+const state={records:[],current:null,job:null,operation:false,elfInfo:null,elfId:null,elfFile:null,sourceFiles:{},sourceSnapshot:null,sourceCompat:false,sources:new SourceStore(),entryAddress:null,hseValues:{stm32h7b0:25},symbolAddress:null,pendingBreakpointRestore:[],lastTraceConfig:null,waiting:false,traceConfigDirty:false};
 const host=embeddedHost(),target=new EtmTarget(log,{host});
 const apiBase=document.body.dataset.apiBase||'/api/';
-async function api(path,body){const response=await fetch(apiBase+path,body===undefined?{}:{method:'POST',...(body instanceof FormData?{body}:{headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})});if(response.status===413)throw Error('提交内容超过本地服务容量限制；请更新页面并重新选择源码目录，按 ELF 匹配所需文件');const data=await response.json();if(!response.ok)throw Error(data.error||response.statusText);return data;}
+async function api(path,body){return requestJson(apiBase+path,body===undefined?{}:{method:'POST',...(body instanceof FormData?{body}:{headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})});}
 function log(message){$('log').textContent=new Date().toLocaleTimeString('zh-CN')+' '+message+'\n'+$('log').textContent;controls();}
 function error(e){log(e.message);$('job-state').textContent=e.message;$('job-state').classList.add('bad');}
 const history=new HistoryView(api,error);
@@ -20,7 +21,7 @@ function controls(){const busy=state.operation||!!state.job,connected=!!target.p
   $('reset').disabled=!connected||busy||state.entryAddress===null;$('run-to').disabled=!connected||busy||state.entryAddress===null;
   $('apply-config').disabled=!connected||busy||!target.info?.traceSupported||!state.elfInfo||state.entryAddress===null;
   $('connect').disabled=connected||busy;$('disconnect').disabled=!connected||busy;$('remove-break').disabled=busy||!target.breakpoints.items.length;$('cancel-wait').hidden=!target.entryBreak&&!state.waiting;
-  $('start').disabled=busy||!state.elfInfo||($('sync').checked&&(!target.info?.traceSupported||!connected||$('entry-before').checked&&state.entryAddress===null));$('stop').disabled=!state.job;
+  $('start').disabled=!!state.failedCaptureJob||busy||!state.elfInfo||($('sync').checked&&(!target.info?.traceSupported||!connected||$('entry-before').checked&&state.entryAddress===null));$('stop').disabled=!state.failedCaptureJob&&!(state.jobKind==='capture'&&['queued','starting','armed'].includes(state.jobPhase));
   for(const id of ['open-record','choose-elf','choose-sources','import'])$(id).disabled=busy;
   $('choose-sources').disabled=busy||(!state.elfInfo&&!history.result);
   for(const id of ['symbol-search','break-command','add-break'])$(id).disabled=busy||!state.elfInfo;
@@ -38,6 +39,11 @@ function controls(){const busy=state.operation||!!state.job,connected=!!target.p
 }
 function panel(name){for(const b of document.querySelectorAll('[data-panel]')){const active=b.dataset.panel===name;b.setAttribute('aria-selected',String(active));b.tabIndex=active?0:-1;$('panel-'+b.dataset.panel).hidden=!active;}document.querySelector('.sidebar-content').scrollTop=0;}
 for(const b of document.querySelectorAll('[data-panel]')){b.onclick=()=>panel(b.dataset.panel);b.onkeydown=e=>{const names=['target','clock','trace','files'],i=names.indexOf(b.dataset.panel);if(['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();const next=e.key==='Home'?0:e.key==='End'?3:(i+(e.key==='ArrowLeft'?3:1))%4;panel(names[next]);$('tab-'+names[next]).focus();}};}
+function externalDecodeConfig(){
+  const config=target.config||state.lastTraceConfig;
+  if(!config)throw Error('直接采集或导入原始波形前，请先连接目标并读取 ETM 配置；不能假定 ETMv4。记录包可直接导入');
+  return {...config,traceid:Number($('traceid').value)};
+}
 function options(){return {traceid:Number($('traceid').value),branchBroadcast:$('branch-broadcast').checked,returnStack:$('return-stack').checked,cycleCount:$('cycles').checked,pinSpeed:Number($('pin-speed').value)};}
 function updateTraceConfigState(info=target.info){
   const label=$('trace-config-state');if(!label)return;
@@ -76,21 +82,26 @@ function renderBreakpoints(){
   $('break-capacity').textContent=target.probe&&target.breakpoints.capacity!==null?target.breakpoints.items.filter(b=>b.lease).length+' / '+target.breakpoints.capacity:'未连接';
   $('break-state').textContent=state.entryAddress===null?'请选择一个断点作为采集起点':'采集起点 '+hex(state.entryAddress);controls();
 }
-async function perform(fn){if(state.operation||state.job)return;state.operation=true;const hardware=!!target.probe;state.hardwareOperation=hardware;$('job-state').classList.remove('bad');controls();try{await(hardware?runEmbedded(host,fn):fn());}catch(e){error(e);}finally{state.operation=false;state.hardwareOperation=false;renderSymbols();renderBreakpoints();controls();}}
+async function perform(fn,{hardware=!!target.probe}={}){if(state.operation||state.job)return;state.operation=true;state.hardwareOperation=hardware;$('job-state').classList.remove('bad');controls();try{await(hardware?runEmbedded(host,fn):fn());}catch(e){error(e);}finally{state.operation=false;state.hardwareOperation=false;renderSymbols();renderBreakpoints();controls();}}
 async function addBreakpoint(item){const bp=target.breakpoints.add(item);if(state.entryAddress===null)state.entryAddress=bp.address;
   if(target.probe){await target.verifyElf(state.elfInfo);await target.breakpoints.arm(bp);await showTarget(await target.inspect());}$('job-state').textContent='已添加 '+bp.label+(target.probe?' · 硬件断点已生效':' · 待连接后下发');log('添加断点 '+bp.label+' · '+hex(bp.address)+(target.probe?'；目标暂停':'；连接后下发'));}
 async function commandBreakpoint(){const data=await api('elf/'+state.elfId+'/breakpoint',{spec:$('break-command').value});
   if(data.candidates.length===1){await addBreakpoint(data.candidates[0]);$('break-command').value='';$('break-candidates').hidden=true;return;}
   const box=$('break-candidates');box.hidden=false;box.textContent='对应多个指令位置，请选择：';for(const item of data.candidates){const button=document.createElement('button');button.textContent=item.file+':'+item.line+' · '+item.function+' · '+hex(item.address);button.onclick=()=>perform(async()=>{await addBreakpoint(item);box.hidden=true;$('break-command').value='';});box.append(button);}}
 $('break-command-form').onsubmit=e=>{e.preventDefault();perform(commandBreakpoint);};
-function setElf(info,id=null,file=null){state.elfInfo=info;state.elfId=id||info.elfId;state.elfFile=file;state.entryAddress=null;state.symbolAddress=null;state.sourceFiles={};state.sourceSnapshot=null;state.sources=new SourceStore();$('symbol-search').value='';$('elf-label').textContent=(file?.name||info.name)+' · '+info.sha256.slice(0,12);$('sources-label').textContent='目标源码尚未选择；历史记录使用自身快照';$('break-candidates').hidden=true;renderSymbols();renderBreakpoints();}
+function setElf(info,id=null,file=null){if(state.elfInfo&&state.elfInfo.sha256!==info.sha256)state.lastTraceConfig=null;state.pendingBreakpointRestore=[];state.elfInfo=info;state.elfId=id||info.elfId;state.elfFile=file;state.entryAddress=null;state.symbolAddress=null;state.sourceFiles={};state.sourceSnapshot=null;state.sources=new SourceStore();$('symbol-search').value='';$('elf-label').textContent=(file?.name||info.name)+' · '+info.sha256.slice(0,12);$('sources-label').textContent='目标源码尚未选择；历史记录使用自身快照';$('break-candidates').hidden=true;renderSymbols();renderBreakpoints();}
 $('symbol-search').oninput=renderSymbols;
 for(const p of COMMON_TARGETS)$('target-profile').append(new Option(p.name,p.id));
-$('target-profile').onchange=()=>{target.profile=$('target-profile').value;const value=state.hseValues[target.profile];$('hse').value=value??'';target.hseHz=value?value*1e6:null;showClocks();};
+$('target-profile').onchange=()=>{target.profile=$('target-profile').value;state.lastTraceConfig=null;const value=state.hseValues[target.profile];$('hse').value=value??'';target.hseHz=value?value*1e6:null;showClocks();};
 $('next-clock').onclick=()=>panel('clock');$('next-trace').onclick=()=>panel('trace');
-async function resumeBreakpoints(items){if(!target.probe)return;const running=!(await target.isHalted());await target.halt();try{await target.breakpoints.resume(items);if(!running)target.breakpoints.hit(await target.pc());}finally{if(running)await target.run();renderBreakpoints();}}
-async function withBreakpointsSuspended(fn){const items=target.breakpoints.items.filter(b=>b.lease);await target.halt();state.waiting=true;return withCleanup(async()=>{await target.breakpoints.suspend();renderBreakpoints();return await fn();},async()=>{state.waiting=false;await resumeBreakpoints(items);},e=>log('断点恢复失败（保留首次错误）：'+e.message));}
-async function showTarget(info){$('target-state').textContent=info.name+' · '+(info.halted?'已暂停':'运行中')+' · DEV_ID '+hex(info.device&4095);$('config-values').textContent=JSON.stringify(info,null,2);
+async function resumeBreakpoints(items){
+  if(!target.probe)return;const running=!(await target.isHalted());await target.halt();
+  await target.breakpoints.resume(items);if(!running)target.breakpoints.hit(await target.pc());
+  if(state.pendingBreakpointRestore===items)state.pendingBreakpointRestore=[];
+  if(running)await target.run();renderBreakpoints();
+}
+async function withBreakpointsSuspended(fn){const items=target.breakpoints.items.filter(b=>b.lease);await target.halt();state.pendingBreakpointRestore=items;state.waiting=true;return withCleanup(async()=>{await target.breakpoints.suspend();renderBreakpoints();return await fn();},async()=>{state.waiting=false;await resumeBreakpoints(items);},e=>log('断点恢复失败（保留首次错误）：'+e.message));}
+async function showTarget(info){state.lastTraceConfig=info.traceSupported&&info.config?{...info.config}:null;$('target-state').textContent=info.name+' · '+(info.halted?'已暂停':'运行中')+' · DEV_ID '+hex(info.device&4095);$('config-values').textContent=JSON.stringify(info,null,2);
   $('target-capability').textContent=info.etmVersion+(info.traceSupported?' · 已适配':' · Trace 待适配');$('target-capability').title=info.traceStatus;$('expected-cpu').max=String(targetPort(info.profile).maxCoreHz/1e6);
   const f103=info.profile==='stm32f103ze';
   if(info.traceSupported&&!state.traceConfigDirty){
@@ -138,16 +149,26 @@ function renderRecordOptions(){
 async function refreshRecords(){state.records=await api('records');renderRecordOptions();}
 $('show-experiments').onchange=renderRecordOptions;
 async function loadRecord(id){if(!id)throw Error('请选择记录');history.range=null;history.rangeHistory=[];history.window=null;$('scope-state').hidden=$('clear-scope').hidden=true;state.current=id;renderRecordOptions();$('records').value=id;const m=state.records.find(r=>r.id===id);
-  if(m&&!m.decoded){history.result=null;history.sid=id;history.selected=null;history.setLoading(false);$('record-description').textContent=m.name;$('metrics').textContent='原始记录';$('quality').textContent=m.error?'失败原因：'+m.error:'已保存波形，尚未解码';$('table-container').textContent='在文件页点击“单独解码”；失败记录保留原始证据';$('source-code').textContent='尚未解码，没有可信源码定位';$('source-location').textContent='';$('selected-instruction').textContent='';$('call-stack').textContent='尚未解码';return;}
+  if(m&&!m.decoded){history.unload(id);history.setLoading(false);$('record-description').textContent=m.name;$('metrics').textContent='原始记录';$('quality').textContent=m.error?'失败原因：'+m.error:'已保存波形，尚未解码';$('table-container').textContent='在文件页点击“单独解码”；失败记录保留原始证据';$('source-code').textContent='尚未解码，没有可信源码定位';$('source-location').textContent='';$('selected-instruction').textContent='';$('call-stack').textContent='尚未解码';return;}
   await history.load(id,m?.name);log('已按需载入记录 '+id);controls();
 }
-async function watchJob(id,{resume=false}={}){state.job=id;controls();let resumed=false;try{for(;;){const job=await api('jobs/'+id);$('job-state').textContent={queued:'准备参数',starting:'LA 正在启动',armed:'LA 等待触发',saving:'保存原始数据',decoding:'解码与源码映射',done:'记录已保存',error:'操作失败'}[job.state];$('stop').disabled=!['starting','armed'].includes(job.state);
-  if(resume&&job.state==='armed'&&!resumed){await sleep(100);await target.run();resumed=true;log('LA 已就绪，CPU 从暂停位置继续；等待 D0 触发');}
-  if(job.state==='done'){await refreshRecords();await loadRecord(job.record);return;}
-  if(job.state==='error')throw Error(job.error);await sleep(200);
-}}catch(e){if(resume&&!resumed&&state.job)try{await api('stop/'+state.job,{});}catch{}throw e;}finally{state.job=null;controls();}}
-on('connect',async()=>{target.profile=$('target-profile').value;target.hseHz=null;const info=await target.connect();const hse=state.hseValues[info.profile]??state.hseValues.auto;$('hse').value=hse??'';target.hseHz=hse?hse*1e6:null;if(state.hseValues.auto!==undefined){state.hseValues[info.profile]=hse;delete state.hseValues.auto;}await showTarget(await target.inspect());if(state.elfInfo&&target.breakpoints.items.some(b=>b.enabled)){await target.verifyElf(state.elfInfo);await target.breakpoints.resume();await showTarget(await target.inspect());}});
-on('recover-debug',async()=>{await showTarget(await target.recoverDebugPort());$('job-state').classList.remove('bad');$('job-state').textContent='调试口已恢复，目标暂停；请重新联动采集';});
+async function watchJob(id,{resume=false,kind='decode'}={}){
+  state.job=id;state.jobKind=kind;state.jobPhase='queued';state.captureCancelled=false;controls();
+  try{await pollJob(id,{read:id=>api('jobs/'+id),shouldResume:()=>!state.captureCancelled,
+    onState:job=>{state.jobPhase=job.state;$('job-state').textContent={queued:'准备参数',starting:'LA 正在启动',armed:'LA 等待触发',saving:'保存原始数据',decoding:'解码与源码映射',done:'记录已保存',cancelled:'采集已取消',error:'操作失败'}[job.state];controls();},
+    onResume:resume?async()=>{await target.run();log('LA 已就绪，CPU 从暂停位置继续；等待 D0 触发');}:null,
+    onDone:async job=>{await refreshRecords();await loadRecord(job.record);}
+  });}catch(e){
+    if(kind==='capture'){
+      state.failedCaptureJob=id;
+      try{await api('stop/'+id,{});state.failedCaptureJob=null;}
+      catch(cleanup){log('采集停止未确认：'+cleanup.message+'；请点击“停止采集”重试，确认前不能新建采集');}
+    }
+    throw e;
+  }finally{state.job=null;state.jobKind=null;state.jobPhase=null;controls();}
+}
+on('connect',async()=>{state.lastTraceConfig=null;target.profile=$('target-profile').value;target.hseHz=null;const info=await target.connect();const hse=state.hseValues[info.profile]??state.hseValues.auto;$('hse').value=hse??'';target.hseHz=hse?hse*1e6:null;if(state.hseValues.auto!==undefined){state.hseValues[info.profile]=hse;delete state.hseValues.auto;}await showTarget(await target.inspect());if(state.elfInfo&&target.breakpoints.items.some(b=>b.enabled)){await target.verifyElf(state.elfInfo);await target.breakpoints.resume();await showTarget(await target.inspect());}});
+on('recover-debug',async()=>{await target.recoverDebugPort();if(state.pendingBreakpointRestore.length){await target.verifyElf(state.elfInfo);await resumeBreakpoints(state.pendingBreakpointRestore);}await showTarget(await target.inspect());$('job-state').classList.remove('bad');$('job-state').textContent='调试口已恢复，目标暂停；请重新联动采集';});
 async function disconnectTarget(){await target.disconnect();target.info=null;showClocks();$('target-state').textContent='探针已断开';$('live-pc').textContent='当前 PC：未连接';renderBreakpoints();controls();}
 on('disconnect',disconnectTarget);
 on('read-config',async()=>{const info=await target.inspect();state.traceConfigDirty=false;await showTarget(info);});on('read-clock',async()=>showTarget(await target.inspect()));on('halt',async()=>{await target.halt();await showTarget(await target.inspect());});
@@ -159,7 +180,12 @@ on('cancel-wait',async()=>{target.cancelEntry=true;log('已请求取消等待断
 on('apply-config',async()=>{entry(true);const info=await target.configure(options());state.traceConfigDirty=false;await showTarget(info);});on('restore-config',async()=>{await target.restore();state.traceConfigDirty=false;await showTarget(await target.inspect());log('原 trace 设置已恢复并重新回读');});
 on('check-la',async()=>{const s=await api('status');$('la-state').textContent='Kingst 已连接';$('la-state').className='status good';const old=$('rate').value;$('rate').replaceChildren(...s.rates.filter(n=>n>=50000000).map(n=>new Option(n/1e6+' MSa/s',n)));$('rate').value=s.rates.includes(Number(old))?old:String(s.rates[0]);clockPlan();});
 on('open-record',()=>loadRecord($('records').value));
-on('start',async()=>{const sync=$('sync').checked,channels=$('channels').value.split(',').map(s=>Number(s.trim()));if(channels.length!==5||new Set(channels).size!==5||channels.some(c=>!Number.isInteger(c)||c<0||c>15))throw Error('需要五个不同的 CH0～15 通道');
+on('start',async()=>{const sync=$('sync').checked,tokens=$('channels').value.split(','),channels=tokens.map(s=>Number(s.trim()));if(tokens.some(t=>!t.trim())||channels.length!==5||new Set(channels).size!==5||channels.some(c=>!Number.isInteger(c)||c<0||c>15))throw Error('需要五个不同且不为空的 CH0～15 通道');
+  const rate=Number($('rate').value),seconds=Number($('duration').value)/1000,threshold=Number($('threshold').value),fraction=Number($('fraction').value),requested=options();
+  if(!Number.isInteger(rate)||!(rate>0&&rate<=500000000&&seconds>0&&seconds<=2&&rate*seconds<=100000000))throw Error('采集参数无效：时间上限 2 秒、深度上限 1 亿样本；尚未操作目标');
+  if(!Number.isFinite(threshold)||threshold< -4||threshold>4||!(fraction>0&&fraction<1))throw Error('阈值或取样相位无效；尚未操作目标');
+  if(!Number.isInteger(requested.traceid)||requested.traceid<1||requested.traceid>111)throw Error('Trace ID 范围为 1～111；尚未操作目标');
+  log('采集步骤：检查逻辑分析仪');const available=await api('status');if(!available.rates.includes(rate))throw Error('LA 不支持所选采样率；请选择设备支持的采样率，尚未操作目标');
   const flashLimit=target.info?.flashLimit||0x08020000;
   if(state.elfInfo.segments.some(s=>s.address+atob(s.data).length>flashLimit))throw Error('ELF 超出当前目标的 Trace Flash 范围');
   const captureElf=state.elfInfo,captureElfId=state.elfId,captureSourceSnapshot=state.sourceSnapshot,requestedOptions=options(),selectedEntry=sync&&$('entry-before').checked?entry(true):null;
@@ -167,19 +193,19 @@ on('start',async()=>{const sync=$('sync').checked,channels=$('channels').value.s
   let stage='校验 ELF';
   await withCleanup(async()=>{try{
   log('采集步骤：'+stage);
-  if(sync){if(!target.probe)throw Error('请先连接探针');if(!target.info?.traceSupported)throw Error(target.info?.traceStatus||'目标 trace 未适配');await target.verifyElf(captureElf);stage='暂停本页断点';log('采集步骤：'+stage);suspendedBps=target.breakpoints.items.filter(b=>b.lease);await target.breakpoints.suspend();renderBreakpoints();
+  if(sync){if(!target.probe)throw Error('请先连接探针');if(!target.info?.traceSupported)throw Error(target.info?.traceStatus||'目标 trace 未适配');await target.verifyElf(captureElf);stage='暂停本页断点';log('采集步骤：'+stage);suspendedBps=target.breakpoints.items.filter(b=>b.lease);state.pendingBreakpointRestore=suspendedBps;await target.breakpoints.suspend();renderBreakpoints();
     stage=$('entry-before').checked?$('reset-before').checked?'复位并停在业务起点':'运行至业务起点':'暂停当前目标';log('采集步骤：'+stage);
     if($('entry-before').checked){captureEntry=selectedEntry;await showTarget($('reset-before').checked?await target.reset({address:captureEntry}):await target.runTo(captureEntry));}
     else await target.halt();
     stage='核对实际时钟';log('采集步骤：'+stage);const before=await target.inspect(),c=before.clocks;
     if(!c?.coreHz||!c?.physicalTraceHz||Math.abs(c.coreHz-Number($('expected-cpu').value)*1e6)>100||Math.abs(c.physicalTraceHz-Number($('expected-trace').value)*1e6)>100)throw Error('实际 CPU/TRACECLK 未确定或与预期不一致；目标保持暂停，请在时钟页核对');
     stage='配置 ETM / TPIU';log('采集步骤：'+stage);await showTarget(await target.configure(requestedOptions));config=target.config;
-  }else if(target.config)config=target.config;
+  }else config=externalDecodeConfig();
   stage='启动 LA 并采集';log('采集步骤：'+stage);const created=await api('capture',{rate:Number($('rate').value),seconds:Number($('duration').value)/1000,threshold:Number($('threshold').value),sync,decode:$('auto-decode').checked,clock:channels[0],data:channels.slice(1),fraction:Number($('fraction').value),config,elfId:captureElfId,targetVerified:sync,targetSnapshot:sync?target.info:null,captureScope:sync?'business-unfiltered-window':'externally-configured-window',captureEntry,sourceSnapshot:captureSourceSnapshot});
-  log('联动任务创建；起点 '+(captureEntry===null?'当前暂停位置':hex(captureEntry)));await watchJob(created.job,{resume:sync});
+  log('联动任务创建；起点 '+(captureEntry===null?'当前暂停位置':hex(captureEntry)));await watchJob(created.job,{resume:sync,kind:'capture'});
   }catch(e){throw new Error(stage+'失败：'+e.message,{cause:e});}},async()=>{if(sync&&target.probe){target.assertTransport();await target.clearEntryBreak();await target.restore();await resumeBreakpoints(suspendedBps);await showTarget(await target.inspect());log('本次 trace 配置与断点已恢复；目标状态已刷新');}},e=>log('采集后的清理/回读失败（未覆盖首次错误）：'+e.message));
 });
-on('stop',async()=>{if(state.job)await api('stop/'+state.job,{});},{exclusive:false});
+on('stop',async()=>{state.captureCancelled=true;const id=state.job||state.failedCaptureJob;if(id){await api('stop/'+id,{});state.failedCaptureJob=null;controls();}},{exclusive:false});
 on('decode',async()=>{if(!state.current)throw Error('请选择记录');await watchJob((await api('decode/'+state.current,{})).job);});
 function download(kind){if(!state.current)throw Error('请选择记录');const a=document.createElement('a');a.href=apiBase+'download/'+state.current+'/'+kind+(history.range&&['source','simplified','simplified-html','csv'].includes(kind)?'?fromSeq='+history.range.start+'&toSeq='+history.range.end:'');a.download='';a.click();}
 on('save-record',()=>download('record'));on('export',()=>download($('export-type').value));on('import',()=>$('capture-file').click());on('choose-elf',()=>$('elf-file').click());on('choose-sources',async()=>{
@@ -189,7 +215,7 @@ on('save-record',()=>download('record'));on('export',()=>download($('export-type
   store.setExpectedPaths(paths);
   try{await store.pick();await saveSourceStore(store);}catch(e){if(e.name==='AbortError')return;if(['SecurityError','NotSupportedError','NotAllowedError'].includes(e.name)){state.sourceCompat=true;log('此环境无法使用原生目录授权；再次点击“选择源码目录”将使用兼容选择');return;}throw e;}
 });
-$('elf-file').onchange=async()=>{if(state.operation){error(Error('请等待当前操作完成后再载入 ELF'));return;}state.operation=true;controls();try{const file=$('elf-file').files[0];if(!file)return;const form=new FormData();form.append('elf',file);const info=await api('elf',form);if(target.probe)await target.halt();await target.breakpoints.clear();setElf(info,info.elfId,file);log('ELF 已载入，请添加断点并选择采集起点');}catch(e){error(e);}finally{state.operation=false;$('elf-file').value='';controls();}};
+$('elf-file').onchange=async()=>{if(state.operation||state.job){error(Error('请等待当前操作完成后再载入 ELF'));$('elf-file').value='';return;}try{await perform(async()=>{const file=$('elf-file').files[0];if(!file)return;const form=new FormData();form.append('elf',file);const info=await api('elf',form);if(target.probe)await target.halt();await target.breakpoints.clear();setElf(info,info.elfId,file);log('ELF 已载入，请添加断点并选择采集起点');});}finally{$('elf-file').value='';}};
 async function saveSourceStore(store){
   const info=state.elfInfo||(state.current&&await api('record-elf/'+state.current));
   if(!info)throw Error('请先载入 ELF 或打开历史记录，才能读取配套源码');
@@ -223,7 +249,7 @@ $('sources-files').onchange=async()=>{
     await store.setExpectedPaths(info.sourceFiles);store.indexFileList(files);await saveSourceStore(store);
   }catch(e){error(e);}finally{state.operation=false;$('sources-files').value='';controls();}
 };
-$('capture-file').onchange=async()=>{try{const f=$('capture-file').files[0];if(!f)return;const form=new FormData();form.append('capture',f);if(!f.name.endsWith('.etmrecord')){if(!state.elfInfo)throw Error('导入原始 CSV/BIN 前请在调试页载入匹配 ELF；记录包可直接导入');if(state.elfFile)form.append('elf',state.elfFile);else{const response=await fetch(state.elfInfo.download||apiBase+'record-firmware/'+state.elfId);if(!response.ok)throw Error('先选择匹配 ELF');form.append('elf',new Blob([await response.arrayBuffer()]),'firmware.elf');}form.append('config',JSON.stringify(target.config||{traceid:Number($('traceid').value),config:1}));form.append('fraction',$('fraction').value);for(const [name,text]of Object.entries(state.sourceFiles))form.append('sources',new Blob([text]),name);}const saved=await api('import',form);await refreshRecords();await watchJob((await api('decode/'+saved.record,{})).job);}catch(e){error(e);}finally{$('capture-file').value='';}};
+$('capture-file').onchange=async()=>{if(state.operation||state.job){error(Error('请等待当前操作完成后再导入'));$('capture-file').value='';return;}try{await perform(async()=>{const f=$('capture-file').files[0];if(!f)return;const form=new FormData();form.append('capture',f);if(!f.name.toLowerCase().endsWith('.etmrecord')){if(!state.elfInfo)throw Error('导入原始 CSV/BIN 前请在调试页载入匹配 ELF；记录包可直接导入');if(state.elfFile)form.append('elf',state.elfFile);else{const response=await fetch(state.elfInfo.download||apiBase+'record-firmware/'+state.elfId);if(!response.ok)throw Error('先选择匹配 ELF');form.append('elf',new Blob([await response.arrayBuffer()]),'firmware.elf');}form.append('config',JSON.stringify(externalDecodeConfig()));form.append('fraction',$('fraction').value);for(const [name,text]of Object.entries(state.sourceFiles))form.append('sources',new Blob([text]),name);}const saved=await api('import',form);await refreshRecords();await watchJob((await api('decode/'+saved.record,{})).job);},{hardware:false});}catch(e){error(e);}finally{$('capture-file').value='';}};
 function sideButtonLabel(){$('toggle-settings').textContent=innerWidth<=780?'采集设置':document.body.classList.contains('side-hidden')?'显示控制':'收起控制';}
 $('help').onclick=()=>$('help-dialog').showModal();$('close-help').onclick=()=>$('help-dialog').close();$('toggle-settings').onclick=()=>{document.body.classList.toggle(innerWidth<=780?'settings-open':'side-hidden');sideButtonLabel();};window.addEventListener('resize',sideButtonLabel);sideButtonLabel();
 $('toggle-source').onclick=()=>{const open=document.body.classList.toggle('source-open');$('toggle-source').textContent=open?'轨迹':'源码';$('toggle-source').setAttribute('aria-expanded',String(open));};
@@ -231,8 +257,16 @@ const divider=document.querySelector('.pane-divider');function setRatio(percent)
 divider.onpointerdown=e=>{divider.setPointerCapture(e.pointerId);divider.onpointermove=v=>{if(divider.hasPointerCapture(v.pointerId)){const box=$('analysis-panes').getBoundingClientRect();setRatio((v.clientX-box.left)/box.width*100);}};divider.onpointerup=v=>divider.releasePointerCapture(v.pointerId);};divider.onkeydown=e=>{if(['ArrowLeft','ArrowRight'].includes(e.key)){e.preventDefault();const value=parseFloat($('analysis-panes').style.getPropertyValue('--trace-width'))||52;setRatio(value+(e.key==='ArrowLeft'?-3:3));}};
 async function init(){state.operation=true;controls();history.setLoading(true);renderSymbols();renderBreakpoints();try{await refreshRecords();$('service-state').textContent='本地服务在线';$('service-state').className='status good';showClocks();}catch(e){error(e);}finally{state.operation=false;history.setLoading(false);controls();}}
 const embeddedBridge={probe:()=>target.probe,busy:()=>!!(state.hardwareOperation||target.probe&&(state.job||state.waiting)),
-  release:async()=>{if(embeddedBridge.busy())throw Error('ETM正在操作或采集，请先停止');await disconnectTarget();},
+  requestStop:async()=>{
+    target.cancelEntry=true;state.captureCancelled=true;
+    if(state.jobKind==='decode')throw Error('正在解码，等待结束或超时后再重新检测');
+    if(state.job)await api('stop/'+state.job,{});
+    const until=Date.now()+20000;
+    while(state.operation||state.job){if(Date.now()>until)throw Error('旧任务尚未完成清理，保留探针；请等待结束后重试');await sleep(50);}
+  },
+  release:async()=>{if(target.transportFault)throw Error('旧调试口仍故障；先点击恢复调试口，避免丢失待恢复的配置');if(embeddedBridge.busy())throw Error('ETM正在操作或采集，请先停止');await disconnectTarget();},
   summary:()=>({record:state.current,job:state.job,target:target.info?.name||null})};
+window.__etmBridge=embeddedBridge;
 if(host)host.attach(embeddedBridge,window);
 // Developer diagnostics also used by the integrated page acceptance tests.
 window.__etm={target,state,history,api};
@@ -240,4 +274,4 @@ init();
 
 // 与操作互斥的轻量状态回读，实际命中后刷新 PC 和断点标记。
 setInterval(async()=>{if(!target.probe||state.operation||state.job||!target.breakpoints.items.some(b=>b.lease)||target.info?.halted||target.transportFault)return;
-  state.operation=true;try{if(await target.isHalted())await showTarget(await target.inspect());}catch(e){error(e);}finally{state.operation=false;controls();}},800);
+  state.operation=true;state.hardwareOperation=true;try{await runEmbedded(host,async()=>{if(await target.isHalted())await showTarget(await target.inspect());});}catch(e){error(e);}finally{state.operation=false;state.hardwareOperation=false;controls();}},800);

@@ -7,10 +7,10 @@ export class EtmView {
   get busy(){return !!this.bridge?.busy();}
   init(){
     this.frame=document.getElementById('etm-frame');this.notice=document.getElementById('etm-notice');
-    document.getElementById('etm-retry').onclick=()=>this.onShow();
+    document.getElementById('etm-retry').onclick=()=>this.retry();
     this.frame.addEventListener('load',()=>{
       if(!this.started)return;
-      if(!this.bridge){this.notice.hidden=false;document.getElementById('etm-status').textContent='ETM 页面未就绪，请确认两个工程都已更新后重试';}
+      if(!this.bridge||this.frame.contentWindow.__etmBridge!==this.bridge)this.showError('ETM 页面未就绪；请点击重新检测。旧连接会先安全释放');
     });
   }
   async onShow(){
@@ -21,9 +21,11 @@ export class EtmView {
   async load(){
     const status=document.getElementById('etm-status');status.textContent='正在检测本地 ETM 服务…';
     try{
-      const response=await fetch('/etm/integration.json',{cache:'no-store'});
-      if(!response.ok)throw Error('请启动本地 ETM 工作台后打开本页');
-      const info=await response.json();
+      const controller=new AbortController();let timer,info;
+      try{info=await Promise.race([
+        fetch('/etm/integration.json',{cache:'no-store',signal:controller.signal}).then(async response=>{if(!response.ok)throw Error('请启动本地 ETM 工作台后打开本页');return response.json();}),
+        new Promise((_,reject)=>{timer=setTimeout(()=>{controller.abort();reject(Error('检测本地桥超时，请确认桥已启动后重试'));},15000);})
+      ]);}finally{clearTimeout(timer);}
       if(info.protocol!==1)throw Error('本地 ETM 集成服务版本不匹配');
       this.started=true;this.frame.hidden=false;this.frame.src='/etm/?embedded=1';
       status.textContent='正在载入 ETM 执行轨迹…';
@@ -32,9 +34,19 @@ export class EtmView {
   attach(bridge,child){
     if(child!==this.frame.contentWindow||child.location.origin!==location.origin)
       throw Error('ETM 页面来源不匹配');
-    if(this.bridge&&this.probe)throw Error('请先断开原 ETM 探针再重新载入页面');
+    if(this.bridge&&this.probe){this.showError('旧 ETM 页面仍连接探针；点击重新检测会先停止旧任务并释放连接');throw Error('请先释放原 ETM 探针再重新载入页面');}
     this.bridge=bridge;this.notice.hidden=true;
     return this;
+  }
+  showError(message){this.notice.hidden=false;document.getElementById('etm-status').textContent=message;}
+  async retry(){
+    try{
+      if(this.bridge){
+        if(this.busy&&this.bridge.requestStop)await this.bridge.requestStop();
+        await this.releaseProbe();this.bridge=null;
+      }
+      this.started=false;return this.onShow();
+    }catch(e){this.showError(e.message);}
   }
   run(fn){return this.probeManager.run('etm',fn,{reason:'ETM 执行轨迹使用探针'});}
   async releaseProbe(){

@@ -23,7 +23,18 @@ export class HistoryView{
   }
   path(suffix){return 'browse/'+this.sid+'/'+suffix;}
   setLoading(loading){this.loading=loading;for(const id of ['history-prev','history-next','jump','nav-mode','search','hide-skipped','toggle-summary'])$(id).disabled=loading||!this.result;for(const b of document.querySelectorAll('[data-view]'))b.disabled=loading||!this.result;this.pagination(this.result?this.pageTotal||0:0,this.offset);}
-  async load(sid,name){this.revision++;this.selectRevision++;this.sid=sid;this.range=null;this.rangeHistory=[];this.window=null;this.timelineKey=null;this.timelineData=null;this.selected=null;this.selectedFunction=null;this.offset=0;this.view='instructions';this.sources.clear();this.result=null;$('execution-timeline-panel').hidden=true;$('search').value='';$('table-container').replaceChildren(make('div','正在准备可复用索引…','empty'));$('record-description').textContent=name||sid;
+  unload(sid=null){
+    this.recordRevision=(this.recordRevision||0)+1;this.revision++;this.selectRevision++;
+    this.sid=sid;this.result=null;this.range=null;this.rangeHistory=[];this.window=null;
+    this.timelineKey=null;this.timelineData=null;this.selected=null;this.selectedFunction=null;
+    this.offset=0;this.view='instructions';this.sources.clear();this.scopeBusy=false;this.rows=[];
+    this.timelineChart.setData(null);$('execution-timeline-panel').hidden=true;
+    $('analysis-panes').classList.remove('flame-layout','flame-source-collapsed');
+    $('scope-state').hidden=$('clear-scope').hidden=true;
+    $('source-name').textContent='';$('source-name').title='';$('source-location').textContent='';$('source-location').title='';$('metrics').textContent='';$('quality').textContent='';$('quality').classList.remove('warn');
+    $('cursor-state').textContent='未选中历史位置';
+  }
+  async load(sid,name){this.unload(sid);const generation=this.recordRevision;$('search').value='';$('table-container').replaceChildren(make('div','正在准备可复用索引…','empty'));$('record-description').textContent=name||sid;
     $('source-code').textContent='载入当前记录中…';$('call-stack').textContent='等待当前记录';$('cursor-state').textContent='未选中历史位置';$('selected-instruction').textContent='';$('selected-instruction').title='';$('source-name').title='';$('source-location').textContent='';$('source-location').title='';
     this.setLoading(true);$('summary-content').replaceChildren();
     try{
@@ -37,10 +48,11 @@ export class HistoryView{
     if(r.quality.overlapBytes)$('quality').textContent+=' · 字节覆盖重叠 '+r.quality.overlapBytes;
     if(r.quality.unsynchronizedBytes)$('quality').textContent+=' · 未同步 '+r.quality.unsynchronizedBytes+' 字节';
     if(r.quality.unknownSourceBytes)$('quality').textContent+=' · 未知源 '+r.quality.unknownSourceBytes+' 字节';
+    if(r.captureStart&&!r.captureStart.entryRecovered)$('quality').textContent+=' · 所选起点未出现在恢复指令中（开头同步边界）';
     $('quality').title=$('quality').textContent;
-    $('quality').classList.toggle('warn',!!r.status.lastErrorCode||!!r.quality.packetIssues||!!r.quality.unaccountedBytes||!!r.quality.overlapBytes||r.samplingValidation?.sensitive||!!r.recordError);
-    $('summary-content').replaceChildren(integrityView(r));await this.render();if(r.firstSeq!==null)await this.select(r.firstSeq,false);
-    }finally{if(this.sid===sid)this.setLoading(false);}
+    $('quality').classList.toggle('warn',!!r.status.lastErrorCode||!!r.quality.packetIssues||!!r.quality.unaccountedBytes||!!r.quality.overlapBytes||r.samplingValidation?.sensitive||!!r.recordError||!!(r.captureStart&&!r.captureStart.entryRecovered));
+    $('summary-content').replaceChildren(integrityView(r));await this.render();if(generation!==this.recordRevision)return;if(r.firstSeq!==null)await this.select(r.firstSeq,false);
+    }finally{if(generation===this.recordRevision)this.setLoading(false);}
   }
   table(headers){const t=document.createElement('table'),head=document.createElement('thead'),row=document.createElement('tr'),body=document.createElement('tbody');for(const h of headers)row.append(make('th',h));head.append(row);t.append(head,body);return [t,body];}
   async render(){if(!this.result)return;const revision=++this.revision;for(const b of document.querySelectorAll('[data-view]'))b.classList.toggle('active',b.dataset.view===this.view);$('analysis-panes').classList.toggle('flame-layout',this.view==='flame');$('analysis-panes').classList.toggle('flame-source-collapsed',this.view==='flame'&&this.flameSourceCollapsed);const search=$('search').value.trim().toLowerCase();
@@ -98,16 +110,17 @@ export class HistoryView{
   }
   scopeParams(p){if(this.range){p.set('fromSeq',this.range.start);p.set('toSeq',this.range.end);}return p;}
   async setRange(range,remember=true,focusSeq=null){
-    if(this.scopeBusy)return;
+    if(!this.result||this.scopeBusy)return;const generation=this.recordRevision;
+    if(focusSeq===null)focusSeq=this.selected;
     if(range&&(!Number.isInteger(range.start)||!Number.isInteger(range.end)||range.start<0||range.end<range.start))throw Error('请输入有效的执行序号区间');
     if(remember&&range)this.rangeHistory.push(this.range?{...this.range}:null);if(!range&&remember)this.rangeHistory=[];
     this.scopeBusy=true;this.updateZoomControlState();try{this.range=range?{start:Math.min(range.start,Math.max(0,this.result.eventCount-1)),end:Math.min(range.end,Math.max(0,this.result.eventCount-1))}:null;this.window=null;this.timelineKey=null;this.timelineData=null;this.offset=0;
-      await this.render();const first=this.range?this.window?.firstSeq:this.result.firstSeq;const keep=Number.isInteger(focusSeq)&&(!this.range||focusSeq>=this.range.start&&focusSeq<=this.range.end);const target=keep?focusSeq:first;if(target!=null)await this.select(target,false);
-    }finally{this.scopeBusy=false;this.updateZoomControlState();}
+      await this.render();if(generation!==this.recordRevision)return;const first=this.range?this.window?.firstSeq:this.result.firstSeq;const keep=Number.isInteger(focusSeq)&&(!this.range||focusSeq>=this.range.start&&focusSeq<=this.range.end);const target=keep?focusSeq:first;if(target!=null)await this.select(target,false);
+    }finally{if(generation===this.recordRevision){this.scopeBusy=false;this.updateZoomControlState();}}
   }
   async backRange(){if(!this.rangeHistory.length)return;const range=this.rangeHistory.pop();await this.setRange(range,false,this.selected);}
-  async select(seq,reveal=false){if(this.range&&(seq<this.range.start||seq>this.range.end))throw Error('该位置不在所选区间内，请先重置区间');const revision=++this.selectRevision;const detail=await this.api(this.path('event/'+seq));if(revision!==this.selectRevision)return;this.selected=seq;this.timelineChart.setCursor(seq);const e=detail.event;this.selectedFunction=e.function||null;
-    if(reveal){this.view='instructions';$('search').value='';$('hide-skipped').checked=false;this.offset=Math.floor((seq-(this.range?.start||0))/150)*150;await this.render();}
+  async select(seq,reveal=false){if(!this.result)return;if(this.range&&(seq<this.range.start||seq>this.range.end))throw Error('该位置不在所选区间内，请先重置区间');const revision=++this.selectRevision;const detail=await this.api(this.path('event/'+seq));if(revision!==this.selectRevision)return;this.selected=seq;this.timelineChart.setCursor(seq);const e=detail.event;this.selectedFunction=e.function||null;
+    if(reveal){this.view='instructions';$('search').value='';$('hide-skipped').checked=false;this.offset=Math.floor((seq-(this.range?.start||0))/150)*150;await this.render();if(revision!==this.selectRevision)return;}
     for(const row of $('table-container').querySelectorAll('[data-seq]'))row.classList.toggle('selected',Number(row.dataset.seq)===seq);
     if(reveal){const row=$('table-container').querySelector(`[data-seq="${seq}"]`);if(row){const a=row.getBoundingClientRect(),b=$('table-container').getBoundingClientRect();$('table-container').scrollTop+=a.top-b.top-Math.max(0,(b.height-a.height)/2);}}
     $('cursor-state').textContent=`#${seq}`+(e.pc!==undefined?' · '+hex(e.pc):' · 边界/异常事件');
@@ -130,8 +143,8 @@ export class HistoryView{
     const source=this.sources.get(e.file);if(!source){$('source-code').textContent='尚未载入配套源码，可在文件页选择目录。';if(this.view==='flame')await this.render();return;}
     const fragment=document.createDocumentFragment();source.split(/\r?\n/).forEach((text,i)=>{const line=make('div',null,'source-line'+(i+1===e.line?' highlight':''));line.append(make('span',i+1,'line-number'),make('span',text||' ','line-text'));fragment.append(line);});$('source-code').replaceChildren(fragment);const active=$('source-code').querySelector('.highlight');if(active)$('source-code').scrollTop=active.offsetTop-$('source-code').offsetTop-100;if(this.view==='flame')await this.render();
   }
-  async navigate(direction,mode=$('nav-mode').value){if(!this.result)return;const q=new URLSearchParams({seq:this.selected??0,direction,mode});this.scopeParams(q);const found=await this.api(this.path('navigate?'+q));if(found.seq===null){$('cursor-state').textContent='该方向已无符合条件的历史位置';return;}await this.select(found.seq,true);}
+  async navigate(direction,mode=$('nav-mode').value){if(!this.result)return;const generation=this.recordRevision;const q=new URLSearchParams({seq:this.selected??0,direction,mode});this.scopeParams(q);const found=await this.api(this.path('navigate?'+q));if(generation!==this.recordRevision)return;if(found.seq===null){$('cursor-state').textContent='该方向已无符合条件的历史位置';return;}await this.select(found.seq,true);}
   async refreshSources(){this.sources.clear();if(this.selected!==null)await this.select(this.selected);}
-  async locatePC(pc){const q=new URLSearchParams({seq:this.selected??-1,pc:'0x'+pc.toString(16)});this.scopeParams(q);const found=await this.api(this.path('navigate?'+q));if(found.seq===null)throw Error('记录中未找到该 PC');await this.select(found.seq,true);if(found.wrapped)$('cursor-state').textContent+=' · 已回到首个匹配';}
+  async locatePC(pc){const generation=this.recordRevision;const q=new URLSearchParams({seq:this.selected??-1,pc:'0x'+pc.toString(16)});this.scopeParams(q);const found=await this.api(this.path('navigate?'+q));if(generation!==this.recordRevision)return;if(found.seq===null)throw Error('记录中未找到该 PC');await this.select(found.seq,true);if(found.wrapped)$('cursor-state').textContent+=' · 已回到首个匹配';}
   async jump(){if(!this.result)throw Error('记录索引仍在载入，请稍候');const value=$('jump-value').value.trim();if(/^0x[0-9a-f]+$/i.test(value))return this.locatePC(Number(value));if(!/^\d+$/.test(value))throw Error('请输入历史序号或 0x 开头的 PC');return this.select(Number(value),true);}
 }

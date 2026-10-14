@@ -3,10 +3,11 @@ import json
 import math
 import sqlite3
 import threading
+import time
 from contextlib import closing
 from pathlib import Path
 
-VERSION=2
+VERSION=3
 _guard=threading.Lock()
 def dumps(value):return json.dumps(value,ensure_ascii=False,separators=(',',':'))
 
@@ -88,7 +89,14 @@ class RecordStore:
                     if q.get(key):issues.append(dict(category='physical',startSeq=None,endSeq=None,records=0,bytes=q[key],reason=label))
                 db.executemany('INSERT INTO issues VALUES (?,?,?,?)',((i,p['startSeq'],p['endSeq'],dumps(p)) for i,p in enumerate(issues)))
                 db.commit()
-            temporary.replace(self.path)
+            deadline=time.monotonic()+10
+            while True:
+                try:temporary.replace(self.path);break
+                except PermissionError:
+                    # A previous read request may still hold the old SQLite
+                    # handle on Windows. Wait boundedly; keep the old index intact.
+                    if time.monotonic()>=deadline:raise
+                    time.sleep(.02)
     def connect(self):
         self.ensure();return sqlite3.connect(f'{self.path.as_uri()}?mode=ro',uri=True)
     def overview(self):

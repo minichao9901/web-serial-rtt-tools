@@ -3,6 +3,14 @@ import assert from 'node:assert/strict';
 import {bindFunctionTimeline} from '../../bridge/etm/backend/web/app/function-timeline.js';
 import {HistoryView} from '../../bridge/etm/backend/web/app/history.js';
 
+test('timeline wheel zoom uses selected cursor rather than pointer position',()=>{
+  globalThis.window={devicePixelRatio:1};globalThis.ResizeObserver=class{observe(){}disconnect(){}};const events=new Map(),ranges=[];
+  const canvas={hidden:false,dataset:{},style:{},getContext:()=>new Proxy({},{get:()=>()=>{}}),getBoundingClientRect:()=>({left:0,width:1000}),setAttribute(){},addEventListener:(name,fn)=>events.set(name,fn)};
+  const chart=bindFunctionTimeline(canvas,{onRange:r=>ranges.push(r),onSelect(){},onError:e=>{throw e;}});
+  chart.setData({range:{start:0,end:100,totalStart:0,totalEnd:100},binCount:1,lanes:[],markers:[]});chart.setCursor(25);
+  events.get('wheel')({ctrlKey:true,clientX:950,deltaY:-1,preventDefault(){}});assert.deepEqual(ranges,[{start:12,end:62}]);chart.destroy();
+});
+
 test('hovering an ETM marker works at original and resized plot geometry',()=>{
   globalThis.window={devicePixelRatio:1};globalThis.ResizeObserver=class{observe(){}disconnect(){}};
   const events=new Map();let width=800;

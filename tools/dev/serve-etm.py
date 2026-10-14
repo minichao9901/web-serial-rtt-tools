@@ -8,6 +8,7 @@ import importlib.util
 import mimetypes
 import re
 import sys
+from urllib.parse import urlsplit
 from pathlib import Path
 from flask import Flask,abort,jsonify,request,send_from_directory
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
@@ -52,6 +53,7 @@ def create_application(etm_root,serial_root=ROOT):
     @app.before_request
     def local_only():
         if request.remote_addr not in ('127.0.0.1','::1'):abort(403)
+        if urlsplit('//'+request.host).hostname not in ('127.0.0.1','localhost','::1'):abort(403)
     @app.route('/etm-launcher.json')
     def launcher_info():
         return jsonify(protocol=1,serialRoot=str(serial_root),etmRoot=str(etm_root))

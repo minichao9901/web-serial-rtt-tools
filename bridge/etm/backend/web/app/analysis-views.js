@@ -90,6 +90,6 @@ export function flameView(result,onFunction,o={}){
   svg.onpointermove=e=>{if(!drag)return;const end=Math.max(0,Math.min(drag.width,e.clientX-drag.left));overlay.setAttribute('x',Math.min(drag.start,end)/drag.width*unit);overlay.setAttribute('width',Math.abs(drag.start-end)/drag.width*unit);};
   svg.onpointerup=e=>{if(!drag)return;const d=drag;drag=null;overlay.remove();svg.releasePointerCapture(e.pointerId);const end=e.clientX-d.left,r=rangeFromPixels(d.start,end,d.width,scope.start,scope.end);if(Math.abs(end-d.start)>4)safe(()=>o.onRange(r));else safe(()=>o.onSelect(r.start));};
   svg.onpointercancel=()=>{drag=null;overlay.remove();};
-  svg.addEventListener('wheel',e=>{if(!e.ctrlKey)return;e.preventDefault();const r=svg.getBoundingClientRect();safe(()=>o.onRange(wheelRange(scope,{start:scope.totalStart,end:scope.totalEnd},(e.clientX-r.left)/r.width,e.deltaY<0)));},{passive:false});
+  svg.addEventListener('wheel',e=>{if(!e.ctrlKey)return;e.preventDefault();const r=svg.getBoundingClientRect(),focus=Number.isInteger(o.cursorSeq)&&o.cursorSeq>=scope.start&&o.cursorSeq<=scope.end?(o.cursorSeq-scope.start)/span:(e.clientX-r.left)/r.width;safe(()=>o.onRange(wheelRange(scope,{start:scope.totalStart,end:scope.totalEnd},focus,e.deltaY<0)));},{passive:false});
   box.append(svg,make('p',`当前区间 ${n(data.analysis.flame.value)} 条路径记录；汇总包含未成立条件和未知状态。图形宽度表示执行顺序跨度，不表示耗时。`,'hint'));return box;
 }

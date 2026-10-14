@@ -87,7 +87,8 @@ export function bindFunctionTimeline(canvas,{onRange,onSelect,onError}){
   canvas.addEventListener('pointercancel',()=>{drag=null;frame();});
   canvas.addEventListener('wheel',event=>{
     if(!event.ctrlKey||!data)return;event.preventDefault();const p=position(event),range=data.range,total={start:range.totalStart,end:range.totalEnd};
-    safe(()=>onRange(wheelRange(range,total,p.pct,event.deltaY<0)));
+    const focus=Number.isInteger(cursor)&&cursor>=range.start&&cursor<=range.end?(cursor-range.start)/(range.end-range.start+1):p.pct;
+    safe(()=>onRange(wheelRange(range,total,focus,event.deltaY<0)));
   },{passive:false});
   canvas.addEventListener('keydown',event=>{
     if(!data||!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;event.preventDefault();

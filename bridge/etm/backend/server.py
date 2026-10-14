@@ -5,6 +5,7 @@ import csv
 import hashlib
 import io
 import json
+import math
 import re
 import socket
 import sys
@@ -12,6 +13,7 @@ import threading
 import time
 import uuid
 import zipfile
+from urllib.parse import urlsplit
 from pathlib import Path
 
 from flask import Flask, jsonify, request, send_file, send_from_directory, abort
@@ -31,12 +33,16 @@ app.config['MAX_CONTENT_LENGTH'] = 150 * 1024 * 1024
 RECORDS = Path(os.environ.get('WEB_ETM_RECORDS', str(ROOT / 'records')))
 RECORDS.mkdir(exist_ok=True)
 jobs = {}
-lock = threading.Lock()
+lock = threading.RLock()
+stop_guard = threading.Lock()
+ACTIVE = ('queued', 'starting', 'armed', 'saving', 'decoding')
 
 
 @app.before_request
 def local_only():
     if request.remote_addr not in ('127.0.0.1', '::1'):
+        abort(403)
+    if urlsplit('//'+request.host).hostname not in ('127.0.0.1','localhost','::1'):
         abort(403)
     if request.method != 'GET' and request.headers.get('Origin') not in (None, request.host_url.rstrip('/')):
         abort(403)
@@ -58,11 +64,35 @@ def directory(sid):
 def save(sid, metadata):
     folder = directory(sid)
     folder.mkdir(exist_ok=True)
-    (folder / 'session.json').write_text(json.dumps(metadata, ensure_ascii=False), encoding='utf-8')
+    save_json(folder/'session.json',metadata)
+
+
+def save_json(path,value):
+    temporary=path.with_name(path.name+'.'+uuid.uuid4().hex+'.tmp')
+    try:
+        temporary.write_text(json.dumps(value,ensure_ascii=False),encoding='utf-8')
+        # Windows cannot replace a file while another request has it open.
+        # Retry only the atomic rename, never repeat the operation that produced it.
+        for attempt in range(50):
+            try:
+                with lock:temporary.replace(path)
+                break
+            except PermissionError:
+                if attempt==49:raise
+                time.sleep(.01)
+    finally:
+        temporary.unlink(missing_ok=True)
+
+
+def load_json(path):
+    with lock:return json.loads(path.read_text(encoding='utf-8'))
 
 
 def meta(sid):
-    return json.loads((directory(sid) / 'session.json').read_text(encoding='utf-8'))
+    value=load_json(directory(sid)/'session.json')
+    if 'input' in value and value['input'] not in ('capture.csv','capture.bin'):
+        raise ValueError('记录输入文件名无效，不能读取记录目录之外的文件。')
+    return value
 
 def verify_record_inputs(sid,r,metadata):
     folder=directory(sid);raw=folder/metadata.get('input','capture.csv')
@@ -76,7 +106,7 @@ def verify_record_inputs(sid,r,metadata):
 
 def result(sid):
     folder = directory(sid)
-    r = json.loads((folder / 'decoded.json').read_text(encoding='utf-8'))
+    r = load_json(folder/'decoded.json')
     if r.get('version', 1) < 3:
         enrich(r, Image(folder / 'firmware.elf'))
         (folder / 'decoded.json').write_text(json.dumps(r, ensure_ascii=False), encoding='utf-8')
@@ -88,6 +118,7 @@ def result(sid):
                             unaccountedBytes=max(0,size-r['quality']['accountedBytes']))
     r.setdefault('targetSnapshot',metadata.get('targetSnapshot'))
     r.setdefault('captureScope',metadata.get('captureScope','unfiltered-window'))
+    r.setdefault('captureStart',capture_start_info(r.get('events',[]),metadata))
     r['laFilter']=metadata.get('laFilter')
     phase_file=folder/'phase-validation.json'
     if phase_file.exists():
@@ -329,7 +360,7 @@ def upload_source_snapshot():
 
 
 def read_source_snapshot(elf_id,snapshot):
-    saved=json.loads(source_snapshot(elf_id,snapshot).read_text(encoding='utf-8'))
+    saved=load_json(source_snapshot(elf_id,snapshot))
     if not saved.get('complete'):
         raise ValueError('源码快照尚未上传完成')
     return saved['sources']
@@ -340,7 +371,7 @@ def records():
     rows = []
     demo=(stable_baseline() or {}).get('previewRecord')
     for file in RECORDS.glob('*/session.json'):
-        row = json.loads(file.read_text(encoding='utf-8'))
+        row = meta(file.parent.name)
         sid=file.parent.name
         rows.append({**row, 'id':sid,'recordKind':record_kind(sid,row,demo),'decoded': (file.parent / 'decoded.json').exists()})
     return jsonify(sorted(rows, key=lambda r: r.get('created', 0), reverse=True))
@@ -364,28 +395,31 @@ def get_record(sid):
 def attach_sources(sid):
     r = result(sid)
     body=request.get_json()
+    if body.get('elfId') and hashlib.sha256((directory(body['elfId'])/'firmware.elf').read_bytes()).hexdigest()!=r.get('elf',{}).get('sha256'):
+        raise ValueError('配套源码来自不同 ELF，请为当前记录载入匹配的 ELF 和源码。')
     provided = read_source_snapshot(body['elfId'],body['sourceSnapshot']) if body.get('sourceSnapshot') else body['sources']
     for file in r['sources']:
         matches = [text for name, text in provided.items() if file.replace('\\', '/')==name.replace('\\','/') or file.replace('\\', '/').endswith('/' + name.replace('\\', '/'))]
         if len(matches) == 1:
             r['sources'][file] = matches[0]
     folder = directory(sid)
-    (folder / 'sources.json').write_text(json.dumps(r['sources'], ensure_ascii=False), encoding='utf-8')
-    (folder / 'decoded.json').write_text(json.dumps(r, ensure_ascii=False), encoding='utf-8')
+    save_json(folder/'sources.json',r['sources'])
+    save_json(folder/'decoded.json',r)
     return jsonify(sources=r['sources'])
 
 
 @app.get('/api/jobs/<jid>')
 def job_state(jid):
     with lock:
+        if jid not in jobs:abort(404,description='任务已不存在；本地桥可能已重启，请检查 LA 状态后重新采集')
         job = jobs[jid]
         return jsonify({k: v for k, v in job.items() if not k.startswith('_')})
 
 
-def new_job(sid, state):
+def new_job(sid, state, kind='capture'):
     jid = uuid.uuid4().hex
     with lock:
-        jobs[jid] = dict(id=jid, record=sid, state=state, error=None)
+        jobs[jid] = dict(id=jid, record=sid, state=state, kind=kind, error=None)
     return jid
 
 
@@ -399,23 +433,33 @@ def record_failure(sid,error,stage):
     except Exception:pass
 
 
+def capture_start_info(events,metadata):
+    entry=metadata.get('captureEntry')
+    if entry is None:return None
+    first=next((e for e in events if e.get('kind')=='instruction'),None)
+    present=any(e.get('kind')=='instruction' and e.get('pc')==entry for e in events)
+    return dict(selectedPC=entry,firstRecoveredPC=first.get('pc') if first else None,
+                entryRecovered=present,firstMatchesEntry=bool(first and first.get('pc')==entry))
+
+
 def decode_job(jid, sid):
     try:
         change(jid, state='decoding')
         folder, m = directory(sid), meta(sid)
-        sources = json.loads((folder / 'sources.json').read_text(encoding='utf-8')) if (folder / 'sources.json').exists() else None
+        sources = load_json(folder/'sources.json') if (folder / 'sources.json').exists() else None
         r = decode_capture(folder / m['input'], folder / 'firmware.elf', folder, m['config'], sources,
                            fraction=m.get('fraction', .25), clock=m.get('clock', 0), data=m.get('data', [1, 2, 3, 4]))
         r['targetSnapshot']=m.get('targetSnapshot')
         r['captureScope']=m.get('captureScope','unfiltered-window')
+        r['captureStart']=capture_start_info(r['events'],m)
         r['laFilter']=m.get('laFilter')
-        (folder/'decoded.json').write_text(json.dumps(r,ensure_ascii=False),encoding='utf8')
-        (folder / 'sources.json').write_text(json.dumps(r['sources'], ensure_ascii=False), encoding='utf-8')
+        save_json(folder/'decoded.json',r)
+        save_json(folder/'sources.json',r['sources'])
         m['summary'] = r['summary']
         m.pop('error',None);m.pop('errorStage',None);m['decodeStatus']='done'
         save(sid, m)
         change(jid, state='done', summary=r['summary'])
-    except Exception as error:
+    except (Exception,SystemExit) as error:
         record_failure(sid,error,'decode')
         change(jid, state='error', error=str(error))
 
@@ -423,8 +467,15 @@ def decode_job(jid, sid):
 @app.post('/api/decode/<sid>')
 def start_decode(sid):
     meta(sid)
-    jid = new_job(sid, 'queued')
-    threading.Thread(target=decode_job, args=(jid, sid), daemon=True).start()
+    with lock:
+        active=next((j for j in jobs.values() if j['record']==sid and j['state'] in ACTIVE),None)
+        if active:
+            if active.get('kind')=='decode':return jsonify(job=active['id'],record=sid)
+            raise ValueError('本记录仍在采集中，完成后再解码。')
+        jid = new_job(sid, 'queued',kind='decode')
+    try:threading.Thread(target=decode_job, args=(jid, sid), daemon=True).start()
+    except Exception as error:
+        change(jid,state='error',error=str(error));raise
     return jsonify(job=jid, record=sid)
 
 
@@ -436,9 +487,12 @@ def import_record():
     uploaded = request.files['capture']
     if uploaded.filename.lower().endswith('.etmrecord'):
         with zipfile.ZipFile(uploaded.stream) as archive:
+            if not {'session.json','firmware.elf'}.issubset(archive.namelist()):raise ValueError('记录包缺少 session.json 或配套 ELF。')
             m = json.loads(archive.read('session.json'))
             if m['input'] not in ('capture.csv', 'capture.bin'):
                 raise ValueError('记录格式无效。')
+            if m['input'] not in archive.namelist():raise ValueError('记录包缺少原始波形，不能作为完整记录导入。')
+            m['config']=decoder_config(m.get('config'))
             for name in ('session.json', m['input'], 'firmware.elf', 'sources.json', 'capture.kvdat'):
                 if name in archive.namelist():
                     info = archive.getinfo(name)
@@ -469,7 +523,10 @@ def import_record():
 
 def capture_job(jid, sid, options):
     v = None
+    started=False
     try:
+        with lock:
+            if jobs[jid].get('_stopped'):return
         v = Vis()
         rates = [int(n) for n in v.cmd('get-supported-sample-rate').split()]
         if options['rate'] not in rates:
@@ -479,10 +536,15 @@ def capture_job(jid, sid, options):
         v.cmd(f"set-threshold-voltage {options['threshold']}")
         # D0 stays high during formatter idle; a clock edge alone would trigger before CPU resumes.
         v.cmd(f"set-trigger --reset --neg-edge {options['data'][0]}" if options['sync'] else 'set-trigger --reset')
-        change(jid, state='starting')
-        v.sock.settimeout(60)
-        v.sock.sendall(b'start')
-        change(jid, state='armed', started=time.time(), _socket=v.sock)
+        # Cancellation and start send are one transition: stop cannot precede
+        # a later start command and accidentally leave the analyser armed.
+        with lock:
+            if jobs[jid].get('_stopped'):return
+            change(jid,state='starting')
+            v.sock.settimeout(5)
+            v.sock.sendall(b'start');started=True
+            v.sock.settimeout(60)
+            change(jid, state='armed', started=time.time(), _socket=v.sock)
         raw = b''
         while True:
             try:
@@ -519,6 +581,13 @@ def capture_job(jid, sid, options):
                 time.sleep(.1)
             if not confirmed:
                 raise ValueError('停止未获得设备空闲回读确认，原始任务保留。')
+            # An idle analyser after stop does not prove its buffer belongs to
+            # this acquisition. Never relabel a previous capture as new data.
+            record_failure(sid,'采集已取消；没有导出或解码可能属于上次采集的 LA 缓存','capture')
+            change(jid,state='cancelled')
+            return
+        if not raw.startswith(b'ACK'):
+            raise ValueError('LA 连接关闭或应答不完整；未确认本次采集完成，不导出缓存。')
         v = Vis()
         change(jid, state='saving')
         folder = directory(sid)
@@ -536,9 +605,13 @@ def capture_job(jid, sid, options):
             decode_job(jid, sid)
         else:
             change(jid, state='done')
-    except Exception as error:
+    except (Exception,SystemExit) as error:
         record_failure(sid,error,'capture')
-        change(jid, state='error', error=str(error))
+        cleanup_error=None
+        if started:
+            try:stop_owned_la(jid)
+            except (Exception,SystemExit) as cleanup:cleanup_error=str(cleanup)
+        change(jid, state='error', error=str(error),cleanupPending=bool(cleanup_error),cleanupError=cleanup_error)
     finally:
         if v:
             v.close()
@@ -565,35 +638,59 @@ def start_capture():
              targetSnapshot=o.get('targetSnapshot'),captureScope=o.get('captureScope','unfiltered-window'),captureEntry=o.get('captureEntry'))
     if not 0 < o['fraction'] < 1:
         raise ValueError('取样位置必须介于 0 和 1。')
+    if not math.isfinite(o['threshold']) or not -4<=o['threshold']<=4:
+        raise ValueError('阈值必须是 -4～4 V 的有限数值。')
     if not (0 < o['seconds'] <= 2 and 0 < o['rate'] <= 500000000 and o['seconds']*o['rate'] <= 100000000):
         raise ValueError('初版采集深度上限 1 亿样本，时间上限 2 秒。')
     if len(o['data']) != 4 or len(set([o['clock']] + o['data'])) != 5 or any(n < 0 or n > 15 for n in [o['clock']] + o['data']):
         raise ValueError('请配置五个不同的 CH0~15 通道。')
     with lock:
-        if any(j['state'] in ('queued', 'starting', 'armed', 'saving') for j in jobs.values()):
+        if any(j.get('kind','capture')=='capture' and (j['state'] in ('queued', 'starting', 'armed', 'saving') or j.get('cleanupPending')) for j in jobs.values()):
             raise ValueError('已有采集任务进行中。')
-    sid = 'capture-' + uuid.uuid4().hex
-    folder = directory(sid)
-    folder.mkdir()
-    (folder / 'firmware.elf').write_bytes(elf.read_bytes())
-    if source_files:
-        (folder / 'sources.json').write_text(json.dumps(source_files), encoding='utf-8')
-    elif o['elfId'] and (directory(o['elfId'])/'sources.json').exists():
-        (folder/'sources.json').write_bytes((directory(o['elfId'])/'sources.json').read_bytes())
-    name=(o.get('targetSnapshot') or {}).get('name') or o['config'].get('protocol','ETMv4')
-    save(sid, dict(name=name+' · '+time.strftime('%Y-%m-%d %H:%M:%S'), created=time.time(),
-                   input='capture.csv', **o, configBasis='SWD snapshot' if o['targetVerified'] else 'provided trace configuration'))
-    jid = new_job(sid, 'queued')
-    threading.Thread(target=capture_job, args=(jid, sid, o), daemon=True).start()
+        sid = 'capture-' + uuid.uuid4().hex
+        jid = new_job(sid, 'queued')
+    try:
+        folder = directory(sid);folder.mkdir()
+        (folder / 'firmware.elf').write_bytes(elf.read_bytes())
+        if source_files:save_json(folder/'sources.json',source_files)
+        elif (directory(o['elfId'])/'sources.json').exists():
+            (folder/'sources.json').write_bytes((directory(o['elfId'])/'sources.json').read_bytes())
+        name=(o.get('targetSnapshot') or {}).get('name') or o['config'].get('protocol','ETMv4')
+        save(sid, dict(name=name+' · '+time.strftime('%Y-%m-%d %H:%M:%S'), created=time.time(),
+                       input='capture.csv', **o, configBasis='SWD snapshot' if o['targetVerified'] else 'provided trace configuration'))
+        threading.Thread(target=capture_job, args=(jid, sid, o), daemon=True).start()
+    except Exception as error:
+        change(jid,state='error',error=str(error));raise
     return jsonify(job=jid, record=sid)
 
 
 @app.post('/api/stop/<jid>')
 def stop_capture(jid):
     with lock:
-        if jobs[jid]['state'] not in ('starting', 'armed'):
+        if jid not in jobs:abort(404,description='任务记录已丢失，未对 LA 发送停止命令；请在 KingstVIS 停止后重新连接本地桥')
+        job=jobs[jid]
+        if job.get('kind','capture')!='capture':raise ValueError('解码任务不能向 LA 发送停止命令。')
+        if job['state']=='queued':
+            job.update(state='cancelled',_stopped=True,_stop_confirmed=True)
+            record_failure(job['record'],'采集启动前已取消','capture')
+            return jsonify(stopped=True,cancelled=True)
+        if job['state'] in ('done','cancelled','error') and not job.get('cleanupPending'):
+            return jsonify(stopped=True,alreadyFinished=True)
+        if job['state'] not in ('starting', 'armed') and not job.get('cleanupPending'):
             raise ValueError('当前没有等待触发或采集中的 LA 任务。')
-        jobs[jid]['_stopped'] = True
+        job['_stopped'] = True
+    stop_owned_la(jid)
+    return jsonify(stopped=True)
+
+
+def stop_owned_la(jid):
+    with stop_guard:
+        with lock:
+            if jobs[jid].get('_stop_confirmed'):return
+        return stop_owned_la_locked(jid)
+
+
+def stop_owned_la_locked(jid):
     v = Vis()
     try:
         try:
@@ -619,6 +716,7 @@ def stop_capture(jid):
         raise ValueError('LA 停止后的空闲状态尚未确认。')
     with lock:
         jobs[jid]['_stop_confirmed'] = True
+        jobs[jid]['cleanupPending'] = False
         capture_socket = jobs[jid].get('_socket')
     if capture_socket:
         try:
@@ -626,7 +724,6 @@ def stop_capture(jid):
         except OSError:
             pass
     # Closing the receive side wakes start even when VIS swallowed its reply.
-    return jsonify(stopped=True)
 
 
 @app.get('/api/download/<sid>/<kind>')
@@ -638,6 +735,8 @@ def download(sid, kind):
         return send_file(file, as_attachment=True)
     if kind == 'record':
         m = meta(sid)
+        if not (folder/m['input']).is_file() or not (folder/'firmware.elf').is_file():
+            raise ValueError('本记录尚无本次原始波形或配套 ELF，不能导出为完整记录包。')
         buffer = io.BytesIO()
         with zipfile.ZipFile(buffer, 'w', zipfile.ZIP_DEFLATED) as archive:
             for name in ('session.json', m['input'], 'firmware.elf', 'sources.json', 'capture.kvdat'):

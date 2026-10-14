@@ -69,7 +69,7 @@ class Vis:
         try:
             self.sock = socket.create_connection((host, port), timeout=5.0)
         except OSError as e:
-            raise SystemExit(
+            raise ConnectionError(
                 f"连不上 KingstVIS（{host}:{port}）：{e}\n"
                 "  ① KingstVIS 开着吗？（进程没了就是这个报错）\n"
                 "  ② vis.config 里 <enaSocket>1</enaSocket> 改过并**重启**过吗？") from None
@@ -123,7 +123,7 @@ def parse_csv(path: str):
         reader = csv.reader(f)
         header = next((r for r in reader if r), None)
         if not header:
-            raise SystemExit(f"{path} 是空文件 —— 采集那一步没导出成功（常见：NAK/超时）")
+            raise ValueError(f"{path} 是空文件 —— 采集那一步没导出成功（常见：NAK/超时）")
         for i, name in enumerate(header[1:]):
             digits = "".join(ch for ch in name if ch.isdigit())
             chans.append(int(digits) if digits else i)

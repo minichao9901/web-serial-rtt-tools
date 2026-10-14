@@ -4,9 +4,11 @@
   "type": "module",
   "scripts": {
     "build:web": "node tools/dev/build-svd.mjs && node tools/dev/build-web.mjs",
-    "check:web": "node tools/dev/build-web.mjs --check"
+    "check:web": "node tools/dev/build-web.mjs --check",
+    "test:etm": "python tools/dev/test-etm.py"
   },
   "devDependencies": {
-    "esbuild": "0.25.12"
+    "esbuild": "0.25.12",
+    "linkedom": "0.18.12"
   }
 }

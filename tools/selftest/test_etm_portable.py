@@ -66,6 +66,7 @@ class PortableTests(unittest.TestCase):
         self.assertEqual(result.returncode,0,result.stdout+result.stderr)
     def test_redecode_demo_under_chinese_and_space_path(self):
         self.assertEqual(len(self.api('etm/api/records')),1)
+        self.assertEqual(self.api('etm/api/records')[0]['recordKind'],'demo')
         sid='demo-spi-70-35-v1';expected=self.api('etm/api/browse/'+sid+'/overview')['summary']['instructions']
         job=self.api('etm/api/decode/'+sid,{})['job']
         for attempt in range(180):
