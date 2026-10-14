@@ -32,6 +32,10 @@ class IntegratedServerTests(unittest.TestCase):
         self.assertIn('javascript',r.content_type);self.assertEqual(r.headers['Cache-Control'],'no-store');r.close()
     def test_download_urls_keep_mount_prefix(self):
         self.assertEqual(self.get('/etm/api/elf').json['download'],'/etm/api/record-firmware/test')
+    def test_launcher_identifies_project_pair_only_to_local_clients(self):
+        info=self.get('/etm-launcher.json').json
+        self.assertEqual(info,dict(protocol=1,serialRoot=str(self.main.resolve()),etmRoot=str(self.etm.resolve())))
+        self.assertEqual(self.client.get('/etm-launcher.json',environ_overrides={'REMOTE_ADDR':'192.0.2.5'}).status_code,403)
     def test_private_root_files_and_remote_clients_are_rejected(self):
         for path in ['/.git/config','/records/private.json','/tmp/secret.txt']:
             self.assertEqual(self.get(path).status_code,404)

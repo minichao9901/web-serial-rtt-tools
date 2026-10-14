@@ -4,6 +4,12 @@
 
 ## 启动
 
+推荐从 **工程生成 → ETM 桥** 填写两个工程目录和端口，点击“下载 ETM 桥包（ZIP）”。解压后双击 `check-tools.bat` 预检，再双击 `start-etm-bridge.bat`：服务准备就绪后自动打开 ETM 页面。也可用页面的“打开 ETM 工作台”按钮打开已运行的桥。
+
+启动包含 BAT、PowerShell 启动器、同源服务脚本、JSON 配置和中文说明；两个工程、Python 依赖与解码器仍需在本机。包可放在中文或含空格的路径中；更换电脑时修改 `etm.config.json`。同一工作台已运行时复用；端口被其他服务占用时报错，不结束已有进程。启动器不自动安装依赖、不修改系统设置。
+
+维护下载包：修改 `tools/dev/etm-launcher.ps1` 或 `serve-etm.py` 后，运行 `node tools/dev/embed-etm-kit.mjs` 更新嵌入副本，再运行 `npm run build:web`。`make test-gen` 会检查下载脚本与维护脚本是否一致；启动器的 Windows 集成检查见 `tools/selftest/test_etm_launcher.py`。
+
 ETM的逻辑分析仪采集和OpenCSD解码需要本地服务；串口、RTT、SWO等原有静态网页功能仍可独立使用。
 
 将 `web-serial-rtt-tools` 与更新后的 `web-etm-trace` 放在同一父目录。使用Chrome/Edge，在串口工具仓库运行：

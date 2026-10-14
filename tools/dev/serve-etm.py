@@ -52,6 +52,9 @@ def create_application(etm_root,serial_root=ROOT):
     @app.before_request
     def local_only():
         if request.remote_addr not in ('127.0.0.1','::1'):abort(403)
+    @app.route('/etm-launcher.json')
+    def launcher_info():
+        return jsonify(protocol=1,serialRoot=str(serial_root),etmRoot=str(etm_root))
     @app.route('/',defaults={'path':'index.html'})
     @app.route('/<path:path>')
     def static_file(path):
@@ -69,6 +72,7 @@ if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--port',type=int,default=8878)
     parser.add_argument('--etm-root',type=Path,default=ROOT.parent/'web-etm-trace')
+    parser.add_argument('--serial-root',type=Path,default=ROOT)
     args=parser.parse_args()
     print(f'统一工作台：http://127.0.0.1:{args.port}/#etm',flush=True)
-    run_simple('127.0.0.1',args.port,create_application(args.etm_root),threaded=True,use_reloader=False)
+    run_simple('127.0.0.1',args.port,create_application(args.etm_root,args.serial_root),threaded=True,use_reloader=False)

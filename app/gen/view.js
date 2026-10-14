@@ -22,6 +22,7 @@ import {
   parseUvprojx, suggestFromDevice, matchFamily, buildOutputs, appliedFixes,
 } from './model.js';
 import { bridgeKitFiles as kitFiles, kitBytes, KIT_DIR } from './bridge-kit.js';
+import { etmKitFiles, etmKitConfig, ETM_KIT_DIR } from './etm-kit.js';
 
 const FIELDS = [
   ['g-project', 'gen.project'],
@@ -56,6 +57,9 @@ const FIELDS = [
   ['g-bk-nodever', 'gen.bkNodeVer'],
   ['g-bk-mirror', 'gen.bkMirror'],
   ['g-bk-autonode', 'gen.bkAutoNode', 'checked'],
+  ['g-etm-serial-root', 'gen.etmSerialRoot'],
+  ['g-etm-root', 'gen.etmRoot'],
+  ['g-etm-port', 'gen.etmPort'],
   ['g-newline', 'gen.newline'],
   ['g-force', 'gen.force', 'checked'],
   ['g-c-jlink', 'gen.cJlink', 'checked'],
@@ -72,6 +76,8 @@ export class GenView {
     this.kitFiles = [];        // 后一半：本地桥安装包（`rtt-bridge-kit/…`）
     this.selP = 0;             // 两个 tab 各自记住"当前在看哪个文件"
     this.selK = 0;
+    this.etmFiles = [];
+    this.selE = 0;
     this.dock = 'files';       // 右列当前 tab（files / params / bridge）—— 左栏跟着它显示
     this.info = null;          // parseUvprojx 的结果（提示用）
     this.folderName = '';      // 上次写入的文件夹名（提示用）
@@ -123,12 +129,34 @@ export class GenView {
     $('g-dl').addEventListener('click', () => this.downloadCurrent());
     $('g-kit-copy').addEventListener('click', () => this.copyCurrent());
     $('g-params-copy').addEventListener('click', () => this.copyParams());
+    $('g-etm-copy').addEventListener('click', () => this.copyCurrent());
+    $('g-etm-dl').addEventListener('click', () => this.downloadCurrent());
+    $('g-zip-etm').addEventListener('click', () => this.downloadEtmZip());
+    $('g-etm-open').addEventListener('click', () => {
+      try { window.location.assign(`http://127.0.0.1:${etmKitConfig({port:$('g-etm-port').value}).port}/#etm`); }
+      catch(e) { toast(e.message,'err'); }
+    });
     // 改了桥那几项就地重算（和别的字段一样：input/change 都挂）
     for (const el of $('tab-gen').querySelectorAll('input,select')){
       if (el.id.startsWith('g-bk-')) el.addEventListener('change', () => this.refresh());
     }
 
     this.refresh();
+    this.detectEtmPaths();
+  }
+
+  async detectEtmPaths(){
+    try {
+      const response = await fetch('/etm-launcher.json');
+      if (!response.ok) return;
+      const info = await response.json();
+      if (info.protocol !== 1) return;
+      if (store.get('gen.etmPort',null) === null && location.port && $('g-etm-port').value === '8878') $('g-etm-port').value=location.port;
+      for (const [id,key,value] of [['g-etm-serial-root','gen.etmSerialRoot',info.serialRoot],['g-etm-root','gen.etmRoot',info.etmRoot]]) {
+        if (!$(id).value && typeof value === 'string') { $(id).value=value; store.set(key,value); }
+      }
+      this.refresh();
+    } catch {} // 普通静态站点没有此接口：路径留空供用户填写。
   }
 
   onShow(){ this.refresh(); }
@@ -147,7 +175,7 @@ export class GenView {
     if (!tabs) return;
     for (const b of tabs.querySelectorAll('button[data-dock]')) b.addEventListener('click', () => this._dockSelect(b.dataset.dock));
     const saved = store.get('gen.dock', 'files');
-    this._dockSelect(['files', 'params', 'bridge'].includes(saved) ? saved : 'files', { save: false });
+    this._dockSelect(['files', 'params', 'bridge', 'etm'].includes(saved) ? saved : 'files', { save: false });
   }
 
   _dockSelect(name, { save = true } = {}){
@@ -160,10 +188,12 @@ export class GenView {
       fs.hidden = !!fs.dataset.dock && fs.dataset.dock !== name;
     }
     this.dock = name;
+    const stats = document.querySelector('#tab-gen .stats');
+    if (stats) stats.style.display = name === 'etm' ? 'none' : '';
     if (save) store.set('gen.dock', name);
     // 刚显示出来的内容补一次刷新（隐藏期间不渲染，省得白算）
     if (name === 'params') this.renderParams();
-    if (name === 'bridge') this.renderPreview();
+    if (name === 'bridge' || name === 'etm') this.renderPreview();
     if (name === 'files') this.renderPreview();
     this.renderPill();
   }
@@ -178,6 +208,7 @@ export class GenView {
     const bytes = (this.files || []).reduce((a, f) => a + f.data.length, 0);
     if (this.dock === 'params') pill.textContent = `${document.querySelectorAll('#g-params-body tr:not(.gparamhead)').length} 项参数 · 点值即复制`;
     else if (this.dock === 'bridge') pill.textContent = kit ? `${kit} 个文件 · ${(kitBytes(this.kitFiles) / 1024).toFixed(0)} KB` : '桥包未生成（左栏勾上）';
+    else if (this.dock === 'etm') pill.textContent = this.etmError || `${this.etmFiles.length} 个文件 · ${(kitBytes(this.etmFiles) / 1024).toFixed(1)} KB`;
     else pill.textContent = `${proj} 个文件 · ${(bytes / 1024).toFixed(1)} KB · ${this.p?.newline === 'lf' ? 'LF' : 'CRLF'}`;
   }
 
@@ -236,6 +267,11 @@ export class GenView {
     });
     this.projFiles = buildOutputs(this.p);
     this.kitFiles = this.kitOut;
+    this.etmError = '';
+    try { this.etmFiles = etmKitFiles({serialRoot:$('g-etm-serial-root').value,etmRoot:$('g-etm-root').value,port:$('g-etm-port').value}); }
+    catch(e) { this.etmFiles=[]; this.etmError=e.message; }
+    $('g-zip-etm').disabled = !!this.etmError;
+    $('g-etm-open').disabled = !!this.etmError;
     this.files = [...this.projFiles, ...this.kitFiles];
     if (this.selP >= this.projFiles.length) this.selP = Math.max(0, this.projFiles.length - 1);
     if (this.selK >= this.kitFiles.length) this.selK = Math.max(0, this.kitFiles.length - 1);
@@ -279,6 +315,7 @@ export class GenView {
     };
     draw($('g-files'), this.projFiles, 'selP');
     draw($('g-kit-files'), this.kitFiles, 'selK');
+    draw($('g-etm-files'), this.etmFiles, 'selE');
   }
 
   /** 两个预览框各自画自己的（切 tab、改参数都会调到）*/
@@ -292,6 +329,8 @@ export class GenView {
     paint($('g-preview'), this.projFiles[this.selP]);
     paint($('g-kit-preview'), this.kitFiles.length ? this.kitFiles[this.selK]
       : (this.p?.bridgeKit ? null : undefined));
+    paint($('g-etm-preview'), this.etmFiles[this.selE]);
+    if (this.etmError) $('g-etm-preview').textContent=this.etmError;
   }
 
   /**
@@ -505,10 +544,20 @@ export class GenView {
    * （「调试参数」tab 没有文件，复制/下载按钮在那儿不显示 —— 那边是参数表。）
    */
   currentFile(){
+    if (this.dock === 'etm') return this.etmFiles[this.selE];
     return this.dock === 'bridge' ? this.kitFiles[this.selK] : this.projFiles[this.selP];
   }
 
+  downloadEtmZip(){
+    this.refresh();
+    if (!this.etmFiles.length) return toast(this.etmError || 'ETM 启动包未生成','err');
+    const zip=zipStore(this.etmFiles.map(f=>({name:f.name,data:f.data})));
+    saveBlob(new Blob([zip],{type:'application/zip'}),`${ETM_KIT_DIR}.zip`);
+    toast('已下载 ETM 桥包：解压后双击 start-etm-bridge.bat，启动成功再打开工作台','ok',6000);
+  }
+
   downloadCurrent(){
+    if (this.dock === 'etm') this.refresh();
     const f = this.currentFile();
     if (!f) return;
     saveBlob(new Blob([f.data], { type: f.bin ? 'application/octet-stream' : 'text/plain' }), f.name);
@@ -545,6 +594,7 @@ export class GenView {
         files: (this.kitFiles || []).map(f => f.name),
         bytes: (this.kitFiles || []).reduce((a, f) => a + f.data.length, 0),
       },
+      etmKit: {files:this.etmFiles.map(f=>f.name),error:this.etmError},
       supported: { directoryPicker: !!window.showDirectoryPicker },
     };
   }

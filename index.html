@@ -13,7 +13,7 @@
   var mode = new URLSearchParams(location.search).get('modules');
   var local = ['localhost', '127.0.0.1', '[::1]'].indexOf(location.hostname) !== -1;
   window.__useWebBundle = mode === 'bundle' || (mode !== 'source' && !local);
-  window.__webBundleUrl = 'app/site/main.js?v=77fb971e4ae7faae';
+  window.__webBundleUrl = 'app/site/main.js?v=882af034e279cdec';
   var preload = document.createElement('link');
   preload.rel = 'modulepreload';
   preload.href = window.__useWebBundle ? window.__webBundleUrl : 'app/main.js';
@@ -2052,6 +2052,15 @@
       </fieldset>
 
       <!-- 本地桥：跟"工程配套文件"是两回事（那是本机跑的程序包）—— 单独一个 tab（用户 2026-10 要求） -->
+      <fieldset data-dock="etm">
+        <legend>ETM 本地桥</legend>
+        <label class="row wide"><span>工具箱工程目录</span><input id="g-etm-serial-root" placeholder="web-serial-rtt-tools 的完整路径"></label>
+        <label class="row wide"><span>ETM 工程目录</span><input id="g-etm-root" placeholder="web-etm-trace 的完整路径"></label>
+        <label class="row"><span>端口</span><input id="g-etm-port" type="number" min="1024" max="65535" value="8878"></label>
+        <p class="hint">本地工作台自动带入目录；其它页面请填写本机路径。留空时，启动器只在解压目录及上两级寻找相邻工程。</p>
+        <p class="hint">① 下载 ZIP 并解压<br>② 双击 <code>start-etm-bridge.bat</code><br>③ 打开工作台，连接探针并采集。</p>
+        <p class="hint">需要两个已更新的工程、Python 3.9+、ETM 的 Python 依赖和已构建的解码器。先打开 KingstVIS 的 Socket 并使能五路通道。<code>check-tools.bat</code> 可检查启动环境。</p>
+      </fieldset>
       <fieldset id="g-bridge-card" data-dock="bridge">
         <legend>本地桥（J-Link / OpenOCD）</legend>
         <label class="chk"><input type="checkbox" id="g-bk-on" checked title="J-Link / OpenOCD 都是本机程序，浏览器无权启动它们 —— 要用这两条后端就得有个本机桥。零安装的 WebUSB 通路不需要它">生成「本地桥」安装包（双击即用）</label>
@@ -2092,6 +2101,7 @@
             <button data-dock="files" class="on">工程文件</button>
             <button data-dock="params">调试参数</button>
             <button data-dock="bridge">本地桥</button>
+            <button data-dock="etm">ETM 桥</button>
           </span>
           <span class="hint dockrun" id="g-dock-pill" title="当前 tab 的一句话状态">待生成</span>
           <span class="spacer"></span>
@@ -2121,6 +2131,18 @@
           </div>
         </div>
 
+        <div class="dockpage" data-dock="etm">
+          <div class="toolbar">
+            <button id="g-zip-etm" class="primary mini">下载 ETM 桥包（ZIP）</button>
+            <button id="g-etm-open" class="mini">打开 ETM 工作台</button>
+            <span class="spacer"></span>
+            <button id="g-etm-copy" class="mini">复制当前文件</button>
+            <button id="g-etm-dl" class="mini">下载当前文件</button>
+          </div>
+          <div class="toolbar"><div class="seg" id="g-etm-files"></div></div>
+          <pre class="rx fill" id="g-etm-preview" tabindex="0"></pre>
+          <p class="flush hint">启动包只包含脚本、BAT、配置和说明；保留本机的两个工程。双击 BAT 后自动打开网页，也可点击上方按钮。网页按钮打开已运行的服务，不能直接执行 BAT。</p>
+        </div>
         <div class="dockpage" data-dock="bridge" id="g-kit-card">
           <div class="toolbar">
             <span class="flush hint">安装包里的文件</span>

@@ -342,11 +342,13 @@ test-scope:
 test-gen:
 	$(NODE) tools/selftest/gen-parity.mjs
 	$(NODE) tools/selftest/bridge-kit.test.mjs
+	$(NODE) tools/selftest/etm-kit.test.mjs
 
 # 改完 bridge/rtt-bridge.mjs 必须重嵌一次（否则「工程生成」页发出去的桥是旧的）
 # 忘了也没事：test-gen 里那条哈希对账会红
 gen-embed:
 	$(NODE) tools/dev/embed-bridge.mjs
+	$(NODE) tools/dev/embed-etm-kit.mjs
 
 # 探针自定义 HID（RTT→CDC 转发）协议自测：组包 / 状态字 / 假探针流程
 test-hid:
