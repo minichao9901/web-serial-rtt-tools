@@ -424,18 +424,19 @@ export class SpiBusView {
       for (const o of sel.options){
         const pad = +o.dataset.pad;
         /* 9/10 = PY00/PY01（v1 不支持）；SPI2_PADS = 桥的信号线；12 = PA30（被 Q1 短到地） */
-        const bad = pad === 9 || pad === 10 || pad === 12 || SPI2_PADS.includes(pad);
+        const bad = pad === 9 || pad === 10 || pad === 12 || pad === 15 || SPI2_PADS.includes(pad);
         o.disabled = bad;
       }
       if (sel.selectedOptions[0]?.disabled){
         const was = sel.selectedOptions[0].textContent;
         sel.value = '0';
-        this.session.log('w', `${id.replace('sp-pad-', '').toUpperCase()} 选的「${was}」固件会拒（SPI2 固定脚 / PY / PA30），已改回「不用」`, this.tag);
+        this.session.log('w', `${id.replace('sp-pad-', '').toUpperCase()} 选的「${was}」固件会拒（SPI2 固定脚 / PY / PA30 / PA27 NRST），已改回「不用」`, this.tag);
       }
     }
     notes.push('PB10~PB13 是 SPI2 的 CS/SCLK/MISO/MOSI（已灰）');
     notes.push('PA30 是 USB0_PWR 网络，被板上 Q1 常态短到地，拉不动（已灰）');
     notes.push('PY00/PY01 在 v1 不支持（已灰）');
+    notes.push('PA27/J3[23] 是目标 NRST 专用输出（已灰）');
     /* PA28/PA29 是 I2C 桥写死的 SDA/SCL（见 akaLinkPro 的 i2c_bridge.c）：
        **不灰掉**（I2C 没使能时它们确实能用），但要让接线的人知道这两根已经名花有主。 */
     notes.push('PA28/PA29 是 I2C 桥的固定 SDA/SCL（J3[21]/J3[19]）—— I2C 一使能，固件就拒这两根当辅助脚');

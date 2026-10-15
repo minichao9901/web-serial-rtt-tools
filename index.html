@@ -13,7 +13,7 @@
   var mode = new URLSearchParams(location.search).get('modules');
   var local = ['localhost', '127.0.0.1', '[::1]'].indexOf(location.hostname) !== -1;
   window.__useWebBundle = mode === 'bundle' || (mode !== 'source' && !local);
-  window.__webBundleUrl = 'app/site/main.js?v=f545cf546275eeb1';
+  window.__webBundleUrl = 'app/site/main.js?v=43b27561dce74593';
   var preload = document.createElement('link');
   preload.rel = 'modulepreload';
   preload.href = window.__useWebBundle ? window.__webBundleUrl : 'app/main.js';
@@ -62,10 +62,10 @@
   </nav>
   <div class="topright">
     <span id="conn-flag" class="flag flag-off">串口：未连接</span>
-    <label class="chk" id="global-trst-control" title="连接支持该功能的 akaLinkPro 固件后可用。">
-      <input type="checkbox" id="global-trst-open-drain" checked disabled> TRST 开漏
+    <label class="chk" id="global-nrst-control" title="连接支持该功能的 akaLinkPro 固件后可用。">
+      <input type="checkbox" id="global-nrst-open-drain" checked disabled> NRST 开漏
     </label>
-    <button id="btn-global-reset" class="mini" type="button" title="通过探针复位输出同时硬复位目标板，然后让目标继续运行">全局复位</button>
+    <button id="btn-global-reset" class="mini" type="button" title="向目标 NRST 发送硬复位脉冲；EVKLite 使用 PA27/J3[23]，PA08 接 TRST 时仅复位 JTAG">全局复位</button>
     <span id="probe-flag" class="flag flag-off" role="status">探针：未使用</span>
     <details class="app-more" id="app-more">
       <summary>帮助</summary>
@@ -729,6 +729,14 @@
       </fieldset>
       <fieldset id="f-sram-bench">
         <legend>SRAM 读写测速</legend>
+          <label class="row"><span>SWD 时钟</span>
+            <select id="f-ram-clock">
+              <option value="0">自动（完整校验后选择档位）</option>
+              <option value="60000">60 MHz</option><option value="45000">45 MHz</option>
+              <option value="36000">36 MHz</option><option value="20000">20 MHz</option>
+              <option value="10000">10 MHz</option><option value="4000">4 MHz</option><option value="1000">1 MHz</option>
+            </select>
+          </label>
         <label class="row"><span>起始地址</span><input id="f-ram-address" class="address" value="" placeholder="0x24080000"></label>
         <label class="row"><span>测试长度</span>
           <select id="f-ram-length">

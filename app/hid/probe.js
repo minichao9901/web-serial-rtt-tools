@@ -45,7 +45,7 @@ export const RTT_ACT = {
 };
 
 /** HID 0x3A: change/query EVKLite reset output mode. */
-export const RESET_IO_ACT = { GET: 0, SET_TRST_MODE: 1 };
+export const RESET_IO_ACT = { GET: 0, SET_NRST_MODE: 1 };
 export function resetIoData(action, openDrain = 0){ return Uint8Array.of(action & 0xff, openDrain ? 1 : 0); }
 
 /** action 10：切全局目标类型。Byte[0]=10（action）、Byte[1]=0 SWD/ARM | 1 RISC-V/JTAG。
@@ -99,12 +99,13 @@ export function parseResetIoResponse(res){
     if (res?.[1] === 0) throw new Error('探针固件不支持复位输出设置（请升级 akaLinkPro 固件）');
     throw new Error('复位输出设置响应格式错误');
   }
-  const rc = s8(res[2] || 0);
+  if (res.length < 5 || res[0] !== 4 || res[3] > 1) throw new Error('复位输出设置响应不完整或格式错误');
+  const rc = s8(res[2]);
   if (rc === -1) throw new Error('当前探针板型不支持复位输出模式设置');
   if (rc === -2) throw new Error('探针拒绝了未知的复位输出操作');
   if (rc !== 0) throw new Error(`复位输出设置失败（返回码 ${rc}）`);
   const caps = res[4] || 0;
-  return { openDrain: !!res[3], supportsMode: !!(caps & 1), dualReset: !!(caps & 2), capabilities: caps };
+  return { openDrain: !!res[3], supportsMode: !!(caps & 1), dualReset: !!(caps & 2), pa27Configurable: !!(caps & 4), capabilities: caps };
 }
 
 /**
@@ -339,7 +340,7 @@ export class AkaLinkHid {
     // else until its reply is consumed (or physical unplug ends that channel).
     const orphan = channel.fault;
     if (orphan){
-      if (res[1] === orphan.cmd || res[1] === 0){
+      if (res[1] === orphan.cmd || (orphan.cmd === CMD.RESET_IO && res[0] === 1 && res[1] === 0)){
         orphan.replyReceived = true;
         if (orphan.writeSettled) channel.fault = null;
       }
@@ -352,7 +353,7 @@ export class AkaLinkHid {
     // Older firmware answers unknown custom commands with CMD_NOT_SUPPORT (0)
     // instead of echoing the request command. Consume that reply so capability
     // checks fail promptly without poisoning the HID channel until timeout.
-    if (res[1] !== p.cmd && res[1] !== 0) return;
+    if (res[1] !== p.cmd && !(p.cmd === CMD.RESET_IO && res[0] === 1 && res[1] === 0)) return;
     p.replyReceived = true;
     this._pending = null;
     this._settle(p);                      // 清掉这条请求的超时定时器，再放行
@@ -528,7 +529,7 @@ export class AkaLinkHid {
   }
 
   getResetOutputMode(){ return this.resetIo(RESET_IO_ACT.GET); }
-  setResetOutputMode(openDrain){ return this.resetIo(RESET_IO_ACT.SET_TRST_MODE, openDrain); }
+  setResetOutputMode(openDrain){ return this.resetIo(RESET_IO_ACT.SET_NRST_MODE, openDrain); }
 
   /**
    * 让探针自己的 RISC-V 引擎**放掉 JTAG TAP**（HID 0x33 action 0）。

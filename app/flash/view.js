@@ -22,6 +22,8 @@ import { store } from '../core/store.js';
 import { CHIPS, fillChipSelect } from '../core/chips.js';
 import { BridgeClient } from '../rtt/bridge.js';
 import { WebUsbDapProbe, withTimeout } from '../rtt/dap-webusb.js';
+import { pulseTargetReset } from './target-reset.js';
+import { SramBenchTransfer } from './sram-transfer.js';
 import { ALGOS, F1_DEV, checkFlashRange } from './algos.js';
 import { HPM_BOARDS, hpmBoard, hpmCheckRange } from './hpm/chips.js';
 import { DBGMCU_BASES, FLASH_SIZE_REGS, decodeCpuid, decodeDpIdcode, decodeStm32Dev, refineByFlash, saneFlashKb } from './devid.js';
@@ -150,7 +152,7 @@ export class FlashView {
     if (!this._ramAddrTouched){
       const ranges = chipRamRanges($('f-chip').value);
       const addr = $('f-chip').value === 'stm32h7b0' ? 0x24080000 : (ranges[0]?.start ?? 0);
-      $('f-ram-address').value = addr ? `0x${addr.toString(16)}` : '';
+      if ($('f-ram-address')) $('f-ram-address').value = addr ? `0x${addr.toString(16)}` : '';
     }
     this._applySramUi();
   }
@@ -237,18 +239,18 @@ export class FlashView {
     try {
       if (!(await this._clearProbeUsers('全局硬复位'))) return false;
       this._status('连接探针，准备硬复位目标…');
-      this.probe = await this._openProbeForRead({ clockKhz: 1000 });
-      const result = await withTimeout(this.probe.reset(), 15000, '全局硬复位目标');
-      this._log(`全局硬复位完成：${result}；EVKLite 的 PA08/J5[3] 与 PA27/J3[23] 会同步驱动 nRESET`);
-      this._status('全局硬复位完成，目标已恢复运行', 'ok');
-      toast('目标板已硬复位并恢复运行', 'ok');
-      return true;
+      this.probe = await this._openProbeForRead({ skipTargetInit: true });
+      await pulseTargetReset(this.probe);
     } catch (e){
       operationError = e;
       throw e;
     } finally {
       await this._closeProbe(operationError);
     }
+    this._log('全局硬复位脉冲已发送并释放；EVKLite 用 PA27/J3[23] 接目标 NRST。PA08 接 TRST 时仅复位 JTAG。');
+    this._status('硬复位脉冲已发送（需连接目标 NRST）', 'ok');
+    toast('硬复位脉冲已发送', 'ok');
+    return true;
   }
 
   async benchmarkSram(){
@@ -278,51 +280,86 @@ export class FlashView {
       this._status('连接目标，暂停 CPU…');
       this.probe = await this._openProbeForRead({ clockKhz: 1000 });
       const p = this.probe;
-      wasHalted = await withTimeout(p.isHalted(), 3000, '读取目标运行状态');
+      const readHalted = async () => {
+        const bytes = await p.readMem(0xE000EDF0, 4);
+        if (bytes.length !== 4) throw new Error('目标运行状态读取不完整');
+        return !!(bytes[2] & 2);
+      };
+      wasHalted = await withTimeout(readHalted(), 3000, '读取目标运行状态');
       await withTimeout(p.halt(), 5000, '暂停目标 CPU');
-      if (!(await withTimeout(p.isHalted(), 3000, '确认目标已暂停')))
+      if (!(await withTimeout(readHalted(), 3000, '确认目标已暂停')))
         throw new Error('无法确认 CPU 已暂停，已取消写入 SRAM');
 
       const pattern = new Uint8Array(size);
-      for (let i = 0; i < pattern.length; i++) pattern[i] = ((i * 73) ^ (i >>> 3) ^ (i >>> 11) ^ 0xA5) & 0xff;
+      const seed = (Date.now() ^ Math.floor(performance.now() * 1000)) & 0xff;
+      const verify = bytes => {
+        if (!bytes || bytes.length !== size) throw new Error('SRAM 读回长度不完整');
+        for (let i = 0; i < size; i++) if (bytes[i] !== pattern[i])
+          throw new Error(`SRAM 校验失败：偏移 0x${i.toString(16)}，地址 0x${(addr + i).toString(16)}`);
+      };
       const verifyWrites = p.verifyWrites;
-      p.verifyWrites = false; // 写入计时只测主机→目标 RAM；最终单独做一次整段校验。
-      let writeMs, readMs, lastRead;
+      const requestedClock = Number($('f-ram-clock')?.value ?? 60000);
+      if (![0,1000,4000,10000,20000,36000,45000,60000].includes(requestedClock)) throw new Error('SRAM 测速 SWD 时钟无效');
+      const bulk = typeof p.info==='function' ? await SramBenchTransfer.create(p) : null;
+      const write = (address, data) => bulk ? bulk.write(address,data) : p.writeMem(address,data);
+      const read = (address, length) => bulk ? bulk.read(address,length) : p.readMem(address,length);
+      let writeMs = 0, readMs = 0, clockKhz = requestedClock;
+      const failedClocks = [];
+      const candidates = requestedClock ? [requestedClock] : [60000,45000,36000,20000,10000,4000,1000];
+      p.verifyWrites = false;
       try {
-        this._status(`写入 ${size / 1024} KiB SRAM（${SRAM_BENCH_PASSES} 轮）…`);
-        let t0 = performance.now();
-        for (let i = 0; i < SRAM_BENCH_PASSES; i++)
-          await withTimeout(p.writeMem(addr, pattern), 45000, `写 SRAM 第 ${i + 1} 轮`);
-        writeMs = performance.now() - t0;
-
-        this._status(`读取 ${size / 1024} KiB SRAM（${SRAM_BENCH_PASSES} 轮）…`);
-        t0 = performance.now();
-        for (let i = 0; i < SRAM_BENCH_PASSES; i++)
-          lastRead = await withTimeout(p.readMem(addr, size), 45000, `读 SRAM 第 ${i + 1} 轮`);
-        readMs = performance.now() - t0;
+        for (const candidate of candidates){
+          try {
+            clockKhz = candidate; writeMs = 0; readMs = 0;
+            if (p.setClock) await p.setClock(clockKhz*1000);
+            this._status(`写入 ${size / 1024} KiB SRAM（${SRAM_BENCH_PASSES} 轮）…`);
+            for (let pass = 0; pass < SRAM_BENCH_PASSES; pass++){
+              for (let i = 0; i < size; i++) pattern[i] = ((i * 73) ^ (i >>> 3) ^ (i >>> 11) ^ seed ^ (pass * 97)) & 0xff;
+              const t0 = performance.now();
+              await withTimeout(write(addr, pattern), 45000, `写 SRAM 第 ${pass + 1} 轮`);
+              writeMs += performance.now() - t0;
+              // Every write has a different pattern; verification is outside write timing.
+              verify(await withTimeout(read(addr, size), 45000, '校验写入 SRAM'));
+            }
+            this._status(`读取 ${size / 1024} KiB SRAM（${SRAM_BENCH_PASSES} 轮）…`);
+            for (let pass = 0; pass < SRAM_BENCH_PASSES; pass++){
+              const t0 = performance.now();
+              const bytes = await withTimeout(read(addr, size), 45000, `读 SRAM 第 ${pass + 1} 轮`);
+              readMs += performance.now() - t0;
+              verify(bytes);
+            }
+            break;
+          } catch (e){
+            failedClocks.push({clockKhz:candidate,error:e.message});
+            if(requestedClock || candidate===1000 || !p.recoverDebugPort) throw e;
+            this._log(`SRAM ${candidate/1000} MHz 未通过完整校验，降低档位重新测试：${e.message}`);
+            await p.setClock(1000000);
+            p.clockHz = 1000000;
+            await p.recoverDebugPort();
+            await p.halt();
+            if(!(await readHalted()))throw new Error('降档后无法确认 CPU 已暂停，取消 SRAM 写入');
+          }
+        }
       } finally {
         p.verifyWrites = verifyWrites;
+        // PPB execution control remains at the known-good 1MHz, independently
+        // of the bulk RAM test clock. In particular H7 halt/run needs this.
+        if (p.setClock) await p.setClock(1000000);
       }
-
-      if (!lastRead || lastRead.length !== pattern.length) throw new Error('SRAM 读回长度不完整');
-      let mismatch = -1;
-      for (let i = 0; i < pattern.length; i++) if (lastRead[i] !== pattern[i]){ mismatch = i; break; }
-      if (mismatch >= 0) throw new Error(`SRAM 校验失败：偏移 0x${mismatch.toString(16)}，地址 0x${(addr + mismatch).toString(16)}`);
 
       const totalBytes = size * SRAM_BENCH_PASSES;
       const writeRate = totalBytes / (Math.max(0.001, writeMs) / 1000) / 1e6;
       const readRate = totalBytes / (Math.max(0.001, readMs) / 1000) / 1e6;
-      result = { addr, size, passes: SRAM_BENCH_PASSES, writeMs, readMs, writeRate, readRate, verified: true };
-      const text = `读 ${readRate.toFixed(2)} MB/s · 写 ${writeRate.toFixed(2)} MB/s · ${size / 1024} KiB × ${SRAM_BENCH_PASSES} 轮 · 校验通过${wasHalted ? ' · CPU 保持暂停' : ' · CPU 已恢复运行'}`;
-      $('f-ram-result').dataset.result = 'true';
-      $('f-ram-result').textContent = text;
-      this._log(`SRAM 测速：0x${addr.toString(16)}，${size / 1024} KiB；读 ${readRate.toFixed(2)} MB/s (${readMs.toFixed(1)} ms)，写 ${writeRate.toFixed(2)} MB/s (${writeMs.toFixed(1)} ms)，${SRAM_BENCH_PASSES} 轮；数据校验通过`);
-      this._status('SRAM 读写测速完成，数据校验通过', 'ok');
+      result = { addr, size, passes: SRAM_BENCH_PASSES, writeMs, readMs, writeRate, readRate, clockKhz, failedClocks, transport: bulk ? `atomic-${bulk.depth}` : 'standard', verified: true };
     } catch (e){
       operationError = e;
     } finally {
       if (this.probe && wasHalted === false){
-        try { await withTimeout(this.probe.run(), 5000, '恢复目标运行'); }
+        try {
+          await withTimeout(this.probe.run(), 5000, '恢复目标运行');
+          const state = await withTimeout(this.probe.readMem(0xE000EDF0, 4), 3000, '确认目标恢复运行');
+          if (state.length !== 4 || (state[2] & 2)) throw new Error('无法确认目标已恢复运行');
+        }
         catch (e){ cleanupError = e; }
       }
       try { await this._closeProbe(); }
@@ -331,6 +368,11 @@ export class FlashView {
     if (operationError && cleanupError) throw new AggregateError([operationError, cleanupError], `${operationError.message}；恢复/关闭探针时也失败：${cleanupError.message}`);
     if (operationError) throw operationError;
     if (cleanupError) throw cleanupError;
+    const text = `读 ${result.readRate.toFixed(2)} MB/s · 写 ${result.writeRate.toFixed(2)} MB/s · SWD ${result.clockKhz/1000} MHz · ${size / 1024} KiB × ${SRAM_BENCH_PASSES} 轮 · 校验通过${wasHalted ? ' · CPU 保持暂停' : ' · CPU 已恢复运行'}`;
+    $('f-ram-result').dataset.result = 'true';
+    $('f-ram-result').textContent = text;
+    this._log(`SRAM 测速：0x${addr.toString(16)}，${size / 1024} KiB；读 ${result.readRate.toFixed(2)} MB/s (${result.readMs.toFixed(1)} ms)，写 ${result.writeRate.toFixed(2)} MB/s (${result.writeMs.toFixed(1)} ms)，SWD ${result.clockKhz/1000} MHz / ${result.transport}，${SRAM_BENCH_PASSES} 轮；数据校验通过`);
+    this._status('SRAM 读写测速完成，数据校验通过', 'ok');
     return result;
   }
 

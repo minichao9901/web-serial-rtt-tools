@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import { parseHTML } from 'linkedom';
+const {document}=parseHTML('<html><body><label id="global-nrst-control"><input id="global-nrst-open-drain" type="checkbox"></label></body></html>');
+globalThis.document=document;
+const {RttCdcView}=await import('../../app/hid/view.js');
+const view={mock:null};
+const apply=state=>RttCdcView.prototype._setResetIoUi.call(view,state);
+const input=document.getElementById('global-nrst-open-drain');
+apply({supportsMode:true,dualReset:true,pa27Configurable:false,openDrain:false});
+assert.equal(input.disabled,true,'old PA08-switching firmware must not enable a PA27-labelled control');
+apply({supportsMode:true,dualReset:true,pa27Configurable:true,openDrain:true});
+assert.equal(input.disabled,false);assert.equal(input.checked,true);
+assert.match(document.getElementById('global-nrst-control').title,/PA27 NRST/);
+apply(null);assert.equal(input.disabled,true,'unknown or failed readback disables mode changes');
+console.log('reset-io-ui: legacy PA08 mapping disabled, PA27 mapping enabled, unknown state disabled PASS');

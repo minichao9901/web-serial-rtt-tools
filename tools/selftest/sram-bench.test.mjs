@@ -23,7 +23,7 @@ assert.throws(() => validateSramBench('custom', '0x20000000', 20480), /不在当
 
 const page = parseHTML(await readFile(new URL('../../index.html', import.meta.url), 'utf8')).document;
 assert.ok(page.getElementById('btn-global-reset'), 'header exposes the global reset button');
-assert.ok(page.getElementById('global-trst-open-drain'), 'header exposes the TRST electrical-mode toggle');
+assert.ok(page.getElementById('global-nrst-open-drain'), 'header exposes the NRST electrical-mode toggle');
 assert.ok(page.getElementById('f-sram-bench'), 'flash page exposes the SRAM test panel');
 assert.deepEqual([...page.getElementById('f-ram-length').options].map(o => Number(o.value)), SRAM_BENCH_SIZES);
 

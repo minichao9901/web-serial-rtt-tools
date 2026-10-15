@@ -84,7 +84,7 @@ export class RttCdcView {
     $('h-stop').addEventListener('click', () => this.stop().catch(e => toast(e.message, 'err')));
     $('h-refresh').addEventListener('click', () => this.refresh());
     $('h-clock').addEventListener('change', debounce(() => this.applyClock(), 60));
-    $('global-trst-open-drain')?.addEventListener('change', () => this.applyResetOutputMode());
+    $('global-nrst-open-drain')?.addEventListener('change', () => this.applyResetOutputMode());
 
     // ?hid=mock：没插硬件也能把这张面板走一遍（自测/演示）
     if (new URLSearchParams(location.search).get('hid') === 'mock') this.useMock();
@@ -151,16 +151,16 @@ export class RttCdcView {
   }
 
   _setResetIoUi(state){
-    const input = $('global-trst-open-drain');
-    const label = $('global-trst-control');
+    const input = $('global-nrst-open-drain');
+    const label = $('global-nrst-control');
     if (!input) return;
-    this._resetIoSupported = !!(state?.supportsMode && state?.dualReset && !this.mock);
+    this._resetIoSupported = !!(state?.supportsMode && state?.dualReset && state?.pa27Configurable && !this.mock);
     if (this._resetIoSupported) input.checked = !!state.openDrain;
     input.disabled = !this._resetIoSupported;
     if (label){
       label.title = this._resetIoSupported
-        ? `J5[3]/PA08 TRST-as-nRESET：${state.openDrain ? '开漏' : '推挽'}；J3[23]/PA27 始终开漏。`
-        : '连接支持双路复位与 TRST 电气模式切换的新版本 akaLinkPro 固件后可用。';
+        ? `J3[23]/PA27 NRST：${state.openDrain ? '开漏' : '推挽'}；J5[3]/PA08 固定开漏；接 TRST 时仅复位 JTAG。`
+        : '连接支持双路复位与 PA27 NRST 电气模式切换的新版本 akaLinkPro 固件后可用。';
     }
   }
 
@@ -178,7 +178,7 @@ export class RttCdcView {
   }
 
   async applyResetOutputMode(){
-    const input = $('global-trst-open-drain');
+    const input = $('global-nrst-open-drain');
     if (!input || !this._resetIoSupported) return;
     if (this.last?.running || this._starting){
       input.checked = !input.checked;
@@ -194,10 +194,10 @@ export class RttCdcView {
       }, { reason: '更改目标复位输出方式', policy: 'reject' });
       if (!state) throw new Error('探针操作已取消');
       this._setResetIoUi(state);
-      toast(`J5[3]/TRST 复位输出已切为${state.openDrain ? '开漏' : '推挽'}`, 'ok');
+      toast(`J3[23]/PA27 NRST 输出已切为${state.openDrain ? '开漏' : '推挽'}`, 'ok');
     } catch (e){
       input.checked = !requested;
-      input.disabled = !this._resetIoSupported;
+      this._setResetIoUi(null); // A lost reply leaves the actual mode unknown; require a fresh query.
       toast('切换复位输出方式失败：' + (e?.message || e), 'err', 6000);
     }
   }

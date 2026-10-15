@@ -11,7 +11,8 @@ param(
   [int]$Port = 9333,
   [string]$Url = 'about:blank',
   [string]$Profile = "$env:TEMP\edge-rtt-tools-test",
-  [string]$Exe = ''
+  [string]$Exe = '',
+  [switch]$Visible
 )
 
 if (-not $Exe){
@@ -53,7 +54,8 @@ $args = @(
 )
 Write-Output "启动: $Exe"
 Write-Output ("参数: " + ($args -join ' '))
-Start-Process -FilePath $Exe -ArgumentList $args -WindowStyle Hidden | Out-Null
+$browserWindowStyle = if ($Visible) { 'Normal' } else { 'Hidden' }
+Start-Process -FilePath $Exe -ArgumentList $args -WindowStyle $browserWindowStyle | Out-Null
 
 for ($i = 0; $i -lt 60; $i++){
   try {

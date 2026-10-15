@@ -12,7 +12,7 @@ export const EVKLITE_J3 = [
       [17, '3V3', 'pwr', '', 0], [18, 'NC', 'nc', '', 0],
       [19, 'PA29', 'i2c', 'I2C 桥 SCL', 17], [20, 'GND', 'gnd', '', 0],
       [21, 'PA28', 'i2c', 'I2C 桥 SDA', 16], [22, 'NC', 'nc', '', 0],
-      [23, 'PA27', 'aux', '原 SPI1 SCLK', 15], [24, 'PA26', 'aux', '原 SPI1 CS0', 14],
+      [23, 'PA27', 'no', '目标 NRST 专用（开漏/推挽）', 15], [24, 'PA26', 'aux', '原 SPI1 CS0', 14],
       [25, 'GND', 'gnd', '', 0], [26, 'PB10', 'spi', 'CS', 4],
       [27, 'PB12', 'spi', 'D1 / MISO', 2], [28, 'PB13', 'spi', 'D0 / MOSI', 3],
       [29, 'PY00', 'no', 'PIOC domain', 9], [30, 'GND', 'gnd', '', 0],
