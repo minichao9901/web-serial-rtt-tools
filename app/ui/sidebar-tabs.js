@@ -7,7 +7,7 @@ export function initSidebarTabs(){
     const tabs = [...side.querySelectorAll('[data-side-tab]')];
     const pages = [...side.querySelectorAll('[data-side-panel]')];
     const help = pages.find(p => p.dataset.sidePanel === 'help');
-    if (!tabs.length || !help) continue;
+    if (!tabs.length) continue;
     const select = (key, remember = true) => {
       if (!tabs.some(t => t.dataset.sideTab === key)) key = tabs[0].dataset.sideTab;
       for (const t of tabs){
@@ -30,6 +30,7 @@ export function initSidebarTabs(){
       });
     }
     select(store.get(`sidebar.${name}.tab`, tabs[0].dataset.sideTab), false);
+    if (!help) continue;
 
     const heading = node => node.closest('fieldset')?.querySelector('legend')?.textContent || '使用说明';
     const note = (title, node) => {

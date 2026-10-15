@@ -64,6 +64,7 @@ export class FlashView {
     store.bind($('f-base'), 'flash.base');
     store.bind($('f-verify'), 'flash.verify', 'checked');
     store.bind($('f-reset'), 'flash.reset', 'checked');
+    store.bind($('f-speed'), 'flash.speed');
     $('f-ram-address')?.addEventListener('input', () => { this._ramAddrTouched = true; });
     $('f-chip').addEventListener('change', () => { rememberHpmBoard($('f-chip').value); this._applyChip(); });
     $('f-backend').addEventListener('change', () => this._applySramUi());
@@ -148,7 +149,7 @@ export class FlashView {
   _applyChip(){
     const custom = $('f-chip').value === 'custom';
     $('f-custom-cfgs-row').hidden = !custom;
-    $('f-custom-speed-row').hidden = !custom;
+    $('f-custom-speed-row').hidden = false;
     if (!this._ramAddrTouched){
       const ranges = chipRamRanges($('f-chip').value);
       const addr = $('f-chip').value === 'stm32h7b0' ? 0x24080000 : (ranges[0]?.start ?? 0);
@@ -158,10 +159,12 @@ export class FlashView {
   }
 
   _applySramUi(){
+    if ($('f-bridge-settings')) $('f-bridge-settings').hidden = $('f-backend')?.value === 'webusb';
     const supported = $('f-backend')?.value === 'webusb' &&
       !HPM_BOARDS.some(b => b.id === $('f-chip')?.value) && chipRamRanges($('f-chip')?.value).length > 0;
     const box = $('f-sram-bench');
     if (box) box.hidden = !supported;
+    if ($('f-sram-unavailable')) $('f-sram-unavailable').hidden = supported;
     const button = $('f-ram-run');
     if (button) button.disabled = !supported || this.busy;
     const result = $('f-ram-result');
@@ -266,6 +269,7 @@ export class FlashView {
       return await this._withProbeOwnership(() => this._benchmarkSramOnce(addr, size), 'SRAM 读写测速');
     } catch (e){
       if (resultEl){ resultEl.dataset.result = 'true'; resultEl.textContent = `SRAM 测速失败：${e?.message || e}`; }
+      this._status('SRAM 测速失败', 'err');
       throw e;
     }
   }
@@ -627,8 +631,7 @@ export class FlashView {
     const total = regions.reduce((s, r) => s + r.data.length, 0);
 
     // 探针：复用已授权的（不弹框），没有才弹浏览器选择框。
-    // 烧录强制 1MHz：flashloader 执行依赖 PPB（调试寄存器）访问，实测本探针固件
-    // 在高时钟下 PPB 访问不可靠（读回 0），RTT 那种纯 RAM 访问则 8MHz 没问题。
+    // 控制操作保持 1MHz；RAM 数据载入与 Flash 校验由 runner.data 切到所选档位。
     //
     // 🚨 每一步都必须带超时：WebUSB 的挂起传输会把浏览器的 USB 服务搞脏，
     //    那时 `navigator.usb.getDevices()` 会**永远不返回**（实测卡 90 秒以上、界面看着像死了，
@@ -650,7 +653,9 @@ export class FlashView {
 
     const verify = $('f-verify').checked;
     const doReset = $('f-reset').checked;
-    const runner = new FlashRunner(this.probe);
+    const clockKhz = Number($('f-speed')?.value) || 1000;
+    const runner = new FlashRunner(this.probe, { clockKhz });
+    this._log(`烧录数据时钟 ${clockKhz / 1000} MHz；执行控制 1 MHz`);
     lap('探针');
     this._log(`── 零安装烧录：${this.file.name}（${fBytes(total)}）→ ${chip} ──`);
     this._bar(1);
@@ -757,7 +762,7 @@ export class FlashView {
          *    的第一遍读常常整段是旧值 —— 实测就出现过"读到 0x0、期望 0xe7"，而 flash 里
          *    其实写对了（用裸客户端读同一个地址是正确的）。读两次一致才认，读不可靠时不会误报。
          */
-        const rb = await this._readStable(seg.addr, seg.data.length);
+        const rb = await this._readStable(seg.addr, seg.data.length, runner.data);
         for (let i = 0; i < seg.data.length; i++){
           if (rb[i] !== seg.data[i]){
             throw new Error(`校验失败：0x${(seg.addr + i).toString(16)} 处读到 0x${rb[i].toString(16)}，期望 0x${seg.data[i].toString(16)}`);
@@ -840,10 +845,10 @@ export class FlashView {
    * 专治这颗探针的「挂起读」——紧跟写操作之后的第一遍读拿到的是上一笔事务的数据。
    * ⚠️ 只用于**静态**数据（flash 校验）：RTT 之类的动态内存本来就会变，别用它。
    */
-  async _readStable(addr, len){
-    let prev = await this.probe.readMem(addr, len);
+  async _readStable(addr, len, reader = this.probe){
+    let prev = await reader.readMem(addr, len);
     for (let i = 0; i < 4; i++){
-      const cur = await this.probe.readMem(addr, len);
+      const cur = await reader.readMem(addr, len);
       if (cur.length === prev.length){
         let same = true;
         for (let j = 0; j < cur.length; j++){ if (cur[j] !== prev[j]){ same = false; break; } }
@@ -964,6 +969,9 @@ export class FlashView {
     this.probe = probe;
     probe.fast = false;
     probe.onLog = s => this._log('   [usb] ' + s);
+    const clockKhz = Number($('f-speed')?.value) || 1000;
+    await probe.setClock(clockKhz * 1000);
+    this._log(`烧录 JTAG 时钟 ${clockKhz / 1000} MHz`);
 
     const port = resolveHpmTarget(board);
     const jtag = new DapJtagTransport(probe, { irLength: port.debug.irLength, log: l => this._log('   ' + l) });
@@ -1091,10 +1099,10 @@ export class FlashView {
        * 会直接连不上探针（跟 WebUSB 那边"谁占着调试器"是同一类问题）。
        */
       ...(useJlink ? { backend: 'jlink' } : {}),
+      speed: Number($('f-speed').value) || 0,
     };
     if (cfg.target === 'custom'){
       cfg.cfgs = String($('f-cfgs').value || '').split(/[,\s;]+/).map(s => s.trim()).filter(Boolean);
-      cfg.speed = Number($('f-speed').value) || 0;
       if (!cfg.cfgs.length) throw new Error('自定义目标要填 cfg 文件（逗号分隔）');
     }
     if (/\.bin$/i.test(name)) cfg.base = Number($('f-base').value) || 0;

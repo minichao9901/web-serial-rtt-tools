@@ -20,6 +20,8 @@ function probe({packet=512,depth=4,fault}={}){
     if(fault==='count')res[6]--;
     if(fault==='ack')res[8]=4;
     if(fault==='echo')res[0]=5;
+    if(fault==='address-protocol')res[4]=8;
+    if(fault==='address-zero')res[4]=0;
     return fault==='short'?res.subarray(0,8):res;
   };
   const p={pkt:packet,_framing:'short',epOut:1,epIn:129,
@@ -49,3 +51,8 @@ for(const fault of ['count','ack','echo','short','stall']){
 const legacy=probe();legacy.info=async()=>Uint8Array.of(0);
 assert.equal(await SramBenchTransfer.create(legacy),null,'unsupported atomic commands use ordinary memory API');
 console.log('sram-transfer: 64/512-byte packets, 1/4-deep FIFO, cross-page data integrity, ACK/count/echo/short/stall failures PASS');
+for(const fault of ['address-protocol','address-zero']){
+  const p=probe({fault}),t=await SramBenchTransfer.create(p);
+  await assert.rejects(t.write(0x24080000,new Uint8Array(131072)),fault==='address-protocol'?/地址设置.*SWD 协议错误/:/地址设置.*异常 ACK/);
+}
+console.log('sram-transfer: reject failed TAR completion even when the following 120-word transfer reports success PASS');

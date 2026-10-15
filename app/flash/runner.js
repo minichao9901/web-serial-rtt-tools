@@ -16,6 +16,7 @@
  *    `yieldTask` = 让一步（不受节流）；`sleep` 只用在"算法真的要跑很久"的兜底节奏上。
  */
 import { sleep, yieldTask } from '../core/pace.js';
+import { FlashDataClock } from './data-clock.js';
 
 export function b64ToBytes(b64){
   const s = atob(b64);
@@ -25,7 +26,7 @@ export function b64ToBytes(b64){
 }
 
 export class FlashRunner {
-  constructor(probe){ this.probe = probe; }
+  constructor(probe, { clockKhz = 1000 } = {}){ this.probe = probe; this.data = new FlashDataClock(probe, clockKhz); }
 
   // ---------- 寄存器 ----------
   // 读写都委托给 probe（AP1 上的 DCRSR/DCRDR 握手在 dap-webusb.regRead/regWrite 里做，
@@ -40,7 +41,7 @@ export class FlashRunner {
     await p.halt();
     // 🚨 先摁住中断再擦：第一个被擦的扇区就是向量表，中断一旦进来内核就 LOCKUP
     if (p.maskInterrupts) await p.maskInterrupts();
-    await p.writeMem(algo.load_address, this.code);
+    await this.data.writeMem(algo.load_address, this.code);
     await this.runCode(algo.pc_init, { 0: algo.flash_start, 1: 0, 2: 0 }, 10000);
   }
 
@@ -95,7 +96,7 @@ export class FlashRunner {
   /** 数据先写进 RAM 缓冲，再调 program_page（r0=目标地址 r1=长度 r2=缓冲地址） */
   async programPage(addr, data){
     const buf = this.algo.page_buffers[0];
-    await this.probe.writeMem(buf, data);
+    await this.data.writeMem(buf, data);
     // 🚨 写完之后**必须把这笔 posted 写逼落地**再让算法去读它：
     //    AP 的写是后发的，算法在目标侧直接读 RAM，抢在前面就会读到上一页的内容 →
     //    烧进去的是旧数据（实测现象：校验失败，某个字节对不上）。

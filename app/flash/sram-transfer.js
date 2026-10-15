@@ -59,8 +59,15 @@ export class SramBenchTransfer {
         const replies=await this._exchange(batch.map(b=>b.req));
         for(let k=0;k<batch.length;k++){
           const {offset,words}=batch[k],res=replies[k];
-          if(res.length<8||res[0]!==2||res[1]!==5||res[2]!==1||res[3]!==1||res[4]!==6||res[7]!==1)
-            throw new Error(`SRAM 批量传输失败 @0x${(addr+offset).toString(16)}（命令/ACK：${Array.from(res.subarray(0,8),v=>v.toString(16).padStart(2,'0')).join(' ')}）`);
+          if(res.length<8||res[0]!==2||res[1]!==5||res[4]!==6)
+            throw new Error('SRAM 批量传输响应格式错误');
+          const fail = (stage, status) => {
+            const reason = status & 8 ? 'SWD 协议错误'
+              : ({1:'传输数量不完整',2:'目标 WAIT 超时',4:'目标 FAULT',7:'目标未应答'}[status & 7] || `异常 ACK 0x${status.toString(16).padStart(2,'0')}`);
+            throw new Error(`SRAM ${stage}失败 @0x${(addr+offset).toString(16)}：${reason}；可降低 SWD 时钟后重试（命令/ACK：${Array.from(res.subarray(0,8),v=>v.toString(16).padStart(2,'0')).join(' ')}）`);
+          };
+          if(res[2]!==1||res[3]!==1) fail('地址设置/完成检查',res[3]);
+          if(res[7]!==1) fail(read ? '块读取' : '块写入',res[7]);
           const got=res[5]|(res[6]<<8);
           if(got!==words||(read&&res.length<8+words*4))throw new Error('SRAM 批量传输不完整');
           if(read)bytes.set(res.subarray(8,8+words*4),offset);

@@ -58,7 +58,7 @@ code{font-family:var(--mono);background:var(--bg3);padding:0 4px;border-radius:v
 .tab.active{background:var(--bg3);border-color:var(--line);color:var(--fg);font-weight:600}
 .topright{justify-self:end;display:flex;align-items:center;gap:8px;min-width:0}
 .topbar>.topright #global-nrst-control{flex:none}
-.topbar>.topright #btn-global-reset{flex:none;white-space:nowrap}
+.topbar>.topright #btn-global-reset,.topbar>.topright #btn-fullscreen{flex:none;white-space:nowrap}
 .flag{font-size:var(--text-xs);padding:2px 8px;border-radius:99px;border:1px solid var(--line);color:var(--fg2);white-space:nowrap}
 .flag-on{color:#0d1117;background:var(--ok);border-color:var(--ok);font-weight:600}
 .flag-warn{color:#0d1117;background:var(--warn);border-color:var(--warn);font-weight:600}

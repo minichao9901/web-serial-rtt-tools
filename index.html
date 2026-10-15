@@ -13,7 +13,7 @@
   var mode = new URLSearchParams(location.search).get('modules');
   var local = ['localhost', '127.0.0.1', '[::1]'].indexOf(location.hostname) !== -1;
   window.__useWebBundle = mode === 'bundle' || (mode !== 'source' && !local);
-  window.__webBundleUrl = 'app/site/main.js?v=43b27561dce74593';
+  window.__webBundleUrl = 'app/site/main.js?v=d5a87fb8e68e8141';
   var preload = document.createElement('link');
   preload.rel = 'modulepreload';
   preload.href = window.__useWebBundle ? window.__webBundleUrl : 'app/main.js';
@@ -66,6 +66,7 @@
       <input type="checkbox" id="global-nrst-open-drain" checked disabled> NRST 开漏
     </label>
     <button id="btn-global-reset" class="mini" type="button" title="向目标 NRST 发送硬复位脉冲；EVKLite 使用 PA27/J3[23]，PA08 接 TRST 时仅复位 JTAG">全局复位</button>
+    <button id="btn-fullscreen" class="mini" type="button" aria-pressed="false" title="全屏显示工作台">全屏</button>
     <span id="probe-flag" class="flag flag-off" role="status">探针：未使用</span>
     <details class="app-more" id="app-more">
       <summary>帮助</summary>
@@ -671,9 +672,13 @@
 <!-- ============================ 烧录器 ============================ -->
 <section class="panel" id="tab-flash">
   <div class="ws">
-    <aside class="side">
+    <aside class="side tool-side" data-sidebar-tabs="flash">
+      <nav class="tool-side-tabs" role="tablist" aria-label="烧录器工具">
+        <button type="button" id="f-side-flash-tab" role="tab" aria-controls="f-side-flash-panel" aria-selected="true" data-side-tab="flash">烧录</button>
+        <button type="button" id="f-side-sram-tab" role="tab" aria-controls="f-side-sram-panel" aria-selected="false" tabindex="-1" data-side-tab="sram">SRAM 读写测试</button>
+      </nav>
       <fieldset>
-        <legend>烧录设置</legend>
+        <legend>目标与连接</legend>
         <label class="row"><span>后端</span>
           <select id="f-backend" title="零安装（默认）：与 RTT 共用探针，直接在浏览器里烧，覆盖 STM32 F0/F1/F4/F7/H7/L0/L4 与 HPM 全系 RISC-V。个别探针固件在 PPB 访问上有兼容问题、或你只想给磁盘路径（不给文件）时，换「本地桥」即可。">
             <option value="webusb">WebUSB · 零安装（默认）</option>
@@ -681,33 +686,44 @@
             <option value="jlink">本地桥 · J-Link</option>
           </select>
         </label>
-        <label class="row"><span>桥地址</span><input id="f-bridge-url" value="ws://127.0.0.1:17321"></label>
         <label class="row"><span>芯片</span>
           <select id="f-chip" title="走本地桥时它就是 OpenOCD 的目标 cfg；列表外的芯片选「自定义 cfg…」"></select>
         </label>
         <div class="row btnrow">
           <button id="f-idcode" title="只读地认目标（不动 flash、不改运行状态）：ARM/SWD 读 DP IDCODE + CPUID + STM32 DBGMCU DEV_ID/REV_ID + flash 容量寄存器；RISC-V/JTAG 读 TAP IDCODE。选错芯片也能读 —— 这个按钮不吃「芯片」那一格（只按后端选 SWD 还是 JTAG）。">读 IDCODE</button>
         </div>
-        <div class="row cfgrow" id="f-custom-cfgs-row" hidden><span>cfg 文件</span>
-          <input id="f-cfgs" title="逗号/空格分隔，按顺序加载。相对 OpenOCD scripts 目录或绝对路径">
-          <button id="f-cfgs-pick" type="button" title="列出桥所在机器的 OpenOCD cfg 让你挑">选择…</button>
-        </div>
-        <label class="row" id="f-custom-speed-row" hidden><span>SWD kHz</span>
-          <select id="f-speed">
-            <option value="">不设（默认）</option>
+      </fieldset>
+      <div id="f-side-flash-panel" class="tool-side-panel" role="tabpanel" aria-labelledby="f-side-flash-tab" data-side-panel="flash">
+      <fieldset>
+        <legend>烧录时钟</legend>
+        <label class="row" id="f-custom-speed-row"><span>时钟</span>
+          <select id="f-speed" title="WebUSB Cortex-M：所选档用于 RAM 数据与 Flash 校验，执行控制保留 1 MHz；本地桥和 RISC-V 使用整体调试时钟。高频传输不稳定时请降低档位。">
+            <option value="">默认（WebUSB 1 MHz）</option>
             <option value="1000">1 MHz</option>
+            <option value="4000">4 MHz</option>
             <option value="5000">5 MHz</option>
             <option value="10000">10 MHz</option>
             <option value="20000">20 MHz</option>
             <option value="30000">30 MHz</option>
+            <option value="36000">36 MHz</option>
             <option value="40000">40 MHz</option>
             <option value="45000">45 MHz</option>
             <option value="50000">50 MHz</option>
             <option value="60000">60 MHz</option>
           </select>
         </label>
+      </fieldset>
+      <fieldset id="f-bridge-settings">
+        <legend>本地桥设置</legend>
+        <label class="row"><span>桥地址</span><input id="f-bridge-url" value="ws://127.0.0.1:17321"></label>
+        <div class="row cfgrow" id="f-custom-cfgs-row" hidden><span>cfg 文件</span>
+          <input id="f-cfgs" title="逗号/空格分隔，按顺序加载。相对 OpenOCD scripts 目录或绝对路径">
+          <button id="f-cfgs-pick" type="button" title="列出桥所在机器的 OpenOCD cfg 让你挑">选择…</button>
+        </div>
+
         <p class="hint">烧录走仓库里的 <code>bridge/start-bridge.bat</code>（与 RTT 的桥同一个）。</p>
       </fieldset>
+
       <fieldset>
         <legend>固件</legend>
         <label class="row"><span>路径</span>
@@ -727,6 +743,9 @@
         </div>
         <p class="hint">烧录会暂停目标并在完成后复位；烧录前会断开占用探针的 RTT 会话。</p>
       </fieldset>
+      </div>
+      <div id="f-side-sram-panel" class="tool-side-panel" role="tabpanel" aria-labelledby="f-side-sram-tab" data-side-panel="sram" hidden>
+        <p id="f-sram-unavailable" class="hint" hidden>SRAM 读写测试需要 WebUSB 后端和支持的 Cortex-M 芯片，请在上方选择。</p>
       <fieldset id="f-sram-bench">
         <legend>SRAM 读写测速</legend>
           <label class="row"><span>SWD 时钟</span>
@@ -750,6 +769,7 @@
         <div class="row btnrow"><button id="f-ram-run" type="button">开始读写测速</button></div>
         <p id="f-ram-result" class="hint" aria-live="polite">选择 Cortex-M 芯片后可用；H7B0 推荐空闲 AXI SRAM：0x24080000。</p>
       </fieldset>
+      </div>
     </aside>
     <section class="main">
       <div class="toolbar">
@@ -758,7 +778,7 @@
         <span class="spacer"></span>
         <button id="f-logclear">清空日志</button>
       </div>
-      <pre class="rx eventlog" data-empty="选择固件后点击「烧录」，这里显示烧录进度与结果。" id="f-log" tabindex="0"></pre>
+      <pre class="rx eventlog" data-empty="烧录或 SRAM 测试的进度与结果显示在这里。" id="f-log" tabindex="0"></pre>
       <div class="stats">
         <span id="f-result">—</span>
         <span class="spacer"></span>

@@ -1074,6 +1074,8 @@ async function flashFirmware(wc, log){
       await backend.start(log);
     }
     const be = backend;
+    // A reused target session must also honor the newly selected flash rate.
+    if (Number(wc.speed) > 0) await be.rpc(`adapter speed ${Math.trunc(Number(wc.speed))}`);
     be.logBuf.length = 0;
 
     const t0 = Date.now();
