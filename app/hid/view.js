@@ -39,6 +39,7 @@ export class RttCdcView {
     this.last = null;         // 最近一次 status
     this._elfInput = null;
     this._bound = false;
+    this._resetIoSupported = false;
   }
 
   init(){
@@ -83,11 +84,15 @@ export class RttCdcView {
     $('h-stop').addEventListener('click', () => this.stop().catch(e => toast(e.message, 'err')));
     $('h-refresh').addEventListener('click', () => this.refresh());
     $('h-clock').addEventListener('change', debounce(() => this.applyClock(), 60));
+    $('global-trst-open-drain')?.addEventListener('change', () => this.applyResetOutputMode());
 
     // ?hid=mock：没插硬件也能把这张面板走一遍（自测/演示）
     if (new URLSearchParams(location.search).get('hid') === 'mock') this.useMock();
 
-    this.dev.onDisconnect = () => this.render({ error: '探针断开了（USB 被拔？）' });
+    this.dev.onDisconnect = () => {
+      this._setResetIoUi(null);
+      this.render({ error: '探针断开了（USB 被拔？）' });
+    };
     this.render();
     // 之前授权过的探针：静默接上（没授权就安静地保持未连接）
     if (!this.mock && AkaLinkHid.supported()) this.reconnect({ silent: true });
@@ -105,6 +110,7 @@ export class RttCdcView {
     try {
       await this.dev.request();
       this.info = await this.dev.info();
+      await this.syncResetOutputMode({ silent: true });
       this.render();
       toast(`已连接：${this.dev.label}${this.info.fw ? ' · FW ' + this.info.fw : ''}`, 'ok');
     } catch (e){
@@ -119,6 +125,7 @@ export class RttCdcView {
     try {
       await this.dev.reconnect();
       this.info = await this.dev.info();
+      await this.syncResetOutputMode({ silent: true });
       this.render();
       if (!silent) toast(`已重连：${this.dev.label}`, 'ok');
       /**
@@ -140,6 +147,58 @@ export class RttCdcView {
     } catch (e){
       if (!silent) toast('重连失败：' + (e?.message || e), 'err');
       else this.render();
+    }
+  }
+
+  _setResetIoUi(state){
+    const input = $('global-trst-open-drain');
+    const label = $('global-trst-control');
+    if (!input) return;
+    this._resetIoSupported = !!(state?.supportsMode && state?.dualReset && !this.mock);
+    if (this._resetIoSupported) input.checked = !!state.openDrain;
+    input.disabled = !this._resetIoSupported;
+    if (label){
+      label.title = this._resetIoSupported
+        ? `J5[3]/PA08 TRST-as-nRESET：${state.openDrain ? '开漏' : '推挽'}；J3[23]/PA27 始终开漏。`
+        : '连接支持双路复位与 TRST 电气模式切换的新版本 akaLinkPro 固件后可用。';
+    }
+  }
+
+  async syncResetOutputMode({ silent = false } = {}){
+    if (this.mock || !this.dev.connected){ this._setResetIoUi(null); return null; }
+    try {
+      const state = await this.dev.getResetOutputMode();
+      this._setResetIoUi(state);
+      return state;
+    } catch (e){
+      this._setResetIoUi(null);
+      if (!silent) toast('读取复位输出模式失败：' + (e?.message || e), 'err');
+      return null;
+    }
+  }
+
+  async applyResetOutputMode(){
+    const input = $('global-trst-open-drain');
+    if (!input || !this._resetIoSupported) return;
+    if (this.last?.running || this._starting){
+      input.checked = !input.checked;
+      toast('先停止 RTT 转发，再切换复位输出方式', 'warn');
+      return;
+    }
+    const requested = input.checked;
+    input.disabled = true;
+    try {
+      const state = await runProbeOperation(this, 'hid', async () => {
+        if (!this.dev.connected) await this.dev.reconnect();
+        return await this.dev.setResetOutputMode(requested ? 1 : 0);
+      }, { reason: '更改目标复位输出方式', policy: 'reject' });
+      if (!state) throw new Error('探针操作已取消');
+      this._setResetIoUi(state);
+      toast(`J5[3]/TRST 复位输出已切为${state.openDrain ? '开漏' : '推挽'}`, 'ok');
+    } catch (e){
+      input.checked = !requested;
+      input.disabled = !this._resetIoSupported;
+      toast('切换复位输出方式失败：' + (e?.message || e), 'err', 6000);
     }
   }
 
@@ -281,6 +340,7 @@ export class RttCdcView {
     try {
       await this.dev.reconnect();
       this.info = await this.dev.info().catch(() => this.info);
+      await this.syncResetOutputMode({ silent: true });
       /**
        * 🚨 **重连之后要把"目标类型"补发一遍**：目标类型是探针侧的**粘性**状态，
        *    但探针被复位/别的页面重设过之后就回到 SWD 了 —— 而界面上下拉仍然显示 RISC-V

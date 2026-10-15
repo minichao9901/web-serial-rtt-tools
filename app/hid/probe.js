@@ -25,6 +25,7 @@ export const CMD = {
   HW_DATE: 0x15, FW_DATE: 0x16, BL_DATE: 0x17,
   RTT: 0x31,
   RISCV: 0x33,
+  RESET_IO: 0x3a,
   RESET: 0xfe, DFU: 0xff,
 };
 
@@ -42,6 +43,10 @@ export const RTT_ACT = {
   STOP: 0, START: 1, STATUS: 2, AUTOSTART: 3, RAW_DAP: 4, PEEK: 5,
   RAW_RESULT: 6, CONFIG: 7, BENCH: 8, BENCH_RESULT: 9, TARGET: 10,
 };
+
+/** HID 0x3A: change/query EVKLite reset output mode. */
+export const RESET_IO_ACT = { GET: 0, SET_TRST_MODE: 1 };
+export function resetIoData(action, openDrain = 0){ return Uint8Array.of(action & 0xff, openDrain ? 1 : 0); }
 
 /** action 10：切全局目标类型。Byte[0]=10（action）、Byte[1]=0 SWD/ARM | 1 RISC-V/JTAG。
  *  ⚠️ 这是**0x31** 的动作，不是 0x32 —— J-Scope 那边要发它得用 HID_CMD_RTT（见 scope/protocol.js）。*/
@@ -87,6 +92,20 @@ export function rttConfigData({ clockHz = 0, chunkBytes = 0, discard = false, de
 }
 
 const s8 = v => (v & 0xff) > 127 ? (v & 0xff) - 256 : (v & 0xff);
+
+/** Parse the 0x3A response payload: cmd, rc, mode, capability bits. */
+export function parseResetIoResponse(res){
+  if (!res || res[1] !== CMD.RESET_IO){
+    if (res?.[1] === 0) throw new Error('探针固件不支持复位输出设置（请升级 akaLinkPro 固件）');
+    throw new Error('复位输出设置响应格式错误');
+  }
+  const rc = s8(res[2] || 0);
+  if (rc === -1) throw new Error('当前探针板型不支持复位输出模式设置');
+  if (rc === -2) throw new Error('探针拒绝了未知的复位输出操作');
+  if (rc !== 0) throw new Error(`复位输出设置失败（返回码 ${rc}）`);
+  const caps = res[4] || 0;
+  return { openDrain: !!res[3], supportsMode: !!(caps & 1), dualReset: !!(caps & 2), capabilities: caps };
+}
 
 /**
  * 12 个状态字（48 字节）→ 好用的对象。字序与位域见协议文档「状态字」表。
@@ -320,7 +339,7 @@ export class AkaLinkHid {
     // else until its reply is consumed (or physical unplug ends that channel).
     const orphan = channel.fault;
     if (orphan){
-      if (res[1] === orphan.cmd){
+      if (res[1] === orphan.cmd || res[1] === 0){
         orphan.replyReceived = true;
         if (orphan.writeSettled) channel.fault = null;
       }
@@ -330,7 +349,10 @@ export class AkaLinkHid {
     if (!p) return;                       // 没人等就算了（比如上一次超时后才回来的包）
     // 迟到的旧响应：**丢掉继续等**（不要拿它去满足新请求 —— 真机上踩过：
     // info() 并发发了 3 条，结果后面那条 AUTOSTART 收到了型号回包，状态字全是垃圾）
-    if (res[1] !== p.cmd) return;
+    // Older firmware answers unknown custom commands with CMD_NOT_SUPPORT (0)
+    // instead of echoing the request command. Consume that reply so capability
+    // checks fail promptly without poisoning the HID channel until timeout.
+    if (res[1] !== p.cmd && res[1] !== 0) return;
     p.replyReceived = true;
     this._pending = null;
     this._settle(p);                      // 清掉这条请求的超时定时器，再放行
@@ -500,6 +522,13 @@ export class AkaLinkHid {
   /** 切**全局目标类型**（HID 0x31 action 10）：false = SWD/ARM，true = RISC-V/JTAG。
    *  粘性：设一次一直有效，J-Scope 采样器的传输后端也跟着它走。 */
   setTargetType(riscv){ return this.rtt(RTT_ACT.TARGET, targetTypeData(!!riscv)); }
+
+  resetIo(action = RESET_IO_ACT.GET, openDrain = 0){
+    return this.xfer(CMD.RESET_IO, resetIoData(action, openDrain)).then(parseResetIoResponse);
+  }
+
+  getResetOutputMode(){ return this.resetIo(RESET_IO_ACT.GET); }
+  setResetOutputMode(openDrain){ return this.resetIo(RESET_IO_ACT.SET_TRST_MODE, openDrain); }
 
   /**
    * 让探针自己的 RISC-V 引擎**放掉 JTAG TAP**（HID 0x33 action 0）。

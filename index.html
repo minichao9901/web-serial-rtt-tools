@@ -13,7 +13,7 @@
   var mode = new URLSearchParams(location.search).get('modules');
   var local = ['localhost', '127.0.0.1', '[::1]'].indexOf(location.hostname) !== -1;
   window.__useWebBundle = mode === 'bundle' || (mode !== 'source' && !local);
-  window.__webBundleUrl = 'app/site/main.js?v=3b5e01c2a10c87bf';
+  window.__webBundleUrl = 'app/site/main.js?v=f545cf546275eeb1';
   var preload = document.createElement('link');
   preload.rel = 'modulepreload';
   preload.href = window.__useWebBundle ? window.__webBundleUrl : 'app/main.js';
@@ -62,6 +62,10 @@
   </nav>
   <div class="topright">
     <span id="conn-flag" class="flag flag-off">串口：未连接</span>
+    <label class="chk" id="global-trst-control" title="连接支持该功能的 akaLinkPro 固件后可用。">
+      <input type="checkbox" id="global-trst-open-drain" checked disabled> TRST 开漏
+    </label>
+    <button id="btn-global-reset" class="mini" type="button" title="通过探针复位输出同时硬复位目标板，然后让目标继续运行">全局复位</button>
     <span id="probe-flag" class="flag flag-off" role="status">探针：未使用</span>
     <details class="app-more" id="app-more">
       <summary>帮助</summary>
@@ -722,6 +726,21 @@
           <button id="f-flash" class="primary">烧录</button>
         </div>
         <p class="hint">烧录会暂停目标并在完成后复位；烧录前会断开占用探针的 RTT 会话。</p>
+      </fieldset>
+      <fieldset id="f-sram-bench">
+        <legend>SRAM 读写测速</legend>
+        <label class="row"><span>起始地址</span><input id="f-ram-address" class="address" value="" placeholder="0x24080000"></label>
+        <label class="row"><span>测试长度</span>
+          <select id="f-ram-length">
+            <option value="20480">20 KiB</option>
+            <option value="32768">32 KiB</option>
+            <option value="65536">64 KiB</option>
+            <option value="131072">128 KiB</option>
+          </select>
+        </label>
+        <p class="hint">暂停 CPU 后通过 SWD 测量读写速度，再恢复原运行状态。所选 SRAM 会被测试数据覆盖且不恢复；地址须完全落在所选芯片的已知 RAM 区间。</p>
+        <div class="row btnrow"><button id="f-ram-run" type="button">开始读写测速</button></div>
+        <p id="f-ram-result" class="hint" aria-live="polite">选择 Cortex-M 芯片后可用；H7B0 推荐空闲 AXI SRAM：0x24080000。</p>
       </fieldset>
     </aside>
     <section class="main">

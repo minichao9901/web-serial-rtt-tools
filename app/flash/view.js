@@ -37,6 +37,7 @@ import { parseFirmware } from './image.js';
 import { bytes as fBytes } from '../core/format.js';
 import { waitMs } from '../core/pace.js';
 import { pickCfgs } from '../ui/cfgpicker.js';
+import { chipRamRanges, validateSramBench, SRAM_BENCH_PASSES } from './sram-bench.js';
 
 export class FlashView {
   constructor(){
@@ -49,6 +50,7 @@ export class FlashView {
     this._statusKind = '';
     this._statusT0 = Date.now();
     this._hb = null;
+    this._ramAddrTouched = false;
   }
 
   init(){
@@ -60,7 +62,9 @@ export class FlashView {
     store.bind($('f-base'), 'flash.base');
     store.bind($('f-verify'), 'flash.verify', 'checked');
     store.bind($('f-reset'), 'flash.reset', 'checked');
+    $('f-ram-address')?.addEventListener('input', () => { this._ramAddrTouched = true; });
     $('f-chip').addEventListener('change', () => { rememberHpmBoard($('f-chip').value); this._applyChip(); });
+    $('f-backend').addEventListener('change', () => this._applySramUi());
     this._applyChip();
     // 「选择…」：列出桥所在机器的 OpenOCD cfg 让你挑（浏览器拿不到本地文件路径，列表只能由桥给）
     $('f-cfgs-pick').addEventListener('click', async () => {
@@ -91,6 +95,8 @@ export class FlashView {
     this._fileInfo();
 
     $('f-flash').addEventListener('click', () => this.flash().catch(e => this._err(e)));
+    $('f-ram-run')?.addEventListener('click', () => this.benchmarkSram().catch(e => this._err(e)));
+    $('btn-global-reset')?.addEventListener('click', () => this.resetTarget().catch(e => this._err(e)));
     /* 「读 IDCODE」：只读地认目标（不动 flash、不改运行状态）。用 `?.` —— 页面混版时可能还没这个按钮，
      * 别让 init 挂在这儿（2026-10 那次白屏的教训）。 */
     $('f-idcode')?.addEventListener('click', () => this.readIdcode().catch(e => this._err(e)));
@@ -141,6 +147,26 @@ export class FlashView {
     const custom = $('f-chip').value === 'custom';
     $('f-custom-cfgs-row').hidden = !custom;
     $('f-custom-speed-row').hidden = !custom;
+    if (!this._ramAddrTouched){
+      const ranges = chipRamRanges($('f-chip').value);
+      const addr = $('f-chip').value === 'stm32h7b0' ? 0x24080000 : (ranges[0]?.start ?? 0);
+      $('f-ram-address').value = addr ? `0x${addr.toString(16)}` : '';
+    }
+    this._applySramUi();
+  }
+
+  _applySramUi(){
+    const supported = $('f-backend')?.value === 'webusb' &&
+      !HPM_BOARDS.some(b => b.id === $('f-chip')?.value) && chipRamRanges($('f-chip')?.value).length > 0;
+    const box = $('f-sram-bench');
+    if (box) box.hidden = !supported;
+    const button = $('f-ram-run');
+    if (button) button.disabled = !supported || this.busy;
+    const result = $('f-ram-result');
+    if (result && !supported) result.textContent = '当前后端或芯片没有可用的 Cortex-M SRAM 地址范围。';
+    else if (result && !result.dataset.result) result.textContent = $('f-chip').value === 'stm32h7b0'
+      ? 'H7B0 推荐空闲 AXI SRAM：0x24080000。测试会覆盖所选 SRAM，不保存原数据。'
+      : '选择一个未使用的 RAM 区域；测试会覆盖所选 SRAM，不保存原数据。';
   }
   // ================= 烧录 =================
   /** Managed acquisition already released conflicts; standalone views use the same adapters. */
@@ -170,7 +196,7 @@ export class FlashView {
   /** Flash and identification share reservation, retry cleanup and button state. */
   async _withProbeOwnership(fn, reason){
     this.busy = true;
-    for (const id of ['f-flash', 'f-idcode']) if ($(id)) $(id).disabled = true;
+    for (const id of ['f-flash', 'f-idcode', 'f-ram-run', 'btn-global-reset']) if ($(id)) $(id).disabled = true;
     try {
       return await runProbeOperation(this, 'flash', async () => {
         // Retry the retained close before opening another native handle.
@@ -180,7 +206,8 @@ export class FlashView {
     } finally {
       this.busy = false;
       if (!this._probeCloseFailed && !this.probeManager?.failures.has('flash')) this.probeManager?.forget('flash');
-      for (const id of ['f-flash', 'f-idcode']) if ($(id)) $(id).disabled = false;
+      for (const id of ['f-flash', 'f-idcode', 'f-ram-run', 'btn-global-reset']) if ($(id)) $(id).disabled = false;
+      this._applySramUi();
     }
   }
 
@@ -198,6 +225,113 @@ export class FlashView {
     this.probe = null;
     this._probeCloseFailed = false;
     this.probeManager?.confirm('flash');
+  }
+
+  async resetTarget(){
+    if (this.busy) throw new Error('探针当前正忙，请等当前操作结束后再复位');
+    return await this._withProbeOwnership(() => this._globalResetOnce(), '全局硬复位目标板');
+  }
+
+  async _globalResetOnce(){
+    let operationError = null;
+    try {
+      if (!(await this._clearProbeUsers('全局硬复位'))) return false;
+      this._status('连接探针，准备硬复位目标…');
+      this.probe = await this._openProbeForRead({ clockKhz: 1000 });
+      const result = await withTimeout(this.probe.reset(), 15000, '全局硬复位目标');
+      this._log(`全局硬复位完成：${result}；EVKLite 的 PA08/J5[3] 与 PA27/J3[23] 会同步驱动 nRESET`);
+      this._status('全局硬复位完成，目标已恢复运行', 'ok');
+      toast('目标板已硬复位并恢复运行', 'ok');
+      return true;
+    } catch (e){
+      operationError = e;
+      throw e;
+    } finally {
+      await this._closeProbe(operationError);
+    }
+  }
+
+  async benchmarkSram(){
+    if (this.busy) throw new Error('探针当前正忙，请等当前操作结束后再测速');
+    if ($('f-backend')?.value !== 'webusb') throw new Error('SRAM 测速需要使用 WebUSB 后端');
+    const chipId = $('f-chip')?.value;
+    if (HPM_BOARDS.some(b => b.id === chipId)) throw new Error('当前 RISC-V 芯片不支持这条 Cortex-M/SWD 测速路径');
+    const size = Number($('f-ram-length')?.value);
+    const { addr } = validateSramBench(chipId, $('f-ram-address')?.value, size);
+    const resultEl = $('f-ram-result');
+    if (resultEl){ resultEl.dataset.result = ''; resultEl.textContent = '正在准备 SRAM 测速…'; }
+    try {
+      return await this._withProbeOwnership(() => this._benchmarkSramOnce(addr, size), 'SRAM 读写测速');
+    } catch (e){
+      if (resultEl){ resultEl.dataset.result = 'true'; resultEl.textContent = `SRAM 测速失败：${e?.message || e}`; }
+      throw e;
+    }
+  }
+
+  async _benchmarkSramOnce(addr, size){
+    let wasHalted = null;
+    let operationError = null;
+    let cleanupError = null;
+    let result = null;
+    try {
+      if (!(await this._clearProbeUsers('SRAM 读写测速'))) return false;
+      this._status('连接目标，暂停 CPU…');
+      this.probe = await this._openProbeForRead({ clockKhz: 1000 });
+      const p = this.probe;
+      wasHalted = await withTimeout(p.isHalted(), 3000, '读取目标运行状态');
+      await withTimeout(p.halt(), 5000, '暂停目标 CPU');
+      if (!(await withTimeout(p.isHalted(), 3000, '确认目标已暂停')))
+        throw new Error('无法确认 CPU 已暂停，已取消写入 SRAM');
+
+      const pattern = new Uint8Array(size);
+      for (let i = 0; i < pattern.length; i++) pattern[i] = ((i * 73) ^ (i >>> 3) ^ (i >>> 11) ^ 0xA5) & 0xff;
+      const verifyWrites = p.verifyWrites;
+      p.verifyWrites = false; // 写入计时只测主机→目标 RAM；最终单独做一次整段校验。
+      let writeMs, readMs, lastRead;
+      try {
+        this._status(`写入 ${size / 1024} KiB SRAM（${SRAM_BENCH_PASSES} 轮）…`);
+        let t0 = performance.now();
+        for (let i = 0; i < SRAM_BENCH_PASSES; i++)
+          await withTimeout(p.writeMem(addr, pattern), 45000, `写 SRAM 第 ${i + 1} 轮`);
+        writeMs = performance.now() - t0;
+
+        this._status(`读取 ${size / 1024} KiB SRAM（${SRAM_BENCH_PASSES} 轮）…`);
+        t0 = performance.now();
+        for (let i = 0; i < SRAM_BENCH_PASSES; i++)
+          lastRead = await withTimeout(p.readMem(addr, size), 45000, `读 SRAM 第 ${i + 1} 轮`);
+        readMs = performance.now() - t0;
+      } finally {
+        p.verifyWrites = verifyWrites;
+      }
+
+      if (!lastRead || lastRead.length !== pattern.length) throw new Error('SRAM 读回长度不完整');
+      let mismatch = -1;
+      for (let i = 0; i < pattern.length; i++) if (lastRead[i] !== pattern[i]){ mismatch = i; break; }
+      if (mismatch >= 0) throw new Error(`SRAM 校验失败：偏移 0x${mismatch.toString(16)}，地址 0x${(addr + mismatch).toString(16)}`);
+
+      const totalBytes = size * SRAM_BENCH_PASSES;
+      const writeRate = totalBytes / (Math.max(0.001, writeMs) / 1000) / 1e6;
+      const readRate = totalBytes / (Math.max(0.001, readMs) / 1000) / 1e6;
+      result = { addr, size, passes: SRAM_BENCH_PASSES, writeMs, readMs, writeRate, readRate, verified: true };
+      const text = `读 ${readRate.toFixed(2)} MB/s · 写 ${writeRate.toFixed(2)} MB/s · ${size / 1024} KiB × ${SRAM_BENCH_PASSES} 轮 · 校验通过${wasHalted ? ' · CPU 保持暂停' : ' · CPU 已恢复运行'}`;
+      $('f-ram-result').dataset.result = 'true';
+      $('f-ram-result').textContent = text;
+      this._log(`SRAM 测速：0x${addr.toString(16)}，${size / 1024} KiB；读 ${readRate.toFixed(2)} MB/s (${readMs.toFixed(1)} ms)，写 ${writeRate.toFixed(2)} MB/s (${writeMs.toFixed(1)} ms)，${SRAM_BENCH_PASSES} 轮；数据校验通过`);
+      this._status('SRAM 读写测速完成，数据校验通过', 'ok');
+    } catch (e){
+      operationError = e;
+    } finally {
+      if (this.probe && wasHalted === false){
+        try { await withTimeout(this.probe.run(), 5000, '恢复目标运行'); }
+        catch (e){ cleanupError = e; }
+      }
+      try { await this._closeProbe(); }
+      catch (e){ cleanupError = cleanupError ? new AggregateError([cleanupError, e], '测速收尾失败') : e; }
+    }
+    if (operationError && cleanupError) throw new AggregateError([operationError, cleanupError], `${operationError.message}；恢复/关闭探针时也失败：${cleanupError.message}`);
+    if (operationError) throw operationError;
+    if (cleanupError) throw cleanupError;
+    return result;
   }
 
   async _flashOnce(){
