@@ -1,0 +1,52 @@
+[
+  {
+    "path": "E:/web-serial-rtt-tools/docs/validation/ram-fill-20261016-223752/hardware.mjs",
+    "bytes": 7410,
+    "sha256": "54e38a7ea57a5ba8f23b8db7bddb2a812d8f98e84ef52500fdce46536fab001a"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/docs/validation/ram-fill-20261016-223752/hardware.json",
+    "bytes": 2812,
+    "sha256": "4fd6bce92431eb75ca6343bf5fd0d9292523fe8b9e2fa76eb90ad7ba2a8f3605"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/docs/validation/ram-fill-20261016-223752/hardware-cdp-unavailable.json",
+    "bytes": 411,
+    "sha256": "efc01af5f5a92dd132137b10cc67cde195552ca241c23f956e50a3beafd0e5ba"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/docs/validation/ram-fill-20261016-223752/backup.json",
+    "bytes": 712,
+    "sha256": "efe2af783b2825833ecfa4165d42d2bf5768a0e030579e12d0df33b39f4d6f96"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/docs/validation/ram-fill-20261016-223752/original-sram.bin",
+    "bytes": 65536,
+    "sha256": "fded18ea195c040c0ef00f686d18213692228c1f1853eec1841774342c51d082"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/docs/validation/ram-fill-20261016-223752/increment-readback.bin",
+    "bytes": 12289,
+    "sha256": "56a966a58251c437761a9d98b8431240cb1f631190083af300da44368619d6b1"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/docs/validation/ram-fill-20261016-223752/test-dbg.log",
+    "bytes": 24915,
+    "sha256": "1d047f108dd1392b73e1ba7347062196e9efe55fd520df31b3ec4a4c4e6b8bf0"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/docs/validation/ram-fill-20261016-223752/worktree.patch",
+    "bytes": 2427654,
+    "sha256": "8cc0b398e004150348beef9090bd7ed5cc159747496eb01eb816d6656f915cef"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/docs/validation/ram-fill-20261016-223752/input-sha256.json",
+    "bytes": 2833,
+    "sha256": "ed3498d28c6f4b75cd311745a08abee840e6ac2ce760f527b605be9e75acb450"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/docs/validation/ram-fill-20261016-223752/browser/result.json",
+    "bytes": 1445,
+    "sha256": "a67ada12eb824d800aabdcaaa42e4114450851aaf2f5524ad0b6e654b3c4153e"
+  }
+]

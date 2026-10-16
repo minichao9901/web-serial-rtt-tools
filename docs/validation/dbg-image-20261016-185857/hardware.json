@@ -1,0 +1,91 @@
+{
+  "started": "2026-10-16T11:03:21.918Z",
+  "result": "passed",
+  "devices": [
+    {
+      "serial": "8F538633E6AEC4CA8ABB6A36FEBB1AC2",
+      "vid": 3368,
+      "pid": 516
+    }
+  ],
+  "backup": {
+    "id": {
+      "dp": 463475831,
+      "device": 268657684,
+      "flashKiB": 512
+    },
+    "wasHalted": false,
+    "selectors": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      20
+    ],
+    "regs": [
+      536936407,
+      1,
+      1,
+      843,
+      536872400,
+      536872404,
+      1781790849,
+      3040398022,
+      4294963199,
+      4192190460,
+      966477800,
+      181606136,
+      0,
+      536936356,
+      4294967289,
+      134221586,
+      16777219,
+      536936356,
+      37207788,
+      1
+    ],
+    "flashSha256": "61a097c84c8ca7cae573a950618de6009083048755b5c26def16f6cc351a354d",
+    "ramSha256": "f17b598b6b84f4f22f64b1fa130d641380b8f66342ce8c21b018cdc6ddbaa7b6"
+  },
+  "commands": {
+    "load": [
+      "12289 bytes written at address 0x20008000",
+      "downloaded 12289 bytes in 0.353200s (33.978 KiB/s)"
+    ],
+    "dump": [
+      "dumped 12289 bytes in 0.177700s (67.535 KiB/s)"
+    ],
+    "clipped": [
+      "1009 bytes written at address 0x2000c007",
+      "downloaded 1009 bytes in 0.047100s (20.920 KiB/s)"
+    ],
+    "bytes": 12289,
+    "sha256": "09390b1ee898165caec37beb1eb19b6d3bcc68e36c90b205cb44fcbef3f16baf",
+    "roundtrip": true,
+    "clippedWindow": true
+  },
+  "restore": {
+    "fullSramRestored": true,
+    "registersPreserved": true,
+    "flashSha256": "61a097c84c8ca7cae573a950618de6009083048755b5c26def16f6cc351a354d",
+    "flashUnchanged": true,
+    "cpuResumed": true
+  },
+  "leaseReleased": true,
+  "finished": "2026-10-16T11:03:42.819Z"
+}

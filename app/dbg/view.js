@@ -51,6 +51,7 @@ import { parseSvdXml, decodeSvdRegister, svdSummary } from './svd.js';
 import { SvdValueState, svdAutoReadReason } from './svd-state.js';
 import { BUNDLED_SVDS } from './svd/bundled.js';
 import { FaultPanel } from './fault-panel.js';
+import { ImageFiles } from './image-files.js';
 
 const on = (id, ev, fn) => { const el = $(id); if (el) el.addEventListener(ev, fn); return el; };
 const baseName = p => String(p || '').replace(/\\/g, '/').split('/').pop();
@@ -74,6 +75,7 @@ export class DbgView {
     this.watch = new WatchList();          // 监视窗口
     this.watchBusy = false;
     this.src = new SourceStore();          // 源码文件仓（用户授权一次目录）
+    this.imageFiles = new ImageFiles();    // load_image / dump_image 的授权工作目录
     this.srcCur = null;                    // {file, line, addr} 当前源码位置
     this.srcShown = null;                  // 已经画出来的视图（用于只在位置变化时滚动）
     this.cancelFlag = false;               // Ctrl+C
@@ -132,6 +134,7 @@ export class DbgView {
     on('d-disconnect', 'click', () => this.disconnect());
     on('d-elf-pick', 'click', () => $('d-elf-file')?.click());
     on('d-elf-file', 'change', e => this._loadElfFile(e.target.files?.[0]));
+    on('d-image-pick', 'click', () => this.pickImageDirectory());
     on('d-svd-pick', 'click', () => $('d-svd-file')?.click());
     on('d-svd-file', 'change', e => this._loadSvdFile(e.target.files?.[0]));
     on('d-svd-default', 'click', () => this.loadBundledSvd());
@@ -1074,13 +1077,24 @@ export class DbgView {
     cmd.setSelectionRange(cmd.value.length, cmd.value.length);
   }
 
+  async pickImageDirectory(){
+    try {
+      const name = await this.imageFiles.pick();
+      const label = $('d-image-dir'); if (label) label.textContent = name;
+      const progress = $('d-image-progress'); if (progress) progress.textContent = '可使用此目录下的文件名或相对路径';
+      this._out(`镜像工作目录：${name}；load_image / dump_image 使用此目录下的相对路径`, 'ok');
+    } catch (e){
+      if (e.name !== 'AbortError') this._out('✗ 选择镜像目录失败：' + e.message, 'err');
+    }
+  }
+
   async runLine(text){
     const line = String(text || '').trim();
     if (!line) return { lines: [] };
     if (this._disconnecting || this._connecting) return { cancelled: true, lines: [] };
     this._followOut();
     if(!/^(frame|locals|args|info)(\s|$)/i.test(line)) this._invalidateBacktrace();
-    if (/^(c|cont|continue|g|s|step|n|next|si|fin|finish|out|rc|runto|halt|stop|pause|reset|mw|ms)(\s|$)/i.test(line) || /^(r|reg|regs)\s+\S+\s+\S+/i.test(line))
+    if (/^(c|cont|continue|g|s|step|n|next|si|fin|finish|out|rc|runto|halt|stop|pause|reset|mw|ms|fill_ram|fill_inc|load_image)(\s|$)/i.test(line) || /^(r|reg|regs)\s+\S+\s+\S+/i.test(line))
       this.faultPanel?.invalidate('目标控制或写入命令，现场转为历史记录');
     this._out('> ' + line, 'cmd');
     if (line !== this.hist[this.hist.length - 1]) this.hist.push(line);
@@ -1091,9 +1105,14 @@ export class DbgView {
       // 命令也是"一整段独占 SWD"：观察循环 / RTT 泵随时可能在读，交错一次就读出垃圾
       res = await this.session.exclusive(async () => {
         if (this._disconnecting) throw Object.assign(new Error('已中断'), { cancelled: true });
-        const result = await runCmd(line, this.session, { view: this, signal: () => this.cancelFlag });
+        const result = await runCmd(line, this.session, {
+          view: this, signal: () => this.cancelFlag,
+          onProgress: ({ command, done, total }) => {
+            const el = $('d-image-progress'); if (el) el.textContent = `${command}：${done} / ${total} 字节`;
+          },
+        });
         this.renderRegs(); this.renderBps(); this._syncButtons();
-        const changedMem = /^(md|mw|ms|x)$/.test(line.split(/\s+/)[0].toLowerCase());
+        const changedMem = /^(md|mw|ms|x|fill_ram|fill_inc|load_image)$/.test(line.split(/\s+/)[0].toLowerCase());
         if (changedMem) await this._readMemLocked({ silent: true });
         if (this.session.halted) await this.afterStop();
         else this._startWatch();
@@ -1103,7 +1122,10 @@ export class DbgView {
       for (const l of res.lines || []) this._out(l.t, l.c || '');
       return res;
     } catch (e){
-      if (e?.cancelled){ this._out('（已中断）', 'warn'); return { cancelled: true, lines: [] }; }
+      if (/^(load_image|dump_image)(\s|$)/i.test(line)){
+        const el = $('d-image-progress'); if (el) el.textContent = e?.cancelled ? '已中断' : '未完成：' + (e?.message || e);
+      }
+      if (e?.cancelled){ this._out(`（${e.message || '已中断'}）`, 'warn'); return { cancelled: true, lines: [] }; }
       if(/^栈帧已失效/.test(e?.message||''))this._invalidateBacktrace();
       this._out('✗ ' + (e?.message || e), 'err');
       return { error: String(e?.message || e) };

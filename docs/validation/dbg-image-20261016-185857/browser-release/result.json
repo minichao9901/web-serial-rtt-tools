@@ -1,0 +1,46 @@
+{
+  "result": "passed",
+  "time": "2026-10-16T11:04:42.226Z",
+  "cases": [
+    {
+      "mode": "source",
+      "requestedMode": "readwrite",
+      "missing": "请先在调试器侧栏选择“镜像目录”",
+      "loaded": "downloaded 12289 bytes in 0.010100s (1188.215 KiB/s)",
+      "dumped": "dumped 12289 bytes in 0.017800s (674.212 KiB/s)",
+      "roundtrip": true,
+      "statePreserved": true,
+      "cancelled": true,
+      "preserved": [
+        99,
+        88
+      ],
+      "traversal": "镜像文件路径超出已授权目录",
+      "empty": true,
+      "completion": "load_image ",
+      "help": true,
+      "label": "dbg-image-test-source-1792148679890",
+      "errors": []
+    },
+    {
+      "mode": "bundle",
+      "requestedMode": "readwrite",
+      "missing": "请先在调试器侧栏选择“镜像目录”",
+      "loaded": "downloaded 12289 bytes in 0.011200s (1071.516 KiB/s)",
+      "dumped": "dumped 12289 bytes in 0.016300s (736.256 KiB/s)",
+      "roundtrip": true,
+      "statePreserved": true,
+      "cancelled": true,
+      "preserved": [
+        99,
+        88
+      ],
+      "traversal": "镜像文件路径超出已授权目录",
+      "empty": true,
+      "completion": "load_image ",
+      "help": true,
+      "label": "dbg-image-test-bundle-1792148681389",
+      "errors": []
+    }
+  ]
+}

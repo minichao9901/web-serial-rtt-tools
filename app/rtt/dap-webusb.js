@@ -189,7 +189,8 @@ export class WebUsbDapProbe {
    */
   async _budgeted(label, fn){
     if (this._operationBudget) return fn();
-    this._operationBudget = new OperationBudget(label, 15000, text => this._note(text));
+    // Keep the current stage for timeout errors; routine DAP traffic is not a user-facing event.
+    this._operationBudget = new OperationBudget(label, 15000);
     try { return await this._operationBudget.step('开始', fn); }
     finally { this._operationBudget = null; }
   }

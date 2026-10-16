@@ -1,0 +1,62 @@
+[
+  {
+    "path": "E:/web-serial-rtt-tools/Makefile",
+    "bytes": 52167,
+    "sha256": "defac08488f3e9fdc7c5b38117ff92270dc1ea83d29b93ba0570391ad7ad4369"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/app/dbg/cmd.js",
+    "bytes": 35934,
+    "sha256": "c52a461b0d32389c2c1b768a26bbbed419768fddc3e0108087867e40d5d75f81"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/app/dbg/complete.js",
+    "bytes": 5427,
+    "sha256": "0f19376684466731f004fad4f5010bc82af615e38f5dfeec6afaf664650226c4"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/app/dbg/view.js",
+    "bytes": 106539,
+    "sha256": "32c63c5ead62051dacd6178c48790fee4430e6e3b205fb454c0bf5181d3e9c2a"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/app/dbg/image.js",
+    "bytes": 9227,
+    "sha256": "9e2e8f842287fbcfa4f6bdca282c91839d3ab154bea2a1e22e7b4626994a4111"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/app/dbg/image-files.js",
+    "bytes": 2040,
+    "sha256": "44b74bbfa295ec47cfede01cf53bb613ee49ca229c94ebe9889b8b1a35fd1531"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/app/site/main.js",
+    "bytes": 1325143,
+    "sha256": "315f7db62ca8ee52aa17331a5b4807afa659975fdc074cbcc766e9dc1b971004"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/app/site/manifest.json",
+    "bytes": 16224,
+    "sha256": "4b1ecbc8d80a9df47190c68685290c740b5c1bda296d83a1b8753b674b8ffb79"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/docs/dbg-page.md",
+    "bytes": 39491,
+    "sha256": "e95195d7924b03501531244d9df0a04ec67a887635915ab20e044cd6a656496b"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/index.html",
+    "bytes": 205812,
+    "sha256": "8ec943a4f51be229b00062d25ad703e640a978bf2d0befd724c30ad8f17d5717"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/tools/selftest/dbg-image.test.mjs",
+    "bytes": 10497,
+    "sha256": "e52f9993bbd9234a907d7bbf79d84e98382bcabfc8b196a407156ebe2bed6c73"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/tools/selftest/dbg-image-page.test.mjs",
+    "bytes": 8123,
+    "sha256": "59fcf892f3af3e0df08aec15ab5a9fba38f13c1c2d994c59e3dc175d0dd5e7cd"
+  }
+]

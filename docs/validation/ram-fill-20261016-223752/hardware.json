@@ -1,0 +1,122 @@
+{
+  "started": "2026-10-16T14:39:45.994Z",
+  "result": "passed",
+  "devices": [
+    {
+      "serial": "8F538633E6AEC4CA8ABB6A36FEBB1AC2",
+      "vid": 3368,
+      "pid": 516
+    }
+  ],
+  "backup": {
+    "id": {
+      "dp": 463475831,
+      "device": 268657684,
+      "flashKiB": 512
+    },
+    "wasHalted": false,
+    "selectors": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      20
+    ],
+    "regs": [
+      536904043,
+      134218748,
+      0,
+      32768,
+      0,
+      32767,
+      536870948,
+      4,
+      9,
+      134218748,
+      966477800,
+      181475320,
+      2147483648,
+      536936384,
+      134218311,
+      134218602,
+      553648128,
+      536936384,
+      37207788,
+      0
+    ],
+    "flashSha256": "9a919d719de031f9da8a13ed587cdae4977c2927196d4ad76437524a5875f7dd",
+    "ramSha256": "fded18ea195c040c0ef00f686d18213692228c1f1853eec1841774342c51d082"
+  },
+  "commands": {
+    "cases": [
+      {
+        "command": "fill_ram 0x20008001 12289 0xA5",
+        "result": [
+          "fill_ram：0x20008001 起 12289 字节重复填充 0xA5（回读一致）"
+        ],
+        "independentReadback": true,
+        "boundariesPreserved": true
+      },
+      {
+        "command": "fill_inc 0x20008001 12289 0xFD",
+        "result": [
+          "fill_inc：0x20008001 起 12289 字节递增填充，起始值 0xFD（回读一致）"
+        ],
+        "independentReadback": true,
+        "boundariesPreserved": true
+      },
+      {
+        "command": "fill_ram 0x2000c003 513 0",
+        "result": [
+          "fill_ram：0x2000c003 起 513 字节重复填充 0x00（回读一致）"
+        ],
+        "independentReadback": true,
+        "boundariesPreserved": true
+      },
+      {
+        "command": "fill_ram 0x2000c403 513 255",
+        "result": [
+          "fill_ram：0x2000c403 起 513 字节重复填充 0xFF（回读一致）"
+        ],
+        "independentReadback": true,
+        "boundariesPreserved": true
+      },
+      {
+        "command": "fill_inc 0x2000c803 513",
+        "result": [
+          "fill_inc：0x2000c803 起 513 字节递增填充，起始值 0x00（回读一致）"
+        ],
+        "independentReadback": true,
+        "boundariesPreserved": true
+      }
+    ],
+    "cancellation": "已中断；已核对 0 / 8193 字节，已写入的内容保留",
+    "writesBeforeCancel": 1,
+    "logs": [],
+    "routineLogsHidden": true
+  },
+  "restore": {
+    "fullSramRestored": true,
+    "registersPreserved": true,
+    "flashSha256": "9a919d719de031f9da8a13ed587cdae4977c2927196d4ad76437524a5875f7dd",
+    "flashUnchanged": true,
+    "cpuResumed": true
+  },
+  "leaseReleased": true,
+  "finished": "2026-10-16T14:40:08.376Z"
+}

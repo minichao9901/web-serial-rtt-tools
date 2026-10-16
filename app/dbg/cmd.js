@@ -14,6 +14,8 @@ import { hex32, hex8, hexdump, parseBytes, parseNum, readLE } from './fmt.js';
 import { decodeXpsr, formatXpsr, regInfo, SPECIAL_REGS, cfbpGet, formatSpecial } from './regs.js';
 import { TREE_LIMITS, treeRows, decodeBitfield } from './watch.js';
 import { SCALARS } from '../elf/dwarf.js';
+import { imageWords, imageCommand, parseImage, imageLoadPlan } from './image.js';
+import { ramFillRequest, ramFillChunk } from './ram-fill.js';
 
 const L = (t, c) => ({ t, c });
 
@@ -24,7 +26,7 @@ export function parseCmd(line){
   const sp = raw.search(/\s/);
   const cmd = (sp < 0 ? raw : raw.slice(0, sp)).toLowerCase();
   const rest = sp < 0 ? '' : raw.slice(sp + 1).trim();
-  return { cmd, args: rest ? rest.split(/\s+/) : [], rest, raw };
+  return { cmd, args: rest ? (['load_image', 'dump_image'].includes(cmd) ? imageWords(rest) : rest.split(/\s+/)) : [], rest, raw };
 }
 
 /** 把 `0x20001000`、`g_var`、`main+4` 解析成地址（失败抛人话错误） */
@@ -78,6 +80,13 @@ const HELP = [
   '  md <地址> [长度]      读内存（默认 64 字节）',
   '  mw <地址> <字节…>     写内存（例：mw 0x20000000 01 02 ff）',
   '  ms <地址> <文本>      写字符串（不含结尾 0）',
+  '  fill_ram <地址> <长度> <值>       按字节重复填充（值 0–255）并回读核对',
+  '  fill_inc <地址> <长度> [起始值]   按字节递增填充（默认 0，255 后回到 0）并回读核对',
+  '                        长度单位为字节；数值支持十进制 / 0x 十六进制；不自动暂停或恢复目标',
+  '  load_image filename [address [bin|ihex|elf|s19 [min_addr [max_length]]]]',
+  '                        加载镜像；address 为镜像地址偏移，范围裁剪在偏移后应用',
+  '  dump_image filename address size  将目标内存保存为原始二进制文件',
+  '                        文件名/相对路径基于侧栏授权的“镜像目录”；空格路径可用双引号或大括号',
   '  p <变量>              打印变量（有 DWARF 时按类型解出数值；结构体打成缩进的树）',
   '  x <地址|&变量> [长度] 同 md，但先把符号解释成人话',
   '  b <地址|符号|文件:行> 加硬件断点（例：b main / b main.c:192 / b +5 / b 0x08000123）',
@@ -260,6 +269,83 @@ async function runCmdInner(p, session, opts = {}){
       const bytes = new TextEncoder().encode(text);
       await S.memWrite(a.addr, bytes);
       return { lines: [L(`写入字符串 ${bytes.length} 字节到 ${hex32(a.addr)}`, 'ok')] };
+    }
+
+    case 'fill_ram': case 'fill_inc': {
+      need();
+      const request = ramFillRequest(cmd, args);
+      let done = 0;
+      try {
+        while (done < request.length){
+          checkCancel(opts);
+          const chunk = ramFillChunk(request, done, Math.min(4096, request.length - done));
+          await S.memWrite(request.address + done, chunk);
+          checkCancel(opts);
+          const back = await S.memRead(request.address + done, chunk.length);
+          checkCancel(opts);
+          if (back.length !== chunk.length) throw new Error(`回读长度不足：需要 ${chunk.length} 字节，实际 ${back.length} 字节`);
+          const mismatch = back.findIndex((byte, i) => byte !== chunk[i]);
+          if (mismatch !== -1) throw new Error(`回读不一致：${hex32(request.address + done + mismatch)} 期望 0x${hex8(chunk[mismatch])}，实际 0x${hex8(back[mismatch])}`);
+          done += chunk.length;
+        }
+      } catch (error){
+        error.message += `；已核对 ${done} / ${request.length} 字节，已写入的内容保留`;
+        throw error;
+      }
+      return { lines: [L(`${cmd}：${hex32(request.address)} 起 ${done} 字节${request.incremental ? '递增填充，起始值' : '重复填充'} 0x${hex8(request.value)}（回读一致）`, 'ok')] };
+    }
+
+    case 'load_image': case 'dump_image': {
+      need();
+      const request = imageCommand(cmd, args);
+      const files = opts.imageFiles || V?.imageFiles;
+      if (!files) throw new Error('请先在调试器侧栏选择“镜像目录”');
+      const started = performance.now();
+      let done = 0;
+      const progress = total => opts.onProgress?.({ command: cmd, done, total });
+      if (cmd === 'load_image'){
+        const bytes = await files.read(request.filename);
+        checkCancel(opts);
+        const image = parseImage(bytes, request.type);
+        const plan = imageLoadPlan(image, request); // Validate every range before the first target write.
+        const total = plan.reduce((sum, section) => sum + section.data.length, 0);
+        progress(total);
+        for (const section of plan){
+          for (let offset = 0; offset < section.data.length; offset += 4096){
+            checkCancel(opts);
+            const chunk = section.data.subarray(offset, offset + 4096);
+            await S.memWrite(section.addr + offset, chunk);
+            done += chunk.length;
+            checkCancel(opts);
+            progress(total);
+          }
+          lines.push(L(`${section.data.length} bytes written at address ${hex32(section.addr)}`, 'ok'));
+        }
+      } else {
+        const writer = await files.openWrite(request.filename);
+        try {
+          progress(request.size);
+          for (let offset = 0; offset < request.size; offset += 4096){
+            checkCancel(opts);
+            const count = Math.min(4096, request.size - offset);
+            const bytes = await S.memRead(request.address + offset, count);
+            checkCancel(opts);
+            if (bytes.length !== count) throw new Error(`dump_image 短读：${hex32(request.address + offset)} 需要 ${count} 字节，实际 ${bytes.length} 字节`);
+            await writer.write(bytes);
+            done += count;
+            progress(request.size);
+          }
+          checkCancel(opts);
+          await writer.close();
+        } catch (error){
+          try { await writer.abort(); }
+          catch (cleanup){ throw new AggregateError([error, cleanup], `${error.message}；关闭导出文件失败：${cleanup.message}`); }
+          throw error;
+        }
+      }
+      const seconds = Math.max(0.000001, (performance.now() - started) / 1000);
+      lines.push(L(`${cmd === 'load_image' ? 'downloaded' : 'dumped'} ${done} bytes in ${seconds.toFixed(6)}s (${(done / seconds / 1024).toFixed(3)} KiB/s)`, 'ok'));
+      return { lines };
     }
 
     case 'p': {

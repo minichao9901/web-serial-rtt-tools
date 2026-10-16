@@ -188,6 +188,8 @@ test-i2c-page: page-prep
 # 拿内置假目标真跑一遍「连接 → 读寄存器 → 写内存 → 下断点 → 继续 → 命中断点 → 单步 → 复位」
 test-dbg: test-dbg-features
 	$(NODE) tools/selftest/dbg-core.test.mjs
+	$(NODE) tools/selftest/dbg-image.test.mjs
+	$(NODE) tools/selftest/dbg-ram-fill.test.mjs
 
 .PHONY: test-dbg-features
 .PHONY: test-diagnostics test-diagnostics-page

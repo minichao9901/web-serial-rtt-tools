@@ -2,6 +2,41 @@
 
 异常现场使用右侧「异常」页签，支持 Cortex-M3/M4/M7 和 RV32 的只读诊断与报告；操作和证据边界见 [异常诊断与采集质量](diagnostics.md)。
 
+## RAM 模式填充
+
+命令行支持以下两条自定义命令，地址、长度和值使用十进制或 `0x` 十六进制：
+
+```text
+fill_ram 0x20001000 1024 0xA5
+fill_inc 0x20001000 1024
+fill_inc 0x20001000 1024 0xFC
+```
+
+`fill_ram 地址 长度 值` 按字节重复填充指定值（0–255）。`fill_inc 地址 长度 [起始值]` 逐字节加一，默认从 0 开始；例如起始值 0xFC 会生成 FC FD FE FF 00 01…。长度单位为字节，必须大于零，不要求地址对齐。
+
+两条命令分块写入并逐块回读核对，支持 Ctrl+C 中断；失败或中断保留已写内容，并提示已核对字节数。操作使用当前调试会话，不自动暂停、复位或运行 CPU；需要稳定回读时先使用 `halt`。请填写当前目标实际可用的 RAM 地址范围。无需选择镜像目录。自动化回归：`node tools/selftest/dbg-ram-fill.test.mjs`，已纳入 `make test-dbg`。
+
+## 镜像加载与导出
+
+在调试器侧栏点击“选择镜像目录…”并授予读写权限，该目录就是镜像命令的工作目录。文件名与子目录使用相对路径；包含空格时用双引号或大括号。目录授权由浏览器管理，支持桌面 Chrome / Edge 的 localhost 与 HTTPS 页面。
+
+命令参数遵循 [OpenOCD 镜像加载命令](https://openocd.org/doc/html/General-Commands.html#Image-loading-commands)：
+
+```text
+load_image filename [address [bin|ihex|elf|s19 [min_addr [max_length]]]]
+dump_image filename address size
+
+load_image firmware.bin 0x20001000 bin
+load_image {images/test data.hex} 0 ihex 0x20001000 0x400
+dump_image {backup/ram dump.bin} 0x20000000 0x10000
+```
+
+`load_image` 的 `address` 是加到镜像内原始地址上的偏移。BIN 从零开始，所以它也是 BIN 的目标地址；ELF、IHEX、S19 保留文件内地址。省略格式时按文件内容自动识别。`min_addr` 与 `max_length` 定义偏移后允许写入的地址窗口，不会把镜像空洞补成数据。ELF 使用 PT_LOAD 的文件内容，不加载纯 BSS。
+
+`dump_image` 始终输出原始二进制，不根据后缀转换格式。两条命令都使用当前调试会话的内存读写，不自动暂停、复位或运行目标，也不修改已载入的符号文件；写 Flash 仍需烧录器的擦写算法。命令支持 Ctrl+C 分块中断，导出失败或取消时中止文件写入，不报告完整导出成功。
+
+本页提供的是这两条命令的参数语法，不运行 Tcl 脚本、变量替换或 `[expr ...]`。目录以外的绝对路径不在浏览器授权范围内；可先把镜像放入已选目录。自动化回归：`node tools/selftest/dbg-image.test.mjs`，已纳入 `make test-dbg`。
+
 > 目标：**不装任何软件**，在浏览器里对目标做平时最常用的那几件事 ——
 > 暂停 / 继续 / 单步 / 复位、看改寄存器、看改内存、下硬件断点、按符号名看变量、
 > 浏览**符号列表**、把变量丢进**监视窗口**、停下来显示**当前源码行**，顺手在旁边看 RTT 的 printf。

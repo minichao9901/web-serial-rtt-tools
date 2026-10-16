@@ -12,9 +12,11 @@
  * 所以能在 Node 里测到底，不用浏览器也不用硬件。
  */
 
+import { imageWords } from './image.js';
+
 export const CMD_NAMES = [
   'h', 'help', 'c', 'cont', 's', 'step', 'n', 'next', 'si', 'fin', 'out', 'rc',
-  'halt', 'reset', 'r', 'md', 'mw', 'ms',
+  'halt', 'reset', 'r', 'md', 'mw', 'ms', 'fill_ram', 'fill_inc', 'load_image', 'dump_image',
   'p', 'x', 'b', 'bd', 'bl', 'wp', 'wpl', 'wpd', 'bt', 'backtrace', 'frame', 'locals', 'args', 'info', 'sym', 'w', 'wl', 'wd', 'src', 'sl', 'cls',
 ];
 
@@ -52,8 +54,12 @@ export function completeLine(line, ctx = {}){
   const token = m ? m[1] : '';
   const head = src.slice(0, src.length - token.length);
   const isCmdPos = !/\S/.test(head);                 // 前面只有空白 = 在敲命令名
-  const parts = head.trim() ? head.trim().split(/\s+/) : [];
+  let parts = head.trim() ? head.trim().split(/\s+/) : [];
   const cmd = (parts[0] || '').toLowerCase();
+  if (cmd === 'load_image' || cmd === 'dump_image'){
+    try { parts = imageWords(head.trim()); }
+    catch { parts = [cmd]; } // An unfinished quoted filename has no format candidates yet.
+  }
   const argIndex = parts.length;                     // 0 = 第一个参数
 
   let pool = [], kind = 'none';
@@ -81,6 +87,9 @@ export function completeLine(line, ctx = {}){
     kind = 'bp';
   } else if (cmd === 'reset'){
     pool = ['run', 'halt'];
+    kind = 'word';
+  } else if (cmd === 'load_image' && argIndex === 3){
+    pool = ['bin', 'ihex', 'elf', 's19'];
     kind = 'word';
   } else if (cmd === 'src'){
     pool = ctx.files || [];

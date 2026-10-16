@@ -5,7 +5,15 @@ import {AnsiDisplay} from '../../app/core/display-stream.js';
 import {MockSpiTransport} from '../../app/spi/transport.js';
 import {usbResourceConflict,isUsbResourceConflict} from '../../app/core/usb-device.js';
 import {initDockNavigation} from '../../app/ui/dock-navigation.js';
+import {WebUsbDapProbe} from '../../app/rtt/dap-webusb.js';
 const tick=()=>new Promise(r=>setImmediate(r));
+{
+ const probe=new WebUsbDapProbe(),logs=[];probe.onLog=text=>logs.push(text);
+ await probe._budgeted('恢复 SWD 调试连接',async()=>{probe._operationBudget.check('DAP 命令 0x2');probe._operationBudget.check('DAP 命令 0x6');});
+ assert.deepEqual(logs,[],'routine DAP budget stages must not fill the user log');
+ await assert.rejects(probe._budgeted('恢复 SWD 调试连接',async()=>{probe._operationBudget.deadline=performance.now()-1;probe._operationBudget.check('DAP 命令 0x6');}),e=>e.code==='OPERATION_TIMEOUT'&&e.message.includes('DAP 命令 0x6'));
+ assert.equal(probe._operationBudget,null);probe._note('USB 写超时');assert.deepEqual(logs,['USB 写超时'],'real recovery diagnostics remain visible');
+}
 {
  const budget=new OperationBudget('test operation',100),held={};let calls=0;budget.deadline=performance.now()-1;
  await assert.rejects(budget.step('new request',async()=>{calls++;}),e=>e.code==='OPERATION_TIMEOUT'&&e.message.includes('new request'));assert.equal(calls,0);

@@ -1,0 +1,67 @@
+[
+  {
+    "path": "E:/web-serial-rtt-tools/docs/validation/dbg-image-20261016-185857/hardware.mjs",
+    "bytes": 7189,
+    "sha256": "e110ee05fbdf1e7954cc61150b4c2886ef779c8981ab03d67f582bacd28e15fe"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/docs/validation/dbg-image-20261016-185857/hardware.json",
+    "bytes": 1828,
+    "sha256": "7a058b3a7b6e66ebf81bd43f864a35217c36b5c583278d46ea69efba9031897c"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/docs/validation/dbg-image-20261016-185857/backup.json",
+    "bytes": 725,
+    "sha256": "fe08949b80925d1b170b2fb5ae66e8ecb8ad67ed0cf20f1fe56e5019fd38d4ec"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/docs/validation/dbg-image-20261016-185857/original-sram.bin",
+    "bytes": 65536,
+    "sha256": "f17b598b6b84f4f22f64b1fa130d641380b8f66342ce8c21b018cdc6ddbaa7b6"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/docs/validation/dbg-image-20261016-185857/dump-image.bin",
+    "bytes": 12289,
+    "sha256": "09390b1ee898165caec37beb1eb19b6d3bcc68e36c90b205cb44fcbef3f16baf"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/docs/validation/dbg-image-20261016-185857/test-dbg.log",
+    "bytes": 24723,
+    "sha256": "13b4b0c9721e15acd851280f319e4a1fdc3699a420f3c27098ad51bb9efe85e6"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/docs/validation/dbg-image-20261016-185857/worktree.patch",
+    "bytes": 2419374,
+    "sha256": "516fa3e05a585e7114d6a8e6ee0f8f67bd8f40f57731cab2db94a99be8340a5e"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/docs/validation/dbg-image-20261016-185857/input-sha256.json",
+    "bytes": 2094,
+    "sha256": "a39394909647f54e7610614303e8d5aeecfba48a39f63d272f3f746850e540ea"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/docs/validation/dbg-image-20261016-185857/browser-release/result.json",
+    "bytes": 1329,
+    "sha256": "33dc535885d28eece51f2bc2b9e3d8cb6c7e4402ef6fd19530bb87b0798ce056"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/docs/validation/dbg-image-20261016-185857/browser-release/source-1280.png",
+    "bytes": 81476,
+    "sha256": "0c27bf2097ad41ac30e51c8e55d738df2750a104e4d09026151043772d9057aa"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/docs/validation/dbg-image-20261016-185857/browser-release/source-1600.png",
+    "bytes": 92079,
+    "sha256": "c1d6c0b27bca7dfc72eba1a92a4d22f7d0960b5e9126a5828d8667d5769303d0"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/docs/validation/dbg-image-20261016-185857/browser-release/bundle-1280.png",
+    "bytes": 81492,
+    "sha256": "c3463acdebb716522137109db5b43981dc0be7296704d7e0849aeb8a3fe95f8e"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/docs/validation/dbg-image-20261016-185857/browser-release/bundle-1600.png",
+    "bytes": 92105,
+    "sha256": "5c8f11f2fd2826bd1ae45efa92f98b356b7304e146c8a3128ec029d395f90578"
+  }
+]

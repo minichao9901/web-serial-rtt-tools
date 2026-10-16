@@ -1,0 +1,82 @@
+[
+  {
+    "path": "E:/web-serial-rtt-tools/Makefile",
+    "bytes": 52214,
+    "sha256": "d3731fd0b0a5d0063183e6f9f90b979005799f5b48df21bc20f95fb91d41503b"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/app/dbg/cmd.js",
+    "bytes": 37639,
+    "sha256": "361dc92f637ff617651acc8673792b6d930c7df5c061aeadb86748e243fc36a3"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/app/dbg/complete.js",
+    "bytes": 5451,
+    "sha256": "bfcf14161dcddb6afcb363621297c7ba87e5a6363c6aa4a9a5677e7522b23333"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/app/dbg/view.js",
+    "bytes": 106593,
+    "sha256": "5ab51c26dfe9e7801267cd30520f5d058de98680bef0b7cac59576e01f1faa8d"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/app/dbg/ram-fill.js",
+    "bytes": 1394,
+    "sha256": "ac366a556451f3c9eb89302c9e6e3206a445b45007ed529cd64be1eb3512f508"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/app/dbg/image.js",
+    "bytes": 9227,
+    "sha256": "9e2e8f842287fbcfa4f6bdca282c91839d3ab154bea2a1e22e7b4626994a4111"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/app/dbg/image-files.js",
+    "bytes": 2040,
+    "sha256": "44b74bbfa295ec47cfede01cf53bb613ee49ca229c94ebe9889b8b1a35fd1531"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/app/rtt/dap-webusb.js",
+    "bytes": 90022,
+    "sha256": "4a45f92cfeb2337149d49930d43215d03d0854ddaf32dbcd131790e69703c202"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/app/site/main.js",
+    "bytes": 1327153,
+    "sha256": "7593cc3b3afad96a51bafb44a9dfd417dc0df272a69c1a5a3aa9dfac5fcc9fcd"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/app/site/manifest.json",
+    "bytes": 16319,
+    "sha256": "0d6fb8390cf9ef13d062e0f5be0424dc3641991fd5b57328f1ffa089d03e84c6"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/docs/dbg-page.md",
+    "bytes": 40431,
+    "sha256": "5e2b8a09a5a46e2c6e3d09a1d5e03c8ec9e3dc466bff7a45859ba04e64ded2ae"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/index.html",
+    "bytes": 205812,
+    "sha256": "428231e21a8fd6c8fe7975667d677d7292c162b526d72b6080f6c75e472865ff"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/tools/selftest/dbg-ram-fill.test.mjs",
+    "bytes": 3592,
+    "sha256": "e22724500108ca8b7e7a2af4af0e0f8cad8ab9d5fd0d8de487bd8682aa0bfc3b"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/tools/selftest/dbg-image.test.mjs",
+    "bytes": 10497,
+    "sha256": "e52f9993bbd9234a907d7bbf79d84e98382bcabfc8b196a407156ebe2bed6c73"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/tools/selftest/dbg-image-page.test.mjs",
+    "bytes": 8885,
+    "sha256": "ce1e8ba4241578a467f7fb9f75575021a3aa31913937b906fffc7da856e1732e"
+  },
+  {
+    "path": "E:/web-serial-rtt-tools/tools/selftest/web-review-maintenance.test.mjs",
+    "bytes": 4080,
+    "sha256": "b9821deb4e85ad4ebac4441990b3ff29945e30840ec6f61fabc1256665ae9d8a"
+  }
+]
