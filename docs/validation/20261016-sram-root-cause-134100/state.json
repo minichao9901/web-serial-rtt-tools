@@ -1,15 +1,17 @@
 {
   "stage": "ready",
-  "lastJob": "job-16",
+  "lastJob": "job-97-restore-firmware",
   "lastResult": {
-    "exitCode": 1,
-    "startedAt": "2026-10-16T13:56:12.058019+08:00",
-    "endedAt": "2026-10-16T13:56:12.395179+08:00",
+    "exitCode": 0,
+    "startedAt": "2026-10-16T14:21:27.916440+08:00",
+    "endedAt": "2026-10-16T14:21:57.430773+08:00",
     "command": [
-      "node",
-      "E:/web-serial-rtt-tools/docs/validation/20261016-sram-root-cause-134100/abort-hardware.mjs"
+      "python",
+      "-u",
+      "docs/validation/20261016-sram-root-cause-134100/restore-firmware.py",
+      "--no-lock"
     ],
-    "cwd": "E:\\web-serial-rtt-tools"
+    "cwd": "E:/web-serial-rtt-tools"
   },
   "pid": 32084
 }

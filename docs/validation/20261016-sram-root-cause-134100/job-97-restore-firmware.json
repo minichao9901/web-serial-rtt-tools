@@ -1,0 +1,5 @@
+{
+  "command": ["python", "-u", "docs/validation/20261016-sram-root-cause-134100/restore-firmware.py", "--no-lock"],
+  "cwd": "E:/web-serial-rtt-tools",
+  "timeout": 600
+}

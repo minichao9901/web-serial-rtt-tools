@@ -1,0 +1,116 @@
+{
+  "result": {
+    "preState": {
+      "faulted": false,
+      "recovering": false,
+      "needsReconnect": false,
+      "faultHeals": 0
+    },
+    "preHeal": "readMem-ok",
+    "afterHeal": {
+      "faulted": false,
+      "faultHeals": 0
+    },
+    "faultError": "SWD FAULT（传输 1/1 条，地址 0xc）",
+    "oldRequest": [
+      8,
+      30,
+      0,
+      0,
+      0
+    ],
+    "oldResponse": [
+      0
+    ],
+    "stickyBefore": 4026531872,
+    "stickyAfterOld": 4026531872,
+    "newRequest": [
+      8,
+      0,
+      30,
+      0,
+      0,
+      0
+    ],
+    "newResponse": true,
+    "stickyAfterNew": 4026531840,
+    "flashBefore": [
+      0,
+      0,
+      1,
+      32,
+      73,
+      2,
+      0,
+      8,
+      17,
+      15,
+      0,
+      8,
+      19,
+      15,
+      0,
+      8
+    ],
+    "flashAfter": [
+      0,
+      0,
+      1,
+      32,
+      73,
+      2,
+      0,
+      8,
+      17,
+      15,
+      0,
+      8,
+      19,
+      15,
+      0,
+      8
+    ],
+    "regsBefore": [
+      39,
+      536936279,
+      1,
+      0,
+      0,
+      8,
+      79764919,
+      7,
+      6,
+      134218745,
+      134236266,
+      28,
+      10,
+      536936448,
+      4294967295,
+      134218312,
+      16777216
+    ],
+    "regsAfter": [
+      39,
+      536936279,
+      1,
+      0,
+      0,
+      8,
+      79764919,
+      7,
+      6,
+      134218745,
+      134236266,
+      28,
+      10,
+      536936448,
+      4294967295,
+      134218312,
+      16777216
+    ],
+    "dhcsr": 196611,
+    "halted": true,
+    "faultHeals": 1
+  },
+  "passed": true
+}

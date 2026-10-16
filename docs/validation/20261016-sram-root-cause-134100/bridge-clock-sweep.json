@@ -1,0 +1,84 @@
+{
+  "requestedHz": 60000000,
+  "samples": [
+    {
+      "i": 0,
+      "result": {
+        "mhz": 45,
+        "cb": 536870924,
+        "yield": 48219
+      }
+    },
+    {
+      "i": 1,
+      "error": "既没弹选择框也没就绪：window.__tools.hid.last?.running && window.__tools.hid.last?.cbAddr"
+    },
+    {
+      "i": 2,
+      "error": "既没弹选择框也没就绪：window.__tools.hid.last?.running && window.__tools.hid.last?.cbAddr"
+    },
+    {
+      "i": 3,
+      "result": {
+        "mhz": 60,
+        "cb": 536870924,
+        "yield": 48219
+      }
+    },
+    {
+      "i": 4,
+      "error": "既没弹选择框也没就绪：window.__tools.hid.last?.running && window.__tools.hid.last?.cbAddr"
+    },
+    {
+      "i": 5,
+      "result": {
+        "mhz": 60,
+        "cb": 536870924,
+        "yield": 48221
+      }
+    },
+    {
+      "i": 6,
+      "error": "既没弹选择框也没就绪：window.__tools.hid.last?.running && window.__tools.hid.last?.cbAddr"
+    },
+    {
+      "i": 7,
+      "error": "既没弹选择框也没就绪：window.__tools.hid.last?.running && window.__tools.hid.last?.cbAddr"
+    },
+    {
+      "i": 8,
+      "error": "既没弹选择框也没就绪：window.__tools.hid.last?.running && window.__tools.hid.last?.cbAddr"
+    },
+    {
+      "i": 9,
+      "error": "既没弹选择框也没就绪：window.__tools.hid.last?.running && window.__tools.hid.last?.cbAddr"
+    }
+  ],
+  "errors": [
+    "既没弹选择框也没就绪：window.__tools.hid.last?.running && window.__tools.hid.last?.cbAddr",
+    "既没弹选择框也没就绪：window.__tools.hid.last?.running && window.__tools.hid.last?.cbAddr",
+    "既没弹选择框也没就绪：window.__tools.hid.last?.running && window.__tools.hid.last?.cbAddr",
+    "既没弹选择框也没就绪：window.__tools.hid.last?.running && window.__tools.hid.last?.cbAddr",
+    "既没弹选择框也没就绪：window.__tools.hid.last?.running && window.__tools.hid.last?.cbAddr",
+    "既没弹选择框也没就绪：window.__tools.hid.last?.running && window.__tools.hid.last?.cbAddr",
+    "既没弹选择框也没就绪：window.__tools.hid.last?.running && window.__tools.hid.last?.cbAddr"
+  ],
+  "clockField": {
+    "value": "60000000",
+    "disabled": false
+  },
+  "elf": {
+    "addr": "0x2000000c",
+    "size": "0x1000"
+  },
+  "summary": {
+    "n": 3,
+    "at60": 2,
+    "below": 1,
+    "values": [
+      45,
+      60,
+      60
+    ]
+  }
+}

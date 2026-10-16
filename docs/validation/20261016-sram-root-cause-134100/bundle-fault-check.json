@@ -1,0 +1,51 @@
+{
+  "entry": "bundle",
+  "result": {
+    "faultError": "SWD FAULT（传输 1/1 条，地址 0xc）",
+    "oldResponse": [
+      0
+    ],
+    "stickyBefore": 4026531872,
+    "stickyAfterOld": 4026531872,
+    "newResponse": true,
+    "stickyAfterNew": 4026531840,
+    "flashBefore": [
+      0,
+      0,
+      1,
+      32,
+      73,
+      2,
+      0,
+      8,
+      17,
+      15,
+      0,
+      8,
+      19,
+      15,
+      0,
+      8
+    ],
+    "flashAfter": [
+      0,
+      0,
+      1,
+      32,
+      73,
+      2,
+      0,
+      8,
+      17,
+      15,
+      0,
+      8,
+      19,
+      15,
+      0,
+      8
+    ],
+    "faultHeals": 1
+  },
+  "passed": true
+}

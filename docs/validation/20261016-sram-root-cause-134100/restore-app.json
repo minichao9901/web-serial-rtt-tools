@@ -1,0 +1,38 @@
+{
+  "result": {
+    "steps": [
+      {
+        "step": "vectors",
+        "sp": "0x20010000",
+        "pc": "0x8000249"
+      },
+      {
+        "step": "APB2ENR-IOPA",
+        "before": "0x0"
+      },
+      {
+        "step": "APB1ENR-USB",
+        "before": "0x0"
+      },
+      {
+        "step": "USB_CNTR=PDWN|FRES"
+      },
+      {
+        "step": "PA12-open-drain-low",
+        "before": "0x88844444"
+      },
+      {
+        "step": "sysreset",
+        "info": "软件复位（AIRCR.SYSRESETREQ）"
+      }
+    ],
+    "sp": "0x20010000",
+    "pc": "0x8000249",
+    "dhcsrAfterReset": 16842753,
+    "haltedAfterReset": false,
+    "dhcsrRunning": 16842753,
+    "haltedAtEnd": false,
+    "faultHeals": 0
+  },
+  "passed": true
+}
