@@ -1,0 +1,109 @@
+{
+  "label": "current60-buf4k",
+  "app": "http://127.0.0.1:8899/index.html",
+  "clock": "60000000",
+  "forceBuffer": "4096",
+  "windows": [
+    {
+      "round": 1,
+      "mhz": 60,
+      "samples": [
+        {
+          "rx": 6750208,
+          "moved": 5267456,
+          "t": 4329.200000047684,
+          "mhz": 60,
+          "pageRate": "2972.0 KB/s"
+        },
+        {
+          "rx": 31166464,
+          "moved": 29628416,
+          "t": 12345.700000047684,
+          "mhz": 60,
+          "pageRate": "2972.0 KB/s"
+        },
+        {
+          "rx": 55570432,
+          "moved": 53983232,
+          "t": 20358.5,
+          "mhz": 60,
+          "pageRate": "2972.0 KB/s"
+        },
+        {
+          "rx": 79941632,
+          "moved": 78364672,
+          "t": 28360.399999976158,
+          "mhz": 60,
+          "pageRate": "2976.0 KB/s"
+        }
+      ],
+      "rates": [
+        {
+          "rxMBs": 3.0457501403355574,
+          "movedMBs": 3.0388523669930767,
+          "dt": 8.02,
+          "pageRate": "2972.0 KB/s",
+          "mhz": 60
+        },
+        {
+          "rxMBs": 3.0456230032130125,
+          "movedMBs": 3.039488817909462,
+          "dt": 8.01,
+          "pageRate": "2972.0 KB/s",
+          "mhz": 60
+        },
+        {
+          "rxMBs": 3.045676651804273,
+          "movedMBs": 3.04695634787646,
+          "dt": 8,
+          "pageRate": "2976.0 KB/s",
+          "mhz": 60
+        }
+      ],
+      "mean": {
+        "rxMBs": 3.046,
+        "movedMBs": 3.042
+      },
+      "lastStatus": {
+        "running": true,
+        "channel": 0,
+        "swdReady": true,
+        "clockDelay": 1,
+        "cbAddr": 536870924,
+        "upAddr": 536870948,
+        "moved": 78364672,
+        "polls": 7725,
+        "transfers": 38265,
+        "rdErr": 0,
+        "wrErr": 0,
+        "lastChunk": 2048,
+        "emptyRing": 0,
+        "dapYield": 41550,
+        "rescans": 0,
+        "lastCmdId": 17,
+        "lastResp": 17,
+        "startRc": 0,
+        "chunkBytes": 2048,
+        "discard": false,
+        "swdMhz": 60
+      }
+    }
+  ],
+  "errors": [],
+  "entry": "source|hid",
+  "bufferPatch": {
+    "patched": true,
+    "bufferSize": 4096
+  },
+  "clockField": {
+    "value": "60000000",
+    "disabled": false,
+    "hasClock": true
+  },
+  "elf": {
+    "addr": "0x2000000c",
+    "size": "0x1000"
+  },
+  "rounds": [],
+  "passed": true
+}

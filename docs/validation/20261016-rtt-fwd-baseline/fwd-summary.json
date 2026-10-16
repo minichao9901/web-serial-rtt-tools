@@ -1,0 +1,176 @@
+{
+  "note": "同一块 F103ZE + 同一个 akaLinkPro 探针 + 同一会话；靶子固件 stm32f103_rtt_speed/build-ze (96 MHz)；页面 RX = window.__tools.stream.rxc.total 增速；moved = 探针自报搬运。单位 MB/s(1e6)。",
+  "rows": [
+    {
+      "label": "baseline",
+      "app": "http://127.0.0.1:8899/tmp/base-20261004/index.html",
+      "clock": "60000000",
+      "forceBuffer": null,
+      "mhz": 45,
+      "rxMBs": 2.575,
+      "movedMBs": 2.567,
+      "windows": [
+        2.576,
+        2.569,
+        2.581
+      ],
+      "chunkBytes": 2048,
+      "dapYield": 41553,
+      "rdErr": 11,
+      "wrErr": 3,
+      "viewer": null
+    },
+    {
+      "label": "baseline60-1",
+      "app": "http://127.0.0.1:8899/tmp/base-20261004/index.html",
+      "clock": "60000000",
+      "forceBuffer": null,
+      "mhz": 60,
+      "rxMBs": 3.045,
+      "movedMBs": 3.043,
+      "windows": [
+        3.045,
+        3.045,
+        3.044
+      ],
+      "chunkBytes": 2048,
+      "dapYield": 41550,
+      "rdErr": 0,
+      "wrErr": 0,
+      "viewer": null
+    },
+    {
+      "label": "baseline60",
+      "app": "http://127.0.0.1:8899/tmp/base-20261004/index.html",
+      "clock": "60000000",
+      "forceBuffer": null,
+      "mhz": 45,
+      "rxMBs": 2.576,
+      "movedMBs": 2.574,
+      "windows": [
+        2.575,
+        2.577,
+        2.576
+      ],
+      "chunkBytes": 2048,
+      "dapYield": 41551,
+      "rdErr": 11,
+      "wrErr": 3,
+      "viewer": null
+    },
+    {
+      "label": "current-after-viewer",
+      "app": "http://127.0.0.1:8899/index.html",
+      "clock": "60000000",
+      "forceBuffer": null,
+      "mhz": 45,
+      "rxMBs": 2.576,
+      "movedMBs": 2.543,
+      "windows": [
+        2.577,
+        2.575,
+        2.576
+      ],
+      "chunkBytes": 2048,
+      "dapYield": 41550,
+      "rdErr": 11,
+      "wrErr": 3,
+      "viewer": true
+    },
+    {
+      "label": "current-buf4k",
+      "app": "http://127.0.0.1:8899/index.html",
+      "clock": "45000000",
+      "forceBuffer": "4096",
+      "mhz": 45,
+      "rxMBs": 2.577,
+      "movedMBs": 2.574,
+      "windows": [
+        2.577,
+        2.577,
+        2.577
+      ],
+      "chunkBytes": 2048,
+      "dapYield": 41550,
+      "rdErr": 0,
+      "wrErr": 0,
+      "viewer": null
+    },
+    {
+      "label": "current-ramp800",
+      "app": "http://127.0.0.1:8899/index.html",
+      "clock": "60000000",
+      "forceBuffer": null,
+      "mhz": 60,
+      "rxMBs": 3.046,
+      "movedMBs": 2.994,
+      "windows": [
+        3.045,
+        3.046,
+        3.046
+      ],
+      "chunkBytes": 2048,
+      "dapYield": 41545,
+      "rdErr": 0,
+      "wrErr": 0,
+      "viewer": null
+    },
+    {
+      "label": "current",
+      "app": "http://127.0.0.1:8899/index.html",
+      "clock": "45000000",
+      "forceBuffer": null,
+      "mhz": 45,
+      "rxMBs": 2.577,
+      "movedMBs": 2.574,
+      "windows": [
+        2.577,
+        2.576,
+        2.577
+      ],
+      "chunkBytes": 2048,
+      "dapYield": 41406,
+      "rdErr": 0,
+      "wrErr": 0,
+      "viewer": null
+    },
+    {
+      "label": "current60-buf4k",
+      "app": "http://127.0.0.1:8899/index.html",
+      "clock": "60000000",
+      "forceBuffer": "4096",
+      "mhz": 60,
+      "rxMBs": 3.046,
+      "movedMBs": 3.042,
+      "windows": [
+        3.046,
+        3.046,
+        3.046
+      ],
+      "chunkBytes": 2048,
+      "dapYield": 41550,
+      "rdErr": 0,
+      "wrErr": 0,
+      "viewer": null
+    },
+    {
+      "label": "current60",
+      "app": "http://127.0.0.1:8899/index.html",
+      "clock": "60000000",
+      "forceBuffer": null,
+      "mhz": 60,
+      "rxMBs": 3.046,
+      "movedMBs": 3.045,
+      "windows": [
+        3.046,
+        3.046,
+        3.046
+      ],
+      "chunkBytes": 2048,
+      "dapYield": 41551,
+      "rdErr": 0,
+      "wrErr": 0,
+      "viewer": null
+    }
+  ]
+}

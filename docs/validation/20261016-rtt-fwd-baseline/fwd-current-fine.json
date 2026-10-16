@@ -1,0 +1,21 @@
+{
+  "label": "current-fine",
+  "app": "http://127.0.0.1:8899/index.html",
+  "clock": "60000000",
+  "forceBuffer": null,
+  "windows": [],
+  "errors": [
+    "round 1: 桥没起来"
+  ],
+  "entry": "source|hid",
+  "clockField": {
+    "value": "60000000",
+    "disabled": false,
+    "hasClock": true
+  },
+  "elf": {
+    "addr": "0x2000000c",
+    "size": "0x1000"
+  },
+  "passed": true
+}

@@ -1,0 +1,114 @@
+{
+  "label": "current-after-viewer",
+  "app": "http://127.0.0.1:8899/index.html",
+  "clock": "60000000",
+  "forceBuffer": null,
+  "windows": [
+    {
+      "round": 1,
+      "mhz": 45,
+      "samples": [
+        {
+          "rx": 2674688,
+          "moved": 2048,
+          "t": 11005.099999904633,
+          "mhz": 45,
+          "pageRate": "2124.0 KB/s"
+        },
+        {
+          "rx": 23330816,
+          "moved": 19916800,
+          "t": 19021.299999952316,
+          "mhz": 45,
+          "pageRate": "2516.0 KB/s"
+        },
+        {
+          "rx": 43937792,
+          "moved": 40515584,
+          "t": 27023.899999976158,
+          "mhz": 45,
+          "pageRate": "2516.0 KB/s"
+        },
+        {
+          "rx": 64585728,
+          "moved": 61118464,
+          "t": 35040.5,
+          "mhz": 45,
+          "pageRate": "2520.0 KB/s"
+        }
+      ],
+      "rates": [
+        {
+          "rxMBs": 2.5767979840669053,
+          "movedMBs": 2.484313265622307,
+          "dt": 8.02,
+          "pageRate": "2516.0 KB/s",
+          "mhz": 45
+        },
+        {
+          "rxMBs": 2.5750351135804124,
+          "movedMBs": 2.5740114462722903,
+          "dt": 8,
+          "pageRate": "2516.0 KB/s",
+          "mhz": 45
+        },
+        {
+          "rxMBs": 2.5756475313647416,
+          "movedMBs": 2.570027193565692,
+          "dt": 8.02,
+          "pageRate": "2520.0 KB/s",
+          "mhz": 45
+        }
+      ],
+      "mean": {
+        "rxMBs": 2.576,
+        "movedMBs": 2.543
+      },
+      "lastStatus": {
+        "running": true,
+        "channel": 0,
+        "swdReady": true,
+        "clockDelay": 1,
+        "cbAddr": 536870924,
+        "upAddr": 536870948,
+        "moved": 61118464,
+        "polls": 48089,
+        "transfers": 29843,
+        "rdErr": 11,
+        "wrErr": 3,
+        "lastChunk": 2048,
+        "emptyRing": 0,
+        "dapYield": 41550,
+        "rescans": 2,
+        "lastCmdId": 17,
+        "lastResp": 17,
+        "startRc": 0,
+        "chunkBytes": 2048,
+        "discard": false,
+        "swdMhz": 45
+      }
+    }
+  ],
+  "errors": [],
+  "entry": "source|hid",
+  "viewer": {
+    "rtt": true,
+    "running": true,
+    "bytes": 0
+  },
+  "viewerAfter": {
+    "bytes": 2854222,
+    "polls": 155
+  },
+  "clockField": {
+    "value": "60000000",
+    "disabled": false,
+    "hasClock": true
+  },
+  "elf": {
+    "addr": "0x2000000c",
+    "size": "0x1000"
+  },
+  "rounds": [],
+  "passed": true
+}
