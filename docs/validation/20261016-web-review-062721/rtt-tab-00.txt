@@ -1,0 +1,153 @@
+- banner:
+  - generic "串口 / RTT 工具箱"
+  - navigation "工具切换":
+    - button "串口助手"
+    - button "终端"
+    - button "RTT Viewer"
+    - button "RTT 转发"
+    - button "J-Scope 波形"
+    - button "烧录器"
+    - button "调试器"
+    - generic "更多功能": 更多功能 ▾
+  - generic: 串口：未连接
+  - generic "连接支持该功能的 akaLinkPro 固件后可用。":
+    - checkbox "NRST 开漏" [checked] [disabled]
+    - text: NRST 开漏
+  - button "全局复位"
+  - button "全屏"
+  - status "当前页面没有功能连接实体探针；串口连接状态单独显示。": 探针：未使用
+  - generic "帮助"
+- main:
+  - text: 连接后这里显示接收数据。
+  - complementary:
+    - group "调试后端":
+      - generic: 调试后端
+      - generic: 类型
+      - combobox "类型":
+        - option "WebUSB · CMSIS-DAP（零安装）" [selected]
+        - option "本地桥 · OpenOCD"
+        - option "本地桥 · J-Link（ch0）"
+        - option "内置模拟目标（演示/自测）"
+      - button "连接探针"
+      - button "换设备…"
+      - button "断开" [disabled]
+      - generic: 目标类型
+      - combobox "目标类型":
+        - option "SWD / ARM（Cortex-M，默认）" [selected]
+        - option "RISC-V / JTAG（HPM、CH32V…）"
+      - generic: SWD 时钟
+      - combobox "SWD 时钟":
+        - option "自动" [selected]
+        - option "1 MHz"
+        - option "5 MHz"
+        - option "10 MHz"
+        - option "20 MHz"
+        - option "30 MHz"
+        - option "40 MHz"
+        - option "45 MHz"
+        - option "50 MHz"
+        - option "60 MHz"
+      - checkbox "显示所有 USB 设备（非 DAPLink）"
+      - text: 显示所有 USB 设备（非 DAPLink）
+      - paragraph:
+        - text: 支持 CMSIS-DAP v2（bulk）探针：DAPLink、自制 cherrydap 等。
+        - text: J-Link 探针不支持 WebUSB，请改用本地桥。
+    - group "RTT 控制块":
+      - generic: RTT 控制块
+      - generic: 芯片
+      - combobox "芯片":
+        - option "STM32F1（F103 等）" [selected]
+        - option "STM32F0"
+        - option "STM32F2"
+        - option "STM32F3"
+        - option "STM32F4"
+        - option "STM32F7"
+        - option "STM32G0"
+        - option "STM32G4"
+        - option "STM32H7（H743 等）"
+        - option "STM32H7B0 / H7A3 / H7B3（H7B0VBT6 KIT）"
+        - option "STM32H7A3"
+        - option "STM32H7B3"
+        - option "STM32H5"
+        - option "STM32L0"
+        - option "STM32L1"
+        - option "STM32L4 / L4+"
+        - option "STM32L5"
+        - option "STM32U5"
+        - option "STM32C0"
+        - option "STM32WB"
+        - option "STM32WL"
+        - option "ESP32-S31（板载 USB-JTAG）"
+        - option "ESP32（Wrover Kit）"
+        - option "自定义 cfg…"
+        - option "HPM5300EVK（HPM5361）"
+        - option "HPM5301EVKLite"
+        - option "HPM5E00EVK"
+        - option "HPM6200EVK（HPM6280）"
+        - option "HPM6300EVK（HPM6360）"
+        - option "HPM6750EVK2"
+        - option "HPM6750EVKMINI"
+        - option "HPM6800EVK（HPM6880）"
+        - option "HPM6E00EVK（HPM6E80）"
+        - option "HPM6P00EVK（HPM6P81）"
+        - option "其它 RISC-V（自己填 RAM 范围）"
+      - generic: RAM 范围
+      - textbox "RAM 范围": 0x20000000-0x20005000
+      - generic: 地址
+      - textbox "地址":
+        - /placeholder: 留空 = 自动扫描 / 读 ELF
+      - button "载入 ELF…"
+      - button "扫描控制块"
+      - generic: 轮询
+      - textbox "轮询 ms": "5"
+      - text: ms
+      - button "复位目标"
+      - button "重连 RTT"
+  - button "终端(ANSI)" [active]
+  - button "文本"
+  - button "HEX"
+  - checkbox "时间戳"
+  - text: 时间戳
+  - checkbox "自动滚动" [checked]
+  - text: 自动滚动
+  - button "暂停"
+  - button "清空"
+  - button "保存数据"
+  - textbox "Terminal input"
+  - text: 等待 RTT 输出…
+  - text: 连接探针并选择 RTT 通道后，目标输出会显示在这里。
+  - text: 连接探针并选择 RTT 通道后，这里显示目标输出。
+  - generic: 控制块 — · up × 0 / down × 0
+  - generic: 链路
+  - text: 读取
+  - generic: 0 B/s
+  - text: · 轮询
+  - generic: "0"
+  - text: Hz
+  - generic "缓冲水位：RTT 不重传，水位打到 3/4 以上说明目标写速 ≥ 主机读速，可能已有覆盖/丢弃。 （主机读速受调试器限制：OpenOCD RPC 实测约 17 KB/s，WebUSB 会快得多）":
+    - generic: 缓冲
+    - text: 高位
+    - generic: 0 次 / 峰值 0%
+    - text: · 溢出丢弃
+    - generic: "0"
+    - text: B · 错位读
+    - generic "读回了控制块等错误地址的内容（已整段丢弃重读，不进显示/文件）。持续增长说明 SWD 时钟太高或不稳定": "0"
+  - button "● 记录到文件"
+  - generic "默认开：每段前加一行 [时:分:秒.毫秒]，存 .txt 给人看；关掉则原样写字节存 .bin（二进制安全，事后解析用）":
+    - checkbox "记录带时间戳" [checked]
+    - text: 记录带时间戳
+  - generic "连接成功后自动弹一次保存框开始记录到文件。配合高速自动关显示（>50KB/s 停渲染、收数/记录照常）":
+    - checkbox "连接自动记录"
+    - text: 连接自动记录
+  - generic: 下行 ch0
+  - text: 行尾
+  - combobox "行尾":
+    - option "\\r" [selected]
+    - option "\\r\\n"
+    - option "\\n"
+    - option "无"
+  - checkbox "HEX"
+  - text: HEX
+  - textbox "给固件发送输入（↑/↓ 翻历史；Enter 发送）"
+  - button "发送"
+  - text: 连接后这里显示接收数据。 烧录或 SRAM 测试的进度与结果显示在这里。 （点「定位并开始」：留空地址就用 .elf 里的 _SEGGER_RTT 符号） ▸ ▸ 连接后这里显示接收数据。 ▸ I2C 事务与应答会显示在这里。

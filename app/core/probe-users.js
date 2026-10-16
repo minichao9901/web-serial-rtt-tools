@@ -1,6 +1,6 @@
 import { ProbeManager } from './probe-manager.js';
 import { CdcMode, isProbeCdcPort } from './cdc-mode.js';
-import { setUsbResetGuard } from './usb-device.js';
+import { setUsbResetGuard, usbResourceConflict } from './usb-device.js';
 
 // One declaration owns resource policy, teardown, injection and USB reset identity.
 // EVKLite: SPI2 PB10..15 and debug PA04..08 are independent. SPI auxiliary
@@ -106,7 +106,7 @@ export function createProbeManager(t, { bus = null, locks, features = PROBE_FEAT
     try { info = t.session?.port?.getInfo?.() || {}; } catch {}
     if (t.session?.isOpen && info.usbVendorId === device.vendorId && info.usbProductId === device.productId)
       peers.push('CDC 串口');
-    if (peers.length) throw new Error(`USB 整设备复位需要先断开 ${[...new Set(peers)].join('、')}`);
+    if (peers.length) throw usbResourceConflict(`USB 整设备复位需要先断开 ${[...new Set(peers)].join('、')}`);
   };
   return manager;
 }

@@ -1,0 +1,73 @@
+{
+  "revision": "fb06da2348543b75db5fbc237dd4d3b0ffe1d655",
+  "dirty": true,
+  "hardwareTest": "not-run (offline runner)",
+  "passed": true,
+  "commands": [
+    {
+      "command": [
+        "node",
+        "--test",
+        "tools\\selftest\\etm-history-races.test.mjs",
+        "tools\\selftest\\etm-host-control.test.mjs",
+        "tools\\selftest\\etm-jobs.test.mjs",
+        "tools\\selftest\\etm-kit.test.mjs",
+        "tools\\selftest\\etm-ownership.test.mjs",
+        "tools\\selftest\\etm-panel-retry.test.mjs",
+        "tools\\selftest\\etm-source-ui.test.mjs",
+        "tools\\selftest\\etm-ui-sequences.test.mjs"
+      ],
+      "exitCode": 0,
+      "log": "E:\\web-serial-rtt-tools\\docs\\validation\\20261016-web-review-062721\\etm-tests\\1-tests.log",
+      "timeout": false
+    },
+    {
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/selftest",
+        "-p",
+        "test_etm_server.py",
+        "-v"
+      ],
+      "exitCode": 0,
+      "log": "E:\\web-serial-rtt-tools\\docs\\validation\\20261016-web-review-062721\\etm-tests\\2-tests.log",
+      "timeout": false
+    },
+    {
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/selftest",
+        "-p",
+        "test_etm_lifecycle.py",
+        "-v"
+      ],
+      "exitCode": 0,
+      "log": "E:\\web-serial-rtt-tools\\docs\\validation\\20261016-web-review-062721\\etm-tests\\3-tests.log",
+      "timeout": false
+    },
+    {
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/selftest",
+        "-p",
+        "test_etm_seed.py",
+        "-v"
+      ],
+      "exitCode": 0,
+      "log": "E:\\web-serial-rtt-tools\\docs\\validation\\20261016-web-review-062721\\etm-tests\\4-tests.log",
+      "timeout": false
+    }
+  ]
+}

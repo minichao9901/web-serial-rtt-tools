@@ -1,0 +1,417 @@
+[
+  {
+    "page": "serial",
+    "name": "ASCII",
+    "ok": true
+  },
+  {
+    "page": "serial",
+    "name": "ANSI",
+    "ok": true
+  },
+  {
+    "page": "serial",
+    "name": "HEX",
+    "ok": true
+  },
+  {
+    "page": "serial",
+    "name": "ASCII",
+    "ok": true
+  },
+  {
+    "page": "serial",
+    "name": "HEX",
+    "ok": true
+  },
+  {
+    "page": "rtt",
+    "name": "终端(ANSI)",
+    "ok": true
+  },
+  {
+    "page": "rtt",
+    "name": "文本",
+    "ok": true
+  },
+  {
+    "page": "rtt",
+    "name": "HEX",
+    "ok": true
+  },
+  {
+    "page": "rttcdc",
+    "name": "ASCII",
+    "ok": true
+  },
+  {
+    "page": "rttcdc",
+    "name": "ANSI",
+    "ok": true
+  },
+  {
+    "page": "rttcdc",
+    "name": "HEX",
+    "ok": true
+  },
+  {
+    "page": "scope",
+    "name": "采集",
+    "ok": true
+  },
+  {
+    "page": "scope",
+    "name": "变量",
+    "ok": true
+  },
+  {
+    "page": "scope",
+    "name": "触发",
+    "ok": true
+  },
+  {
+    "page": "scope",
+    "name": "帮助",
+    "ok": true
+  },
+  {
+    "page": "scope",
+    "name": "叠加",
+    "ok": true
+  },
+  {
+    "page": "scope",
+    "name": "分道",
+    "ok": true
+  },
+  {
+    "page": "flash",
+    "name": "烧录",
+    "ok": true
+  },
+  {
+    "page": "flash",
+    "name": "SRAM 读写测试",
+    "ok": true
+  },
+  {
+    "page": "dbg",
+    "name": "会话",
+    "ok": true
+  },
+  {
+    "page": "dbg",
+    "name": "断点 0",
+    "ok": true
+  },
+  {
+    "page": "dbg",
+    "name": "栈帧",
+    "ok": true
+  },
+  {
+    "page": "dbg",
+    "name": "寄存器",
+    "ok": true
+  },
+  {
+    "page": "dbg",
+    "name": "内存",
+    "ok": true
+  },
+  {
+    "page": "dbg",
+    "name": "变量",
+    "ok": true
+  },
+  {
+    "page": "dbg",
+    "name": "SVD",
+    "ok": true
+  },
+  {
+    "page": "dbg",
+    "name": "RTT",
+    "ok": true
+  },
+  {
+    "page": "dbg",
+    "name": "异常",
+    "ok": true
+  },
+  {
+    "page": "spi",
+    "name": "连接",
+    "ok": true
+  },
+  {
+    "page": "spi",
+    "name": "总线",
+    "ok": true
+  },
+  {
+    "page": "spi",
+    "name": "状态",
+    "ok": true
+  },
+  {
+    "page": "spi",
+    "name": "帮助",
+    "ok": true
+  },
+  {
+    "page": "spi",
+    "name": "命令表",
+    "ok": true
+  },
+  {
+    "page": "spi",
+    "name": "寄存器",
+    "ok": true
+  },
+  {
+    "page": "spi",
+    "name": "脚本",
+    "ok": true
+  },
+  {
+    "page": "spi",
+    "name": "实时值",
+    "ok": true
+  },
+  {
+    "page": "spi",
+    "name": "Flash 测试",
+    "ok": true
+  },
+  {
+    "page": "spi",
+    "name": "回环自检",
+    "ok": true
+  },
+  {
+    "page": "panel",
+    "name": "连接",
+    "ok": true
+  },
+  {
+    "page": "panel",
+    "name": "屏配置",
+    "ok": true
+  },
+  {
+    "page": "panel",
+    "name": "控制",
+    "ok": true
+  },
+  {
+    "page": "panel",
+    "name": "帮助",
+    "ok": true
+  },
+  {
+    "page": "panel",
+    "name": "刷屏",
+    "ok": true
+  },
+  {
+    "page": "panel",
+    "name": "面板初始化",
+    "ok": true
+  },
+  {
+    "page": "panel",
+    "name": "读回",
+    "ok": true
+  },
+  {
+    "page": "spicdc",
+    "name": "ASCII",
+    "ok": true
+  },
+  {
+    "page": "spicdc",
+    "name": "ANSI",
+    "ok": true
+  },
+  {
+    "page": "spicdc",
+    "name": "HEX",
+    "ok": true
+  },
+  {
+    "page": "swo",
+    "name": "录制",
+    "ok": true
+  },
+  {
+    "page": "swo",
+    "name": "分析",
+    "ok": true
+  },
+  {
+    "page": "i2c",
+    "name": "连接",
+    "ok": true
+  },
+  {
+    "page": "i2c",
+    "name": "总线",
+    "ok": true
+  },
+  {
+    "page": "i2c",
+    "name": "诊断",
+    "ok": true
+  },
+  {
+    "page": "i2c",
+    "name": "帮助",
+    "ok": true
+  },
+  {
+    "page": "i2c",
+    "name": "扫描总线",
+    "ok": true
+  },
+  {
+    "page": "i2c",
+    "name": "命令表",
+    "ok": true
+  },
+  {
+    "page": "i2c",
+    "name": "寄存器",
+    "ok": true
+  },
+  {
+    "page": "i2c",
+    "name": "脚本",
+    "ok": true
+  },
+  {
+    "page": "i2c",
+    "name": "实时值",
+    "ok": true
+  },
+  {
+    "page": "analog",
+    "name": "ADC 示波器",
+    "ok": true
+  },
+  {
+    "page": "analog",
+    "name": "DAC 信号发生器",
+    "ok": true
+  },
+  {
+    "page": "gen",
+    "name": "工程文件",
+    "ok": true
+  },
+  {
+    "page": "gen",
+    "name": "调试参数",
+    "ok": true
+  },
+  {
+    "page": "gen",
+    "name": "本地桥",
+    "ok": true
+  },
+  {
+    "page": "gen",
+    "name": "ETM 桥",
+    "ok": true
+  },
+  {
+    "page": "gen",
+    "name": "Makefile.jlink",
+    "ok": true
+  },
+  {
+    "page": "gen",
+    "name": "jlink_gdb.script",
+    "ok": true
+  },
+  {
+    "page": "gen",
+    "name": "Makefile.pyocd",
+    "ok": true
+  },
+  {
+    "page": "gen",
+    "name": "Makefile.openocd",
+    "ok": true
+  },
+  {
+    "page": "gen",
+    "name": "rtt_logger.py",
+    "ok": true
+  },
+  {
+    "page": "gen",
+    "name": "test_sram.bin",
+    "ok": true
+  },
+  {
+    "page": "gen",
+    "name": "start-etm-bridge.bat",
+    "ok": true
+  },
+  {
+    "page": "gen",
+    "name": "check-tools.bat",
+    "ok": true
+  },
+  {
+    "page": "gen",
+    "name": "etm.config.json",
+    "ok": true
+  },
+  {
+    "page": "gen",
+    "name": "etm-launcher.ps1",
+    "ok": true
+  },
+  {
+    "page": "gen",
+    "name": "README-etm.txt",
+    "ok": true
+  },
+  {
+    "page": "gen",
+    "name": "rtt-bridge.mjs",
+    "ok": true
+  },
+  {
+    "page": "gen",
+    "name": "bridge.config.json",
+    "ok": true
+  },
+  {
+    "page": "gen",
+    "name": "README-bridge.txt",
+    "ok": true
+  },
+  {
+    "page": "gen",
+    "name": "start-bridge.bat",
+    "ok": true
+  },
+  {
+    "page": "gen",
+    "name": "check-tools.bat",
+    "ok": true
+  },
+  {
+    "page": "gen",
+    "name": "get-node.ps1",
+    "ok": true
+  },
+  {
+    "page": "gen",
+    "name": "start-bridge.sh",
+    "ok": true
+  }
+]

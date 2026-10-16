@@ -1,0 +1,1269 @@
+[
+  {
+    "page": "serial",
+    "data": {
+      "v": "ascii"
+    },
+    "id": "",
+    "selector": ".panel.active [data-group=\"rxmode\"] button[data-v=\"ascii\"]",
+    "text": "ASCII",
+    "checked": true,
+    "file": "serial-tab-00.png",
+    "activeDock": [],
+    "overflow": false,
+    "selected": []
+  },
+  {
+    "page": "serial",
+    "data": {
+      "v": "ansi"
+    },
+    "id": "",
+    "selector": ".panel.active [data-group=\"rxmode\"] button[data-v=\"ansi\"]",
+    "text": "ANSI",
+    "checked": true,
+    "file": "serial-tab-01.png",
+    "activeDock": [],
+    "overflow": false,
+    "selected": []
+  },
+  {
+    "page": "serial",
+    "data": {
+      "v": "hex"
+    },
+    "id": "",
+    "selector": ".panel.active [data-group=\"rxmode\"] button[data-v=\"hex\"]",
+    "text": "HEX",
+    "checked": true,
+    "file": "serial-tab-02.png",
+    "activeDock": [],
+    "overflow": false,
+    "selected": []
+  },
+  {
+    "page": "serial",
+    "data": {
+      "v": "ascii"
+    },
+    "id": "",
+    "selector": ".panel.active [data-group=\"txmode\"] button[data-v=\"ascii\"]",
+    "text": "ASCII",
+    "checked": true,
+    "file": "serial-tab-03.png",
+    "activeDock": [],
+    "overflow": false,
+    "selected": []
+  },
+  {
+    "page": "serial",
+    "data": {
+      "v": "hex"
+    },
+    "id": "",
+    "selector": ".panel.active [data-group=\"txmode\"] button[data-v=\"hex\"]",
+    "text": "HEX",
+    "checked": true,
+    "file": "serial-tab-04.png",
+    "activeDock": [],
+    "overflow": false,
+    "selected": []
+  },
+  {
+    "page": "rtt",
+    "data": {
+      "v": "term"
+    },
+    "id": "",
+    "selector": ".panel.active [data-group=\"rttmode\"] button[data-v=\"term\"]",
+    "text": "终端(ANSI)",
+    "checked": true,
+    "file": "rtt-tab-00.png",
+    "activeDock": [],
+    "overflow": false,
+    "selected": []
+  },
+  {
+    "page": "rtt",
+    "data": {
+      "v": "text"
+    },
+    "id": "",
+    "selector": ".panel.active [data-group=\"rttmode\"] button[data-v=\"text\"]",
+    "text": "文本",
+    "checked": true,
+    "file": "rtt-tab-01.png",
+    "activeDock": [],
+    "overflow": false,
+    "selected": []
+  },
+  {
+    "page": "rtt",
+    "data": {
+      "v": "hex"
+    },
+    "id": "",
+    "selector": ".panel.active [data-group=\"rttmode\"] button[data-v=\"hex\"]",
+    "text": "HEX",
+    "checked": true,
+    "file": "rtt-tab-02.png",
+    "activeDock": [],
+    "overflow": false,
+    "selected": []
+  },
+  {
+    "page": "rttcdc",
+    "data": {
+      "v": "ascii"
+    },
+    "id": "",
+    "selector": ".panel.active [data-group=\"crxmode\"] button[data-v=\"ascii\"]",
+    "text": "ASCII",
+    "checked": true,
+    "file": "rttcdc-tab-00.png",
+    "activeDock": [],
+    "overflow": false,
+    "selected": []
+  },
+  {
+    "page": "rttcdc",
+    "data": {
+      "v": "ansi"
+    },
+    "id": "",
+    "selector": ".panel.active [data-group=\"crxmode\"] button[data-v=\"ansi\"]",
+    "text": "ANSI",
+    "checked": true,
+    "file": "rttcdc-tab-01.png",
+    "activeDock": [],
+    "overflow": false,
+    "selected": []
+  },
+  {
+    "page": "rttcdc",
+    "data": {
+      "v": "hex"
+    },
+    "id": "",
+    "selector": ".panel.active [data-group=\"crxmode\"] button[data-v=\"hex\"]",
+    "text": "HEX",
+    "checked": true,
+    "file": "rttcdc-tab-02.png",
+    "activeDock": [],
+    "overflow": false,
+    "selected": []
+  },
+  {
+    "page": "scope",
+    "data": {
+      "sideTab": "capture"
+    },
+    "id": "sc-side-capture-tab",
+    "selector": "#sc-side-capture-tab",
+    "text": "采集",
+    "checked": true,
+    "file": "scope-tab-00.png",
+    "activeDock": [],
+    "overflow": false,
+    "selected": [
+      "sc-side-capture-tab"
+    ]
+  },
+  {
+    "page": "scope",
+    "data": {
+      "sideTab": "variables"
+    },
+    "id": "sc-side-variables-tab",
+    "selector": "#sc-side-variables-tab",
+    "text": "变量",
+    "checked": true,
+    "file": "scope-tab-01.png",
+    "activeDock": [],
+    "overflow": false,
+    "selected": [
+      "sc-side-variables-tab"
+    ]
+  },
+  {
+    "page": "scope",
+    "data": {
+      "sideTab": "trigger"
+    },
+    "id": "sc-side-trigger-tab",
+    "selector": "#sc-side-trigger-tab",
+    "text": "触发",
+    "checked": true,
+    "file": "scope-tab-02.png",
+    "activeDock": [],
+    "overflow": false,
+    "selected": [
+      "sc-side-trigger-tab"
+    ]
+  },
+  {
+    "page": "scope",
+    "data": {
+      "sideTab": "help"
+    },
+    "id": "sc-side-help-tab",
+    "selector": "#sc-side-help-tab",
+    "text": "帮助",
+    "checked": true,
+    "file": "scope-tab-03.png",
+    "activeDock": [],
+    "overflow": false,
+    "selected": [
+      "sc-side-help-tab"
+    ]
+  },
+  {
+    "page": "scope",
+    "data": {
+      "v": "overlay"
+    },
+    "id": "",
+    "selector": ".panel.active [data-group=\"sclayout\"] button[data-v=\"overlay\"]",
+    "text": "叠加",
+    "checked": true,
+    "file": "scope-tab-04.png",
+    "activeDock": [],
+    "overflow": false,
+    "selected": [
+      "sc-side-help-tab"
+    ]
+  },
+  {
+    "page": "scope",
+    "data": {
+      "v": "lanes"
+    },
+    "id": "",
+    "selector": ".panel.active [data-group=\"sclayout\"] button[data-v=\"lanes\"]",
+    "text": "分道",
+    "checked": true,
+    "file": "scope-tab-05.png",
+    "activeDock": [],
+    "overflow": false,
+    "selected": [
+      "sc-side-help-tab"
+    ]
+  },
+  {
+    "page": "flash",
+    "data": {
+      "sideTab": "flash"
+    },
+    "id": "f-side-flash-tab",
+    "selector": "#f-side-flash-tab",
+    "text": "烧录",
+    "checked": true,
+    "file": "flash-tab-00.png",
+    "activeDock": [],
+    "overflow": false,
+    "selected": [
+      "f-side-flash-tab"
+    ]
+  },
+  {
+    "page": "flash",
+    "data": {
+      "sideTab": "sram"
+    },
+    "id": "f-side-sram-tab",
+    "selector": "#f-side-sram-tab",
+    "text": "SRAM 读写测试",
+    "checked": true,
+    "file": "flash-tab-01.png",
+    "activeDock": [],
+    "overflow": false,
+    "selected": [
+      "f-side-sram-tab"
+    ]
+  },
+  {
+    "page": "dbg",
+    "data": {},
+    "id": "d-side-session-tab",
+    "selector": "#d-side-session-tab",
+    "text": "会话",
+    "checked": true,
+    "file": "dbg-tab-00.png",
+    "activeDock": [
+      {
+        "h": 883.6000366210938,
+        "id": "",
+        "key": "regs",
+        "w": 380
+      }
+    ],
+    "overflow": false,
+    "selected": [
+      "d-side-session-tab"
+    ]
+  },
+  {
+    "page": "dbg",
+    "data": {},
+    "id": "d-side-breaks-tab",
+    "selector": "#d-side-breaks-tab",
+    "text": "断点 0",
+    "checked": true,
+    "file": "dbg-tab-01.png",
+    "activeDock": [
+      {
+        "h": 883.6000366210938,
+        "id": "",
+        "key": "regs",
+        "w": 380
+      }
+    ],
+    "overflow": false,
+    "selected": [
+      "d-side-breaks-tab"
+    ]
+  },
+  {
+    "page": "dbg",
+    "data": {},
+    "id": "d-side-frames-tab",
+    "selector": "#d-side-frames-tab",
+    "text": "栈帧",
+    "checked": true,
+    "file": "dbg-tab-02.png",
+    "activeDock": [
+      {
+        "h": 883.6000366210938,
+        "id": "",
+        "key": "regs",
+        "w": 380
+      }
+    ],
+    "overflow": false,
+    "selected": [
+      "d-side-frames-tab"
+    ]
+  },
+  {
+    "page": "dbg",
+    "data": {
+      "dock": "regs"
+    },
+    "id": "",
+    "selector": "#d-dock-tabs button[data-dock=\"regs\"]",
+    "text": "寄存器",
+    "checked": true,
+    "file": "dbg-tab-03.png",
+    "activeDock": [
+      {
+        "h": 883.6000366210938,
+        "id": "",
+        "key": "regs",
+        "w": 380
+      }
+    ],
+    "overflow": false,
+    "selected": [
+      "d-side-frames-tab"
+    ]
+  },
+  {
+    "page": "dbg",
+    "data": {
+      "dock": "mem"
+    },
+    "id": "",
+    "selector": "#d-dock-tabs button[data-dock=\"mem\"]",
+    "text": "内存",
+    "checked": true,
+    "file": "dbg-tab-04.png",
+    "activeDock": [
+      {
+        "h": 883.6000366210938,
+        "id": "",
+        "key": "mem",
+        "w": 380
+      }
+    ],
+    "overflow": false,
+    "selected": [
+      "d-side-frames-tab"
+    ]
+  },
+  {
+    "page": "dbg",
+    "data": {
+      "dock": "var"
+    },
+    "id": "",
+    "selector": "#d-dock-tabs button[data-dock=\"var\"]",
+    "text": "变量",
+    "checked": true,
+    "file": "dbg-tab-05.png",
+    "activeDock": [
+      {
+        "h": 883.6000366210938,
+        "id": "",
+        "key": "var",
+        "w": 380
+      }
+    ],
+    "overflow": false,
+    "selected": [
+      "d-side-frames-tab"
+    ]
+  },
+  {
+    "page": "dbg",
+    "data": {
+      "dock": "svd"
+    },
+    "id": "",
+    "selector": "#d-dock-tabs button[data-dock=\"svd\"]",
+    "text": "SVD",
+    "checked": true,
+    "file": "dbg-tab-06.png",
+    "activeDock": [
+      {
+        "h": 883.6000366210938,
+        "id": "",
+        "key": "svd",
+        "w": 380
+      }
+    ],
+    "overflow": false,
+    "selected": [
+      "d-side-frames-tab"
+    ]
+  },
+  {
+    "page": "dbg",
+    "data": {
+      "dock": "rtt"
+    },
+    "id": "",
+    "selector": "#d-dock-tabs button[data-dock=\"rtt\"]",
+    "text": "RTT",
+    "checked": true,
+    "file": "dbg-tab-07.png",
+    "activeDock": [
+      {
+        "h": 883.6000366210938,
+        "id": "",
+        "key": "rtt",
+        "w": 380
+      }
+    ],
+    "overflow": false,
+    "selected": [
+      "d-side-frames-tab"
+    ]
+  },
+  {
+    "page": "dbg",
+    "data": {
+      "dock": "fault"
+    },
+    "id": "",
+    "selector": "#d-dock-tabs button[data-dock=\"fault\"]",
+    "text": "异常",
+    "checked": true,
+    "file": "dbg-tab-08.png",
+    "activeDock": [
+      {
+        "h": 883.6000366210938,
+        "id": "",
+        "key": "fault",
+        "w": 380
+      }
+    ],
+    "overflow": false,
+    "selected": [
+      "d-side-frames-tab"
+    ]
+  },
+  {
+    "page": "spi",
+    "data": {
+      "sideTab": "connect"
+    },
+    "id": "sp-side-connect-tab",
+    "selector": "#sp-side-connect-tab",
+    "text": "连接",
+    "checked": true,
+    "file": "spi-tab-00.png",
+    "activeDock": [
+      {
+        "h": 638.9375,
+        "id": "sp-cmd-card",
+        "key": "cmd",
+        "w": 1102
+      }
+    ],
+    "overflow": false,
+    "selected": [
+      "sp-side-connect-tab"
+    ]
+  },
+  {
+    "page": "spi",
+    "data": {
+      "sideTab": "bus"
+    },
+    "id": "sp-side-bus-tab",
+    "selector": "#sp-side-bus-tab",
+    "text": "总线",
+    "checked": true,
+    "file": "spi-tab-01.png",
+    "activeDock": [
+      {
+        "h": 638.9375,
+        "id": "sp-cmd-card",
+        "key": "cmd",
+        "w": 1102
+      }
+    ],
+    "overflow": false,
+    "selected": [
+      "sp-side-bus-tab"
+    ]
+  },
+  {
+    "page": "spi",
+    "data": {
+      "sideTab": "status"
+    },
+    "id": "sp-side-status-tab",
+    "selector": "#sp-side-status-tab",
+    "text": "状态",
+    "checked": true,
+    "file": "spi-tab-02.png",
+    "activeDock": [
+      {
+        "h": 638.9375,
+        "id": "sp-cmd-card",
+        "key": "cmd",
+        "w": 1102
+      }
+    ],
+    "overflow": false,
+    "selected": [
+      "sp-side-status-tab"
+    ]
+  },
+  {
+    "page": "spi",
+    "data": {
+      "sideTab": "help"
+    },
+    "id": "sp-side-help-tab",
+    "selector": "#sp-side-help-tab",
+    "text": "帮助",
+    "checked": true,
+    "file": "spi-tab-03.png",
+    "activeDock": [
+      {
+        "h": 638.9375,
+        "id": "sp-cmd-card",
+        "key": "cmd",
+        "w": 1102
+      }
+    ],
+    "overflow": false,
+    "selected": [
+      "sp-side-help-tab"
+    ]
+  },
+  {
+    "page": "spi",
+    "data": {
+      "dock": "cmd"
+    },
+    "id": "",
+    "selector": "#sp-dock-tabs button[data-dock=\"cmd\"]",
+    "text": "命令表",
+    "checked": true,
+    "file": "spi-tab-04.png",
+    "activeDock": [
+      {
+        "h": 638.9375,
+        "id": "sp-cmd-card",
+        "key": "cmd",
+        "w": 1102
+      }
+    ],
+    "overflow": false,
+    "selected": [
+      "sp-side-help-tab"
+    ]
+  },
+  {
+    "page": "spi",
+    "data": {
+      "dock": "reg"
+    },
+    "id": "",
+    "selector": "#sp-dock-tabs button[data-dock=\"reg\"]",
+    "text": "寄存器",
+    "checked": true,
+    "file": "spi-tab-05.png",
+    "activeDock": [
+      {
+        "h": 638.9375,
+        "id": "sp-reg-card",
+        "key": "reg",
+        "w": 1102
+      }
+    ],
+    "overflow": false,
+    "selected": [
+      "sp-side-help-tab"
+    ]
+  },
+  {
+    "page": "spi",
+    "data": {
+      "dock": "dsl"
+    },
+    "id": "",
+    "selector": "#sp-dock-tabs button[data-dock=\"dsl\"]",
+    "text": "脚本",
+    "checked": true,
+    "file": "spi-tab-06.png",
+    "activeDock": [
+      {
+        "h": 638.9375,
+        "id": "sp-dsl-card",
+        "key": "dsl",
+        "w": 1102
+      }
+    ],
+    "overflow": false,
+    "selected": [
+      "sp-side-help-tab"
+    ]
+  },
+  {
+    "page": "spi",
+    "data": {
+      "dock": "live"
+    },
+    "id": "",
+    "selector": "#sp-dock-tabs button[data-dock=\"live\"]",
+    "text": "实时值",
+    "checked": true,
+    "file": "spi-tab-07.png",
+    "activeDock": [
+      {
+        "h": 638.9375,
+        "id": "sp-live-card",
+        "key": "live",
+        "w": 1102
+      }
+    ],
+    "overflow": false,
+    "selected": [
+      "sp-side-help-tab"
+    ]
+  },
+  {
+    "page": "spi",
+    "data": {
+      "dock": "flash"
+    },
+    "id": "",
+    "selector": "#sp-dock-tabs button[data-dock=\"flash\"]",
+    "text": "Flash 测试",
+    "checked": true,
+    "file": "spi-tab-08.png",
+    "activeDock": [
+      {
+        "h": 638.9375,
+        "id": "sp-flash-card",
+        "key": "flash",
+        "w": 1102
+      }
+    ],
+    "overflow": false,
+    "selected": [
+      "sp-side-help-tab"
+    ]
+  },
+  {
+    "page": "spi",
+    "data": {
+      "dock": "loop"
+    },
+    "id": "",
+    "selector": "#sp-dock-tabs button[data-dock=\"loop\"]",
+    "text": "回环自检",
+    "checked": true,
+    "file": "spi-tab-09.png",
+    "activeDock": [
+      {
+        "h": 638.9375,
+        "id": "sp-loop-card",
+        "key": "loop",
+        "w": 1102
+      }
+    ],
+    "overflow": false,
+    "selected": [
+      "sp-side-help-tab"
+    ]
+  },
+  {
+    "page": "panel",
+    "data": {
+      "sideTab": "connect"
+    },
+    "id": "pn-side-connect-tab",
+    "selector": "#pn-side-connect-tab",
+    "text": "连接",
+    "checked": true,
+    "file": "panel-tab-00.png",
+    "activeDock": [
+      {
+        "h": 738.7999877929688,
+        "id": "pn-img-card",
+        "key": "img",
+        "w": 1077.4000244140625
+      }
+    ],
+    "overflow": false,
+    "selected": [
+      "pn-side-connect-tab"
+    ]
+  },
+  {
+    "page": "panel",
+    "data": {
+      "sideTab": "display"
+    },
+    "id": "pn-side-display-tab",
+    "selector": "#pn-side-display-tab",
+    "text": "屏配置",
+    "checked": true,
+    "file": "panel-tab-01.png",
+    "activeDock": [
+      {
+        "h": 738.7999877929688,
+        "id": "pn-img-card",
+        "key": "img",
+        "w": 1077.4000244140625
+      }
+    ],
+    "overflow": false,
+    "selected": [
+      "pn-side-display-tab"
+    ]
+  },
+  {
+    "page": "panel",
+    "data": {
+      "sideTab": "control"
+    },
+    "id": "pn-side-control-tab",
+    "selector": "#pn-side-control-tab",
+    "text": "控制",
+    "checked": true,
+    "file": "panel-tab-02.png",
+    "activeDock": [
+      {
+        "h": 738.7999877929688,
+        "id": "pn-img-card",
+        "key": "img",
+        "w": 1077.4000244140625
+      }
+    ],
+    "overflow": false,
+    "selected": [
+      "pn-side-control-tab"
+    ]
+  },
+  {
+    "page": "panel",
+    "data": {
+      "sideTab": "help"
+    },
+    "id": "pn-side-help-tab",
+    "selector": "#pn-side-help-tab",
+    "text": "帮助",
+    "checked": true,
+    "file": "panel-tab-03.png",
+    "activeDock": [
+      {
+        "h": 738.7999877929688,
+        "id": "pn-img-card",
+        "key": "img",
+        "w": 1077.4000244140625
+      }
+    ],
+    "overflow": false,
+    "selected": [
+      "pn-side-help-tab"
+    ]
+  },
+  {
+    "page": "panel",
+    "data": {
+      "dock": "img"
+    },
+    "id": "",
+    "selector": "#pn-dock-tabs button[data-dock=\"img\"]",
+    "text": "刷屏",
+    "checked": true,
+    "file": "panel-tab-04.png",
+    "activeDock": [
+      {
+        "h": 738.7999877929688,
+        "id": "pn-img-card",
+        "key": "img",
+        "w": 1077.4000244140625
+      }
+    ],
+    "overflow": false,
+    "selected": [
+      "pn-side-help-tab"
+    ]
+  },
+  {
+    "page": "panel",
+    "data": {
+      "dock": "code"
+    },
+    "id": "",
+    "selector": "#pn-dock-tabs button[data-dock=\"code\"]",
+    "text": "面板初始化",
+    "checked": true,
+    "file": "panel-tab-05.png",
+    "activeDock": [
+      {
+        "h": 738.7999877929688,
+        "id": "pn-code-card",
+        "key": "code",
+        "w": 1077.4000244140625
+      }
+    ],
+    "overflow": false,
+    "selected": [
+      "pn-side-help-tab"
+    ]
+  },
+  {
+    "page": "panel",
+    "data": {
+      "dock": "read"
+    },
+    "id": "",
+    "selector": "#pn-dock-tabs button[data-dock=\"read\"]",
+    "text": "读回",
+    "checked": true,
+    "file": "panel-tab-06.png",
+    "activeDock": [
+      {
+        "h": 738.7999877929688,
+        "id": "pn-read-card",
+        "key": "read",
+        "w": 1077.4000244140625
+      }
+    ],
+    "overflow": false,
+    "selected": [
+      "pn-side-help-tab"
+    ]
+  },
+  {
+    "page": "spicdc",
+    "data": {
+      "v": "ascii"
+    },
+    "id": "",
+    "selector": ".panel.active [data-group=\"sirxmode\"] button[data-v=\"ascii\"]",
+    "text": "ASCII",
+    "checked": true,
+    "file": "spicdc-tab-00.png",
+    "activeDock": [],
+    "overflow": false,
+    "selected": []
+  },
+  {
+    "page": "spicdc",
+    "data": {
+      "v": "ansi"
+    },
+    "id": "",
+    "selector": ".panel.active [data-group=\"sirxmode\"] button[data-v=\"ansi\"]",
+    "text": "ANSI",
+    "checked": true,
+    "file": "spicdc-tab-01.png",
+    "activeDock": [],
+    "overflow": false,
+    "selected": []
+  },
+  {
+    "page": "spicdc",
+    "data": {
+      "v": "hex"
+    },
+    "id": "",
+    "selector": ".panel.active [data-group=\"sirxmode\"] button[data-v=\"hex\"]",
+    "text": "HEX",
+    "checked": true,
+    "file": "spicdc-tab-02.png",
+    "activeDock": [],
+    "overflow": false,
+    "selected": []
+  },
+  {
+    "page": "swo",
+    "data": {},
+    "id": "sw-record-tab",
+    "selector": "#sw-record-tab",
+    "text": "录制",
+    "checked": true,
+    "file": "swo-tab-00.png",
+    "activeDock": [],
+    "overflow": false,
+    "selected": [
+      "sw-record-tab"
+    ]
+  },
+  {
+    "page": "swo",
+    "data": {},
+    "id": "sw-analysis-tab",
+    "selector": "#sw-analysis-tab",
+    "text": "分析",
+    "checked": true,
+    "file": "swo-tab-01.png",
+    "activeDock": [],
+    "overflow": false,
+    "selected": [
+      "sw-analysis-tab"
+    ]
+  },
+  {
+    "page": "i2c",
+    "data": {
+      "sideTab": "connect"
+    },
+    "id": "i2-side-connect-tab",
+    "selector": "#i2-side-connect-tab",
+    "text": "连接",
+    "checked": true,
+    "file": "i2c-tab-00.png",
+    "activeDock": [
+      {
+        "h": 630.2125244140625,
+        "id": "",
+        "key": "scan",
+        "w": 1080.4000244140625
+      }
+    ],
+    "overflow": false,
+    "selected": [
+      "i2-side-connect-tab"
+    ]
+  },
+  {
+    "page": "i2c",
+    "data": {
+      "sideTab": "bus"
+    },
+    "id": "i2-side-bus-tab",
+    "selector": "#i2-side-bus-tab",
+    "text": "总线",
+    "checked": true,
+    "file": "i2c-tab-01.png",
+    "activeDock": [
+      {
+        "h": 630.2125244140625,
+        "id": "",
+        "key": "scan",
+        "w": 1080.4000244140625
+      }
+    ],
+    "overflow": false,
+    "selected": [
+      "i2-side-bus-tab"
+    ]
+  },
+  {
+    "page": "i2c",
+    "data": {
+      "sideTab": "diagnostics"
+    },
+    "id": "i2-side-diagnostics-tab",
+    "selector": "#i2-side-diagnostics-tab",
+    "text": "诊断",
+    "checked": true,
+    "file": "i2c-tab-02.png",
+    "activeDock": [
+      {
+        "h": 630.2125244140625,
+        "id": "",
+        "key": "scan",
+        "w": 1080.4000244140625
+      }
+    ],
+    "overflow": false,
+    "selected": [
+      "i2-side-diagnostics-tab"
+    ]
+  },
+  {
+    "page": "i2c",
+    "data": {
+      "sideTab": "help"
+    },
+    "id": "i2-side-help-tab",
+    "selector": "#i2-side-help-tab",
+    "text": "帮助",
+    "checked": true,
+    "file": "i2c-tab-03.png",
+    "activeDock": [
+      {
+        "h": 630.2125244140625,
+        "id": "",
+        "key": "scan",
+        "w": 1080.4000244140625
+      }
+    ],
+    "overflow": false,
+    "selected": [
+      "i2-side-help-tab"
+    ]
+  },
+  {
+    "page": "i2c",
+    "data": {
+      "dock": "scan"
+    },
+    "id": "",
+    "selector": "#i2-dock-tabs button[data-dock=\"scan\"]",
+    "text": "扫描总线",
+    "checked": true,
+    "file": "i2c-tab-04.png",
+    "activeDock": [
+      {
+        "h": 630.2125244140625,
+        "id": "",
+        "key": "scan",
+        "w": 1080.4000244140625
+      }
+    ],
+    "overflow": false,
+    "selected": [
+      "i2-side-help-tab"
+    ]
+  },
+  {
+    "page": "i2c",
+    "data": {
+      "dock": "cmd"
+    },
+    "id": "",
+    "selector": "#i2-dock-tabs button[data-dock=\"cmd\"]",
+    "text": "命令表",
+    "checked": true,
+    "file": "i2c-tab-05.png",
+    "activeDock": [
+      {
+        "h": 630.2125244140625,
+        "id": "",
+        "key": "cmd",
+        "w": 1080.4000244140625
+      }
+    ],
+    "overflow": false,
+    "selected": [
+      "i2-side-help-tab"
+    ]
+  },
+  {
+    "page": "i2c",
+    "data": {
+      "dock": "reg"
+    },
+    "id": "",
+    "selector": "#i2-dock-tabs button[data-dock=\"reg\"]",
+    "text": "寄存器",
+    "checked": true,
+    "file": "i2c-tab-06.png",
+    "activeDock": [
+      {
+        "h": 630.2125244140625,
+        "id": "",
+        "key": "reg",
+        "w": 1080.4000244140625
+      }
+    ],
+    "overflow": false,
+    "selected": [
+      "i2-side-help-tab"
+    ]
+  },
+  {
+    "page": "i2c",
+    "data": {
+      "dock": "dsl"
+    },
+    "id": "",
+    "selector": "#i2-dock-tabs button[data-dock=\"dsl\"]",
+    "text": "脚本",
+    "checked": true,
+    "file": "i2c-tab-07.png",
+    "activeDock": [
+      {
+        "h": 630.2125244140625,
+        "id": "",
+        "key": "dsl",
+        "w": 1080.4000244140625
+      }
+    ],
+    "overflow": false,
+    "selected": [
+      "i2-side-help-tab"
+    ]
+  },
+  {
+    "page": "i2c",
+    "data": {
+      "dock": "live"
+    },
+    "id": "",
+    "selector": "#i2-dock-tabs button[data-dock=\"live\"]",
+    "text": "实时值",
+    "checked": true,
+    "file": "i2c-tab-08.png",
+    "activeDock": [
+      {
+        "h": 630.2125244140625,
+        "id": "",
+        "key": "live",
+        "w": 1080.4000244140625
+      }
+    ],
+    "overflow": false,
+    "selected": [
+      "i2-side-help-tab"
+    ]
+  },
+  {
+    "page": "analog",
+    "data": {
+      "anTab": "adc"
+    },
+    "id": "an-tab-adc",
+    "selector": "#an-tab-adc",
+    "text": "ADC 示波器",
+    "checked": true,
+    "file": "analog-tab-00.png",
+    "activeDock": [],
+    "overflow": false,
+    "selected": [
+      "an-tab-adc"
+    ]
+  },
+  {
+    "page": "analog",
+    "data": {
+      "anTab": "dac"
+    },
+    "id": "an-tab-dac",
+    "selector": "#an-tab-dac",
+    "text": "DAC 信号发生器",
+    "checked": true,
+    "file": "analog-tab-01.png",
+    "activeDock": [],
+    "overflow": false,
+    "selected": [
+      "an-tab-dac"
+    ]
+  },
+  {
+    "page": "gen",
+    "data": {
+      "dock": "files"
+    },
+    "id": "",
+    "selector": "#g-dock-tabs button[data-dock=\"files\"]",
+    "text": "工程文件",
+    "checked": true,
+    "file": "gen-tab-00.png",
+    "activeDock": [
+      {
+        "h": 846.2000122070312,
+        "id": "g-files-card",
+        "key": "files",
+        "w": 1080.4000244140625
+      }
+    ],
+    "overflow": false,
+    "selected": []
+  },
+  {
+    "page": "gen",
+    "data": {
+      "dock": "params"
+    },
+    "id": "",
+    "selector": "#g-dock-tabs button[data-dock=\"params\"]",
+    "text": "调试参数",
+    "checked": true,
+    "file": "gen-tab-01.png",
+    "activeDock": [
+      {
+        "h": 846.2000122070312,
+        "id": "g-params-card",
+        "key": "params",
+        "w": 1080.4000244140625
+      }
+    ],
+    "overflow": false,
+    "selected": []
+  },
+  {
+    "page": "gen",
+    "data": {
+      "dock": "bridge"
+    },
+    "id": "",
+    "selector": "#g-dock-tabs button[data-dock=\"bridge\"]",
+    "text": "本地桥",
+    "checked": true,
+    "file": "gen-tab-02.png",
+    "activeDock": [
+      {
+        "h": 846.2000122070312,
+        "id": "g-kit-card",
+        "key": "bridge",
+        "w": 1080.4000244140625
+      }
+    ],
+    "overflow": false,
+    "selected": []
+  },
+  {
+    "page": "gen",
+    "data": {
+      "dock": "etm"
+    },
+    "id": "",
+    "selector": "#g-dock-tabs button[data-dock=\"etm\"]",
+    "text": "ETM 桥",
+    "checked": true,
+    "file": "gen-tab-03.png",
+    "activeDock": [
+      {
+        "h": 888,
+        "id": "",
+        "key": "etm",
+        "w": 1080.4000244140625
+      }
+    ],
+    "overflow": false,
+    "selected": []
+  }
+]

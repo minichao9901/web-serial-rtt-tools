@@ -1,0 +1,16 @@
+{
+  "runId": "20261016-web-review-062721",
+  "revision": "fb06da2348543b75db5fbc237dd4d3b0ffe1d655",
+  "branch": "main",
+  "dirty": [
+    " M app/rtt/dap-webusb.js",
+    "?? .agent-teams/",
+    "?? docs/etm-page-review-2026-10-14.md",
+    "?? tools/selftest/dap-ap-discovery.test.mjs"
+  ],
+  "startedAt": "2026-10-16T06:27:22.1927366+08:00",
+  "cwd": "E:\\web-serial-rtt-tools",
+  "node": "v24.13.1",
+  "python": "Python 3.13.5",
+  "app": "http://127.0.0.1:8896/index.html"
+}

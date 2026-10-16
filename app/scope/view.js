@@ -33,7 +33,7 @@ const CLOCKS = [[0, '自动'], [1000, '1 MHz'], [5000, '5 MHz'], [10000, '10 MHz
                 [30000, '30 MHz'], [40000, '40 MHz'], [45000, '45 MHz'], [50000, '50 MHz'], [60000, '60 MHz']];
 
 const MAX_VARS = 8;
-const sleep = ms => new Promise(r => setTimeout(r, ms));
+const sleep = waitMs;
 
 export class ScopeView {
   /** @param {{mockFactory?:Function}} opts 自测可以换一个"带丢包/会卡住"的假探针 */

@@ -1,0 +1,10 @@
+{
+  "record": "capture-926a4f2b899542f5b566e68a1d1eb631",
+  "branchTransitionsChecked": 9357,
+  "observedSpiCalls": 13,
+  "closedSpiCalls": 12,
+  "bytesPerClosedTransfer": 100,
+  "partialTransferBytes": 100,
+  "unknownPredicates": 39,
+  "scope": "只核对此版本真实捕获中的控制流与发送次数；不证明所有变量值或绝对无损"
+}

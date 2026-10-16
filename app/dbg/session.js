@@ -42,7 +42,7 @@ const VC_CORERESET = 1;
 function busFaultText(verb, addr, len){
   return `${verb} 0x${(addr >>> 0).toString(16)}（${len} 字节）失败：目标回了总线 FAULT —— `
        + '这个地址在当前状态读/写不了（没映射的窗口 / 外设时钟没开 / 只写寄存器 / 跨出了 RAM 末尾）。'
-       + '调试链路会自己重新初始化，不用重连，换一个地址继续即可。';
+       + '下次访问会尝试恢复调试链路；若连续失败，请断开后重新连接目标。';
 }
 
 /* Thumb 的指令长度/调用解码在 app/dbg/thumb.js（那边能单独自测），这里直接用。 */

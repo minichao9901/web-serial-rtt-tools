@@ -1,0 +1,66 @@
+[
+  {
+    "id": "F01-serial-write-success-on-failure",
+    "result": "reproduced",
+    "callerRejected": false,
+    "errorEvents": [
+      "injected write failure"
+    ]
+  },
+  {
+    "id": "F02-timer-sends-after-stop",
+    "result": "reproduced",
+    "atStop": {
+      "submitted": 5,
+      "finished": 0
+    },
+    "finishedAfterStop": 5
+  },
+  {
+    "id": "F03-adc-invalid-start-erases-history",
+    "result": "reproduced",
+    "before": 3,
+    "after": 0,
+    "error": "先连接探针"
+  },
+  {
+    "id": "F04-spi-mutation-allowed-while-busy",
+    "result": "reproduced",
+    "busy": true,
+    "disabled": {
+      "sp-set": false,
+      "sp-pin-apply": false,
+      "sp-disable": false,
+      "sp-reset": false,
+      "sp-abort": false
+    },
+    "commandsSent": [
+      2
+    ]
+  },
+  {
+    "id": "F05-spi-stop-failure-has-no-ui-retry",
+    "result": "reproduced",
+    "disconnectResult": false,
+    "stopButtonDisabled": true,
+    "takeoverError": "SPI/QSPI正在使用探针，请等待完成"
+  },
+  {
+    "id": "F06-spi-disable-rejected-but-reports-success",
+    "result": "reproduced",
+    "returned": true,
+    "responseEnabled": true,
+    "logs": [
+      {
+        "kind": "g",
+        "text": "桥已失能（引脚恢复默认）"
+      }
+    ]
+  },
+  {
+    "id": "F04b-spi-mock-switch-ignores-busy",
+    "result": "reproduced",
+    "busyAtEntry": true,
+    "teardownCalls": 1
+  }
+]

@@ -1,0 +1,250 @@
+- banner:
+  - generic "串口 / RTT 工具箱"
+  - navigation "工具切换":
+    - button "串口助手"
+    - button "终端"
+    - button "RTT Viewer"
+    - button "RTT 转发"
+    - button "J-Scope 波形"
+    - button "烧录器"
+    - button "调试器"
+    - generic "更多功能，当前页面：工程生成": 更多功能 ▾
+  - generic: 串口：未连接
+  - generic "连接支持该功能的 akaLinkPro 固件后可用。":
+    - checkbox "NRST 开漏" [checked] [disabled]
+    - text: NRST 开漏
+  - button "全局复位"
+  - button "全屏"
+  - status "当前页面没有功能连接实体探针；串口连接状态单独显示。": 探针：未使用
+  - generic "帮助"
+- main:
+  - text: 连接后这里显示接收数据。 连接探针并选择 RTT 通道后，这里显示目标输出。 连接后这里显示接收数据。 烧录或 SRAM 测试的进度与结果显示在这里。 （点「定位并开始」：留空地址就用 .elf 里的 _SEGGER_RTT 符号） ▸ ▸ 连接后这里显示接收数据。 ▸ I2C 事务与应答会显示在这里。
+  - complementary:
+    - group "参数":
+      - generic: 参数
+      - generic: 接口
+      - combobox "接口":
+        - option "SWD" [selected]
+        - option "JTAG"
+      - generic: 时钟 kHz
+      - textbox "时钟 kHz": "25000"
+      - generic: RTT 地址
+      - textbox "RTT 地址": "0x20002000"
+      - generic: RTT 范围
+      - textbox "RTT 范围": "0x2000"
+      - generic: GDB 端口
+      - textbox "GDB 端口": "3333"
+      - generic: build 目录
+      - textbox "build 目录": build
+      - generic: CMake 生成器
+      - combobox "CMake 生成器":
+        - option "Ninja" [selected]
+        - option "Unix Makefiles"
+        - option "MinGW Makefiles"
+      - generic: 构建类型
+      - combobox "构建类型":
+        - option "Debug" [selected]
+        - option "Release"
+        - option "RelWithDebInfo"
+        - option "MinSizeRel"
+      - generic: PyOCD 目标
+      - textbox "PyOCD 目标": stm32f103rb
+      - generic: PyOCD Hz
+      - textbox "PyOCD Hz": "10000000"
+      - generic: OpenOCD 根
+      - textbox "OpenOCD 根": E:/MounRiver/MounRiver_Studio2/resources/app/resources/win32/components/WCH/OpenOCD/OpenOCD
+      - generic: OpenOCD 接口
+      - combobox "OpenOCD 接口":
+        - option "CMSIS-DAP / DAPLink（默认）" [selected]
+        - option "J-Link"
+        - option "ST-Link"
+        - option "FTDI JTAGKey"
+      - generic: OpenOCD 目标
+      - combobox "OpenOCD 目标": target/stm32f1x.cfg
+      - generic: OpenOCD kHz
+      - textbox "OpenOCD kHz": "10000"
+      - generic: RTT 端口
+      - textbox "RTT 端口": "9090"
+  - button "工程文件"
+  - button "调试参数" [active]
+  - button "本地桥"
+  - button "ETM 桥"
+  - generic "当前 tab 的一句话状态": 39 项参数 · 点值即复制
+  - generic: 左栏填的值在这里逐项列全（长路径不再被侧栏宽度截断；点值即复制）
+  - button "复制全部（键=值）"
+  - table:
+    - rowgroup:
+      - row "工程":
+        - cell "工程"
+      - row "项目名 project":
+        - cell "项目名"
+        - cell "project":
+          - code: project
+      - row "器件 STM32F103RB":
+        - cell "器件"
+        - cell "STM32F103RB":
+          - code: STM32F103RB
+      - row "Flash 起址 0x08000000":
+        - cell "Flash 起址"
+        - cell "0x08000000":
+          - code: "0x08000000"
+      - row "生成哪些":
+        - cell "生成哪些"
+      - row "Makefile.jlink（J-Link 烧录/调试） ✓ 开":
+        - cell "Makefile.jlink（J-Link 烧录/调试）"
+        - cell "✓ 开":
+          - code: ✓ 开
+      - row "jlink_gdb.script（GDB 脚本） ✓ 开":
+        - cell "jlink_gdb.script（GDB 脚本）"
+        - cell "✓ 开":
+          - code: ✓ 开
+      - row "Makefile.pyocd（PyOCD） ✓ 开":
+        - cell "Makefile.pyocd（PyOCD）"
+        - cell "✓ 开":
+          - code: ✓ 开
+      - row "Makefile.openocd（附带 rtt_logger.py） ✓ 开":
+        - cell "Makefile.openocd（附带 rtt_logger.py）"
+        - cell "✓ 开":
+          - code: ✓ 开
+      - row "test_sram.bin（SRAM 测试图案） ✓ 开":
+        - cell "test_sram.bin（SRAM 测试图案）"
+        - cell "✓ 开":
+          - code: ✓ 开
+      - row "bin 大小 20480":
+        - cell "bin 大小"
+        - cell "20480":
+          - code: "20480"
+      - row "参数":
+        - cell "参数"
+      - row "接口 SWD":
+        - cell "接口"
+        - cell "SWD":
+          - code: SWD
+      - row "时钟 kHz 25000":
+        - cell "时钟 kHz"
+        - cell "25000":
+          - code: "25000"
+      - row "RTT 地址 0x20002000":
+        - cell "RTT 地址"
+        - cell "0x20002000":
+          - code: "0x20002000"
+      - row "RTT 范围 0x2000":
+        - cell "RTT 范围"
+        - cell "0x2000":
+          - code: "0x2000"
+      - row "GDB 端口 3333":
+        - cell "GDB 端口"
+        - cell "3333":
+          - code: "3333"
+      - row "build 目录 build":
+        - cell "build 目录"
+        - cell "build":
+          - code: build
+      - row "CMake 生成器 Ninja":
+        - cell "CMake 生成器"
+        - cell "Ninja":
+          - code: Ninja
+      - row "构建类型 Debug":
+        - cell "构建类型"
+        - cell "Debug":
+          - code: Debug
+      - row "PyOCD 目标 stm32f103rb":
+        - cell "PyOCD 目标"
+        - cell "stm32f103rb":
+          - code: stm32f103rb
+      - row "PyOCD Hz 10000000":
+        - cell "PyOCD Hz"
+        - cell "10000000":
+          - code: "10000000"
+      - row "OpenOCD 根 E:/MounRiver/MounRiver_Studio2/resources/app/resources/win32/components/WCH/OpenOCD/OpenOCD":
+        - cell "OpenOCD 根"
+        - cell "E:/MounRiver/MounRiver_Studio2/resources/app/resources/win32/components/WCH/OpenOCD/OpenOCD":
+          - code: E:/MounRiver/MounRiver_Studio2/resources/app/resources/win32/components/WCH/OpenOCD/OpenOCD
+      - row "OpenOCD 接口 interface/cmsis-dap.cfg":
+        - cell "OpenOCD 接口"
+        - cell "interface/cmsis-dap.cfg":
+          - code: interface/cmsis-dap.cfg
+      - row "OpenOCD 目标 target/stm32f1x.cfg":
+        - cell "OpenOCD 目标"
+        - cell "target/stm32f1x.cfg":
+          - code: target/stm32f1x.cfg
+      - row "OpenOCD kHz 10000":
+        - cell "OpenOCD kHz"
+        - cell "10000":
+          - code: "10000"
+      - row "RTT 端口 9090":
+        - cell "RTT 端口"
+        - cell "9090":
+          - code: "9090"
+      - row "落地方式":
+        - cell "落地方式"
+      - row "换行符 crlf":
+        - cell "换行符"
+        - cell "crlf":
+          - code: crlf
+      - row "已存在就直接覆盖（不再问） ✗ 关":
+        - cell "已存在就直接覆盖（不再问）"
+        - cell "✗ 关":
+          - code: ✗ 关
+      - row "ETM 本地桥":
+        - cell "ETM 本地桥"
+      - row "端口 8878":
+        - cell "端口"
+        - cell "8878":
+          - code: "8878"
+      - row "本地桥（J-Link / OpenOCD）":
+        - cell "本地桥（J-Link / OpenOCD）"
+      - row "生成「本地桥」安装包（双击即用） ✓ 开":
+        - cell "生成「本地桥」安装包（双击即用）"
+        - cell "✓ 开":
+          - code: ✓ 开
+      - row "端口 17321":
+        - cell "端口"
+        - cell "17321":
+          - code: "17321"
+      - row "目标 stm32f103":
+        - cell "目标"
+        - cell "stm32f103":
+          - code: stm32f103
+      - row "自定义 cfg interface/cmsis-dap.cfg, target/stm32f1x.cfg":
+        - cell "自定义 cfg"
+        - cell "interface/cmsis-dap.cfg, target/stm32f1x.cfg":
+          - code: interface/cmsis-dap.cfg, target/stm32f1x.cfg
+      - row "OpenOCD kHz 4000":
+        - cell "OpenOCD kHz"
+        - cell "4000":
+          - code: "4000"
+      - row "openocd.exe （留空）":
+        - cell "openocd.exe"
+        - cell "（留空）":
+          - code: （留空）
+      - row "scripts 目录 （留空）":
+        - cell "scripts 目录"
+        - cell "（留空）":
+          - code: （留空）
+      - row "J-Link 器件 STM32F103C8":
+        - cell "J-Link 器件"
+        - cell "STM32F103C8":
+          - code: STM32F103C8
+      - row "J-Link kHz 50000":
+        - cell "J-Link kHz"
+        - cell "50000":
+          - code: "50000"
+      - row "便携 Node 22.14.0":
+        - cell "便携 Node"
+        - cell "22.14.0":
+          - code: 22.14.0
+      - row "下载源 1":
+        - cell "下载源"
+        - cell "1":
+          - code: "1"
+      - row "没 Node 时自动下便携版 ✓ 开":
+        - cell "没 Node 时自动下便携版"
+        - cell "✓ 开":
+          - code: ✓ 开
+  - generic: 13 个文件 · 119.5 KB · CRLF · 修正 4 项 · 含桥包 78 KB
+  - text: 模板逐字节移植自
+  - code: uvprojx2cmake.py
+  - text: ，默认再套 4 项修正（
+  - code: make test-gen
+  - text: 负责对账）

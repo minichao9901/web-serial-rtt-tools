@@ -1,0 +1,119 @@
+[
+  {
+    "command": [
+      "node",
+      "tools/selftest/rtt.test.mjs"
+    ],
+    "exitCode": 0,
+    "seconds": 0.344,
+    "log": "E:\\web-serial-rtt-tools\\docs\\validation\\20261016-cross-review-065747\\rtt.test.mjs.log"
+  },
+  {
+    "command": [
+      "node",
+      "tools/selftest/riscv-sba-async.test.mjs"
+    ],
+    "exitCode": 0,
+    "seconds": 0.548,
+    "log": "E:\\web-serial-rtt-tools\\docs\\validation\\20261016-cross-review-065747\\riscv-sba-async.test.mjs.log"
+  },
+  {
+    "command": [
+      "node",
+      "tools/selftest/cdc-mode.test.mjs"
+    ],
+    "exitCode": 0,
+    "seconds": 0.087,
+    "log": "E:\\web-serial-rtt-tools\\docs\\validation\\20261016-cross-review-065747\\cdc-mode.test.mjs.log"
+  },
+  {
+    "command": [
+      "node",
+      "tools/selftest/rtt-cdc-lifecycle.test.mjs"
+    ],
+    "exitCode": 0,
+    "seconds": 0.107,
+    "log": "E:\\web-serial-rtt-tools\\docs\\validation\\20261016-cross-review-065747\\rtt-cdc-lifecycle.test.mjs.log"
+  },
+  {
+    "command": [
+      "node",
+      "tools/selftest/dbg-riscv-resume.test.mjs"
+    ],
+    "exitCode": 0,
+    "seconds": 0.072,
+    "log": "E:\\web-serial-rtt-tools\\docs\\validation\\20261016-cross-review-065747\\dbg-riscv-resume.test.mjs.log"
+  },
+  {
+    "command": [
+      "node",
+      "tools/selftest/probe-manager.test.mjs"
+    ],
+    "exitCode": 0,
+    "seconds": 0.057,
+    "log": "E:\\web-serial-rtt-tools\\docs\\validation\\20261016-cross-review-065747\\probe-manager.test.mjs.log"
+  },
+  {
+    "command": [
+      "node",
+      "tools/selftest/probe-cross-tab.test.mjs"
+    ],
+    "exitCode": 0,
+    "seconds": 0.059,
+    "log": "E:\\web-serial-rtt-tools\\docs\\validation\\20261016-cross-review-065747\\probe-cross-tab.test.mjs.log"
+  },
+  {
+    "command": [
+      "node",
+      "tools/selftest/usb-device.test.mjs"
+    ],
+    "exitCode": 0,
+    "seconds": 0.069,
+    "log": "E:\\web-serial-rtt-tools\\docs\\validation\\20261016-cross-review-065747\\usb-device.test.mjs.log"
+  },
+  {
+    "command": [
+      "node",
+      "tools/selftest/spi-runner-lifecycle.test.mjs"
+    ],
+    "exitCode": 0,
+    "seconds": 0.251,
+    "log": "E:\\web-serial-rtt-tools\\docs\\validation\\20261016-cross-review-065747\\spi-runner-lifecycle.test.mjs.log"
+  },
+  {
+    "command": [
+      "node",
+      "tools/selftest/i2c-lifecycle.test.mjs"
+    ],
+    "exitCode": 0,
+    "seconds": 0.067,
+    "log": "E:\\web-serial-rtt-tools\\docs\\validation\\20261016-cross-review-065747\\i2c-lifecycle.test.mjs.log"
+  },
+  {
+    "command": [
+      "node",
+      "tools/selftest/adc-transport.test.mjs"
+    ],
+    "exitCode": 0,
+    "seconds": 0.15,
+    "log": "E:\\web-serial-rtt-tools\\docs\\validation\\20261016-cross-review-065747\\adc-transport.test.mjs.log"
+  },
+  {
+    "command": [
+      "node",
+      "tools/selftest/swo-capture.test.mjs"
+    ],
+    "exitCode": 0,
+    "seconds": 2.837,
+    "log": "E:\\web-serial-rtt-tools\\docs\\validation\\20261016-cross-review-065747\\swo-capture.test.mjs.log"
+  },
+  {
+    "command": [
+      "node",
+      "tools/selftest/etm-panel-retry.test.mjs"
+    ],
+    "exitCode": 0,
+    "seconds": 0.322,
+    "log": "E:\\web-serial-rtt-tools\\docs\\validation\\20261016-cross-review-065747\\etm-panel-retry.test.mjs.log"
+  }
+]

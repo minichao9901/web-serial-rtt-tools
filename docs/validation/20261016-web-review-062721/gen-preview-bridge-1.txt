@@ -1,0 +1,79 @@
+- banner:
+  - generic "串口 / RTT 工具箱"
+  - navigation "工具切换":
+    - button "串口助手"
+    - button "终端"
+    - button "RTT Viewer"
+    - button "RTT 转发"
+    - button "J-Scope 波形"
+    - button "烧录器"
+    - button "调试器"
+    - generic "更多功能，当前页面：工程生成": 更多功能 ▾
+  - generic: 串口：未连接
+  - generic "连接支持该功能的 akaLinkPro 固件后可用。":
+    - checkbox "NRST 开漏" [checked] [disabled]
+    - text: NRST 开漏
+  - button "全局复位"
+  - button "全屏"
+  - status "当前页面没有功能连接实体探针；串口连接状态单独显示。": 探针：未使用
+  - generic "帮助"
+- main:
+  - text: 连接后这里显示接收数据。 连接探针并选择 RTT 通道后，这里显示目标输出。 连接后这里显示接收数据。 烧录或 SRAM 测试的进度与结果显示在这里。 （点「定位并开始」：留空地址就用 .elf 里的 _SEGGER_RTT 符号） ▸ ▸ 连接后这里显示接收数据。 ▸ I2C 事务与应答会显示在这里。
+  - complementary:
+    - group "本地桥（J-Link / OpenOCD）":
+      - generic: 本地桥（J-Link / OpenOCD）
+      - checkbox "生成「本地桥」安装包（双击即用）" [checked]
+      - text: 生成「本地桥」安装包（双击即用）
+      - generic: 端口
+      - textbox "端口": "17321"
+      - generic: 目标
+      - combobox "目标":
+        - option "STM32F103（cmsis-dap + stm32f1x）" [selected]
+        - option "STM32H7B0（cmsis-dap + stm32h7x）"
+        - option "自定义 cfg…"
+      - generic: 自定义 cfg
+      - textbox "自定义 cfg": interface/cmsis-dap.cfg, target/stm32f1x.cfg
+      - generic: OpenOCD kHz
+      - textbox "OpenOCD kHz": "4000"
+      - generic: openocd.exe
+      - textbox "openocd.exe":
+        - /placeholder: 留空 = 自动探测
+      - generic: scripts 目录
+      - textbox "scripts 目录":
+        - /placeholder: 留空 = 跟着 openocd.exe 推断
+      - generic: J-Link 器件
+      - textbox "J-Link 器件": STM32F103C8
+      - generic: J-Link kHz
+      - textbox "J-Link kHz": "50000"
+      - generic: 便携 Node
+      - textbox "便携 Node": 22.14.0
+      - generic: 下载源
+      - combobox "下载源":
+        - option "国内镜像优先（npmmirror）" [selected]
+        - option "官方优先（nodejs.org）"
+      - checkbox "没 Node 时自动下便携版" [checked]
+      - text: 没 Node 时自动下便携版
+      - paragraph: 包里：启动器（bat/sh）+ 桥本体 + 配置 + 预检脚本 + 便携 Node 下载器 + 说明。 路径留空 = 桥自己探测（ESP-IDF 的 openocd-esp32 → Program Files → PATH；J-Link 找 SEGGER 目录里版本号最大的）； 起桥前会先跑一次环境预检，把"该改哪一行"打出来。退出用 Ctrl+C（会把 OpenOCD / J-Link 子进程一起收掉）。 每个文件的预览与「下载桥包（ZIP）」在右边「本地桥」tab。
+  - button "工程文件"
+  - button "调试参数"
+  - button "本地桥"
+  - button "ETM 桥"
+  - generic "当前 tab 的一句话状态": 7 个文件 · 78 KB
+  - generic: 安装包里的文件
+  - button "rtt-bridge.mjs"
+  - button "bridge.config.json"
+  - button "README-bridge.txt"
+  - button "start-bridge.bat"
+  - button "check-tools.bat"
+  - button "get-node.ps1"
+  - button "start-bridge.sh"
+  - button "复制当前文件"
+  - button "下载桥包（ZIP）"
+  - generic: "{ \"openocd\": \"\", \"scripts\": \"\", \"jlink\": { \"exe\": \"\", \"gdbserver\": \"\", \"rttLogger\": \"\", \"device\": \"STM32F103C8\", \"speed\": 50000, \"rttPort\": 19021, \"gdbPort\": 2331, \"note\": \"exe/gdbserver/rttLogger 留空 = 自动找（PATH → C:/Program Files/SEGGER/JLink_*/ 里版本号最大的那份）。device 是给 J-Link 的器件名；speed 单位 kHz（50000 = 50MHz，本机 J-Link PRO + F103 实测可用）。\" }, \"targets\": { \"stm32f103\": { \"cfgs\": [ \"interface/cmsis-dap.cfg\", \"target/stm32f1x.cfg\" ], \"pre\": [ \"cmsis-dap backend usb_bulk\" ], \"speed\": 4000, \"jlinkDevice\": \"STM32F103C8\", \"note\": \"STM32F103 中容量（CMSIS-DAP + SWD）\" }, \"stm32h7b0\": { \"cfgs\": [ \"interface/cmsis-dap.cfg\", \"target/stm32h7x.cfg\" ], \"pre\": [ \"cmsis-dap backend usb_bulk\" ], \"speed\": 4000, \"jlinkDevice\": \"STM32H7B0VB\", \"note\": \"STM32H7B0（H7A3/7B3 同一个 target cfg）\" } }, \"_生成信息\": { \"生成时间\": \"2026-10-15T22:38:23Z\", \"桥本体_sha256\": \"97c5be74c47be685d920f9276c2dbcb3001c1bc564dbed5187398af96b8a4443\", \"说明\": \"改 openocd / scripts / jlink.* 就能适配别的机器；留空 = 自动探测。改完跑 check-tools.bat 复核。\" } }"
+  - paragraph: 7 个文件：启动器（bat / sh）+ 桥本体 + 配置 + 预检脚本 + 便携 Node 下载器 + 说明 —— 参数在左栏「本地桥」那张卡里改，改完这里立刻跟着变。
+  - generic: 13 个文件 · 119.5 KB · CRLF · 修正 4 项 · 含桥包 78 KB
+  - text: 模板逐字节移植自
+  - code: uvprojx2cmake.py
+  - text: ，默认再套 4 项修正（
+  - code: make test-gen
+  - text: 负责对账）

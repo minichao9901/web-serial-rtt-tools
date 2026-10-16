@@ -1,0 +1,79 @@
+- banner:
+  - generic "串口 / RTT 工具箱"
+  - navigation "工具切换":
+    - button "串口助手"
+    - button "终端"
+    - button "RTT Viewer"
+    - button "RTT 转发"
+    - button "J-Scope 波形"
+    - button "烧录器"
+    - button "调试器"
+    - generic "更多功能，当前页面：工程生成": 更多功能 ▾
+  - generic: 串口：未连接
+  - generic "连接支持该功能的 akaLinkPro 固件后可用。":
+    - checkbox "NRST 开漏" [checked] [disabled]
+    - text: NRST 开漏
+  - button "全局复位"
+  - button "全屏"
+  - status "当前页面没有功能连接实体探针；串口连接状态单独显示。": 探针：未使用
+  - generic "帮助"
+- main:
+  - text: 连接后这里显示接收数据。 连接探针并选择 RTT 通道后，这里显示目标输出。 连接后这里显示接收数据。 烧录或 SRAM 测试的进度与结果显示在这里。 （点「定位并开始」：留空地址就用 .elf 里的 _SEGGER_RTT 符号） ▸ ▸ 连接后这里显示接收数据。 ▸ I2C 事务与应答会显示在这里。
+  - complementary:
+    - group "本地桥（J-Link / OpenOCD）":
+      - generic: 本地桥（J-Link / OpenOCD）
+      - checkbox "生成「本地桥」安装包（双击即用）" [checked]
+      - text: 生成「本地桥」安装包（双击即用）
+      - generic: 端口
+      - textbox "端口": "17321"
+      - generic: 目标
+      - combobox "目标":
+        - option "STM32F103（cmsis-dap + stm32f1x）" [selected]
+        - option "STM32H7B0（cmsis-dap + stm32h7x）"
+        - option "自定义 cfg…"
+      - generic: 自定义 cfg
+      - textbox "自定义 cfg": interface/cmsis-dap.cfg, target/stm32f1x.cfg
+      - generic: OpenOCD kHz
+      - textbox "OpenOCD kHz": "4000"
+      - generic: openocd.exe
+      - textbox "openocd.exe":
+        - /placeholder: 留空 = 自动探测
+      - generic: scripts 目录
+      - textbox "scripts 目录":
+        - /placeholder: 留空 = 跟着 openocd.exe 推断
+      - generic: J-Link 器件
+      - textbox "J-Link 器件": STM32F103C8
+      - generic: J-Link kHz
+      - textbox "J-Link kHz": "50000"
+      - generic: 便携 Node
+      - textbox "便携 Node": 22.14.0
+      - generic: 下载源
+      - combobox "下载源":
+        - option "国内镜像优先（npmmirror）" [selected]
+        - option "官方优先（nodejs.org）"
+      - checkbox "没 Node 时自动下便携版" [checked]
+      - text: 没 Node 时自动下便携版
+      - paragraph: 包里：启动器（bat/sh）+ 桥本体 + 配置 + 预检脚本 + 便携 Node 下载器 + 说明。 路径留空 = 桥自己探测（ESP-IDF 的 openocd-esp32 → Program Files → PATH；J-Link 找 SEGGER 目录里版本号最大的）； 起桥前会先跑一次环境预检，把"该改哪一行"打出来。退出用 Ctrl+C（会把 OpenOCD / J-Link 子进程一起收掉）。 每个文件的预览与「下载桥包（ZIP）」在右边「本地桥」tab。
+  - button "工程文件"
+  - button "调试参数"
+  - button "本地桥"
+  - button "ETM 桥"
+  - generic "当前 tab 的一句话状态": 7 个文件 · 78 KB
+  - generic: 安装包里的文件
+  - button "rtt-bridge.mjs"
+  - button "bridge.config.json"
+  - button "README-bridge.txt"
+  - button "start-bridge.bat"
+  - button "check-tools.bat"
+  - button "get-node.ps1"
+  - button "start-bridge.sh"
+  - button "复制当前文件"
+  - button "下载桥包（ZIP）"
+  - generic: "<# 便携 Node 下载器（只在 start-bridge.bat 发现本机没有 Node 时被调用） · 绿色：只往 -Dest 里放，不动系统 PATH、不写注册表 · 校验：从同一个分发目录取 SHASUMS256.txt 验 sha256（拿不到就跳过并说明） 用法： powershell -ExecutionPolicy Bypass -File get-node.ps1 -Version 22.14.0 -Mirror 1 -Dest .\\node #> param( [string]$Version = '22.14.0', [int]$Mirror = 1, [string]$Dest = '' ) $ErrorActionPreference = 'Stop' $ProgressPreference = 'SilentlyContinue' if (-not $Dest) { $Dest = Join-Path $PSScriptRoot 'node' } $arch = if ([Environment]::Is64BitOperatingSystem) { 'x64' } else { 'x86' } $name = \"node-v$Version-win-$arch\" if ($Mirror -eq 1) { $bases = @(\"https://registry.npmmirror.com/-/binary/node/v$Version\", \"https://nodejs.org/dist/v$Version\") } else { $bases = @(\"https://nodejs.org/dist/v$Version\", \"https://registry.npmmirror.com/-/binary/node/v$Version\") } $zip = Join-Path $env:TEMP \"$($name).zip\" $ok = $false foreach ($b in $bases) { try { Write-Host \" -> $($b)/$($name).zip\" Invoke-WebRequest -Uri \"$($b)/$($name).zip\" -OutFile $zip -UseBasicParsing -TimeoutSec 900 try { $sums = (Invoke-WebRequest -Uri \"$($b)/SHASUMS256.txt\" -UseBasicParsing -TimeoutSec 60).Content $line = ($sums -split \"`n\" | Where-Object { $_ -match [regex]::Escape(\"$($name).zip\") } | Select-Object -First 1) $want = ($line -split '\\s+')[0] if ($want) { $want = $want.Trim().ToLower() $got = (Get-FileHash $zip -Algorithm SHA256).Hash.ToLower() if ($want -ne $got) { Write-Host \" [!] sha256 不一致（期望 $want / 实际 $got）—— 换下一个源\"; Remove-Item $zip -Force; continue } Write-Host \" [i] sha256 校验通过\" } } catch { Write-Host \" [!] 没取到 SHASUMS256.txt，跳过校验：$($_.Exception.Message)\" } $ok = $true break } catch { Write-Host \" [!] 下载失败：$($_.Exception.Message)\" } } if (-not $ok) { Write-Host '' Write-Host '[x] 便携版没下成。两条路：' Write-Host ' 1) 手动装 Node 18+ ： https://nodejs.org/ （装完重开这个窗口）' Write-Host \" 2) 手动下载 zip： https://nodejs.org/dist/v$Version/$($name).zip\" Write-Host \" 解压后把里面的 node.exe 等文件放进： $Dest\" exit 1 } $tmp = Join-Path $env:TEMP \"node-portable-$([guid]::NewGuid().ToString('N'))\" Expand-Archive -Path $zip -DestinationPath $tmp -Force $src = Join-Path $tmp $name if (-not (Test-Path (Join-Path $src 'node.exe'))) { Write-Host \"[x] 解压后没找到 node.exe（压缩包结构变了？）：$src\" exit 1 } New-Item -ItemType Directory -Force -Path $Dest | Out-Null Copy-Item (Join-Path $src '*') $Dest -Recurse -Force Remove-Item $tmp -Recurse -Force -ErrorAction SilentlyContinue Remove-Item $zip -Force -ErrorAction SilentlyContinue Write-Host \"[i] 便携 Node 就绪： $Dest\\node.exe\" exit 0"
+  - paragraph: 7 个文件：启动器（bat / sh）+ 桥本体 + 配置 + 预检脚本 + 便携 Node 下载器 + 说明 —— 参数在左栏「本地桥」那张卡里改，改完这里立刻跟着变。
+  - generic: 13 个文件 · 119.5 KB · CRLF · 修正 4 项 · 含桥包 78 KB
+  - text: 模板逐字节移植自
+  - code: uvprojx2cmake.py
+  - text: ，默认再套 4 项修正（
+  - code: make test-gen
+  - text: 负责对账）

@@ -1,5 +1,5 @@
 /**
- * 「RTT → CDC 转发」面板（挂在**终端**页）。
+ * RTT → CDC 转发页的探针控制面；接收视图共用串口会话。
  *
  * 干什么：akaLinkPro 探针自己就能轮询目标的 RTT 控制块、把数据塞进它的 CDC 虚拟串口，
  * 于是主机只要读一个 COM 口就能拿到 RTT —— 不用每轮三次 USB 往返（实测 2.5~3 MB/s）。
@@ -524,6 +524,7 @@ export class RttCdcView {
   _armAutoRefresh(){
     clearInterval(this._timer);
     this._timer = setInterval(() => {
+      if (document.hidden) return; // Read-only UI status; acquisition and lease maintenance continue.
       if (this.mock) return;                       // 假探针不用自动查
       if (!this.dev.connected) return;
       if (!this.last?.running) return;

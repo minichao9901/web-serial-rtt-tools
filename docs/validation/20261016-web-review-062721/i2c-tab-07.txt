@@ -1,0 +1,82 @@
+- banner:
+  - generic "串口 / RTT 工具箱"
+  - navigation "工具切换":
+    - button "串口助手"
+    - button "终端"
+    - button "RTT Viewer"
+    - button "RTT 转发"
+    - button "J-Scope 波形"
+    - button "烧录器"
+    - button "调试器"
+    - generic "更多功能，当前页面：USB→I2C": 更多功能 ▾
+  - generic: 串口：未连接
+  - generic "连接支持该功能的 akaLinkPro 固件后可用。":
+    - checkbox "NRST 开漏" [checked] [disabled]
+    - text: NRST 开漏
+  - button "全局复位"
+  - button "全屏"
+  - status "当前页面没有功能连接实体探针；串口连接状态单独显示。": 探针：未使用
+  - generic "帮助"
+- main:
+  - text: 连接后这里显示接收数据。 连接探针并选择 RTT 通道后，这里显示目标输出。 连接后这里显示接收数据。 烧录或 SRAM 测试的进度与结果显示在这里。 （点「定位并开始」：留空地址就用 .elf 里的 _SEGGER_RTT 符号） ▸ ▸ 连接后这里显示接收数据。
+  - complementary:
+    - tablist "侧栏设置":
+      - tab "连接"
+      - tab "总线"
+      - tab "诊断"
+      - tab "帮助" [selected]
+    - text: ▸
+    - tabpanel "帮助":
+      - generic: 参数、接线与排障说明
+      - generic "选择其它探针"
+      - generic "连接与上手"
+      - generic "接线与排障 · 接线自检结果判读"
+      - generic "连接"
+      - generic "接线与排障"
+      - generic "接线与排障"
+      - generic "连接 · 参数"
+      - generic "总线配置 · 参数"
+    - generic "运行控制":
+      - button "使能" [disabled]
+      - button "失能" [disabled]
+      - paragraph: 未连接
+  - button "扫描总线"
+  - button "命令表"
+  - button "寄存器"
+  - button "脚本" [active]
+  - button "实时值"
+  - generic "定时任务的运行状态（切到哪个 tab 都看得见）": 未运行
+  - button "停止" [disabled]
+  - generic: 示例
+  - combobox:
+    - option "快速上手（扫描 + 试读）" [selected]
+    - option "AT24C02 · 读（安全，不动内容）"
+    - option "AT24C02 · 页写 + 回读对账（⚠️ 会改动内容）"
+    - option "MPU6050 · 初始化 + while(1) 读姿态"
+    - option "ADS1115 · 四通道 + while(1) 读电压"
+    - option "⚠ Si5351 · 配成三路输出（50 / 12.5 / 1 MHz）"
+  - button "载入"
+  - button "读文件…"
+  - button "命令表 → 脚本"
+  - button "只看解析"
+  - button "解析并发送" [disabled]
+  - button "开始定时" [disabled]
+  - 'textbox "一行一条命令，''#'' 注释。例： scan 扫总线 ping 0x50 地址探测 rd 0x50 0x00 8 读 0x50 的 0x00 起 8 B rd 0x50 0x00 256 读 256 B —— 超过 54 B 自动分片 {0x50, 1, 0x0000, 4, 0, (uint8_t[]){0xA5,0x5A,0xDE,0xAD}}, C 表行 delay 10ms 延时 loop 50ms while(1)：整段按 50 ms 循环 rd 0x68 0x3B 14 as ax=i16be(0)/16384, az=i16be(4)/16384 end"':
+    - /placeholder: "一行一条命令，'#' 注释。例：\n\nscan                                    扫总线\nping 0x50                               地址探测\nrd 0x50 0x00 8                          读 0x50 的 0x00 起 8 B\nrd 0x50 0x00 256                        读 256 B —— 超过 54 B 自动分片\n{0x50, 1, 0x0000, 4, 0, (uint8_t[]){0xA5,0x5A,0xDE,0xAD}},   C 表行\ndelay 10ms                              延时\nloop 50ms                               while(1)：整段按 50 ms 循环\n  rd 0x68 0x3B 14 as ax=i16be(0)/16384, az=i16be(4)/16384\nend"
+    - text: "# ── 快速上手 ───────────────────────────────────────────────── # 顺序：左边「连接探针（授权）」→「使能」→ 点上面的「扫描总线」。 # 然后这几行可以直接「解析并发送」。 scan # 扫 0x08..0x77，列出所有应答 ACK 的地址 ping 0x50 # 探测 0x50（AT24C02 EEPROM） ping 0x68 # 探测 0x68（MPU6050） rd 0x50 0x00 8 # 读 0x50 的 0x00 起 8 字节 # 想做传感器「while(1) 读」：把上面的示例下拉换成 MPU6050 / ADS1115 那份。 # 想读/写 EEPROM：换「AT24C02」那两份（写的那份会改动片子内容，已标出来）。"
+  - generic: 未解析
+  - button "载入到命令表"
+  - button "导出 C 表"
+  - button "导出 JSON"
+  - button "导出文本"
+  - button "清空"
+  - generic "语法速查 + as 解码表达式"
+  - generic "拖动：调整日志高度"
+  - strong: I2C 日志
+  - button "复制"
+  - button "保存"
+  - button "清空"
+  - generic: I2C 事务与应答会显示在这里。
+  - text: 协议：
+  - code: HID 0x36
+  - text: （控制面 + 数据面同一条报文，事务在主循环执行，主机轮询 RESULT 取结果）· 长读自动分片

@@ -1,0 +1,216 @@
+- banner:
+  - generic "串口 / RTT 工具箱"
+  - navigation "工具切换":
+    - button "串口助手"
+    - button "终端"
+    - button "RTT Viewer"
+    - button "RTT 转发"
+    - button "J-Scope 波形"
+    - button "烧录器"
+    - button "调试器"
+    - generic "更多功能，当前页面：ETM 执行轨迹": 更多功能 ▾
+  - generic: 串口：未连接
+  - generic "连接支持该功能的 akaLinkPro 固件后可用。":
+    - checkbox "NRST 开漏" [checked] [disabled]
+    - text: NRST 开漏
+  - button "全局复位"
+  - button "全屏"
+  - status "当前页面没有功能连接实体探针；串口连接状态单独显示。": 探针：未使用
+  - generic "帮助"
+- main:
+  - iframe [active] [id="etm-frame"]:
+    - complementary:
+      - text: 目标与录制
+      - generic: ELF → 断点 → 时钟 → 采集
+      - tablist "采集步骤":
+        - tab "1 调试" [selected]
+        - tab "2 时钟"
+        - tab "3 采集"
+        - tab "4 文件"
+      - tabpanel "1 调试":
+        - heading "① 载入目标 ELF" [level=2]
+        - button "浏览载入 ELF…"
+        - paragraph: 尚未载入 ELF
+        - generic "配套源码（可选）"
+        - heading "② 连接与识别目标" [level=2]
+        - text: 芯片预置
+        - combobox "芯片预置":
+          - option "自动识别" [selected]
+          - option "STM32F103ZE / 高容量 F103（PE2～PE6）"
+          - option "STM32F103（标准/超大容量，Trace 待验收）"
+          - option "STM32F407 / F405"
+          - option "STM32H743 / H742 / H750 / H753"
+          - option "STM32H7B0 / H7A3 / H7B3"
+        - button "连接探针"
+        - button "断开" [disabled]
+        - paragraph: 未连接 · 可先添加断点。
+        - paragraph: F103ZE / H7B0 已验收；其余型号 Trace 待适配。
+        - heading "③ 添加断点" [level=2]
+        - textbox "搜索 ELF 函数" [disabled]:
+          - /placeholder: 搜索 ELF 函数…
+        - generic "ELF 函数列表": 先浏览载入 ELF
+        - paragraph: ＋ 添加断点，圆点选择采集起点。
+        - textbox "断点命令" [disabled]:
+          - /placeholder: b main:199
+        - button "添加" [disabled]
+        - generic "断点命令格式"
+        - heading "④ 断点与采集起点 未连接" [level=2]
+        - generic: 无断点；从函数前 ＋ 或命令添加。
+        - paragraph: 请选择一个断点作为采集起点
+        - button "运行至起点" [disabled]
+        - button "清空断点" [disabled]
+        - button "复位至起点" [disabled]
+        - button "暂停" [disabled]
+        - button "继续" [disabled]
+        - paragraph: 当前 PC：未连接
+        - checkbox "联动采集前停在所选断点" [checked]
+        - text: 联动采集前停在所选断点
+        - checkbox "先复位，再运行至起点" [checked]
+        - text: 先复位，再运行至起点
+        - paragraph: 列表中的圆点选择采集起点；采集期间暂时停用本页断点，结束后恢复。启动入口采集仍未验收。
+        - button "下一步：核对时钟 →"
+      - paragraph: 按 1→2→3 设置，选择一个断点作为起点，再联动采集。
+      - button "联动采集" [disabled]
+      - button "停止采集" [disabled]
+    - main:
+      - button "收起控制"
+      - button "使用说明"
+      - combobox "已保存记录":
+        - option "选择记录…"
+        - option "Demo · 70/35 MHz · 1 ms" [selected]
+      - button "打开"
+      - generic: 47,537 路径 · 2,876 包 · 1 中断
+      - generic "采集时镜像已核对 · 未知条件 39 条 · 包问题 0 · overflow 0 · 捕获边界保留"
+      - button "报告"
+      - navigation "分析视图":
+        - button "执行流"
+        - button "调用统计"
+        - button "火焰图" [active]
+        - button "热点"
+        - button "ETMv4 包"
+        - button "可信区段"
+      - button "历史调用栈" [expanded]
+      - button "←"
+      - button "→"
+      - combobox "历史导航类型":
+        - option "指令" [selected]
+        - option "源码位置"
+        - option "调用"
+        - option "返回"
+        - option "异常"
+        - option "未知 / 边界"
+      - textbox "历史定位":
+        - /placeholder: 序号或 0xPC
+      - button "定位"
+      - textbox "筛选执行记录":
+        - /placeholder: 搜索函数、PC、文件或指令…
+      - checkbox "隐藏未成立分支"
+      - text: 隐藏未成立分支
+      - generic: 13 条
+      - generic: "#2 · 0x08000b14"
+      - table:
+        - rowgroup:
+          - row "函数 路径记录 实际调用 未知状态":
+            - columnheader "函数"
+            - columnheader "路径记录"
+            - columnheader "实际调用"
+            - columnheader "未知状态"
+        - rowgroup:
+          - row "HAL_SPI_Transmit 42,560 13 13":
+            - cell "HAL_SPI_Transmit"
+            - cell "42,560"
+            - cell "13"
+            - cell "13"
+          - row "main 3,887 0 0":
+            - cell "main"
+            - cell "3,887"
+            - cell "0"
+            - cell "0"
+          - row "SPI_CloseTransfer 504 12 0":
+            - cell "SPI_CloseTransfer"
+            - cell "504"
+            - cell "12"
+            - cell "0"
+          - row "SPI_WaitOnFlagUntilTimeout 219 13 26":
+            - cell "SPI_WaitOnFlagUntilTimeout"
+            - cell "219"
+            - cell "13"
+            - cell "26"
+          - row "HAL_RCC_GetSysClockFreq 106 2 0":
+            - cell "HAL_RCC_GetSysClockFreq"
+            - cell "106"
+            - cell "2"
+            - cell "0"
+          - row "HAL_GPIO_WritePin 88 25 0":
+            - cell "HAL_GPIO_WritePin"
+            - cell "88"
+            - cell "25"
+            - cell "0"
+          - row "HAL_RCCEx_GetPLL2ClockFreq 62 1 0":
+            - cell "HAL_RCCEx_GetPLL2ClockFreq"
+            - cell "62"
+            - cell "1"
+            - cell "0"
+          - row "HAL_GetTick 39 13 0":
+            - cell "HAL_GetTick"
+            - cell "39"
+            - cell "13"
+            - cell "0"
+          - row "HAL_RCCEx_GetPeriphCLKFreq 29 1 0":
+            - cell "HAL_RCCEx_GetPeriphCLKFreq"
+            - cell "29"
+            - cell "1"
+            - cell "0"
+          - row "HAL_RCC_GetHCLKFreq 19 1 0":
+            - cell "HAL_RCC_GetHCLKFreq"
+            - cell "19"
+            - cell "1"
+            - cell "0"
+          - row "spi_trace_ready 14 0 0":
+            - cell "spi_trace_ready"
+            - cell "14"
+            - cell "0"
+            - cell "0"
+          - row "HAL_IncTick 7 1 0":
+            - cell "HAL_IncTick"
+            - cell "7"
+            - cell "1"
+            - cell "0"
+          - row "SysTick_Handler 3 0 / IRQ 1 0":
+            - cell "SysTick_Handler"
+            - cell "3"
+            - cell "0 / IRQ 1"
+            - cell "0"
+      - strong: spi_trace_support.c
+      - generic "spi_trace_ready · 第 6 行"
+      - 'generic "10b5 push {r4, lr} · 已证实执行"'
+      - generic: "1"
+      - generic: "#include \"main.h\""
+      - generic: "2"
+      - generic: "#include \"spi_trace_support.h\""
+      - generic: "3"
+      - generic: /* Debugger-visible diagnostics bypass the M7 data cache in DTCM. */
+      - generic: "4"
+      - generic: volatile SpiTraceDiagnostics g_spi_trace __attribute__((section(".trace_diag"), aligned(4)));
+      - generic: "5"
+      - generic: /* A stable breakpoint address for the host; this firmware never enables ETM. */
+      - generic: "6"
+      - generic: "__attribute__((noinline)) void spi_trace_ready(void) {"
+      - generic: "7"
+      - generic: g_spi_trace.cpu_hz = HAL_RCC_GetSysClockFreq();
+      - generic: "8"
+      - generic: g_spi_trace.hclk_hz = HAL_RCC_GetHCLKFreq();
+      - generic: "9"
+      - generic: g_spi_trace.spi_kernel_hz = HAL_RCCEx_GetPeriphCLKFreq(RCC_PERIPHCLK_SPI2);
+      - generic: "10"
+      - generic: g_spi_trace.traceclk_hz = 560000000U / SPI_TRACE_PLL_R / 2U;
+      - generic: "11"
+      - generic: g_spi_trace.ready = 1;
+      - generic: "12"
+      - generic: "}"
+      - generic: "13"
+      - generic "历史 trace 重建，包含未证实祖先；不是当前寄存器快照":
+        - strong: 选中位置的历史调用栈
+        - generic: 采集前调用栈未知
+        - generic: › spi_trace_ready
+  - text: 连接后这里显示接收数据。 连接探针并选择 RTT 通道后，这里显示目标输出。 连接后这里显示接收数据。 烧录或 SRAM 测试的进度与结果显示在这里。 （点「定位并开始」：留空地址就用 .elf 里的 _SEGGER_RTT 符号） ▸ ▸ 连接后这里显示接收数据。 ▸ I2C 事务与应答会显示在这里。

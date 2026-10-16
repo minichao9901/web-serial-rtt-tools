@@ -1,3 +1,4 @@
+import { waitMs } from '../core/pace.js';
 /**
  * 数据面传输：把"512 B 包流"从探针搬到页面。两种实现**同形**，页面不用管用的是哪个：
  *   · `VendorEpTransport` —— 真家伙：WebUSB 认领 interface 0，走**空闲的 bulk IN 端点 0x83**
@@ -12,7 +13,7 @@
  */
 import { withTimeout } from '../rtt/dap-webusb.js';
 import { MockScopeProbe } from './mock.js';
-import { UsbLease } from '../core/usb-device.js';
+import { UsbLease, isUsbResourceConflict } from '../core/usb-device.js';
 
 /** 探针上那个空闲的 bulk IN 端点（SWO 端点，SWO_STREAM=0 所以没人用）*/
 export const EP_SCOPE = 0x83;
@@ -20,7 +21,7 @@ const VID = 0x0d28;
 const dirtyDevices = new WeakSet();
 const pendingByDevice = new WeakMap();
 
-const sleep = ms => new Promise(r => setTimeout(r, ms));
+const sleep = waitMs;
 
 export class VendorEpTransport {
   constructor(device, opts = {}){
@@ -177,7 +178,7 @@ export class VendorEpTransport {
        * another live client still owns the probe and must be released first.
        */
       const why = String(resetError?.message || resetError);
-      if (/USB 整设备复位需要先断开|USB 端点正在被/.test(why)) throw resetError;
+      if (isUsbResourceConflict(resetError)) throw resetError;
       try {
         await this._usb.close({ dirty: false });
         await withTimeout(Promise.allSettled([...this._pendingWorkers]), 1500, '等待旧采样读退出（USB 重开）');
@@ -363,7 +364,7 @@ export class VendorEpTransport {
        */
       // Do not bypass the shared-resource guard (for example an active SPI
       // lease).  Only a native reset failure is recoverable by this fallback.
-      if (!dirty || /USB 整设备复位需要先断开|USB 端点正在被/.test(String(e?.message || e))) throw e;
+      if (!dirty || isUsbResourceConflict(e)) throw e;
       try {
         await this._usb.close({ dirty: false });
         dirtyDevices.delete(this.device);

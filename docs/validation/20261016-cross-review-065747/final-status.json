@@ -1,0 +1,15 @@
+{
+  "completedAt": "2026-10-16T07:04:41.395345+08:00",
+  "revision": "fb06da2348543b75db5fbc237dd4d3b0ffe1d655",
+  "productionInputsChanged": [],
+  "sourceReportUnchanged": true,
+  "verifiedAssertions": 14,
+  "allAssertionsPassed": true,
+  "regressionEntries": 13,
+  "allRegressionsPassed": true,
+  "newFunctionalFindings": 6,
+  "mergedFunctionalFindings": 13,
+  "missingLinks": [],
+  "reportSha256": "86583be442a1ee2c7ed6d356eb34eedcb9ad61639722a0e7e440ecd542a783e7",
+  "hardware": "not-run"
+}

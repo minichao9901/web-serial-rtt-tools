@@ -1,5 +1,5 @@
 /**
- * 入口：把三个标签页接起来。
+ * 工作台入口：登记视图并连接共享会话。
  * 串口助手与终端共用同一个串口会话（一个 COM 口只能被一个程序打开，
  * 两个标签是同一路数据的两种看法）；RTT 是独立的调试器会话。
  */
@@ -7,6 +7,7 @@ import { installProbeManager } from './core/probe-users.js';
 import { initTabs } from './ui/tabs.js';
 import { initWorkspaces } from './ui/workspace.js';
 import { initSidebarTabs } from './ui/sidebar-tabs.js';
+import { initDockNavigation } from './ui/dock-navigation.js';
 import { initFullscreen } from './ui/fullscreen.js';
 import { initProbeStatus } from './ui/probe-status.js';
 import { initEventLogs } from './ui/event-logs.js';
@@ -87,24 +88,19 @@ analog.init();
 spiCdc.init();
 swo.init();
 etm.init();
+initDockNavigation();
 installAcquisitionDiagnostics(tools);
 
+const pages = { serial:assistant, terminal, rtt, rttcdc:stream, scope, flash, spi, panel,
+  dbg, i2c, analog, swo, etm, spicdc:spiCdc, gen };
 initTabs(name => {
   workspace.sync();
-  if (name === 'serial') requestAnimationFrame(() => assistant.onShow());
-  if (name === 'terminal') requestAnimationFrame(() => terminal.onShow());
-  if (name === 'rtt') requestAnimationFrame(() => rtt.onShow());
-  if (name === 'rttcdc') requestAnimationFrame(() => stream.onShow());
-  if (name === 'scope') requestAnimationFrame(() => scope.onShow());
-  if (name === 'spi') requestAnimationFrame(() => spi.onShow());
-  if (name === 'panel') requestAnimationFrame(() => panel.onShow());
-  if (name === 'dbg') requestAnimationFrame(() => dbg.onShow());
-  if (name === 'i2c') requestAnimationFrame(() => i2c.onShow());
-  if (name === 'analog') requestAnimationFrame(() => analog.onShow());
-  if (name === 'swo') requestAnimationFrame(() => swo.onShow());
-  if (name === 'etm') requestAnimationFrame(() => etm.onShow());
-  if (name === 'spicdc') requestAnimationFrame(() => spiCdc.onShow());
-  if (name === 'gen') requestAnimationFrame(() => gen.onShow());
+  requestAnimationFrame(() => {
+    if (!document.getElementById('tab-'+name)?.classList.contains('active')) return;
+    Promise.resolve().then(() => pages[name]?.onShow?.()).catch(error => {
+      errors.push(`[page:${name}] ${error.message}`); toast(error.message, 'err');
+    });
+  });
 });
 
 /**

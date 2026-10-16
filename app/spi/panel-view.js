@@ -138,7 +138,7 @@ export class SpiPanelView {
     $('pn-disconnect').addEventListener('click', () => s.disconnect());
     $('pn-choose').addEventListener('click', () => s.connectHid(true));
     $('pn-usb').addEventListener('click', () => s.connectUsb(null, { inFlight: +($('pn-inflight').value || 4) }));
-    $('pn-mock').addEventListener('change', e => s.setMock(e.target.checked));
+    $('pn-mock').addEventListener('change', e => this.wrap(() => s.setMock(e.target.checked)).finally(() => this.renderState(s.stateInfo())));
     /**
      * 攒批档位：一次 `transferOut` 带多少字节（见 `protocol.batchPacks` 的注释）。
      * 落 store 是为了实验时不用每次重设；512 = 老行为（一片一次调用）。
@@ -535,12 +535,11 @@ export class SpiPanelView {
   async applySclk(){
     const s=this.session;if(!s.connected||s.busy)return;
     const sclkHz=Number($('pn-sclk').value);if(!Number.isInteger(sclkHz)||sclkHz<0)return;
-    s.setBusy(true);
-    try{await this.wrap(async()=>{
+    await this.wrap(async()=>{
       const cfg=await s.loadCfg({quiet:true,tag:this.tag});
       await s.applyConfig({...cfg,sclkHz},this.tag);
       await s.pollStatus(true);
-    });}finally{s.setBusy(false);}
+    });
   }
 
   fillProfile(p){
@@ -583,12 +582,14 @@ export class SpiPanelView {
 
   refreshButtons(){
     const s = this.session, c = s.connected, d = s.dataReady, busy = s.busy;
+    const access = s.capabilities();
     $('pn-connect').disabled = c || busy;
     $('pn-choose').disabled = c || d || busy;
-    $('pn-disconnect').disabled = !(c || d) || busy;
-    $('pn-prof-get').disabled = !c; $('pn-prof-set').disabled = !c;
-    $('pn-enable').disabled = !c; $('pn-disable').disabled = !c;
-    $('pn-preset-apply').disabled = !c;
+    $('pn-disconnect').disabled = !(c || d) || (busy && !access.retryStop);
+    $('pn-prof-get').disabled = !c; $('pn-prof-set').disabled = !access.configure;
+    $('pn-enable').disabled = !access.configure; $('pn-disable').disabled = !access.configure;
+    $('pn-preset-apply').disabled = !access.configure;
+    $('pn-mock').disabled = !access.switchDevice;
     $('pn-sclk').disabled=$('pn-sclk-set').disabled=!c||!s.cfg||busy;
     const canSend = d && !busy;
     for (const id of ['pn-code-play', 'pn-img-send', 'pn-rst-send', 'pn-rst-bl', 'pn-bl-on', 'pn-bl-off', 'pn-pwr-on', 'pn-disp-on', 'pn-disp-off', 'pn-pwr-off']) $(id).disabled = !canSend;

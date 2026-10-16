@@ -1,0 +1,80 @@
+{
+  "pages": [
+    {
+      "entry": "bundle",
+      "page": "tab-serial",
+      "preload": "app/site/main.js?v=efbe4c0a3e12b521"
+    },
+    {
+      "entry": "bundle",
+      "page": "tab-terminal",
+      "preload": "app/site/main.js?v=efbe4c0a3e12b521"
+    },
+    {
+      "entry": "bundle",
+      "page": "tab-rtt",
+      "preload": "app/site/main.js?v=efbe4c0a3e12b521"
+    },
+    {
+      "entry": "bundle",
+      "page": "tab-rttcdc",
+      "preload": "app/site/main.js?v=efbe4c0a3e12b521"
+    },
+    {
+      "entry": "bundle",
+      "page": "tab-scope",
+      "preload": "app/site/main.js?v=efbe4c0a3e12b521"
+    },
+    {
+      "entry": "bundle",
+      "page": "tab-flash",
+      "preload": "app/site/main.js?v=efbe4c0a3e12b521"
+    },
+    {
+      "entry": "bundle",
+      "page": "tab-dbg",
+      "preload": "app/site/main.js?v=efbe4c0a3e12b521"
+    },
+    {
+      "entry": "bundle",
+      "page": "tab-spi",
+      "preload": "app/site/main.js?v=efbe4c0a3e12b521"
+    },
+    {
+      "entry": "bundle",
+      "page": "tab-panel",
+      "preload": "app/site/main.js?v=efbe4c0a3e12b521"
+    },
+    {
+      "entry": "bundle",
+      "page": "tab-spicdc",
+      "preload": "app/site/main.js?v=efbe4c0a3e12b521"
+    },
+    {
+      "entry": "bundle",
+      "page": "tab-swo",
+      "preload": "app/site/main.js?v=efbe4c0a3e12b521"
+    },
+    {
+      "entry": "bundle",
+      "page": "tab-etm",
+      "preload": "app/site/main.js?v=efbe4c0a3e12b521"
+    },
+    {
+      "entry": "bundle",
+      "page": "tab-i2c",
+      "preload": "app/site/main.js?v=efbe4c0a3e12b521"
+    },
+    {
+      "entry": "bundle",
+      "page": "tab-analog",
+      "preload": "app/site/main.js?v=efbe4c0a3e12b521"
+    },
+    {
+      "entry": "bundle",
+      "page": "tab-gen",
+      "preload": "app/site/main.js?v=efbe4c0a3e12b521"
+    }
+  ],
+  "warnings": []
+}

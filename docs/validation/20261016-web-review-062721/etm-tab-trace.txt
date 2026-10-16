@@ -1,0 +1,113 @@
+- banner:
+  - generic "串口 / RTT 工具箱"
+  - navigation "工具切换":
+    - button "串口助手"
+    - button "终端"
+    - button "RTT Viewer"
+    - button "RTT 转发"
+    - button "J-Scope 波形"
+    - button "烧录器"
+    - button "调试器"
+    - generic "更多功能，当前页面：ETM 执行轨迹": 更多功能 ▾
+  - generic: 串口：未连接
+  - generic "连接支持该功能的 akaLinkPro 固件后可用。":
+    - checkbox "NRST 开漏" [checked] [disabled]
+    - text: NRST 开漏
+  - button "全局复位"
+  - button "全屏"
+  - status "当前页面没有功能连接实体探针；串口连接状态单独显示。": 探针：未使用
+  - generic "帮助"
+- main:
+  - iframe [active] [id="etm-frame"]:
+    - complementary:
+      - text: 目标与录制
+      - generic: ELF → 断点 → 时钟 → 采集
+      - tablist "采集步骤":
+        - tab "1 调试"
+        - tab "2 时钟"
+        - tab "3 采集" [active] [selected]
+        - tab "4 文件"
+      - tabpanel "3 采集":
+        - generic: 上位机配置 · ETM / TPIU / LA
+        - heading "① ETM / TPIU 配置" [level=2]
+        - text: Trace ID
+        - spinbutton "Trace ID"
+        - generic "增加分支地址输出，可能引起 overflow；建议先关闭":
+          - checkbox "分支广播"
+          - text: 分支广播
+        - checkbox "返回栈压缩"
+        - text: 返回栈压缩
+        - checkbox "周期计数"
+        - text: 周期计数
+        - generic "选项说明与芯片能力"
+        - paragraph: 连接后读取硬件配置；编辑项会保留为待应用设置。
+        - button "读取配置" [disabled]
+        - button "配置并暂停" [disabled]
+        - generic "TPIU 与引脚"
+        - option "超高速 · 基准值" [selected]
+        - option "高速"
+        - option "中速"
+        - generic "寄存器回读"
+        - heading "② 逻辑分析仪" [level=2]
+        - generic: LA 未检查
+        - button "检查连接"
+        - text: 采样率
+        - combobox "采样率":
+          - option "500 MSa/s" [selected]
+          - option "200 MSa/s"
+          - option "100 MSa/s"
+        - text: 时长（ms）
+        - spinbutton "时长（ms）"
+        - text: 阈值（V）
+        - spinbutton "阈值（V）"
+        - generic "通道、相位与滤波"
+        - checkbox "SWD 联动，LA 就绪后继续 CPU" [checked]
+        - text: SWD 联动，LA 就绪后继续 CPU
+        - checkbox "保存后自动解码" [checked]
+        - text: 保存后自动解码
+      - paragraph: 按 1→2→3 设置，选择一个断点作为起点，再联动采集。
+      - button "联动采集" [disabled]
+      - button "停止采集" [disabled]
+    - main:
+      - button "收起控制"
+      - button "使用说明"
+      - combobox "已保存记录":
+        - option "选择记录…" [selected]
+      - button "打开"
+      - generic: 历史执行流与当前目标状态分别显示。
+      - button "报告" [disabled]
+      - navigation "分析视图":
+        - button "执行流" [disabled]
+        - button "调用统计" [disabled]
+        - button "火焰图" [disabled]
+        - button "热点" [disabled]
+        - button "ETM 包" [disabled]
+        - button "可信区段" [disabled]
+      - button "历史调用栈" [expanded]
+      - button "←" [disabled]
+      - button "→" [disabled]
+      - combobox "历史导航类型" [disabled]:
+        - option "指令" [selected]
+        - option "源码位置"
+        - option "调用"
+        - option "返回"
+        - option "异常"
+        - option "未知 / 边界"
+      - textbox "历史定位":
+        - /placeholder: 序号或 0xPC
+      - button "定位" [disabled]
+      - textbox "筛选执行记录" [disabled]:
+        - /placeholder: 搜索函数、PC、文件或指令…
+      - checkbox "隐藏未成立分支" [disabled]
+      - text: 隐藏未成立分支
+      - generic: 0 条
+      - generic: 未选中历史位置
+      - generic: 请在调试页浏览载入 ELF，或打开一份历史记录。
+      - button "上一页" [disabled]
+      - generic: —
+      - button "下一页" [disabled]
+      - separator "调整执行流与源码比例"
+      - strong: 源码 / 机器码
+      - strong: 选中位置的历史调用栈
+      - generic: 选择一条历史指令。
+  - text: 连接后这里显示接收数据。 连接探针并选择 RTT 通道后，这里显示目标输出。 连接后这里显示接收数据。 烧录或 SRAM 测试的进度与结果显示在这里。 （点「定位并开始」：留空地址就用 .elf 里的 _SEGGER_RTT 符号） ▸ ▸ 连接后这里显示接收数据。 ▸ I2C 事务与应答会显示在这里。

@@ -119,7 +119,7 @@ export class SpiBusView {
     $('sp-disconnect').addEventListener('click', () => s.disconnect());
     $('sp-choose').addEventListener('click', () => s.connectHid(true));
     $('sp-usb').addEventListener('click', () => s.connectUsb(null, { inFlight: +($('sp-inflight').value || 4) }));
-    $('sp-mock').addEventListener('change', e => s.setMock(e.target.checked, { device: $('sp-mock-device').value }));
+    $('sp-mock').addEventListener('change', e => this.wrap(() => s.setMock(e.target.checked, { device: $('sp-mock-device').value })).finally(() => this.renderState(s.stateInfo())));
     // 假探针的"末级器件"：SPI 没有器件地址，所以是**换一个末级**（NOR / 寄存器器件 / 命令型 ADC）
     $('sp-mock-device').value = store.get('spi.mockDevice', 'flash');
     $('sp-mock-device').addEventListener('change', e => {
@@ -383,12 +383,15 @@ export class SpiBusView {
 
   refreshButtons(){
     const s = this.session, c = s.connected, d = s.dataReady, busy = s.busy;
+    const access = s.capabilities();
     $('sp-connect').disabled = c || busy;
     $('sp-choose').disabled = c || d || busy;
-    $('sp-disconnect').disabled = !(c || d) || busy;
-    $('sp-get').disabled = !c; $('sp-set').disabled = !c; $('sp-pin-apply').disabled = !c;
-    $('sp-enable').disabled = !c; $('sp-disable').disabled = !c;
-    $('sp-reset').disabled = !c; $('sp-abort').disabled = !c; $('sp-status').disabled = !c;
+    $('sp-disconnect').disabled = !(c || d) || (busy && !access.retryStop);
+    $('sp-get').disabled = !c; $('sp-set').disabled = !access.configure; $('sp-pin-apply').disabled = !access.configure;
+    $('sp-enable').disabled = !access.configure; $('sp-disable').disabled = !access.configure;
+    $('sp-reset').disabled = !access.configure; $('sp-abort').disabled = !access.configure; $('sp-status').disabled = !c;
+    $('sp-mock').disabled = !access.switchDevice;
+    $('sp-mock-device').disabled = !access.switchDevice;
     $('sp-cmd-send').disabled = !d || busy;
     $('sp-lb-run').disabled = !d || busy;
     // 「中止」在 tab 栏上（切到任何 tab 都能停）—— 它的可用性由 renderRunPill 统一管，
@@ -397,7 +400,7 @@ export class SpiBusView {
     // 通用命令（文本）/ flash：没数据端点或正忙时不能发
     for (const id of ['sp-dsl-parse', 'sp-dsl-send']) $(id).disabled = !d || busy;
     // 「寄存器」面板：连上就能读（它自己还会管"有没有改动"）
-    this.reg?.setEnabled(c && d);
+    this.reg?.setEnabled(c && d && !busy);
     // 定时采集：跑起来之后「开始」保持灰、「停止」亮（胶囊在 tab 栏上，切 tab 也看得见）
     this.acq?.renderPill(this.acq.running ? 'running' : 'idle');
     for (const id of ['sp-fl-readid', 'sp-fl-sfdp', 'sp-fl-sr', 'sp-fl-read', 'sp-fl-bench']) $(id).disabled = !d || busy;

@@ -657,6 +657,7 @@ export class I2cView {
       if (res.skip) return;
       if (res.error){ errs.push({ row: i + 1, msg: res.error }); return; }
       res.item.line = i + 1;
+      res.item.resultRow = i;
       items.push(res.item);
     });
     return { items, errs };
@@ -827,7 +828,7 @@ export class I2cView {
         this._runPill('run');
         break;
       case 'item': {
-        const row = e.item.line != null ? e.item.line - 1 : -1;
+        const row = e.item.resultRow ?? -1;
         if (e.phase === 'begin'){
           this._setResult(row, '… 正在跑', 'dim');
           return;
@@ -860,7 +861,7 @@ export class I2cView {
         break;
       }
       case 'tick': {
-        const row = e.task?.items?.[0]?.line != null ? e.task.items[0].line - 1 : -1;
+        const row = e.task?.items?.[0]?.resultRow ?? -1;
         const per = e.task?.period || 0;
         const late = e.actualMs > per * 1.25;
         this._setTick(row, `第 ${e.n} 拍 · 实测 ${e.actualMs.toFixed(0)} ms` +

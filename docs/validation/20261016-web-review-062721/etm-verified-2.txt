@@ -1,0 +1,264 @@
+- banner:
+  - generic "串口 / RTT 工具箱"
+  - navigation "工具切换":
+    - button "串口助手"
+    - button "终端"
+    - button "RTT Viewer"
+    - button "RTT 转发"
+    - button "J-Scope 波形"
+    - button "烧录器"
+    - button "调试器"
+    - generic "更多功能，当前页面：ETM 执行轨迹": 更多功能 ▾
+  - generic: 串口：未连接
+  - generic "连接支持该功能的 akaLinkPro 固件后可用。":
+    - checkbox "NRST 开漏" [checked] [disabled]
+    - text: NRST 开漏
+  - button "全局复位"
+  - button "全屏"
+  - status "当前页面没有功能连接实体探针；串口连接状态单独显示。": 探针：未使用
+  - generic "帮助"
+- main:
+  - iframe [active] [id="etm-frame"]:
+    - complementary:
+      - text: 目标与录制
+      - generic: ELF → 断点 → 时钟 → 采集
+      - tablist "采集步骤":
+        - tab "1 调试" [selected]
+        - tab "2 时钟"
+        - tab "3 采集"
+        - tab "4 文件"
+      - tabpanel "1 调试":
+        - heading "① 载入目标 ELF" [level=2]
+        - button "浏览载入 ELF…"
+        - paragraph: 尚未载入 ELF
+        - generic "配套源码（可选）"
+        - heading "② 连接与识别目标" [level=2]
+        - text: 芯片预置
+        - combobox "芯片预置":
+          - option "自动识别" [selected]
+          - option "STM32F103ZE / 高容量 F103（PE2～PE6）"
+          - option "STM32F103（标准/超大容量，Trace 待验收）"
+          - option "STM32F407 / F405"
+          - option "STM32H743 / H742 / H750 / H753"
+          - option "STM32H7B0 / H7A3 / H7B3"
+        - button "连接探针"
+        - button "断开" [disabled]
+        - paragraph: 未连接 · 可先添加断点。
+        - paragraph: F103ZE / H7B0 已验收；其余型号 Trace 待适配。
+        - heading "③ 添加断点" [level=2]
+        - textbox "搜索 ELF 函数" [disabled]:
+          - /placeholder: 搜索 ELF 函数…
+        - generic "ELF 函数列表": 先浏览载入 ELF
+        - paragraph: ＋ 添加断点，圆点选择采集起点。
+        - textbox "断点命令" [disabled]:
+          - /placeholder: b main:199
+        - button "添加" [disabled]
+        - generic "断点命令格式"
+        - heading "④ 断点与采集起点 未连接" [level=2]
+        - generic: 无断点；从函数前 ＋ 或命令添加。
+        - paragraph: 请选择一个断点作为采集起点
+        - button "运行至起点" [disabled]
+        - button "清空断点" [disabled]
+        - button "复位至起点" [disabled]
+        - button "暂停" [disabled]
+        - button "继续" [disabled]
+        - paragraph: 当前 PC：未连接
+        - checkbox "联动采集前停在所选断点" [checked]
+        - text: 联动采集前停在所选断点
+        - checkbox "先复位，再运行至起点" [checked]
+        - text: 先复位，再运行至起点
+        - paragraph: 列表中的圆点选择采集起点；采集期间暂时停用本页断点，结束后恢复。启动入口采集仍未验收。
+        - button "下一步：核对时钟 →"
+      - paragraph: 按 1→2→3 设置，选择一个断点作为起点，再联动采集。
+      - button "联动采集" [disabled]
+      - button "停止采集" [disabled]
+    - main:
+      - button "收起控制"
+      - button "使用说明"
+      - combobox "已保存记录":
+        - option "选择记录…"
+        - option "Demo · 70/35 MHz · 1 ms" [selected]
+      - button "打开"
+      - generic: 47,537 路径 · 2,876 包 · 1 中断
+      - generic "采集时镜像已核对 · 未知条件 39 条 · 包问题 0 · overflow 0 · 捕获边界保留"
+      - button "报告"
+      - navigation "分析视图":
+        - button "执行流"
+        - button "调用统计"
+        - button "火焰图" [active]
+        - button "热点"
+        - button "ETMv4 包"
+        - button "可信区段"
+      - button "历史调用栈" [expanded]
+      - button "←"
+      - button "→"
+      - combobox "历史导航类型":
+        - option "指令" [selected]
+        - option "源码位置"
+        - option "调用"
+        - option "返回"
+        - option "异常"
+        - option "未知 / 边界"
+      - textbox "历史定位":
+        - /placeholder: 序号或 0xPC
+      - button "定位"
+      - textbox "筛选执行记录":
+        - /placeholder: 搜索函数、PC、文件或指令…
+      - checkbox "隐藏未成立分支"
+      - text: 隐藏未成立分支
+      - generic: 0 条
+      - generic: "#2 · 0x08000b14"
+      - button "按执行顺序"
+      - button "按调用权重"
+      - button "上一级" [disabled]
+      - group "图表缩放":
+        - button "缩小" [disabled]:
+        - button "放大":
+        - button "适配全部区间" [disabled]:
+      - button "收起源码" [expanded]
+      - generic: "#"
+      - spinbutton "区间起点序号"
+      - generic: ～
+      - spinbutton "区间结束序号"
+      - button "查看"
+      - paragraph: "#0～#47541 · 横轴为执行序号，当前没有逐指令时间戳。"
+      - paragraph: 拖选、缩放按钮或 Ctrl＋滚轮查看局部序号区间；纵向按实际调用深度延展，可滚动查看。灰色“多段调用”表示当前显示桶含多条路径，放大后可查看细节。
+      - img "按执行先后排列的调用区间图，拖选缩放":
+        - generic: "#0"
+        - generic: "#11885"
+        - generic: "#23771"
+        - generic: "#35656"
+        - generic: "#47541"
+        - generic "#0 OCSD_GEN_TRC_ELEM_NO_SYNC( [init-decoder])；#1 OCSD_GEN_TRC_ELEM_TRACE_ON( [begin or filter])"
+        - generic "#23225 OCSD_GEN_TRC_ELEM_EXCEPTION(pref ret addr:0x8003de2; excep num (0x0f) )；#23236 OCSD_GEN_TRC_ELEM_EXCEPTION_RET()"
+        - generic "#47541 OCSD_GEN_TRC_ELEM_EO_TRACE( [end-of-trace])"
+        - button "采集前调用栈未知 执行区间 0 到 39"
+        - button "spi_trace_ready 执行区间 0 到 39"
+        - button "多段调用（放大查看） 执行区间 0 到 39"
+        - button "采集前调用栈未知 执行区间 40 到 23199"
+        - generic: 采集前调用栈未知
+        - button "spi_trace_ready 执行区间 40 到 199"
+        - button "多段调用（放大查看） 执行区间 40 到 79"
+        - button "HAL_RCC_GetHCLKFreq 执行区间 80 到 119"
+        - button "多段调用（放大查看） 执行区间 80 到 119"
+        - button "多段调用（放大查看） 执行区间 120 到 159"
+        - button "HAL_RCCEx_GetPeriphCLKFreq 执行区间 160 到 199"
+        - button "HAL_RCCEx_GetPLL2ClockFreq 执行区间 160 到 199"
+        - button "多段调用（放大查看） 执行区间 200 到 239"
+        - button "main 执行区间 240 到 23199"
+        - generic: main
+        - button "多段调用（放大查看） 执行区间 240 到 279"
+        - button "HAL_SPI_Transmit 执行区间 280 到 3559"
+        - generic: HAL_SPI_
+        - button "多段调用（放大查看） 执行区间 3480 到 3559"
+        - button "多段调用（放大查看） 执行区间 3560 到 3599"
+        - button "多段调用（放大查看） 执行区间 3880 到 3919"
+        - button "HAL_SPI_Transmit 执行区间 3920 到 7239"
+        - generic: HAL_SPI_T
+        - button "多段调用（放大查看） 执行区间 3920 到 3959"
+        - button "多段调用（放大查看） 执行区间 7160 到 7239"
+        - button "多段调用（放大查看） 执行区间 7240 到 7279"
+        - button "多段调用（放大查看） 执行区间 7560 到 7599"
+        - button "HAL_SPI_Transmit 执行区间 7600 到 10879"
+        - generic: HAL_SPI_
+        - button "多段调用（放大查看） 执行区间 10840 到 10879"
+        - button "多段调用（放大查看） 执行区间 10880 到 10959"
+        - button "多段调用（放大查看） 执行区间 11200 到 11279"
+        - button "HAL_SPI_Transmit 执行区间 11280 到 14559"
+        - generic: HAL_SPI_
+        - button "多段调用（放大查看） 执行区间 14480 到 14559"
+        - button "多段调用（放大查看） 执行区间 14560 到 14599"
+        - button "多段调用（放大查看） 执行区间 14880 到 14919"
+        - button "HAL_SPI_Transmit 执行区间 14920 到 18239"
+        - generic: HAL_SPI_T
+        - button "多段调用（放大查看） 执行区间 14920 到 14959"
+        - button "多段调用（放大查看） 执行区间 18160 到 18199"
+        - button "SPI_CloseTransfer 执行区间 18200 到 18239"
+        - button "多段调用（放大查看） 执行区间 18240 到 18279"
+        - button "多段调用（放大查看） 执行区间 18560 到 18599"
+        - button "HAL_SPI_Transmit 执行区间 18600 到 21879"
+        - generic: HAL_SPI_
+        - button "多段调用（放大查看） 执行区间 21840 到 21879"
+        - button "多段调用（放大查看） 执行区间 21880 到 21959"
+        - button "多段调用（放大查看） 执行区间 22240 到 22279"
+        - button "HAL_SPI_Transmit 执行区间 22280 到 23199"
+        - button "多段调用（放大查看） 执行区间 23200 到 23239"
+        - button "采集前调用栈未知 执行区间 23240 到 47519"
+        - generic: 采集前调用栈未知
+        - button "main 执行区间 23240 到 47519"
+        - generic: main
+        - button "HAL_SPI_Transmit 执行区间 23240 到 25559"
+        - generic: HAL_SP
+        - button "多段调用（放大查看） 执行区间 25520 到 25559"
+        - button "多段调用（放大查看） 执行区间 25560 到 25639"
+        - button "多段调用（放大查看） 执行区间 25880 到 25959"
+        - button "HAL_SPI_Transmit 执行区间 25960 到 29239"
+        - generic: HAL_SPI_
+        - button "多段调用（放大查看） 执行区间 29160 到 29239"
+        - button "多段调用（放大查看） 执行区间 29240 到 29279"
+        - button "多段调用（放大查看） 执行区间 29560 到 29599"
+        - button "HAL_SPI_Transmit 执行区间 29600 到 32919"
+        - generic: HAL_SPI_T
+        - button "多段调用（放大查看） 执行区间 29600 到 29639"
+        - button "多段调用（放大查看） 执行区间 32840 到 32879"
+        - button "SPI_CloseTransfer 执行区间 32880 到 32919"
+        - button "多段调用（放大查看） 执行区间 32920 到 32959"
+        - button "多段调用（放大查看） 执行区间 33240 到 33279"
+        - button "HAL_SPI_Transmit 执行区间 33280 到 36559"
+        - generic: HAL_SPI_
+        - button "多段调用（放大查看） 执行区间 36520 到 36559"
+        - button "多段调用（放大查看） 执行区间 36560 到 36639"
+        - button "多段调用（放大查看） 执行区间 36920 到 36959"
+        - button "HAL_SPI_Transmit 执行区间 36960 到 40239"
+        - generic: HAL_SPI_
+        - button "多段调用（放大查看） 执行区间 40160 到 40239"
+        - button "多段调用（放大查看） 执行区间 40240 到 40279"
+        - button "多段调用（放大查看） 执行区间 40560 到 40599"
+        - button "HAL_SPI_Transmit 执行区间 40600 到 43919"
+        - generic: HAL_SPI_T
+        - button "多段调用（放大查看） 执行区间 40600 到 40639"
+        - button "多段调用（放大查看） 执行区间 43840 到 43879"
+        - button "SPI_CloseTransfer 执行区间 43880 到 43919"
+        - button "多段调用（放大查看） 执行区间 43920 到 43959"
+        - button "多段调用（放大查看） 执行区间 44240 到 44279"
+        - button "HAL_SPI_Transmit 执行区间 44280 到 47519"
+        - generic: HAL_SPI_
+        - button "采集前调用栈未知 执行区间 47520 到 47541"
+        - button "main 执行区间 47520 到 47541"
+        - button "HAL_SPI_Transmit 执行区间 47520 到 47541"
+        - button "多段调用（放大查看） 执行区间 47520 到 47541"
+        - 'generic "当前光标 · #2"'
+      - paragraph: 当前区间 47,537 条路径记录；汇总包含未成立条件和未知状态。图形宽度表示执行顺序跨度，不表示耗时。
+      - strong: spi_trace_support.c
+      - generic "spi_trace_ready · 第 6 行"
+      - 'generic "10b5 push {r4, lr} · 已证实执行"'
+      - generic: "1"
+      - generic: "#include \"main.h\""
+      - generic: "2"
+      - generic: "#include \"spi_trace_support.h\""
+      - generic: "3"
+      - generic: /* Debugger-visible diagnostics bypass the M7 data cache in DTCM. */
+      - generic: "4"
+      - generic: volatile SpiTraceDiagnostics g_spi_trace __attribute__((section(".trace_diag"), aligned(4)));
+      - generic: "5"
+      - generic: /* A stable breakpoint address for the host; this firmware never enables ETM. */
+      - generic: "6"
+      - generic: "__attribute__((noinline)) void spi_trace_ready(void) {"
+      - generic: "7"
+      - generic: g_spi_trace.cpu_hz = HAL_RCC_GetSysClockFreq();
+      - generic: "8"
+      - generic: g_spi_trace.hclk_hz = HAL_RCC_GetHCLKFreq();
+      - generic: "9"
+      - generic: g_spi_trace.spi_kernel_hz = HAL_RCCEx_GetPeriphCLKFreq(RCC_PERIPHCLK_SPI2);
+      - generic: "10"
+      - generic: g_spi_trace.traceclk_hz = 560000000U / SPI_TRACE_PLL_R / 2U;
+      - generic: "11"
+      - generic: g_spi_trace.ready = 1;
+      - generic: "12"
+      - generic: "}"
+      - generic: "13"
+      - generic "历史 trace 重建，包含未证实祖先；不是当前寄存器快照":
+        - strong: 选中位置的历史调用栈
+        - generic: 采集前调用栈未知
+        - generic: › spi_trace_ready
+  - text: 连接后这里显示接收数据。 连接探针并选择 RTT 通道后，这里显示目标输出。 连接后这里显示接收数据。 烧录或 SRAM 测试的进度与结果显示在这里。 （点「定位并开始」：留空地址就用 .elf 里的 _SEGGER_RTT 符号） ▸ ▸ 连接后这里显示接收数据。 ▸ I2C 事务与应答会显示在这里。

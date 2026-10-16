@@ -205,11 +205,12 @@ export class RttCdcStreamView {
   _stats(){
     const now = performance.now();
     const r = this.rxc.rate(now);
+    this._highspeedGate(r);
+    if (!this.$('tab-rttcdc').classList.contains('active')) return;
     this.$('c-rxbytes').textContent = fBytes(this.rxc.total);
     this.$('c-rxframes').textContent = this.rxc.frames;
     this.$('c-rxrate').textContent = fRate(r);
     this.$('c-buf').textContent = fBytes(this.rx?.bytes ?? 0);
-    this._highspeedGate(r);
     // 记录/落盘期间按钮要一直刷：字节数、待落盘量都得看得见（见 recorder.js 的说明）
     if (this.rec.active || this.rec.draining) this._recordBtn();
     if (this.rx?.paused) this.$('c-pause').title = `暂停中，已缓存 ${fBytes(this.rx.bytes)}`;
@@ -335,6 +336,7 @@ export class RttCdcStreamView {
       visible: () => this.ansiOn && !this.rx.paused && !this.suppressed && this.$('tab-rttcdc').classList.contains('active'),
       format: (b, t) => this._ansiBytes(b, t),
       onSkip: () => { this._lastWasCR = false; },
+      onError: e => setStatus(this.$('c-err'), `终端显示失败：${e.message}；清空后可重试，接收和记录继续`, 'err'),
     });
     this.fit?.fit();
     new ResizeObserver(() => { if (this.ansiOn){ try { this.fit?.fit(); } catch {} } }).observe(this.$('c-term'));

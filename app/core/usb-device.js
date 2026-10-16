@@ -2,6 +2,8 @@
 const byDevice = new WeakMap();
 const bySerial = new Map();
 let resetGuard = null;
+export function usbResourceConflict(message){ return Object.assign(new Error(message), { code:'USB_RESOURCE_BUSY' }); }
+export const isUsbResourceConflict = error => error?.code === 'USB_RESOURCE_BUSY';
 export function setUsbResetGuard(fn){ resetGuard = fn; }
 function entryFor(device){
   let e = byDevice.get(device);
@@ -84,7 +86,7 @@ export class UsbLease {
       for (const c of e.clients){
         if (c === this) continue;
         for (const eps of c.claims.values()) if (endpoints.some(ep => eps.has(ep)))
-          throw new Error(`USB 端点正在被 ${c.owner} 使用`);
+          throw usbResourceConflict(`USB 端点正在被 ${c.owner} 使用`);
       }
       let owners = e.interfaces.get(iface);
       if (!owners){
@@ -101,11 +103,11 @@ export class UsbLease {
       const e = this.entry;
       if (e.disconnected) throw new Error('USB 设备已拔出，请重新选择探针');
       const owners = e.interfaces.get(iface);
-      if (owners?.size) throw new Error(`USB 接口 ${iface} 已被占用`);
+      if (owners?.size) throw usbResourceConflict(`USB 接口 ${iface} 已被占用`);
       for (const c of e.clients){
         if (c === this) continue;
         for (const eps of c.claims.values()) if (endpoints.some(ep => eps.has(ep)))
-          throw new Error(`USB 端点正在被 ${c.owner} 使用`);
+          throw usbResourceConflict(`USB 端点正在被 ${c.owner} 使用`);
       }
       e.clients.add(this); this.abandoned = false;
       e.interfaces.set(iface, new Set([this]));
@@ -129,8 +131,12 @@ export class UsbLease {
   }
   async _reset(){
     const others = [...this.entry.clients].filter(c => c !== this && !c.abandoned);
-    if (others.length) throw new Error(`USB 整设备复位需要先断开 ${others.map(c => c.owner).join('、')}`);
-    await resetGuard?.(this.owner, this.device);
+    if (others.length) throw usbResourceConflict(`USB 整设备复位需要先断开 ${others.map(c => c.owner).join('、')}`);
+    try { await resetGuard?.(this.owner, this.device); }
+    catch (error){
+      if (error instanceof Error){ error.code ||= 'USB_RESOURCE_BUSY'; throw error; }
+      throw usbResourceConflict(String(error));
+    }
     await this._io(() => this.device.reset());
     this.entry.fault = false;
     this.entry.interfaces.clear();

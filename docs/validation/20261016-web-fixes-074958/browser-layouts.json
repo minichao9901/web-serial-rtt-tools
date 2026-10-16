@@ -1,0 +1,407 @@
+[
+  {
+    "documentWidth": 1440,
+    "duplicateIds": 0,
+    "page": "tab-serial",
+    "selectedTabs": [],
+    "width": 1440
+  },
+  {
+    "documentWidth": 1440,
+    "duplicateIds": 0,
+    "page": "tab-terminal",
+    "selectedTabs": [],
+    "width": 1440
+  },
+  {
+    "documentWidth": 1440,
+    "duplicateIds": 0,
+    "page": "tab-rtt",
+    "selectedTabs": [],
+    "width": 1440
+  },
+  {
+    "documentWidth": 1440,
+    "duplicateIds": 0,
+    "page": "tab-rttcdc",
+    "selectedTabs": [],
+    "summary": "转发未启动 · 接收口未打开",
+    "width": 1440
+  },
+  {
+    "documentWidth": 1440,
+    "duplicateIds": 0,
+    "page": "tab-scope",
+    "selectedTabs": [
+      "帮助"
+    ],
+    "summary": "探针未连接 · 数据未连接",
+    "width": 1440
+  },
+  {
+    "documentWidth": 1440,
+    "duplicateIds": 0,
+    "page": "tab-flash",
+    "selectedTabs": [
+      "SRAM 读写测试"
+    ],
+    "width": 1440
+  },
+  {
+    "documentWidth": 1440,
+    "duplicateIds": 0,
+    "page": "tab-dbg",
+    "selectedTabs": [
+      "栈帧",
+      "异常"
+    ],
+    "width": 1440
+  },
+  {
+    "documentWidth": 1440,
+    "duplicateIds": 0,
+    "page": "tab-spi",
+    "selectedTabs": [
+      "连接",
+      "寄存器"
+    ],
+    "summary": "控制已连接 · 数据已连接",
+    "width": 1440
+  },
+  {
+    "documentWidth": 1440,
+    "duplicateIds": 0,
+    "page": "tab-panel",
+    "selectedTabs": [
+      "帮助",
+      "读回"
+    ],
+    "summary": "共享 SPI：控制已连接 · 数据已连接",
+    "width": 1440
+  },
+  {
+    "documentWidth": 1440,
+    "duplicateIds": 0,
+    "page": "tab-spicdc",
+    "selectedTabs": [],
+    "summary": "转发未启动 · 接收口未打开",
+    "width": 1440
+  },
+  {
+    "documentWidth": 1440,
+    "duplicateIds": 0,
+    "page": "tab-swo",
+    "selectedTabs": [
+      "录制"
+    ],
+    "width": 1440
+  },
+  {
+    "documentWidth": 1440,
+    "duplicateIds": 0,
+    "page": "tab-etm",
+    "selectedTabs": [],
+    "width": 1440
+  },
+  {
+    "documentWidth": 1440,
+    "duplicateIds": 0,
+    "page": "tab-i2c",
+    "selectedTabs": [
+      "帮助",
+      "实时值"
+    ],
+    "width": 1440
+  },
+  {
+    "documentWidth": 1440,
+    "duplicateIds": 0,
+    "page": "tab-analog",
+    "selectedTabs": [
+      "ADC 示波器"
+    ],
+    "width": 1440
+  },
+  {
+    "documentWidth": 1440,
+    "duplicateIds": 0,
+    "page": "tab-gen",
+    "selectedTabs": [
+      "ETM 桥",
+      "Makefile.jlink",
+      "start-etm-bridge.bat",
+      "rtt-bridge.mjs"
+    ],
+    "width": 1440
+  },
+  {
+    "documentWidth": 1024,
+    "duplicateIds": 0,
+    "page": "tab-serial",
+    "selectedTabs": [],
+    "width": 1024
+  },
+  {
+    "documentWidth": 1024,
+    "duplicateIds": 0,
+    "page": "tab-terminal",
+    "selectedTabs": [],
+    "width": 1024
+  },
+  {
+    "documentWidth": 1024,
+    "duplicateIds": 0,
+    "page": "tab-rtt",
+    "selectedTabs": [],
+    "width": 1024
+  },
+  {
+    "documentWidth": 1024,
+    "duplicateIds": 0,
+    "page": "tab-rttcdc",
+    "selectedTabs": [],
+    "summary": "转发未启动 · 接收口未打开",
+    "width": 1024
+  },
+  {
+    "documentWidth": 1024,
+    "duplicateIds": 0,
+    "page": "tab-scope",
+    "selectedTabs": [
+      "帮助"
+    ],
+    "summary": "探针未连接 · 数据未连接",
+    "width": 1024
+  },
+  {
+    "documentWidth": 1024,
+    "duplicateIds": 0,
+    "page": "tab-flash",
+    "selectedTabs": [
+      "SRAM 读写测试"
+    ],
+    "width": 1024
+  },
+  {
+    "documentWidth": 1024,
+    "duplicateIds": 0,
+    "page": "tab-dbg",
+    "selectedTabs": [
+      "栈帧",
+      "异常"
+    ],
+    "width": 1024
+  },
+  {
+    "documentWidth": 1024,
+    "duplicateIds": 0,
+    "page": "tab-spi",
+    "selectedTabs": [
+      "连接",
+      "寄存器"
+    ],
+    "summary": "控制已连接 · 数据已连接",
+    "width": 1024
+  },
+  {
+    "documentWidth": 1024,
+    "duplicateIds": 0,
+    "page": "tab-panel",
+    "selectedTabs": [
+      "帮助",
+      "读回"
+    ],
+    "summary": "共享 SPI：控制已连接 · 数据已连接",
+    "width": 1024
+  },
+  {
+    "documentWidth": 1024,
+    "duplicateIds": 0,
+    "page": "tab-spicdc",
+    "selectedTabs": [],
+    "summary": "转发未启动 · 接收口未打开",
+    "width": 1024
+  },
+  {
+    "documentWidth": 1024,
+    "duplicateIds": 0,
+    "page": "tab-swo",
+    "selectedTabs": [
+      "录制"
+    ],
+    "width": 1024
+  },
+  {
+    "documentWidth": 1024,
+    "duplicateIds": 0,
+    "page": "tab-etm",
+    "selectedTabs": [],
+    "width": 1024
+  },
+  {
+    "documentWidth": 1024,
+    "duplicateIds": 0,
+    "page": "tab-i2c",
+    "selectedTabs": [
+      "帮助",
+      "实时值"
+    ],
+    "width": 1024
+  },
+  {
+    "documentWidth": 1024,
+    "duplicateIds": 0,
+    "page": "tab-analog",
+    "selectedTabs": [
+      "ADC 示波器"
+    ],
+    "width": 1024
+  },
+  {
+    "documentWidth": 1024,
+    "duplicateIds": 0,
+    "page": "tab-gen",
+    "selectedTabs": [
+      "ETM 桥",
+      "Makefile.jlink",
+      "start-etm-bridge.bat",
+      "rtt-bridge.mjs"
+    ],
+    "width": 1024
+  },
+  {
+    "documentWidth": 381,
+    "duplicateIds": 0,
+    "page": "tab-serial",
+    "selectedTabs": [],
+    "width": 390
+  },
+  {
+    "documentWidth": 381,
+    "duplicateIds": 0,
+    "page": "tab-terminal",
+    "selectedTabs": [],
+    "width": 390
+  },
+  {
+    "documentWidth": 381,
+    "duplicateIds": 0,
+    "page": "tab-rtt",
+    "selectedTabs": [],
+    "width": 390
+  },
+  {
+    "documentWidth": 381,
+    "duplicateIds": 0,
+    "page": "tab-rttcdc",
+    "selectedTabs": [],
+    "summary": "转发未启动 · 接收口未打开",
+    "width": 390
+  },
+  {
+    "documentWidth": 381,
+    "duplicateIds": 0,
+    "page": "tab-scope",
+    "selectedTabs": [
+      "帮助"
+    ],
+    "summary": "探针未连接 · 数据未连接",
+    "width": 390
+  },
+  {
+    "documentWidth": 381,
+    "duplicateIds": 0,
+    "page": "tab-flash",
+    "selectedTabs": [
+      "SRAM 读写测试"
+    ],
+    "width": 390
+  },
+  {
+    "documentWidth": 381,
+    "duplicateIds": 0,
+    "page": "tab-dbg",
+    "selectedTabs": [
+      "栈帧",
+      "异常"
+    ],
+    "width": 390
+  },
+  {
+    "documentWidth": 381,
+    "duplicateIds": 0,
+    "page": "tab-spi",
+    "selectedTabs": [
+      "连接",
+      "寄存器"
+    ],
+    "summary": "控制已连接 · 数据已连接",
+    "width": 390
+  },
+  {
+    "documentWidth": 381,
+    "duplicateIds": 0,
+    "page": "tab-panel",
+    "selectedTabs": [
+      "帮助",
+      "读回"
+    ],
+    "summary": "共享 SPI：控制已连接 · 数据已连接",
+    "width": 390
+  },
+  {
+    "documentWidth": 381,
+    "duplicateIds": 0,
+    "page": "tab-spicdc",
+    "selectedTabs": [],
+    "summary": "转发未启动 · 接收口未打开",
+    "width": 390
+  },
+  {
+    "documentWidth": 381,
+    "duplicateIds": 0,
+    "page": "tab-swo",
+    "selectedTabs": [
+      "录制"
+    ],
+    "width": 390
+  },
+  {
+    "documentWidth": 390,
+    "duplicateIds": 0,
+    "page": "tab-etm",
+    "selectedTabs": [],
+    "width": 390
+  },
+  {
+    "documentWidth": 381,
+    "duplicateIds": 0,
+    "page": "tab-i2c",
+    "selectedTabs": [
+      "帮助",
+      "实时值"
+    ],
+    "width": 390
+  },
+  {
+    "documentWidth": 381,
+    "duplicateIds": 0,
+    "page": "tab-analog",
+    "selectedTabs": [
+      "ADC 示波器"
+    ],
+    "width": 390
+  },
+  {
+    "documentWidth": 381,
+    "duplicateIds": 0,
+    "page": "tab-gen",
+    "selectedTabs": [
+      "ETM 桥",
+      "Makefile.jlink",
+      "start-etm-bridge.bat",
+      "rtt-bridge.mjs"
+    ],
+    "width": 390
+  }
+]

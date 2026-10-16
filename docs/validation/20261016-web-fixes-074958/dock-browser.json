@@ -1,0 +1,14 @@
+{
+  "endpoint": "假探针（无需硬件）· 档位 0 · 板级默认",
+  "focused": "寄存器",
+  "roles": [
+    "tab",
+    "tab",
+    "tab",
+    "tab",
+    "tab",
+    "tab"
+  ],
+  "selected": "寄存器",
+  "sharedConnected": "假探针（无需硬件）"
+}

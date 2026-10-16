@@ -794,6 +794,8 @@ test-probe:
 	$(NODE) tools/selftest/spi-teardown.test.mjs
 
 test-stability: test-probe
+	$(NODE) tools/selftest/web-review-fixes.test.mjs
+	$(NODE) tools/selftest/web-review-maintenance.test.mjs
 	$(NODE) tools/selftest/bridge-memory.test.mjs
 	$(NODE) tools/selftest/bridge-rpc.test.mjs
 	$(NODE) tools/selftest/spi-runner-lifecycle.test.mjs

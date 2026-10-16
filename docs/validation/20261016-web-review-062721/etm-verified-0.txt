@@ -1,0 +1,910 @@
+- banner:
+  - generic "串口 / RTT 工具箱"
+  - navigation "工具切换":
+    - button "串口助手"
+    - button "终端"
+    - button "RTT Viewer"
+    - button "RTT 转发"
+    - button "J-Scope 波形"
+    - button "烧录器"
+    - button "调试器"
+    - generic "更多功能，当前页面：ETM 执行轨迹": 更多功能 ▾
+  - generic: 串口：未连接
+  - generic "连接支持该功能的 akaLinkPro 固件后可用。":
+    - checkbox "NRST 开漏" [checked] [disabled]
+    - text: NRST 开漏
+  - button "全局复位"
+  - button "全屏"
+  - status "当前页面没有功能连接实体探针；串口连接状态单独显示。": 探针：未使用
+  - generic "帮助"
+- main:
+  - iframe [active] [id="etm-frame"]:
+    - complementary:
+      - text: 目标与录制
+      - generic: ELF → 断点 → 时钟 → 采集
+      - tablist "采集步骤":
+        - tab "1 调试" [selected]
+        - tab "2 时钟"
+        - tab "3 采集"
+        - tab "4 文件"
+      - tabpanel "1 调试":
+        - heading "① 载入目标 ELF" [level=2]
+        - button "浏览载入 ELF…"
+        - paragraph: 尚未载入 ELF
+        - generic "配套源码（可选）"
+        - heading "② 连接与识别目标" [level=2]
+        - text: 芯片预置
+        - combobox "芯片预置":
+          - option "自动识别" [selected]
+          - option "STM32F103ZE / 高容量 F103（PE2～PE6）"
+          - option "STM32F103（标准/超大容量，Trace 待验收）"
+          - option "STM32F407 / F405"
+          - option "STM32H743 / H742 / H750 / H753"
+          - option "STM32H7B0 / H7A3 / H7B3"
+        - button "连接探针"
+        - button "断开" [disabled]
+        - paragraph: 未连接 · 可先添加断点。
+        - paragraph: F103ZE / H7B0 已验收；其余型号 Trace 待适配。
+        - heading "③ 添加断点" [level=2]
+        - textbox "搜索 ELF 函数" [disabled]:
+          - /placeholder: 搜索 ELF 函数…
+        - generic "ELF 函数列表": 先浏览载入 ELF
+        - paragraph: ＋ 添加断点，圆点选择采集起点。
+        - textbox "断点命令" [disabled]:
+          - /placeholder: b main:199
+        - button "添加" [disabled]
+        - generic "断点命令格式"
+        - heading "④ 断点与采集起点 未连接" [level=2]
+        - generic: 无断点；从函数前 ＋ 或命令添加。
+        - paragraph: 请选择一个断点作为采集起点
+        - button "运行至起点" [disabled]
+        - button "清空断点" [disabled]
+        - button "复位至起点" [disabled]
+        - button "暂停" [disabled]
+        - button "继续" [disabled]
+        - paragraph: 当前 PC：未连接
+        - checkbox "联动采集前停在所选断点" [checked]
+        - text: 联动采集前停在所选断点
+        - checkbox "先复位，再运行至起点" [checked]
+        - text: 先复位，再运行至起点
+        - paragraph: 列表中的圆点选择采集起点；采集期间暂时停用本页断点，结束后恢复。启动入口采集仍未验收。
+        - button "下一步：核对时钟 →"
+      - paragraph: 按 1→2→3 设置，选择一个断点作为起点，再联动采集。
+      - button "联动采集" [disabled]
+      - button "停止采集" [disabled]
+    - main:
+      - button "收起控制"
+      - button "使用说明"
+      - combobox "已保存记录":
+        - option "选择记录…"
+        - option "Demo · 70/35 MHz · 1 ms" [selected]
+      - button "打开"
+      - generic: 47,537 路径 · 2,876 包 · 1 中断
+      - generic "采集时镜像已核对 · 未知条件 39 条 · 包问题 0 · overflow 0 · 捕获边界保留"
+      - button "报告"
+      - navigation "分析视图":
+        - button "执行流" [active]
+        - button "调用统计"
+        - button "火焰图"
+        - button "热点"
+        - button "ETMv4 包"
+        - button "可信区段"
+      - button "历史调用栈" [expanded]
+      - button "←"
+      - button "→"
+      - combobox "历史导航类型":
+        - option "指令" [selected]
+        - option "源码位置"
+        - option "调用"
+        - option "返回"
+        - option "异常"
+        - option "未知 / 边界"
+      - textbox "历史定位":
+        - /placeholder: 序号或 0xPC
+      - button "定位"
+      - textbox "筛选执行记录":
+        - /placeholder: 搜索函数、PC、文件或指令…
+      - checkbox "隐藏未成立分支"
+      - text: 隐藏未成立分支
+      - generic: 47,542 条
+      - generic: "#2 · 0x08000b14"
+      - strong: 函数执行轨迹
+      - generic: "#0～#47,541 · 42,209 条已证实 · 39 条未知 · 5,289 条未成立 · 5 个边界 / 中断（图中合并为 3 段）"
+      - group "图表缩放":
+        - button "缩小" [disabled]:
+        - button "放大":
+        - button "适配全部区间" [disabled]:
+      - button "收起轨迹图" [expanded]
+      - slider "执行序号函数轨迹；左右键定位，拖动选择区间"
+      - generic: 横轴是执行序号，不代表时间；拖动框选局部区间，点击定位指令。黄色为状态未知，灰色为未成立路径；竖线标示同步、缺口或中断事件。
+      - table:
+        - rowgroup:
+          - row "序号 PC 机器码 / 指令 函数 / 源码":
+            - columnheader "序号"
+            - columnheader "PC"
+            - columnheader "机器码 / 指令"
+            - columnheader "函数 / 源码"
+        - rowgroup:
+          - row "0 未同步边界（初始化或缺口）":
+            - cell "0"
+            - cell "未同步边界（初始化或缺口）"
+          - row "1 跟踪开启边界":
+            - cell "1"
+            - cell "跟踪开启边界"
+          - 'row "2 0x08000b14 push {r4, lr} spi_trace_ready :6"':
+            - cell "2"
+            - cell "0x08000b14"
+            - 'cell "push {r4, lr}"'
+            - cell "spi_trace_ready :6"
+          - 'row "3 0x08000b16 bl #0x8001b0c spi_trace_ready :7"':
+            - cell "3"
+            - cell "0x08000b16"
+            - 'cell "bl #0x8001b0c"'
+            - cell "spi_trace_ready :7"
+          - 'row "4 0x08001b0c ldr r3, [pc, #0x1d0] HAL_RCC_GetSysClockFreq :1375"':
+            - cell "4"
+            - cell "0x08001b0c"
+            - 'cell "ldr r3, [pc, #0x1d0]"'
+            - cell "HAL_RCC_GetSysClockFreq :1375"
+          - 'row "5 0x08001b0e ldr r3, [r3, #0x10] HAL_RCC_GetSysClockFreq :1375"':
+            - cell "5"
+            - cell "0x08001b0e"
+            - 'cell "ldr r3, [r3, #0x10]"'
+            - cell "HAL_RCC_GetSysClockFreq :1375"
+          - 'row "6 0x08001b10 and r3, r3, #0x38 HAL_RCC_GetSysClockFreq :1375"':
+            - cell "6"
+            - cell "0x08001b10"
+            - 'cell "and r3, r3, #0x38"'
+            - cell "HAL_RCC_GetSysClockFreq :1375"
+          - 'row "7 0x08001b14 cmp r3, #0x10 HAL_RCC_GetSysClockFreq :1375"':
+            - cell "7"
+            - cell "0x08001b14"
+            - 'cell "cmp r3, #0x10"'
+            - cell "HAL_RCC_GetSysClockFreq :1375"
+          - 'row "8 0x08001b16 beq.w #0x8001cd6 HAL_RCC_GetSysClockFreq :1375"':
+            - cell "8"
+            - cell "0x08001b16"
+            - 'cell "beq.w #0x8001cd6"'
+            - cell "HAL_RCC_GetSysClockFreq :1375"
+          - 'row "9 0x08001b1a cmp r3, #0x18 HAL_RCC_GetSysClockFreq :1375"':
+            - cell "9"
+            - cell "0x08001b1a"
+            - 'cell "cmp r3, #0x18"'
+            - cell "HAL_RCC_GetSysClockFreq :1375"
+          - 'row "10 0x08001b1c beq #0x8001b40 HAL_RCC_GetSysClockFreq :1375"':
+            - cell "10"
+            - cell "0x08001b1c"
+            - 'cell "beq #0x8001b40"'
+            - cell "HAL_RCC_GetSysClockFreq :1375"
+          - 'row "11 0x08001b40 push {r4} HAL_RCC_GetSysClockFreq :1368"':
+            - cell "11"
+            - cell "0x08001b40"
+            - 'cell "push {r4}"'
+            - cell "HAL_RCC_GetSysClockFreq :1368"
+          - 'row "12 0x08001b42 ldr r2, [pc, #0x19c] HAL_RCC_GetSysClockFreq :1403"':
+            - cell "12"
+            - cell "0x08001b42"
+            - 'cell "ldr r2, [pc, #0x19c]"'
+            - cell "HAL_RCC_GetSysClockFreq :1403"
+          - 'row "13 0x08001b44 ldr r1, [r2, #0x28] HAL_RCC_GetSysClockFreq :1403"':
+            - cell "13"
+            - cell "0x08001b44"
+            - 'cell "ldr r1, [r2, #0x28]"'
+            - cell "HAL_RCC_GetSysClockFreq :1403"
+          - 'row "14 0x08001b46 and r1, r1, #3 HAL_RCC_GetSysClockFreq :1403"':
+            - cell "14"
+            - cell "0x08001b46"
+            - 'cell "and r1, r1, #3"'
+            - cell "HAL_RCC_GetSysClockFreq :1403"
+          - 'row "15 0x08001b4a ldr r4, [r2, #0x28] HAL_RCC_GetSysClockFreq :1404"':
+            - cell "15"
+            - cell "0x08001b4a"
+            - 'cell "ldr r4, [r2, #0x28]"'
+            - cell "HAL_RCC_GetSysClockFreq :1404"
+          - 'row "16 0x08001b4c ubfx r0, r4, #4, #6 HAL_RCC_GetSysClockFreq :1404"':
+            - cell "16"
+            - cell "0x08001b4c"
+            - 'cell "ubfx r0, r4, #4, #6"'
+            - cell "HAL_RCC_GetSysClockFreq :1404"
+          - 'row "17 0x08001b50 ldr r3, [r2, #0x2c] HAL_RCC_GetSysClockFreq :1405"':
+            - cell "17"
+            - cell "0x08001b50"
+            - 'cell "ldr r3, [r2, #0x2c]"'
+            - cell "HAL_RCC_GetSysClockFreq :1405"
+          - 'row "18 0x08001b52 and ip, r3, #1 HAL_RCC_GetSysClockFreq :1405"':
+            - cell "18"
+            - cell "0x08001b52"
+            - 'cell "and ip, r3, #1"'
+            - cell "HAL_RCC_GetSysClockFreq :1405"
+          - 'row "19 0x08001b56 ldr r3, [r2, #0x34] HAL_RCC_GetSysClockFreq :1406"':
+            - cell "19"
+            - cell "0x08001b56"
+            - 'cell "ldr r3, [r2, #0x34]"'
+            - cell "HAL_RCC_GetSysClockFreq :1406"
+          - 'row "20 0x08001b58 ubfx r3, r3, #3, #0xd HAL_RCC_GetSysClockFreq :1406"':
+            - cell "20"
+            - cell "0x08001b58"
+            - 'cell "ubfx r3, r3, #3, #0xd"'
+            - cell "HAL_RCC_GetSysClockFreq :1406"
+          - row "21 0x08001b5c mul r3, ip, r3 HAL_RCC_GetSysClockFreq :1406":
+            - cell "21"
+            - cell "0x08001b5c"
+            - cell "mul r3, ip, r3"
+            - cell "HAL_RCC_GetSysClockFreq :1406"
+          - row "22 0x08001b60 vmov s15, r3 HAL_RCC_GetSysClockFreq :1406":
+            - cell "22"
+            - cell "0x08001b60"
+            - cell "vmov s15, r3"
+            - cell "HAL_RCC_GetSysClockFreq :1406"
+          - row "23 0x08001b64 vcvt.f32.u32 s15, s15 HAL_RCC_GetSysClockFreq :1406":
+            - cell "23"
+            - cell "0x08001b64"
+            - cell "vcvt.f32.u32 s15, s15"
+            - cell "HAL_RCC_GetSysClockFreq :1406"
+          - 'row "24 0x08001b68 tst.w r4, #0x3f0 HAL_RCC_GetSysClockFreq :1408"':
+            - cell "24"
+            - cell "0x08001b68"
+            - 'cell "tst.w r4, #0x3f0"'
+            - cell "HAL_RCC_GetSysClockFreq :1408"
+          - 'row "25 0x08001b6c beq.w #0x8001c96 HAL_RCC_GetSysClockFreq :1408"':
+            - cell "25"
+            - cell "0x08001b6c"
+            - 'cell "beq.w #0x8001c96"'
+            - cell "HAL_RCC_GetSysClockFreq :1408"
+          - 'row "26 0x08001b70 cmp r1, #1 HAL_RCC_GetSysClockFreq :1410"':
+            - cell "26"
+            - cell "0x08001b70"
+            - 'cell "cmp r1, #1"'
+            - cell "HAL_RCC_GetSysClockFreq :1410"
+          - 'row "27 0x08001b72 beq #0x8001c40 HAL_RCC_GetSysClockFreq :1410"':
+            - cell "27"
+            - cell "0x08001b72"
+            - 'cell "beq #0x8001c40"'
+            - cell "HAL_RCC_GetSysClockFreq :1410"
+          - 'row "28 0x08001b74 cmp r1, #2 HAL_RCC_GetSysClockFreq :1410"':
+            - cell "28"
+            - cell "0x08001b74"
+            - 'cell "cmp r1, #2"'
+            - cell "HAL_RCC_GetSysClockFreq :1410"
+          - 'row "29 0x08001b76 beq.w #0x8001c9c HAL_RCC_GetSysClockFreq :1410"':
+            - cell "29"
+            - cell "0x08001b76"
+            - 'cell "beq.w #0x8001c9c"'
+            - cell "HAL_RCC_GetSysClockFreq :1410"
+          - row "30 0x08001c9c vmov s14, r0 HAL_RCC_GetSysClockFreq :1430":
+            - cell "30"
+            - cell "0x08001c9c"
+            - cell "vmov s14, r0"
+            - cell "HAL_RCC_GetSysClockFreq :1430"
+          - row "31 0x08001ca0 vcvt.f32.u32 s13, s14 HAL_RCC_GetSysClockFreq :1430":
+            - cell "31"
+            - cell "0x08001ca0"
+            - cell "vcvt.f32.u32 s13, s14"
+            - cell "HAL_RCC_GetSysClockFreq :1430"
+          - 'row "32 0x08001ca4 vldr s12, [pc, #0x50] HAL_RCC_GetSysClockFreq :1430"':
+            - cell "32"
+            - cell "0x08001ca4"
+            - 'cell "vldr s12, [pc, #0x50]"'
+            - cell "HAL_RCC_GetSysClockFreq :1430"
+          - row "33 0x08001ca8 vdiv.f32 s14, s12, s13 HAL_RCC_GetSysClockFreq :1430":
+            - cell "33"
+            - cell "0x08001ca8"
+            - cell "vdiv.f32 s14, s12, s13"
+            - cell "HAL_RCC_GetSysClockFreq :1430"
+          - 'row "34 0x08001cac ldr r3, [pc, #0x30] HAL_RCC_GetSysClockFreq :1430"':
+            - cell "34"
+            - cell "0x08001cac"
+            - 'cell "ldr r3, [pc, #0x30]"'
+            - cell "HAL_RCC_GetSysClockFreq :1430"
+          - 'row "35 0x08001cae ldr r3, [r3, #0x30] HAL_RCC_GetSysClockFreq :1430"':
+            - cell "35"
+            - cell "0x08001cae"
+            - 'cell "ldr r3, [r3, #0x30]"'
+            - cell "HAL_RCC_GetSysClockFreq :1430"
+          - 'row "36 0x08001cb0 ubfx r3, r3, #0, #9 HAL_RCC_GetSysClockFreq :1430"':
+            - cell "36"
+            - cell "0x08001cb0"
+            - 'cell "ubfx r3, r3, #0, #9"'
+            - cell "HAL_RCC_GetSysClockFreq :1430"
+          - row "37 0x08001cb4 vmov s13, r3 HAL_RCC_GetSysClockFreq :1430":
+            - cell "37"
+            - cell "0x08001cb4"
+            - cell "vmov s13, r3"
+            - cell "HAL_RCC_GetSysClockFreq :1430"
+          - row "38 0x08001cb8 vcvt.f32.u32 s13, s13 HAL_RCC_GetSysClockFreq :1430":
+            - cell "38"
+            - cell "0x08001cb8"
+            - cell "vcvt.f32.u32 s13, s13"
+            - cell "HAL_RCC_GetSysClockFreq :1430"
+          - 'row "39 0x08001cbc vldr s12, [pc, #0x30] HAL_RCC_GetSysClockFreq :1430"':
+            - cell "39"
+            - cell "0x08001cbc"
+            - 'cell "vldr s12, [pc, #0x30]"'
+            - cell "HAL_RCC_GetSysClockFreq :1430"
+          - row "40 0x08001cc0 vmul.f32 s15, s15, s12 HAL_RCC_GetSysClockFreq :1430":
+            - cell "40"
+            - cell "0x08001cc0"
+            - cell "vmul.f32 s15, s15, s12"
+            - cell "HAL_RCC_GetSysClockFreq :1430"
+          - row "41 0x08001cc4 vadd.f32 s15, s13, s15 HAL_RCC_GetSysClockFreq :1430":
+            - cell "41"
+            - cell "0x08001cc4"
+            - cell "vadd.f32 s15, s13, s15"
+            - cell "HAL_RCC_GetSysClockFreq :1430"
+          - 'row "42 0x08001cc8 vmov.f32 s13, #1.000000e+00 HAL_RCC_GetSysClockFreq :1430"':
+            - cell "42"
+            - cell "0x08001cc8"
+            - 'cell "vmov.f32 s13, #1.000000e+00"'
+            - cell "HAL_RCC_GetSysClockFreq :1430"
+          - row "43 0x08001ccc vadd.f32 s15, s15, s13 HAL_RCC_GetSysClockFreq :1430":
+            - cell "43"
+            - cell "0x08001ccc"
+            - cell "vadd.f32 s15, s15, s13"
+            - cell "HAL_RCC_GetSysClockFreq :1430"
+          - row "44 0x08001cd0 vmul.f32 s14, s14, s15 HAL_RCC_GetSysClockFreq :1430":
+            - cell "44"
+            - cell "0x08001cd0"
+            - cell "vmul.f32 s14, s14, s15"
+            - cell "HAL_RCC_GetSysClockFreq :1430"
+          - 'row "45 0x08001cd4 b #0x8001c78 HAL_RCC_GetSysClockFreq :1431"':
+            - cell "45"
+            - cell "0x08001cd4"
+            - 'cell "b #0x8001c78"'
+            - cell "HAL_RCC_GetSysClockFreq :1431"
+          - 'row "46 0x08001c78 ldr r3, [pc, #0x64] HAL_RCC_GetSysClockFreq :1437"':
+            - cell "46"
+            - cell "0x08001c78"
+            - 'cell "ldr r3, [pc, #0x64]"'
+            - cell "HAL_RCC_GetSysClockFreq :1437"
+          - 'row "47 0x08001c7a ldr r3, [r3, #0x30] HAL_RCC_GetSysClockFreq :1437"':
+            - cell "47"
+            - cell "0x08001c7a"
+            - 'cell "ldr r3, [r3, #0x30]"'
+            - cell "HAL_RCC_GetSysClockFreq :1437"
+          - 'row "48 0x08001c7c ubfx r3, r3, #9, #7 HAL_RCC_GetSysClockFreq :1437"':
+            - cell "48"
+            - cell "0x08001c7c"
+            - 'cell "ubfx r3, r3, #9, #7"'
+            - cell "HAL_RCC_GetSysClockFreq :1437"
+          - 'row "49 0x08001c80 adds r3, #1 HAL_RCC_GetSysClockFreq :1437"':
+            - cell "49"
+            - cell "0x08001c80"
+            - 'cell "adds r3, #1"'
+            - cell "HAL_RCC_GetSysClockFreq :1437"
+          - row "50 0x08001c82 vmov s15, r3 HAL_RCC_GetSysClockFreq :1438":
+            - cell "50"
+            - cell "0x08001c82"
+            - cell "vmov s15, r3"
+            - cell "HAL_RCC_GetSysClockFreq :1438"
+          - row "51 0x08001c86 vcvt.f32.u32 s15, s15 HAL_RCC_GetSysClockFreq :1438":
+            - cell "51"
+            - cell "0x08001c86"
+            - cell "vcvt.f32.u32 s15, s15"
+            - cell "HAL_RCC_GetSysClockFreq :1438"
+          - row "52 0x08001c8a vdiv.f32 s13, s14, s15 HAL_RCC_GetSysClockFreq :1438":
+            - cell "52"
+            - cell "0x08001c8a"
+            - cell "vdiv.f32 s13, s14, s15"
+            - cell "HAL_RCC_GetSysClockFreq :1438"
+          - row "53 0x08001c8e vcvt.u32.f32 s15, s13 HAL_RCC_GetSysClockFreq :1438":
+            - cell "53"
+            - cell "0x08001c8e"
+            - cell "vcvt.u32.f32 s15, s13"
+            - cell "HAL_RCC_GetSysClockFreq :1438"
+          - row "54 0x08001c92 vmov r0, s15 HAL_RCC_GetSysClockFreq :1438":
+            - cell "54"
+            - cell "0x08001c92"
+            - cell "vmov r0, s15"
+            - cell "HAL_RCC_GetSysClockFreq :1438"
+          - 'row "55 0x08001c96 ldr r4, [sp], #4 HAL_RCC_GetSysClockFreq :1452"':
+            - cell "55"
+            - cell "0x08001c96"
+            - 'cell "ldr r4, [sp], #4"'
+            - cell "HAL_RCC_GetSysClockFreq :1452"
+          - row "56 0x08001c9a bx lr HAL_RCC_GetSysClockFreq :1452":
+            - cell "56"
+            - cell "0x08001c9a"
+            - cell "bx lr"
+            - cell "HAL_RCC_GetSysClockFreq :1452"
+          - 'row "57 0x08000b1a ldr r4, [pc, #0x1c] spi_trace_ready :7"':
+            - cell "57"
+            - cell "0x08000b1a"
+            - 'cell "ldr r4, [pc, #0x1c]"'
+            - cell "spi_trace_ready :7"
+          - 'row "58 0x08000b1c str r0, [r4, #8] spi_trace_ready :7"':
+            - cell "58"
+            - cell "0x08000b1c"
+            - 'cell "str r0, [r4, #8]"'
+            - cell "spi_trace_ready :7"
+          - 'row "59 0x08000b1e bl #0x8001f94 spi_trace_ready :8"':
+            - cell "59"
+            - cell "0x08000b1e"
+            - 'cell "bl #0x8001f94"'
+            - cell "spi_trace_ready :8"
+          - 'row "60 0x08001f94 push {r3, lr} HAL_RCC_GetHCLKFreq :1465"':
+            - cell "60"
+            - cell "0x08001f94"
+            - 'cell "push {r3, lr}"'
+            - cell "HAL_RCC_GetHCLKFreq :1465"
+          - 'row "61 0x08001f96 bl #0x8001b0c HAL_RCC_GetHCLKFreq :1471"':
+            - cell "61"
+            - cell "0x08001f96"
+            - 'cell "bl #0x8001b0c"'
+            - cell "HAL_RCC_GetHCLKFreq :1471"
+          - 'row "62 0x08001b0c ldr r3, [pc, #0x1d0] HAL_RCC_GetSysClockFreq :1375"':
+            - cell "62"
+            - cell "0x08001b0c"
+            - 'cell "ldr r3, [pc, #0x1d0]"'
+            - cell "HAL_RCC_GetSysClockFreq :1375"
+          - 'row "63 0x08001b0e ldr r3, [r3, #0x10] HAL_RCC_GetSysClockFreq :1375"':
+            - cell "63"
+            - cell "0x08001b0e"
+            - 'cell "ldr r3, [r3, #0x10]"'
+            - cell "HAL_RCC_GetSysClockFreq :1375"
+          - 'row "64 0x08001b10 and r3, r3, #0x38 HAL_RCC_GetSysClockFreq :1375"':
+            - cell "64"
+            - cell "0x08001b10"
+            - 'cell "and r3, r3, #0x38"'
+            - cell "HAL_RCC_GetSysClockFreq :1375"
+          - 'row "65 0x08001b14 cmp r3, #0x10 HAL_RCC_GetSysClockFreq :1375"':
+            - cell "65"
+            - cell "0x08001b14"
+            - 'cell "cmp r3, #0x10"'
+            - cell "HAL_RCC_GetSysClockFreq :1375"
+          - 'row "66 0x08001b16 beq.w #0x8001cd6 HAL_RCC_GetSysClockFreq :1375"':
+            - cell "66"
+            - cell "0x08001b16"
+            - 'cell "beq.w #0x8001cd6"'
+            - cell "HAL_RCC_GetSysClockFreq :1375"
+          - 'row "67 0x08001b1a cmp r3, #0x18 HAL_RCC_GetSysClockFreq :1375"':
+            - cell "67"
+            - cell "0x08001b1a"
+            - 'cell "cmp r3, #0x18"'
+            - cell "HAL_RCC_GetSysClockFreq :1375"
+          - 'row "68 0x08001b1c beq #0x8001b40 HAL_RCC_GetSysClockFreq :1375"':
+            - cell "68"
+            - cell "0x08001b1c"
+            - 'cell "beq #0x8001b40"'
+            - cell "HAL_RCC_GetSysClockFreq :1375"
+          - 'row "69 0x08001b40 push {r4} HAL_RCC_GetSysClockFreq :1368"':
+            - cell "69"
+            - cell "0x08001b40"
+            - 'cell "push {r4}"'
+            - cell "HAL_RCC_GetSysClockFreq :1368"
+          - 'row "70 0x08001b42 ldr r2, [pc, #0x19c] HAL_RCC_GetSysClockFreq :1403"':
+            - cell "70"
+            - cell "0x08001b42"
+            - 'cell "ldr r2, [pc, #0x19c]"'
+            - cell "HAL_RCC_GetSysClockFreq :1403"
+          - 'row "71 0x08001b44 ldr r1, [r2, #0x28] HAL_RCC_GetSysClockFreq :1403"':
+            - cell "71"
+            - cell "0x08001b44"
+            - 'cell "ldr r1, [r2, #0x28]"'
+            - cell "HAL_RCC_GetSysClockFreq :1403"
+          - 'row "72 0x08001b46 and r1, r1, #3 HAL_RCC_GetSysClockFreq :1403"':
+            - cell "72"
+            - cell "0x08001b46"
+            - 'cell "and r1, r1, #3"'
+            - cell "HAL_RCC_GetSysClockFreq :1403"
+          - 'row "73 0x08001b4a ldr r4, [r2, #0x28] HAL_RCC_GetSysClockFreq :1404"':
+            - cell "73"
+            - cell "0x08001b4a"
+            - 'cell "ldr r4, [r2, #0x28]"'
+            - cell "HAL_RCC_GetSysClockFreq :1404"
+          - 'row "74 0x08001b4c ubfx r0, r4, #4, #6 HAL_RCC_GetSysClockFreq :1404"':
+            - cell "74"
+            - cell "0x08001b4c"
+            - 'cell "ubfx r0, r4, #4, #6"'
+            - cell "HAL_RCC_GetSysClockFreq :1404"
+          - 'row "75 0x08001b50 ldr r3, [r2, #0x2c] HAL_RCC_GetSysClockFreq :1405"':
+            - cell "75"
+            - cell "0x08001b50"
+            - 'cell "ldr r3, [r2, #0x2c]"'
+            - cell "HAL_RCC_GetSysClockFreq :1405"
+          - 'row "76 0x08001b52 and ip, r3, #1 HAL_RCC_GetSysClockFreq :1405"':
+            - cell "76"
+            - cell "0x08001b52"
+            - 'cell "and ip, r3, #1"'
+            - cell "HAL_RCC_GetSysClockFreq :1405"
+          - 'row "77 0x08001b56 ldr r3, [r2, #0x34] HAL_RCC_GetSysClockFreq :1406"':
+            - cell "77"
+            - cell "0x08001b56"
+            - 'cell "ldr r3, [r2, #0x34]"'
+            - cell "HAL_RCC_GetSysClockFreq :1406"
+          - 'row "78 0x08001b58 ubfx r3, r3, #3, #0xd HAL_RCC_GetSysClockFreq :1406"':
+            - cell "78"
+            - cell "0x08001b58"
+            - 'cell "ubfx r3, r3, #3, #0xd"'
+            - cell "HAL_RCC_GetSysClockFreq :1406"
+          - row "79 0x08001b5c mul r3, ip, r3 HAL_RCC_GetSysClockFreq :1406":
+            - cell "79"
+            - cell "0x08001b5c"
+            - cell "mul r3, ip, r3"
+            - cell "HAL_RCC_GetSysClockFreq :1406"
+          - row "80 0x08001b60 vmov s15, r3 HAL_RCC_GetSysClockFreq :1406":
+            - cell "80"
+            - cell "0x08001b60"
+            - cell "vmov s15, r3"
+            - cell "HAL_RCC_GetSysClockFreq :1406"
+          - row "81 0x08001b64 vcvt.f32.u32 s15, s15 HAL_RCC_GetSysClockFreq :1406":
+            - cell "81"
+            - cell "0x08001b64"
+            - cell "vcvt.f32.u32 s15, s15"
+            - cell "HAL_RCC_GetSysClockFreq :1406"
+          - 'row "82 0x08001b68 tst.w r4, #0x3f0 HAL_RCC_GetSysClockFreq :1408"':
+            - cell "82"
+            - cell "0x08001b68"
+            - 'cell "tst.w r4, #0x3f0"'
+            - cell "HAL_RCC_GetSysClockFreq :1408"
+          - 'row "83 0x08001b6c beq.w #0x8001c96 HAL_RCC_GetSysClockFreq :1408"':
+            - cell "83"
+            - cell "0x08001b6c"
+            - 'cell "beq.w #0x8001c96"'
+            - cell "HAL_RCC_GetSysClockFreq :1408"
+          - 'row "84 0x08001b70 cmp r1, #1 HAL_RCC_GetSysClockFreq :1410"':
+            - cell "84"
+            - cell "0x08001b70"
+            - 'cell "cmp r1, #1"'
+            - cell "HAL_RCC_GetSysClockFreq :1410"
+          - 'row "85 0x08001b72 beq #0x8001c40 HAL_RCC_GetSysClockFreq :1410"':
+            - cell "85"
+            - cell "0x08001b72"
+            - 'cell "beq #0x8001c40"'
+            - cell "HAL_RCC_GetSysClockFreq :1410"
+          - 'row "86 0x08001b74 cmp r1, #2 HAL_RCC_GetSysClockFreq :1410"':
+            - cell "86"
+            - cell "0x08001b74"
+            - 'cell "cmp r1, #2"'
+            - cell "HAL_RCC_GetSysClockFreq :1410"
+          - 'row "87 0x08001b76 beq.w #0x8001c9c HAL_RCC_GetSysClockFreq :1410"':
+            - cell "87"
+            - cell "0x08001b76"
+            - 'cell "beq.w #0x8001c9c"'
+            - cell "HAL_RCC_GetSysClockFreq :1410"
+          - row "88 0x08001c9c vmov s14, r0 HAL_RCC_GetSysClockFreq :1430":
+            - cell "88"
+            - cell "0x08001c9c"
+            - cell "vmov s14, r0"
+            - cell "HAL_RCC_GetSysClockFreq :1430"
+          - row "89 0x08001ca0 vcvt.f32.u32 s13, s14 HAL_RCC_GetSysClockFreq :1430":
+            - cell "89"
+            - cell "0x08001ca0"
+            - cell "vcvt.f32.u32 s13, s14"
+            - cell "HAL_RCC_GetSysClockFreq :1430"
+          - 'row "90 0x08001ca4 vldr s12, [pc, #0x50] HAL_RCC_GetSysClockFreq :1430"':
+            - cell "90"
+            - cell "0x08001ca4"
+            - 'cell "vldr s12, [pc, #0x50]"'
+            - cell "HAL_RCC_GetSysClockFreq :1430"
+          - row "91 0x08001ca8 vdiv.f32 s14, s12, s13 HAL_RCC_GetSysClockFreq :1430":
+            - cell "91"
+            - cell "0x08001ca8"
+            - cell "vdiv.f32 s14, s12, s13"
+            - cell "HAL_RCC_GetSysClockFreq :1430"
+          - 'row "92 0x08001cac ldr r3, [pc, #0x30] HAL_RCC_GetSysClockFreq :1430"':
+            - cell "92"
+            - cell "0x08001cac"
+            - 'cell "ldr r3, [pc, #0x30]"'
+            - cell "HAL_RCC_GetSysClockFreq :1430"
+          - 'row "93 0x08001cae ldr r3, [r3, #0x30] HAL_RCC_GetSysClockFreq :1430"':
+            - cell "93"
+            - cell "0x08001cae"
+            - 'cell "ldr r3, [r3, #0x30]"'
+            - cell "HAL_RCC_GetSysClockFreq :1430"
+          - 'row "94 0x08001cb0 ubfx r3, r3, #0, #9 HAL_RCC_GetSysClockFreq :1430"':
+            - cell "94"
+            - cell "0x08001cb0"
+            - 'cell "ubfx r3, r3, #0, #9"'
+            - cell "HAL_RCC_GetSysClockFreq :1430"
+          - row "95 0x08001cb4 vmov s13, r3 HAL_RCC_GetSysClockFreq :1430":
+            - cell "95"
+            - cell "0x08001cb4"
+            - cell "vmov s13, r3"
+            - cell "HAL_RCC_GetSysClockFreq :1430"
+          - row "96 0x08001cb8 vcvt.f32.u32 s13, s13 HAL_RCC_GetSysClockFreq :1430":
+            - cell "96"
+            - cell "0x08001cb8"
+            - cell "vcvt.f32.u32 s13, s13"
+            - cell "HAL_RCC_GetSysClockFreq :1430"
+          - 'row "97 0x08001cbc vldr s12, [pc, #0x30] HAL_RCC_GetSysClockFreq :1430"':
+            - cell "97"
+            - cell "0x08001cbc"
+            - 'cell "vldr s12, [pc, #0x30]"'
+            - cell "HAL_RCC_GetSysClockFreq :1430"
+          - row "98 0x08001cc0 vmul.f32 s15, s15, s12 HAL_RCC_GetSysClockFreq :1430":
+            - cell "98"
+            - cell "0x08001cc0"
+            - cell "vmul.f32 s15, s15, s12"
+            - cell "HAL_RCC_GetSysClockFreq :1430"
+          - row "99 0x08001cc4 vadd.f32 s15, s13, s15 HAL_RCC_GetSysClockFreq :1430":
+            - cell "99"
+            - cell "0x08001cc4"
+            - cell "vadd.f32 s15, s13, s15"
+            - cell "HAL_RCC_GetSysClockFreq :1430"
+          - 'row "100 0x08001cc8 vmov.f32 s13, #1.000000e+00 HAL_RCC_GetSysClockFreq :1430"':
+            - cell "100"
+            - cell "0x08001cc8"
+            - 'cell "vmov.f32 s13, #1.000000e+00"'
+            - cell "HAL_RCC_GetSysClockFreq :1430"
+          - row "101 0x08001ccc vadd.f32 s15, s15, s13 HAL_RCC_GetSysClockFreq :1430":
+            - cell "101"
+            - cell "0x08001ccc"
+            - cell "vadd.f32 s15, s15, s13"
+            - cell "HAL_RCC_GetSysClockFreq :1430"
+          - row "102 0x08001cd0 vmul.f32 s14, s14, s15 HAL_RCC_GetSysClockFreq :1430":
+            - cell "102"
+            - cell "0x08001cd0"
+            - cell "vmul.f32 s14, s14, s15"
+            - cell "HAL_RCC_GetSysClockFreq :1430"
+          - 'row "103 0x08001cd4 b #0x8001c78 HAL_RCC_GetSysClockFreq :1431"':
+            - cell "103"
+            - cell "0x08001cd4"
+            - 'cell "b #0x8001c78"'
+            - cell "HAL_RCC_GetSysClockFreq :1431"
+          - 'row "104 0x08001c78 ldr r3, [pc, #0x64] HAL_RCC_GetSysClockFreq :1437"':
+            - cell "104"
+            - cell "0x08001c78"
+            - 'cell "ldr r3, [pc, #0x64]"'
+            - cell "HAL_RCC_GetSysClockFreq :1437"
+          - 'row "105 0x08001c7a ldr r3, [r3, #0x30] HAL_RCC_GetSysClockFreq :1437"':
+            - cell "105"
+            - cell "0x08001c7a"
+            - 'cell "ldr r3, [r3, #0x30]"'
+            - cell "HAL_RCC_GetSysClockFreq :1437"
+          - 'row "106 0x08001c7c ubfx r3, r3, #9, #7 HAL_RCC_GetSysClockFreq :1437"':
+            - cell "106"
+            - cell "0x08001c7c"
+            - 'cell "ubfx r3, r3, #9, #7"'
+            - cell "HAL_RCC_GetSysClockFreq :1437"
+          - 'row "107 0x08001c80 adds r3, #1 HAL_RCC_GetSysClockFreq :1437"':
+            - cell "107"
+            - cell "0x08001c80"
+            - 'cell "adds r3, #1"'
+            - cell "HAL_RCC_GetSysClockFreq :1437"
+          - row "108 0x08001c82 vmov s15, r3 HAL_RCC_GetSysClockFreq :1438":
+            - cell "108"
+            - cell "0x08001c82"
+            - cell "vmov s15, r3"
+            - cell "HAL_RCC_GetSysClockFreq :1438"
+          - row "109 0x08001c86 vcvt.f32.u32 s15, s15 HAL_RCC_GetSysClockFreq :1438":
+            - cell "109"
+            - cell "0x08001c86"
+            - cell "vcvt.f32.u32 s15, s15"
+            - cell "HAL_RCC_GetSysClockFreq :1438"
+          - row "110 0x08001c8a vdiv.f32 s13, s14, s15 HAL_RCC_GetSysClockFreq :1438":
+            - cell "110"
+            - cell "0x08001c8a"
+            - cell "vdiv.f32 s13, s14, s15"
+            - cell "HAL_RCC_GetSysClockFreq :1438"
+          - row "111 0x08001c8e vcvt.u32.f32 s15, s13 HAL_RCC_GetSysClockFreq :1438":
+            - cell "111"
+            - cell "0x08001c8e"
+            - cell "vcvt.u32.f32 s15, s13"
+            - cell "HAL_RCC_GetSysClockFreq :1438"
+          - row "112 0x08001c92 vmov r0, s15 HAL_RCC_GetSysClockFreq :1438":
+            - cell "112"
+            - cell "0x08001c92"
+            - cell "vmov r0, s15"
+            - cell "HAL_RCC_GetSysClockFreq :1438"
+          - 'row "113 0x08001c96 ldr r4, [sp], #4 HAL_RCC_GetSysClockFreq :1452"':
+            - cell "113"
+            - cell "0x08001c96"
+            - 'cell "ldr r4, [sp], #4"'
+            - cell "HAL_RCC_GetSysClockFreq :1452"
+          - row "114 0x08001c9a bx lr HAL_RCC_GetSysClockFreq :1452":
+            - cell "114"
+            - cell "0x08001c9a"
+            - cell "bx lr"
+            - cell "HAL_RCC_GetSysClockFreq :1452"
+          - 'row "115 0x08001f9a ldr r2, [pc, #0x2c] HAL_RCC_GetHCLKFreq :1471"':
+            - cell "115"
+            - cell "0x08001f9a"
+            - 'cell "ldr r2, [pc, #0x2c]"'
+            - cell "HAL_RCC_GetHCLKFreq :1471"
+          - 'row "116 0x08001f9c ldr r3, [r2, #0x18] HAL_RCC_GetHCLKFreq :1471"':
+            - cell "116"
+            - cell "0x08001f9c"
+            - 'cell "ldr r3, [r2, #0x18]"'
+            - cell "HAL_RCC_GetHCLKFreq :1471"
+          - 'row "117 0x08001f9e ubfx r3, r3, #8, #4 HAL_RCC_GetHCLKFreq :1471"':
+            - cell "117"
+            - cell "0x08001f9e"
+            - 'cell "ubfx r3, r3, #8, #4"'
+            - cell "HAL_RCC_GetHCLKFreq :1471"
+          - 'row "118 0x08001fa2 ldr r1, [pc, #0x28] HAL_RCC_GetHCLKFreq :1471"':
+            - cell "118"
+            - cell "0x08001fa2"
+            - 'cell "ldr r1, [pc, #0x28]"'
+            - cell "HAL_RCC_GetHCLKFreq :1471"
+          - row "119 0x08001fa4 ldrb r3, [r1, r3] HAL_RCC_GetHCLKFreq :1471":
+            - cell "119"
+            - cell "0x08001fa4"
+            - cell "ldrb r3, [r1, r3]"
+            - cell "HAL_RCC_GetHCLKFreq :1471"
+          - 'row "120 0x08001fa6 and r3, r3, #0x1f HAL_RCC_GetHCLKFreq :1471"':
+            - cell "120"
+            - cell "0x08001fa6"
+            - 'cell "and r3, r3, #0x1f"'
+            - cell "HAL_RCC_GetHCLKFreq :1471"
+          - row "121 0x08001faa lsr.w r3, r0, r3 HAL_RCC_GetHCLKFreq :1471":
+            - cell "121"
+            - cell "0x08001faa"
+            - cell "lsr.w r3, r0, r3"
+            - cell "HAL_RCC_GetHCLKFreq :1471"
+          - 'row "122 0x08001fae ldr r2, [r2, #0x18] HAL_RCC_GetHCLKFreq :1477"':
+            - cell "122"
+            - cell "0x08001fae"
+            - 'cell "ldr r2, [r2, #0x18]"'
+            - cell "HAL_RCC_GetHCLKFreq :1477"
+          - 'row "123 0x08001fb0 and r2, r2, #0xf HAL_RCC_GetHCLKFreq :1477"':
+            - cell "123"
+            - cell "0x08001fb0"
+            - 'cell "and r2, r2, #0xf"'
+            - cell "HAL_RCC_GetHCLKFreq :1477"
+          - row "124 0x08001fb4 ldrb r0, [r1, r2] HAL_RCC_GetHCLKFreq :1477":
+            - cell "124"
+            - cell "0x08001fb4"
+            - cell "ldrb r0, [r1, r2]"
+            - cell "HAL_RCC_GetHCLKFreq :1477"
+          - 'row "125 0x08001fb6 and r0, r0, #0x1f HAL_RCC_GetHCLKFreq :1477"':
+            - cell "125"
+            - cell "0x08001fb6"
+            - 'cell "and r0, r0, #0x1f"'
+            - cell "HAL_RCC_GetHCLKFreq :1477"
+          - row "126 0x08001fba lsr.w r0, r3, r0 HAL_RCC_GetHCLKFreq :1477":
+            - cell "126"
+            - cell "0x08001fba"
+            - cell "lsr.w r0, r3, r0"
+            - cell "HAL_RCC_GetHCLKFreq :1477"
+          - 'row "127 0x08001fbe ldr r2, [pc, #0x10] HAL_RCC_GetHCLKFreq :1477"':
+            - cell "127"
+            - cell "0x08001fbe"
+            - 'cell "ldr r2, [pc, #0x10]"'
+            - cell "HAL_RCC_GetHCLKFreq :1477"
+          - row "128 0x08001fc0 str r0, [r2] HAL_RCC_GetHCLKFreq :1477":
+            - cell "128"
+            - cell "0x08001fc0"
+            - cell "str r0, [r2]"
+            - cell "HAL_RCC_GetHCLKFreq :1477"
+          - 'row "129 0x08001fc2 ldr r2, [pc, #0x10] HAL_RCC_GetHCLKFreq :1483"':
+            - cell "129"
+            - cell "0x08001fc2"
+            - 'cell "ldr r2, [pc, #0x10]"'
+            - cell "HAL_RCC_GetHCLKFreq :1483"
+          - row "130 0x08001fc4 str r3, [r2] HAL_RCC_GetHCLKFreq :1483":
+            - cell "130"
+            - cell "0x08001fc4"
+            - cell "str r3, [r2]"
+            - cell "HAL_RCC_GetHCLKFreq :1483"
+          - 'row "131 0x08001fc6 pop {r3, pc} HAL_RCC_GetHCLKFreq :1487"':
+            - cell "131"
+            - cell "0x08001fc6"
+            - 'cell "pop {r3, pc}"'
+            - cell "HAL_RCC_GetHCLKFreq :1487"
+          - 'row "132 0x08000b22 str r0, [r4, #0xc] spi_trace_ready :8"':
+            - cell "132"
+            - cell "0x08000b22"
+            - 'cell "str r0, [r4, #0xc]"'
+            - cell "spi_trace_ready :8"
+          - 'row "133 0x08000b24 mov.w r0, #0x1000 spi_trace_ready :9"':
+            - cell "133"
+            - cell "0x08000b24"
+            - 'cell "mov.w r0, #0x1000"'
+            - cell "spi_trace_ready :9"
+          - 'row "134 0x08000b28 bl #0x80031b0 spi_trace_ready :9"':
+            - cell "134"
+            - cell "0x08000b28"
+            - 'cell "bl #0x80031b0"'
+            - cell "spi_trace_ready :9"
+          - 'row "135 0x080031b0 push {lr} HAL_RCCEx_GetPeriphCLKFreq :1785"':
+            - cell "135"
+            - cell "0x080031b0"
+            - 'cell "push {lr}"'
+            - cell "HAL_RCCEx_GetPeriphCLKFreq :1785"
+          - 'row "136 0x080031b2 sub sp, #0x2c HAL_RCCEx_GetPeriphCLKFreq :1785"':
+            - cell "136"
+            - cell "0x080031b2"
+            - 'cell "sub sp, #0x2c"'
+            - cell "HAL_RCCEx_GetPeriphCLKFreq :1785"
+          - 'row "137 0x080031b4 cmp.w r0, #0x100 HAL_RCCEx_GetPeriphCLKFreq :1797"':
+            - cell "137"
+            - cell "0x080031b4"
+            - 'cell "cmp.w r0, #0x100"'
+            - cell "HAL_RCCEx_GetPeriphCLKFreq :1797"
+          - 'row "138 0x080031b8 beq #0x80031f4 HAL_RCCEx_GetPeriphCLKFreq :1797"':
+            - cell "138"
+            - cell "0x080031b8"
+            - 'cell "beq #0x80031f4"'
+            - cell "HAL_RCCEx_GetPeriphCLKFreq :1797"
+          - 'row "139 0x080031ba cmp.w r0, #0x200 HAL_RCCEx_GetPeriphCLKFreq :1987"':
+            - cell "139"
+            - cell "0x080031ba"
+            - 'cell "cmp.w r0, #0x200"'
+            - cell "HAL_RCCEx_GetPeriphCLKFreq :1987"
+          - 'row "140 0x080031be beq #0x800329c HAL_RCCEx_GetPeriphCLKFreq :1987"':
+            - cell "140"
+            - cell "0x080031be"
+            - 'cell "beq #0x800329c"'
+            - cell "HAL_RCCEx_GetPeriphCLKFreq :1987"
+          - 'row "141 0x080031c0 cmp.w r0, #0x400 HAL_RCCEx_GetPeriphCLKFreq :2083"':
+            - cell "141"
+            - cell "0x080031c0"
+            - 'cell "cmp.w r0, #0x400"'
+            - cell "HAL_RCCEx_GetPeriphCLKFreq :2083"
+          - 'row "142 0x080031c4 beq.w #0x8003350 HAL_RCCEx_GetPeriphCLKFreq :2083"':
+            - cell "142"
+            - cell "0x080031c4"
+            - 'cell "beq.w #0x8003350"'
+            - cell "HAL_RCCEx_GetPeriphCLKFreq :2083"
+          - 'row "143 0x080031c8 cmp.w r0, #0x1000 HAL_RCCEx_GetPeriphCLKFreq :2366"':
+            - cell "143"
+            - cell "0x080031c8"
+            - 'cell "cmp.w r0, #0x1000"'
+            - cell "HAL_RCCEx_GetPeriphCLKFreq :2366"
+          - 'row "144 0x080031cc beq.w #0x800340a HAL_RCCEx_GetPeriphCLKFreq :2366"':
+            - cell "144"
+            - cell "0x080031cc"
+            - 'cell "beq.w #0x800340a"'
+            - cell "HAL_RCCEx_GetPeriphCLKFreq :2366"
+          - 'row "145 0x0800340a ldr r3, [pc, #0x40] HAL_RCCEx_GetPeriphCLKFreq :2369"':
+            - cell "145"
+            - cell "0x0800340a"
+            - 'cell "ldr r3, [pc, #0x40]"'
+            - cell "HAL_RCCEx_GetPeriphCLKFreq :2369"
+          - 'row "146 0x0800340c ldr r3, [r3, #0x50] HAL_RCCEx_GetPeriphCLKFreq :2369"':
+            - cell "146"
+            - cell "0x0800340c"
+            - 'cell "ldr r3, [r3, #0x50]"'
+            - cell "HAL_RCCEx_GetPeriphCLKFreq :2369"
+          - 'row "147 0x0800340e and r3, r3, #0x7000 HAL_RCCEx_GetPeriphCLKFreq :2369"':
+            - cell "147"
+            - cell "0x0800340e"
+            - 'cell "and r3, r3, #0x7000"'
+            - cell "HAL_RCCEx_GetPeriphCLKFreq :2369"
+          - 'row "148 0x08003412 cmp.w r3, #0x2000 HAL_RCCEx_GetPeriphCLKFreq :2371"':
+            - cell "148"
+            - cell "0x08003412"
+            - 'cell "cmp.w r3, #0x2000"'
+            - cell "HAL_RCCEx_GetPeriphCLKFreq :2371"
+          - 'row "149 0x08003416 beq #0x8003494 HAL_RCCEx_GetPeriphCLKFreq :2371"':
+            - cell "149"
+            - cell "0x08003416"
+            - 'cell "beq #0x8003494"'
+            - cell "HAL_RCCEx_GetPeriphCLKFreq :2371"
+      - button "上一页" [disabled]
+      - generic: 1 / 317
+      - button "下一页"
+      - separator "调整执行流与源码比例"
+      - strong: spi_trace_support.c
+      - generic "spi_trace_ready · 第 6 行"
+      - 'generic "10b5 push {r4, lr} · 已证实执行"'
+      - generic: "1"
+      - generic: "#include \"main.h\""
+      - generic: "2"
+      - generic: "#include \"spi_trace_support.h\""
+      - generic: "3"
+      - generic: /* Debugger-visible diagnostics bypass the M7 data cache in DTCM. */
+      - generic: "4"
+      - generic: volatile SpiTraceDiagnostics g_spi_trace __attribute__((section(".trace_diag"), aligned(4)));
+      - generic: "5"
+      - generic: /* A stable breakpoint address for the host; this firmware never enables ETM. */
+      - generic: "6"
+      - generic: "__attribute__((noinline)) void spi_trace_ready(void) {"
+      - generic: "7"
+      - generic: g_spi_trace.cpu_hz = HAL_RCC_GetSysClockFreq();
+      - generic: "8"
+      - generic: g_spi_trace.hclk_hz = HAL_RCC_GetHCLKFreq();
+      - generic: "9"
+      - generic: g_spi_trace.spi_kernel_hz = HAL_RCCEx_GetPeriphCLKFreq(RCC_PERIPHCLK_SPI2);
+      - generic: "10"
+      - generic: g_spi_trace.traceclk_hz = 560000000U / SPI_TRACE_PLL_R / 2U;
+      - generic: "11"
+      - generic: g_spi_trace.ready = 1;
+      - generic: "12"
+      - generic: "}"
+      - generic: "13"
+      - generic "历史 trace 重建，包含未证实祖先；不是当前寄存器快照":
+        - strong: 选中位置的历史调用栈
+        - generic: 采集前调用栈未知
+        - generic: › spi_trace_ready
+  - text: 连接后这里显示接收数据。 连接探针并选择 RTT 通道后，这里显示目标输出。 连接后这里显示接收数据。 烧录或 SRAM 测试的进度与结果显示在这里。 （点「定位并开始」：留空地址就用 .elf 里的 _SEGGER_RTT 符号） ▸ ▸ 连接后这里显示接收数据。 ▸ I2C 事务与应答会显示在这里。

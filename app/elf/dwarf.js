@@ -292,7 +292,6 @@ export class Dwarf {
         const idx = this._idxOf(r, form, FORM.addrx, FORM.addrx1, FORM.addrx2, FORM.addrx3);
         return { form, value: this._addrAtIndex(cu, idx) };
       }
-      case FORM.data16: return { form, value: r.bytes(16) };
       case FORM.block1: { const n = r.u8(); return { form, value: r.bytes(n) }; }
       case FORM.block2: { const n = r.u16(); return { form, value: r.bytes(n) }; }
       case FORM.block4: { const n = r.u32(); return { form, value: r.bytes(n) }; }

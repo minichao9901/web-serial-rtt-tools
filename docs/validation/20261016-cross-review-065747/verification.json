@@ -1,0 +1,147 @@
+[
+  {
+    "id": "N01-heal-bypasses-memory-lock",
+    "result": "verified",
+    "events": [
+      "read-enter-1",
+      "heal-enter",
+      "read-exit-1",
+      "read-enter-3",
+      "read-exit-3",
+      "heal-exit",
+      "read-enter-2",
+      "read-exit-2"
+    ]
+  },
+  {
+    "id": "N01b-failed-heal-clears-fault",
+    "result": false,
+    "faultAfterFailure": false
+  },
+  {
+    "id": "N02-usb-recovery-does-not-mark-target-stale",
+    "result": "verified",
+    "claimPerformed": true,
+    "targetFaultFlag": false
+  },
+  {
+    "id": "N03-zero-count-read-returns-zero-filled-success",
+    "result": "verified",
+    "length": 8,
+    "data": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "id": "REJECT-dmi-sba-response-swap",
+    "result": "verified",
+    "register": 287454020,
+    "memory": [
+      221,
+      204,
+      187,
+      170
+    ],
+    "trace": [
+      {
+        "op": 1,
+        "addr": 17
+      },
+      {
+        "op": 0,
+        "addr": 0
+      },
+      {
+        "op": 2,
+        "addr": 57
+      },
+      {
+        "op": 0,
+        "addr": 0
+      },
+      {
+        "op": 1,
+        "addr": 60
+      },
+      {
+        "op": 0,
+        "addr": 0
+      }
+    ]
+  },
+  {
+    "id": "N04-i2c-script-results-pollute-command-table",
+    "result": "verified",
+    "results": [
+      [
+        1,
+        {
+          "text": "old table result"
+        }
+      ],
+      [
+        0,
+        {
+          "text": "AA · 1.0 ms",
+          "cls": "ok",
+          "title": "AA · 1.0 ms"
+        }
+      ]
+    ]
+  },
+  {
+    "id": "REJECT-promise-race-loser-unhandled",
+    "result": "verified",
+    "unhandled": []
+  },
+  {
+    "id": "REJECT-signed-PC-loses-function-and-line",
+    "result": "verified",
+    "masked": -2147461236,
+    "function": "high_pc_fn",
+    "line": "main.c:19"
+  },
+  {
+    "id": "N10-unconfirmed-resume-still-reports-step",
+    "result": "step",
+    "resumeConfirmed": false,
+    "note": "PC equality alone cannot prove failure: stepping a self-loop can legitimately retain PC"
+  },
+  {
+    "id": "N07a-spi-cdc-cleanup-erases-original-error",
+    "result": "verified",
+    "message": "cleanup failure",
+    "handleRetained": true
+  },
+  {
+    "id": "N07b-periodic-finally-erases-body-error",
+    "result": "verified",
+    "message": "cleanup STOP failed",
+    "cause": null
+  },
+  {
+    "id": "REJECT-spi-callback-step-not-validated",
+    "result": "verified",
+    "callbacks": 0,
+    "error": "probe 周期结果任务身份不匹配"
+  },
+  {
+    "id": "N15-mock-response-arrives-after-stop",
+    "result": "verified",
+    "callbackAfterStop": true
+  },
+  {
+    "id": "CORRECT-uncertain-RTT-start-needs-proven-stop",
+    "result": "verified",
+    "before": "unknown",
+    "afterClearingRequested": "unknown",
+    "reason": "failure ledger still blocks UART; firmware acceptance is uncertain"
+  }
+]

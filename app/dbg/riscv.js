@@ -221,6 +221,9 @@ export class RiscvDebugSession extends DebugSession {
     for (;;){
       let st = 0;
       try { st = (await this.dm.dmiRead(0x11)) >>> 0; } catch { return false; }
+        // step() first clears the previous resumereq/ack. A fresh ack also
+        // proves execution when a one-instruction self-loop returns to the same PC.
+        if (st & (3 << 16)) return true;
       if (((st >>> 10) & 3) !== 0) return true;                 // ① running
       if (((st >>> 8) & 3) !== 3) return true;                  // ② 已经不在"停"态
       if (pc0 != null){                                         // ③ PC 动了（单步/立刻命中）
@@ -607,9 +610,18 @@ export class RiscvDebugSession extends DebugSession {
     const pc = (await this.dm.readReg(REGNO.PC)) >>> 0;
     await this._withBpCleared(pc, async () => {
       const d = (await this.dm.readReg(REGNO.DCSR)) >>> 0;
-      await this.dm.writeReg(REGNO.DCSR, (d | DCSR_STEP | EBREAK_ALL) >>> 0);
-      await this.dm.dmiWrite(0x10, this.dm._ctl(this.port?.debug.hart ?? 0, DMCONTROL.resumereq));
-      this.halted = false;
+      const control = this.dm._ctl(this.port?.debug.hart ?? 0);
+      await this.dm.dmiWrite(0x10, control);
+      const clearUntil = Date.now() + 400;
+      while ((await this.dm.dmiRead(0x11)) & (3 << 16)) {
+        if (Date.now() >= clearUntil) throw new Error('上次运行应答尚未清除，未发起新的单步');
+        await waitMs(2);
+      }
+      let operationError;
+      try {
+        await this.dm.writeReg(REGNO.DCSR, (d | DCSR_STEP | EBREAK_ALL) >>> 0);
+        this.halted = false; // A lost resume reply leaves execution uncertain until halt is confirmed.
+        await this.dm.dmiWrite(0x10, this.dm._ctl(this.port?.debug.hart ?? 0, DMCONTROL.resumereq));
       /**
        * 🚨 **先确认真的跑起来了，再等它停**（2026-10 真机定因）。
        *    直接 `waitHalted()` 会在"DM 还没处理完 resumereq、仍报 halted"的窗口里
@@ -617,11 +629,20 @@ export class RiscvDebugSession extends DebugSession {
        *    等 DM 真放开核时，它带着"断点已装回、step 已被清"重新执行同一条指令：
        *    原地再命中 → 现象就是"单步按了没反应、PC 一动不动"。
        */
-      await this._waitResumed(pc, 400);
-      try { await this.dm.waitHalted(3000); }
-      catch (e){ await this._haltQuiet(this.port?.debug.hart ?? 0, 1500).catch(() => {}); throw new Error('单步没停下来：' + (e?.message || e)); }
-      await this.dm.writeReg(REGNO.DCSR, (d & ~DCSR_STEP) >>> 0).catch(() => {});
-      this.halted = true;
+        if (!await this._waitResumed(pc, 400)) throw new Error('未确认目标执行单步，未报告完成');
+        await this.dm.waitHalted(3000);
+        this.halted = true;
+      } catch (e){ operationError = e; throw e; }
+      finally {
+        try {
+          await this.dm.dmiWrite(0x10, control);
+          if (!this.halted) await this._haltQuiet(this.port?.debug.hart ?? 0, 1500);
+          await this.dm.writeReg(REGNO.DCSR, (d & ~DCSR_STEP) >>> 0);
+        } catch (cleanup){
+          if (operationError) throw new AggregateError([operationError,cleanup], `${operationError.message}；单步清理也失败：${cleanup.message}`, {cause:operationError});
+          throw cleanup;
+        }
+      }
     });
     await this.refresh();
     await this.refreshRegs();

@@ -1,0 +1,2305 @@
+[
+  {
+    "label": "串口助手",
+    "name": "serial",
+    "active": "tab-serial",
+    "buttons": [
+      {
+        "disabled": false,
+        "id": "s-pick",
+        "text": "选择…"
+      },
+      {
+        "disabled": false,
+        "id": "s-scan",
+        "text": "刷新"
+      },
+      {
+        "disabled": false,
+        "id": "s-open",
+        "text": "连接"
+      },
+      {
+        "disabled": true,
+        "id": "s-close",
+        "text": "断开"
+      },
+      {
+        "disabled": false,
+        "id": "s-quick-add",
+        "text": "＋ 添加快捷发送"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "ASCII"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "ANSI"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "HEX"
+      },
+      {
+        "disabled": false,
+        "id": "s-pause",
+        "text": "暂停"
+      },
+      {
+        "disabled": false,
+        "id": "s-clear",
+        "text": "清空"
+      },
+      {
+        "disabled": false,
+        "id": "s-save",
+        "text": "保存数据"
+      },
+      {
+        "disabled": false,
+        "id": "s-record",
+        "text": "● 记录到文件"
+      },
+      {
+        "disabled": false,
+        "id": "s-statclear",
+        "text": "计数清零"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "ASCII"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "HEX"
+      },
+      {
+        "disabled": false,
+        "id": "s-send",
+        "text": "发送"
+      }
+    ],
+    "documentWidth": 1440,
+    "height": 1000,
+    "overflow": [],
+    "tabs": [],
+    "width": 1440
+  },
+  {
+    "label": "终端",
+    "name": "terminal",
+    "active": "tab-terminal",
+    "buttons": [
+      {
+        "disabled": false,
+        "id": "t-paste",
+        "text": "粘贴并发送"
+      },
+      {
+        "disabled": false,
+        "id": "t-clear",
+        "text": "清屏"
+      },
+      {
+        "disabled": false,
+        "id": "t-save",
+        "text": "保存输出"
+      }
+    ],
+    "documentWidth": 1440,
+    "height": 1000,
+    "overflow": [],
+    "tabs": [],
+    "width": 1440
+  },
+  {
+    "label": "RTT Viewer",
+    "name": "rtt",
+    "active": "tab-rtt",
+    "buttons": [
+      {
+        "disabled": false,
+        "id": "r-usb-connect",
+        "text": "连接探针"
+      },
+      {
+        "disabled": false,
+        "id": "r-usb-pick",
+        "text": "换设备…"
+      },
+      {
+        "disabled": true,
+        "id": "r-usb-disconnect",
+        "text": "断开"
+      },
+      {
+        "disabled": false,
+        "id": "r-elf",
+        "text": "载入 ELF…"
+      },
+      {
+        "disabled": false,
+        "id": "r-find",
+        "text": "扫描控制块"
+      },
+      {
+        "disabled": false,
+        "id": "r-reset",
+        "text": "复位目标"
+      },
+      {
+        "disabled": false,
+        "id": "r-restart",
+        "text": "重连 RTT"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "终端(ANSI)"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "文本"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "HEX"
+      },
+      {
+        "disabled": false,
+        "id": "r-pause",
+        "text": "暂停"
+      },
+      {
+        "disabled": false,
+        "id": "r-clear",
+        "text": "清空"
+      },
+      {
+        "disabled": false,
+        "id": "r-save",
+        "text": "保存数据"
+      },
+      {
+        "disabled": false,
+        "id": "r-record",
+        "text": "● 记录到文件"
+      },
+      {
+        "disabled": false,
+        "id": "r-send",
+        "text": "发送"
+      }
+    ],
+    "documentWidth": 1440,
+    "height": 1000,
+    "overflow": [],
+    "tabs": [],
+    "width": 1440
+  },
+  {
+    "label": "RTT 转发",
+    "name": "rttcdc",
+    "active": "tab-rttcdc",
+    "buttons": [
+      {
+        "disabled": false,
+        "id": "h-connect",
+        "text": "连接探针"
+      },
+      {
+        "disabled": false,
+        "id": "h-reconnect",
+        "text": "重连"
+      },
+      {
+        "disabled": false,
+        "id": "h-elf",
+        "text": "载入 ELF…"
+      },
+      {
+        "disabled": false,
+        "id": "h-start",
+        "text": "启动转发"
+      },
+      {
+        "disabled": false,
+        "id": "h-stop",
+        "text": "停止"
+      },
+      {
+        "disabled": false,
+        "id": "h-auto",
+        "text": "自动搜控制块"
+      },
+      {
+        "disabled": false,
+        "id": "h-refresh",
+        "text": "刷新状态"
+      },
+      {
+        "disabled": false,
+        "id": "c-pick",
+        "text": "选择…"
+      },
+      {
+        "disabled": false,
+        "id": "c-scan",
+        "text": "刷新"
+      },
+      {
+        "disabled": false,
+        "id": "c-open",
+        "text": "连接"
+      },
+      {
+        "disabled": true,
+        "id": "c-close",
+        "text": "断开"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "ASCII"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "ANSI"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "HEX"
+      },
+      {
+        "disabled": false,
+        "id": "c-save",
+        "text": "保存数据"
+      },
+      {
+        "disabled": false,
+        "id": "c-pause",
+        "text": "暂停"
+      },
+      {
+        "disabled": false,
+        "id": "c-clear",
+        "text": "清空"
+      },
+      {
+        "disabled": false,
+        "id": "c-record",
+        "text": "● 记录到文件"
+      },
+      {
+        "disabled": false,
+        "id": "c-statclear",
+        "text": "计数清零"
+      },
+      {
+        "disabled": false,
+        "id": "c-quality",
+        "text": "质量"
+      }
+    ],
+    "documentWidth": 1440,
+    "height": 1000,
+    "overflow": [],
+    "tabs": [],
+    "width": 1440
+  },
+  {
+    "label": "J-Scope 波形",
+    "name": "scope",
+    "active": "tab-scope",
+    "buttons": [
+      {
+        "disabled": false,
+        "id": "sc-side-capture-tab",
+        "text": "采集"
+      },
+      {
+        "disabled": false,
+        "id": "sc-side-variables-tab",
+        "text": "变量"
+      },
+      {
+        "disabled": false,
+        "id": "sc-side-trigger-tab",
+        "text": "触发"
+      },
+      {
+        "disabled": false,
+        "id": "sc-side-help-tab",
+        "text": "帮助"
+      },
+      {
+        "disabled": false,
+        "id": "sc-connect",
+        "text": "连接探针"
+      },
+      {
+        "disabled": false,
+        "id": "sc-reconnect",
+        "text": "重连"
+      },
+      {
+        "disabled": false,
+        "id": "sc-usb",
+        "text": "连接数据端点…"
+      },
+      {
+        "disabled": false,
+        "id": "sc-bench",
+        "text": "标定真实速率"
+      },
+      {
+        "disabled": false,
+        "id": "sc-recc",
+        "text": "用建议周期"
+      },
+      {
+        "disabled": false,
+        "id": "sc-start",
+        "text": "开始采样"
+      },
+      {
+        "disabled": true,
+        "id": "sc-stop",
+        "text": "停止"
+      },
+      {
+        "disabled": false,
+        "id": "sc-layout-sidebar",
+        "text": "收起设置"
+      },
+      {
+        "disabled": false,
+        "id": "sc-fit",
+        "text": "全览"
+      },
+      {
+        "disabled": false,
+        "id": "sc-zin",
+        "text": "放大"
+      },
+      {
+        "disabled": false,
+        "id": "sc-zout",
+        "text": "缩小"
+      },
+      {
+        "disabled": false,
+        "id": "sc-zoompts",
+        "text": "细看"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "叠加"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "分道"
+      },
+      {
+        "disabled": false,
+        "id": "sc-mark-clear",
+        "text": "清游标"
+      },
+      {
+        "disabled": false,
+        "id": "sc-csv",
+        "text": "导出 CSV"
+      },
+      {
+        "disabled": false,
+        "id": "sc-save",
+        "text": "保存原始"
+      },
+      {
+        "disabled": false,
+        "id": "sc-open",
+        "text": "打开回放"
+      },
+      {
+        "disabled": false,
+        "id": "sc-clear",
+        "text": "清空"
+      },
+      {
+        "disabled": false,
+        "id": "sc-layout-focus",
+        "text": "最大化波形"
+      },
+      {
+        "disabled": false,
+        "id": "sc-quality",
+        "text": "质量"
+      }
+    ],
+    "documentWidth": 1440,
+    "height": 1000,
+    "overflow": [],
+    "tabs": [
+      {
+        "data": {
+          "sideTab": "capture"
+        },
+        "id": "sc-side-capture-tab",
+        "text": "采集"
+      },
+      {
+        "data": {
+          "sideTab": "variables"
+        },
+        "id": "sc-side-variables-tab",
+        "text": "变量"
+      },
+      {
+        "data": {
+          "sideTab": "trigger"
+        },
+        "id": "sc-side-trigger-tab",
+        "text": "触发"
+      },
+      {
+        "data": {
+          "sideTab": "help"
+        },
+        "id": "sc-side-help-tab",
+        "text": "帮助"
+      }
+    ],
+    "width": 1440
+  },
+  {
+    "label": "烧录器",
+    "name": "flash",
+    "active": "tab-flash",
+    "buttons": [
+      {
+        "disabled": false,
+        "id": "f-side-flash-tab",
+        "text": "烧录"
+      },
+      {
+        "disabled": false,
+        "id": "f-side-sram-tab",
+        "text": "SRAM 读写测试"
+      },
+      {
+        "disabled": false,
+        "id": "f-idcode",
+        "text": "读 IDCODE"
+      },
+      {
+        "disabled": false,
+        "id": "f-pick",
+        "text": "选择文件…"
+      },
+      {
+        "disabled": false,
+        "id": "f-flash",
+        "text": "烧录"
+      },
+      {
+        "disabled": false,
+        "id": "f-logclear",
+        "text": "清空日志"
+      }
+    ],
+    "documentWidth": 1440,
+    "height": 1000,
+    "overflow": [],
+    "tabs": [
+      {
+        "data": {
+          "sideTab": "flash"
+        },
+        "id": "f-side-flash-tab",
+        "text": "烧录"
+      },
+      {
+        "data": {
+          "sideTab": "sram"
+        },
+        "id": "f-side-sram-tab",
+        "text": "SRAM 读写测试"
+      }
+    ],
+    "width": 1440
+  },
+  {
+    "label": "调试器",
+    "name": "dbg",
+    "active": "tab-dbg",
+    "buttons": [
+      {
+        "disabled": false,
+        "id": "d-side-session-tab",
+        "text": "会话"
+      },
+      {
+        "disabled": false,
+        "id": "d-side-breaks-tab",
+        "text": "断点 0"
+      },
+      {
+        "disabled": false,
+        "id": "d-side-frames-tab",
+        "text": "栈帧"
+      },
+      {
+        "disabled": false,
+        "id": "d-connect",
+        "text": "连接"
+      },
+      {
+        "disabled": true,
+        "id": "d-disconnect",
+        "text": "断开"
+      },
+      {
+        "disabled": false,
+        "id": "d-elf-pick",
+        "text": "载入 ELF…"
+      },
+      {
+        "disabled": true,
+        "id": "d-reset-halt",
+        "text": "复位并停"
+      },
+      {
+        "disabled": true,
+        "id": "d-reset-run",
+        "text": "复位并跑"
+      },
+      {
+        "disabled": false,
+        "id": "d-layout-sidebar",
+        "text": "收起设置"
+      },
+      {
+        "disabled": true,
+        "id": "d-halt",
+        "text": "暂停"
+      },
+      {
+        "disabled": true,
+        "id": "d-cont",
+        "text": "继续"
+      },
+      {
+        "disabled": true,
+        "id": "d-step",
+        "text": "单步"
+      },
+      {
+        "disabled": true,
+        "id": "d-step-over",
+        "text": "跳过"
+      },
+      {
+        "disabled": true,
+        "id": "d-step-into",
+        "text": "进入"
+      },
+      {
+        "disabled": true,
+        "id": "d-step-out",
+        "text": "跳出"
+      },
+      {
+        "disabled": false,
+        "id": "d-layout-focus",
+        "text": "专注调试"
+      },
+      {
+        "disabled": false,
+        "id": "d-src-pick",
+        "text": "选择源码目录…"
+      },
+      {
+        "disabled": false,
+        "id": "d-max-src",
+        "text": "最大化"
+      },
+      {
+        "disabled": false,
+        "id": "d-max-term",
+        "text": "最大化"
+      },
+      {
+        "disabled": false,
+        "id": "d-run",
+        "text": "执行"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "寄存器"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "内存"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "变量"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "SVD"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "RTT"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "异常"
+      },
+      {
+        "disabled": false,
+        "id": "d-max-dock",
+        "text": "最大化"
+      },
+      {
+        "disabled": false,
+        "id": "d-reg-refresh",
+        "text": "刷新"
+      }
+    ],
+    "documentWidth": 1440,
+    "height": 1000,
+    "overflow": [],
+    "tabs": [
+      {
+        "data": {},
+        "id": "d-side-session-tab",
+        "text": "会话"
+      },
+      {
+        "data": {},
+        "id": "d-side-breaks-tab",
+        "text": "断点 0"
+      },
+      {
+        "data": {},
+        "id": "d-side-frames-tab",
+        "text": "栈帧"
+      }
+    ],
+    "width": 1440
+  },
+  {
+    "label": "USB→SPI/QSPI",
+    "name": "spi",
+    "active": "tab-spi",
+    "buttons": [
+      {
+        "disabled": false,
+        "id": "sp-side-connect-tab",
+        "text": "连接"
+      },
+      {
+        "disabled": false,
+        "id": "sp-side-bus-tab",
+        "text": "总线"
+      },
+      {
+        "disabled": false,
+        "id": "sp-side-status-tab",
+        "text": "状态"
+      },
+      {
+        "disabled": false,
+        "id": "sp-side-help-tab",
+        "text": "帮助"
+      },
+      {
+        "disabled": false,
+        "id": "sp-connect",
+        "text": "连接探针"
+      },
+      {
+        "disabled": true,
+        "id": "sp-disconnect",
+        "text": "关闭探针"
+      },
+      {
+        "disabled": false,
+        "id": "sp-usb",
+        "text": "连接数据端点…"
+      },
+      {
+        "disabled": true,
+        "id": "sp-enable",
+        "text": "使能"
+      },
+      {
+        "disabled": true,
+        "id": "sp-disable",
+        "text": "失能"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "命令表"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "寄存器"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "脚本"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "实时值"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "Flash 测试"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "回环自检"
+      },
+      {
+        "disabled": true,
+        "id": "sp-run-abort",
+        "text": "中止"
+      },
+      {
+        "disabled": false,
+        "id": "sp-cmd-add",
+        "text": "＋ 添加行"
+      },
+      {
+        "disabled": false,
+        "id": "sp-cmd-clear",
+        "text": "清空结果"
+      },
+      {
+        "disabled": true,
+        "id": "sp-cmd-send",
+        "text": "发送全部"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "复制"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "保存"
+      },
+      {
+        "disabled": false,
+        "id": "sp-log-clear",
+        "text": "清空"
+      }
+    ],
+    "documentWidth": 1440,
+    "height": 1000,
+    "overflow": [],
+    "tabs": [
+      {
+        "data": {
+          "sideTab": "connect"
+        },
+        "id": "sp-side-connect-tab",
+        "text": "连接"
+      },
+      {
+        "data": {
+          "sideTab": "bus"
+        },
+        "id": "sp-side-bus-tab",
+        "text": "总线"
+      },
+      {
+        "data": {
+          "sideTab": "status"
+        },
+        "id": "sp-side-status-tab",
+        "text": "状态"
+      },
+      {
+        "data": {
+          "sideTab": "help"
+        },
+        "id": "sp-side-help-tab",
+        "text": "帮助"
+      }
+    ],
+    "width": 1440
+  },
+  {
+    "label": "SPI/QSPI屏",
+    "name": "panel",
+    "active": "tab-panel",
+    "buttons": [
+      {
+        "disabled": false,
+        "id": "pn-side-connect-tab",
+        "text": "连接"
+      },
+      {
+        "disabled": false,
+        "id": "pn-side-display-tab",
+        "text": "屏配置"
+      },
+      {
+        "disabled": false,
+        "id": "pn-side-control-tab",
+        "text": "控制"
+      },
+      {
+        "disabled": false,
+        "id": "pn-side-help-tab",
+        "text": "帮助"
+      },
+      {
+        "disabled": false,
+        "id": "pn-connect",
+        "text": "连接探针"
+      },
+      {
+        "disabled": true,
+        "id": "pn-disconnect",
+        "text": "关闭探针"
+      },
+      {
+        "disabled": false,
+        "id": "pn-usb",
+        "text": "连接数据端点…"
+      },
+      {
+        "disabled": true,
+        "id": "pn-enable",
+        "text": "使能"
+      },
+      {
+        "disabled": true,
+        "id": "pn-disable",
+        "text": "失能"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "刷屏"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "面板初始化"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "读回"
+      },
+      {
+        "disabled": true,
+        "id": "pn-run-abort",
+        "text": "中止"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "红 R"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "绿 G"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "蓝 B"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "黄 R+G"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "品红 R+B"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "青 G+B"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "白 W"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "黑 K"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "灰 GY"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "混色卡"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "色条 8"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "对半 红|绿"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "对半 绿|蓝"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "对半 红|蓝"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "棋盘 16px"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "棋盘 1px"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "渐变"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "4px 网格"
+      },
+      {
+        "disabled": false,
+        "id": "pn-drop",
+        "text": "选择图片…"
+      },
+      {
+        "disabled": true,
+        "id": "pn-img-send",
+        "text": "刷这一张"
+      },
+      {
+        "disabled": false,
+        "id": "pn-anim-file",
+        "text": "选择文件…"
+      },
+      {
+        "disabled": true,
+        "id": "pn-anim-play",
+        "text": "播放到屏"
+      },
+      {
+        "disabled": true,
+        "id": "pn-anim-stop",
+        "text": "停止"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "复制"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "保存"
+      },
+      {
+        "disabled": false,
+        "id": "pn-log-clear",
+        "text": "清空"
+      }
+    ],
+    "documentWidth": 1440,
+    "height": 1000,
+    "overflow": [],
+    "tabs": [
+      {
+        "data": {
+          "sideTab": "connect"
+        },
+        "id": "pn-side-connect-tab",
+        "text": "连接"
+      },
+      {
+        "data": {
+          "sideTab": "display"
+        },
+        "id": "pn-side-display-tab",
+        "text": "屏配置"
+      },
+      {
+        "data": {
+          "sideTab": "control"
+        },
+        "id": "pn-side-control-tab",
+        "text": "控制"
+      },
+      {
+        "data": {
+          "sideTab": "help"
+        },
+        "id": "pn-side-help-tab",
+        "text": "帮助"
+      }
+    ],
+    "width": 1440
+  },
+  {
+    "label": "SPI转发",
+    "name": "spicdc",
+    "active": "tab-spicdc",
+    "buttons": [
+      {
+        "disabled": false,
+        "id": "si-connect",
+        "text": "连接探针"
+      },
+      {
+        "disabled": true,
+        "id": "si-disconnect",
+        "text": "关闭探针"
+      },
+      {
+        "disabled": false,
+        "id": "si-pinmap-btn",
+        "text": "引脚分配图"
+      },
+      {
+        "disabled": true,
+        "id": "si-start",
+        "text": "启动转发"
+      },
+      {
+        "disabled": true,
+        "id": "si-stop",
+        "text": "停止"
+      },
+      {
+        "disabled": true,
+        "id": "si-status",
+        "text": "刷新状态"
+      },
+      {
+        "disabled": false,
+        "id": "si-rx-pick",
+        "text": "选择…"
+      },
+      {
+        "disabled": false,
+        "id": "si-rx-scan",
+        "text": "刷新"
+      },
+      {
+        "disabled": false,
+        "id": "si-rx-open",
+        "text": "连接"
+      },
+      {
+        "disabled": true,
+        "id": "si-rx-close",
+        "text": "断开"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "ASCII"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "ANSI"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "HEX"
+      },
+      {
+        "disabled": false,
+        "id": "si-rx-save",
+        "text": "保存数据"
+      },
+      {
+        "disabled": false,
+        "id": "si-rx-pause",
+        "text": "暂停"
+      },
+      {
+        "disabled": false,
+        "id": "si-rx-clear",
+        "text": "清空"
+      },
+      {
+        "disabled": false,
+        "id": "si-rx-record",
+        "text": "● 记录到文件"
+      },
+      {
+        "disabled": false,
+        "id": "si-rx-statclear",
+        "text": "计数清零"
+      }
+    ],
+    "documentWidth": 1440,
+    "height": 1000,
+    "overflow": [],
+    "tabs": [],
+    "width": 1440
+  },
+  {
+    "label": "SWO 执行轨迹",
+    "name": "swo",
+    "active": "tab-swo",
+    "buttons": [
+      {
+        "disabled": false,
+        "id": "sw-record-tab",
+        "text": "录制"
+      },
+      {
+        "disabled": false,
+        "id": "sw-analysis-tab",
+        "text": "分析"
+      },
+      {
+        "disabled": false,
+        "id": "sw-calculator-open",
+        "text": "时钟计算器"
+      },
+      {
+        "disabled": false,
+        "id": "sw-help-open",
+        "text": "使用帮助"
+      },
+      {
+        "disabled": false,
+        "id": "sw-entry-elf-pick",
+        "text": "浏览载入 ELF…"
+      },
+      {
+        "disabled": false,
+        "id": "sw-pick",
+        "text": "选择…"
+      },
+      {
+        "disabled": false,
+        "id": "sw-detect",
+        "text": "识别目标与时钟"
+      },
+      {
+        "disabled": false,
+        "id": "sw-clock-grant",
+        "text": "授权时钟"
+      },
+      {
+        "disabled": true,
+        "id": "sw-entry-set",
+        "text": "添加"
+      },
+      {
+        "disabled": true,
+        "id": "sw-reset-entry",
+        "text": "复位并停在起点"
+      },
+      {
+        "disabled": true,
+        "id": "sw-entry-clear",
+        "text": "清空断点"
+      },
+      {
+        "disabled": true,
+        "id": "sw-start",
+        "text": "运行至断点并录制"
+      },
+      {
+        "disabled": true,
+        "id": "sw-stop",
+        "text": "停止并分析"
+      },
+      {
+        "disabled": false,
+        "id": "sw-chart-toggle",
+        "text": "收起轨迹图"
+      },
+      {
+        "disabled": false,
+        "id": "sw-range-apply",
+        "text": "应用"
+      },
+      {
+        "disabled": false,
+        "id": "sw-range-reset",
+        "text": "全部"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": ""
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": ""
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": ""
+      },
+      {
+        "disabled": false,
+        "id": "sw-prev",
+        "text": "←"
+      },
+      {
+        "disabled": false,
+        "id": "sw-play",
+        "text": "逐样本回放"
+      },
+      {
+        "disabled": false,
+        "id": "sw-next",
+        "text": "→"
+      },
+      {
+        "disabled": false,
+        "id": "sw-page-prev",
+        "text": "上一页"
+      },
+      {
+        "disabled": false,
+        "id": "sw-page-next",
+        "text": "下一页"
+      }
+    ],
+    "documentWidth": 1440,
+    "height": 1000,
+    "overflow": [],
+    "tabs": [
+      {
+        "data": {},
+        "id": "sw-record-tab",
+        "text": "录制"
+      },
+      {
+        "data": {},
+        "id": "sw-analysis-tab",
+        "text": "分析"
+      }
+    ],
+    "width": 1440
+  },
+  {
+    "label": "ETM 执行轨迹",
+    "name": "etm",
+    "active": "tab-etm",
+    "buttons": [
+      {
+        "disabled": false,
+        "id": "etm-retry",
+        "text": "重新检测服务"
+      }
+    ],
+    "documentWidth": 1440,
+    "height": 1000,
+    "overflow": [],
+    "tabs": [],
+    "width": 1440
+  },
+  {
+    "label": "USB→I2C",
+    "name": "i2c",
+    "active": "tab-i2c",
+    "buttons": [
+      {
+        "disabled": false,
+        "id": "i2-side-connect-tab",
+        "text": "连接"
+      },
+      {
+        "disabled": false,
+        "id": "i2-side-bus-tab",
+        "text": "总线"
+      },
+      {
+        "disabled": false,
+        "id": "i2-side-diagnostics-tab",
+        "text": "诊断"
+      },
+      {
+        "disabled": false,
+        "id": "i2-side-help-tab",
+        "text": "帮助"
+      },
+      {
+        "disabled": false,
+        "id": "i2-connect",
+        "text": "连接探针"
+      },
+      {
+        "disabled": true,
+        "id": "i2-disconnect",
+        "text": "关闭探针"
+      },
+      {
+        "disabled": false,
+        "id": "i2-pinmap-btn",
+        "text": "引脚分配图 / 接线"
+      },
+      {
+        "disabled": true,
+        "id": "i2-enable",
+        "text": "使能"
+      },
+      {
+        "disabled": true,
+        "id": "i2-disable",
+        "text": "失能"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "扫描总线"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "命令表"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "寄存器"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "脚本"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "实时值"
+      },
+      {
+        "disabled": true,
+        "id": "i2-run-stop",
+        "text": "停止"
+      },
+      {
+        "disabled": true,
+        "id": "i2-scan",
+        "text": "扫描总线"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "00"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "01"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "02"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "03"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "04"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "05"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "06"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "07"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "08"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "09"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "0A"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "0B"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "0C"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "0D"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "0E"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "0F"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "10"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "11"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "12"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "13"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "14"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "15"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "16"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "17"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "18"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "19"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "1A"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "1B"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "1C"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "1D"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "1E"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "1F"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "20"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "21"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "22"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "23"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "24"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "25"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "26"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "27"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "28"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "29"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "2A"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "2B"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "2C"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "2D"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "2E"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "2F"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "30"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "31"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "32"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "33"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "34"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "35"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "36"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "37"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "38"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "39"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "3A"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "3B"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "3C"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "3D"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "3E"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "3F"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "40"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "41"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "42"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "43"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "44"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "45"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "46"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "47"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "48"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "49"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "4A"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "4B"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "4C"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "4D"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "4E"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "4F"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "50"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "51"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "52"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "53"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "54"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "55"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "56"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "57"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "58"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "59"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "5A"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "5B"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "5C"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "5D"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "5E"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "5F"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "60"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "61"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "62"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "63"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "64"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "65"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "66"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "67"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "68"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "69"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "6A"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "6B"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "6C"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "6D"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "6E"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "6F"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "70"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "71"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "72"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "73"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "74"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "75"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "76"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "77"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "78"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "79"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "7A"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "7B"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "7C"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "7D"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "7E"
+      },
+      {
+        "disabled": true,
+        "id": "",
+        "text": "7F"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "复制"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "保存"
+      },
+      {
+        "disabled": false,
+        "id": "i2-log-clear",
+        "text": "清空"
+      }
+    ],
+    "documentWidth": 1440,
+    "height": 1000,
+    "overflow": [],
+    "tabs": [
+      {
+        "data": {
+          "sideTab": "connect"
+        },
+        "id": "i2-side-connect-tab",
+        "text": "连接"
+      },
+      {
+        "data": {
+          "sideTab": "bus"
+        },
+        "id": "i2-side-bus-tab",
+        "text": "总线"
+      },
+      {
+        "data": {
+          "sideTab": "diagnostics"
+        },
+        "id": "i2-side-diagnostics-tab",
+        "text": "诊断"
+      },
+      {
+        "data": {
+          "sideTab": "help"
+        },
+        "id": "i2-side-help-tab",
+        "text": "帮助"
+      }
+    ],
+    "width": 1440
+  },
+  {
+    "label": "USB→ADC/DAC",
+    "name": "analog",
+    "active": "tab-analog",
+    "buttons": [
+      {
+        "disabled": false,
+        "id": "an-connect",
+        "text": "连接探针"
+      },
+      {
+        "disabled": true,
+        "id": "an-disconnect",
+        "text": "关闭探针"
+      },
+      {
+        "disabled": false,
+        "id": "an-tab-adc",
+        "text": "ADC 示波器"
+      },
+      {
+        "disabled": false,
+        "id": "an-tab-dac",
+        "text": "DAC 信号发生器"
+      },
+      {
+        "disabled": false,
+        "id": "an-pinmap-btn",
+        "text": "引脚分配图 / 接线"
+      },
+      {
+        "disabled": false,
+        "id": "an-once",
+        "text": "单次捕获"
+      },
+      {
+        "disabled": false,
+        "id": "an-start",
+        "text": "运行"
+      },
+      {
+        "disabled": false,
+        "id": "an-stop",
+        "text": "停止"
+      },
+      {
+        "disabled": false,
+        "id": "an-adc-export",
+        "text": "导出 ADC CSV"
+      },
+      {
+        "disabled": false,
+        "id": "an-cursor-reset",
+        "text": "复位游标"
+      },
+      {
+        "disabled": false,
+        "id": "an-cursor-clear",
+        "text": "清游标"
+      }
+    ],
+    "documentWidth": 1440,
+    "height": 1000,
+    "overflow": [],
+    "tabs": [
+      {
+        "data": {
+          "anTab": "adc"
+        },
+        "id": "an-tab-adc",
+        "text": "ADC 示波器"
+      },
+      {
+        "data": {
+          "anTab": "dac"
+        },
+        "id": "an-tab-dac",
+        "text": "DAC 信号发生器"
+      }
+    ],
+    "width": 1440
+  },
+  {
+    "label": "工程生成",
+    "name": "gen",
+    "active": "tab-gen",
+    "buttons": [
+      {
+        "disabled": false,
+        "id": "g-uvpick",
+        "text": "选择 .uvprojx…"
+      },
+      {
+        "disabled": false,
+        "id": "g-save",
+        "text": "写入文件夹…"
+      },
+      {
+        "disabled": false,
+        "id": "g-zip",
+        "text": "打包 ZIP"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "工程文件"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "调试参数"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "本地桥"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "ETM 桥"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "Makefile.jlink"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "jlink_gdb.script"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "Makefile.pyocd"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "Makefile.openocd"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "rtt_logger.py"
+      },
+      {
+        "disabled": false,
+        "id": "",
+        "text": "test_sram.bin"
+      },
+      {
+        "disabled": false,
+        "id": "g-copy",
+        "text": "复制当前文件"
+      },
+      {
+        "disabled": false,
+        "id": "g-dl",
+        "text": "下载当前文件"
+      }
+    ],
+    "documentWidth": 1440,
+    "height": 1000,
+    "overflow": [],
+    "tabs": [],
+    "width": 1440
+  }
+]

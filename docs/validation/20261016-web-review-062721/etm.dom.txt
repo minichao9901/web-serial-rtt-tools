@@ -1,0 +1,29 @@
+- banner:
+  - generic "串口 / RTT 工具箱"
+  - navigation "工具切换":
+    - button "串口助手"
+    - button "终端"
+    - button "RTT Viewer" [active]
+    - button "RTT 转发"
+    - button "J-Scope 波形"
+    - button "烧录器"
+    - button "调试器"
+    - generic "更多功能，当前页面：ETM 执行轨迹": 更多功能 ▾
+  - generic: 串口：未连接
+  - generic "连接支持该功能的 akaLinkPro 固件后可用。":
+    - checkbox "NRST 开漏" [checked] [disabled]
+    - text: NRST 开漏
+  - button "全局复位"
+  - button "全屏"
+  - status "当前页面没有功能连接实体探针；串口连接状态单独显示。": 探针：未使用
+  - generic "帮助"
+- main:
+  - heading "ETM 执行轨迹" [level=2]
+  - paragraph: 请启动本地 ETM 工作台后打开本页
+  - paragraph: 请使用本地启动入口打开工具箱；载入 ELF、选择断点起点后，即可采集并对照源码分析。
+  - button "重新检测服务"
+  - link "打开本地 ETM 工作台":
+    - /url: http://127.0.0.1:8896/#etm
+  - link "启动与使用说明":
+    - /url: docs/etm-integration.md
+  - text: 连接后这里显示接收数据。 连接探针并选择 RTT 通道后，这里显示目标输出。 连接后这里显示接收数据。 烧录或 SRAM 测试的进度与结果显示在这里。 （点「定位并开始」：留空地址就用 .elf 里的 _SEGGER_RTT 符号） ▸ ▸ 连接后这里显示接收数据。 ▸ I2C 事务与应答会显示在这里。

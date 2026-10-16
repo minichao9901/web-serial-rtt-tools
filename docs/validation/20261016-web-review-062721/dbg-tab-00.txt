@@ -1,0 +1,107 @@
+- banner:
+  - generic "串口 / RTT 工具箱"
+  - navigation "工具切换":
+    - button "串口助手"
+    - button "终端"
+    - button "RTT Viewer"
+    - button "RTT 转发"
+    - button "J-Scope 波形"
+    - button "烧录器"
+    - button "调试器"
+    - generic "更多功能": 更多功能 ▾
+  - generic: 串口：未连接
+  - generic "连接支持该功能的 akaLinkPro 固件后可用。":
+    - checkbox "NRST 开漏" [checked] [disabled]
+    - text: NRST 开漏
+  - button "全局复位"
+  - button "全屏"
+  - status "当前页面没有功能连接实体探针；串口连接状态单独显示。": 探针：未使用
+  - generic "帮助"
+- main:
+  - text: 连接后这里显示接收数据。 连接探针并选择 RTT 通道后，这里显示目标输出。 连接后这里显示接收数据。 烧录或 SRAM 测试的进度与结果显示在这里。
+  - complementary:
+    - tablist "调试器侧栏":
+      - tab "会话" [active] [selected]
+      - tab "断点"
+      - tab "栈帧"
+    - tabpanel "会话":
+      - group "连接":
+        - generic: 连接
+        - generic: 后端
+        - combobox "后端":
+          - option "SWD / ARM" [selected]
+          - option "JTAG / RISC-V"
+          - option "模拟目标"
+        - generic: SWD 时钟
+        - combobox "SWD 时钟":
+          - option "10 MHz（默认）" [selected]
+          - option "20 MHz"
+          - option "5 MHz"
+          - option "2 MHz"
+          - option "1 MHz"
+          - option "500 kHz"
+          - option "200 kHz"
+        - button "连接"
+        - button "断开" [disabled]
+      - group "符号文件":
+        - generic: 符号文件
+        - button "载入 ELF…"
+        - paragraph: 未载入 ELF（符号、源码与变量）
+      - group "目标复位":
+        - generic: 目标复位
+        - button "复位并停" [disabled]
+        - button "复位并跑" [disabled]
+  - button "收起设置" [expanded]
+  - generic: 未连接
+  - generic: PC —
+  - generic "当前源码位置（停下来 / 单步后更新）": —
+  - button "暂停" [disabled]
+  - button "继续" [disabled]
+  - button "单步" [disabled]
+  - button "跳过" [disabled]
+  - button "进入" [disabled]
+  - button "跳出" [disabled]
+  - checkbox "内存跟随 PC" [checked]
+  - text: 内存跟随 PC
+  - button "最大化调试工作区": 专注调试
+  - group "源码 选择源码目录… — 最大化源码":
+    - text: 源码
+    - button "选择源码目录…"
+    - generic: —
+    - button "最大化源码": 最大化
+    - generic: （载入 .elf 后可用：停下来时这里显示 PC 所在的源码行，点行号下断点）
+  - generic "拖动：调整命令行高度"
+  - group "命令行 h 帮助 · Tab 补全 · ↑↓ 历史 最大化命令行":
+    - text: 命令行
+    - generic "Ctrl+C 中断 · Ctrl+L 清屏；更多命令和快捷键输入 h 查看": h 帮助 · Tab 补全 · ↑↓ 历史
+    - button "最大化命令行": 最大化
+    - generic: 调试器就绪。连上目标后按 h 看命令，Tab 补全、↑↓ 翻历史、Ctrl+C 中断。
+    - generic: ">"
+    - textbox "h / r / md 0x20000000 / b main.c:192 / p g_pack / w g_var / n / si / fin / c"
+    - button "执行"
+  - generic "拖动：调整右侧面板宽度"
+  - group "寄存器 内存 变量 SVD RTT 异常 最大化检查面板":
+    - button "寄存器"
+    - button "内存"
+    - button "变量"
+    - button "SVD"
+    - button "RTT"
+    - button "异常"
+    - button "最大化检查面板": 最大化
+    - button "刷新"
+    - text: 回车即写入（只读位会黄字提醒）
+    - table "核心寄存器":
+      - row "寄存器 调整寄存器列宽 值 调整值列宽 说明 调整说明列宽":
+        - columnheader "寄存器 调整寄存器列宽":
+          - text: 寄存器
+          - separator "调整寄存器列宽"
+        - columnheader "值 调整值列宽":
+          - text: 值
+          - separator "调整值列宽"
+        - columnheader "说明 调整说明列宽":
+          - text: 说明
+          - separator "调整说明列宽"
+      - rowgroup:
+        - generic: （未连接）
+    - text: （点「定位并开始」：留空地址就用 .elf 里的 _SEGGER_RTT 符号）
+  - text: ▸ ▸ 连接后这里显示接收数据。 ▸ I2C 事务与应答会显示在这里。

@@ -1,0 +1,159 @@
+- banner:
+  - generic "串口 / RTT 工具箱"
+  - navigation "工具切换":
+    - button "串口助手"
+    - button "终端"
+    - button "RTT Viewer"
+    - button "RTT 转发"
+    - button "J-Scope 波形"
+    - button "烧录器"
+    - button "调试器"
+    - generic "更多功能，当前页面：SPI/QSPI屏": 更多功能 ▾
+  - generic: 串口：未连接
+  - generic "连接支持该功能的 akaLinkPro 固件后可用。":
+    - checkbox "NRST 开漏" [checked] [disabled]
+    - text: NRST 开漏
+  - button "全局复位"
+  - button "全屏"
+  - status "当前页面没有功能连接实体探针；串口连接状态单独显示。": 探针：未使用
+  - generic "帮助"
+- main:
+  - text: 连接后这里显示接收数据。 连接探针并选择 RTT 通道后，这里显示目标输出。 连接后这里显示接收数据。 烧录或 SRAM 测试的进度与结果显示在这里。 （点「定位并开始」：留空地址就用 .elf 里的 _SEGGER_RTT 符号） ▸
+  - complementary:
+    - tablist "侧栏设置":
+      - tab "连接"
+      - tab "屏配置" [active] [selected]
+      - tab "控制"
+      - tab "帮助"
+    - tabpanel "屏配置":
+      - group "屏型号":
+        - generic: 屏型号
+        - generic: 型号
+        - combobox "型号":
+          - option "AXS15352（240×296）" [selected]
+          - option "ST77916（360×360）"
+        - generic "型号说明 ▸"
+        - button "套用推荐值" [disabled]
+        - generic: SCLK
+        - combobox "屏幕 SCLK" [disabled]:
+          - option "板级默认（20 MHz）" [selected]
+          - option "10 MHz"
+          - option "20 MHz"
+          - option "40 MHz"
+          - option "60 MHz"
+          - option "75 MHz（板子上限）"
+        - button "应用" [disabled]
+        - status "探针状态回读的实际 SCLK": 实际 —
+      - group "通信档位":
+        - generic: 通信档位
+        - generic: 档位
+        - combobox "档位":
+          - option "raw（普通 SPI）" [selected]
+          - option "spi_dcx（SPI + DC）"
+          - option "qspi（QSPI 屏）"
+        - generic: 默认线数
+        - combobox "默认线数":
+          - option "1" [selected]
+          - option "2"
+          - option "4"
+        - checkbox "DC 高 = 数据" [checked]
+        - text: DC 高 = 数据
+        - checkbox "翻 DC 时保持 CS" [checked]
+        - text: 翻 DC 时保持 CS
+        - generic: QSPI 写
+        - textbox "QSPI 写": "0x02"
+        - generic: QSPI 像素
+        - textbox "QSPI 像素": "0x32"
+        - generic: 地址字节
+        - textbox "地址字节": "3"
+        - button "读取档位" [disabled]
+        - button "写入档位" [disabled]
+    - generic "运行控制":
+      - button "使能" [disabled]
+      - button "失能" [disabled]
+      - paragraph: 未连接
+  - button "刷屏"
+  - button "面板初始化"
+  - button "读回"
+  - generic "屏页当前在跑什么（切到哪个 tab 都看得见）：刷图 / 重放 / 读回 / 播放动画": 未连接数据端点
+  - button "中止" [disabled]
+  - generic: 纯色
+  - button "红 R": 红 R
+  - button "绿 G": 绿 G
+  - button "蓝 B": 蓝 B
+  - button "黄 R+G": 黄 R+G
+  - button "品红 R+B": 品红 R+B
+  - button "青 G+B": 青 G+B
+  - button "白 W": 白 W
+  - button "黑 K": 黑 K
+  - button "灰 GY": 灰 GY
+  - generic: 图案
+  - button "混色卡"
+  - button "色条 8"
+  - button "对半 红|绿"
+  - button "对半 绿|蓝"
+  - button "对半 红|蓝"
+  - button "棋盘 16px"
+  - button "棋盘 1px"
+  - button "渐变"
+  - button "4px 网格"
+  - button "选择图片…"
+  - button "刷这一张" [disabled]
+  - generic: 内置图案 BAR 源图 240×296 · 目标 240×296
+  - generic "可拖入 BMP / PNG / JPEG"
+  - generic: 屏幕
+  - combobox "屏幕":
+    - option "axs15352（240×296）" [selected]
+    - option "st77916（360×360）"
+    - option "gc9a01（240×240）"
+    - option "自定义…"
+  - generic: 开窗 x/y
+  - textbox "开窗 x/y 0": "0"
+  - textbox: "0"
+  - generic: 缩放
+  - combobox "缩放":
+    - option "铺满（裁剪）" [selected]
+    - option "适应（留边）"
+    - option "拉伸"
+    - option "原始尺寸"
+  - generic: 字节序
+  - combobox "字节序":
+    - option "高字节在前" [selected]
+    - option "低字节在前"
+  - generic "等价于 MADCTL 的 BGR 位":
+    - checkbox "R/B 交换"
+    - text: R/B 交换
+  - generic: 电平
+  - textbox "电平": "255"
+  - generic "只把与上一帧不同的那块包围盒发出去（静止区域完全不碰面板）。勾上后：连刷同一张图第二次会「整帧跳过」；播放动画时按变化面积提速。开窗坐标会按 4 像素对齐。与动画行那个开关是同一个状态。":
+    - checkbox "局部刷新" [checked]
+    - text: 局部刷新
+  - generic: 容差
+  - combobox "容差":
+    - option "0 位（逐位精确）"
+    - option "1 位（推荐）" [selected]
+    - option "2 位（噪声大时）"
+  - generic: 动画 / 视频
+  - button "选择文件…"
+  - button "播放到屏" [disabled]
+  - button "停止" [disabled]
+  - checkbox "循环" [checked]
+  - text: 循环
+  - generic "与上方图片设置开关同步：勾上 = 只发与上一帧不同的包围盒":
+    - checkbox "局部刷新" [checked]
+    - text: 局部刷新
+  - paragraph: 选择动画或视频
+  - generic "窗口与传输详情"
+  - generic "拖动：调整日志高度"
+  - strong: 屏日志
+  - button "复制"
+  - button "保存"
+  - button "清空"
+  - generic: "[桥] 就绪。真机：先「连接探针」再「连接数据端点」；没板子就勾「用假探针」。"
+  - generic: 已载入内置示例：天马 2P01 / AXS15352（240×296 · 4 线 SPI + DC）（30 条）
+  - generic: 解析完成：30 条 / 284 参数字节 / 累计 100 ms
+  - generic: 图案 BAR（240×296）
+  - generic: 帧 ok 0 · err 0 · tx 0 B · rx 0 B
+  - text: 与桥页共享同一次连接 · 方案
+  - code: docs/spi-bridge-page.md
+  - text: 连接后这里显示接收数据。 ▸ I2C 事务与应答会显示在这里。

@@ -1,0 +1,103 @@
+- banner:
+  - generic "串口 / RTT 工具箱"
+  - navigation "工具切换":
+    - button "串口助手"
+    - button "终端"
+    - button "RTT Viewer"
+    - button "RTT 转发"
+    - button "J-Scope 波形"
+    - button "烧录器"
+    - button "调试器"
+    - generic "更多功能": 更多功能 ▾
+  - generic: 串口：未连接
+  - generic "连接支持该功能的 akaLinkPro 固件后可用。":
+    - checkbox "NRST 开漏" [checked] [disabled]
+    - text: NRST 开漏
+  - button "全局复位"
+  - button "全屏"
+  - status "当前页面没有功能连接实体探针；串口连接状态单独显示。": 探针：未使用
+  - generic "帮助"
+- main:
+  - text: 连接后这里显示接收数据。 连接探针并选择 RTT 通道后，这里显示目标输出。 连接后这里显示接收数据。
+  - complementary:
+    - tablist "烧录器工具":
+      - tab "烧录" [active] [selected]
+      - tab "SRAM 读写测试"
+    - group "目标与连接":
+      - generic: 目标与连接
+      - generic: 后端
+      - combobox "后端":
+        - option "WebUSB · 零安装（默认）" [selected]
+        - option "本地桥 · OpenOCD"
+        - option "本地桥 · J-Link"
+      - generic: 芯片
+      - combobox "芯片":
+        - option "STM32F1（F103 等）" [selected]
+        - option "STM32F0"
+        - option "STM32F2"
+        - option "STM32F3"
+        - option "STM32F4"
+        - option "STM32F7"
+        - option "STM32G0"
+        - option "STM32G4"
+        - option "STM32H7"
+        - option "STM32H7B0/H7A3/H7B3"
+        - option "STM32H5"
+        - option "STM32L0"
+        - option "STM32L1"
+        - option "STM32L4 / L4+"
+        - option "STM32L5"
+        - option "STM32U5"
+        - option "STM32C0"
+        - option "STM32WB"
+        - option "STM32WL"
+        - option "ESP32-S31（板载 USB-JTAG）"
+        - option "ESP32（Wrover Kit）"
+        - option "HPM5300EVK（HPM5361）（RISC-V，零安装）"
+        - option "HPM5301EVKLite（RISC-V，零安装）"
+        - option "HPM5E00EVK（RISC-V，零安装）"
+        - option "HPM6200EVK（HPM6280）（RISC-V，零安装）"
+        - option "HPM6300EVK（HPM6360）（RISC-V，零安装）"
+        - option "HPM6750EVK2（RISC-V，零安装）"
+        - option "HPM6750EVKMINI（RISC-V，零安装）"
+        - option "HPM6800EVK（HPM6880）（RISC-V，零安装）"
+        - option "HPM6E00EVK（HPM6E80）（RISC-V，零安装）"
+        - option "HPM6P00EVK（HPM6P81）（RISC-V，零安装）"
+        - option "自定义 cfg…"
+      - button "读 IDCODE"
+    - tabpanel "烧录":
+      - group "烧录时钟":
+        - generic: 烧录时钟
+        - generic: 时钟
+        - combobox "时钟":
+          - option "默认（WebUSB 1 MHz）" [selected]
+          - option "1 MHz"
+          - option "4 MHz"
+          - option "5 MHz"
+          - option "10 MHz"
+          - option "20 MHz"
+          - option "30 MHz"
+          - option "36 MHz"
+          - option "40 MHz"
+          - option "45 MHz"
+          - option "50 MHz"
+          - option "60 MHz"
+      - group "固件":
+        - generic: 固件
+        - generic: 路径
+        - textbox "路径":
+          - /placeholder: 桥所在电脑上的 .elf / .hex / .bin 路径
+        - button "选择文件…"
+        - paragraph: 支持 .elf / .hex / .bin：点「选择文件…」或拖进右侧日志区；填路径仅「本地桥」后端支持
+        - checkbox "校验" [checked]
+        - text: 校验
+        - checkbox "烧录后复位运行" [checked]
+        - text: 烧录后复位运行
+        - button "烧录"
+        - paragraph: 烧录会暂停目标并在完成后复位；烧录前会断开占用探针的 RTT 会话。
+  - generic: 空闲
+  - button "清空日志"
+  - generic: 烧录或 SRAM 测试的进度与结果显示在这里。
+  - generic: —
+  - generic: .bin 记得核对基地址（默认 0x08000000）
+  - text: （点「定位并开始」：留空地址就用 .elf 里的 _SEGGER_RTT 符号） ▸ ▸ 连接后这里显示接收数据。 ▸ I2C 事务与应答会显示在这里。

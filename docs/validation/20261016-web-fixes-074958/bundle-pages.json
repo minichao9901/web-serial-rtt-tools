@@ -1,0 +1,77 @@
+[
+  {
+    "entry": "bundle",
+    "masked": false,
+    "page": "tab-serial"
+  },
+  {
+    "entry": "bundle",
+    "masked": false,
+    "page": "tab-terminal"
+  },
+  {
+    "entry": "bundle",
+    "masked": false,
+    "page": "tab-rtt"
+  },
+  {
+    "entry": "bundle",
+    "masked": false,
+    "page": "tab-rttcdc"
+  },
+  {
+    "entry": "bundle",
+    "masked": false,
+    "page": "tab-scope"
+  },
+  {
+    "entry": "bundle",
+    "masked": false,
+    "page": "tab-flash"
+  },
+  {
+    "entry": "bundle",
+    "masked": false,
+    "page": "tab-dbg"
+  },
+  {
+    "entry": "bundle",
+    "masked": false,
+    "page": "tab-spi"
+  },
+  {
+    "entry": "bundle",
+    "masked": false,
+    "page": "tab-panel"
+  },
+  {
+    "entry": "bundle",
+    "masked": false,
+    "page": "tab-spicdc"
+  },
+  {
+    "entry": "bundle",
+    "masked": false,
+    "page": "tab-swo"
+  },
+  {
+    "entry": "bundle",
+    "masked": false,
+    "page": "tab-etm"
+  },
+  {
+    "entry": "bundle",
+    "masked": false,
+    "page": "tab-i2c"
+  },
+  {
+    "entry": "bundle",
+    "masked": false,
+    "page": "tab-analog"
+  },
+  {
+    "entry": "bundle",
+    "masked": false,
+    "page": "tab-gen"
+  }
+]

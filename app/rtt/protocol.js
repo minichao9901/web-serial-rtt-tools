@@ -27,6 +27,8 @@
  *       界面上的数字都当"下限/压力指示"，不是精确账。
  */
 import { u32le, u32leBytes, latin1 } from '../core/bin.js';
+import { waitMs } from '../core/pace.js';
+import { OperationBudget } from '../core/operation-budget.js';
 
 export const CB_ID = 'SEGGER RTT';
 export const ENTRY = 24;
@@ -64,7 +66,7 @@ export const MAX_CH_BYTES = 32 << 20;
  */
 export const MAX_READ_PER_POLL = 64 * 1024;
 
-const sleepMs = ms => new Promise(r => setTimeout(r, ms));
+const sleepMs = waitMs;
 const allZero = b => b.length > 0 && b.every(x => x === 0);
 const hasCbId = b => b.length >= CB_ID.length && latin1(b.subarray(0, CB_ID.length)) === CB_ID;
 /**
@@ -145,6 +147,7 @@ export class Rtt {
 
   /** 校验某个地址是不是合理的控制块（结构自洽才认） */
   static async validate(mem, addr){
+    const budget = new OperationBudget('校验 RTT 控制块', 15000);
     try {
       /**
        * 🚨 头 24 字节**必须重试**（2026-10 HPM6800EVK 真机定因）：
@@ -153,11 +156,11 @@ export class Rtt {
        *    「没有 "SEGGER RTT" 标识」—— 界面表现正是用户说的"Viewer 时好时坏、连不上"。
        *    读失败或读到全 0 就**重启一次链路再读**，最多 3 次；3 次都不行才认账。
        */
-      let hdr = await mem.readMem(addr, 24);
+      let hdr = await budget.step('读取标识', () => mem.readMem(addr, 24));
       for (let i = 0; i < 2 && !hasCbId(hdr); i++){
-        await recoverMem(mem);
+        await budget.step('恢复读取链路', () => recoverMem(mem));
         await sleepMs(80);
-        hdr = await mem.readMem(addr, 24);
+        hdr = await budget.step('重新读取标识', () => mem.readMem(addr, 24));
       }
       if (!hasCbId(hdr)) return { ok: false, reason: `没有 "SEGGER RTT" 标识${allZero(hdr) ? '（读到全 0，重试 3 次仍如此）' : ''}` };
       const maxUp = u32le(hdr, 16), maxDown = u32le(hdr, 20);
@@ -185,6 +188,11 @@ export class Rtt {
   }
 
   async init(addr = this.addr){
+    this._initBudget = new OperationBudget('初始化 RTT 通道', 15000);
+    try { return await this._initNow(addr); }
+    finally { this._initBudget = null; }
+  }
+  async _initNow(addr){
     const hdr = await this.mem.readMem(addr, 24);
     if (latin1(hdr.subarray(0, 10)) !== CB_ID){
       throw new Error(`0x${addr.toString(16)} 处不是 RTT 控制块（读到 "${latin1(hdr.subarray(0, 16))}"）`);
@@ -217,6 +225,7 @@ export class Rtt {
   async _entry(base, i){
     let lastErr = null;
     for (let attempt = 0; attempt < 3; attempt++){
+      this._initBudget?.check(`读取通道 ${i}`);
       try { return await this._entryOnce(base, i); }
       catch (e){
         lastErr = e;

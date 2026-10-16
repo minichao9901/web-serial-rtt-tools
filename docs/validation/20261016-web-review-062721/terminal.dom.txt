@@ -1,0 +1,62 @@
+- banner:
+  - generic "串口 / RTT 工具箱"
+  - navigation "工具切换":
+    - button "串口助手"
+    - button "终端"
+    - button "RTT Viewer" [active]
+    - button "RTT 转发"
+    - button "J-Scope 波形"
+    - button "烧录器"
+    - button "调试器"
+    - generic "更多功能": 更多功能 ▾
+  - generic: 串口：未连接
+  - generic "连接支持该功能的 akaLinkPro 固件后可用。":
+    - checkbox "NRST 开漏" [checked] [disabled]
+    - text: NRST 开漏
+  - button "全局复位"
+  - button "全屏"
+  - status "当前页面没有功能连接实体探针；串口连接状态单独显示。": 探针：未使用
+  - generic "帮助"
+- main:
+  - text: 连接后这里显示接收数据。
+  - complementary:
+    - group "终端":
+      - generic: 终端
+      - paragraph: 跟随「串口助手」的串口会话（端口与波特率在那边设置）。
+      - generic: 回显
+      - combobox "回显":
+        - option "设备回显（默认）" [selected]
+        - option "本地回显"
+        - option "双向"
+      - generic: 回车发送
+      - combobox "回车发送":
+        - option "\\r (0x0D)" [selected]
+        - option "\\r\\n"
+        - option "\\n (0x0A)"
+      - generic: 退格发送
+      - combobox "退格发送":
+        - option "0x7F (DEL)" [selected]
+        - option "0x08 (BS)"
+      - generic: 换行
+      - combobox "换行":
+        - option "自动补回车（\\n → \\r\\n）" [selected]
+        - option "原样（\\n 只换行）"
+      - generic: 字号
+      - textbox "字号 px": "14"
+      - text: px
+      - button "粘贴并发送"
+      - button "清屏"
+      - button "保存输出"
+      - paragraph: 选中即复制（Ctrl+Shift+C）；Ctrl+Shift+V 粘贴；Ctrl+Shift+L 清屏。
+      - paragraph: RTT→CDC 转发（akaLinkPro）在「RTT 转发」那一页。
+  - generic: 未连接 · 串口参数在「串口助手」里设置
+  - textbox "Terminal input"
+  - generic: 终端已就绪：先在「串口助手」里连接串口，这里就能像
+  - generic: Xshell
+  - generic: 一样敲命令。
+  - generic: 如果敲了字看不到回显，把左边的「回显」改成
+  - generic: “
+  - generic: 本地回显
+  - generic: ”
+  - generic: （很多固件不回显你输入的字符）。
+  - text: 连接探针并选择 RTT 通道后，这里显示目标输出。 连接后这里显示接收数据。 烧录或 SRAM 测试的进度与结果显示在这里。 （点「定位并开始」：留空地址就用 .elf 里的 _SEGGER_RTT 符号） ▸ ▸ 连接后这里显示接收数据。 ▸ I2C 事务与应答会显示在这里。

@@ -9,9 +9,10 @@ export class BurstGuard {
 }
 
 export class AnsiDisplay {
-  constructor(term, { visible = () => true, format = b => b, onSkip = () => {}, limit = 64 * 1024 } = {}){
+  constructor(term, { visible = () => true, format = b => b, onSkip = () => {}, onError = e => console.error(e), limit = 64 * 1024 } = {}){
     this.term = term; this.visible = visible; this.format = format; this.limit = limit;
     this.onSkip = onSkip;
+    this.onError = onError; this.failed = false;
     this.pending = []; this.bytes = 0; this.skipped = 0; this.busy = false;
     this.timer = setInterval(() => this.flush(), 60);
   }
@@ -21,9 +22,9 @@ export class AnsiDisplay {
     this.pending.push({ b, t }); this.bytes += b.length;
     while (this.bytes > this.limit || this.pending.length > 1024){ const old = this.pending.shift(); this.bytes -= old.b.length; this.skipped += old.b.length; }
   }
-  clear(){ this.pending = []; this.bytes = 0; this.skipped = 0; if (this.busy) this._clearOnDrain = true; }
+  clear(){ this.pending = []; this.bytes = 0; this.skipped = 0; this.failed = false; if (this.busy) this._clearOnDrain = true; }
   flush(){
-    if (this.busy || !this.visible() || !this.pending.length) return;
+    if (this.failed || this.busy || !this.visible() || !this.pending.length) return;
     const chunks = []; let size = 0;
     if (this.skipped){
       this.onSkip();
@@ -44,7 +45,7 @@ export class AnsiDisplay {
       if (this._clearOnDrain){ this.term.clear?.(); this._clearOnDrain = false; }
       this.busy = false;
     }); }
-    catch (e){ this.busy = false; throw e; }
+    catch (e){ this.busy = false; this.failed = true; try { this.onError(e); } catch (feedback){ console.error(feedback); } }
   }
 }
 

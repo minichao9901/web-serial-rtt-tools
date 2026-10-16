@@ -1,0 +1,79 @@
+- banner:
+  - generic "串口 / RTT 工具箱"
+  - navigation "工具切换":
+    - button "串口助手"
+    - button "终端"
+    - button "RTT Viewer"
+    - button "RTT 转发"
+    - button "J-Scope 波形"
+    - button "烧录器"
+    - button "调试器"
+    - generic "更多功能，当前页面：工程生成": 更多功能 ▾
+  - generic: 串口：未连接
+  - generic "连接支持该功能的 akaLinkPro 固件后可用。":
+    - checkbox "NRST 开漏" [checked] [disabled]
+    - text: NRST 开漏
+  - button "全局复位"
+  - button "全屏"
+  - status "当前页面没有功能连接实体探针；串口连接状态单独显示。": 探针：未使用
+  - generic "帮助"
+- main:
+  - text: 连接后这里显示接收数据。 连接探针并选择 RTT 通道后，这里显示目标输出。 连接后这里显示接收数据。 烧录或 SRAM 测试的进度与结果显示在这里。 （点「定位并开始」：留空地址就用 .elf 里的 _SEGGER_RTT 符号） ▸ ▸ 连接后这里显示接收数据。 ▸ I2C 事务与应答会显示在这里。
+  - complementary:
+    - group "本地桥（J-Link / OpenOCD）":
+      - generic: 本地桥（J-Link / OpenOCD）
+      - checkbox "生成「本地桥」安装包（双击即用）" [checked]
+      - text: 生成「本地桥」安装包（双击即用）
+      - generic: 端口
+      - textbox "端口": "17321"
+      - generic: 目标
+      - combobox "目标":
+        - option "STM32F103（cmsis-dap + stm32f1x）" [selected]
+        - option "STM32H7B0（cmsis-dap + stm32h7x）"
+        - option "自定义 cfg…"
+      - generic: 自定义 cfg
+      - textbox "自定义 cfg": interface/cmsis-dap.cfg, target/stm32f1x.cfg
+      - generic: OpenOCD kHz
+      - textbox "OpenOCD kHz": "4000"
+      - generic: openocd.exe
+      - textbox "openocd.exe":
+        - /placeholder: 留空 = 自动探测
+      - generic: scripts 目录
+      - textbox "scripts 目录":
+        - /placeholder: 留空 = 跟着 openocd.exe 推断
+      - generic: J-Link 器件
+      - textbox "J-Link 器件": STM32F103C8
+      - generic: J-Link kHz
+      - textbox "J-Link kHz": "50000"
+      - generic: 便携 Node
+      - textbox "便携 Node": 22.14.0
+      - generic: 下载源
+      - combobox "下载源":
+        - option "国内镜像优先（npmmirror）" [selected]
+        - option "官方优先（nodejs.org）"
+      - checkbox "没 Node 时自动下便携版" [checked]
+      - text: 没 Node 时自动下便携版
+      - paragraph: 包里：启动器（bat/sh）+ 桥本体 + 配置 + 预检脚本 + 便携 Node 下载器 + 说明。 路径留空 = 桥自己探测（ESP-IDF 的 openocd-esp32 → Program Files → PATH；J-Link 找 SEGGER 目录里版本号最大的）； 起桥前会先跑一次环境预检，把"该改哪一行"打出来。退出用 Ctrl+C（会把 OpenOCD / J-Link 子进程一起收掉）。 每个文件的预览与「下载桥包（ZIP）」在右边「本地桥」tab。
+  - button "工程文件"
+  - button "调试参数"
+  - button "本地桥"
+  - button "ETM 桥"
+  - generic "当前 tab 的一句话状态": 7 个文件 · 78 KB
+  - generic: 安装包里的文件
+  - button "rtt-bridge.mjs"
+  - button "bridge.config.json"
+  - button "README-bridge.txt"
+  - button "start-bridge.bat"
+  - button "check-tools.bat"
+  - button "get-node.ps1"
+  - button "start-bridge.sh"
+  - button "复制当前文件"
+  - button "下载桥包（ZIP）"
+  - generic: "#!/bin/sh # rtt-bridge 本地桥（macOS / Linux）—— 由网页「工程生成」生成 # 用法： ./start-bridge.sh [参数...] 例： ./start-bridge.sh --port 17322 cd \"$(dirname \"$0\")\" || exit 1 if command -v node >/dev/null 2>&1; then NODE_BIN=node elif [ -x \"./node/bin/node\" ]; then NODE_BIN=\"./node/bin/node\" else cat <<'EOF' [!] 没找到 Node.js（桥需要 Node 18+）。三种装法： · macOS ： brew install node · Ubuntu： sudo apt install nodejs · 免安装： curl -fsSL https://nodejs.org/dist/v22.14.0/node-v22.14.0-linux-x64.tar.xz | tar -xJ 然后 mv node-v22.14.0-linux-x64 node （放在本目录即可，脚本会自动用 ./node/bin/node） EOF exit 1 fi echo \"[i] Node $(\"$NODE_BIN\" -v)\" \"$NODE_BIN\" ./rtt-bridge.mjs --doctor --port 17321 --target stm32f103 || true exec \"$NODE_BIN\" ./rtt-bridge.mjs \"$@\""
+  - paragraph: 7 个文件：启动器（bat / sh）+ 桥本体 + 配置 + 预检脚本 + 便携 Node 下载器 + 说明 —— 参数在左栏「本地桥」那张卡里改，改完这里立刻跟着变。
+  - generic: 13 个文件 · 119.5 KB · CRLF · 修正 4 项 · 含桥包 78 KB
+  - text: 模板逐字节移植自
+  - code: uvprojx2cmake.py
+  - text: ，默认再套 4 项修正（
+  - code: make test-gen
+  - text: 负责对账）

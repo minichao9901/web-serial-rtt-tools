@@ -21,6 +21,7 @@ import { WebUsbSpiTransport, MockSpiTransport } from './transport.js';
 import { MockSpiProbe } from './mock.js';
 import { runProbeOperation } from '../core/probe-manager.js';
 import { BUS, runSessionPeriodic, stopSessionPeriodic } from '../core/bus-periodic.js';
+import { waitMs } from '../core/pace.js';
 
 const POLL_MS = 1000;          // 状态/计数器轮询间隔（观察量，1 s 够）
 const RING_MAX = 400;          // 日志 ring（切页时全量重放用）
@@ -85,7 +86,21 @@ export class SpiSession {
   }
 
   get connected(){ return !!(this.hid && (this.usingMock || this.hid.connected)); }
+  get busy(){ return !!(this._busy || this._frameCount || this._controlBusy || this._teardownPromise); }
+  set busy(value){ this._busy = !!value; }
   get dataReady(){ return !!this.transport; }
+  capabilities(){
+    return { read: this.connected, configure: this.connected && !this.busy && !this._teardownPromise,
+      switchDevice: !this.busy && !this._teardownPromise,
+      retryStop: !!this._periodic?.client.stopError && this.connected };
+  }
+  async _control(fn){
+    if (this.busy || this._teardownPromise) throw new Error('SPI 任务正在运行或停止中，请先停止当前任务');
+    this._controlBusy = true;
+    this.setBusy(true);
+    try { return await fn(); }
+    finally { this._controlBusy = false; this.setBusy(!!this._periodic?.client.stopError); }
+  }
   /**
    * 桥当前是否使能。
    * ⚠️ 别写 `lastStatus.enabled` —— `parseStatusPayload()` 返回的是**协议原样**的字段
@@ -117,7 +132,7 @@ export class SpiSession {
       this.ensurePoll();
       await this.loadCfg({ quiet: true });
       await this.loadProfile({ quiet: true });
-      await this.pollStatus();
+      await this.pollStatus(true);
       this._setState('HID 已连接');
     } catch (e){
       this.log('e', '连接 HID 失败：' + (e?.message || e));
@@ -174,6 +189,9 @@ export class SpiSession {
 
   /** 假探针：HID 与 bulk **必须**指向同一个实例（两个实例会造出"配置发给 A、数据从 B 出来"的假象）*/
   async setMock(on, opts = {}){
+    return this._control(() => this._setMock(on, opts));
+  }
+  async _setMock(on, opts = {}){
     await this.teardown();
     if (on){
       const probe = new MockSpiProbe(opts.device ? { device: opts.device } : {});
@@ -187,7 +205,7 @@ export class SpiSession {
       this._setState('假探针');
       await this.loadCfg({ quiet: true });
       await this.loadProfile({ quiet: true });
-      await this.pollStatus();
+      await this.pollStatus(true);
       this.ensurePoll();               // teardown 清了定时器，这里要重新武装（真机路径在 connectHid 里做）
     } else {
       this.usingMock = false;
@@ -205,6 +223,7 @@ export class SpiSession {
    * 真机上这个动作没意义（会如实拒绝）。
    */
   setMockDevice(kind){
+    if (this.busy) throw new Error('请先停止 SPI 任务再切换模拟器件');
     if (!this.usingMock || !this.mockProbe){
       this.log('w', '「假器件」只在假探针模式下有意义 —— 真机上末级器件就是你接的那颗');
       return null;
@@ -224,13 +243,14 @@ export class SpiSession {
       await this._teardownNow();
       this.probeManager?.forget('spi');
     })();
+    this.setBusy(true);
     try { return await this._teardownPromise; }
-    finally { this._teardownPromise = null; }
+    finally { this._teardownPromise = null; this.setBusy(!!this._periodic?.client.stopError); }
   }
 
   /** 页面“关闭探针”：结束共享会话；传输中先由对应操作的停止按钮收尾。 */
   async disconnect(){
-    if (this.busy) return false;
+    if (this.busy && !this.capabilities().retryStop) return false;
     this.setBusy(true);
     try {
       await this.teardown();
@@ -241,7 +261,7 @@ export class SpiSession {
       this.log('e', message);
       this._setState(message, 'err');
       return false;
-    } finally { this.setBusy(false); }
+    } finally { this.setBusy(!!this._periodic?.client.stopError); }
   }
 
   async _teardownNow(){
@@ -300,8 +320,17 @@ export class SpiSession {
     this.busy = !!on;
     this._emit('busy', this.busy);
   }
-  runPeriodic(groups, opts){ return runSessionPeriodic(this, BUS.SPI, groups, opts); }
-  stopPeriodic(){ return stopSessionPeriodic(this); }
+  runPeriodic(groups, opts){
+    return runSessionPeriodic(this, BUS.SPI, groups, opts).catch(error => {
+      if (this._periodic?.client.stopError) this.probeManager?.fail('spi', error);
+      throw error;
+    });
+  }
+  async stopPeriodic(){
+    const owned = !!this._periodic;
+    try { await stopSessionPeriodic(this); if (owned) this.probeManager?.confirm('spi'); }
+    catch (error){ this.probeManager?.fail('spi', error); throw error; }
+  }
 
   // ==================================================================== HID 控制面
 
@@ -331,6 +360,9 @@ export class SpiSession {
    *    固件把字段夹取走了（例如开 quad 后退掉 PA30/PA31 的辅助脚）。
    */
   async applyConfig(want, tag = 'bus'){
+    return this._control(() => this._applyConfig(want, tag));
+  }
+  async _applyConfig(want, tag){
     const pads = [[P.LINE.DC, want.padDc], [P.LINE.RST, want.padRst],
                   [P.LINE.CS_AUX, want.padCsAux], [P.LINE.BL, want.padBl]];
     for (const [line, pad] of pads){
@@ -344,7 +376,7 @@ export class SpiSession {
     }
     if (diffs.length) this.log('w', '写入后被固件改掉了：' + diffs.join('、') + '（越界、或开 quad 与辅助脚冲突会被拒/夹取）', tag);
     else this.log('g', '配置已生效（回读对账一致）', tag);
-    await this.pollStatus();
+    await this.pollStatus(true);
     return { cfg: back, diffs };
   }
 
@@ -357,6 +389,9 @@ export class SpiSession {
   }
 
   async applyProfile(prof, tag = 'bus'){
+    return this._control(() => this._applyProfile(prof, tag));
+  }
+  async _applyProfile(prof, tag){
     await this.hidAction(P.ACT.SET_PROFILE, P.hidData.setProfile(P.encodeProfile(prof)), 'SET_PROFILE', { tag });
     const back = await this.loadProfile({ quiet: true, tag });
     const diffs = [];
@@ -371,20 +406,30 @@ export class SpiSession {
   }
 
   async setEnabled(on, tag = 'bus'){
+    return this._control(() => this._setEnabled(on, tag));
+  }
+  async _setEnabled(on, tag){
     const res = await this.hidAction(P.ACT.ENABLE, P.hidData.enable(on), `ENABLE ${on ? 1 : 0}`, { tag });
-    const st = P.statusWord(P.parseWordPayload(res));
-    if (on && !st.enabled){ this.log('e', 'ENABLE 没生效（状态字里 enabled 仍是 0）', tag); await this.pollStatus(); return false; }
+    let enabled = P.statusWord(P.parseWordPayload(res)).enabled;
+    const deadline = performance.now() + 1500;
+    while (enabled !== !!on){
+      if (performance.now() >= deadline) throw new Error(`桥${on ? '使能' : '失能'}未确认，请读取状态后重试`);
+      await waitMs(20);
+      const status = await this.pollStatus(true);
+      if (!status) throw new Error('无法确认 SPI 桥状态，未宣称引脚已释放');
+      enabled = P.statusWord(status.status).enabled;
+    }
     this.log('g', on ? '桥已使能（引脚已复用）' : '桥已失能（引脚恢复默认）', tag);
-    await this.pollStatus();
+    await this.pollStatus(true);
     return true;
   }
 
   async reset(opts = {}){
-    await this.hidAction(P.ACT.RESET, P.hidData.reset(), 'RESET（清环+清计数器）', opts);
+    return this._control(() => this.hidAction(P.ACT.RESET, P.hidData.reset(), 'RESET（清环+清计数器）', opts));
   }
 
   async abort(opts = {}){
-    await this.hidAction(P.ACT.ABORT, P.hidData.abort(), 'ABORT（丢未处理帧与 IN 队列）', opts);
+    return this._control(() => this.hidAction(P.ACT.ABORT, P.hidData.abort(), 'ABORT（丢未处理帧与 IN 队列）', opts));
   }
 
   async pollStatus(force = false){
@@ -458,6 +503,13 @@ export class SpiSession {
    * @returns {Promise<{sent:number, failed:number, rsps:Array<{status:number,data:Uint8Array}|null>, packs:number, batches?:number}>}
    */
   async sendFrames(items, opts = {}){
+    if (this._controlBusy || this._teardownPromise) throw new Error('SPI 会话正在配置或关闭，请等待完成');
+    this._frameCount = (this._frameCount || 0) + 1;
+    this._emit('busy', this.busy);
+    try { return await this._sendFrames(items, opts); }
+    finally { this._frameCount--; this._emit('busy', this.busy); }
+  }
+  async _sendFrames(items, opts){
     if (!this.dataReady) throw new Error('数据端点没连上（先「连接数据端点」或勾「用假探针」）');
     const timeoutMs = opts.timeoutMs ?? 1500;
     const tag = opts.tag || 'bus';

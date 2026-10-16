@@ -1,0 +1,5 @@
+{
+  "active": "tab-flash",
+  "debugger": "hpm6800evk",
+  "flash": "hpm5301evklite"
+}

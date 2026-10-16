@@ -25,10 +25,10 @@ export class SpiCdcView {
     bind('disconnect',()=>this.session.disconnect());
     bind('start',()=>this.session.start({mode:Number($('si-mode').value),lsb:$('si-lsb').value==='1'}));
     bind('stop',()=>this.session.stop());bind('status',()=>this.session.status());
-    setInterval(()=>{if(this.session.connected&&!this.session.busy)this.session.status().catch(e=>setStatus($('si-info'),e.message,'err'));},1000);
+    setInterval(()=>{if(!document.hidden&&this.session.connected&&!this.session.busy)this.session.status().catch(e=>setStatus($('si-info'),e.message,'err'));},1000);
     this.render();
   }
-  onShow(){this.stream.onShow();this.render();}
+  onShow(){this.stream.onShow();this.render();if(this.session.connected&&!this.session.busy)this.session.status().catch(e=>setStatus($('si-info'),e.message,'err'));}
   render(){
     this.pinMap?.refresh();
     const s=this.session.last,connected=this.session.connected,busy=this.session.busy;

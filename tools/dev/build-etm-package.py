@@ -26,6 +26,8 @@ def main():
     package=work/'dist/etm-bridge';toolbox=package/'toolbox';toolbox.mkdir()
     shutil.copyfile(ROOT/'index.html',toolbox/'index.html')
     public_files=subprocess.check_output(['git','ls-files','--','app'],cwd=ROOT,text=True).splitlines()
+    # A pre-commit build must also ship newly introduced bundle source modules.
+    public_files+=list(json.loads((ROOT/'app/site/manifest.json').read_text(encoding='utf8'))['inputs'])
     # Include new app files introduced by this task before their first commit.
     public_files+=['app/gen/etm-kit.js','app/gen/etm-kit-src.js','docs/etm-integration.md','docs/etm-audit-2026-10-14.md','docs/etm-review-followup-2026-10-15.md']
     for name in sorted(set(public_files)):

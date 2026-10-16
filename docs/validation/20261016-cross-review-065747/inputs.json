@@ -1,0 +1,726 @@
+[
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\app.css",
+    "Hash": "B55B41FF0AFB4A9203A8681123AAEB3782F9DC23CD9F65007580EFAA0927ABCE"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\main.js",
+    "Hash": "048AC6ACD9B34BE8CABA72516BFB200740B6F81A1BF59BBAD099B20F4B610699"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\analog\\adc-protocol.js",
+    "Hash": "71C9DCE15D2A008CB18C3A91AD394204BB84FDF22FA7A52872C54B022BB498DB"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\analog\\adc-usb-worker.js",
+    "Hash": "980508969B7D8766CA797BB09CA78643982F5E274FD504CBEF46233A162D5356"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\analog\\dac-protocol.js",
+    "Hash": "63FA4712D0167B253E6FA1180211FC30D087A5B8ECD06E9950C83DA1D7C0C997"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\analog\\measure.js",
+    "Hash": "EB43248E74D5163DE2DD3AFC38862DE515A752CDD4012953110C52A216A5B5E2"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\analog\\model.js",
+    "Hash": "BFA779161A1BFB5539820E8DA735C3D8CF860A385EA9FBBEE36CA69E4C63763A"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\analog\\scope-store.js",
+    "Hash": "5E5E1FAE1BBEA8831BD2ADCC1EE9EC50DB3373D5C764A9C706411B5902B5B8C9"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\analog\\session.js",
+    "Hash": "D8A3FE589238226E92260EA8BB4F792EB02ED2A6A77C3989D7E17F5CC57A7059"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\analog\\transport.js",
+    "Hash": "565B9403A88C920CEC904E9FC02ADAA75849EEDAEDF212C69E58259AD472B475"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\analog\\view.js",
+    "Hash": "63B47288D2605E96C12B67BBA0879B6E538811918E7A9C367270407C64746A6F"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\core\\b64.js",
+    "Hash": "01B44ECB1D0E5F9D3160490852B0DCEB9101E52685C94E454800C82DBB54D9E8"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\core\\bin.js",
+    "Hash": "0A236F6FB5165EF3EFFEC574C0D0C2486CA15200C6587740B0CAA4D3158C4AE5"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\core\\build.js",
+    "Hash": "A435F1CCF6AE1758858D672C8E60E117F0C00F4EA5F03206A26A75134636F907"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\core\\bus-periodic.js",
+    "Hash": "031AC82BE389F111E5B5BC13C64B511D18039CE1704AC8F2DDA71F9644F6979C"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\core\\bus.js",
+    "Hash": "A961476670CDBBC394335FE003D4E7C7F69448E4A109569773313E22DDDB6FEC"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\core\\bytes.js",
+    "Hash": "E966A87467F50B98773595249DAF6AD035C73D29E9C5A98FFA6FFF9B354BC76D"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\core\\cdc-mode.js",
+    "Hash": "61B9C927C8DA0AB5196F1967A614C0BEFBEB69AE27F864F036DC1FAD1E54F4BB"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\core\\chips.js",
+    "Hash": "44400036A21C7A977FBF488B712FD62AD527B36BC80E58C51A9C543916614EE9"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\core\\display-stream.js",
+    "Hash": "A8E4D985FCCDED40FB9FF82F8C692ED5CD093AD3506966CB8D4DC5694DD20F45"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\core\\expr.js",
+    "Hash": "FC9291E6C57AAB6034974CB9B616144A91224B4DC624BE8A434C0EFF58667D76"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\core\\format.js",
+    "Hash": "9BF4607BA90FCC3D7471A7B1944FA004ACCFF75F43DAC08816939E86270CF86A"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\core\\hex.js",
+    "Hash": "24409D41CA9F5417EA6E30CA3A3E456950DC18639A92E11D50C58A568078A7C3"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\core\\pace.js",
+    "Hash": "AC27D5DB130CC32033221C5B96C1F2FA5C108450A8DDBC706A174DC6C2AB1B8E"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\core\\probe-bus.js",
+    "Hash": "E40BE1AC37B1E162D3C656B16AC4FAB155C0BF6B674F8AADFBE38332D8F3F75D"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\core\\probe-manager.js",
+    "Hash": "317789AE9B34A8BDE6892481790A1DF7EA27C65E256A4F51FD97EEE844B2AE6F"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\core\\probe-users.js",
+    "Hash": "85E5580AE9F0A5F9D42978A1D92906F235C1D3978FB5DD77C4C071BA16C67D65"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\core\\recorder.js",
+    "Hash": "64481C2553709C2749B20F92D0A8B0DAA4B3033860D1A0B52FCBB0EBC03D2D93"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\core\\rxview.js",
+    "Hash": "61C48066E9D895222E38869A4147B0E8B2BC26ED8A84BBD435F8CF042C7A26C5"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\core\\stats.js",
+    "Hash": "08525D1F3E7DA711F5D56D1525AF18DFE1D893708D8A8D51638B2892881542B2"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\core\\store.js",
+    "Hash": "8E9FAD8E76730BBB170F9535E62D7643E7156E27930F8F0CB563C7E46EE0D774"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\core\\usb-device.js",
+    "Hash": "0011FE57D1E3CC0608AAE2457E304CC3374745F34329A454BAF3538A372E472B"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\dbg\\backtrace.js",
+    "Hash": "AAE290E218685D65BBF13D19970B0660924F214C5CE355DA63946333237E19D9"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\dbg\\bp.js",
+    "Hash": "FAA19159365B4DA7955167C49A02321E69A2D5A9B5ACD943ABD5E1114D220AD3"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\dbg\\cfi.js",
+    "Hash": "C91F3C03ED6127FDD3AAD83325EA52C9CE81CE0208BED06B0CE1DB7FCFEF518B"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\dbg\\cmd.js",
+    "Hash": "235B7A458FB40BA16E46CD448799C1A5B6FD8A93015BAFAAAAA2C6FBE7CD859E"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\dbg\\complete.js",
+    "Hash": "D18661ABD05BBF895789D9AECB7EF1E7D10F5AB3664EAF71EC9395C6A68167FD"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\dbg\\dwt.js",
+    "Hash": "7C183C15E66A15ACEFB97DEA702CF6F1E5DB27BB778CE21E1B90E052CACB7F61"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\dbg\\fault-panel.js",
+    "Hash": "A0EDF2B736F856825AFEC884C82EFC5445DACF144E09E01732C99D323CDF5A4A"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\dbg\\fault.js",
+    "Hash": "DC00CE4338D2B3BB63A863D4A16903FF11FE030B10A14097ABA825F91007E22C"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\dbg\\fmt.js",
+    "Hash": "73756243E467F8442E2CECB1786C465CC20C4C83E8F3E378B473309C38C985D4"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\dbg\\locals.js",
+    "Hash": "E3F7AA179AB5F0238A65918764F6EF4E25273200497A0DCC0FE6D0A00FAE9E6F"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\dbg\\mock.js",
+    "Hash": "0AD3DC2CA0B4D8DBEA021A463F4D4E573A39EAEB1A6804807879BC9F24B64F04"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\dbg\\regs.js",
+    "Hash": "BB908330E9C3C20958EA605F1906333C604C1F47752A58A51FE14ABBC6A04944"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\dbg\\riscv.js",
+    "Hash": "48A208D01F92EE215BBB6D44F35E46A77E0D2097E3FE005A4DFC2EB0AEDF88B4"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\dbg\\rv.js",
+    "Hash": "EE4BB316F7D813F99C32540C176F470CEB114C803A5C353529B4324EAD6DD1CC"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\dbg\\session.js",
+    "Hash": "54FE0221E6C4B15AFC47E51A23FE90BC322B8554DA3F12A481E83B9FC63820DB"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\dbg\\source-syntax.js",
+    "Hash": "71D39745F09DE5B17E462CCF046B193496369DAFD55A98517DF8DE58623F4634"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\dbg\\source.js",
+    "Hash": "E95670C37146D056C31B6C03B8F4550A8A71670246975D8ECC848258902E4B1C"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\dbg\\svd-state.js",
+    "Hash": "5A286B059A073E7693D77FBA2D0B3452F263CECCD4994B8238C77ECEDD7381C5"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\dbg\\svd.js",
+    "Hash": "D0775C6408AF0CA8DEEFB1A6291BD2B54C8C7C6EBE0164813953E63C88E963FB"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\dbg\\symbols.js",
+    "Hash": "0953317456B313DC7001BBB304E69EE9738CBA2258A77E3F6B6B3CC4C88E90F2"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\dbg\\thumb.js",
+    "Hash": "E754AD0E14768098CC032736BBAB46CBE527108F00317D70A43B34BD38139D6C"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\dbg\\view.js",
+    "Hash": "9427DF6DA0C02A3B6833A46FC84C2A181B1C1801E26360570621BF9EF4F52ADF"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\dbg\\watch.js",
+    "Hash": "C7522B76F24FBAAA8718BD85A7E2D59F94E91408BA6AF771C9913EB987136657"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\dbg\\svd\\bundled.js",
+    "Hash": "96F4F99097CF46AB497215DBE749A07AD25C3291C68FA28801858F6B982F38F5"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\diagnostics\\acquisition.js",
+    "Hash": "3B905182A8447B3D2A59D4E62EF7BA92EF126545AE85A25D6A1BBA3AAD5DEE7A"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\diagnostics\\drawer.js",
+    "Hash": "C64D07834228A1190580ACA5428F8076091CA83720F14ADC590B17C2050C4E7F"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\diagnostics\\quality.js",
+    "Hash": "893A9B1130D52A8FAB404171E2C8B3F4F3FFC2F44C5D66F7536BF1CE6D58CD81"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\diagnostics\\report.js",
+    "Hash": "59AF554143B5018587FFF3B557AE4FCF9B1C3ED2124FF8C194133A8CB41D2789"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\elf\\dwarf.js",
+    "Hash": "7E8BF0CAB930615242F59189514B3BFDD1350458C23FA95FBB00E16A58E0767D"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\elf\\elf.js",
+    "Hash": "ECEEC4295883F0F6E2D54E0E75A906678CD419B21433B60176889DA861CA0836"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\elf\\lines.js",
+    "Hash": "6C7EC6977C3D3E2B4CE59BA95DCEC941A1B51A3B9F4AF9A754C626E2510171AF"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\etm\\style.css",
+    "Hash": "5349585D2198C3C54281A9DE48E343569700E8859FEB6BC6BF1F6CA80C254528"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\etm\\view.js",
+    "Hash": "BC68126F9D2B2C30E669BDBE68A293A0F1210A90AF310B50BAF3947C49F6DA8F"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\flash\\algos.js",
+    "Hash": "EAF20E3215338CB40E897932EF67D2AE2B1F914CDBFE83655C4CE0F087A17064"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\flash\\data-clock.js",
+    "Hash": "EF9A2269C9675E3AF86702E700DCE90655403536CF559E2ADBBEBA8BC1DCE327"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\flash\\devid.js",
+    "Hash": "4A98855B9CEC59EB1290F512952031D7372D346F1488D351F0C4F78B4A43C538"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\flash\\image.js",
+    "Hash": "648AD44B7E51BC64F72B1213E15B24E7610D832EFAAE11B0A598BBEA881F291B"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\flash\\runner.js",
+    "Hash": "80DDDFDA37DEE713C36AB47FF370B29A7C6B3500527C9609BA31477FD1762705"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\flash\\sram-bench.js",
+    "Hash": "290A7D3B8C8D6D65E7043F37AD431B68429A2FA6922AA4755FD0BE7632C0FEA2"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\flash\\sram-transfer.js",
+    "Hash": "4DCCB6ACFF5F4FA80248272A5841AF1E817A3966DCB2EC15C64FD187BC13CA62"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\flash\\target-reset.js",
+    "Hash": "AB40DC56BD702F945DEB2E2E5C2E2AFA6E67C5B2CF2CE391BA64260CCAAF5CC9"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\flash\\view.js",
+    "Hash": "F254155C8083919CAA6CF349D5EFB3C1E1D2AAB9E53749E75343DA44A3663118"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\flash\\hpm\\algo.js",
+    "Hash": "BFD64F8D0F111EF01209A9303A7C6F7545D66E896871A8A43211AEA41451C846"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\flash\\hpm\\chips.js",
+    "Hash": "C518B5E0FECBD564B1CD839D35AD01CE0D12C7EEAE61972E5A18BA0DE27B3675"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\flash\\hpm\\dap-transport.js",
+    "Hash": "B3DE358E7BBD428B8DE3266EE51F3120F055E9DA4EE58901C6D043EEF54457BA"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\flash\\hpm\\entry.js",
+    "Hash": "66C7B8BB112A816D3F977EB63743102027520D25D50E95F931B35B3B2A107283"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\flash\\hpm\\flash.js",
+    "Hash": "F7F944FCB901DBD59879E4825F88339313C340E71917EB086B075D2AB33B9227"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\flash\\hpm\\jtag.js",
+    "Hash": "655BDBE090032C38FA66A05459D6E89C0D3CF63E255725A4708F05E9E11062C7"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\flash\\hpm\\riscv-dm.js",
+    "Hash": "60F5B9385188A99221DE2A684D09CBB1C1949907F5196918F51BDE2C7852A9AA"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\flash\\hpm\\xip-copy.js",
+    "Hash": "8FAAA87E1C659A9E7D09D7E0272F050E8237CCDA7741998A247180E6C7F67A8A"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\gen\\bridge-kit.js",
+    "Hash": "FF664AD92BDBCEB2E3251E4398EDC80511A2D8B5C10D6D0595FA22E1F23DD3D7"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\gen\\bridge-src.js",
+    "Hash": "6DFF9D3D0BD55EED5048711C2CB1F44EEA528D64E99A2605BE5EE6708CD66146"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\gen\\etm-kit-src.js",
+    "Hash": "97FB8184723D159FDE6AE7908A7C4C619E422BF6D5C03215806EC0B2331CA515"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\gen\\etm-kit.js",
+    "Hash": "87E6708FDCF379722642957C3BE763DC5C3975E82163394D255DC7A2E9DCB470"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\gen\\fixes.js",
+    "Hash": "6D815DD0BD0D4F8D1071E338ED5229B530AA7E604E7BED9301A30F062032D402"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\gen\\model.js",
+    "Hash": "5B618EC847647456FC551EFAF4176CAEF3797EE6C518801169828BA4AB3B17FD"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\gen\\templates.js",
+    "Hash": "F8AE3E4F202DA08C946CF94275B1C95120198218CC02529BCFC81C6F14B40B22"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\gen\\view.js",
+    "Hash": "F64ABF340B53AE6F6CF4C8235914EFF773FD9790D6CB75EFE7CBC0C70AD59ED9"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\gen\\zip.js",
+    "Hash": "33A6AC301D423E13003D0847646F26F83F394296EE9CE9B380ED6A3025CB8FBA"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\hid\\mock.js",
+    "Hash": "DD42D54F457D9EEB729D5F6BC23991D0E03788E6302D02880406431B7999821B"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\hid\\probe.js",
+    "Hash": "5416330921BF987FCEB3D2A447A6F69D570C14B08B9E9755577EB30B5809F8B3"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\hid\\stream.js",
+    "Hash": "733FCDFECAAD744F5C29319D2E092AE3D46C2835DE4608740539F2AEA7F6A750"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\hid\\view.js",
+    "Hash": "F47FEFE44B88DF87F9AF77EBD1067CED5A391BBEC22C7C0BD555D99BE42839CC"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\i2c\\dsl.js",
+    "Hash": "D4A3681B992D594DE3C69BA292CF37F40FE29F97C5B050C560CA54F6E7CC90B2"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\i2c\\expr.js",
+    "Hash": "6C33C11417CEEB8EAF05153DD38C0F3F3D5B01295D68CF3C5BE2C37335A96E55"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\i2c\\mock.js",
+    "Hash": "8F77EEE11D65B10ADB2834AFB0EFF22AB6D20AD8297BABC40B794234747D61D1"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\i2c\\presets.js",
+    "Hash": "9193D1A480A23114621352D98FC15F99609AF1C6A9DCEBA849EAB2C2B2B27933"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\i2c\\protocol.js",
+    "Hash": "E9EB67BBFFDB06FD7BAEEA41C1341657133A9DFAE8D5CD433838C18DE7D741DB"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\i2c\\reg-view.js",
+    "Hash": "A7308C4A4154D4C72A548B85A12E48EADA13C0BE06A2FEC9488D6625E12DC590"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\i2c\\registers.js",
+    "Hash": "7599C25530FB9617A4ED6473F80158D1CA05BA7802CE6CA6FCFE79DEF304E5EA"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\i2c\\runner.js",
+    "Hash": "BBE99D2344745CCF094416ECA559F6BC6EA77821D4FFD221E2176FFBB1BE208A"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\i2c\\session.js",
+    "Hash": "2C887AE69447425E1196CE61833C51311789EA398CDC2AB74B78CA91071805C2"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\i2c\\view.js",
+    "Hash": "020F98B8707C1D6A2E0EB733F4750D07CA8E8A5C54FDBBF7277823AD2656E8D3"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\rtt\\bridge.js",
+    "Hash": "10921D213BF8A9A178266971C382672E38F7C1FD99112DCBA975958A73D5CF9F"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\rtt\\dap-webusb.js",
+    "Hash": "8B6EF3D9EE41C68E77A095345F79FF1091762D60930F2B35345AC4076BEAC5FE"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\rtt\\elf.js",
+    "Hash": "76A6278965724F52133467F8F07D4472077C5A9C35CA187FECE59ABAD42405C7"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\rtt\\mock.js",
+    "Hash": "713DA5C0C48D4A912ED9DA57DBAF5DECF824E57BE3B185ADC70023E02A1C072D"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\rtt\\protocol.js",
+    "Hash": "B5453269EFBC6B4D1ACF59B8044C689C23A1E00D84ADA7DAC91FC5DD0E2E0379"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\rtt\\riscv-mem.js",
+    "Hash": "591789D39772B186641E27327B77492904EC49370BC740978E5E47ADF75A8669"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\rtt\\view.js",
+    "Hash": "4561C728833F5769C586FD1FD61AD6100401976A964C2F3C8D0387D4D83F7D3A"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\scope\\array-vars.js",
+    "Hash": "ACEF3EFBFFE7E2C70958E06C8DC8D0EA3FE123DB3928A4BAA6463F5EA9CAFB5B"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\scope\\mock.js",
+    "Hash": "B075E7202C4C181FB941BA25976EBB89D62E94CEDCD3C35C619268A89524EF2C"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\scope\\protocol.js",
+    "Hash": "57A6304F1D4196329519BDFE74EC6D56EC8B3CF5FF9E017A46019B7B1C68CDA9"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\scope\\render.js",
+    "Hash": "539FAA88133F619836D12B3086C189367F7C28894165BC0240B6F0FF1283B6CA"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\scope\\store.js",
+    "Hash": "5D72C1DC2A4780890BFA80100D6FF85BD78FA4A6EE37CD8DD447FE47E74A2D07"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\scope\\transport.js",
+    "Hash": "E2529C5B08068296CA369A48D24CCEEE42E11BD4F6C1AEFE12E1AC1EEED63DF1"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\scope\\view.js",
+    "Hash": "2AEB8A2A015665E57658B8D6D240670091C114D4CCC8CDB862263994139AA992"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\serial\\assistant.js",
+    "Hash": "9C1248128E652C4847690EBC12A1761C259AB59B9FA36DA0E976817F48818557"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\serial\\demo.js",
+    "Hash": "7E1CC7301B5EDBCB99EDAA1D2B43778AA5696A038D565B754ABAE5AE0A6D7AD6"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\serial\\session.js",
+    "Hash": "1F5C0C387EB4A28448C2022269A91ECFC28095F72F0B1D251D649C07C4C8763B"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\serial\\terminal.js",
+    "Hash": "BA1AF8F665E6283C4F34F4C1EC31416FB25B11A5A200D2BD18E8BD18A0AF5DAB"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\site\\main.js",
+    "Hash": "D5A87FB8E68E814159F52524723952FDE8EC4F9FB45B0BB65B75049573FAE3AA"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\spi\\acq-view.js",
+    "Hash": "4541D5B10A2109C08727FBD983DF265BBC4055A3F1BE8254E3BF75D2F1859DEA"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\spi\\anim.js",
+    "Hash": "78AED3FFDBF9EB38F27960A390642EC632D80806B2E6DEBE1562AF54AA0CB961"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\spi\\bit-editor.js",
+    "Hash": "22205EB9B0BEEE954B4E05C1838E622775B9FECE0C4175FD5CD1F7FA80591B30"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\spi\\bus-view.js",
+    "Hash": "FC8DBF4BC3F8868A161C9F60D54AA671AD2CF914B77CCD5E08329A75BAD32A76"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\spi\\flash.js",
+    "Hash": "B75AD44A8CA38D303A19504E4030FB370B7ECD87105ED95E7BF4F5AED559C88F"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\spi\\frames-dsl.js",
+    "Hash": "C682DD58C168DA1B6AFB77D80C2926FCB0F55537A9EB1A975F582A507ED4E156"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\spi\\image.js",
+    "Hash": "B21F3EDE88433909824A1EA821B84CABF202328BDD7E301A714469E5E342952D"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\spi\\mock.js",
+    "Hash": "97BA2B64C59919819B424435E3B4CD42FD3E9FFBB894AF367C221B6DC8767E9B"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\spi\\panel-code.js",
+    "Hash": "1883F01DB0A454BFF7FA12739858348779DD065A21B3C0546C51209CC8335F4D"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\spi\\panel-read.js",
+    "Hash": "2E8F06955AFA5CDDCFC4805197D12EC129971D96654674EEAA10DB8C654A4F47"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\spi\\panel-view.js",
+    "Hash": "1112B975099ECFCC3D0558718F559197843D822BC2F7B847AA9B8A9D0F43F181"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\spi\\panels-data.js",
+    "Hash": "E058988159A236DE3AB2E3C1A4BCA0E9491C4AA6F512FB8478ABB5FC98B8A6B9"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\spi\\protocol.js",
+    "Hash": "0A53B2269D588994B05761AD8C61949175E9592DD338CF87364C692E71313E91"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\spi\\reg-view.js",
+    "Hash": "0AEE8C3EC10D27E33E7F8210944752A637D008377D5E70993909DDAA9598FA8F"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\spi\\regs.js",
+    "Hash": "7F45093291EF33118C4DE2F92396735CC3634999AAAA1DF5F2CF6225CA95FB8C"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\spi\\runner.js",
+    "Hash": "0F32AC5FFA66760A3D8545F4AE99E97CD800A0298279BCFD3FCFF61D416C543D"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\spi\\session.js",
+    "Hash": "7B65E37326C91C9BA24E4BF7804C0E3068355766A9C8F4B782B176DB9512F304"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\spi\\transport.js",
+    "Hash": "28EE75A77396DD55853C48F0B2432512BD864CCC5F0035412911CA3940228031"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\spi-cdc\\protocol.js",
+    "Hash": "D0DCD7B2E05B49196D6F79D008D382705D729E514C186D4DB3CBFB87D0411EA8"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\spi-cdc\\session.js",
+    "Hash": "3B404E08C72B8E8DC3897BA3A3002C1D80C61BD9464C16F4E5F075D522943B25"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\spi-cdc\\view.js",
+    "Hash": "76456C6EA9E7EF0802DAE6CC05BB98047AD198124D4BF1A28C19AE6D9D4C266C"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\swo\\analyze.js",
+    "Hash": "AB18DFBC5E331DBA9753E69347663E5120A4B645343E6D692C9BE691E971B713"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\swo\\capture.js",
+    "Hash": "18FAC74BE89D0218BE22906284F463DBEA6490076CB06EA8BCE95A94877B5525"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\swo\\decoder.js",
+    "Hash": "BFD8B675D2F4D0B96A07C161B21358A9D31D57C1E6907ACC1AA58B2E29BEAEF0"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\swo\\export-worker.js",
+    "Hash": "827236B830FB4F23A793CC86B13DE31C295C44F5B094CE585EF98CAC762314F1"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\swo\\export.js",
+    "Hash": "4B78C89DBA5E2B484DFCE44BC9A2D36D13251F9AED1E6261011A2C03AB1C3ECC"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\swo\\matching.js",
+    "Hash": "308133509506DAF90B94C6942E021F427B642E08550D525DE8FB8FB3BDDD64F1"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\swo\\planning.js",
+    "Hash": "0AA2934D2BADB4CEB5C416D7CF00E9B128B1A9F3BE20D3D279A3A6BE08B4DB1D"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\swo\\ports.js",
+    "Hash": "1315002FAD648BD2D3F1715FF49CDCDC3AF4DA873EDD989EF19F45AA2EF58510"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\swo\\receiver.js",
+    "Hash": "1899BD916AA031030D4134CE96A54F6843C03EC6D5ABB354BD0FE3D5908201C3"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\swo\\recording.js",
+    "Hash": "033B0FF2333A1645CBBBF1380BEF23D005B42F6A607001508F8EB7713EF7B6FC"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\swo\\route.js",
+    "Hash": "A0AE38AB4D2EB44F3AA0020F927E7490A76EC5CDAC591CE1967B08B9D427D61E"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\swo\\simplify.js",
+    "Hash": "CA758E18965A3B0D13E6A1B386E569A0AB9C6939761EF4322C06517ADF6FE72F"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\swo\\target.js",
+    "Hash": "A4591518330194D3A117BB336E5ED81E3EA00096B7CEE159CCBE055EB306B36F"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\swo\\view.js",
+    "Hash": "CB700FA3CC32D4CC2C11C418B9AE881135C6886F3FC278ECB4B82837BA1100AA"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\swo\\window.js",
+    "Hash": "7CCBD7E82CA72C32D78A72A5A9ECAA95AC9FF8DE71582FE290673241696BE18F"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\swo\\worker.js",
+    "Hash": "BA166C567A53DE58E2A908AFF9A1F4E30B2BB26A4E742E1FEEF88E99CF7CBC56"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\targets\\hpm\\porting.js",
+    "Hash": "03B989DB796598291D1B89AEDA549D2D9290D88E6FD9323029E2BAEC975E5A1B"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\targets\\hpm\\select.js",
+    "Hash": "E252F28915C4731E3659BC761939B0A09218CF74AA910D8ABF2E421FFD7371AD"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\ui\\board-pinout.js",
+    "Hash": "FF3C09120BB4BCAA87873CA7D8BF0B6C6CDA06C627B97E4A838D399F49823454"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\ui\\cfgpicker.js",
+    "Hash": "F5F5BD40AC6F49FF9970CFE2F0CB14B0A2F60350E1443EF8DA50D73B843DD25B"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\ui\\dom.js",
+    "Hash": "9D62BDF817711E1AE498A0BA65F4717F56F5AE680A9CB541FAED39774277ABAC"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\ui\\event-logs.js",
+    "Hash": "3D6C0E96428049757CA6508B49343D645BFFB92CAA181E400F21E23B11869169"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\ui\\fullscreen.js",
+    "Hash": "4A47B527D2CA1F9E9930EC641B90EC8651E410AC08D75145DC1B8813E61B574B"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\ui\\inspector-table.js",
+    "Hash": "0DD8810CC9C632829F5AB9C4AD87B7551D3AB9439C55424918818BCBDA69C7B6"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\ui\\pin-map.js",
+    "Hash": "94134FADC7F2244093402E66FA65EB28C9CF4F06F67BFC6B86FA2EEBA4D7B97F"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\ui\\probe-status.js",
+    "Hash": "C8666F31D5030FBB2E09A83E64FD3CE15486806860E427FAD6135D6B56C607EF"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\ui\\reg-grid.js",
+    "Hash": "78E2BB0327045CFD15DB4D8B5B1F131C9DC370B8B61FAFBDF3CA0AEF64A25A20"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\ui\\sidebar-tabs.js",
+    "Hash": "DEAAD754902F8D9958B3DB671176A9FFD569D7205D322A0160D26E6744DFF847"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\ui\\spark.js",
+    "Hash": "ECAAF9CCE78B4C22921FA2411F9F94EB1D145C05FC5CC3D9ADF00DA718E1D49A"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\ui\\tabs.js",
+    "Hash": "01EFF700FDF0EE888B826217DF58810CECB834A685D90515423D0E5E1DAC21C0"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\ui\\toast.js",
+    "Hash": "4AD6D90A90CFBA752B324500E14324808305B8927B32A887DDBB736A4D9D2AE2"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\ui\\workspace.js",
+    "Hash": "25B6CE94E5D90302A37E6CEC2B7E35C975AF95CE29BEF1094A4493F3890FC0B7"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\ui\\zoom-controls.js",
+    "Hash": "D7520D813135941C8B0E8F5601722C45F53D2D2ED8A940F789BC032DA0180FF9"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\vendor\\xterm\\addon-fit.js",
+    "Hash": "BDAEFA370B1BFC42EE88D46FE6072400902A4D4B2D45CD93438DDA9B23C97089"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\vendor\\xterm\\xterm.css",
+    "Hash": "BA8E6985669488981CCF40C0CEFE3ABA80722CB6C92DE7AD628B0BD717FAF2B6"
+  },
+  {
+    "Path": "E:\\web-serial-rtt-tools\\app\\vendor\\xterm\\xterm.js",
+    "Hash": "1F991AC3B4B283EBF96E60AE23A00A52765DD3A2E46FA6FDDA9F1AAB032F7495"
+  }
+]

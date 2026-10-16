@@ -101,6 +101,7 @@ export class PanelAnim {
     this.callsOf = o.callsOf || null;      // transport.writes 的取值器（统计"调用/帧"）
     this.partial = new I.PartialRefresh({ enabled: false });
     this.src = null;                       // { kind:'video'|'gif', name, w, h, frames? }
+    this.loop = false;
     this.stat = { frames: 0, bytes: 0, calls: 0, dropped: 0, partial: 0, skipped: 0,
                   pxSent: 0, pxFull: 0, t0: 0, ms: 0, fps: 0, kbs: 0, lastMs: 0 };
     this._stop = false;

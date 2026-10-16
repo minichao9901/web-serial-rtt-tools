@@ -1,0 +1,124 @@
+- banner:
+  - generic "串口 / RTT 工具箱"
+  - navigation "工具切换":
+    - button "串口助手"
+    - button "终端"
+    - button "RTT Viewer"
+    - button "RTT 转发"
+    - button "J-Scope 波形"
+    - button "烧录器"
+    - button "调试器"
+    - generic "更多功能，当前页面：USB→I2C": 更多功能 ▾
+  - generic: 串口：未连接
+  - generic "连接支持该功能的 akaLinkPro 固件后可用。":
+    - checkbox "NRST 开漏" [checked] [disabled]
+    - text: NRST 开漏
+  - button "全局复位"
+  - button "全屏"
+  - status "当前页面没有功能连接实体探针；串口连接状态单独显示。": 探针：未使用
+  - generic "帮助"
+- main:
+  - text: 连接后这里显示接收数据。 连接探针并选择 RTT 通道后，这里显示目标输出。 连接后这里显示接收数据。 烧录或 SRAM 测试的进度与结果显示在这里。 （点「定位并开始」：留空地址就用 .elf 里的 _SEGGER_RTT 符号） ▸ ▸ 连接后这里显示接收数据。
+  - complementary:
+    - tablist "侧栏设置":
+      - tab "连接"
+      - tab "总线"
+      - tab "诊断"
+      - tab "帮助" [selected]
+    - text: ▸
+    - tabpanel "帮助":
+      - generic: 参数、接线与排障说明
+      - generic "选择其它探针"
+      - generic "连接与上手"
+      - generic "接线与排障 · 接线自检结果判读"
+      - generic "连接"
+      - generic "接线与排障"
+      - generic "接线与排障"
+      - generic "连接 · 参数"
+      - generic "总线配置 · 参数"
+    - generic "运行控制":
+      - button "使能" [disabled]
+      - button "失能" [disabled]
+      - paragraph: 未连接
+  - button "扫描总线"
+  - button "命令表"
+  - button "寄存器" [active]
+  - button "脚本"
+  - button "实时值"
+  - generic "定时任务的运行状态（切到哪个 tab 都看得见）": 未运行
+  - button "停止" [disabled]
+  - generic: 器件
+  - textbox "器件": "0x50"
+  - generic: 起始
+  - textbox "起始": "0x00"
+  - generic: 长度
+  - textbox "长度": "128"
+  - generic: 地址宽度
+  - combobox "地址宽度":
+    - option "1 B" [selected]
+    - option "2 B"
+    - option "0 B（纯读）"
+  - generic: 读法
+  - combobox "读法":
+    - option "每片重发地址" [selected]
+    - option "地址指针自增"
+  - generic: 写分片
+  - combobox "写分片":
+    - option "51 B（协议上限，寄存器/传感器用这个）" [selected]
+    - option "32 B（AT24C32 页写 / 保险一点）"
+    - option "16 B"
+    - option "8 B（AT24C02 页写）"
+  - generic: 片间等待
+  - textbox "片间等待": "0"
+  - generic: 页大小
+  - combobox "页大小":
+    - option "不限（寄存器/传感器）" [selected]
+    - option "8 B（AT24C02）"
+    - option "16 B（AT24C04/08/16）"
+    - option "32 B（AT24C32/64）"
+    - option "64 B（AT24C128/256）"
+    - option "128 B（AT24C512）"
+  - generic "写完自动回读同一段对账。器件回 ACK 不等于写对了 —— 页写回卷、器件把字段夹掉、片间 tWR 没等够，都会让它老实 ACK 却存了别的东西。关掉就只能靠肉眼比对（默认开）":
+    - checkbox "写后回读" [checked]
+    - text: 写后回读
+  - button "读取" [disabled]
+  - button "只写改动" [disabled]
+  - button "整块写回" [disabled]
+  - button "丢弃改动" [disabled]
+  - table:
+    - rowgroup:
+      - row "地址 0 1 2 3 4 5 6 7 8 9 A B C D E F ASCII":
+        - columnheader "地址"
+        - columnheader "0"
+        - columnheader "1"
+        - columnheader "2"
+        - columnheader "3"
+        - columnheader "4"
+        - columnheader "5"
+        - columnheader "6"
+        - columnheader "7"
+        - columnheader "8"
+        - columnheader "9"
+        - columnheader "A"
+        - columnheader "B"
+        - columnheader "C"
+        - columnheader "D"
+        - columnheader "E"
+        - columnheader "F"
+        - columnheader "ASCII"
+    - rowgroup:
+      - row "还没读 —— 填好参数后点「读取」":
+        - cell "还没读 —— 填好参数后点「读取」"
+  - paragraph: 还没读 —— 器件 0x50 [0x00] · 计划读 128 B
+  - paragraph:
+    - text: 点表里任意一个字节 → 弹出 8 个 bit（点一下就翻转，和原值不同的位套黄框；也能直接敲十六进制）。 读到的是"器件现值"，只有点「只写改动 / 整块写回」才真的发 I2C。
+    - text: EEPROM 注意两条：写分片要按页给（AT24C02 页 8 B、AT24C32 页 32 B，给大了器件内部会回卷覆盖）； 每写完一页要等 tWR（约 5 ms）才认下一笔 —— 填在「片间等待」里（例如 6 ms）。
+  - generic "拖动：调整日志高度"
+  - strong: I2C 日志
+  - button "复制"
+  - button "保存"
+  - button "清空"
+  - generic: I2C 事务与应答会显示在这里。
+  - text: 协议：
+  - code: HID 0x36
+  - text: （控制面 + 数据面同一条报文，事务在主循环执行，主机轮询 RESULT 取结果）· 长读自动分片

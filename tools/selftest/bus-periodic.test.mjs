@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { spawn, execFileSync } from 'node:child_process';
 import { mkdtempSync, rmSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join, resolve } from 'node:path';
+import { join, resolve, delimiter } from 'node:path';
 import { createInterface } from 'node:readline';
 import { fileURLToPath } from 'node:url';
 import { BusPeriodicClient, BUS, program, delayRecord, runSessionPeriodic, stopSessionPeriodic } from '../../app/core/bus-periodic.js';
@@ -17,7 +17,7 @@ const firmware = process.env.PROBE_FIRMWARE_REPO || resolve(root, '../5301evk_ak
 assert.ok(existsSync(join(firmware, 'script_test/bus_periodic_wire_server.py')), 'set PROBE_FIRMWARE_REPO to the paired firmware checkout');
 const dir = mkdtempSync(join(tmpdir(), 'bus-periodic-'));
 const binary = join(dir, process.platform === 'win32' ? 'wire.exe' : 'wire');
-execFileSync(process.env.PYTHON || 'python3', [join(firmware, 'script_test/bus_periodic_wire_server.py'), binary]);
+execFileSync(process.env.PYTHON || (process.platform === 'win32' ? 'python' : 'python3'), [join(firmware, 'script_test/bus_periodic_wire_server.py'), binary], {env:{...process.env,CPATH:[join(firmware,'firmware/application_5301/src/api'),process.env.CPATH].filter(Boolean).join(delimiter)}});
 const child = spawn(binary, [], { stdio: ['pipe','pipe','inherit'] });
 const pending = [];
 createInterface({ input: child.stdout }).on('line', line => pending.shift()?.resolve(line));

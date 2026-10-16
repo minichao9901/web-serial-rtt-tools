@@ -1,0 +1,8 @@
+{
+  "active": "tab-gen",
+  "documentWidth": 1440,
+  "entry": "bundle",
+  "preload": "app/site/main.js?v=a303fb18b9adc809",
+  "width": 1440,
+  "warnings": []
+}

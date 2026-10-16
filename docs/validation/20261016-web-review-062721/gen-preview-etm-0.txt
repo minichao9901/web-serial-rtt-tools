@@ -1,0 +1,54 @@
+- banner:
+  - generic "串口 / RTT 工具箱"
+  - navigation "工具切换":
+    - button "串口助手"
+    - button "终端"
+    - button "RTT Viewer"
+    - button "RTT 转发"
+    - button "J-Scope 波形"
+    - button "烧录器"
+    - button "调试器"
+    - generic "更多功能，当前页面：工程生成": 更多功能 ▾
+  - generic: 串口：未连接
+  - generic "连接支持该功能的 akaLinkPro 固件后可用。":
+    - checkbox "NRST 开漏" [checked] [disabled]
+    - text: NRST 开漏
+  - button "全局复位"
+  - button "全屏"
+  - status "当前页面没有功能连接实体探针；串口连接状态单独显示。": 探针：未使用
+  - generic "帮助"
+- main:
+  - text: 连接后这里显示接收数据。 连接探针并选择 RTT 通道后，这里显示目标输出。 连接后这里显示接收数据。 烧录或 SRAM 测试的进度与结果显示在这里。 （点「定位并开始」：留空地址就用 .elf 里的 _SEGGER_RTT 符号） ▸ ▸ 连接后这里显示接收数据。 ▸ I2C 事务与应答会显示在这里。
+  - complementary:
+    - group "ETM 本地桥":
+      - generic: ETM 本地桥
+      - generic: 端口
+      - spinbutton "端口": "8878"
+      - paragraph:
+        - text: 首次使用：下载完整 ETM 桥包 → 解压 → 双击
+        - code: start-etm-bridge.bat
+        - text: 。无需安装 Python 或配置工程目录。
+      - paragraph: 已有完整包：仅下载启动文件，放到完整包目录覆盖同名文件。完整包默认端口 8878；可用左侧端口生成启动配置。
+      - paragraph:
+        - text: 先打开 KingstVIS 的 Socket 并使能五路通道。记录保存在包内
+        - code: data/records
+        - text: ；更新前请保留 data。
+        - code: check-tools.bat
+        - text: 可预检。
+  - button "工程文件"
+  - button "调试参数"
+  - button "本地桥"
+  - button "ETM 桥"
+  - generic "当前 tab 的一句话状态": 5 个文件 · 2.7 KB
+  - button "下载完整 ETM 桥包"
+  - button "仅下载启动文件"
+  - button "打开 ETM 工作台"
+  - button "复制当前文件"
+  - button "下载当前文件"
+  - button "start-etm-bridge.bat"
+  - button "check-tools.bat"
+  - button "etm.config.json"
+  - button "etm-launcher.ps1"
+  - button "README-etm.txt"
+  - generic: "@echo off setlocal EnableExtensions chcp 65001 >nul cd /d \"%~dp0\" \"%SystemRoot%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\" -NoProfile -ExecutionPolicy Bypass -File \"%~dp0etm-launcher.ps1\" %* set \"RESULT=%ERRORLEVEL%\" echo. echo ETM bridge exited. Press any key to close. pause >nul exit /b %RESULT%"
+  - paragraph: Windows 64 位 · 完整包包含运行环境、网页、采集分析服务和 OpenCSD 解码器。网页按钮打开已运行的工作台，启动服务请双击 BAT。

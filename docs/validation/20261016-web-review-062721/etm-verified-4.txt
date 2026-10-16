@@ -1,0 +1,754 @@
+- banner:
+  - generic "串口 / RTT 工具箱"
+  - navigation "工具切换":
+    - button "串口助手"
+    - button "终端"
+    - button "RTT Viewer"
+    - button "RTT 转发"
+    - button "J-Scope 波形"
+    - button "烧录器"
+    - button "调试器"
+    - generic "更多功能，当前页面：ETM 执行轨迹": 更多功能 ▾
+  - generic: 串口：未连接
+  - generic "连接支持该功能的 akaLinkPro 固件后可用。":
+    - checkbox "NRST 开漏" [checked] [disabled]
+    - text: NRST 开漏
+  - button "全局复位"
+  - button "全屏"
+  - status "当前页面没有功能连接实体探针；串口连接状态单独显示。": 探针：未使用
+  - generic "帮助"
+- main:
+  - iframe [active] [id="etm-frame"]:
+    - complementary:
+      - text: 目标与录制
+      - generic: ELF → 断点 → 时钟 → 采集
+      - tablist "采集步骤":
+        - tab "1 调试" [selected]
+        - tab "2 时钟"
+        - tab "3 采集"
+        - tab "4 文件"
+      - tabpanel "1 调试":
+        - heading "① 载入目标 ELF" [level=2]
+        - button "浏览载入 ELF…"
+        - paragraph: 尚未载入 ELF
+        - generic "配套源码（可选）"
+        - heading "② 连接与识别目标" [level=2]
+        - text: 芯片预置
+        - combobox "芯片预置":
+          - option "自动识别" [selected]
+          - option "STM32F103ZE / 高容量 F103（PE2～PE6）"
+          - option "STM32F103（标准/超大容量，Trace 待验收）"
+          - option "STM32F407 / F405"
+          - option "STM32H743 / H742 / H750 / H753"
+          - option "STM32H7B0 / H7A3 / H7B3"
+        - button "连接探针"
+        - button "断开" [disabled]
+        - paragraph: 未连接 · 可先添加断点。
+        - paragraph: F103ZE / H7B0 已验收；其余型号 Trace 待适配。
+        - heading "③ 添加断点" [level=2]
+        - textbox "搜索 ELF 函数" [disabled]:
+          - /placeholder: 搜索 ELF 函数…
+        - generic "ELF 函数列表": 先浏览载入 ELF
+        - paragraph: ＋ 添加断点，圆点选择采集起点。
+        - textbox "断点命令" [disabled]:
+          - /placeholder: b main:199
+        - button "添加" [disabled]
+        - generic "断点命令格式"
+        - heading "④ 断点与采集起点 未连接" [level=2]
+        - generic: 无断点；从函数前 ＋ 或命令添加。
+        - paragraph: 请选择一个断点作为采集起点
+        - button "运行至起点" [disabled]
+        - button "清空断点" [disabled]
+        - button "复位至起点" [disabled]
+        - button "暂停" [disabled]
+        - button "继续" [disabled]
+        - paragraph: 当前 PC：未连接
+        - checkbox "联动采集前停在所选断点" [checked]
+        - text: 联动采集前停在所选断点
+        - checkbox "先复位，再运行至起点" [checked]
+        - text: 先复位，再运行至起点
+        - paragraph: 列表中的圆点选择采集起点；采集期间暂时停用本页断点，结束后恢复。启动入口采集仍未验收。
+        - button "下一步：核对时钟 →"
+      - paragraph: 按 1→2→3 设置，选择一个断点作为起点，再联动采集。
+      - button "联动采集" [disabled]
+      - button "停止采集" [disabled]
+    - main:
+      - button "收起控制"
+      - button "使用说明"
+      - combobox "已保存记录":
+        - option "选择记录…"
+        - option "Demo · 70/35 MHz · 1 ms" [selected]
+      - button "打开"
+      - generic: 47,537 路径 · 2,876 包 · 1 中断
+      - generic "采集时镜像已核对 · 未知条件 39 条 · 包问题 0 · overflow 0 · 捕获边界保留"
+      - button "报告"
+      - navigation "分析视图":
+        - button "执行流"
+        - button "调用统计"
+        - button "火焰图"
+        - button "热点"
+        - button "ETMv4 包" [active]
+        - button "可信区段"
+      - button "历史调用栈" [expanded]
+      - button "←"
+      - button "→"
+      - combobox "历史导航类型":
+        - option "指令" [selected]
+        - option "源码位置"
+        - option "调用"
+        - option "返回"
+        - option "异常"
+        - option "未知 / 边界"
+      - textbox "历史定位":
+        - /placeholder: 序号或 0xPC
+      - button "定位"
+      - textbox "筛选执行记录":
+        - /placeholder: 搜索函数、PC、文件或指令…
+      - checkbox "隐藏未成立分支"
+      - text: 隐藏未成立分支
+      - generic: 2,876 条
+      - generic: "#2 · 0x08000b14"
+      - table:
+        - rowgroup:
+          - row "偏移 长度 包":
+            - columnheader "偏移"
+            - columnheader "长度"
+            - columnheader "包"
+        - rowgroup:
+          - 'row "0 12 I_ASYNC : Alignment Synchronisation."':
+            - cell "0"
+            - cell "12"
+            - 'cell "I_ASYNC : Alignment Synchronisation."'
+          - 'row "12 4 I_TRACE_INFO : Trace Info.; INFO=0x0 { CC.0 }; INIT SPEC DEPTH=0; Decoder Sync point TINFO"':
+            - cell "12"
+            - cell "4"
+            - 'cell "I_TRACE_INFO : Trace Info.; INFO=0x0 { CC.0 }; INIT SPEC DEPTH=0; Decoder Sync point TINFO"'
+          - 'row "16 1 I_TRACE_ON : Trace On."':
+            - cell "16"
+            - cell "1"
+            - 'cell "I_TRACE_ON : Trace On."'
+          - 'row "17 6 I_ADDR_CTXT_L_32IS1 : Address & Context, Long, 32 bit, IS1.; Addr=0x0000000008000B14; Ctxt: AArch32, EL0, S;"':
+            - cell "17"
+            - cell "6"
+            - 'cell "I_ADDR_CTXT_L_32IS1 : Address & Context, Long, 32 bit, IS1.; Addr=0x0000000008000B14; Ctxt: AArch32, EL0, S;"'
+          - 'row "23 1 I_ATOM_F4 : Atom format 4.; ENEN"':
+            - cell "23"
+            - cell "1"
+            - 'cell "I_ATOM_F4 : Atom format 4.; ENEN"'
+          - 'row "24 1 I_ATOM_F4 : Atom format 4.; NEEE"':
+            - cell "24"
+            - cell "1"
+            - 'cell "I_ATOM_F4 : Atom format 4.; NEEE"'
+          - 'row "25 2 I_ADDR_S_IS1 : Address, Short, IS1.; Addr=0x0000000008000B1A ~[0x1A]"':
+            - cell "25"
+            - cell "2"
+            - 'cell "I_ADDR_S_IS1 : Address, Short, IS1.; Addr=0x0000000008000B1A ~[0x1A]"'
+          - 'row "27 1 I_ATOM_F3 : Atom format 3.; EEN"':
+            - cell "27"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; EEN"'
+          - 'row "28 1 I_ATOM_F3 : Atom format 3.; ENN"':
+            - cell "28"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; ENN"'
+          - 'row "29 1 I_ATOM_F3 : Atom format 3.; EEE"':
+            - cell "29"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; EEE"'
+          - 'row "30 3 I_ADDR_S_IS1 : Address, Short, IS1.; Addr=0x0000000008001F9A ~[0x1F9A]"':
+            - cell "30"
+            - cell "3"
+            - 'cell "I_ADDR_S_IS1 : Address, Short, IS1.; Addr=0x0000000008001F9A ~[0x1F9A]"'
+          - 'row "33 1 I_ATOM_F1 : Atom format 1.; E"':
+            - cell "33"
+            - cell "1"
+            - 'cell "I_ATOM_F1 : Atom format 1.; E"'
+          - 'row "34 3 I_ADDR_S_IS1 : Address, Short, IS1.; Addr=0x0000000008000B22 ~[0xB22]"':
+            - cell "34"
+            - cell "3"
+            - 'cell "I_ADDR_S_IS1 : Address, Short, IS1.; Addr=0x0000000008000B22 ~[0xB22]"'
+          - 'row "37 1 I_ATOM_F3 : Atom format 3.; ENN"':
+            - cell "37"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; ENN"'
+          - 'row "38 1 I_ATOM_F5 : Atom format 5.; NENEN"':
+            - cell "38"
+            - cell "1"
+            - 'cell "I_ATOM_F5 : Atom format 5.; NENEN"'
+          - 'row "39 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "39"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "40 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "40"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "41 1 I_ATOM_F2 : Atom format 2.; EE"':
+            - cell "41"
+            - cell "1"
+            - 'cell "I_ATOM_F2 : Atom format 2.; EE"'
+          - 'row "42 3 I_ADDR_S_IS1 : Address, Short, IS1.; Addr=0x0000000008003472 ~[0x3472]"':
+            - cell "42"
+            - cell "3"
+            - 'cell "I_ADDR_S_IS1 : Address, Short, IS1.; Addr=0x0000000008003472 ~[0x3472]"'
+          - 'row "45 1 I_ATOM_F2 : Atom format 2.; EE"':
+            - cell "45"
+            - cell "1"
+            - 'cell "I_ATOM_F2 : Atom format 2.; EE"'
+          - 'row "46 3 I_ADDR_S_IS1 : Address, Short, IS1.; Addr=0x0000000008000B2C ~[0xB2C]"':
+            - cell "46"
+            - cell "3"
+            - 'cell "I_ADDR_S_IS1 : Address, Short, IS1.; Addr=0x0000000008000B2C ~[0xB2C]"'
+          - 'row "49 1 I_ATOM_F1 : Atom format 1.; E"':
+            - cell "49"
+            - cell "1"
+            - 'cell "I_ATOM_F1 : Atom format 1.; E"'
+          - 'row "50 3 I_ADDR_S_IS1 : Address, Short, IS1.; Addr=0x000000000800088C ~[0x88C]"':
+            - cell "50"
+            - cell "3"
+            - 'cell "I_ADDR_S_IS1 : Address, Short, IS1.; Addr=0x000000000800088C ~[0x88C]"'
+          - 'row "53 1 I_ATOM_F6 : Atom format 6.; EEEE"':
+            - cell "53"
+            - cell "1"
+            - 'cell "I_ATOM_F6 : Atom format 6.; EEEE"'
+          - 'row "54 2 I_ADDR_S_IS1 : Address, Short, IS1.; Addr=0x00000000080008A2 ~[0xA2]"':
+            - cell "54"
+            - cell "2"
+            - 'cell "I_ADDR_S_IS1 : Address, Short, IS1.; Addr=0x00000000080008A2 ~[0xA2]"'
+          - 'row "56 1 I_ATOM_F3 : Atom format 3.; ENE"':
+            - cell "56"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; ENE"'
+          - 'row "57 1 I_ATOM_F1 : Atom format 1.; E"':
+            - cell "57"
+            - cell "1"
+            - 'cell "I_ATOM_F1 : Atom format 1.; E"'
+          - 'row "58 3 I_ADDR_S_IS1 : Address, Short, IS1.; Addr=0x0000000008003C42 ~[0x3C42]"':
+            - cell "58"
+            - cell "3"
+            - 'cell "I_ADDR_S_IS1 : Address, Short, IS1.; Addr=0x0000000008003C42 ~[0x3C42]"'
+          - 'row "61 1 I_ATOM_F3 : Atom format 3.; NNN"':
+            - cell "61"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNN"'
+          - 'row "62 1 I_ATOM_F3 : Atom format 3.; EEN"':
+            - cell "62"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; EEN"'
+          - 'row "63 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "63"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "64 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "64"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "65 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "65"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "66 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "66"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "67 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "67"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "68 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "68"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "69 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "69"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "70 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "70"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "71 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "71"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "72 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "72"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "73 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "73"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "74 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "74"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "75 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "75"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "76 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "76"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "77 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "77"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "78 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "78"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "79 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "79"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "80 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "80"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "81 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "81"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "82 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "82"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "83 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "83"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "84 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "84"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "85 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "85"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "86 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "86"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "87 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "87"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "88 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "88"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "89 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "89"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "90 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "90"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "91 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "91"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "92 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "92"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "93 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "93"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "94 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "94"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "95 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "95"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "96 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "96"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "97 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "97"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "98 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "98"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "99 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "99"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "100 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "100"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "101 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "101"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "102 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "102"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "103 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "103"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "104 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "104"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "105 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "105"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "106 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "106"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "107 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "107"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "108 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "108"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "109 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "109"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "110 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "110"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "111 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "111"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "112 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "112"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "113 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "113"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "114 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "114"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "115 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "115"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "116 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "116"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "117 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "117"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "118 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "118"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "119 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "119"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "120 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "120"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "121 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "121"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "122 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "122"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "123 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "123"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "124 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "124"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "125 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "125"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "126 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "126"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "127 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "127"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "128 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "128"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "129 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "129"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "130 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "130"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "131 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "131"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "132 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "132"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "133 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "133"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "134 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "134"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "135 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "135"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "136 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "136"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "137 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "137"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "138 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "138"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "139 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "139"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "140 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "140"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "141 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "141"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "142 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "142"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "143 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "143"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "144 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "144"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "145 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "145"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "146 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "146"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "147 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "147"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "148 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "148"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "149 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "149"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "150 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "150"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "151 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "151"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "152 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "152"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "153 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "153"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "154 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "154"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "155 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "155"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "156 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "156"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "157 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "157"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "158 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "158"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "159 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "159"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "160 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "160"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "161 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "161"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "162 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "162"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "163 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "163"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "164 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "164"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "165 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "165"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "166 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "166"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "167 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "167"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "168 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "168"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "169 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "169"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "170 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "170"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "171 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "171"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "172 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "172"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "173 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "173"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "174 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "174"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "175 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "175"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "176 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "176"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "177 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "177"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "178 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "178"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "179 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "179"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "180 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "180"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+          - 'row "181 1 I_ATOM_F3 : Atom format 3.; NEN"':
+            - cell "181"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NEN"'
+          - 'row "182 1 I_ATOM_F3 : Atom format 3.; NNE"':
+            - cell "182"
+            - cell "1"
+            - 'cell "I_ATOM_F3 : Atom format 3.; NNE"'
+      - button "上一页" [disabled]
+      - generic: 1 / 20
+      - button "下一页"
+      - separator "调整执行流与源码比例"
+      - strong: spi_trace_support.c
+      - generic "spi_trace_ready · 第 6 行"
+      - 'generic "10b5 push {r4, lr} · 已证实执行"'
+      - generic: "1"
+      - generic: "#include \"main.h\""
+      - generic: "2"
+      - generic: "#include \"spi_trace_support.h\""
+      - generic: "3"
+      - generic: /* Debugger-visible diagnostics bypass the M7 data cache in DTCM. */
+      - generic: "4"
+      - generic: volatile SpiTraceDiagnostics g_spi_trace __attribute__((section(".trace_diag"), aligned(4)));
+      - generic: "5"
+      - generic: /* A stable breakpoint address for the host; this firmware never enables ETM. */
+      - generic: "6"
+      - generic: "__attribute__((noinline)) void spi_trace_ready(void) {"
+      - generic: "7"
+      - generic: g_spi_trace.cpu_hz = HAL_RCC_GetSysClockFreq();
+      - generic: "8"
+      - generic: g_spi_trace.hclk_hz = HAL_RCC_GetHCLKFreq();
+      - generic: "9"
+      - generic: g_spi_trace.spi_kernel_hz = HAL_RCCEx_GetPeriphCLKFreq(RCC_PERIPHCLK_SPI2);
+      - generic: "10"
+      - generic: g_spi_trace.traceclk_hz = 560000000U / SPI_TRACE_PLL_R / 2U;
+      - generic: "11"
+      - generic: g_spi_trace.ready = 1;
+      - generic: "12"
+      - generic: "}"
+      - generic: "13"
+      - generic "历史 trace 重建，包含未证实祖先；不是当前寄存器快照":
+        - strong: 选中位置的历史调用栈
+        - generic: 采集前调用栈未知
+        - generic: › spi_trace_ready
+  - text: 连接后这里显示接收数据。 连接探针并选择 RTT 通道后，这里显示目标输出。 连接后这里显示接收数据。 烧录或 SRAM 测试的进度与结果显示在这里。 （点「定位并开始」：留空地址就用 .elf 里的 _SEGGER_RTT 符号） ▸ ▸ 连接后这里显示接收数据。 ▸ I2C 事务与应答会显示在这里。

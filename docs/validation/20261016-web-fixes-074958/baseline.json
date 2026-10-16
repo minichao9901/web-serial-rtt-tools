@@ -1,0 +1,18 @@
+{
+  "runId": "20261016-web-fixes-074958",
+  "revision": "fb06da2348543b75db5fbc237dd4d3b0ffe1d655",
+  "dirty": [
+    " M app/rtt/dap-webusb.js",
+    "?? .agent-teams/",
+    "?? docs/etm-page-review-2026-10-14.md",
+    "?? docs/page-review-2026-10-16.md",
+    "?? docs/validation/20261016-cross-review-065747/",
+    "?? docs/validation/20261016-web-fixes-074958/",
+    "?? docs/validation/20261016-web-review-062721/",
+    "?? docs/web-review-fix-list-2026-10-16.md",
+    "?? tools/selftest/dap-ap-discovery.test.mjs",
+    "?? validation/"
+  ],
+  "started": "2026-10-16T07:49:58.5746347+08:00",
+  "scope": "F01-F13 and actionable maintenance/UI items; H01-H04 excluded pending evidence"
+}

@@ -1,3 +1,4 @@
+import {waitMs} from '../core/pace.js';
 import {WebUsbDapProbe} from '../rtt/dap-webusb.js';
 import {SerialSession} from '../serial/session.js';
 import {MAX_RAW} from './recording.js';
@@ -19,7 +20,7 @@ export class SwoCapture {
   createReceiver(){return new SwoReceiver();}
   async read(a){const b=await this.probe.readMemDiagnostic(a,4);return new DataView(b.buffer,b.byteOffset,4).getUint32(0,true);}
   async write(a,v){const b=new Uint8Array(4);new DataView(b.buffer).setUint32(0,v,true);await this.probe.writeMem(a,b);}
-  async waitRegister(address,mask,value,alive=()=>{}){for(let i=0;i<100;i++){alive();if(((await this.read(address))&mask)===value)return;await new Promise(resolve=>setTimeout(resolve,5));}throw Error(`读取目标断点状态超时：0x${address.toString(16)}`);}
+  async waitRegister(address,mask,value,alive=()=>{}){for(let i=0;i<100;i++){alive();if(((await this.read(address))&mask)===value)return;await waitMs(5);}throw Error(`读取目标断点状态超时：0x${address.toString(16)}`);}
   async readCorePc(alive=()=>{}){await this.write(0xe000edf4,15);await this.waitRegister(0xe000edf0,1<<16,1<<16,alive);return (await this.read(0xe000edf8))&~1;}
   async clearEntryBreakpoint(){
     const lease=this.entryLease;if(!lease)return;
@@ -45,7 +46,7 @@ export class SwoCapture {
       if((await this.read(slot))!==encoded||!((await this.read(FPB.CTRL))&1))throw Error('采集起点断点写入回读失败');
       if(wasHalted)await this.probe.run();
       const until=Date.now()+timeoutMs;
-      for(;;){alive();if(await this.probe.isHalted())break;if(Date.now()>until)throw Error(`等待命中起点断点超时：${label||'0x'+address.toString(16)}`);await new Promise(resolve=>setTimeout(resolve,20));}
+      for(;;){alive();if(await this.probe.isHalted())break;if(Date.now()>until)throw Error(`等待命中起点断点超时：${label||'0x'+address.toString(16)}`);await waitMs(20);}
       const pc=await this.readCorePc(alive);if(pc!==address){state.unexpectedStop=true;throw Error(`目标停在 0x${pc.toString(16)}，不是所选采集起点 0x${address.toString(16)}`);}
       state.hit=true;state.hitPc=pc;
     }catch(error){
@@ -128,7 +129,7 @@ export class SwoCapture {
         await this.write(R.demcr,demcr&~1); // Disable vector catch; let the reset handler reach the selected business entry.
         phase('软件复位并等待所选起点');resetIssued=true;await this.write(0xe000ed0c,0x05fa0004);
         const until=Date.now()+(options.entryTimeoutMs||15000);
-        for(;;){alive();if(await this.probe.isHalted())break;if(Date.now()>until)throw Error(`复位后等待起点超时：${options.entryLabel||hex(address)}`);await new Promise(resolve=>setTimeout(resolve,20));}
+        for(;;){alive();if(await this.probe.isHalted())break;if(Date.now()>until)throw Error(`复位后等待起点超时：${options.entryLabel||hex(address)}`);await waitMs(20);}
         const pc=await this.readCorePc(alive);if(pc!==address)throw Error(`复位后停在 ${hex(pc)}，不是所选起点 ${hex(address)}`);
         await this.clearEntryBreakpoint();await this.write(R.demcr,demcr);if(await this.read(R.demcr)!==demcr)throw Error('复位后 DEMCR 恢复回读不一致');demcr=null;
         return {address,hitPc:pc,label:options.entryLabel||hex(address),alreadyAtEntry:false,reset:true,wasHaltedBeforeReset:wasHalted};
@@ -191,7 +192,7 @@ export class SwoCapture {
           if(Math.abs(receiverStatus.actualBaud-plan.baudRate)/plan.baudRate>.005)throw Error('目标与探针波特率偏差超过 0.5%');
           this.receiverPulse=setInterval(()=>{if(this._heartbeatTask)return;this._heartbeatTask=this.receiver.heartbeat().then(s=>{if(s.actualBaud!==receiverStatus.actualBaud||s.uartHz!==receiverStatus.uartHz)throw Error('探针时钟意外改变');}).catch(e=>{this.metadata.receiverError=e.message;this.onError?.(e);this.stop().catch(error=>this.onError?.(error));}).finally(()=>{this._heartbeatTask=null;});},1000);
         }
-        phase('打开串口并确认 SWO 线路静止');await this.serial.open(options.port,{baudRate:this.receiver?Math.round(plan.baudRate):plan.requestedBaudRate,owner:'swo'});alive();this.lastRxAt=performance.now();for(let i=0;i<20;i++){await new Promise(r=>setTimeout(r,30));alive();if(performance.now()-this.lastRxAt>=150)break;if(i===19)throw Error('SWO 引脚关闭后接收仍未安静，请检查其他 trace 连接');}
+        phase('打开串口并确认 SWO 线路静止');await this.serial.open(options.port,{baudRate:this.receiver?Math.round(plan.baudRate):plan.requestedBaudRate,owner:'swo'});alive();this.lastRxAt=performance.now();for(let i=0;i<20;i++){await waitMs(30);alive();if(performance.now()-this.lastRxAt>=150)break;if(i===19)throw Error('SWO 引脚关闭后接收仍未安静，请检查其他 trace 连接');}
         if(this.receiver){const actual=await this.receiver.heartbeat();if(actual.actualBaud!==receiverStatus.actualBaud||actual.uartHz!==receiverStatus.uartHz)throw Error('串口打开后探针配置改变');const d=await this.receiver.hid.xfer(0x18),v=new DataView(d.buffer,d.byteOffset+2);if(v.getUint32(24,true)||v.getUint32(12,true)!==actual.actualBaud||v.getUint32(16,true)!==actual.osr)throw Error('UART 线路配置回读失败');}
         const receiverBaseline=this.receiver?await this.receiver.diagnostics():null;
         this.chunks=[];this.bytes=0;this.metadata={receiverBaseline,format:'swo-pc-v1',startAligned:true,plan,startedAt:null,clockCheck:this.clockCheck,receiver:receiverStatus,receiverSources:this.receiverSources||null,target:{...target,probe:this.probe.device?.serialNumber||''},elfSha256:options.elfSha256||null,entryBreakpoint:this.entryBoundary,transportGaps:[]};
@@ -220,7 +221,7 @@ export class SwoCapture {
         await this.write(R.dwt,this.saved.dwt&~((1<<12)|(1<<16)));await this.write(R.ter,0);
         // Drain valid queued packets while NRZ remains enabled. Disabling ITM
         // first can change the SWO idle level and create UART break bytes.
-        this.lastRxAt=performance.now();for(let i=0;i<10;i++){await new Promise(r=>setTimeout(r,20));if(performance.now()-this.lastRxAt>=60)break;if(i===9)this.metadata.endAligned=false;}
+        this.lastRxAt=performance.now();for(let i=0;i<10;i++){await waitMs(20);if(performance.now()-this.lastRxAt>=60)break;if(i===9)this.metadata.endAligned=false;}
         if(this.receiver&&this.metadata.receiverBaseline){const current=await this.receiver.diagnostics();this.metadata.receiverDiagnostics=current;this.metadata.receiverErrors=Object.fromEntries(Object.entries(current).map(([k,v])=>[k,(v-this.metadata.receiverBaseline[k])>>>0]));}
         this.collecting=false;await this.write(R.itm,0);
       }catch(e){errors.push(e);}

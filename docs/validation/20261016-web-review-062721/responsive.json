@@ -1,0 +1,964 @@
+[
+  {
+    "page": "serial",
+    "width": 1280,
+    "height": 720,
+    "active": "tab-serial",
+    "innerHeight": 720,
+    "innerWidth": 1280,
+    "main": {
+      "height": 664,
+      "left": 328,
+      "top": 46,
+      "width": 942
+    },
+    "outside": [],
+    "rootWidth": 1280
+  },
+  {
+    "page": "terminal",
+    "width": 1280,
+    "height": 720,
+    "active": "tab-terminal",
+    "innerHeight": 720,
+    "innerWidth": 1280,
+    "main": {
+      "height": 664,
+      "left": 328,
+      "top": 46,
+      "width": 942
+    },
+    "outside": [],
+    "rootWidth": 1280
+  },
+  {
+    "page": "rtt",
+    "width": 1280,
+    "height": 720,
+    "active": "tab-rtt",
+    "innerHeight": 720,
+    "innerWidth": 1280,
+    "main": {
+      "height": 664,
+      "left": 328,
+      "top": 46,
+      "width": 942
+    },
+    "outside": [],
+    "rootWidth": 1280
+  },
+  {
+    "page": "rttcdc",
+    "width": 1280,
+    "height": 720,
+    "active": "tab-rttcdc",
+    "innerHeight": 720,
+    "innerWidth": 1280,
+    "main": {
+      "height": 664,
+      "left": 328,
+      "top": 46,
+      "width": 942
+    },
+    "outside": [],
+    "rootWidth": 1280
+  },
+  {
+    "page": "scope",
+    "width": 1280,
+    "height": 720,
+    "active": "tab-scope",
+    "innerHeight": 720,
+    "innerWidth": 1280,
+    "main": {
+      "height": 672,
+      "left": 296,
+      "top": 42,
+      "width": 976
+    },
+    "outside": [],
+    "rootWidth": 1280
+  },
+  {
+    "page": "flash",
+    "width": 1280,
+    "height": 720,
+    "active": "tab-flash",
+    "innerHeight": 720,
+    "innerWidth": 1280,
+    "main": {
+      "height": 664,
+      "left": 328,
+      "top": 46,
+      "width": 942
+    },
+    "outside": [],
+    "rootWidth": 1280
+  },
+  {
+    "page": "dbg",
+    "width": 1280,
+    "height": 720,
+    "active": "tab-dbg",
+    "innerHeight": 720,
+    "innerWidth": 1280,
+    "main": {
+      "height": 672,
+      "left": 296,
+      "top": 42,
+      "width": 976
+    },
+    "outside": [],
+    "rootWidth": 1280
+  },
+  {
+    "page": "spi",
+    "width": 1280,
+    "height": 720,
+    "active": "tab-spi",
+    "innerHeight": 720,
+    "innerWidth": 1280,
+    "main": {
+      "height": 664,
+      "left": 328,
+      "top": 46,
+      "width": 942
+    },
+    "outside": [],
+    "rootWidth": 1280
+  },
+  {
+    "page": "panel",
+    "width": 1280,
+    "height": 720,
+    "active": "tab-panel",
+    "innerHeight": 720,
+    "innerWidth": 1280,
+    "main": {
+      "height": 664,
+      "left": 328,
+      "top": 46,
+      "width": 942
+    },
+    "outside": [],
+    "rootWidth": 1280
+  },
+  {
+    "page": "spicdc",
+    "width": 1280,
+    "height": 720,
+    "active": "tab-spicdc",
+    "innerHeight": 720,
+    "innerWidth": 1280,
+    "main": {
+      "height": 664,
+      "left": 328,
+      "top": 46,
+      "width": 942
+    },
+    "outside": [],
+    "rootWidth": 1280
+  },
+  {
+    "page": "swo",
+    "width": 1280,
+    "height": 720,
+    "active": "tab-swo",
+    "innerHeight": 720,
+    "innerWidth": 1280,
+    "main": {
+      "height": 664,
+      "left": 328,
+      "top": 46,
+      "width": 942
+    },
+    "outside": [],
+    "rootWidth": 1280
+  },
+  {
+    "page": "etm",
+    "width": 1280,
+    "height": 720,
+    "active": "tab-etm",
+    "innerHeight": 720,
+    "innerWidth": 1280,
+    "main": null,
+    "outside": [],
+    "rootWidth": 1280
+  },
+  {
+    "page": "i2c",
+    "width": 1280,
+    "height": 720,
+    "active": "tab-i2c",
+    "innerHeight": 720,
+    "innerWidth": 1280,
+    "main": {
+      "height": 664,
+      "left": 328,
+      "top": 46,
+      "width": 942
+    },
+    "outside": [],
+    "rootWidth": 1280
+  },
+  {
+    "page": "analog",
+    "width": 1280,
+    "height": 720,
+    "active": "tab-analog",
+    "innerHeight": 720,
+    "innerWidth": 1280,
+    "main": null,
+    "outside": [],
+    "rootWidth": 1280
+  },
+  {
+    "page": "gen",
+    "width": 1280,
+    "height": 720,
+    "active": "tab-gen",
+    "innerHeight": 720,
+    "innerWidth": 1280,
+    "main": {
+      "height": 664,
+      "left": 328,
+      "top": 46,
+      "width": 942
+    },
+    "outside": [],
+    "rootWidth": 1280
+  },
+  {
+    "page": "serial",
+    "width": 1024,
+    "height": 768,
+    "active": "tab-serial",
+    "innerHeight": 768,
+    "innerWidth": 1024,
+    "main": {
+      "height": 712,
+      "left": 328,
+      "top": 46,
+      "width": 686
+    },
+    "outside": [],
+    "rootWidth": 1024
+  },
+  {
+    "page": "terminal",
+    "width": 1024,
+    "height": 768,
+    "active": "tab-terminal",
+    "innerHeight": 768,
+    "innerWidth": 1024,
+    "main": {
+      "height": 712,
+      "left": 328,
+      "top": 46,
+      "width": 686
+    },
+    "outside": [],
+    "rootWidth": 1024
+  },
+  {
+    "page": "rtt",
+    "width": 1024,
+    "height": 768,
+    "active": "tab-rtt",
+    "innerHeight": 768,
+    "innerWidth": 1024,
+    "main": {
+      "height": 712,
+      "left": 328,
+      "top": 46,
+      "width": 686
+    },
+    "outside": [],
+    "rootWidth": 1024
+  },
+  {
+    "page": "rttcdc",
+    "width": 1024,
+    "height": 768,
+    "active": "tab-rttcdc",
+    "innerHeight": 768,
+    "innerWidth": 1024,
+    "main": {
+      "height": 712,
+      "left": 328,
+      "top": 46,
+      "width": 686
+    },
+    "outside": [],
+    "rootWidth": 1024
+  },
+  {
+    "page": "scope",
+    "width": 1024,
+    "height": 768,
+    "active": "tab-scope",
+    "innerHeight": 768,
+    "innerWidth": 1024,
+    "main": {
+      "height": 720,
+      "left": 296,
+      "top": 42,
+      "width": 720
+    },
+    "outside": [],
+    "rootWidth": 1024
+  },
+  {
+    "page": "flash",
+    "width": 1024,
+    "height": 768,
+    "active": "tab-flash",
+    "innerHeight": 768,
+    "innerWidth": 1024,
+    "main": {
+      "height": 712,
+      "left": 328,
+      "top": 46,
+      "width": 686
+    },
+    "outside": [],
+    "rootWidth": 1024
+  },
+  {
+    "page": "dbg",
+    "width": 1024,
+    "height": 768,
+    "active": "tab-dbg",
+    "innerHeight": 768,
+    "innerWidth": 1024,
+    "main": {
+      "height": 720,
+      "left": 296,
+      "top": 42,
+      "width": 720
+    },
+    "outside": [],
+    "rootWidth": 1024
+  },
+  {
+    "page": "spi",
+    "width": 1024,
+    "height": 768,
+    "active": "tab-spi",
+    "innerHeight": 768,
+    "innerWidth": 1024,
+    "main": {
+      "height": 712,
+      "left": 328,
+      "top": 46,
+      "width": 686
+    },
+    "outside": [],
+    "rootWidth": 1024
+  },
+  {
+    "page": "panel",
+    "width": 1024,
+    "height": 768,
+    "active": "tab-panel",
+    "innerHeight": 768,
+    "innerWidth": 1024,
+    "main": {
+      "height": 712,
+      "left": 328,
+      "top": 46,
+      "width": 686
+    },
+    "outside": [],
+    "rootWidth": 1024
+  },
+  {
+    "page": "spicdc",
+    "width": 1024,
+    "height": 768,
+    "active": "tab-spicdc",
+    "innerHeight": 768,
+    "innerWidth": 1024,
+    "main": {
+      "height": 712,
+      "left": 328,
+      "top": 46,
+      "width": 686
+    },
+    "outside": [],
+    "rootWidth": 1024
+  },
+  {
+    "page": "swo",
+    "width": 1024,
+    "height": 768,
+    "active": "tab-swo",
+    "innerHeight": 768,
+    "innerWidth": 1024,
+    "main": {
+      "height": 712,
+      "left": 328,
+      "top": 46,
+      "width": 686
+    },
+    "outside": [],
+    "rootWidth": 1024
+  },
+  {
+    "page": "etm",
+    "width": 1024,
+    "height": 768,
+    "active": "tab-etm",
+    "innerHeight": 768,
+    "innerWidth": 1024,
+    "main": null,
+    "outside": [],
+    "rootWidth": 1024
+  },
+  {
+    "page": "i2c",
+    "width": 1024,
+    "height": 768,
+    "active": "tab-i2c",
+    "innerHeight": 768,
+    "innerWidth": 1024,
+    "main": {
+      "height": 712,
+      "left": 328,
+      "top": 46,
+      "width": 686
+    },
+    "outside": [],
+    "rootWidth": 1024
+  },
+  {
+    "page": "analog",
+    "width": 1024,
+    "height": 768,
+    "active": "tab-analog",
+    "innerHeight": 768,
+    "innerWidth": 1024,
+    "main": null,
+    "outside": [],
+    "rootWidth": 1024
+  },
+  {
+    "page": "gen",
+    "width": 1024,
+    "height": 768,
+    "active": "tab-gen",
+    "innerHeight": 768,
+    "innerWidth": 1024,
+    "main": {
+      "height": 712,
+      "left": 328,
+      "top": 46,
+      "width": 686
+    },
+    "outside": [],
+    "rootWidth": 1024
+  },
+  {
+    "page": "serial",
+    "width": 768,
+    "height": 900,
+    "active": "tab-serial",
+    "innerHeight": 900,
+    "innerWidth": 768,
+    "main": {
+      "height": 624,
+      "left": 10,
+      "top": 521,
+      "width": 738
+    },
+    "outside": [],
+    "rootWidth": 758
+  },
+  {
+    "page": "terminal",
+    "width": 768,
+    "height": 900,
+    "active": "tab-terminal",
+    "innerHeight": 900,
+    "innerWidth": 768,
+    "main": {
+      "height": 712,
+      "left": 10,
+      "top": 389,
+      "width": 738
+    },
+    "outside": [],
+    "rootWidth": 758
+  },
+  {
+    "page": "rtt",
+    "width": 768,
+    "height": 900,
+    "active": "tab-rtt",
+    "innerHeight": 900,
+    "innerWidth": 768,
+    "main": {
+      "height": 563,
+      "left": 10,
+      "top": 517,
+      "width": 738
+    },
+    "outside": [],
+    "rootWidth": 758
+  },
+  {
+    "page": "rttcdc",
+    "width": 768,
+    "height": 900,
+    "active": "tab-rttcdc",
+    "innerHeight": 900,
+    "innerWidth": 768,
+    "main": {
+      "height": 516,
+      "left": 10,
+      "top": 687,
+      "width": 738
+    },
+    "outside": [],
+    "rootWidth": 758
+  },
+  {
+    "page": "scope",
+    "width": 768,
+    "height": 900,
+    "active": "tab-scope",
+    "innerHeight": 900,
+    "innerWidth": 768,
+    "main": {
+      "height": 446,
+      "left": 256,
+      "top": 42,
+      "width": 504
+    },
+    "outside": [],
+    "rootWidth": 768
+  },
+  {
+    "page": "flash",
+    "width": 768,
+    "height": 900,
+    "active": "tab-flash",
+    "innerHeight": 900,
+    "innerWidth": 768,
+    "main": {
+      "height": 493,
+      "left": 10,
+      "top": 380,
+      "width": 748
+    },
+    "outside": [],
+    "rootWidth": 768
+  },
+  {
+    "page": "dbg",
+    "width": 768,
+    "height": 900,
+    "active": "tab-dbg",
+    "innerHeight": 900,
+    "innerWidth": 768,
+    "main": {
+      "height": 531,
+      "left": 256,
+      "top": 42,
+      "width": 504
+    },
+    "outside": [],
+    "rootWidth": 768
+  },
+  {
+    "page": "spi",
+    "width": 768,
+    "height": 900,
+    "active": "tab-spi",
+    "innerHeight": 900,
+    "innerWidth": 768,
+    "main": {
+      "height": 343,
+      "left": 10,
+      "top": 380,
+      "width": 748
+    },
+    "outside": [],
+    "rootWidth": 768
+  },
+  {
+    "page": "panel",
+    "width": 768,
+    "height": 900,
+    "active": "tab-panel",
+    "innerHeight": 900,
+    "innerWidth": 768,
+    "main": {
+      "height": 545,
+      "left": 10,
+      "top": 380,
+      "width": 738
+    },
+    "outside": [],
+    "rootWidth": 758
+  },
+  {
+    "page": "spicdc",
+    "width": 768,
+    "height": 900,
+    "active": "tab-spicdc",
+    "innerHeight": 900,
+    "innerWidth": 768,
+    "main": {
+      "height": 484,
+      "left": 10,
+      "top": 575,
+      "width": 738
+    },
+    "outside": [],
+    "rootWidth": 758
+  },
+  {
+    "page": "swo",
+    "width": 768,
+    "height": 900,
+    "active": "tab-swo",
+    "innerHeight": 900,
+    "innerWidth": 768,
+    "main": {
+      "height": 820,
+      "left": 10,
+      "top": 380,
+      "width": 738
+    },
+    "outside": [],
+    "rootWidth": 758
+  },
+  {
+    "page": "etm",
+    "width": 768,
+    "height": 900,
+    "active": "tab-etm",
+    "innerHeight": 900,
+    "innerWidth": 768,
+    "main": null,
+    "outside": [],
+    "rootWidth": 768
+  },
+  {
+    "page": "i2c",
+    "width": 768,
+    "height": 900,
+    "active": "tab-i2c",
+    "innerHeight": 900,
+    "innerWidth": 768,
+    "main": {
+      "height": 303,
+      "left": 10,
+      "top": 380,
+      "width": 748
+    },
+    "outside": [],
+    "rootWidth": 768
+  },
+  {
+    "page": "analog",
+    "width": 768,
+    "height": 900,
+    "active": "tab-analog",
+    "innerHeight": 900,
+    "innerWidth": 768,
+    "main": null,
+    "outside": [],
+    "rootWidth": 758
+  },
+  {
+    "page": "gen",
+    "width": 768,
+    "height": 900,
+    "active": "tab-gen",
+    "innerHeight": 900,
+    "innerWidth": 768,
+    "main": {
+      "height": 581,
+      "left": 10,
+      "top": 202,
+      "width": 748
+    },
+    "outside": [],
+    "rootWidth": 768
+  },
+  {
+    "page": "serial",
+    "width": 390,
+    "height": 844,
+    "active": "tab-serial",
+    "innerHeight": 844,
+    "innerWidth": 390,
+    "main": {
+      "height": 698,
+      "left": 10,
+      "top": 606,
+      "width": 361
+    },
+    "outside": [],
+    "rootWidth": 405
+  },
+  {
+    "page": "terminal",
+    "width": 390,
+    "height": 844,
+    "active": "tab-terminal",
+    "innerHeight": 844,
+    "innerWidth": 390,
+    "main": {
+      "height": 712,
+      "left": 10,
+      "top": 454,
+      "width": 361
+    },
+    "outside": [],
+    "rootWidth": 405
+  },
+  {
+    "page": "rtt",
+    "width": 390,
+    "height": 844,
+    "active": "tab-rtt",
+    "innerHeight": 844,
+    "innerWidth": 390,
+    "main": {
+      "height": 662,
+      "left": 10,
+      "top": 582,
+      "width": 361
+    },
+    "outside": [],
+    "rootWidth": 405
+  },
+  {
+    "page": "rttcdc",
+    "width": 390,
+    "height": 844,
+    "active": "tab-rttcdc",
+    "innerHeight": 844,
+    "innerWidth": 390,
+    "main": {
+      "height": 557,
+      "left": 10,
+      "top": 772,
+      "width": 361
+    },
+    "outside": [],
+    "rootWidth": 405
+  },
+  {
+    "page": "scope",
+    "width": 390,
+    "height": 844,
+    "active": "tab-scope",
+    "innerHeight": 844,
+    "innerWidth": 390,
+    "main": {
+      "height": 515,
+      "left": 8,
+      "top": 399,
+      "width": 365
+    },
+    "outside": [],
+    "rootWidth": 405
+  },
+  {
+    "page": "flash",
+    "width": 390,
+    "height": 844,
+    "active": "tab-flash",
+    "innerHeight": 844,
+    "innerWidth": 390,
+    "main": {
+      "height": 468,
+      "left": 10,
+      "top": 405,
+      "width": 361
+    },
+    "outside": [],
+    "rootWidth": 405
+  },
+  {
+    "page": "dbg",
+    "width": 390,
+    "height": 844,
+    "active": "tab-dbg",
+    "innerHeight": 844,
+    "innerWidth": 390,
+    "main": {
+      "height": 536,
+      "left": 8,
+      "top": 300,
+      "width": 365
+    },
+    "outside": [],
+    "rootWidth": 405
+  },
+  {
+    "page": "spi",
+    "width": 390,
+    "height": 844,
+    "active": "tab-spi",
+    "innerHeight": 844,
+    "innerWidth": 390,
+    "main": {
+      "height": 424,
+      "left": 10,
+      "top": 405,
+      "width": 361
+    },
+    "outside": [],
+    "rootWidth": 405
+  },
+  {
+    "page": "panel",
+    "width": 390,
+    "height": 844,
+    "active": "tab-panel",
+    "innerHeight": 844,
+    "innerWidth": 390,
+    "main": {
+      "height": 675,
+      "left": 10,
+      "top": 405,
+      "width": 361
+    },
+    "outside": [
+      {
+        "id": "pn-read-chunk",
+        "right": 420
+      },
+      {
+        "id": "pn-read-go",
+        "right": 483
+      },
+      {
+        "id": "pn-read-stop",
+        "right": 529
+      },
+      {
+        "id": "pn-read-bmp",
+        "right": 602
+      },
+      {
+        "id": "pn-read-dummy",
+        "right": 443
+      },
+      {
+        "id": "pn-read-lines",
+        "right": 525
+      },
+      {
+        "id": "pn-read-ramrd",
+        "right": 619
+      },
+      {
+        "id": "pn-read-cont",
+        "right": 696
+      }
+    ],
+    "rootWidth": 405
+  },
+  {
+    "page": "spicdc",
+    "width": 390,
+    "height": 844,
+    "active": "tab-spicdc",
+    "innerHeight": 844,
+    "innerWidth": 390,
+    "main": {
+      "height": 557,
+      "left": 10,
+      "top": 659,
+      "width": 361
+    },
+    "outside": [],
+    "rootWidth": 405
+  },
+  {
+    "page": "swo",
+    "width": 390,
+    "height": 844,
+    "active": "tab-swo",
+    "innerHeight": 844,
+    "innerWidth": 390,
+    "main": {
+      "height": 820,
+      "left": 10,
+      "top": 405,
+      "width": 361
+    },
+    "outside": [],
+    "rootWidth": 405
+  },
+  {
+    "page": "etm",
+    "width": 390,
+    "height": 844,
+    "active": "tab-etm",
+    "innerHeight": 844,
+    "innerWidth": 390,
+    "main": null,
+    "outside": [],
+    "rootWidth": 405
+  },
+  {
+    "page": "i2c",
+    "width": 390,
+    "height": 844,
+    "active": "tab-i2c",
+    "innerHeight": 844,
+    "innerWidth": 390,
+    "main": {
+      "height": 453,
+      "left": 10,
+      "top": 405,
+      "width": 361
+    },
+    "outside": [],
+    "rootWidth": 405
+  },
+  {
+    "page": "analog",
+    "width": 390,
+    "height": 844,
+    "active": "tab-analog",
+    "innerHeight": 844,
+    "innerWidth": 390,
+    "main": null,
+    "outside": [],
+    "rootWidth": 405
+  },
+  {
+    "page": "gen",
+    "width": 390,
+    "height": 844,
+    "active": "tab-gen",
+    "innerHeight": 844,
+    "innerWidth": 390,
+    "main": {
+      "height": 630,
+      "left": 10,
+      "top": 328,
+      "width": 361
+    },
+    "outside": [
+      {
+        "id": "",
+        "right": 488
+      },
+      {
+        "id": "",
+        "right": 601
+      }
+    ],
+    "rootWidth": 405
+  }
+]

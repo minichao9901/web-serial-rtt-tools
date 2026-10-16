@@ -1,0 +1,92 @@
+[
+  {
+    "dock": "files",
+    "file": "Makefile.jlink",
+    "checked": true
+  },
+  {
+    "dock": "files",
+    "file": "jlink_gdb.script",
+    "checked": true
+  },
+  {
+    "dock": "files",
+    "file": "Makefile.pyocd",
+    "checked": true
+  },
+  {
+    "dock": "files",
+    "file": "Makefile.openocd",
+    "checked": true
+  },
+  {
+    "dock": "files",
+    "file": "rtt_logger.py",
+    "checked": true
+  },
+  {
+    "dock": "files",
+    "file": "test_sram.bin",
+    "checked": true
+  },
+  {
+    "dock": "bridge",
+    "file": "rtt-bridge.mjs",
+    "checked": true
+  },
+  {
+    "dock": "bridge",
+    "file": "bridge.config.json",
+    "checked": true
+  },
+  {
+    "dock": "bridge",
+    "file": "README-bridge.txt",
+    "checked": true
+  },
+  {
+    "dock": "bridge",
+    "file": "start-bridge.bat",
+    "checked": true
+  },
+  {
+    "dock": "bridge",
+    "file": "check-tools.bat",
+    "checked": true
+  },
+  {
+    "dock": "bridge",
+    "file": "get-node.ps1",
+    "checked": true
+  },
+  {
+    "dock": "bridge",
+    "file": "start-bridge.sh",
+    "checked": true
+  },
+  {
+    "dock": "etm",
+    "file": "start-etm-bridge.bat",
+    "checked": true
+  },
+  {
+    "dock": "etm",
+    "file": "check-tools.bat",
+    "checked": true
+  },
+  {
+    "dock": "etm",
+    "file": "etm.config.json",
+    "checked": true
+  },
+  {
+    "dock": "etm",
+    "file": "etm-launcher.ps1",
+    "checked": true
+  },
+  {
+    "dock": "etm",
+    "file": "README-etm.txt",
+    "checked": true
+  }
+]

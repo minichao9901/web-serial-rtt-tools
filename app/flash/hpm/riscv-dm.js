@@ -1,3 +1,4 @@
+import { waitMs, yieldTask } from '../../core/pace.js';
 import { resolveHpmTarget, overlapsSbaFence, assertHpmIdentity } from '../../targets/hpm/porting.js';
 /**
  * RISC-V 调试模块访问（DMI + SBA），跑在 CMSIS-DAP 的 JTAG 序列之上。
@@ -183,7 +184,7 @@ export class RiscvTransport {
     for (let i = 0; i < 5; i++){
       try {
         await this.dmiWrite(DM.DMCONTROL, this._ctl(this.hart ?? 0));
-        await new Promise(r => setTimeout(r, 50));
+        await waitMs(50);
         const st = (await this.dmiRead(DM.DMSTATUS)) >>> 0;
         if (st) return st;
       } catch { /* 继续试 */ }
@@ -399,7 +400,7 @@ export class RiscvTransport {
   /** reset-halt（兜底）：ndmreset 拉高带 haltreq → 松开 ndmreset（haltreq 保持）*/
   async _haltByReset(hart = this.hart ?? 0, timeoutMs = 3000){
     await this.dmiWrite(DM.DMCONTROL, this._ctl(hart, DMCONTROL.ndmreset | DMCONTROL.haltreq));
-    await new Promise(r => setTimeout(r, 50));
+    await waitMs(50);
     // 🚨 放开 ndmreset 这一步**必须执行**（卡住就把整芯片按在复位态，见 resetHalt() 的注释）
     try {
       await this.dmiWrite(DM.DMCONTROL, this._ctl(hart, DMCONTROL.haltreq));
@@ -423,7 +424,7 @@ export class RiscvTransport {
       this.log(` ⚠ dmcontrol 回读 0x${(dmc ?? 0).toString(16)}：ndmreset 还没放开，再写一次`);
       try { await this.dmiWrite(DM.DMCONTROL, this._ctl(hart, DMCONTROL.haltreq)); }
       catch { /* 下一次回读会再判断 */ }
-      await new Promise(r => setTimeout(r, 20));
+      await waitMs(20);
     }
     return await this.waitHalted(timeoutMs);
   }
@@ -458,7 +459,7 @@ export class RiscvTransport {
     let released = false;
     try {
       await this.dmiWrite(DM.DMCONTROL, this._ctl(hart, DMCONTROL.ndmreset | DMCONTROL.haltreq));
-      await new Promise(r => setTimeout(r, 50));
+      await waitMs(50);
     } finally {
       try {
         await this.dmiWrite(DM.DMCONTROL, this._ctl(hart, DMCONTROL.haltreq));
@@ -498,9 +499,9 @@ export class RiscvTransport {
   /** 系统复位后运行（烧完让固件自己跑起来）：ndmreset 脉冲 + 不置 haltreq */
   async resetRun(hart = this.hart ?? 0){
     await this.dmiWrite(DM.DMCONTROL, this._ctl(hart, DMCONTROL.ndmreset));
-    await new Promise(r => setTimeout(r, 50));
+    await waitMs(50);
     await this.dmiWrite(DM.DMCONTROL, this._ctl(hart));
-    await new Promise(r => setTimeout(r, 10));
+    await waitMs(10);
   }
 
   /**
@@ -516,7 +517,7 @@ export class RiscvTransport {
     for (let i = 0; i < 20; i++){
       v = await this.dmiRead(DM.DMSTATUS);
       if (v & (legacyMask | specMask)) break;
-      await new Promise(r => setTimeout(r, 25));
+      await waitMs(25);
     }
     // 两套布局的 halted 位互不相同：哪一对置起就用哪套（都没置起就按实测的 legacy 来）
     this.dmLayout = (v & legacyMask) ? 'legacy' : (v & specMask) ? 'spec' : 'legacy';
@@ -635,7 +636,7 @@ export class RiscvTransport {
       if (!(sbcs & SBCS.SBBUSY)) return sbcs;
       // Real USB calls already yield. Avoid a host timer per poll (Windows
       // timers can be much longer than 1 ms); yield periodically for simulators.
-      if (++polls % 32 === 0) await new Promise(resolve => setTimeout(resolve, 0));
+      if (++polls % 32 === 0) await yieldTask();
     }
   }
 

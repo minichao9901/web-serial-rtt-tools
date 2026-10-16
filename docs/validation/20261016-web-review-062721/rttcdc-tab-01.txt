@@ -1,0 +1,90 @@
+- banner:
+  - generic "串口 / RTT 工具箱"
+  - navigation "工具切换":
+    - button "串口助手"
+    - button "终端"
+    - button "RTT Viewer"
+    - button "RTT 转发"
+    - button "J-Scope 波形"
+    - button "烧录器"
+    - button "调试器"
+    - generic "更多功能": 更多功能 ▾
+  - generic: 串口：未连接
+  - generic "连接支持该功能的 akaLinkPro 固件后可用。":
+    - checkbox "NRST 开漏" [checked] [disabled]
+    - text: NRST 开漏
+  - button "全局复位"
+  - button "全屏"
+  - status "当前页面没有功能连接实体探针；串口连接状态单独显示。": 探针：未使用
+  - generic "帮助"
+- main:
+  - text: 连接后这里显示接收数据。 连接探针并选择 RTT 通道后，这里显示目标输出。
+  - complementary:
+    - group "探针 · RTT → CDC":
+      - generic: 探针 · RTT → CDC
+      - button "连接探针"
+      - button "重连"
+      - paragraph: 未连接（点「连接探针」在弹框里选 akaLinkPro）
+      - generic: RTT 地址
+      - textbox "RTT 地址": "0x20000000"
+      - button "载入 ELF…"
+      - generic: 搜索长度
+      - textbox "搜索长度": "0"
+      - generic: 通道
+      - textbox "通道": "0"
+      - generic: 目标类型
+      - combobox "目标类型":
+        - option "SWD / ARM" [selected]
+        - option "RISC-V / JTAG"
+      - generic: SWD 时钟
+      - combobox "SWD 时钟":
+        - option "不改（用探针当前档位）" [selected]
+        - option "20 MHz"
+        - option "30 MHz"
+        - option "36 MHz"
+        - option "45 MHz（出厂默认）"
+        - option "60 MHz（更快，偶发抖动）"
+      - button "启动转发"
+      - button "停止"
+      - button "自动搜控制块"
+      - button "刷新状态"
+      - paragraph: —
+      - paragraph: 探针只在 DAP 空闲 ≥20 ms 时轮询目标，正常调试会话不受影响。
+    - group "接收（探针的 CDC 口）":
+      - generic: 接收（探针的 CDC 口）
+      - generic: 端口
+      - combobox "端口":
+        - option "（没有已授权的串口 → 点「选择…」）" [selected]
+      - button "选择…"
+      - button "刷新"
+      - generic: 波特率
+      - textbox "波特率": "115200"
+      - button "连接"
+      - button "断开" [disabled]
+      - paragraph: 还没授权任何串口：点「选择…」在浏览器弹框里选探针的 CDC 口（第一次必须手动选一次）。
+  - button "ASCII"
+  - button "ANSI" [active]
+  - button "HEX"
+  - checkbox "时间戳"
+  - text: 时间戳
+  - checkbox "绝对时间"
+  - text: 绝对时间
+  - checkbox "自动滚动" [checked]
+  - text: 自动滚动
+  - generic: 纯输出页：没有发送功能
+  - button "保存数据"
+  - button "暂停"
+  - button "清空"
+  - text: 连接后这里显示接收数据。
+  - textbox "Terminal input"
+  - generic: RX 0 B B / 0 段 · 0 B/s · 缓冲 0 B
+  - button "● 记录到文件"
+  - generic "默认开：每段前加一行 [时:分:秒.毫秒]，存 .txt 给人看；关掉则原样写字节存 .bin（二进制安全）":
+    - checkbox "记录带时间戳" [checked]
+    - text: 记录带时间戳
+  - generic "连接成功后自动弹一次保存框开始记录。配合高速自动关显示（>100KB/s 停渲染、收数/记录照常），一上来就猛灌的场景全程无感":
+    - checkbox "连接自动记录"
+    - text: 连接自动记录
+  - button "计数清零"
+  - button "质量"
+  - text: 烧录或 SRAM 测试的进度与结果显示在这里。 （点「定位并开始」：留空地址就用 .elf 里的 _SEGGER_RTT 符号） ▸ ▸ 连接后这里显示接收数据。 ▸ I2C 事务与应答会显示在这里。

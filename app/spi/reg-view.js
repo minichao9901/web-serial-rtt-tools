@@ -177,11 +177,12 @@ export class SpiRegView {
 
   /** 读一段寄存器 */
   async read(){
+    if (this.session.busy || this.busy){ this.log('w', 'SPI 任务尚未结束'); return; }
     const p = this._readFields();
     this._saveParams();
     const frames = G.readPlan(p, this.start, this.count).frames;
     if (!frames.length){ this.log('w', '寄存器面板：没有要读的帧'); return; }
-    this.busy = true; this._syncButtons();
+    this.busy = true; this.session.setBusy?.(true); this._syncButtons();
     try {
       const items = G.itemsOf(frames);
       const r = await this.session.sendFrames(items, { tag: 'bus', timeoutMs: 2500 });
@@ -197,7 +198,7 @@ export class SpiRegView {
       this.log('ok', `寄存器读 ${p.name} · 起 ${G.regLabel(p, this.start)} × ${this.count}` +
         ` → ${data.length} B · ${frames.length} 帧 · ${hexFirst(data)}`);
     } finally {
-      this.busy = false; this._syncButtons();
+      this.busy = false; this.session.setBusy?.(false); this._syncButtons();
       this._renderSummary();
       this.grid.reattach();
     }
@@ -205,6 +206,7 @@ export class SpiRegView {
 
   /** 写回：`only` = 只写改动字节 */
   async write({ only = true } = {}){
+    if (this.session.busy || this.busy){ this.log('w', 'SPI 任务尚未结束'); return; }
     if (!this.grid.length){ this.log('w', '寄存器面板：还没读过，先「读取」再写（不然不知道器件现状）'); return; }
     const p = this._readFields();
     if (this.readKey && SpiRegView.keyOf(p, this.start, this.count) !== this.readKey){
@@ -215,7 +217,7 @@ export class SpiRegView {
     if (only && !offs.length){ this.log('w', '寄存器面板：没有改动，不用写'); return; }
     const plan = G.writePlan(p, this.start, this.grid.cur, { offsets: offs });
     if (!plan.frames.length){ this.log('w', '寄存器面板：没有要写的帧'); return; }
-    this.busy = true; this._syncButtons();
+    this.busy = true; this.session.setBusy?.(true); this._syncButtons();
     try {
       const r = await this.session.sendFrames(G.itemsOf(plan.frames), { tag: 'bus', timeoutMs: 2500 });
       const failed = (r.rsps || []).filter(x => !x || x.error || x.status !== P.ST.OK).length;
@@ -228,7 +230,7 @@ export class SpiRegView {
       this.log('ok', `寄存器写 ${p.name} · 起 ${G.regLabel(p, this.start)} × ` +
         `${offs ? offs.length : this.grid.cur.length} B（${offs ? '只写改动' : '整块'}） → ${plan.frames.length} 帧`);
     } finally {
-      this.busy = false; this._syncButtons();
+      this.busy = false; this.session.setBusy?.(false); this._syncButtons();
       this._renderSummary();
       this.grid.reattach();
     }

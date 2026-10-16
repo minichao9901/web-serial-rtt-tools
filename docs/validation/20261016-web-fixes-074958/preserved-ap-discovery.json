@@ -1,0 +1,6 @@
+{
+  "preexistingAddedLines": 13,
+  "allRetained": true,
+  "originalCopy": "E:\\web-serial-rtt-tools\\docs\\validation\\20261016-web-fixes-074958\\dap-webusb.before.js",
+  "existingTestUnmodified": "E:\\web-serial-rtt-tools\\tools\\selftest\\dap-ap-discovery.test.mjs"
+}

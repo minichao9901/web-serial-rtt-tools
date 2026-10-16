@@ -28,7 +28,10 @@ export class AcqView {
 
   init(){
     $('sp-dsl-run').addEventListener('click', () => this.start());
-    $('sp-dsl-stop').addEventListener('click', () => this.stop('用户停止'));
+    $('sp-dsl-stop').addEventListener('click', () => this.stop('用户停止').catch(e => {
+      appendLogLine($('sp-log'), `停止未确认：${e.message}；可重试停止`, 'err', 400);
+      this.renderPill();
+    }));
     $('sp-live-reset').addEventListener('click', () => { this.live.clear(); this.renderLive(); });
     $('sp-live-spark').addEventListener('change', () => this.renderLive());
     this.renderLive();
@@ -55,9 +58,13 @@ export class AcqView {
     return ok;
   }
 
-  stop(reason){
+  async stop(reason){
+    if (this._stopping) return;
+    this._stopping = true;
     this.runner.stop(reason);
     this.renderPill('idle');
+    try { await this.session.stopPeriodic?.(); }
+    finally { this._stopping = false; this.renderPill('idle'); }
   }
 
   _showErrors(parsed){
@@ -105,7 +112,10 @@ export class AcqView {
     if (!pill) return;
     const st = this.runner.stat;
     const running = this.runner.running;
-    if (running){
+    const failed = !!this.session._periodic?.client.stopError;
+    if (failed){
+      pill.textContent = '停止未确认 · 请重试停止'; pill.classList.remove('on');
+    } else if (running){
       pill.textContent = `采集 · ${st.ticks} 拍` +
         (st.late ? ` · 迟 ${st.late}` : '') + (st.errors ? ` · 错 ${st.errors}` : '') +
         (this.live.size ? ` · ${this.live.size} 变量` : '');
@@ -115,8 +125,8 @@ export class AcqView {
       pill.classList.remove('on');
     }
     const run = $('sp-dsl-run'), stop = $('sp-dsl-stop');
-    if (run) run.disabled = running || !this.session.dataReady;
-    if (stop) stop.disabled = !running;
+    if (run) run.disabled = running || this.session.busy || !this.session.dataReady;
+    if (stop){ stop.disabled = this._stopping || (!running && !failed); stop.textContent = this._stopping ? '正在停止…' : failed ? '重试停止' : '停止'; }
   }
 
   _push(v, timeMs){

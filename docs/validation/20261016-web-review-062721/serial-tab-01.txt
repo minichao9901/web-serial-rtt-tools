@@ -1,0 +1,103 @@
+- banner:
+  - generic "串口 / RTT 工具箱"
+  - navigation "工具切换":
+    - button "串口助手"
+    - button "终端"
+    - button "RTT Viewer"
+    - button "RTT 转发"
+    - button "J-Scope 波形"
+    - button "烧录器"
+    - button "调试器"
+    - generic "更多功能": 更多功能 ▾
+  - generic: 串口：未连接
+  - generic "连接支持该功能的 akaLinkPro 固件后可用。":
+    - checkbox "NRST 开漏" [checked] [disabled]
+    - text: NRST 开漏
+  - button "全局复位"
+  - button "全屏"
+  - status "当前页面没有功能连接实体探针；串口连接状态单独显示。": 探针：未使用
+  - generic "帮助"
+- main:
+  - complementary:
+    - group "串口":
+      - generic: 串口
+      - generic: 端口
+      - combobox "端口":
+        - option "（没有已授权的串口 → 点「选择…」）" [selected]
+      - button "选择…"
+      - button "刷新"
+      - generic: 波特率
+      - combobox "波特率": "115200"
+      - generic: 数据位
+      - combobox "数据位":
+        - option "8" [selected]
+        - option "7"
+        - option "6"
+        - option "5"
+      - generic: 停止位
+      - combobox "停止位":
+        - option "1" [selected]
+        - option "2"
+      - generic: 校验
+      - combobox "校验":
+        - option "无" [selected]
+        - option "偶"
+        - option "奇"
+      - generic: 流控
+      - combobox "流控":
+        - option "无" [selected]
+        - option "硬件 RTS/CTS"
+      - checkbox "DTR"
+      - text: DTR
+      - checkbox "RTS"
+      - text: RTS
+      - button "连接"
+      - button "断开" [disabled]
+      - paragraph: 还没有授权任何串口：点「选择…」在浏览器弹框里选一次。
+    - group "快捷发送":
+      - generic: 快捷发送
+      - button "＋ 添加快捷发送"
+      - paragraph:
+        - text: 按 Alt+1…5 直接发对应的槽位（浏览器占用了 Ctrl+数字，改标签页）。
+        - text: HEX 用空格分隔；内容按「发送」那边选的 ASCII/HEX 与行尾处理。
+  - button "ASCII"
+  - button "ANSI" [active]
+  - button "HEX"
+  - checkbox "时间戳"
+  - text: 时间戳
+  - checkbox "绝对时间"
+  - text: 绝对时间
+  - checkbox "自动滚动" [checked]
+  - text: 自动滚动
+  - checkbox "显示发送"
+  - text: 显示发送
+  - button "暂停"
+  - button "清空"
+  - button "保存数据"
+  - text: 连接后这里显示接收数据。
+  - textbox "Terminal input"
+  - generic: RX 0 B B / 0 段 · 0 B/s
+  - generic: TX 0 B B / 0 段 · 0 B/s
+  - button "● 记录到文件"
+  - generic "默认开：每段前加一行 [时:分:秒.毫秒]，存 .txt 给人看；关掉则原样写字节存 .bin（二进制安全，事后解析用）":
+    - checkbox "记录带时间戳" [checked]
+    - text: 记录带时间戳
+  - generic "连接成功后自动弹一次保存框开始记录到文件。配合高速自动关显示（>50KB/s 停渲染、收数/记录照常），MicroLink RTT→CDC 这种一上来就猛灌的场景全程无感":
+    - checkbox "连接自动记录"
+    - text: 连接自动记录
+  - button "计数清零"
+  - button "ASCII"
+  - button "HEX"
+  - text: 行尾
+  - combobox "行尾":
+    - option "无"
+    - option "\\r\\n" [selected]
+    - option "\\r"
+    - option "\\n"
+  - checkbox "定时"
+  - text: 定时
+  - textbox "周期，毫秒": "1000"
+  - text: ms
+  - button "发送"
+  - textbox "在这里输入要发送的内容（Ctrl+Enter 发送；HEX 模式如：01 03 00 00 00 0A C5 CD）"
+  - text: 连接探针并选择 RTT 通道后，这里显示目标输出。 连接后这里显示接收数据。 烧录或 SRAM 测试的进度与结果显示在这里。 （点「定位并开始」：留空地址就用 .elf 里的 _SEGGER_RTT 符号） ▸ ▸ 连接后这里显示接收数据。 ▸ I2C 事务与应答会显示在这里。

@@ -117,3 +117,8 @@ make hw-random-flow-6800evk ARGS="--seed=7 --rounds=4"
 `rtt-speed*.mjs`、`flash-timing.mjs`、`dbg-step-hw.mjs`、`probe-hid-diag.py` 等是针对
 单一问题的诊断工具，不作为默认回归入口。它们仍保留，
 但默认固件路径已经指向板卡清单；需要跑时先看脚本头注释和对应历史记录。
+
+
+## 周期总线的配套固件路径
+
+`bus-periodic.test.mjs` 使用配套固件源码编译主机协议夹具，不连接硬件。仓库不是相邻默认目录时，先设置当前会话的 `PROBE_FIRMWARE_REPO` 为 akaLinkPro 工作区，再运行 `node tools/selftest/bus-periodic.test.mjs`。Windows 默认使用 `python`，可用 `PYTHON` 覆盖；测试自动把固件的 `src/api` 加入该子进程的头文件路径，不修改全局设置。

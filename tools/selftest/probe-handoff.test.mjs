@@ -1,12 +1,14 @@
 import assert from 'node:assert/strict';
 import {DebugSession} from '../../app/dbg/session.js';
 import {DbgView} from '../../app/dbg/view.js';
+import {SvdValueState} from '../../app/dbg/svd-state.js';
 import {FlashView} from '../../app/flash/view.js';
 import {prepareProbeHandoff} from '../../app/core/probe-users.js';
 const gate=()=>{let resolve;const promise=new Promise(r=>resolve=r);return {promise,resolve};};
 const tick=()=>new Promise(r=>setImmediate(r));
 globalThis.document={getElementById:()=>null};
 const s=new DebugSession(),v=Object.create(DbgView.prototype),held=gate(),events=[];
+v.svdValues=new SvdValueState();v._svdRevision=0;
 s.probe={disconnect:async()=>events.push('disconnect')};
 Object.assign(v,{session:s,queue:['step'],_stopWatch(){},rttStop(){},renderRegs(){},renderMem(){},renderBps(){},_syncButtons(){}});
 const operation=s.exclusive(async()=>{await held.promise;events.push('operation-end');});

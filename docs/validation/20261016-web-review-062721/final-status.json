@@ -1,0 +1,21 @@
+{
+  "completedAt": "2026-10-16T06:47:32.6778896+08:00",
+  "revision": "fb06da2348543b75db5fbc237dd4d3b0ffe1d655",
+  "productionInputsChanged": [],
+  "initialTestEntries": 104,
+  "initialPassed": 101,
+  "initialFailed": [
+    "node tools/selftest/dbg-backend-lifecycle.test.mjs",
+    "node tools/selftest/probe-handoff.test.mjs",
+    "node tools/selftest/bus-periodic.test.mjs"
+  ],
+  "configuredBusPeriodic": "passed",
+  "originalFixtureFailures": "remain unfixed; copied fixtures with SVD initialization pass",
+  "etmCases": 77,
+  "etmResult": "passed",
+  "productionChangesByAudit": "none",
+  "functionalFindings": 7,
+  "p1": 1,
+  "p2": 6,
+  "hardware": "not-run"
+}

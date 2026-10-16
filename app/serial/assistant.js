@@ -297,18 +297,30 @@ export class Assistant {
     const { bytes, error } = this._build(rawText);
     if (error){ setStatus($('s-err'), error, 'err'); if (!fromTimer) toast(error, 'warn'); return false; }
     setStatus($('s-err'), '', null);
-    try { await this.s.write(bytes); return true; }
+    try { return (await this.s.write(bytes, { signal: opts.signal })) !== false; }
     catch (e){ setStatus($('s-err'), '发送失败：' + e.message, 'err'); return false; }
   }
 
   sendText(t, opts = {}){ return this.send(t, opts); }
 
   _armTimer(){
-    clearInterval(this.timer);
+    clearTimeout(this.timer);
+    this._timerAbort?.abort();
     this.timer = null;
     if (!$('s-timer').checked || !this.s.isOpen) return;
+    const controller = this._timerAbort = new AbortController();
     const ms = Math.max(20, Number($('s-timer-ms').value) || 1000);
-    this.timer = setInterval(() => this.send(undefined, { fromTimer: true }), ms);
+    const schedule = () => {
+      if (controller.signal.aborted || !this.s.isOpen) return;
+      this.timer = setTimeout(async () => {
+        if (controller.signal.aborted) return;
+        if (this._timerSending){ schedule(); return; }
+        this._timerSending = true;
+        try { await this.send(undefined, { fromTimer: true, signal: controller.signal }); }
+        finally { this._timerSending = false; schedule(); }
+      }, ms);
+    };
+    schedule();
   }
 
   _buildQuick(){
@@ -344,13 +356,14 @@ export class Assistant {
 
   _stats(){
     const now = performance.now();
+    this._highspeedGate(this.rxc.rate(now));
+    if (!$('tab-serial').classList.contains('active')) return;
     $('s-rxbytes').textContent = fBytes(this.rxc.total);
     $('s-rxframes').textContent = this.rxc.frames;
     $('s-rxrate').textContent = fRate(this.rxc.rate(now));
     $('s-txbytes').textContent = fBytes(this.txc.total);
     $('s-txframes').textContent = this.txc.frames;
     $('s-txrate').textContent = fRate(this.txc.rate(now));
-    this._highspeedGate(this.rxc.rate(now));
     if (this.rx?.paused) $('s-pause').title = `暂停中，已缓存 ${fBytes(this.rx.bytes)}`;
     // 记录/落盘期间按钮要一直刷：字节数与"待落盘"量都得看得见（见 recorder.js 的说明）
     if (this.rec.active || this.rec.draining) this._recordBtn();
@@ -493,6 +506,7 @@ export class Assistant {
       visible: () => this.ansiOn && !this.rx.paused && !this.suppressed && $('tab-serial').classList.contains('active'),
       format: (b, t) => this._ansiBytes(b, t),
       onSkip: () => { this._lastWasCR = false; },
+      onError: e => setStatus($('s-err'), `终端显示失败：${e.message}；清空后可重试，接收和记录继续`, 'err'),
     });
     this.fit?.fit();
     const ro = new ResizeObserver(() => { if (this.ansiOn){ try { this.fit?.fit(); } catch {} } });
@@ -520,7 +534,7 @@ export class Assistant {
     for (const r of this.rx.raw) this._ansiFeed(r.b, r.t);
   }
 
-  onShow(){ this.rx?.flush(); if (this.ansiOn){ this.fit?.fit(); this.ansiDisplay?.flush(); } }
+  onShow(){ this._stats(); this.rx?.flush(); if (this.ansiOn){ this.fit?.fit(); this.ansiDisplay?.flush(); } }
 
   save(){
     if (this.rx.empty){ toast('接收区没有数据', 'warn'); return; }

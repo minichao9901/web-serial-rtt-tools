@@ -1,0 +1,117 @@
+- banner:
+  - generic "串口 / RTT 工具箱"
+  - navigation "工具切换":
+    - button "串口助手"
+    - button "终端"
+    - button "RTT Viewer"
+    - button "RTT 转发"
+    - button "J-Scope 波形"
+    - button "烧录器"
+    - button "调试器"
+    - generic "更多功能，当前页面：ETM 执行轨迹": 更多功能 ▾
+  - generic: 串口：未连接
+  - generic "连接支持该功能的 akaLinkPro 固件后可用。":
+    - checkbox "NRST 开漏" [checked] [disabled]
+    - text: NRST 开漏
+  - button "全局复位"
+  - button "全屏"
+  - status "当前页面没有功能连接实体探针；串口连接状态单独显示。": 探针：未使用
+  - generic "帮助"
+- main:
+  - iframe [id="etm-frame"]:
+    - complementary:
+      - text: 目标与录制
+      - generic: ELF → 断点 → 时钟 → 采集
+      - tablist "采集步骤":
+        - tab "1 调试" [selected]
+        - tab "2 时钟"
+        - tab "3 采集"
+        - tab "4 文件"
+      - tabpanel "1 调试":
+        - heading "① 载入目标 ELF" [level=2]
+        - button "浏览载入 ELF…"
+        - paragraph: 尚未载入 ELF
+        - generic "配套源码（可选）"
+        - heading "② 连接与识别目标" [level=2]
+        - text: 芯片预置
+        - combobox "芯片预置":
+          - option "自动识别" [selected]
+          - option "STM32F103ZE / 高容量 F103（PE2～PE6）"
+          - option "STM32F103（标准/超大容量，Trace 待验收）"
+          - option "STM32F407 / F405"
+          - option "STM32H743 / H742 / H750 / H753"
+          - option "STM32H7B0 / H7A3 / H7B3"
+        - button "连接探针"
+        - button "断开" [disabled]
+        - paragraph: 未连接 · 可先添加断点。
+        - paragraph: F103ZE / H7B0 已验收；其余型号 Trace 待适配。
+        - heading "③ 添加断点" [level=2]
+        - textbox "搜索 ELF 函数" [disabled]:
+          - /placeholder: 搜索 ELF 函数…
+        - generic "ELF 函数列表": 先浏览载入 ELF
+        - paragraph: ＋ 添加断点，圆点选择采集起点。
+        - textbox "断点命令" [disabled]:
+          - /placeholder: b main:199
+        - button "添加" [disabled]
+        - generic "断点命令格式"
+        - heading "④ 断点与采集起点 未连接" [level=2]
+        - generic: 无断点；从函数前 ＋ 或命令添加。
+        - paragraph: 请选择一个断点作为采集起点
+        - button "运行至起点" [disabled]
+        - button "清空断点" [disabled]
+        - button "复位至起点" [disabled]
+        - button "暂停" [disabled]
+        - button "继续" [disabled]
+        - paragraph: 当前 PC：未连接
+        - checkbox "联动采集前停在所选断点" [checked]
+        - text: 联动采集前停在所选断点
+        - checkbox "先复位，再运行至起点" [checked]
+        - text: 先复位，再运行至起点
+        - paragraph: 列表中的圆点选择采集起点；采集期间暂时停用本页断点，结束后恢复。启动入口采集仍未验收。
+        - button "下一步：核对时钟 →"
+      - paragraph: 按 1→2→3 设置，选择一个断点作为起点，再联动采集。
+      - button "联动采集" [disabled]
+      - button "停止采集" [disabled]
+    - main:
+      - button "收起控制"
+      - button "使用说明"
+      - combobox "已保存记录":
+        - option "选择记录…" [selected]
+      - button "打开"
+      - generic: 历史执行流与当前目标状态分别显示。
+      - button "报告" [disabled]
+      - navigation "分析视图":
+        - button "执行流" [disabled]
+        - button "调用统计" [disabled]
+        - button "火焰图" [disabled]
+        - button "热点" [disabled]
+        - button "ETM 包" [disabled]
+        - button "可信区段" [disabled]
+      - button "历史调用栈" [expanded]
+      - button "←" [disabled]
+      - button "→" [disabled]
+      - combobox "历史导航类型" [disabled]:
+        - option "指令" [selected]
+        - option "源码位置"
+        - option "调用"
+        - option "返回"
+        - option "异常"
+        - option "未知 / 边界"
+      - textbox "历史定位":
+        - /placeholder: 序号或 0xPC
+      - button "定位" [disabled]
+      - textbox "筛选执行记录" [disabled]:
+        - /placeholder: 搜索函数、PC、文件或指令…
+      - checkbox "隐藏未成立分支" [disabled]
+      - text: 隐藏未成立分支
+      - generic: 0 条
+      - generic: 未选中历史位置
+      - generic: 请在调试页浏览载入 ELF，或打开一份历史记录。
+      - button "上一页" [disabled]
+      - generic: —
+      - button "下一页" [disabled]
+      - separator "调整执行流与源码比例"
+      - strong: 源码 / 机器码
+      - strong: 选中位置的历史调用栈
+      - generic: 选择一条历史指令。
+  - text: 连接后这里显示接收数据。 连接探针并选择 RTT 通道后，这里显示目标输出。 连接后这里显示接收数据。 烧录或 SRAM 测试的进度与结果显示在这里。 （点「定位并开始」：留空地址就用 .elf 里的 _SEGGER_RTT 符号） ▸ ▸ 连接后这里显示接收数据。 ▸ I2C 事务与应答会显示在这里。

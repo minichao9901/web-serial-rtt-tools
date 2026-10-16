@@ -25,7 +25,11 @@ export class SpiCdcSession {
         hid.onDisconnect=()=>{this._requested=false;this.last=null;this.onChange?.();};
         this.probeManager?.confirm('spicdc');this.onChange?.();return status;
       }catch(error){
-        try{await hid.close();}catch(cleanup){this.hid=hid;this.probeManager?.fail('spicdc',cleanup);throw cleanup;}
+        try{await hid.close();}catch(cleanup){
+          this.hid=hid;
+          const combined=new AggregateError([error,cleanup],`${error.message}；HID 关闭也失败：${cleanup.message}`,{cause:error});
+          this.probeManager?.fail('spicdc',combined);throw combined;
+        }
         throw error;
       }
     },{reason:'SPI转发 要使用共享 SPI 缓冲和 CDC 数据源',recovery:true});

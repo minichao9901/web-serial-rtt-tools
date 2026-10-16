@@ -1,0 +1,122 @@
+- banner:
+  - generic "串口 / RTT 工具箱"
+  - navigation "工具切换":
+    - button "串口助手"
+    - button "终端"
+    - button "RTT Viewer"
+    - button "RTT 转发"
+    - button "J-Scope 波形"
+    - button "烧录器"
+    - button "调试器"
+    - generic "更多功能，当前页面：USB→ADC/DAC": 更多功能 ▾
+  - generic: 串口：未连接
+  - generic "连接支持该功能的 akaLinkPro 固件后可用。":
+    - checkbox "NRST 开漏" [checked] [disabled]
+    - text: NRST 开漏
+  - button "全局复位"
+  - button "全屏"
+  - status "当前页面没有功能连接实体探针；串口连接状态单独显示。": 探针：未使用
+  - generic "帮助"
+- main:
+  - text: 连接后这里显示接收数据。 连接探针并选择 RTT 通道后，这里显示目标输出。 连接后这里显示接收数据。 烧录或 SRAM 测试的进度与结果显示在这里。 （点「定位并开始」：留空地址就用 .elf 里的 _SEGGER_RTT 符号） ▸ ▸ 连接后这里显示接收数据。 ▸ I2C 事务与应答会显示在这里。
+  - button "连接探针"
+  - button "关闭探针" [disabled]
+  - status: 未连接
+  - tablist "ADC / DAC 工具":
+    - tab "ADC 示波器" [active] [selected]
+    - tab "DAC 信号发生器"
+  - tabpanel "ADC 示波器":
+    - complementary:
+      - group "ADC · USB 示波器":
+        - generic: ADC · USB 示波器
+        - paragraph: 连接后查询可用输入；查看引脚图前请确认板型
+        - button "引脚分配图 / 接线"
+        - generic "连接与共用资源"
+        - generic: 分辨率
+        - combobox "分辨率":
+          - option "8"
+          - option "10"
+          - option "12"
+          - option "16" [selected]
+        - paragraph: PB14 / ADC0.6 · EVKLite J3[10] · 定时器触发 + DMA。记录点数 0 = 连续。
+        - generic: 采样率 Sa/s
+        - spinbutton "采样率 Sa/s": "1000000"
+        - generic: 记录点数
+        - spinbutton "记录点数": "0"
+        - generic: 参考电压 V
+        - spinbutton "参考电压 V": "3.3"
+        - paragraph: 硬件时基来自 probe；最高请求 2 MSa/s，实际速率由定时器时钟量化。输入须在 0–VREFH 范围内，信号地接板卡 GND。高速档需低阻抗驱动；请断开 QSPI 外设对 PB14 的驱动。
+        - button "单次捕获"
+        - button "运行"
+        - button "停止"
+        - generic: 时基 / div
+        - combobox "时基 / div":
+          - option "500 ns"
+          - option "1 μs"
+          - option "2 μs"
+          - option "5 μs"
+          - option "10 μs"
+          - option "20 μs"
+          - option "50 μs"
+          - option "100 μs" [selected]
+          - option "200 μs"
+          - option "500 μs"
+          - option "1 ms"
+          - option "2 ms"
+          - option "5 ms"
+          - option "10 ms"
+          - option "20 ms"
+          - option "50 ms"
+          - option "100 ms"
+        - generic: 垂直 / div
+        - combobox "垂直 / div":
+          - option "10 mV"
+          - option "100 mV"
+          - option "500 mV" [selected]
+          - option "1 V"
+        - generic: 垂直中心 V
+        - spinbutton "垂直中心 V": "1.65"
+        - generic: 触发模式
+        - combobox "触发模式":
+          - option "自动" [selected]
+          - option "正常（未触发保持）"
+        - generic: 触发边沿
+        - combobox "触发边沿":
+          - option "上升沿" [selected]
+          - option "下降沿"
+        - generic: 触发电平 V
+        - spinbutton "触发电平 V": "1.65"
+        - checkbox "冻结显示（采集继续）"
+        - text: 冻结显示（采集继续）
+        - generic "触发方式与记录限制"
+        - generic "游标与测量说明"
+        - button "导出 ADC CSV"
+    - generic: — V
+    - generic: CH1 · 等待采集
+    - checkbox "时间游标"
+    - text: 时间游标
+    - checkbox "电压游标"
+    - text: 电压游标
+    - text: 点图移动
+    - combobox "选择要移动的游标":
+      - option "T1" [disabled] [selected]
+      - option "T2" [disabled]
+      - option "V1" [disabled]
+      - option "V2" [disabled]
+    - button "复位游标"
+    - button "清游标"
+    - generic "ADC 波形、时基、触发电平和可拖动的时间/电压游标"
+    - generic "当前显示窗口的自动测量":
+      - generic: 周期
+      - strong: —
+      - generic: 频率
+      - strong: —
+      - generic "最小值": Ymin
+      - strong: —
+      - generic "最大值": Ymax
+      - strong: —
+      - generic "平均值": Yavg
+      - strong: —
+      - generic "峰峰值": Ypp
+      - strong: —
+    - generic: 0 点 · 硬件时基 0.000 kSa/s · 最近 0 点可导出 · 自动扫描

@@ -1,0 +1,58 @@
+[
+  {
+    "id": "F01-serial-write-success-on-failure",
+    "result": "reproduced",
+    "callerRejected": false,
+    "errorEvents": [
+      "injected write failure"
+    ]
+  },
+  {
+    "id": "F02-timer-sends-after-stop",
+    "result": "reproduced",
+    "atStop": {
+      "submitted": 5,
+      "finished": 0
+    },
+    "finishedAfterStop": 5
+  },
+  {
+    "id": "F03-adc-invalid-start-erases-history",
+    "result": "reproduced",
+    "before": 3,
+    "after": 0,
+    "error": "先连接探针"
+  },
+  {
+    "id": "F04-spi-mutation-allowed-while-busy",
+    "result": "reproduced",
+    "busy": true,
+    "disabled": {
+      "sp-set": false,
+      "sp-pin-apply": false,
+      "sp-disable": false,
+      "sp-reset": false,
+      "sp-abort": false
+    },
+    "commandsSent": [
+      2
+    ]
+  },
+  {
+    "id": "F05-spi-stop-failure-has-no-ui-retry",
+    "result": "not-reproduced",
+    "error": "AssertionError [ERR_ASSERTION]: The input did not match the regular expression /正在使用探针/. Input:\n\n''\n\n    at file:///E:/web-serial-rtt-tools/docs/validation/20261016-web-review-062721/reproduce.mjs:41:109\n    at async repro (file:///E:/web-serial-rtt-tools/docs/validation/20261016-web-review-062721/reproduce.mjs:16:70)\n    at async file:///E:/web-serial-rtt-tools/docs/validation/20261016-web-review-062721/reproduce.mjs:38:1"
+  },
+  {
+    "id": "F06-spi-disable-rejected-but-reports-success",
+    "result": "reproduced",
+    "returned": true,
+    "responseEnabled": true,
+    "logs": [
+      {
+        "kind": "g",
+        "text": "桥已失能（引脚恢复默认）"
+      }
+    ]
+  }
+]

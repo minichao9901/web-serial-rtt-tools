@@ -1,0 +1,83 @@
+- banner:
+  - generic "串口 / RTT 工具箱"
+  - navigation "工具切换":
+    - button "串口助手"
+    - button "终端"
+    - button "RTT Viewer"
+    - button "RTT 转发"
+    - button "J-Scope 波形"
+    - button "烧录器"
+    - button "调试器"
+    - generic "更多功能，当前页面：USB→ADC/DAC": 更多功能 ▾
+  - generic: 串口：未连接
+  - generic "连接支持该功能的 akaLinkPro 固件后可用。":
+    - checkbox "NRST 开漏" [checked] [disabled]
+    - text: NRST 开漏
+  - button "全局复位"
+  - button "全屏"
+  - status "当前页面没有功能连接实体探针；串口连接状态单独显示。": 探针：未使用
+  - generic "帮助"
+- main:
+  - text: 连接后这里显示接收数据。 连接探针并选择 RTT 通道后，这里显示目标输出。 连接后这里显示接收数据。 烧录或 SRAM 测试的进度与结果显示在这里。 （点「定位并开始」：留空地址就用 .elf 里的 _SEGGER_RTT 符号） ▸ ▸ 连接后这里显示接收数据。 ▸ I2C 事务与应答会显示在这里。
+  - button "连接探针"
+  - button "关闭探针" [disabled]
+  - status: 未连接
+  - tablist "ADC / DAC 工具":
+    - tab "ADC 示波器"
+    - tab "DAC 信号发生器" [active] [selected]
+  - tabpanel "DAC 信号发生器":
+    - complementary:
+      - group "DAC 信号发生器":
+        - generic: DAC 信号发生器
+        - paragraph: 设置波形后可离线预览、导出。连接具备 DAC 能力的探针后可启动输出；当前固件尚未提供物理 DAC 输出。
+        - generic: DAC 通道
+        - combobox "DAC 通道" [disabled]:
+          - option "等待支持 DAC 的固件" [selected]
+        - generic: 波形
+        - combobox "波形":
+          - option "正弦" [selected]
+          - option "方波"
+          - option "三角波"
+          - option "锯齿波↑"
+          - option "锯齿波↓"
+          - option "脉冲"
+          - option "直流"
+          - option "白噪声（伪随机）"
+        - generic: 信号频率 Hz
+        - spinbutton "信号频率 Hz": "100"
+        - generic: 幅度 Vp
+        - spinbutton "幅度 Vp": "1"
+        - generic: 峰峰值 Vpp
+        - spinbutton "峰峰值 Vpp": "2"
+        - generic: 共模电压 V
+        - spinbutton "共模电压 V": "1.65"
+        - generic: 最大电压 V
+        - spinbutton "最大电压 V": "2.65"
+        - generic: 最小电压 V
+        - spinbutton "最小电压 V": "0.65"
+        - generic "电压参数联动说明"
+        - generic: 初相位 °
+        - spinbutton "初相位 °": "0"
+        - generic: 满量程 V
+        - spinbutton "满量程 V": "3.3"
+        - generic: 脉冲占空比 %
+        - spinbutton "脉冲占空比 %" [disabled]: "50"
+        - generic: 量化位宽
+        - combobox "量化位宽":
+          - option "8"
+          - option "12" [selected]
+          - option "16"
+        - generic: 更新率 Sa/s
+        - spinbutton "更新率 Sa/s": "10000"
+        - generic: 噪声表点数
+        - spinbutton "噪声表点数" [disabled]: "1024"
+        - generic "波形表与频率量化"
+        - button "刷新预览"
+        - button "导出波形表 CSV"
+        - button "输出 ON" [disabled]
+        - button "输出 OFF" [disabled]
+        - button "查询输出" [disabled]
+        - status: DAC 已预留，当前未连接或固件不支持；仍可预览和导出
+    - status: 正弦 · 100.000 Hz · 2 Vpp · 共模 1.65 V · 0.650000–2.65000 V
+    - generic "信号发生器电压与时间预览"
+    - generic: 100 点完整一周期表 · 更新率 10000 Sa/s · 表时长 10.0000 ms · 请求 100 Hz，按整数点数量化。预览/导出不启动输出；硬件实际更新率以 START 应答为准。

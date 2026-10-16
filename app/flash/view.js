@@ -16,7 +16,7 @@
  */
 import { prepareProbeHandoff } from '../core/probe-users.js';
 import { runProbeOperation } from '../core/probe-manager.js';
-import { $, setStatus } from '../ui/dom.js';
+import { $, setStatus, appendLogLine } from '../ui/dom.js';
 import { toast } from '../ui/toast.js';
 import { store } from '../core/store.js';
 import { CHIPS, fillChipSelect } from '../core/chips.js';
@@ -1177,9 +1177,7 @@ export class FlashView {
     this._hb = null;
   }
   _log(s){
-    const el = $('f-log');
-    el.textContent += (el.textContent ? '\n' : '') + s;
-    el.scrollTop = el.scrollHeight;
+    appendLogLine($('f-log'), s, 'dim', 800);
   }
   _err(e){
     this._log('── 出错 ──\n' + (e?.message || e));

@@ -15,6 +15,18 @@ export function probeStatus(tools){
 }
 
 export function initProbeStatus(tools){
+  const summaryViews = [
+    ['spi', () => `控制${tools.spiSession.connected?'已连接':'未连接'} · 数据${tools.spiSession.dataReady?'已连接':'未连接'}`],
+    ['panel', () => `共享 SPI：控制${tools.spiSession.connected?'已连接':'未连接'} · 数据${tools.spiSession.dataReady?'已连接':'未连接'}`],
+    ['scope', () => `探针${tools.scope.hid?.connected||tools.scope.usingMock?'已连接':'未连接'} · 数据${tools.scope.transport||tools.scope.usingMock?'已连接':'未连接'}`],
+    ['rttcdc', () => `转发${tools.hid.last?.running?'运行中':tools.probeManager?.failures.has('hid')?'状态未确认':'未启动'} · 接收口${tools.session.isOpen?'已打开':'未打开'}`],
+    ['spicdc', () => `转发${tools.spiCdc.session.running?'运行中':'未启动'} · 接收口${tools.session.isOpen?'已打开':'未打开'}`],
+  ].map(([name, read]) => {
+    const side=document.querySelector(`#tab-${name} .side`);
+    if(!side)return null;
+    const el=document.createElement('div');el.className='connection-summary';el.setAttribute('role','status');
+    side.prepend(el);return {el,read};
+  }).filter(Boolean);
   const serial = document.getElementById('conn-flag');
   setFlag(serial, tools.session.isOpen ? '串口：已连接' : '串口：未连接', tools.session.isOpen ? 'on' : 'off');
   tools.session.on('open', ({ info, opts }) => {
@@ -24,6 +36,7 @@ export function initProbeStatus(tools){
   const el = document.getElementById('probe-flag');
   let previous = '';
   const update = () => {
+    for(const {el,read} of summaryViews){const text=read();if(el.textContent!==text)el.textContent=text;}
     const state = probeStatus(tools), key = JSON.stringify(state);
     if (key === previous) return;
     previous = key;

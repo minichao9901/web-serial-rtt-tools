@@ -54,6 +54,7 @@ export class TerminalView {
       visible: () => $('tab-terminal').classList.contains('active'),
       format: b => this.nlMode === 'raw' ? b : terminalBytes(b, this),
       onSkip: () => { this.lastWasCR = false; },
+      onError: e => setStatus($('t-status'), `显示失败：${e.message}；清空后可重试，串口接收继续`, 'err'),
     });
     this.fit?.fit();
 

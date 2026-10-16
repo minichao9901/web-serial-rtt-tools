@@ -86,6 +86,7 @@ export class BusPeriodicClient {
     if (String.fromCharCode(...caps.subarray(0, 4)) !== 'BPT1' || caps.length !== 10)
       throw Error('固件未支持 BPT1 周期采集');
     if (stopped()) return;
+    let operationError;
     try {
       await this.command(ACT.CLEAR); this.owned = true;
       for (let slot = 0; slot < groups.length; slot++){
@@ -121,7 +122,14 @@ export class BusPeriodicClient {
         if (!s.active && !s.queued && !s.cleanup) break;
         await waitMs(5);
       }
-    } finally { await this.stop(); }
+    } catch (error){ operationError = error; throw error; }
+    finally {
+      try { await this.stop(); }
+      catch (cleanup){
+        if (operationError) throw new AggregateError([operationError, cleanup], `${operationError.message}；停止也失败：${cleanup.message}`, { cause: operationError });
+        throw cleanup;
+      }
+    }
   }
 }
 

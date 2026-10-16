@@ -1,0 +1,83 @@
+- banner:
+  - generic "串口 / RTT 工具箱"
+  - navigation "工具切换":
+    - button "串口助手"
+    - button "终端"
+    - button "RTT Viewer"
+    - button "RTT 转发"
+    - button "J-Scope 波形"
+    - button "烧录器"
+    - button "调试器"
+    - generic "更多功能，当前页面：SWO 执行轨迹": 更多功能 ▾
+  - generic: 串口：未连接
+  - generic "连接支持该功能的 akaLinkPro 固件后可用。":
+    - checkbox "NRST 开漏" [checked] [disabled]
+    - text: NRST 开漏
+  - button "全局复位"
+  - button "全屏"
+  - status "当前页面没有功能连接实体探针；串口连接状态单独显示。": 探针：未使用
+  - generic "帮助"
+- main:
+  - text: 连接后这里显示接收数据。 连接探针并选择 RTT 通道后，这里显示目标输出。 连接后这里显示接收数据。 烧录或 SRAM 测试的进度与结果显示在这里。 （点「定位并开始」：留空地址就用 .elf 里的 _SEGGER_RTT 符号） ▸ ▸ 连接后这里显示接收数据。 ▸ I2C 事务与应答会显示在这里。
+  - region "SWO 执行轨迹":
+    - complementary:
+      - tablist "SWO 工作区":
+        - tab "录制"
+        - tab "分析" [active] [selected]
+      - button "时钟计算器"
+      - button "使用帮助"
+      - tabpanel "分析":
+        - group "文件与离线分析":
+          - generic: 文件与离线分析
+          - button "载入 ELF…"
+          - button "源码目录…"
+          - paragraph: ELF 与源码均未载入
+          - button "打开记录…"
+          - button "保存记录" [disabled]
+          - button "重新分析" [disabled]
+          - button "导出区间 CSV" [disabled]
+          - button "完整导出 .c" [disabled]
+          - button "导出简化.c" [disabled]
+          - button "载入配套实测示例"
+          - generic "原始 .bin 导入选项"
+          - status
+        - group "函数热点 · PC 样本占比":
+          - generic: 函数热点 · PC 样本占比
+          - generic: 载入记录后显示
+      - alert
+    - strong: SWO 执行轨迹
+    - generic: 先记录，也可直接打开离线文件
+    - button "收起轨迹图" [expanded]
+    - generic "采样说明"
+    - generic "跳转统计"
+    - generic: PC 样本区间
+    - spinbutton "区间开始 PC 样本": "0"
+    - generic: 至
+    - spinbutton "区间结束 PC 样本": "0"
+    - button "应用"
+    - button "全部"
+    - group "轨迹图缩放":
+      - button "缩小（以当前 PC 样本为中心）" [disabled]:
+      - button "放大（以当前 PC 样本为中心）" [disabled]:
+      - button "适配全部 PC 样本" [disabled]:
+    - textbox "筛选轨迹":
+      - /placeholder: 筛选函数 / 事件
+    - generic "按 PC 样本序号排列的函数执行落点；点击定位，拖选区间，缩放以当前光标为中心"
+    - button "上一个 PC 样本": ←
+    - button "逐样本回放"
+    - button "下一个 PC 样本": →
+    - slider "选择 PC 样本": "0"
+    - generic: 未选择
+    - button "上一页"
+    - generic: 0 条事件
+    - button "下一页"
+    - table:
+      - rowgroup:
+        - row "事件序号 / PC 样本 段内核心时间 执行落点 源码":
+          - columnheader "事件序号 / PC 样本"
+          - columnheader "段内核心时间"
+          - columnheader "执行落点"
+          - columnheader "源码"
+      - rowgroup
+    - generic: 点击轨迹或热点查看源码
+    - generic: 未选择采样位置

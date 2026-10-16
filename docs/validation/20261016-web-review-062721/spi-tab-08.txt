@@ -1,0 +1,104 @@
+- banner:
+  - generic "串口 / RTT 工具箱"
+  - navigation "工具切换":
+    - button "串口助手"
+    - button "终端"
+    - button "RTT Viewer"
+    - button "RTT 转发"
+    - button "J-Scope 波形"
+    - button "烧录器"
+    - button "调试器"
+    - generic "更多功能，当前页面：USB→SPI/QSPI": 更多功能 ▾
+  - generic: 串口：未连接
+  - generic "连接支持该功能的 akaLinkPro 固件后可用。":
+    - checkbox "NRST 开漏" [checked] [disabled]
+    - text: NRST 开漏
+  - button "全局复位"
+  - button "全屏"
+  - status "当前页面没有功能连接实体探针；串口连接状态单独显示。": 探针：未使用
+  - generic "帮助"
+- main:
+  - text: 连接后这里显示接收数据。 连接探针并选择 RTT 通道后，这里显示目标输出。 连接后这里显示接收数据。 烧录或 SRAM 测试的进度与结果显示在这里。 （点「定位并开始」：留空地址就用 .elf 里的 _SEGGER_RTT 符号）
+  - complementary:
+    - tablist "侧栏设置":
+      - tab "连接"
+      - tab "总线"
+      - tab "状态"
+      - tab "帮助" [selected]
+    - text: ▸
+    - tabpanel "帮助":
+      - generic: 参数、接线与排障说明
+      - generic "选择其它探针"
+      - generic "连接与上手"
+      - generic "引脚设置 · 辅助引脚限制"
+      - generic "连接 · 参数"
+      - generic "总线配置 · 参数"
+    - generic "运行控制":
+      - button "使能" [disabled]
+      - button "失能" [disabled]
+      - paragraph: 未连接
+  - button "命令表"
+  - button "寄存器"
+  - button "脚本"
+  - button "实时值"
+  - button "Flash 测试" [active]
+  - button "回环自检"
+  - generic "桥当前在跑什么（切到哪个 tab 都看得见）——「忙」的时候大部分按钮会被灰掉，原因就在这": 空闲
+  - generic "定时采集的运行状态（在「脚本」tab 里点「开始定时」）—— 与 I2C 页一样放在 tab 栏，切到任何 tab 都看得见": 未运行
+  - button "中止" [disabled]
+  - button "读 ID" [disabled]
+  - button "读 SFDP" [disabled]
+  - button "读状态" [disabled]
+  - button "接线"
+  - generic: 读模式
+  - combobox "读模式":
+    - option "READ 0x03 · 1 线 · 无 dummy" [selected]
+    - option "FAST READ 0x0B · 1 线 · 8 拍 dummy"
+    - option "DUAL OUT 0x3B · 2 线出 · 8 拍 dummy"
+    - option "QUAD OUT 0x6B · 4 线出 · 8 拍 dummy"
+    - option "QUAD I/O 0xEB · 4 线全开 · 8 拍 dummy"
+  - generic: dummy
+  - textbox "dummy": "0"
+  - generic: 地址
+  - textbox "地址": "0x000000"
+  - generic: 长度
+  - textbox "长度": "256"
+  - paragraph: dummy 的单位是 8 个时钟拍（dummy=1 → 8 拍，不是 bit 也不是单拍）：0x03 无需 dummy；0x0B / 0x3B / 0x6B 一般 8 拍；0xEB 常见 8~10 拍。切换读模式会自动带出默认值，仍可手动改。
+  - button "读一段" [disabled]
+  - button "读测速" [disabled]
+  - generic: 测速量
+  - textbox "测速量 KB": "64"
+  - generic: KB
+  - generic: （还没测过）
+  - generic "擦写是破坏性的：先解锁，再点后面的按钮。地址 / 数据都在上面或下面填":
+    - checkbox "我确认要擦写这颗 flash"
+    - text: 我确认要擦写这颗 flash
+  - combobox:
+    - option "扇区擦除 0x20 · 4 KB" [selected]
+    - option "块擦除 0x52 · 32 KB"
+    - option "块擦除 0xD8 · 64 KB"
+    - option "整片擦除 0xC7 · 全部（慢）"
+  - button "擦除" [disabled]
+  - button "写 + 校验" [disabled]
+  - button "写测速" [disabled]
+  - generic: 写数据
+  - textbox "十六进制，如 00 01 02 …（一次最多 4 KB；留空 = 用递增图案）"
+  - button "填递增图案"
+  - generic: 页间等 tPP
+  - textbox "页间等 tPP ms": "3"
+  - generic: ms
+  - generic "拖动：调整日志高度"
+  - strong: SPI 日志
+  - button "复制"
+  - button "保存"
+  - button "清空"
+  - generic: 就绪。真机：先「连接探针」再「连接数据端点」；没板子就勾「用假探针」。
+  - generic: "[屏] 已载入内置示例：天马 2P01 / AXS15352（240×296 · 4 线 SPI + DC）（30 条）"
+  - generic: "[屏] 解析完成：30 条 / 284 参数字节 / 累计 100 ms"
+  - generic: "[屏] 图案 BAR（240×296）"
+  - text: 协议：
+  - code: HID 0x35
+  - text: 控制面 +
+  - code: bulk 0x0B/0x8B
+  - text: 帧流
+  - text: ▸ 连接后这里显示接收数据。 ▸ I2C 事务与应答会显示在这里。

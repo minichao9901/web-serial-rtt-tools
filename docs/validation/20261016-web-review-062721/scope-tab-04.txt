@@ -1,0 +1,61 @@
+- banner:
+  - generic "串口 / RTT 工具箱"
+  - navigation "工具切换":
+    - button "串口助手"
+    - button "终端"
+    - button "RTT Viewer"
+    - button "RTT 转发"
+    - button "J-Scope 波形"
+    - button "烧录器"
+    - button "调试器"
+    - generic "更多功能": 更多功能 ▾
+  - generic: 串口：未连接
+  - generic "连接支持该功能的 akaLinkPro 固件后可用。":
+    - checkbox "NRST 开漏" [checked] [disabled]
+    - text: NRST 开漏
+  - button "全局复位"
+  - button "全屏"
+  - status "当前页面没有功能连接实体探针；串口连接状态单独显示。": 探针：未使用
+  - generic "帮助"
+- main:
+  - text: 连接后这里显示接收数据。 连接探针并选择 RTT 通道后，这里显示目标输出。 连接后这里显示接收数据。
+  - complementary:
+    - tablist "侧栏设置":
+      - tab "采集"
+      - tab "变量"
+      - tab "触发"
+      - tab "帮助" [selected]
+    - tabpanel "帮助":
+      - generic: 参数、接线与排障说明
+      - generic "连接与上手"
+      - generic "采样 · 读计划与速率估算"
+      - generic "采样 · 参数"
+    - generic "运行控制":
+      - button "开始采样"
+      - button "停止" [disabled]
+      - paragraph: 未开始
+  - button "收起设置" [expanded]
+  - group "视图缩放":
+    - button "全览"
+    - button "放大"
+    - button "缩小"
+    - button "细看"
+  - generic "叠加 = 所有通道画在同一片区域（量程差异大时会糊在一起）；分道 = 每个通道一条横带、各自独立的 Y 轴（多通道混合单位推荐）":
+    - button "叠加" [active]
+    - button "分道"
+  - generic "叠加模式下：所有通道共用一个 Y 轴量程；关掉则每个通道各自自适应。（分道模式下每路天生就是自己的量程）":
+    - checkbox "共用 Y 轴"
+    - text: 共用 Y 轴
+  - generic "把原始 512 B 包另存一份，可离线回放（也方便把现场数据留给排查）":
+    - checkbox "记录原始包"
+    - text: 记录原始包
+  - button "清游标"
+  - button "导出 CSV"
+  - button "保存原始"
+  - button "打开回放"
+  - button "清空"
+  - button "最大化波形"
+  - generic: 样本 0 · 0 Hz · 包 0 · 丢：探针 0 / USB 0 / 缺口 0 / 溢出 0 · 读错 0 / 让路 0 · 缓冲 0% · 内存 0 B · SWD —
+  - generic "点波形放游标 A，Shift+点放游标 B（两条线之间就是被测间隔）；抓住线可以拖动微调，Esc 或「清游标」清除": 点波形放 A · Shift+点放 B · 拖线微调 · Esc 清除
+  - button "质量"
+  - text: 烧录或 SRAM 测试的进度与结果显示在这里。 （点「定位并开始」：留空地址就用 .elf 里的 _SEGGER_RTT 符号） ▸ ▸ 连接后这里显示接收数据。 ▸ I2C 事务与应答会显示在这里。

@@ -1,0 +1,537 @@
+[
+  {
+    "command": "node tools/selftest/probe-status.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.07
+  },
+  {
+    "command": "node tools/selftest/probe-manager.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.07
+  },
+  {
+    "command": "node tools/selftest/probe-feature-registry.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.07
+  },
+  {
+    "command": "node tools/selftest/hid-channel.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.14
+  },
+  {
+    "command": "node tools/selftest/probe-bus.test.mjs",
+    "exitCode": 0,
+    "seconds": 3.07
+  },
+  {
+    "command": "node tools/selftest/probe-cross-tab.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.07
+  },
+  {
+    "command": "node tools/selftest/probe-integration.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.19
+  },
+  {
+    "command": "node tools/selftest/usb-device.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.08
+  },
+  {
+    "command": "node tools/selftest/usb-transports.test.mjs",
+    "exitCode": 0,
+    "seconds": 1.69
+  },
+  {
+    "command": "node tools/selftest/cdc-mode.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.11
+  },
+  {
+    "command": "node tools/selftest/spi-cdc.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.11
+  },
+  {
+    "command": "node tools/selftest/spi-connect.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.08
+  },
+  {
+    "command": "node tools/selftest/spi-teardown.test.mjs",
+    "exitCode": 0,
+    "seconds": 2.53
+  },
+  {
+    "command": "node tools/selftest/bridge-memory.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.19
+  },
+  {
+    "command": "node tools/selftest/bridge-rpc.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.12
+  },
+  {
+    "command": "node tools/selftest/spi-runner-lifecycle.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.25
+  },
+  {
+    "command": "node tools/selftest/i2c-lifecycle.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.09
+  },
+  {
+    "command": "node tools/selftest/recorder-lifecycle.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.08
+  },
+  {
+    "command": "node tools/selftest/flash-lifecycle.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.1
+  },
+  {
+    "command": "node tools/selftest/flash-runner-abi.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.07
+  },
+  {
+    "command": "node tools/selftest/dbg-lock.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.08
+  },
+  {
+    "command": "node tools/selftest/dbg-view-lock.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.12
+  },
+  {
+    "command": "node tools/selftest/dbg-backend-lifecycle.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.14
+  },
+  {
+    "command": "node tools/selftest/dap-register-ready.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.2
+  },
+  {
+    "command": "node tools/selftest/dap-disconnect.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.06
+  },
+  {
+    "command": "node tools/selftest/probe-handoff.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.14
+  },
+  {
+    "command": "node tools/selftest/probe-users.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.1
+  },
+  {
+    "command": "node tools/selftest/probe-bus-failure.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.23
+  },
+  {
+    "command": "node tools/selftest/rtt-lifecycle.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.09
+  },
+  {
+    "command": "node tools/selftest/rtt-cdc-lifecycle.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.13
+  },
+  {
+    "command": "node tools/selftest/scope-lifecycle.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.22
+  },
+  {
+    "command": "node tools/selftest/scope-watchdog.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.08
+  },
+  {
+    "command": "node tools/selftest/target-switch.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.08
+  },
+  {
+    "command": "node tools/selftest/dbg-source-syntax.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.07
+  },
+  {
+    "command": "node tools/selftest/dap-resume.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.11
+  },
+  {
+    "command": "node tools/selftest/diagnostics.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.09
+  },
+  {
+    "command": "node tools/selftest/dbg-dwt.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.16
+  },
+  {
+    "command": "node tools/selftest/dbg-backtrace.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.08
+  },
+  {
+    "command": "node tools/selftest/dbg-frame-locals.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.11
+  },
+  {
+    "command": "node tools/selftest/dbg-frame-riscv.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.09
+  },
+  {
+    "command": "node tools/selftest/dbg-frame-contract.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.18
+  },
+  {
+    "command": "node tools/selftest/dbg-frame-hw-runner.test.mjs",
+    "exitCode": 0,
+    "seconds": 1.04
+  },
+  {
+    "command": "node tools/selftest/dbg-watch-bt-ui.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.11
+  },
+  {
+    "command": "node tools/selftest/dbg-svd.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.71
+  },
+  {
+    "command": "node tools/selftest/board-matrix.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.07
+  },
+  {
+    "command": "node tools/selftest/hw-random-flow.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.06
+  },
+  {
+    "command": "node tools/selftest/stats.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.08
+  },
+  {
+    "command": "node tools/selftest/analog.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.09
+  },
+  {
+    "command": "node tools/selftest/analog-connect.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.09
+  },
+  {
+    "command": "node tools/selftest/pin-map.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.08
+  },
+  {
+    "command": "node tools/selftest/adc-transport.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.16
+  },
+  {
+    "command": "node tools/selftest/adc-scope.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.06
+  },
+  {
+    "command": "node tools/selftest/adc-measure.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.09
+  },
+  {
+    "command": "node tools/selftest/adc-view.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.09
+  },
+  {
+    "command": "node tools/selftest/adc-session.test.mjs",
+    "exitCode": 0,
+    "seconds": 1.2
+  },
+  {
+    "command": "node tools/selftest/dac-protocol.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.11
+  },
+  {
+    "command": "node tools/selftest/dac-generator.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.07
+  },
+  {
+    "command": "node tools/selftest/rtt.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.32
+  },
+  {
+    "command": "node tools/selftest/rtt-campaign-wait.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.06
+  },
+  {
+    "command": "node tools/selftest/campaign-summary.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.07
+  },
+  {
+    "command": "node tools/selftest/serial-display.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.15
+  },
+  {
+    "command": "node tools/selftest/gen-parity.mjs",
+    "exitCode": 0,
+    "seconds": 0.12
+  },
+  {
+    "command": "node tools/selftest/hid-proto.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.46
+  },
+  {
+    "command": "node tools/selftest/dwarf.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.1
+  },
+  {
+    "command": "node tools/selftest/scope-array.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.11
+  },
+  {
+    "command": "node tools/selftest/scope-proto.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.15
+  },
+  {
+    "command": "node tools/selftest/scope-rate.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.49
+  },
+  {
+    "command": "node tools/selftest/scope-transport.test.mjs",
+    "exitCode": 0,
+    "seconds": 5.1
+  },
+  {
+    "command": "node tools/selftest/scope-store-batch.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.08
+  },
+  {
+    "command": "node tools/selftest/bridge-origin.test.mjs",
+    "exitCode": 0,
+    "seconds": 3.44
+  },
+  {
+    "command": "node tools/selftest/bridge-lifecycle.test.mjs",
+    "exitCode": 0,
+    "seconds": 1.28
+  },
+  {
+    "command": "node tools/selftest/flash-image.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.06
+  },
+  {
+    "command": "node tools/selftest/hpm-flash.test.mjs",
+    "exitCode": 0,
+    "seconds": 2.12
+  },
+  {
+    "command": "node tools/selftest/hpm-porting.test.mjs",
+    "exitCode": 0,
+    "seconds": 4.98
+  },
+  {
+    "command": "node tools/selftest/spi-proto.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.18
+  },
+  {
+    "command": "node tools/selftest/spi-panel-code.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.2
+  },
+  {
+    "command": "node tools/selftest/spi-read.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.15
+  },
+  {
+    "command": "node tools/selftest/spi-frames-dsl.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.1
+  },
+  {
+    "command": "node tools/selftest/spi-flash.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.1
+  },
+  {
+    "command": "node tools/selftest/stm32-devid.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.07
+  },
+  {
+    "command": "node tools/selftest/dbg-core.test.mjs",
+    "exitCode": 0,
+    "seconds": 11.24
+  },
+  {
+    "command": "node tools/selftest/dbg-riscv-reset.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.16
+  },
+  {
+    "command": "node tools/selftest/dbg-riscv-memory.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.15
+  },
+  {
+    "command": "node tools/selftest/riscv-sba-async.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.54
+  },
+  {
+    "command": "node tools/selftest/dbg-riscv-resume.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.08
+  },
+  {
+    "command": "node tools/selftest/dbg-src-suggest.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.12
+  },
+  {
+    "command": "node tools/selftest/i2c-proto.test.mjs",
+    "exitCode": 0,
+    "seconds": 1.64
+  },
+  {
+    "command": "node tools/selftest/i2c-dsl.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.1
+  },
+  {
+    "command": "node tools/selftest/i2c-registers.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.36
+  },
+  {
+    "command": "node tools/selftest/spi-regs.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.8
+  },
+  {
+    "command": "node tools/selftest/scenery-samples.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.12
+  },
+  {
+    "command": "node tools/selftest/swo.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.09
+  },
+  {
+    "command": "node tools/selftest/swo-capture.test.mjs",
+    "exitCode": 0,
+    "seconds": 2.67
+  },
+  {
+    "command": "node tools/selftest/swo-ports.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.92
+  },
+  {
+    "command": "node tools/selftest/swo-export.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.7
+  },
+  {
+    "command": "node tools/selftest/swo-demo.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.45
+  },
+  {
+    "command": "node tools/selftest/swo-matching.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.28
+  },
+  {
+    "command": "node tools/selftest/bus-periodic.test.mjs",
+    "exitCode": 0,
+    "seconds": 1.43
+  },
+  {
+    "command": "node tools/selftest/flash-data-clock.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.06
+  },
+  {
+    "command": "node tools/selftest/flash-sram-flow.test.mjs",
+    "exitCode": 0,
+    "seconds": 4.14
+  },
+  {
+    "command": "node tools/selftest/reset-io-protocol.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.05
+  },
+  {
+    "command": "node tools/selftest/reset-io-ui.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.2
+  },
+  {
+    "command": "node tools/selftest/sram-transfer.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.1
+  },
+  {
+    "command": "node tools/selftest/sram-bench.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.23
+  },
+  {
+    "command": "node tools/selftest/web-review-maintenance.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.22
+  },
+  {
+    "command": "node tools/selftest/web-review-fixes.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.62
+  },
+  {
+    "command": "node tools/selftest/dap-ap-discovery.test.mjs",
+    "exitCode": 0,
+    "seconds": 0.29
+  }
+]

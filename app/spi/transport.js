@@ -328,12 +328,13 @@ export class MockSpiTransport {
   async start(onRsp){
     if (this.running) return;
     this.running = true;
+    const generation = this._mockGeneration = (this._mockGeneration || 0) + 1;
     this.onRsp = onRsp;
     const pump = async () => {
       if (!this.running) return;
       this.probe.tick();
       await this._drain();
-      this.timer = setTimeout(pump, this.tickMs);
+      if (this.running && generation === this._mockGeneration) this.timer = setTimeout(pump, this.tickMs);
     };
     pump();
   }
@@ -344,9 +345,11 @@ export class MockSpiTransport {
    * 16 槽 IN 环、把先到的应答挤掉 —— 于是"读测速"在假探针上假失败（真机上不会）。
    */
   async _drain(){
+    const generation = this._mockGeneration;
     let rsp;
     while ((rsp = this.probe.takeRsp())){
       if (this._delay) await sleep(this._delay);
+      if (!this.running || generation !== this._mockGeneration) return;
       this.reads++; this.readBytes += rsp.length;
       this.onRsp?.(rsp);
     }
@@ -384,6 +387,7 @@ export class MockSpiTransport {
   async stop(){
     if (!this.running) return;
     this.running = false;
+    this._mockGeneration = (this._mockGeneration || 0) + 1;
     if (this.timer){ clearTimeout(this.timer); this.timer = null; }
     await sleep(10);
   }

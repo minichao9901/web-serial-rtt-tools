@@ -94,14 +94,17 @@ export class AnalogView {
     const options={bits:Number($('an-bits').value),rate:Number($('an-rate').value),count};
     const reference=Number($('an-reference').value);
     if(!Number.isFinite(reference)||reference<=0||reference>10)throw Error('参考电压需为 0–10 V 范围内的正数');
-    this.store.reset();this.total=0;this.lastFrame=null;this.adcDisplay=null;$('an-freeze').checked=false;
-    this.renderAdc();
+    let received = false;
     this.status(count?'单次/有限记录采集中…':'连续 DMA 采集中…');
     await this.session.acquire(options,block=>{
+      if (!received){
+        received = true;
+        this.store.reset();this.total=0;this.lastFrame=null;this.adcDisplay=null;$('an-freeze').checked=false;
+      }
       this.store.append(block);this.total=this.store.total;
       if(!$('an-freeze').checked&&this._raf===null)this._raf=requestAnimationFrame(()=>{this._raf=null;this.renderAdc();});
     });
-    this.renderAdc();this.status(`采集停止，共 ${this.total} 点；保留最近 ${this.store.length} 点可导出`);
+    this.renderAdc();this.status(received ? `采集停止，共 ${this.total} 点；保留最近 ${this.store.length} 点可导出` : '未收到新样本；保留上次波形与导出数据');
   }
   renderAdc(){
     const reference=Number($('an-reference').value),timeDiv=Number($('an-time').value);

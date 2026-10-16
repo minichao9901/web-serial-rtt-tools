@@ -187,26 +187,25 @@ export class SerialSession extends Bus {
   }
 
   /** 写入（串行排队：Web Serial 同一时刻只允许一个 write） */
-  write(bytes){
+  write(bytes, { signal } = {}){
+    if (signal?.aborted) return Promise.resolve(false);
     if (!this.isOpen || !this.port) return Promise.reject(new Error('串口未打开'));
     try { if (isProbeCdcPort(this.port)) this.probeManager?.cdcMode.assertUart(); }
     catch (e){ return Promise.reject(e); }
     const generation = this._epoch;
     const data = bytes instanceof Uint8Array ? bytes : new Uint8Array(bytes);
-    /**
-     * 🚨 catch 里**不要 rethrow**：那会把 `_wq` 这条链永久留在 rejected 状态 ——
-     *    之后每次 write() 的 then 体都被跳过（一个字节都写不出去），却对着同一个
-     *    **旧**错误重复 emit('error')，直到重开串口。错误已经走过 'error' 事件了，
-     *    这里把链恢复成 resolved，让后面的写继续。
-     */
-    this._wq = this._wq.then(async () => {
+    // Return this operation's result; only the internal queue recovers from errors.
+    const task = this._wq.then(async () => {
+      if (signal?.aborted) return false;
       if (!this.isOpen || generation !== this._epoch) throw new Error('串口已关闭或已切换');
       if (isProbeCdcPort(this.port)) this.probeManager?.cdcMode.assertUart();
       if (!this.writer) this.writer = this.port.writable.getWriter();
       await this.writer.write(data);
       this.emit('tx', data);
-    }).catch(e => { this.emit('error', e); });
-    return this._wq.catch(() => {});
+      return true;
+    });
+    this._wq = task.catch(e => { this.emit('error', e); });
+    return task;
   }
 
   async setSignals({ dtr, rts }){

@@ -3,6 +3,7 @@ import { parseHTML } from 'linkedom';
 
 const { document } = parseHTML('<html><body><div id="f-status"></div><div id="f-log"></div><div id="f-ram-result"></div><div id="toasts"></div></body></html>');
 globalThis.document = document;
+globalThis.requestAnimationFrame = fn => setImmediate(fn);
 const { FlashView } = await import('../../app/flash/view.js');
 const { WebUsbDapProbe } = await import('../../app/rtt/dap-webusb.js');
 

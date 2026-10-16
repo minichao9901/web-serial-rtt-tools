@@ -46,17 +46,18 @@ code{font-family:var(--mono);background:var(--bg3);padding:0 4px;border-radius:v
 
 /* ---------------- 顶栏 ---------------- */
 .topbar{
-  display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:2px 12px;padding:3px 10px;
+  display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:8px;padding:4px 10px;
+  position:relative;z-index:30;
   background:var(--bg2);border-bottom:1px solid var(--line);flex:none;
 }
 .brand{font-weight:600;letter-spacing:.2px}
-/* 页签独占一行；窄窗口横向滚动，保留全部工具的直接入口。 */
-.tabs{grid-column:1/-1;grid-row:2;display:flex;gap:2px;min-width:0;overflow-x:auto;scrollbar-width:thin;padding-bottom:0}
+/* 常用入口可滚动，其余工具由“更多功能”展开。 */
+.tabs{display:flex;gap:2px;min-width:0;padding-bottom:0}
 .tabs .tab{flex:none}
 .tab{background:transparent;border:1px solid transparent;color:var(--fg2);padding:3px 10px;border-radius:var(--radius-control)}
 .tab:hover{color:var(--fg);background:var(--bg3)}
 .tab.active{background:var(--bg3);border-color:var(--line);color:var(--fg);font-weight:600}
-.topright{justify-self:end;display:flex;align-items:center;gap:8px;min-width:0}
+.topright{grid-column:3;grid-row:1;justify-self:end;display:flex;align-items:center;gap:6px;min-width:0}
 .topbar>.topright #global-nrst-control{flex:none}
 .topbar>.topright #btn-global-reset,.topbar>.topright #btn-fullscreen{flex:none;white-space:nowrap}
 .flag{font-size:var(--text-xs);padding:2px 8px;border-radius:99px;border:1px solid var(--line);color:var(--fg2);white-space:nowrap}
@@ -1059,9 +1060,6 @@ fieldset.folded > legend::after{content:' · 已折叠';color:var(--fg2);font-si
   #tab-analog .an-plot{flex:none;height:50vh}
 }
 @media (max-width:540px){
-  .topbar{grid-template-columns:1fr}
-  .topright{grid-row:2;justify-self:start}
-  .tabs{grid-row:3}
   .i2-address-map{gap:2px}
 }
 @media (max-width:860px){
@@ -1232,12 +1230,10 @@ body.workspace-focused>.topbar{display:none}
 }
 
 /* 单行工具入口与共享分隔线，减少工作台的容器层次。 */
-.topbar{grid-template-columns:auto minmax(0,1fr) auto;gap:8px;padding:4px 10px;position:relative;z-index:30}
 .topbar>.brand{grid-column:1;grid-row:1;white-space:nowrap;letter-spacing:0}
 .topbar>#tabs{grid-column:2;grid-row:1;display:flex;align-items:center;gap:6px;overflow:visible;scrollbar-width:none;padding:0}
 .primary-tabs{display:flex;align-items:center;gap:1px;flex:1 1 auto;overflow-x:auto;scrollbar-width:none;min-width:0}
 .primary-tabs>.tab{padding:4px 7px}
-.topbar>.topright{grid-column:3;grid-row:1;flex-wrap:nowrap;gap:6px}
 .tool-switch{position:relative;flex:none;min-width:0;font-size:var(--text-xs)}
 .tool-switch>summary{display:block;list-style:none;cursor:pointer;padding:4px 7px;border:1px solid transparent;border-radius:var(--radius-control);color:var(--fg2);white-space:nowrap}
 .tool-switch>summary::-webkit-details-marker{display:none}
@@ -1265,7 +1261,17 @@ body.workspace-focused>.topbar{display:none}
 #tab-dbg .docktabs>button.on{background:transparent;color:var(--acc);border-bottom-color:var(--acc)}
 #sc-canvas{border-radius:0}
 @media(max-width:640px){.topbar{gap:5px;padding:4px 6px}.primary-tabs>.tab{padding:4px 5px}.tool-switch>summary{padding:4px 5px}.topbar>.topright{gap:3px}}
-@media(max-width:540px){.topbar{grid-template-columns:auto minmax(0,1fr)}.topbar>.brand{grid-column:1;grid-row:1}.topbar>#tabs{grid-column:2;grid-row:1}.topbar>.topright{grid-column:1/-1;grid-row:2}}
+@media(max-width:540px){.topbar{grid-template-columns:auto minmax(0,1fr)}.topbar>.brand{grid-column:1;grid-row:1}.topbar>#tabs{grid-column:2;grid-row:1}.topbar>.topright{grid-column:1/-1;grid-row:2;justify-self:stretch;justify-content:flex-start;flex-wrap:wrap;max-width:100%}}
+
+#g-files,#g-kit-files,#g-etm-files{display:flex;flex:1 1 0;min-width:0;max-width:100%;overflow-x:auto;scrollbar-width:thin}
+#g-files>button,#g-kit-files>button,#g-etm-files>button{flex:none}
+[role="tab"]:focus-visible{outline:2px solid var(--acc);outline-offset:1px}
+.connection-summary{flex:none;color:var(--fg2);font-size:var(--text-xs);padding:5px 2px;border-bottom:1px solid var(--line);line-height:1.6}
+@media(max-width:700px){
+  #pn-read-card>.toolrow.nw{flex-wrap:wrap;overflow:visible}
+  #pn-read-card .toolrow>label{flex-wrap:nowrap}
+  #g-files,#g-kit-files,#g-etm-files{flex-basis:100%;width:100%}
+}
 
 /* 表头与所有成员行共享列宽；窄面板横向滚动，标题在纵向滚动时固定。 */
 #tab-dbg .inspector-table{padding:0;border:0;border-radius:0;overflow:auto;background:transparent;position:relative}

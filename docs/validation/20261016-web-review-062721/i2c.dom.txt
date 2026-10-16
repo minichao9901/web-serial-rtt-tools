@@ -1,0 +1,199 @@
+- banner:
+  - generic "串口 / RTT 工具箱"
+  - navigation "工具切换":
+    - button "串口助手"
+    - button "终端"
+    - button "RTT Viewer" [active]
+    - button "RTT 转发"
+    - button "J-Scope 波形"
+    - button "烧录器"
+    - button "调试器"
+    - generic "更多功能，当前页面：USB→I2C": 更多功能 ▾
+  - generic: 串口：未连接
+  - generic "连接支持该功能的 akaLinkPro 固件后可用。":
+    - checkbox "NRST 开漏" [checked] [disabled]
+    - text: NRST 开漏
+  - button "全局复位"
+  - button "全屏"
+  - status "当前页面没有功能连接实体探针；串口连接状态单独显示。": 探针：未使用
+  - generic "帮助"
+- main:
+  - text: 连接后这里显示接收数据。 连接探针并选择 RTT 通道后，这里显示目标输出。 连接后这里显示接收数据。 烧录或 SRAM 测试的进度与结果显示在这里。 （点「定位并开始」：留空地址就用 .elf 里的 _SEGGER_RTT 符号） ▸ ▸ 连接后这里显示接收数据。
+  - complementary:
+    - tablist "侧栏设置":
+      - tab "连接" [selected]
+      - tab "总线"
+      - tab "诊断"
+      - tab "帮助"
+    - tabpanel "连接":
+      - group "连接":
+        - generic: 连接
+        - button "连接探针"
+        - button "关闭探针" [disabled]
+        - paragraph: 未连接
+        - button "引脚分配图 / 接线"
+        - generic "不需要硬件：内置 AT24C02@0x50 / MPU6050@0x68 / ADS1115@0x48 / Si5351@0x60 四个假器件，传感器数据是活的（会动的正弦），示例脚本能直接看出效果":
+          - checkbox "模拟探针"
+          - text: 模拟探针
+    - text: ▸
+    - generic "运行控制":
+      - button "使能" [disabled]
+      - button "失能" [disabled]
+      - paragraph: 未连接
+  - button "扫描总线"
+  - button "命令表"
+  - button "寄存器"
+  - button "脚本"
+  - button "实时值"
+  - generic "定时任务的运行状态（切到哪个 tab 都看得见）": 未运行
+  - button "停止" [disabled]
+  - button "扫描总线" [disabled]
+  - generic: 还没扫过
+  - generic: 选中器件
+  - textbox "选中器件": "0x50"
+  - generic "I2C 7 位地址扫描结果":
+    - button "0x00 · 保留地址，未扫描" [disabled]: "00"
+    - button "0x01 · 保留地址，未扫描" [disabled]: "01"
+    - button "0x02 · 保留地址，未扫描" [disabled]: "02"
+    - button "0x03 · 保留地址，未扫描" [disabled]: "03"
+    - button "0x04 · 保留地址，未扫描" [disabled]: "04"
+    - button "0x05 · 保留地址，未扫描" [disabled]: "05"
+    - button "0x06 · 保留地址，未扫描" [disabled]: "06"
+    - button "0x07 · 保留地址，未扫描" [disabled]: "07"
+    - button "0x08 · 无应答" [disabled]: "08"
+    - button "0x09 · 无应答" [disabled]: "09"
+    - button "0x0A · 无应答" [disabled]: 0A
+    - button "0x0B · 无应答" [disabled]: 0B
+    - button "0x0C · 无应答" [disabled]: 0C
+    - button "0x0D · 无应答" [disabled]: 0D
+    - button "0x0E · 无应答" [disabled]: 0E
+    - button "0x0F · 无应答" [disabled]: 0F
+    - button "0x10 · 无应答" [disabled]: "10"
+    - button "0x11 · 无应答" [disabled]: "11"
+    - button "0x12 · 无应答" [disabled]: "12"
+    - button "0x13 · 无应答" [disabled]: "13"
+    - button "0x14 · 无应答" [disabled]: "14"
+    - button "0x15 · 无应答" [disabled]: "15"
+    - button "0x16 · 无应答" [disabled]: "16"
+    - button "0x17 · 无应答" [disabled]: "17"
+    - button "0x18 · 无应答" [disabled]: "18"
+    - button "0x19 · 无应答" [disabled]: "19"
+    - button "0x1A · 无应答" [disabled]: 1A
+    - button "0x1B · 无应答" [disabled]: 1B
+    - button "0x1C · 无应答" [disabled]: 1C
+    - button "0x1D · 无应答" [disabled]: 1D
+    - button "0x1E · 无应答" [disabled]: 1E
+    - button "0x1F · 无应答" [disabled]: 1F
+    - button "0x20 · 无应答" [disabled]: "20"
+    - button "0x21 · 无应答" [disabled]: "21"
+    - button "0x22 · 无应答" [disabled]: "22"
+    - button "0x23 · 无应答" [disabled]: "23"
+    - button "0x24 · 无应答" [disabled]: "24"
+    - button "0x25 · 无应答" [disabled]: "25"
+    - button "0x26 · 无应答" [disabled]: "26"
+    - button "0x27 · 无应答" [disabled]: "27"
+    - button "0x28 · 无应答" [disabled]: "28"
+    - button "0x29 · 无应答" [disabled]: "29"
+    - button "0x2A · 无应答" [disabled]: 2A
+    - button "0x2B · 无应答" [disabled]: 2B
+    - button "0x2C · 无应答" [disabled]: 2C
+    - button "0x2D · 无应答" [disabled]: 2D
+    - button "0x2E · 无应答" [disabled]: 2E
+    - button "0x2F · 无应答" [disabled]: 2F
+    - button "0x30 · 无应答" [disabled]: "30"
+    - button "0x31 · 无应答" [disabled]: "31"
+    - button "0x32 · 无应答" [disabled]: "32"
+    - button "0x33 · 无应答" [disabled]: "33"
+    - button "0x34 · 无应答" [disabled]: "34"
+    - button "0x35 · 无应答" [disabled]: "35"
+    - button "0x36 · 无应答" [disabled]: "36"
+    - button "0x37 · 无应答" [disabled]: "37"
+    - button "0x38 · 无应答" [disabled]: "38"
+    - button "0x39 · 无应答" [disabled]: "39"
+    - button "0x3A · 无应答" [disabled]: 3A
+    - button "0x3B · 无应答" [disabled]: 3B
+    - button "0x3C · 无应答" [disabled]: 3C
+    - button "0x3D · 无应答" [disabled]: 3D
+    - button "0x3E · 无应答" [disabled]: 3E
+    - button "0x3F · 无应答" [disabled]: 3F
+    - button "0x40 · 无应答" [disabled]: "40"
+    - button "0x41 · 无应答" [disabled]: "41"
+    - button "0x42 · 无应答" [disabled]: "42"
+    - button "0x43 · 无应答" [disabled]: "43"
+    - button "0x44 · 无应答" [disabled]: "44"
+    - button "0x45 · 无应答" [disabled]: "45"
+    - button "0x46 · 无应答" [disabled]: "46"
+    - button "0x47 · 无应答" [disabled]: "47"
+    - button "0x48 · 无应答" [disabled]: "48"
+    - button "0x49 · 无应答" [disabled]: "49"
+    - button "0x4A · 无应答" [disabled]: 4A
+    - button "0x4B · 无应答" [disabled]: 4B
+    - button "0x4C · 无应答" [disabled]: 4C
+    - button "0x4D · 无应答" [disabled]: 4D
+    - button "0x4E · 无应答" [disabled]: 4E
+    - button "0x4F · 无应答" [disabled]: 4F
+    - button "0x50 · 无应答" [disabled]: "50"
+    - button "0x51 · 无应答" [disabled]: "51"
+    - button "0x52 · 无应答" [disabled]: "52"
+    - button "0x53 · 无应答" [disabled]: "53"
+    - button "0x54 · 无应答" [disabled]: "54"
+    - button "0x55 · 无应答" [disabled]: "55"
+    - button "0x56 · 无应答" [disabled]: "56"
+    - button "0x57 · 无应答" [disabled]: "57"
+    - button "0x58 · 无应答" [disabled]: "58"
+    - button "0x59 · 无应答" [disabled]: "59"
+    - button "0x5A · 无应答" [disabled]: 5A
+    - button "0x5B · 无应答" [disabled]: 5B
+    - button "0x5C · 无应答" [disabled]: 5C
+    - button "0x5D · 无应答" [disabled]: 5D
+    - button "0x5E · 无应答" [disabled]: 5E
+    - button "0x5F · 无应答" [disabled]: 5F
+    - button "0x60 · 无应答" [disabled]: "60"
+    - button "0x61 · 无应答" [disabled]: "61"
+    - button "0x62 · 无应答" [disabled]: "62"
+    - button "0x63 · 无应答" [disabled]: "63"
+    - button "0x64 · 无应答" [disabled]: "64"
+    - button "0x65 · 无应答" [disabled]: "65"
+    - button "0x66 · 无应答" [disabled]: "66"
+    - button "0x67 · 无应答" [disabled]: "67"
+    - button "0x68 · 无应答" [disabled]: "68"
+    - button "0x69 · 无应答" [disabled]: "69"
+    - button "0x6A · 无应答" [disabled]: 6A
+    - button "0x6B · 无应答" [disabled]: 6B
+    - button "0x6C · 无应答" [disabled]: 6C
+    - button "0x6D · 无应答" [disabled]: 6D
+    - button "0x6E · 无应答" [disabled]: 6E
+    - button "0x6F · 无应答" [disabled]: 6F
+    - button "0x70 · 无应答" [disabled]: "70"
+    - button "0x71 · 无应答" [disabled]: "71"
+    - button "0x72 · 无应答" [disabled]: "72"
+    - button "0x73 · 无应答" [disabled]: "73"
+    - button "0x74 · 无应答" [disabled]: "74"
+    - button "0x75 · 无应答" [disabled]: "75"
+    - button "0x76 · 无应答" [disabled]: "76"
+    - button "0x77 · 无应答" [disabled]: "77"
+    - button "0x78 · 保留地址，未扫描" [disabled]: "78"
+    - button "0x79 · 保留地址，未扫描" [disabled]: "79"
+    - button "0x7A · 保留地址，未扫描" [disabled]: 7A
+    - button "0x7B · 保留地址，未扫描" [disabled]: 7B
+    - button "0x7C · 保留地址，未扫描" [disabled]: 7C
+    - button "0x7D · 保留地址，未扫描" [disabled]: 7D
+    - button "0x7E · 保留地址，未扫描" [disabled]: 7E
+    - button "0x7F · 保留地址，未扫描" [disabled]: 7F
+  - paragraph: 绿色 = ACK · 灰色 = 未扫描 / 无应答 · 虚线 = 保留地址（未扫描）；点击应答地址可选用。
+  - table:
+    - rowgroup:
+      - row "地址 可能的器件（只是提示，按手册核） 操作":
+        - columnheader "地址"
+        - columnheader "可能的器件（只是提示，按手册核）"
+        - columnheader "操作"
+    - rowgroup
+  - generic "拖动：调整日志高度"
+  - strong: I2C 日志
+  - button "复制"
+  - button "保存"
+  - button "清空"
+  - generic: I2C 事务与应答会显示在这里。
+  - text: 协议：
+  - code: HID 0x36
+  - text: （控制面 + 数据面同一条报文，事务在主循环执行，主机轮询 RESULT 取结果）· 长读自动分片

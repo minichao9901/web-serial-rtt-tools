@@ -1,0 +1,17 @@
+{
+  "runId": "20261016-cross-review-065747",
+  "revision": "fb06da2348543b75db5fbc237dd4d3b0ffe1d655",
+  "dirty": [
+    " M app/rtt/dap-webusb.js",
+    "?? .agent-teams/",
+    "?? docs/etm-page-review-2026-10-14.md",
+    "?? docs/page-review-2026-10-16.md",
+    "?? docs/validation/20261016-web-review-062721/",
+    "?? tools/selftest/dap-ap-discovery.test.mjs",
+    "?? validation/"
+  ],
+  "reviewedReport": "E:/web-serial-rtt-tools/docs/page-review-2026-10-16.md",
+  "reportSha256": "B2F42283147BC32310895B183D89A854F707EA3EFD0263AC24DE7851336DF826",
+  "started": "2026-10-16T06:57:48.1411614+08:00",
+  "cwd": "E:\\web-serial-rtt-tools"
+}

@@ -1,0 +1,151 @@
+- banner:
+  - generic "串口 / RTT 工具箱"
+  - navigation "工具切换":
+    - button "串口助手"
+    - button "终端"
+    - button "RTT Viewer"
+    - button "RTT 转发"
+    - button "J-Scope 波形"
+    - button "烧录器"
+    - button "调试器"
+    - generic "更多功能，当前页面：USB→I2C": 更多功能 ▾
+  - generic: 串口：未连接
+  - generic "连接支持该功能的 akaLinkPro 固件后可用。":
+    - checkbox "NRST 开漏" [checked] [disabled]
+    - text: NRST 开漏
+  - button "全局复位"
+  - button "全屏"
+  - status "当前页面没有功能连接实体探针；串口连接状态单独显示。": 探针：未使用
+  - generic "帮助"
+- main:
+  - text: 连接后这里显示接收数据。 连接探针并选择 RTT 通道后，这里显示目标输出。 连接后这里显示接收数据。 烧录或 SRAM 测试的进度与结果显示在这里。 （点「定位并开始」：留空地址就用 .elf 里的 _SEGGER_RTT 符号） ▸ ▸ 连接后这里显示接收数据。
+  - complementary:
+    - tablist "侧栏设置":
+      - tab "连接"
+      - tab "总线"
+      - tab "诊断"
+      - tab "帮助" [selected]
+    - text: ▸
+    - tabpanel "帮助":
+      - generic: 参数、接线与排障说明
+      - generic "选择其它探针"
+      - generic "连接与上手"
+      - generic "接线与排障 · 接线自检结果判读"
+      - generic "连接"
+      - generic "接线与排障"
+      - generic "接线与排障"
+      - generic "连接 · 参数"
+      - generic "总线配置 · 参数"
+    - generic "运行控制":
+      - button "使能" [disabled]
+      - button "失能" [disabled]
+      - paragraph: 未连接
+  - button "扫描总线"
+  - button "命令表" [active]
+  - button "寄存器"
+  - button "脚本"
+  - button "实时值"
+  - generic "定时任务的运行状态（切到哪个 tab 都看得见）": 未运行
+  - button "停止" [disabled]
+  - button "+ 加一行"
+  - button "删末行"
+  - button "清空表"
+  - button "清空结果"
+  - button "发送全部" [disabled]
+  - button "开始定时" [disabled]
+  - table:
+    - rowgroup:
+      - row "# 操作 器件 子地址 数据 读长 解码 as 周期 结果":
+        - columnheader "#"
+        - columnheader "操作"
+        - columnheader "器件"
+        - columnheader "子地址"
+        - columnheader "数据"
+        - columnheader "读长"
+        - columnheader "解码 as"
+        - columnheader "周期"
+        - columnheader "结果"
+    - rowgroup:
+      - row "1 读 0x50 读 0x50 × 1":
+        - cell "1"
+        - cell "读":
+          - combobox:
+            - option "读" [selected]
+            - option "写"
+            - option "探测"
+            - option "延时"
+        - cell "0x50":
+          - textbox: "0x50"
+        - cell:
+          - 'textbox "子地址（留空 = 不带子地址的纯读；`-` 同）"'
+        - cell:
+          - textbox "读操作不用这一格" [disabled]:
+            - /placeholder: ""
+        - cell:
+          - textbox "读几个字节（≤4096；超过 54 自动分片，想连续读加 ptr）"
+        - cell:
+          - textbox "as 解码"
+        - cell:
+          - textbox "周期，如 100ms / 100ms×50"
+        - cell "读 0x50 × 1"
+      - row "2 读 0x50 读 0x50 × 1":
+        - cell "2"
+        - cell "读":
+          - combobox:
+            - option "读" [selected]
+            - option "写"
+            - option "探测"
+            - option "延时"
+        - cell "0x50":
+          - textbox: "0x50"
+        - cell:
+          - 'textbox "子地址（留空 = 不带子地址的纯读；`-` 同）"'
+        - cell:
+          - textbox "读操作不用这一格" [disabled]:
+            - /placeholder: ""
+        - cell:
+          - textbox "读几个字节（≤4096；超过 54 自动分片，想连续读加 ptr）"
+        - cell:
+          - textbox "as 解码"
+        - cell:
+          - textbox "周期，如 100ms / 100ms×50"
+        - cell "读 0x50 × 1"
+      - row "3 读 0x50 读 0x50 × 1":
+        - cell "3"
+        - cell "读":
+          - combobox:
+            - option "读" [selected]
+            - option "写"
+            - option "探测"
+            - option "延时"
+        - cell "0x50":
+          - textbox: "0x50"
+        - cell:
+          - 'textbox "子地址（留空 = 不带子地址的纯读；`-` 同）"'
+        - cell:
+          - textbox "读操作不用这一格" [disabled]:
+            - /placeholder: ""
+        - cell:
+          - textbox "读几个字节（≤4096；超过 54 自动分片，想连续读加 ptr）"
+        - cell:
+          - textbox "as 解码"
+        - cell:
+          - textbox "周期，如 100ms / 100ms×50"
+        - cell "读 0x50 × 1"
+  - paragraph:
+    - text: 每行一次事务（START…STOP）。器件格留空 = 跳过该行。 操作：读 = 子地址 + 读长（读长可以随便写，超过 54 B 自动分片，日志只出一行）； 写 = 子地址 + 数据（数据留空 = 只把地址指针推过去；写不自动分片，一次 ≤51 B）； 探测 = 只问 ACK；延时 = 在「数据」格里填时长（如
+    - code: 10ms
+    - text: ）。 周期格写
+    - code: 100ms
+    - text: 或
+    - code: 100ms×50
+    - text: （×50 = 跑 50 轮自己停；不写 = 一直跑）。
+  - generic "拖动：调整日志高度"
+  - strong: I2C 日志
+  - button "复制"
+  - button "保存"
+  - button "清空"
+  - generic: I2C 事务与应答会显示在这里。
+  - text: 协议：
+  - code: HID 0x36
+  - text: （控制面 + 数据面同一条报文，事务在主循环执行，主机轮询 RESULT 取结果）· 长读自动分片

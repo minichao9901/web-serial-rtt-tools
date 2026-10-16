@@ -1,0 +1,12 @@
+[
+  {
+    "name": "dbg-backend-lifecycle.test.mjs",
+    "exitCode": 0,
+    "change": "Only initialize constructor-owned SvdValueState in copied test fixture; app unchanged"
+  },
+  {
+    "name": "probe-handoff.test.mjs",
+    "exitCode": 0,
+    "change": "Only initialize constructor-owned SvdValueState in copied test fixture; app unchanged"
+  }
+]
