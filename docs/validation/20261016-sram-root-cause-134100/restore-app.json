@@ -8,18 +8,18 @@
       },
       {
         "step": "APB2ENR-IOPA",
-        "before": "0x0"
+        "before": "0x404d"
       },
       {
         "step": "APB1ENR-USB",
-        "before": "0x0"
+        "before": "0x10800000"
       },
       {
         "step": "USB_CNTR=PDWN|FRES"
       },
       {
         "step": "PA12-open-drain-low",
-        "before": "0x88844444"
+        "before": "0x888448b4"
       },
       {
         "step": "sysreset",

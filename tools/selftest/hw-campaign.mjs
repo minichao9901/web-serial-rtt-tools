@@ -2,7 +2,7 @@
  * 真机场景测试（2026-10 用户口径，需求逐条对应）：
  *
  *   1) 烧「狂发固件」→ 测 RTT Viewer 速率（**判决 > 300 KB/s**）
- *                  → 测 RTT 转发速率（**判决 > 2.5 MB/s**，60 MHz 档）
+ *                  → 测 RTT 转发速率（**档位下限 45 MHz；60 MHz 档判 > 2.5 MB/s，45 MHz 档判 > 2.0 MB/s**）
  *                  → 继续转发 **10 s 存盘**（页面「记录到文件」；落盘后导出到磁盘核对）
  *   2) 烧「scope 固件」→ 测 J-Scope：1 个变量 / 3 个变量的采样率
  *   3) 1)+2) 重复 **2** 遍
@@ -42,6 +42,13 @@
  *   ⚠️ 「50 kHz 档零丢样本」这条 2026-10 复测时改成**按比例**判（探针跳拍 ≤ 100 ppm，
  *      USB/缺口仍必须是 0）：连跑 4 遍实测探针稳定丢 2~4/150040 样本（见 scopeRun 里的说明），
  *      "恰好 0" 会把整条流程交给 3 个样本的抖动。
+ *
+ * 🚨 2026-10-16 档位判据改口径（用户拍板，改判据不改探针固件）：原判据「转发跑在 60 MHz 档」
+ *    连续三次正式跑都 FAIL —— 但根因不在网页：探针固件 `rtt_bridge.c` 在 3 次读失败后重扫、
+ *    2 次重扫即 `rtt_clock_step_down()` 降一档且**只降不升**，文件头自己写明 60 MHz「长跑不稳」、
+ *    稳定默认档是 45 MHz。实测（run 20261016-sram-root-cause-134100）：campaign 重跑仍是
+ *    Viewer 60 MHz 通过 / 转发自报 45 MHz；独立启动抽样 [45,60,60]。新判据：**档位下限 45 MHz**
+ *    （低于它才说明真没跑起来），速率线按实际档位选（60→2.5 MB/s 原口径，45→2.0 MB/s）。
  *
  * ⚠️ 固件版本很要紧：狂发固件必须用 `build-ze`（96 MHz + RTT 32 KB 缓冲）。
  *    仓库里曾长期躺着一份**旧简化版**（无 PLL 设置、SYST_RVR=8000 → 复位后 HSI 8 MHz、缓冲 4 KB），
@@ -122,13 +129,24 @@ const CYCLES = argN('cycles', 2);
 const ALT = argN('alt', 5);
 const OUT = argV('out', 'tmp/campaign-result.json');
 const KEEP_GOING = has('keep-going');
-const CLOCK = '60000000';                 // 60 MHz（值就是 Hz，见文件头 ①）
+const CLOCK = String(argV('clock', '60000000'));   // 请求的档位（Hz，见文件头 ①）；--clock=45000000 可量 45 MHz 档
 const RTT_SECS = 6;                       // RTT Viewer 测速窗口
 const FWD_SECS = 8;                       // 转发速率窗口
 const REC_SECS = 10;                      // 存盘窗口（用户口径：测 10 秒）
 const SCOPE_SECS = 3;
 const J_VIEWER = 300 * 1024;              // 判决：RTT Viewer > 300 KB/s
-const J_FWD = 2.5 * 1048576;              // 判决：RTT 转发 > 2.5 MB/s
+const J_FWD = 2.5 * 1048576;              // 判决：RTT 转发 > 2.5 MB/s（60 MHz 档）
+/**
+ * 🚨 档位判据（2026-10-16 用户拍板改判据，不改探针固件）：
+ * 转发桥的 SWD 档位由**探针固件**决定（`rtt_bridge.c`：3 次读失败触发重扫、2 次重扫即
+ * `rtt_clock_step_down()` 降一档，只降不升）。该固件把 60 MHz 标注为"长跑不稳"、稳定默认档是
+ * 45 MHz，所以"请求 60"不等于"报 60"。判据因此取 **45 MHz 为下限**（低于它才说明真的没跑起来），
+ * 同时按**实际档位**选速率线；实际 60 仍然按原口径 >2.5 MB/s 判。
+ */
+const J_FWD_MHZ_MIN = 45;
+// 45 MHz 档速率线 = 实测 2.46 MB/s × 80%（2026-10-16 真机：--clock=45000000，页面 RX 2.46 MB/s；
+// 探针固件自己也写着 45 MHz 交付约 2.5 MB/s）。60 MHz 档维持原口径 2.5 MB/s（实测 2.90）。
+const J_FWD_45 = 2.0 * 1048576;
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 const WD = setTimeout(() => { console.log('!! 看门狗超时（8 分钟），退出'); process.exit(9); }, 8 * 60 * 1000);
@@ -631,8 +649,10 @@ async function rttForward(){
     }
   }
   const st0 = await cdp.evalJson(`({ mhz: window.__tools.hid.last?.swdMhz, cb: window.__tools.hid.last?.cbAddr })`);
-  console.log(`   [转发] 探针报告档位 ${st0.mhz} MHz · 控制块 0x${Number(st0.cb || 0).toString(16)}`);
-  judge('转发跑在 60 MHz 档', st0.mhz >= 60, `实际 ${st0.mhz} MHz`);
+  const reqMhz = Number(CLOCK) / 1e6;
+  console.log(`   [转发] 探针报告档位 ${st0.mhz} MHz · 控制块 0x${Number(st0.cb || 0).toString(16)}`
+    + (st0.mhz >= reqMhz ? `（请求 ${reqMhz}，未降档）` : `（请求 ${reqMhz}，探针按设计降档）`));
+  judge(`转发档位 ≥ ${J_FWD_MHZ_MIN} MHz（探针固件稳定档下限）`, st0.mhz >= J_FWD_MHZ_MIN, `实际 ${st0.mhz} MHz`);
 
   // 页面的 CDC 口（已授权 → 直接连，不弹框）
   await cdp.eval(`window.__tools.stream.refreshPorts()`).catch(() => {});
@@ -655,7 +675,8 @@ async function rttForward(){
   const probeRate = (b.m - a.m) / dt;
   console.log(`   [转发速率] 页面 RX ${(rxRate / 1048576).toFixed(2)} MB/s（页面显示 ${b.rate}）·`
     + ` 探针侧搬运 ${(probeRate / 1048576).toFixed(2)} MB/s · 窗口 ${dt.toFixed(1)}s`);
-  judge('RTT 转发速率 > 2.5 MB/s', rxRate > J_FWD, `${(rxRate / 1048576).toFixed(2)} MB/s`);
+  const fwdFloor = st0.mhz >= 60 ? J_FWD : J_FWD_45;
+  judge(`RTT 转发速率 > ${(fwdFloor / 1048576).toFixed(2)} MB/s（${st0.mhz} MHz 档）`, rxRate > fwdFloor, `${(rxRate / 1048576).toFixed(2)} MB/s`);
 
   /* 1c) 10 s 存盘：页面「记录到文件」→ OPFS（真 FSA 语义）→ 导出到磁盘核对 */
   const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
@@ -933,12 +954,14 @@ dump();
  * 表格口径 = spec 那一列由脚本的判决常量给（这份基准只对速率与 50 kHz 档设线，
  * 烧录耗时与 J-Scope 上限只记录不判决 —— 与文件头的口径一致）。
  */
+const fwdClocks = report.cycles.map(r => r.fwd?.mhz).filter(m => typeof m === 'number');
+const specFwdFloor = fwdClocks.length && fwdClocks.every(m => m < 60) ? J_FWD_45 : J_FWD;
 printSummary({
   ...report,
   boardLabel: BOARD.label,
   floodLabel: '烧录 狂发固件',
   viewerLabel: '（WebUSB · 60 MHz）',
-  spec: { viewerKBps: J_VIEWER / 1024, fwdMBps: J_FWD / 1048576, recordBytesRatio: 0.98 },
+  spec: { viewerKBps: J_VIEWER / 1024, fwdMBps: specFwdFloor / 1048576, recordBytesRatio: 0.98 },
 });
 console.log(`\n判决：${pass} 通过 / ${fail} 失败`);
 if (report.errors.length) console.log('错误：' + JSON.stringify(report.errors));

@@ -41,21 +41,22 @@ try {
   for (let i = 0; i < N; i++) {
     const sample = { i };
     try {
+      await sleep(1200);   // 上一次 stop 之后给固件/页面的状态机一点恢复时间，别把"还没就绪"记成失败
       await c.eval(`document.getElementById('h-start').click()`, true);
-      await c.settle(/./, 'window.__tools.hid.last?.running && window.__tools.hid.last?.cbAddr', 12000);
-      const st = await c.json(`({mhz:window.__tools.hid.last?.swdMhz, cb:window.__tools.hid.last?.cbAddr, chunk:window.__tools.hid.last?.chunk, yield:window.__tools.hid.last?.dapYield})`);
+      await c.settle(/./, 'window.__tools.hid.last?.running && window.__tools.hid.last?.cbAddr', 25000);
+      const st = await c.json(`({mhz:window.__tools.hid.last?.swdMhz, cb:window.__tools.hid.last?.cbAddr, chunk:window.__tools.hid.last?.chunk, yield:window.__tools.hid.last?.dapYield, moved:window.__tools.hid.last?.moved})`);
       sample.result = st;
     } catch (e) {
       sample.error = String(e.message || e);
       report.errors.push(sample.error);
     }
     await c.eval(`(async()=>{ try{ await window.__tools.hid.stop('sweep'); }catch(e){} })()`).catch(() => {});
-    await sleep(500);
+    await sleep(1200);
     report.samples.push(sample);
     console.log(JSON.stringify(sample));
   }
   const mhz = report.samples.map(s => s.result?.mhz).filter(v => typeof v === 'number');
-  report.summary = { n: mhz.length, at60: mhz.filter(v => v >= 60).length, below: mhz.filter(v => v < 60).length, values: mhz };
+  report.summary = { requestedMhz: 60, ready: mhz.length, at60: mhz.filter(v => v >= 60).length, below: mhz.filter(v => v < 60).length, values: mhz, timeouts: report.samples.filter(s => s.error).length };
   console.log('SUMMARY ' + JSON.stringify(report.summary));
 } catch (e) {
   report.fatal = e.stack;
