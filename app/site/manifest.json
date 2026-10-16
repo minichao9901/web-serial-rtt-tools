@@ -88,7 +88,7 @@
     "app/hid/mock.js": "b37788033bc12dfc5febb3beaaa20f6b293bdaa83dba9898df1c693b94d832d5",
     "app/hid/probe.js": "5416330921bf987fceb3d2a447a6f69d570c14b08b9e9755577eb30b5809f8b3",
     "app/hid/stream.js": "333b66dbe4be27f45091b4cffcd57169bcf486f9d49ac979117c384820c32a4b",
-    "app/hid/view.js": "b4ff7a58d1eeafedc6b5dde9fe4cede9a377d856f3eb8d9844a1f11c3e79808c",
+    "app/hid/view.js": "98fec1929dad5a3ff82a59f0f33cbc1aaf180863a3f23c6de0c7b123919af5dd",
     "app/i2c/dsl.js": "c6dbe0ea012f1d33aab34d648471890712f2b518fad25cdf5f670e7a70c17f1c",
     "app/i2c/expr.js": "ea3168ff8a1bf26841545c3290b41e0f94057d095111071adad4f1eecd1e734c",
     "app/i2c/mock.js": "852a81fdca8dd4f541ceac90a97200e3bb21a112a11433332d10c62613c61888",
@@ -113,7 +113,7 @@
     "app/scope/render.js": "539faa88133f619836d12b3086c189367f7c28894165bc0240b6f0ff1283b6ca",
     "app/scope/store.js": "a54138c35048ae447446201f3491ef81bb989ebad3e23e32fb26ca44800937e3",
     "app/scope/transport.js": "35895457dd1c2f138ad275b560f607e7df5d483b931b814ea1855b6f4268986b",
-    "app/scope/view.js": "e600dc52e4a3ab502231d223324ee2e198579f0568767348bc6cb71f4a909301",
+    "app/scope/view.js": "e5e5e2ffaf72e7bd55094bc2ba40dd6c45ea4b18cda2902de798cb0b78f00dd5",
     "app/serial/assistant.js": "6fe10153099201d1b4b8552309e0bcc20b7ac1d85c29aa528e49d6b0fc615736",
     "app/serial/demo.js": "7e1cc7301b5edbcb99edaa1d2b43778aa5696a038d565b754abae5ae0a6d7ad6",
     "app/serial/session.js": "5d37537c36613d8a062a34f94d8afe834eb7c6746d5510ddb9d9fb14714fbff2",
@@ -170,6 +170,6 @@
     "app/ui/workspace.js": "25b6ce94e5d90302a37e6cec2b7e35c975af95ce29bef1094a4493f3890fc0b7",
     "app/ui/zoom-controls.js": "d7520d813135941c8b0e8f5601722c45f53d2d2ed8a940f789bc032da0180ff9"
   },
-  "outputSha256": "6114b29e31c3ce0342375affe645aa9bac6f5c476548e3a4c321f0c9c2ac116c",
-  "outputBytes": 1311839
+  "outputSha256": "ddf13055cdd6f2d0caf0d3d711ff41b7be68f1ed42ebefd0c20a4a06cef38fc7",
+  "outputBytes": 1315269
 }

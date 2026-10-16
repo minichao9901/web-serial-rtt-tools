@@ -72,6 +72,7 @@ export class ScopeView {
     this._lastPktT = null;      // 上一包的起始时刻 / 帧数（用来估包内真实间隔，见 DATA 分支）
     this._lastPktN = 0;
     this._capturing = false;    // 本轮采集还开着吗（DATA 分支据此决定入不入缓冲，见 start/stop）
+    this._releasing = false;
     this._wdTimer = null;       // 数据面看门狗（采集中断流的兜底）
     this._lastPktAt = 0;        // 最近收到一个包的时刻
     this.backend = null;        // **生效**后端：swd | riscv（只认探针回报的 DEF flags bit6 / 状态字 0 bit1）
@@ -110,7 +111,7 @@ export class ScopeView {
     tm.value = String(TRIG.NONE);
 
     $('sc-connect').addEventListener('click', () => this.connectHid(true));
-    $('sc-reconnect').addEventListener('click', () => this.connectHid(false));
+    $('sc-disconnect')?.addEventListener('click', () => this.disconnect());
     $('sc-usb').addEventListener('click', () => this.connectUsb(true));
     $('sc-mock').addEventListener('change', e => this.setMock(e.target.checked));
     $('sc-elf').addEventListener('click', () => this.elfInput.click());
@@ -318,11 +319,12 @@ export class ScopeView {
   async connectHid(request){
     if (this._hidConnectPromise) return await this._hidConnectPromise;
     if (this._releasing || this.usingMock) return;
-    if (this.running || this._starting){ this.setStatusText('先停止采样，再重连探针', 'warn'); return; }
+    if (this.running || this._starting){ this.setStatusText('先停止采样，再连接探针', 'warn'); return; }
     this._hidConnectPromise = runProbeOperation(this, 'scope', () => this._connectHidNow(request), { reason: 'J-Scope 要连接探针', recovery: true });
+    this.syncButtons();
     try { return await this._hidConnectPromise; }
     catch (e){ this.setStatusText(e.message, 'err'); return false; }
-    finally { this._hidConnectPromise = null; }
+    finally { this._hidConnectPromise = null; this.syncButtons(); }
   }
 
   async _connectHidNow(request){
@@ -332,14 +334,14 @@ export class ScopeView {
       /**
        * 🚨 每次都 new 一个 `AkaLinkHid`，**旧的要先 close()**：老代码不关，
        *    旧 device 的 `inputreport` 监听和 `navigator.hid` 的 disconnect 监听会一直留着
-       *    （代码审查抓到的）。用户反复点「重连」就会叠一层，旧句柄的回包还会去动 `_pending`。
+       *    （代码审查抓到的）。用户反复重新连接就会叠一层，旧句柄的回包还会去动 `_pending`。
        */
       const old = this.hid;
       if (old && old !== this.mockProbe){ try { await old.close(); } catch {} this.hid = null; }
       const hid = new AkaLinkHid();
       // 探针被复位/拔插 → 浏览器会发 disconnect：立刻把状态写清楚，别等用户点开始采样才报一句英文错
       hid.onDisconnect = () => {
-        this.setStatusText('探针断开了（被复位、拔插或掉电？）—— 点「重连」，或拔插一次探针', 'err');
+        this.setStatusText('探针断开了（被复位、拔插或掉电？）—— 点「连接探针」重新连接，或拔插一次探针', 'err');
         $('sc-info').textContent = '探针已断开';
         if (this.running) this.stop().catch(() => {});
       };
@@ -392,11 +394,12 @@ export class ScopeView {
   async connectUsb(request = true){
     if (this._usbConnectPromise) return await this._usbConnectPromise;
     if (this._releasing || this.usingMock) return;
-    if (this.running || this._starting){ this.setStatusText('先停止采样，再重连数据端点', 'warn'); return; }
+    if (this.running || this._starting){ this.setStatusText('先停止采样，再连接数据端点', 'warn'); return; }
     this._usbConnectPromise = runProbeOperation(this, 'scope', () => this._connectUsbNow(request), { reason: 'J-Scope 要使用数据端点', recovery: true });
+    this.syncButtons();
     try { return await this._usbConnectPromise; }
     catch (e){ this.setStatusText(e.message, 'err'); return false; }
-    finally { this._usbConnectPromise = null; }
+    finally { this._usbConnectPromise = null; this.syncButtons(); }
   }
 
   async _connectUsbNow(request = true){
@@ -451,6 +454,7 @@ export class ScopeView {
 
   async _releaseProbeNow(reason){
     this._releasing = true;
+    this.syncButtons();
     let failure;
     try { await this.stop(reason); } catch (e) { failure = e; }
     await Promise.allSettled([this._hidConnectPromise, this._usbConnectPromise].filter(Boolean));
@@ -468,12 +472,29 @@ export class ScopeView {
       const info = $('sc-info'); if (info) info.textContent = '未连接（已让出探针：' + reason + '）';
     }
     const ui = $('sc-usbinfo'); if (ui) ui.textContent = '未连接数据端点';
-    this._releasing = false;
-    if (failure){ this.setStatusText(failure.message, 'err'); throw failure; }
-    this.probeManager?.forget('scope');
-    this.setStatusText('已让出探针（' + reason + '）—— 需要时点「连接探针 / 数据端点」重新占用', 'warn');
-    this.syncButtons();
-    return true;
+    try {
+      if (failure){ this.setStatusText(failure.message, 'err'); throw failure; }
+      this.probeManager?.forget('scope');
+      this.setStatusText('已让出探针（' + reason + '）—— 需要时点「连接探针 / 数据端点」重新占用', 'warn');
+      return true;
+    } finally {
+      this._releasing = false;
+      this.syncButtons();
+    }
+  }
+
+  async disconnect(){
+    try {
+      if (this.usingMock) await this.setMock(false);
+      else await this.releaseProbe('用户关闭探针');
+      const info = $('sc-info'); if (info) info.textContent = '未连接';
+      const usbInfo = $('sc-usbinfo'); if (usbInfo) usbInfo.textContent = '未连接数据端点';
+      this.setStatusText('探针连接已关闭', 'ok');
+      return true;
+    } catch (e){
+      this.setStatusText('关闭探针失败：' + (e?.message || e), 'err');
+      return false;
+    }
   }
 
   async setMock(on){
@@ -812,7 +833,7 @@ export class ScopeView {
       if (!this._captureAlive(g)) return;
       if (!this.hid || !this.transport){
         this.setStatusText(!this.hid
-          ? '探针没连上：点左边「连接探针」授权一次（烧录/别的页面用过的探针要在这里重连一下）'
+          ? '探针没连上：点左边「连接探针」授权一次（烧录或别的页面用过探针后，需要在这里重新连接）'
           : '数据端点没连上：点「连接数据端点…」授权一次（采样数据走 EP 0x83，必须有它）', 'err');
         return;
       }
@@ -1055,7 +1076,7 @@ export class ScopeView {
     // 先给个即时反馈：后面两个 await（排空 + HID STOP）要几十毫秒，这期间界面上不该还写着"采样中"
     this.setStatusText('正在停止…', '');
     if (this._startPromise) await this._startPromise.catch(() => {});
-    if (this._stopUnconfirmed && !this.hid) throw new Error('采样停止尚未确认，请先重连探针，再点停止');
+    if (this._stopUnconfirmed && !this.hid) throw new Error('采样停止尚未确认，请先重新连接探针，再点停止');
     if (hadData || this._startTouched || this.transport?.running || this._stopUnconfirmed) await this._stopData();
     await this.readScopeMetrics({fresh: true}).catch(e => { this.metricsError = e.message; });
     const st = this.store;
@@ -1090,7 +1111,7 @@ export class ScopeView {
   async _applyTargetTypeNow(){
     const sel = $('sc-target');
     const riscv = sel.value === 'riscv';
-    if (this.running || this._starting || this._stopPromise || globalThis.__tools?.hid?.last?.running){
+    if (this._releasing || this.running || this._starting || this._stopPromise || globalThis.__tools?.hid?.last?.running){
       sel.value = this.targetRiscv ? 'riscv' : 'swd';
       store.set('rtt.target', sel.value);
       this.setStatusText('采样或 RTT 转发正在运行：先停止，再切目标类型', 'warn');
@@ -1384,7 +1405,7 @@ export class ScopeView {
   isReal(){ return !this.usingMock; }
   signed(v){ const x = (v ?? 0) & 0xff; return x > 127 ? x - 256 : x; }
   async hidXfer(cmd, data, timeout){
-    if (!this.hid) throw new Error('探针没连上：点左边「连接探针」授权一次（或点「重连」）');
+    if (!this.hid) throw new Error('探针没连上：点左边「连接探针」授权一次；USB 数据也需连接「连接数据端点…」');
     if (this.usingMock) return await this.hid.xfer(cmd, data);
     return await this.hid.xfer(cmd, data, timeout);
   }
@@ -1712,11 +1733,17 @@ export class ScopeView {
   }
 
   syncButtons(){
+    const pending = !!(this._hidConnectPromise || this._usbConnectPromise);
+    const connected = this.usingMock || !!this.hid || !!this.transport;
+    const recoverable = !!(this._stopUnconfirmed || this.probeManager?.failures?.has('scope'));
+    const connect = $('sc-connect'); if (connect) connect.disabled = !!(this._releasing || this._hidConnectPromise || this.usingMock || this.hid?.connected);
+    const disconnect = $('sc-disconnect'); if (disconnect) disconnect.disabled = !!(this._releasing || !(connected || pending || recoverable));
+    const usb = $('sc-usb'); if (usb) usb.disabled = !!(this._releasing || this._usbConnectPromise);
     $('sc-start').disabled = !!(this.running || this._starting || this._stopPromise || this._releasing);
     $('sc-stop').disabled = !!this._stopPromise || (!this.running && !this._starting);
-    const target = $('sc-target'); if (target) target.disabled = !!(this.running || this._starting || this._stopPromise);
+    const target = $('sc-target'); if (target) target.disabled = !!(this.running || this._starting || this._stopPromise || this._releasing);
     for (const id of ['sc-period', 'sc-clock', 'sc-batch', 'sc-cdcoff', 'sc-bench', 'sc-recc']){
-      const el = $(id); if (el) el.disabled = !!(this.running || this._starting || this._stopPromise) || (id === 'sc-clock' && this.uiBackend() === P.BACKEND.RISCV);
+      const el = $(id); if (el) el.disabled = !!(this.running || this._starting || this._stopPromise || this._releasing) || (id === 'sc-clock' && this.uiBackend() === P.BACKEND.RISCV);
     }
   }
 

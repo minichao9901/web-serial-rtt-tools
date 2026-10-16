@@ -13,7 +13,7 @@
   var mode = new URLSearchParams(location.search).get('modules');
   var local = ['localhost', '127.0.0.1', '[::1]'].indexOf(location.hostname) !== -1;
   window.__useWebBundle = mode === 'bundle' || (mode !== 'source' && !local);
-  window.__webBundleUrl = 'app/site/main.js?v=6114b29e31c3ce03';
+  window.__webBundleUrl = 'app/site/main.js?v=ddf13055cdd6f2d0';
   var preload = document.createElement('link');
   preload.rel = 'modulepreload';
   preload.href = window.__useWebBundle ? window.__webBundleUrl : 'app/main.js';
@@ -451,8 +451,8 @@
       <fieldset>
         <legend>探针 · RTT → CDC</legend>
         <div class="row btnrow">
-          <button id="h-connect" class="primary" title="走探针的自定义 HID（usage page 0xFF00）选设备">连接探针</button>
-          <button id="h-reconnect" title="用浏览器记住的探针直接连（不用再点一次弹框）">重连</button>
+          <button id="h-connect" class="primary" title="连接已授权探针；首次使用或有多个探针时弹出设备选择框">连接探针</button>
+          <button id="h-disconnect" title="先停止探针侧 RTT 转发，再关闭 HID 连接；CDC 串口由串口页单独管理" disabled>关闭探针</button>
         </div>
         <p class="hint" id="h-info">未连接</p>
         <label class="row"><span>RTT 地址</span>
@@ -552,8 +552,8 @@
         <fieldset>
         <legend>连接</legend>
         <div class="row btnrow">
-          <button id="sc-connect" class="primary" title="走探针的自定义 HID（usage page 0xFF00）选设备：配置与状态走这条">连接探针</button>
-          <button id="sc-reconnect" title="用浏览器记住的探针直接连（不用再点弹框）">重连</button>
+          <button id="sc-connect" class="primary" title="连接已授权探针；首次使用或连接失败时弹出设备选择框">连接探针</button>
+          <button id="sc-disconnect" title="停止采样并关闭 HID 配置连接和 USB 数据端点；不关闭目标电源" disabled>关闭探针</button>
         </div>
         <p class="hint" id="sc-info">未连接</p>
         <label class="chk" title="不需要硬件：波形由页面确定性生成（f32 正弦 / i32 计数 / i16 方波 / f64 斜坡…），用来看界面、试触发、试导出"><input type="checkbox" id="sc-mock"> 模拟探针</label>

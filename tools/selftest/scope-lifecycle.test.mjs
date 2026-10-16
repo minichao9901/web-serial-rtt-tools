@@ -36,3 +36,20 @@ console.log('scope-lifecycle: STOP errors propagate while USB drains; rejected i
  fail=false;await v.releaseProbe();assert.equal(v.hid,null);assert.deepEqual(events.at(-1),['forget','scope']);
 }
 console.log('scope-lifecycle: HID close failure retains handle and ownership until successful retry PASS');
+{
+ const v=Object.create(ScopeView.prototype),events=[];
+ Object.assign(v,{usingMock:false,running:true,hid:{connected:true,close:async()=>events.push('HID close')},
+  transport:{running:true,close:async()=>events.push('USB close')},
+  stop:async reason=>events.push(`stop:${reason}`),syncButtons(){},
+  setStatusText:text=>events.push(`status:${text}`),
+  probeManager:{cancel(){},forget:owner=>events.push(`forget:${owner}`)}});
+ assert.equal(await v.disconnect(),true);
+ assert.deepEqual(events.slice(0,4),['stop:用户关闭探针','USB close','HID close','forget:scope']);
+ assert.equal(v.transport,null);assert.equal(v.hid,null);assert.match(events.at(-1),/status:探针连接已关闭/);
+}
+{
+ const v=Object.create(ScopeView.prototype),events=[];
+ Object.assign(v,{usingMock:true,setMock:async enabled=>events.push(`mock:${enabled}`),setStatusText:text=>events.push(text)});
+ assert.equal(await v.disconnect(),true);assert.deepEqual(events,['mock:false','探针连接已关闭']);
+}
+console.log('scope-lifecycle: user disconnect stops capture and closes USB/HID; mock disconnect exits mock mode PASS');

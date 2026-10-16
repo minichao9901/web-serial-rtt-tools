@@ -40,6 +40,9 @@ export class RttCdcView {
     this._elfInput = null;
     this._bound = false;
     this._resetIoSupported = false;
+    this._connecting = false;
+    this._disconnecting = false;
+    this._disconnectPromise = null;
   }
 
   init(){
@@ -76,7 +79,7 @@ export class RttCdcView {
     $('h-target').addEventListener('change', () => this.applyTargetType());
 
     $('h-connect').addEventListener('click', () => this.connect());
-    $('h-reconnect').addEventListener('click', () => this.reconnect());
+    $('h-disconnect')?.addEventListener('click', () => this.disconnect());
     $('h-elf').addEventListener('click', () => this._elfInput.click());
     this._elfInput.addEventListener('change', () => this.loadElf());
     $('h-start').addEventListener('click', () => this.start());
@@ -107,24 +110,37 @@ export class RttCdcView {
 
   // ---------------------------------------------------------------- 连接
   async connect(){
+    if (this._connecting || this._disconnecting || this.dev.connected) return false;
+    this._connecting = true;
+    this.render();
     try {
-      await this.dev.request();
+      if (this.mock) await this.dev.request();
+      else await this.dev.connect();
       this.info = await this.dev.info();
+      this._statusError = null;
       await this.syncResetOutputMode({ silent: true });
       this.render();
       toast(`已连接：${this.dev.label}${this.info.fw ? ' · FW ' + this.info.fw : ''}`, 'ok');
+      return true;
     } catch (e){
       this._statusError = e?.message || String(e);
       this.render({ error: this._statusError });
       toast('连接探针失败：' + (e?.message || e), 'err');
+      return false;
+    } finally {
+      this._connecting = false;
+      this.render({ error: this._statusError });
     }
   }
 
   async reconnect({ silent = false } = {}){
-    if (this.mock) return;
+    if (this.mock || this._connecting || this._disconnecting) return false;
+    this._connecting = true;
+    this.render();
     try {
       await this.dev.reconnect();
       this.info = await this.dev.info();
+      this._statusError = null;
       await this.syncResetOutputMode({ silent: true });
       this.render();
       if (!silent) toast(`已重连：${this.dev.label}`, 'ok');
@@ -144,9 +160,57 @@ export class RttCdcView {
             '不用了就去点「停止」；要测 RTT Viewer 也建议先停 —— 两边读的是同一个 RTT 环。', 'warn', 10000);
         }
       } catch { /* 查不到状态不影响"连上了"这件事本身 */ }
+      return true;
     } catch (e){
       if (!silent) toast('重连失败：' + (e?.message || e), 'err');
-      else this.render();
+      return false;
+    } finally {
+      this._connecting = false;
+      this.render();
+    }
+  }
+
+  /** 停止探针侧 RTT 桥后关闭本页 HID 会话；CDC 串口仍由串口页单独管理。 */
+  async disconnect(){
+    if (this._disconnectPromise) return await this._disconnectPromise;
+    if (this._connecting || this._disconnecting) return false;
+    this._disconnecting = true;
+    this.render();
+    this._disconnectPromise = (async () => {
+      const needsStop = !!(this._starting || this.last?.running || this._bridgeRequested ||
+        this.probeManager?.leases?.has('hid') || this.probeManager?.failures?.has('hid'));
+      if (needsStop){
+        const stopped = await this.stop();
+        if (stopped === false) throw new Error('停止 RTT 转发未确认，探针连接仍保持打开');
+      }
+      clearInterval(this._timer);
+      const closing = this.dev;
+      await closing.close();
+      if (this.mock === closing){ this.mock = null; this.dev = new AkaLinkHid(); }
+      this.info = null;
+      this.last = null;
+      this._statusError = null;
+      this._statusAt = 0;
+      this._statusSource = null;
+      this._bridgeRequested = false;
+      this._stall = 0;
+      this._lastMoved = null;
+      this._setResetIoUi(null);
+      this.render();
+      toast('探针连接已关闭', 'ok');
+      return true;
+    })();
+    try { return await this._disconnectPromise; }
+    catch (e){
+      this._statusError = e?.message || String(e);
+      if (this.dev.connected) this.probeManager?.fail?.('hid', e);
+      this.render({ error: this._statusError });
+      toast('关闭探针失败：' + this._statusError, 'err');
+      return false;
+    } finally {
+      this._disconnecting = false;
+      this._disconnectPromise = null;
+      this.render({ error: this._statusError });
     }
   }
 
@@ -179,7 +243,7 @@ export class RttCdcView {
 
   async applyResetOutputMode(){
     const input = $('global-nrst-open-drain');
-    if (!input || !this._resetIoSupported) return;
+    if (!input || !this._resetIoSupported || this._disconnecting) return;
     if (this.last?.running || this._starting){
       input.checked = !input.checked;
       toast('先停止 RTT 转发，再切换复位输出方式', 'warn');
@@ -236,7 +300,7 @@ export class RttCdcView {
   /** SWD 时钟那条是运行时调参（action 7），改了立刻发；没连就只记着 */
   async applyClock(){
     this.persist();
-    if (this.mock) return;
+    if (this.mock || this._disconnecting) return;
     if (this.isRiscv){ toast('RISC-V/JTAG 下不用 SWD 时钟档（这个字段在 JTAG 下是 DMI idle，必须留 0）', 'warn'); return; }
     const { clockHz } = this.params();
     if (!this.dev.connected || !clockHz) return;
@@ -260,6 +324,7 @@ export class RttCdcView {
    *    而同一块板同一个探针，用参考脚本 `hpm6800_rtt_loss.py`（clock 传 0）能跑 1.39 MB/s、rderr=0。
    */
   async applyTargetType(){
+    if (this._disconnecting) return;
     const scope = globalThis.__tools?.scope;
     if (this.last?.running || this._starting || scope?.running || scope?._starting){
       $('h-target').value = this._targetRiscv ? 'riscv' : 'swd';
@@ -364,7 +429,7 @@ export class RttCdcView {
   async autostart(){ return await this._startBridge(true); }
 
   async _startBridge(auto){
-    if (this._starting || this._stopPromise) return;
+    if (this._starting || this._stopPromise || this._disconnecting) return;
     const g = this._engineGen = (this._engineGen || 0) + 1;
     this._starting = true;
     clearInterval(this._timer);
@@ -495,7 +560,7 @@ export class RttCdcView {
   }
 
   async refresh(){
-    if (this._starting || this._stopPromise || this.dev._pending) return;
+    if (this._starting || this._stopPromise || this._disconnecting || this.dev._pending) return;
     try {
       const dev = this.dev, device = dev.device, generation = this._engineGen;
       const r = await this.dev.status();
@@ -593,9 +658,20 @@ export class RttCdcView {
   // ---------------------------------------------------------------- 渲染
   render({ error } = {}){
     const dev = this.dev;
+    const connectionBusy = this._connecting || this._disconnecting;
+    if ($('h-connect')) $('h-connect').disabled = connectionBusy || !!dev.connected;
+    if ($('h-disconnect')) $('h-disconnect').disabled = connectionBusy || !dev.connected;
+    const engineBusy = this._disconnecting || this._starting || !!this._stopPromise;
+    if ($('h-start')) $('h-start').disabled = engineBusy;
+    if ($('h-auto')) $('h-auto').disabled = engineBusy;
+    if ($('h-stop')) $('h-stop').disabled = this._disconnecting;
+    if ($('h-refresh')) $('h-refresh').disabled = this._disconnecting || this._connecting;
+    const target = $('h-target'); if (target) target.disabled = engineBusy;
+    const clock = $('h-clock'); if (clock) clock.disabled = engineBusy || this.isRiscv;
+    const resetMode = $('global-nrst-open-drain'); if (resetMode) resetMode.disabled = !this._resetIoSupported || this._disconnecting;
     // 第一行：设备信息
     if (error && !dev.connected) setStatus($('h-info'), error, 'err');
-    else if (!dev.connected) setStatus($('h-info'), '未连接（点「连接探针」在弹框里选 akaLinkPro）', '');
+    else if (!dev.connected) setStatus($('h-info'), '未连接（点「连接探针」；首次使用或有多个设备时选择 akaLinkPro）', '');
     else{
       const i = this.info || {};
       setStatus($('h-info'), `已连接：${dev.label}${i.fw ? ' · FW ' + i.fw : ''}${i.sn ? ' · SN ' + i.sn : ''}`, 'ok');

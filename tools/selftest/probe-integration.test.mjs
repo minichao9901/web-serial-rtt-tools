@@ -90,7 +90,7 @@ console.log('probe-integration: real entry points serialize setup, coexist on di
 scope._stopUnconfirmed = true;
 manager.fail('scope', new Error('HID STOP unavailable'));
 await assert.rejects(manager.run('dbg', () => assert.fail()), /释放尚未确认/);
-await assert.rejects(scope.stop(), /先重连探针/);
+await assert.rejects(scope.stop(), /先重新连接探针/);
 await assert.rejects(manager.run('dbg', () => assert.fail()), /释放尚未确认/);
 manager.confirm('scope'); manager.forget('scope');
 console.log('probe-integration: unknown firmware stop cannot be bypassed by a later feature PASS');
