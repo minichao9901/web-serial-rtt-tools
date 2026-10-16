@@ -1,0 +1,30 @@
+{
+  "cases": 14,
+  "verifiedCases": 11,
+  "failedFixedClocks": [
+    36000,
+    45000,
+    60000
+  ],
+  "fixed20ReadMean": 1.1650494228224813,
+  "fixed20WriteMean": 1.1593918002389698,
+  "fixed20ReadRange": [
+    1.0556701022278647,
+    1.24878048962032
+  ],
+  "fixed20WriteRange": [
+    1.1150635203886536,
+    1.1861003844626155
+  ],
+  "autoChoicesKhz": [
+    20000,
+    45000,
+    45000,
+    20000
+  ],
+  "ramRestored": true,
+  "architecturalRegistersPreservedDuringTest": true,
+  "originalProgramRestartedAtEnd": true,
+  "flashSha256": "61a097c84c8ca7cae573a950618de6009083048755b5c26def16f6cc351a354d",
+  "usbPassed": true
+}

@@ -1,0 +1,10 @@
+{
+  "exitCode": 0,
+  "startedAt": "2026-10-16T13:41:19.316685+08:00",
+  "endedAt": "2026-10-16T13:41:22.551260+08:00",
+  "command": [
+    "python",
+    "E:/web-serial-rtt-tools/docs/validation/20261016-sram-root-cause-134100/browser-prep.py"
+  ],
+  "cwd": "E:\\web-serial-rtt-tools"
+}

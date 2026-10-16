@@ -1,0 +1,30 @@
+[
+  {
+    "path": "app/flash/view.js",
+    "sha256": "ddf4903607fdc866a2e6801bd2a6ba736fb5c0e918245764a47b03e210ddcc82"
+  },
+  {
+    "path": "app/flash/sram-bench.js",
+    "sha256": "290a7d3b8c8d6d65e7043f37ad431b68429a2fa6922aa4755fd0be7632c0fea2"
+  },
+  {
+    "path": "app/flash/sram-transfer.js",
+    "sha256": "4dccb6acff5f4fa80248272a5841af1e817a3966dcb2ec15c64fd187bc13ca62"
+  },
+  {
+    "path": "app/core/chips.js",
+    "sha256": "44400036a21c7a977fbf488b712fd62ad527b36bc80e58c51a9c543916614ee9"
+  },
+  {
+    "path": "app/rtt/dap-webusb.js",
+    "sha256": "acd5e1e4e7b808a7a6c8dee0575f065230195c597bb88337b0e8c493363c57b4"
+  },
+  {
+    "path": "app/core/probe-manager.js",
+    "sha256": "317789ae9b34a8bde6892481790a1df7ea27c65e256a4f51fd97eee844b2ae6f"
+  },
+  {
+    "path": "index.html",
+    "sha256": "f74fc2ed13198c82aa000d09a96ad2c23b33104a39ca2c9c2e432471573a66ca"
+  }
+]

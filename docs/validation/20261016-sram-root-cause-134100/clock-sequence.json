@@ -1,0 +1,232 @@
+{
+  "cases": [
+    {
+      "variant": "activation",
+      "khz": 36000,
+      "repeat": 0,
+      "id": 430970483,
+      "error": "warm ID mismatch 19b01673"
+    },
+    {
+      "variant": "activation",
+      "khz": 36000,
+      "repeat": 1,
+      "id": 464520255,
+      "error": "warm ID mismatch 1bb0043f"
+    },
+    {
+      "variant": "activation",
+      "khz": 36000,
+      "repeat": 2,
+      "id": 464524343,
+      "error": "warm ID mismatch 1bb01437"
+    },
+    {
+      "variant": "activation",
+      "khz": 45000,
+      "repeat": 0,
+      "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+    },
+    {
+      "variant": "activation",
+      "khz": 45000,
+      "repeat": 1,
+      "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+    },
+    {
+      "variant": "activation",
+      "khz": 45000,
+      "repeat": 2,
+      "error": "SWD FAULT（传输 0/1 条，地址 0x0）"
+    },
+    {
+      "variant": "activation",
+      "khz": 60000,
+      "repeat": 0,
+      "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+    },
+    {
+      "variant": "activation",
+      "khz": 60000,
+      "repeat": 1,
+      "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+    },
+    {
+      "variant": "activation",
+      "khz": 60000,
+      "repeat": 2,
+      "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+    },
+    {
+      "variant": "all-steps",
+      "khz": 36000,
+      "repeat": 0,
+      "readMBps": 1.4769230803089028,
+      "verified": true
+    },
+    {
+      "variant": "all-steps",
+      "khz": 36000,
+      "repeat": 1,
+      "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+    },
+    {
+      "variant": "all-steps",
+      "khz": 36000,
+      "repeat": 2,
+      "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+    },
+    {
+      "variant": "all-steps",
+      "khz": 45000,
+      "repeat": 0,
+      "readMBps": 1.9755626994501259,
+      "verified": true
+    },
+    {
+      "variant": "all-steps",
+      "khz": 45000,
+      "repeat": 1,
+      "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+    },
+    {
+      "variant": "all-steps",
+      "khz": 45000,
+      "repeat": 2,
+      "readMBps": 1.7655172377505852,
+      "verified": true
+    },
+    {
+      "variant": "all-steps",
+      "khz": 60000,
+      "repeat": 0,
+      "readMBps": 2.041196011672229,
+      "verified": true
+    },
+    {
+      "variant": "all-steps",
+      "khz": 60000,
+      "repeat": 1,
+      "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+    },
+    {
+      "variant": "all-steps",
+      "khz": 60000,
+      "repeat": 2,
+      "readMBps": 1.6125984241877338,
+      "verified": true
+    },
+    {
+      "variant": "pin-low",
+      "khz": 36000,
+      "repeat": 0,
+      "id": 464520311,
+      "error": "warm ID mismatch 1bb00477"
+    },
+    {
+      "variant": "pin-low",
+      "khz": 36000,
+      "repeat": 1,
+      "error": "SWD ACK=0（传输 0/1 条，地址 0x0）"
+    },
+    {
+      "variant": "pin-low",
+      "khz": 36000,
+      "repeat": 2,
+      "id": 464524343,
+      "error": "warm ID mismatch 1bb01437"
+    },
+    {
+      "variant": "pin-low",
+      "khz": 45000,
+      "repeat": 0,
+      "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+    },
+    {
+      "variant": "pin-low",
+      "khz": 45000,
+      "repeat": 1,
+      "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+    },
+    {
+      "variant": "pin-low",
+      "khz": 45000,
+      "repeat": 2,
+      "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+    },
+    {
+      "variant": "pin-low",
+      "khz": 60000,
+      "repeat": 0,
+      "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+    },
+    {
+      "variant": "pin-low",
+      "khz": 60000,
+      "repeat": 1,
+      "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+    },
+    {
+      "variant": "pin-low",
+      "khz": 60000,
+      "repeat": 2,
+      "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+    },
+    {
+      "variant": "reinit",
+      "khz": 36000,
+      "repeat": 0,
+      "error": "SWD ACK=0（传输 0/1 条，地址 0x0）"
+    },
+    {
+      "variant": "reinit",
+      "khz": 36000,
+      "repeat": 1,
+      "readMBps": 1.6972375668251218,
+      "verified": true
+    },
+    {
+      "variant": "reinit",
+      "khz": 36000,
+      "repeat": 2,
+      "error": "SWD ACK=0（传输 0/1 条，地址 0x0）"
+    },
+    {
+      "variant": "reinit",
+      "khz": 45000,
+      "repeat": 0,
+      "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+    },
+    {
+      "variant": "reinit",
+      "khz": 45000,
+      "repeat": 1,
+      "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+    },
+    {
+      "variant": "reinit",
+      "khz": 45000,
+      "repeat": 2,
+      "readMBps": 1.817751475443322,
+      "verified": true
+    },
+    {
+      "variant": "reinit",
+      "khz": 60000,
+      "repeat": 0,
+      "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+    },
+    {
+      "variant": "reinit",
+      "khz": 60000,
+      "repeat": 1,
+      "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+    },
+    {
+      "variant": "reinit",
+      "khz": 60000,
+      "repeat": 2,
+      "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+    }
+  ]
+}

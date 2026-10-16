@@ -1,0 +1,10 @@
+{
+  "exitCode": 1,
+  "startedAt": "2026-10-16T13:52:47.768649+08:00",
+  "endedAt": "2026-10-16T13:52:48.094732+08:00",
+  "command": [
+    "python",
+    "E:/web-serial-rtt-tools/docs/validation/20261016-sram-root-cause-134100/native-clock-matrix.py"
+  ],
+  "cwd": "E:\\web-serial-rtt-tools"
+}

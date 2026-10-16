@@ -1,0 +1,132 @@
+{
+  "cases": [
+    {
+      "repeat": 0,
+      "requestedKhz": 60000,
+      "result": {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 22.50000011920929,
+        "readMs": 22.300000071525574,
+        "writeRate": 2.730666652199074,
+        "readRate": 2.755156941835687,
+        "clockKhz": 60000,
+        "clockSetup": {
+          "attempts": 1,
+          "failures": []
+        },
+        "failedClocks": [],
+        "transport": "transfer-4/1024B",
+        "verified": true
+      }
+    },
+    {
+      "repeat": 0,
+      "requestedKhz": 0,
+      "result": {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 51.799999952316284,
+        "readMs": 23.100000023841858,
+        "writeRate": 1.1861003871922333,
+        "readRate": 2.659740256995102,
+        "clockKhz": 60000,
+        "clockSetup": {
+          "attempts": 1,
+          "failures": []
+        },
+        "failedClocks": [],
+        "transport": "transfer-4/1024B",
+        "verified": true
+      }
+    },
+    {
+      "repeat": 1,
+      "requestedKhz": 60000,
+      "result": {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 18.899999976158142,
+        "readMs": 22,
+        "writeRate": 3.2507936548944425,
+        "readRate": 2.792727272727273,
+        "clockKhz": 60000,
+        "clockSetup": {
+          "attempts": 1,
+          "failures": []
+        },
+        "failedClocks": [],
+        "transport": "transfer-4/1024B",
+        "verified": true
+      }
+    },
+    {
+      "repeat": 1,
+      "requestedKhz": 0,
+      "result": {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 20.899999976158142,
+        "readMs": 22.100000023841858,
+        "writeRate": 2.9397129220137903,
+        "readRate": 2.7800904947383476,
+        "clockKhz": 60000,
+        "clockSetup": {
+          "attempts": 1,
+          "failures": []
+        },
+        "failedClocks": [],
+        "transport": "transfer-4/1024B",
+        "verified": true
+      }
+    },
+    {
+      "repeat": 2,
+      "requestedKhz": 60000,
+      "result": {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 19.899999976158142,
+        "readMs": 22.49999988079071,
+        "writeRate": 3.087437189628655,
+        "readRate": 2.7306666811342595,
+        "clockKhz": 60000,
+        "clockSetup": {
+          "attempts": 1,
+          "failures": []
+        },
+        "failedClocks": [],
+        "transport": "transfer-4/1024B",
+        "verified": true
+      }
+    },
+    {
+      "repeat": 2,
+      "requestedKhz": 0,
+      "result": {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 20.899999856948853,
+        "readMs": 65.60000002384186,
+        "writeRate": 2.939712938781307,
+        "readRate": 0.936585365513263,
+        "clockKhz": 60000,
+        "clockSetup": {
+          "attempts": 1,
+          "failures": []
+        },
+        "failedClocks": [],
+        "transport": "transfer-4/1024B",
+        "verified": true
+      }
+    }
+  ],
+  "entry": "bundle",
+  "error": "Error: 页面异常：Error: fault not triggered\n    at <anonymous>:1:312\n    at Cdp.eval (file:///E:/web-serial-rtt-tools/tools/selftest/cdp-lib.mjs:82:35)\n    at async file:///E:/web-serial-rtt-tools/docs/validation/20261016-sram-root-cause-134100/bundle-check.mjs:6:22"
+}

@@ -1,0 +1,254 @@
+{
+  "cases": [
+    {
+      "format": "single-transfer",
+      "ramp": false,
+      "depth": 1,
+      "khz": 20000,
+      "reads": [
+        30.600000023841858,
+        29.09999990463257,
+        29.200000047683716
+      ],
+      "writes": [
+        26.399999976158142,
+        26,
+        24.899999976158142
+      ],
+      "rcc": 5309450,
+      "verified": true,
+      "readMBps": 0.6911136109839982,
+      "writeMBps": 0.7948253562470923
+    },
+    {
+      "format": "single-transfer",
+      "ramp": false,
+      "depth": 1,
+      "khz": 36000,
+      "reads": [],
+      "writes": [],
+      "rcc": 5309450,
+      "error": "flat status 1,5,1,8"
+    },
+    {
+      "format": "single-transfer",
+      "ramp": false,
+      "depth": 1,
+      "khz": 45000,
+      "reads": [],
+      "writes": [],
+      "rcc": 5309450,
+      "error": "flat status 1,5,1,8"
+    },
+    {
+      "format": "single-transfer",
+      "ramp": false,
+      "depth": 1,
+      "khz": 60000,
+      "reads": [],
+      "writes": [],
+      "rcc": 5309450,
+      "error": "flat status 1,5,0,0"
+    },
+    {
+      "format": "single-transfer",
+      "ramp": false,
+      "depth": 4,
+      "khz": 20000,
+      "reads": [
+        17.5,
+        17.5,
+        28.5
+      ],
+      "writes": [
+        17,
+        17.300000071525574,
+        18
+      ],
+      "rcc": 5309450,
+      "verified": true,
+      "readMBps": 0.9675590551181104,
+      "writeMBps": 1.174760992657257
+    },
+    {
+      "format": "single-transfer",
+      "ramp": false,
+      "depth": 4,
+      "khz": 36000,
+      "reads": [],
+      "writes": [],
+      "rcc": 5309450,
+      "error": "flat status 1,5,1,8"
+    },
+    {
+      "format": "single-transfer",
+      "ramp": false,
+      "depth": 4,
+      "khz": 45000,
+      "reads": [],
+      "writes": [],
+      "rcc": 5309450,
+      "error": "flat status 1,5,1,8"
+    },
+    {
+      "format": "single-transfer",
+      "ramp": false,
+      "depth": 4,
+      "khz": 60000,
+      "reads": [],
+      "writes": [],
+      "rcc": 5309450,
+      "error": "flat status 1,5,0,0"
+    },
+    {
+      "format": "single-transfer",
+      "ramp": true,
+      "depth": 1,
+      "khz": 20000,
+      "reads": [
+        30.5,
+        29,
+        27.800000071525574
+      ],
+      "writes": [
+        27.199999928474426,
+        24.799999952316284,
+        25.5
+      ],
+      "rcc": 5309450,
+      "verified": true,
+      "readMBps": 0.7037800681519099,
+      "writeMBps": 0.7927741947678202
+    },
+    {
+      "format": "single-transfer",
+      "ramp": true,
+      "depth": 1,
+      "khz": 36000,
+      "reads": [
+        22.699999928474426,
+        22.90000009536743,
+        21.300000071525574
+      ],
+      "writes": [
+        19.5,
+        18.5,
+        19.899999976158142
+      ],
+      "rcc": 5309450,
+      "verified": true,
+      "readMBps": 0.9183856489150363,
+      "writeMBps": 1.0611398968100096
+    },
+    {
+      "format": "single-transfer",
+      "ramp": true,
+      "depth": 1,
+      "khz": 45000,
+      "reads": [
+        21.399999976158142,
+        24.200000047683716,
+        21.700000047683716
+      ],
+      "writes": [
+        20.100000023841858,
+        20,
+        20.899999976158142
+      ],
+      "rcc": 5309450,
+      "verified": true,
+      "readMBps": 0.9129271907088019,
+      "writeMBps": 1.0072131147540986
+    },
+    {
+      "format": "single-transfer",
+      "ramp": true,
+      "depth": 1,
+      "khz": 60000,
+      "reads": [
+        21.5,
+        17.399999976158142,
+        19.300000071525574
+      ],
+      "writes": [
+        16.90000009536743,
+        16.5,
+        26.299999952316284
+      ],
+      "rcc": 5309450,
+      "verified": true,
+      "readMBps": 1.055670102227865,
+      "writeMBps": 1.0291457278212146
+    },
+    {
+      "format": "single-transfer",
+      "ramp": true,
+      "depth": 4,
+      "khz": 20000,
+      "reads": [
+        19.800000071525574,
+        19,
+        18.299999952316284
+      ],
+      "writes": [
+        17.899999976158142,
+        18.899999976158142,
+        17.5
+      ],
+      "rcc": 5309450,
+      "verified": true,
+      "readMBps": 1.0760070048046586,
+      "writeMBps": 1.1314917137008056
+    },
+    {
+      "format": "single-transfer",
+      "ramp": true,
+      "depth": 4,
+      "khz": 36000,
+      "reads": [
+        12.900000095367432,
+        13.699999928474426,
+        14.399999976158142
+      ],
+      "writes": [
+        17.700000047683716,
+        12.800000071525574,
+        13.100000023841858
+      ],
+      "rcc": 5309450,
+      "verified": true,
+      "readMBps": 1.4985365853658539,
+      "writeMBps": 1.4091743073031193
+    },
+    {
+      "format": "single-transfer",
+      "ramp": true,
+      "depth": 4,
+      "khz": 45000,
+      "reads": [],
+      "writes": [],
+      "rcc": 5309450,
+      "error": "SWD ACK=0（传输 0/1 条，地址 0x0）"
+    },
+    {
+      "format": "single-transfer",
+      "ramp": true,
+      "depth": 4,
+      "khz": 60000,
+      "reads": [
+        10.399999976158142,
+        10,
+        10.100000023841858
+      ],
+      "writes": [
+        9.799999952316284,
+        9,
+        9.399999976158142
+      ],
+      "rcc": 5309450,
+      "verified": true,
+      "readMBps": 2.014426229508197,
+      "writeMBps": 2.1787234097813637
+    }
+  ]
+}

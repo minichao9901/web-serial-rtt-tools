@@ -1,0 +1,20 @@
+{
+  "source": "E:\\Share\\github\\akaLinkPro\\script_test\\sram_speed_test.py",
+  "sha256": "98739edaf017908c1b9709e2dee83ba7fc397e1466f036dfdb089d6bb8ba4151",
+  "overrides": {
+    "WORKDIR": "E:\\web-serial-rtt-tools\\docs\\validation\\20261016-sram-root-cause-134100\\native-original-script",
+    "OPENOCD": "E:/sdk_env_v1.11.0/tools/openocd/openocd.exe",
+    "SCRIPTS": "E:/sdk_env_v1.11.0/tools/openocd/tcl"
+  },
+  "boost": true,
+  "speeds": [
+    1000,
+    2000,
+    4000,
+    10000,
+    20000,
+    36000,
+    45000,
+    60000
+  ]
+}

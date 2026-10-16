@@ -1,0 +1,3 @@
+{
+  "error": "Error: 页面异常：Error: 调试口已有 FAULT／正在恢复；诊断未重新初始化目标\n    at WebUsbDapProbe.readMemDiagnostic (http://127.0.0.1:8899/app/rtt/dap-webusb.js:1051:50)\n    at <anonymous>:1:873\n    at Cdp.eval (file:///E:/web-serial-rtt-tools/tools/selftest/cdp-lib.mjs:82:35)\n    at async file:///E:/web-serial-rtt-tools/docs/validation/20261016-sram-root-cause-134100/abort-hardware.mjs:2:37"
+}

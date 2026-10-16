@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "method": "USB PDWN/FRES; PA12 temporary open-drain low 150 ms; SYSRESETREQ restores GPIO and starts original firmware",
+  "flashWrites": false,
+  "flashBytesVerified": 524288,
+  "flashSha256": "61a097c84c8ca7cae573a950618de6009083048755b5c26def16f6cc351a354d",
+  "command": [
+    "E:/Share/env-windows/xpack-openocd-0.12.0-6/bin/openocd.exe",
+    "-s",
+    "E:/Share/env-windows/xpack-openocd-0.12.0-6/openocd/scripts",
+    "-f",
+    "interface/cmsis-dap.cfg",
+    "-c",
+    "cmsis-dap backend usb_bulk",
+    "-f",
+    "target/stm32f1x.cfg",
+    "-c",
+    "adapter speed 1000",
+    "-c",
+    "gdb port disabled",
+    "-c",
+    "tcl port disabled",
+    "-c",
+    "telnet port disabled",
+    "-c",
+    "init; halt; echo \"BEFORE_CRL [read_memory 0x40010804 32 1]\"; set apb2 [lindex [read_memory 0x40021018 32 1] 0]; mww 0x40021018 [expr {$apb2 | 4}]; set apb1 [lindex [read_memory 0x4002101c 32 1] 0]; mww 0x4002101c [expr {$apb1 | 0x00800000}]; mwh 0x40005c40 3; mww 0x40010810 0x10000000; set crh [lindex [read_memory 0x40010804 32 1] 0]; mww 0x40010804 [expr {($crh & 0xfff0ffff) | 0x00060000}]; sleep 150; cortex_m reset_config sysresetreq; reset halt; set vectors [read_memory 0x08000000 32 2]; mww 0xe000ed08 0x08000000; reg sp [lindex $vectors 0]; reg pc [lindex $vectors 1]; reg primask 0; reg faultmask 0; resume; sleep 500; echo \"AFTER_CRL [read_memory 0x40010804 32 1]\"; echo \"CLOCK [read_memory 0x200000a0 32 2]\"; dump_image {E:/web-serial-rtt-tools/docs/validation/20261016-f103ze-sram-131809-fcaefe/usb-reenumerated-flash.bin} 0x08000000 524288; shutdown"
+  ],
+  "cwd": "E:\\web-serial-rtt-tools",
+  "time": "2026-10-16T13:26:07.497984+08:00"
+}

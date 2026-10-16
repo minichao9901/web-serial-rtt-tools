@@ -1,0 +1,191 @@
+[
+  {
+    "method": "halt-before",
+    "repeat": 0,
+    "exitCode": 1,
+    "verified": false,
+    "command": [
+      "E:/sdk_env_v1.11.0/tools/openocd/openocd.exe",
+      "-s",
+      "E:/sdk_env_v1.11.0/tools/openocd/tcl",
+      "-f",
+      "E:/Share/github/akaLinkPro/script_test/openocd_stm32f1_swd.cfg",
+      "-c",
+      "gdb port disabled",
+      "-c",
+      "telnet port disabled",
+      "-c",
+      "tcl port disabled",
+      "-c",
+      "init; halt; echo RCC_BEFORE; mdw 0x40021004; adapter speed 60000; echo RCC_TEST; mdw 0x40021004; load_image {E:/web-serial-rtt-tools/docs/validation/20261016-sram-root-cause-134100/native-original-script/sram_test.bin} 0x20000000 bin; dump_image {E:/web-serial-rtt-tools/docs/validation/20261016-sram-root-cause-134100/native-direct-halt-before-0.bin} 0x20000000 20480; shutdown"
+    ]
+  },
+  {
+    "method": "halt-before",
+    "repeat": 1,
+    "exitCode": 1,
+    "verified": false,
+    "command": [
+      "E:/sdk_env_v1.11.0/tools/openocd/openocd.exe",
+      "-s",
+      "E:/sdk_env_v1.11.0/tools/openocd/tcl",
+      "-f",
+      "E:/Share/github/akaLinkPro/script_test/openocd_stm32f1_swd.cfg",
+      "-c",
+      "gdb port disabled",
+      "-c",
+      "telnet port disabled",
+      "-c",
+      "tcl port disabled",
+      "-c",
+      "init; halt; echo RCC_BEFORE; mdw 0x40021004; adapter speed 60000; echo RCC_TEST; mdw 0x40021004; load_image {E:/web-serial-rtt-tools/docs/validation/20261016-sram-root-cause-134100/native-original-script/sram_test.bin} 0x20000000 bin; dump_image {E:/web-serial-rtt-tools/docs/validation/20261016-sram-root-cause-134100/native-direct-halt-before-1.bin} 0x20000000 20480; shutdown"
+    ]
+  },
+  {
+    "method": "halt-before",
+    "repeat": 2,
+    "exitCode": 1,
+    "verified": false,
+    "command": [
+      "E:/sdk_env_v1.11.0/tools/openocd/openocd.exe",
+      "-s",
+      "E:/sdk_env_v1.11.0/tools/openocd/tcl",
+      "-f",
+      "E:/Share/github/akaLinkPro/script_test/openocd_stm32f1_swd.cfg",
+      "-c",
+      "gdb port disabled",
+      "-c",
+      "telnet port disabled",
+      "-c",
+      "tcl port disabled",
+      "-c",
+      "init; halt; echo RCC_BEFORE; mdw 0x40021004; adapter speed 60000; echo RCC_TEST; mdw 0x40021004; load_image {E:/web-serial-rtt-tools/docs/validation/20261016-sram-root-cause-134100/native-original-script/sram_test.bin} 0x20000000 bin; dump_image {E:/web-serial-rtt-tools/docs/validation/20261016-sram-root-cause-134100/native-direct-halt-before-2.bin} 0x20000000 20480; shutdown"
+    ]
+  },
+  {
+    "method": "halt-after",
+    "repeat": 0,
+    "exitCode": 1,
+    "verified": false,
+    "command": [
+      "E:/sdk_env_v1.11.0/tools/openocd/openocd.exe",
+      "-s",
+      "E:/sdk_env_v1.11.0/tools/openocd/tcl",
+      "-f",
+      "E:/Share/github/akaLinkPro/script_test/openocd_stm32f1_swd.cfg",
+      "-c",
+      "gdb port disabled",
+      "-c",
+      "telnet port disabled",
+      "-c",
+      "tcl port disabled",
+      "-c",
+      "init; halt; echo RCC_BEFORE; mdw 0x40021004; resume; adapter speed 60000; halt; echo RCC_TEST; mdw 0x40021004; load_image {E:/web-serial-rtt-tools/docs/validation/20261016-sram-root-cause-134100/native-original-script/sram_test.bin} 0x20000000 bin; dump_image {E:/web-serial-rtt-tools/docs/validation/20261016-sram-root-cause-134100/native-direct-halt-after-0.bin} 0x20000000 20480; shutdown"
+    ]
+  },
+  {
+    "method": "halt-after",
+    "repeat": 1,
+    "exitCode": 1,
+    "verified": false,
+    "command": [
+      "E:/sdk_env_v1.11.0/tools/openocd/openocd.exe",
+      "-s",
+      "E:/sdk_env_v1.11.0/tools/openocd/tcl",
+      "-f",
+      "E:/Share/github/akaLinkPro/script_test/openocd_stm32f1_swd.cfg",
+      "-c",
+      "gdb port disabled",
+      "-c",
+      "telnet port disabled",
+      "-c",
+      "tcl port disabled",
+      "-c",
+      "init; halt; echo RCC_BEFORE; mdw 0x40021004; resume; adapter speed 60000; halt; echo RCC_TEST; mdw 0x40021004; load_image {E:/web-serial-rtt-tools/docs/validation/20261016-sram-root-cause-134100/native-original-script/sram_test.bin} 0x20000000 bin; dump_image {E:/web-serial-rtt-tools/docs/validation/20261016-sram-root-cause-134100/native-direct-halt-after-1.bin} 0x20000000 20480; shutdown"
+    ]
+  },
+  {
+    "method": "halt-after",
+    "repeat": 2,
+    "exitCode": 1,
+    "verified": false,
+    "command": [
+      "E:/sdk_env_v1.11.0/tools/openocd/openocd.exe",
+      "-s",
+      "E:/sdk_env_v1.11.0/tools/openocd/tcl",
+      "-f",
+      "E:/Share/github/akaLinkPro/script_test/openocd_stm32f1_swd.cfg",
+      "-c",
+      "gdb port disabled",
+      "-c",
+      "telnet port disabled",
+      "-c",
+      "tcl port disabled",
+      "-c",
+      "init; halt; echo RCC_BEFORE; mdw 0x40021004; resume; adapter speed 60000; halt; echo RCC_TEST; mdw 0x40021004; load_image {E:/web-serial-rtt-tools/docs/validation/20261016-sram-root-cause-134100/native-original-script/sram_test.bin} 0x20000000 bin; dump_image {E:/web-serial-rtt-tools/docs/validation/20261016-sram-root-cause-134100/native-direct-halt-after-2.bin} 0x20000000 20480; shutdown"
+    ]
+  },
+  {
+    "method": "reset-after",
+    "repeat": 0,
+    "exitCode": 0,
+    "verified": true,
+    "command": [
+      "E:/sdk_env_v1.11.0/tools/openocd/openocd.exe",
+      "-s",
+      "E:/sdk_env_v1.11.0/tools/openocd/tcl",
+      "-f",
+      "E:/Share/github/akaLinkPro/script_test/openocd_stm32f1_swd.cfg",
+      "-c",
+      "gdb port disabled",
+      "-c",
+      "telnet port disabled",
+      "-c",
+      "tcl port disabled",
+      "-c",
+      "init; halt; echo RCC_BEFORE; mdw 0x40021004; resume; adapter speed 60000; reset halt; echo RCC_TEST; mdw 0x40021004; load_image {E:/web-serial-rtt-tools/docs/validation/20261016-sram-root-cause-134100/native-original-script/sram_test.bin} 0x20000000 bin; dump_image {E:/web-serial-rtt-tools/docs/validation/20261016-sram-root-cause-134100/native-direct-reset-after-0.bin} 0x20000000 20480; shutdown"
+    ]
+  },
+  {
+    "method": "reset-after",
+    "repeat": 1,
+    "exitCode": 0,
+    "verified": true,
+    "command": [
+      "E:/sdk_env_v1.11.0/tools/openocd/openocd.exe",
+      "-s",
+      "E:/sdk_env_v1.11.0/tools/openocd/tcl",
+      "-f",
+      "E:/Share/github/akaLinkPro/script_test/openocd_stm32f1_swd.cfg",
+      "-c",
+      "gdb port disabled",
+      "-c",
+      "telnet port disabled",
+      "-c",
+      "tcl port disabled",
+      "-c",
+      "init; halt; echo RCC_BEFORE; mdw 0x40021004; resume; adapter speed 60000; reset halt; echo RCC_TEST; mdw 0x40021004; load_image {E:/web-serial-rtt-tools/docs/validation/20261016-sram-root-cause-134100/native-original-script/sram_test.bin} 0x20000000 bin; dump_image {E:/web-serial-rtt-tools/docs/validation/20261016-sram-root-cause-134100/native-direct-reset-after-1.bin} 0x20000000 20480; shutdown"
+    ]
+  },
+  {
+    "method": "reset-after",
+    "repeat": 2,
+    "exitCode": 0,
+    "verified": true,
+    "command": [
+      "E:/sdk_env_v1.11.0/tools/openocd/openocd.exe",
+      "-s",
+      "E:/sdk_env_v1.11.0/tools/openocd/tcl",
+      "-f",
+      "E:/Share/github/akaLinkPro/script_test/openocd_stm32f1_swd.cfg",
+      "-c",
+      "gdb port disabled",
+      "-c",
+      "telnet port disabled",
+      "-c",
+      "tcl port disabled",
+      "-c",
+      "init; halt; echo RCC_BEFORE; mdw 0x40021004; resume; adapter speed 60000; reset halt; echo RCC_TEST; mdw 0x40021004; load_image {E:/web-serial-rtt-tools/docs/validation/20261016-sram-root-cause-134100/native-original-script/sram_test.bin} 0x20000000 bin; dump_image {E:/web-serial-rtt-tools/docs/validation/20261016-sram-root-cause-134100/native-direct-reset-after-2.bin} 0x20000000 20480; shutdown"
+    ]
+  }
+]

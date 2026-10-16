@@ -1,0 +1,10 @@
+{
+  "exitCode": 1,
+  "startedAt": "2026-10-16T13:55:27.102508+08:00",
+  "endedAt": "2026-10-16T13:55:28.882390+08:00",
+  "command": [
+    "node",
+    "E:/web-serial-rtt-tools/docs/validation/20261016-sram-root-cause-134100/bundle-check.mjs"
+  ],
+  "cwd": "E:\\web-serial-rtt-tools"
+}

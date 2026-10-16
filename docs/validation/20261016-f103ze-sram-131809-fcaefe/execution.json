@@ -1,0 +1,8 @@
+{
+  "command": [
+    "node",
+    "E:\\web-serial-rtt-tools\\docs\\validation\\20261016-f103ze-sram-131809-fcaefe\\sram-web.mjs"
+  ],
+  "cwd": "E:\\web-serial-rtt-tools",
+  "exitCode": 0
+}

@@ -1,0 +1,446 @@
+{
+  "cases": [
+    {
+      "variant": "direct",
+      "khz": 36000,
+      "repeat": 0,
+      "reads": [
+        13,
+        11.799999952316284,
+        11.900000095367432
+      ],
+      "writes": [
+        12.099999904632568,
+        11.899999976158142,
+        11.799999952316284
+      ],
+      "rcc": 5309450,
+      "verified": true,
+      "readMBps": 1.6741144392417442,
+      "writeMBps": 1.7162011253190497
+    },
+    {
+      "variant": "direct",
+      "khz": 36000,
+      "repeat": 1,
+      "reads": [
+        12,
+        12.600000023841858,
+        13.5
+      ],
+      "writes": [
+        14,
+        12.199999928474426,
+        13.699999928474426
+      ],
+      "rcc": 5309450,
+      "verified": true,
+      "readMBps": 1.6125984241877338,
+      "writeMBps": 1.539849629580884
+    },
+    {
+      "variant": "direct",
+      "khz": 36000,
+      "repeat": 2,
+      "reads": [],
+      "writes": [],
+      "rcc": 5309450,
+      "error": "SRAM 地址设置/完成检查失败 @0x20000000：SWD 协议错误；可降低 SWD 时钟后重试（命令/ACK：02 05 01 08 06 78 00 01）"
+    },
+    {
+      "variant": "direct",
+      "khz": 45000,
+      "repeat": 0,
+      "reads": [
+        18.300000071525574,
+        11,
+        11.100000023841858
+      ],
+      "writes": [
+        10.600000023841858,
+        10.200000047683716,
+        9.900000095367432
+      ],
+      "rcc": 5309450,
+      "verified": true,
+      "readMBps": 1.5207920756179696,
+      "writeMBps": 2.0013029207165
+    },
+    {
+      "variant": "direct",
+      "khz": 45000,
+      "repeat": 1,
+      "reads": [],
+      "writes": [],
+      "rcc": 5309450,
+      "error": "SRAM 地址设置/完成检查失败 @0x20000000：异常 ACK 0x00；可降低 SWD 时钟后重试（命令/ACK：02 05 01 00 06 78 00 01）"
+    },
+    {
+      "variant": "direct",
+      "khz": 45000,
+      "repeat": 2,
+      "reads": [],
+      "writes": [],
+      "rcc": 5309450,
+      "error": "SRAM 地址设置/完成检查失败 @0x20000000：SWD 协议错误；可降低 SWD 时钟后重试（命令/ACK：02 05 01 08 06 78 00 01）"
+    },
+    {
+      "variant": "direct",
+      "khz": 60000,
+      "repeat": 0,
+      "reads": [],
+      "writes": [],
+      "rcc": 5309450,
+      "error": "SRAM 地址设置/完成检查失败 @0x20000000：异常 ACK 0x00；可降低 SWD 时钟后重试（命令/ACK：02 05 00 00 06 00 00 07）"
+    },
+    {
+      "variant": "direct",
+      "khz": 60000,
+      "repeat": 1,
+      "reads": [],
+      "writes": [],
+      "rcc": 5309450,
+      "error": "SRAM 地址设置/完成检查失败 @0x20000000：异常 ACK 0x00；可降低 SWD 时钟后重试（命令/ACK：02 05 00 00 06 00 00 07）"
+    },
+    {
+      "variant": "direct",
+      "khz": 60000,
+      "repeat": 2,
+      "reads": [],
+      "writes": [],
+      "rcc": 5309450,
+      "error": "SRAM 地址设置/完成检查失败 @0x20000000：异常 ACK 0x00；可降低 SWD 时钟后重试（命令/ACK：02 05 00 00 06 00 00 07）"
+    },
+    {
+      "variant": "middle-only",
+      "khz": 36000,
+      "repeat": 0,
+      "reads": [],
+      "writes": [],
+      "rcc": 5309450,
+      "error": "SRAM 地址设置/完成检查失败 @0x20000000：SWD 协议错误；可降低 SWD 时钟后重试（命令/ACK：02 05 01 08 06 78 00 01）"
+    },
+    {
+      "variant": "middle-only",
+      "khz": 36000,
+      "repeat": 1,
+      "reads": [],
+      "writes": [],
+      "rcc": 5309450,
+      "error": "SRAM 地址设置/完成检查失败 @0x20000000：SWD 协议错误；可降低 SWD 时钟后重试（命令/ACK：02 05 01 08 06 78 00 01）"
+    },
+    {
+      "variant": "middle-only",
+      "khz": 36000,
+      "repeat": 2,
+      "reads": [],
+      "writes": [],
+      "rcc": 5309450,
+      "error": "SRAM 地址设置/完成检查失败 @0x20000000：SWD 协议错误；可降低 SWD 时钟后重试（命令/ACK：02 05 01 08 06 78 00 01）"
+    },
+    {
+      "variant": "middle-only",
+      "khz": 45000,
+      "repeat": 0,
+      "reads": [],
+      "writes": [],
+      "rcc": 5309450,
+      "error": "SRAM 地址设置/完成检查失败 @0x20000000：异常 ACK 0x00；可降低 SWD 时钟后重试（命令/ACK：02 05 01 00 06 00 00 08）"
+    },
+    {
+      "variant": "middle-only",
+      "khz": 45000,
+      "repeat": 1,
+      "reads": [],
+      "writes": [],
+      "rcc": 5309450,
+      "error": "SRAM 地址设置/完成检查失败 @0x20000000：异常 ACK 0x00；可降低 SWD 时钟后重试（命令/ACK：02 05 01 00 06 00 00 08）"
+    },
+    {
+      "variant": "middle-only",
+      "khz": 45000,
+      "repeat": 2,
+      "reads": [],
+      "writes": [],
+      "rcc": 5309450,
+      "error": "SRAM 地址设置/完成检查失败 @0x20000000：SWD 协议错误；可降低 SWD 时钟后重试（命令/ACK：02 05 01 08 06 78 00 01）"
+    },
+    {
+      "variant": "middle-only",
+      "khz": 60000,
+      "repeat": 0,
+      "reads": [],
+      "writes": [],
+      "rcc": 5309450,
+      "error": "SRAM 地址设置/完成检查失败 @0x20000000：异常 ACK 0x00；可降低 SWD 时钟后重试（命令/ACK：02 05 00 00 06 00 00 07）"
+    },
+    {
+      "variant": "middle-only",
+      "khz": 60000,
+      "repeat": 1,
+      "reads": [],
+      "writes": [],
+      "rcc": 5309450,
+      "error": "SRAM 地址设置/完成检查失败 @0x20000000：异常 ACK 0x00；可降低 SWD 时钟后重试（命令/ACK：02 05 00 00 06 00 00 07）"
+    },
+    {
+      "variant": "middle-only",
+      "khz": 60000,
+      "repeat": 2,
+      "reads": [],
+      "writes": [],
+      "rcc": 5309450,
+      "error": "SRAM 地址设置/完成检查失败 @0x20000000：异常 ACK 0x00；可降低 SWD 时钟后重试（命令/ACK：02 05 00 00 06 00 00 07）"
+    },
+    {
+      "variant": "middle-clear-id",
+      "khz": 36000,
+      "repeat": 0,
+      "reads": [
+        11.400000095367432,
+        11.600000023841858,
+        11.800000071525574
+      ],
+      "writes": [
+        10.799999952316284,
+        11.800000071525574,
+        12.299999952316284
+      ],
+      "rcc": 5309450,
+      "warmId": 463475831,
+      "verified": true,
+      "readMBps": 1.7655172317027104,
+      "writeMBps": 1.7604584539247166
+    },
+    {
+      "variant": "middle-clear-id",
+      "khz": 36000,
+      "repeat": 1,
+      "reads": [
+        12.200000047683716,
+        11.799999952316284,
+        11.899999976158142
+      ],
+      "writes": [
+        11.599999904632568,
+        11.300000071525574,
+        12.100000023841858
+      ],
+      "rcc": 5309450,
+      "warmId": 463475831,
+      "verified": true,
+      "readMBps": 1.711420613949957,
+      "writeMBps": 1.7554285714285716
+    },
+    {
+      "variant": "middle-clear-id",
+      "khz": 36000,
+      "repeat": 2,
+      "reads": [
+        11.5,
+        11.5,
+        10.899999976158142
+      ],
+      "writes": [
+        11.200000047683716,
+        11,
+        11.399999976158142
+      ],
+      "rcc": 5309450,
+      "warmId": 463475831,
+      "verified": true,
+      "readMBps": 1.8123893818056267,
+      "writeMBps": 1.8285714272739129
+    },
+    {
+      "variant": "middle-clear-id",
+      "khz": 45000,
+      "repeat": 0,
+      "reads": [],
+      "writes": [],
+      "rcc": 5309450,
+      "error": "SWD ACK=0（传输 0/1 条，地址 0x0）"
+    },
+    {
+      "variant": "middle-clear-id",
+      "khz": 45000,
+      "repeat": 1,
+      "reads": [
+        10.900000095367432,
+        12,
+        10.900000095367432
+      ],
+      "writes": [
+        11.200000047683716,
+        10.900000095367432,
+        10.700000047683716
+      ],
+      "rcc": 5309450,
+      "warmId": 463475831,
+      "verified": true,
+      "readMBps": 1.817751469032291,
+      "writeMBps": 1.8731707208146662
+    },
+    {
+      "variant": "middle-clear-id",
+      "khz": 45000,
+      "repeat": 2,
+      "reads": [],
+      "writes": [],
+      "rcc": 5309450,
+      "error": "SWD ACK=0（传输 0/1 条，地址 0x0）"
+    },
+    {
+      "variant": "middle-clear-id",
+      "khz": 60000,
+      "repeat": 0,
+      "reads": [
+        9.299999952316284,
+        10.099999904632568,
+        8.700000047683716
+      ],
+      "writes": [
+        8.799999952316284,
+        9,
+        9.199999928474426
+      ],
+      "rcc": 5309450,
+      "warmId": 463475831,
+      "verified": true,
+      "readMBps": 2.186476875747996,
+      "writeMBps": 2.2755555656024953
+    },
+    {
+      "variant": "middle-clear-id",
+      "khz": 60000,
+      "repeat": 1,
+      "reads": [
+        8.799999952316284,
+        9.600000023841858,
+        9.5
+      ],
+      "writes": [
+        9.300000071525574,
+        8.899999976158142,
+        9
+      ],
+      "rcc": 5309450,
+      "warmId": 463475831,
+      "verified": true,
+      "readMBps": 2.20215053951625,
+      "writeMBps": 2.258823525451872
+    },
+    {
+      "variant": "middle-clear-id",
+      "khz": 60000,
+      "repeat": 2,
+      "reads": [
+        9.799999952316284,
+        8.599999904632568,
+        9
+      ],
+      "writes": [
+        8.299999952316284,
+        8.799999952316284,
+        8.699999928474426
+      ],
+      "rcc": 5309450,
+      "warmId": 463475831,
+      "verified": true,
+      "readMBps": 2.242335778130245,
+      "writeMBps": 2.381395364241792
+    },
+    {
+      "variant": "id-only",
+      "khz": 36000,
+      "repeat": 0,
+      "reads": [
+        12.899999976158142,
+        11.5,
+        12.100000023841858
+      ],
+      "writes": [
+        12.300000071525574,
+        11.299999952316284,
+        11.799999952316284
+      ],
+      "rcc": 5309450,
+      "warmId": 464524343,
+      "verified": true,
+      "readMBps": 1.683287671232877,
+      "writeMBps": 1.7355932215079033
+    },
+    {
+      "variant": "id-only",
+      "khz": 36000,
+      "repeat": 1,
+      "reads": [],
+      "writes": [],
+      "rcc": 5309450,
+      "error": "SWD ACK=0（传输 0/1 条，地址 0x0）"
+    },
+    {
+      "variant": "id-only",
+      "khz": 36000,
+      "repeat": 2,
+      "reads": [],
+      "writes": [],
+      "rcc": 5309450,
+      "error": "SWD ACK=0（传输 0/1 条，地址 0x0）"
+    },
+    {
+      "variant": "id-only",
+      "khz": 45000,
+      "repeat": 0,
+      "reads": [],
+      "writes": [],
+      "rcc": 5309450,
+      "error": "SWD ACK=0（传输 0/1 条，地址 0x0）"
+    },
+    {
+      "variant": "id-only",
+      "khz": 45000,
+      "repeat": 1,
+      "reads": [],
+      "writes": [],
+      "rcc": 5309450,
+      "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+    },
+    {
+      "variant": "id-only",
+      "khz": 45000,
+      "repeat": 2,
+      "reads": [],
+      "writes": [],
+      "rcc": 5309450,
+      "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+    },
+    {
+      "variant": "id-only",
+      "khz": 60000,
+      "repeat": 0,
+      "reads": [],
+      "writes": [],
+      "rcc": 5309450,
+      "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+    },
+    {
+      "variant": "id-only",
+      "khz": 60000,
+      "repeat": 1,
+      "reads": [],
+      "writes": [],
+      "rcc": 5309450,
+      "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+    },
+    {
+      "variant": "id-only",
+      "khz": 60000,
+      "repeat": 2,
+      "reads": [],
+      "writes": [],
+      "rcc": 5309450,
+      "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+    }
+  ]
+}

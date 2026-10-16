@@ -1,0 +1,753 @@
+{
+  "cases": [
+    {
+      "variant": "double-clock",
+      "khz": 36000,
+      "repeat": 0,
+      "attempts": [
+        {
+          "error": "ID 1bb00477"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "double-clock",
+      "khz": 36000,
+      "repeat": 1,
+      "attempts": [
+        {
+          "error": "SWD ACK=0（传输 0/1 条，地址 0x0）"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "double-clock",
+      "khz": 36000,
+      "repeat": 2,
+      "attempts": [
+        {
+          "error": "SWD ACK=0（传输 0/1 条，地址 0x0）"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "double-clock",
+      "khz": 36000,
+      "repeat": 3,
+      "attempts": [
+        {
+          "error": "SWD ACK=0（传输 0/1 条，地址 0x0）"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "double-clock",
+      "khz": 36000,
+      "repeat": 4,
+      "attempts": [
+        {
+          "error": "ID 1bb00477"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "double-clock",
+      "khz": 45000,
+      "repeat": 0,
+      "attempts": [
+        {
+          "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "double-clock",
+      "khz": 45000,
+      "repeat": 1,
+      "attempts": [
+        {
+          "error": "ID 19b01673"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "double-clock",
+      "khz": 45000,
+      "repeat": 2,
+      "attempts": [
+        {
+          "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "double-clock",
+      "khz": 45000,
+      "repeat": 3,
+      "attempts": [
+        {
+          "error": "SWD ACK=0（传输 0/1 条，地址 0x0）"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "double-clock",
+      "khz": 45000,
+      "repeat": 4,
+      "attempts": [
+        {
+          "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "double-clock",
+      "khz": 60000,
+      "repeat": 0,
+      "attempts": [
+        {
+          "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "double-clock",
+      "khz": 60000,
+      "repeat": 1,
+      "attempts": [
+        {
+          "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "double-clock",
+      "khz": 60000,
+      "repeat": 2,
+      "attempts": [
+        {
+          "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "double-clock",
+      "khz": 60000,
+      "repeat": 3,
+      "attempts": [
+        {
+          "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "double-clock",
+      "khz": 60000,
+      "repeat": 4,
+      "attempts": [
+        {
+          "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "activation-clock",
+      "khz": 36000,
+      "repeat": 0,
+      "attempts": [
+        {
+          "error": "ID 1bb01437"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "activation-clock",
+      "khz": 36000,
+      "repeat": 1,
+      "attempts": [
+        {
+          "error": "SWD ACK=0（传输 0/1 条，地址 0x0）"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "activation-clock",
+      "khz": 36000,
+      "repeat": 2,
+      "attempts": [
+        {
+          "error": "SWD ACK=0（传输 0/1 条，地址 0x0）"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "activation-clock",
+      "khz": 36000,
+      "repeat": 3,
+      "attempts": [
+        {
+          "error": "ID 1bb01473"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "activation-clock",
+      "khz": 36000,
+      "repeat": 4,
+      "attempts": [
+        {
+          "error": "ID 1bb01437"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "activation-clock",
+      "khz": 45000,
+      "repeat": 0,
+      "attempts": [
+        {
+          "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "activation-clock",
+      "khz": 45000,
+      "repeat": 1,
+      "attempts": [
+        {
+          "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "activation-clock",
+      "khz": 45000,
+      "repeat": 2,
+      "attempts": [
+        {
+          "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "activation-clock",
+      "khz": 45000,
+      "repeat": 3,
+      "attempts": [
+        {
+          "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "activation-clock",
+      "khz": 45000,
+      "repeat": 4,
+      "attempts": [
+        {
+          "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "activation-clock",
+      "khz": 60000,
+      "repeat": 0,
+      "attempts": [
+        {
+          "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "activation-clock",
+      "khz": 60000,
+      "repeat": 1,
+      "attempts": [
+        {
+          "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "activation-clock",
+      "khz": 60000,
+      "repeat": 2,
+      "attempts": [
+        {
+          "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "activation-clock",
+      "khz": 60000,
+      "repeat": 3,
+      "attempts": [
+        {
+          "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "activation-clock",
+      "khz": 60000,
+      "repeat": 4,
+      "attempts": [
+        {
+          "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "low-sequence-fast",
+      "khz": 36000,
+      "repeat": 0,
+      "attempts": [
+        {
+          "error": "SWD ACK=0（传输 0/1 条，地址 0x0）"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "low-sequence-fast",
+      "khz": 36000,
+      "repeat": 1,
+      "attempts": [
+        {
+          "error": "SWD ACK=0（传输 0/1 条，地址 0x0）"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "low-sequence-fast",
+      "khz": 36000,
+      "repeat": 2,
+      "attempts": [
+        {
+          "error": "SWD ACK=0（传输 0/1 条，地址 0x0）"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "low-sequence-fast",
+      "khz": 36000,
+      "repeat": 3,
+      "attempts": [
+        {
+          "error": "SWD ACK=0（传输 0/1 条，地址 0x0）"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "low-sequence-fast",
+      "khz": 36000,
+      "repeat": 4,
+      "attempts": [
+        {
+          "error": "SWD ACK=0（传输 0/1 条，地址 0x0）"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "low-sequence-fast",
+      "khz": 45000,
+      "repeat": 0,
+      "attempts": [
+        {
+          "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "low-sequence-fast",
+      "khz": 45000,
+      "repeat": 1,
+      "attempts": [
+        {
+          "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "low-sequence-fast",
+      "khz": 45000,
+      "repeat": 2,
+      "attempts": [
+        {
+          "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "low-sequence-fast",
+      "khz": 45000,
+      "repeat": 3,
+      "attempts": [
+        {
+          "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "low-sequence-fast",
+      "khz": 45000,
+      "repeat": 4,
+      "attempts": [
+        {
+          "error": "ID 19b01673"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "low-sequence-fast",
+      "khz": 60000,
+      "repeat": 0,
+      "attempts": [
+        {
+          "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "low-sequence-fast",
+      "khz": 60000,
+      "repeat": 1,
+      "attempts": [
+        {
+          "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "low-sequence-fast",
+      "khz": 60000,
+      "repeat": 2,
+      "attempts": [
+        {
+          "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "low-sequence-fast",
+      "khz": 60000,
+      "repeat": 3,
+      "attempts": [
+        {
+          "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "low-sequence-fast",
+      "khz": 60000,
+      "repeat": 4,
+      "attempts": [
+        {
+          "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+        }
+      ],
+      "error": "link not synchronized"
+    },
+    {
+      "variant": "resync-retry",
+      "khz": 36000,
+      "repeat": 0,
+      "attempts": [
+        {
+          "error": "ID 1bb00477"
+        },
+        {
+          "id": 463475831
+        }
+      ],
+      "readMBps": 1.735593221507903,
+      "verified": true
+    },
+    {
+      "variant": "resync-retry",
+      "khz": 36000,
+      "repeat": 1,
+      "attempts": [
+        {
+          "error": "SWD ACK=0（传输 0/1 条，地址 0x0）"
+        },
+        {
+          "error": "SWD ACK=0（传输 0/1 条，地址 0x0）"
+        },
+        {
+          "id": 463475831
+        }
+      ],
+      "readMBps": 1.6297082259036026,
+      "verified": true
+    },
+    {
+      "variant": "resync-retry",
+      "khz": 36000,
+      "repeat": 2,
+      "attempts": [
+        {
+          "error": "SWD ACK=0（传输 0/1 条，地址 0x0）"
+        },
+        {
+          "id": 463475831
+        }
+      ],
+      "readMBps": 1.6879120890176638,
+      "verified": true
+    },
+    {
+      "variant": "resync-retry",
+      "khz": 36000,
+      "repeat": 3,
+      "attempts": [
+        {
+          "error": "SWD ACK=0（传输 0/1 条，地址 0x0）"
+        },
+        {
+          "id": 463475831
+        }
+      ],
+      "readMBps": 1.6786885234966378,
+      "verified": true
+    },
+    {
+      "variant": "resync-retry",
+      "khz": 36000,
+      "repeat": 4,
+      "attempts": [
+        {
+          "error": "ID 1bb01437"
+        },
+        {
+          "id": 463475831
+        }
+      ],
+      "readMBps": 1.6925619801360476,
+      "verified": true
+    },
+    {
+      "variant": "resync-retry",
+      "khz": 45000,
+      "repeat": 0,
+      "attempts": [
+        {
+          "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+        },
+        {
+          "error": "SWD ACK=0（传输 0/1 条，地址 0x0）"
+        },
+        {
+          "id": 463475831
+        }
+      ],
+      "readMBps": 1.8731707276225729,
+      "verified": true
+    },
+    {
+      "variant": "resync-retry",
+      "khz": 45000,
+      "repeat": 1,
+      "attempts": [
+        {
+          "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+        },
+        {
+          "error": "ID 19b01673"
+        },
+        {
+          "id": 463475831
+        }
+      ],
+      "readMBps": 2.048,
+      "verified": true
+    },
+    {
+      "variant": "resync-retry",
+      "khz": 45000,
+      "repeat": 2,
+      "attempts": [
+        {
+          "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+        },
+        {
+          "error": "ID 1ba01673"
+        },
+        {
+          "id": 463475831
+        }
+      ],
+      "readMBps": 1.926018810216924,
+      "verified": true
+    },
+    {
+      "variant": "resync-retry",
+      "khz": 45000,
+      "repeat": 3,
+      "attempts": [
+        {
+          "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+        },
+        {
+          "error": "SWD ACK=0（传输 0/1 条，地址 0x0）"
+        },
+        {
+          "id": 463475831
+        }
+      ],
+      "readMBps": 1.7757225421290022,
+      "verified": true
+    },
+    {
+      "variant": "resync-retry",
+      "khz": 45000,
+      "repeat": 4,
+      "attempts": [
+        {
+          "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+        },
+        {
+          "error": "SWD ACK=0（传输 0/1 条，地址 0x0）"
+        },
+        {
+          "id": 463475831
+        }
+      ],
+      "readMBps": 2.041196011672229,
+      "verified": true
+    },
+    {
+      "variant": "resync-retry",
+      "khz": 60000,
+      "repeat": 0,
+      "attempts": [
+        {
+          "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+        },
+        {
+          "error": "ID 1d900f1b"
+        },
+        {
+          "id": 463475831
+        }
+      ],
+      "error": "SWD NO ACK（传输 0/1 条，地址 0x8）"
+    },
+    {
+      "variant": "resync-retry",
+      "khz": 60000,
+      "repeat": 1,
+      "attempts": [
+        {
+          "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+        },
+        {
+          "error": "ID d900e1b"
+        },
+        {
+          "id": 463475831
+        }
+      ],
+      "error": "SWD NO ACK（传输 0/1 条，地址 0x8）"
+    },
+    {
+      "variant": "resync-retry",
+      "khz": 60000,
+      "repeat": 2,
+      "attempts": [
+        {
+          "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+        },
+        {
+          "error": "ID 1d900f1b"
+        },
+        {
+          "id": 463475831
+        }
+      ],
+      "error": "SWD NO ACK（传输 0/1 条，地址 0x8）"
+    },
+    {
+      "variant": "resync-retry",
+      "khz": 60000,
+      "repeat": 3,
+      "attempts": [
+        {
+          "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+        },
+        {
+          "error": "ID d900e1b"
+        },
+        {
+          "id": 463475831
+        }
+      ],
+      "error": "SWD NO ACK（传输 0/1 条，地址 0x8）"
+    },
+    {
+      "variant": "resync-retry",
+      "khz": 60000,
+      "repeat": 4,
+      "attempts": [
+        {
+          "error": "SWD ACK=5（传输 0/1 条，地址 0x0）"
+        },
+        {
+          "error": "ID d900b1b"
+        },
+        {
+          "id": 463475831
+        }
+      ],
+      "readMBps": 2.2100719462368503,
+      "verified": true
+    }
+  ]
+}

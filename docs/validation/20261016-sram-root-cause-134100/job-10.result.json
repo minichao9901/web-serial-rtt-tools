@@ -1,0 +1,10 @@
+{
+  "exitCode": 0,
+  "startedAt": "2026-10-16T13:47:52.945401+08:00",
+  "endedAt": "2026-10-16T13:48:10.429762+08:00",
+  "command": [
+    "node",
+    "E:/web-serial-rtt-tools/docs/validation/20261016-sram-root-cause-134100/transport-matrix.mjs"
+  ],
+  "cwd": "E:\\web-serial-rtt-tools"
+}

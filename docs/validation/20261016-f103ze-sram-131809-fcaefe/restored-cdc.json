@@ -1,0 +1,10 @@
+{
+  "port": "COM34",
+  "plannedTx": "PING\r\nINFO\r\nECHO acceptance-restored\r\n",
+  "rx": "PING\r\nPONG\r\nINFO\r\nchip=STM32F103 sysclk=48000000Hz clk_err=0 loops=2512485 marks=2 rx=38 tx=116 usbhp=0 ctr=0\r\nECHO acceptance-restored\r\nacceptance-restored\r\n",
+  "error": null,
+  "pong": true,
+  "echo": true,
+  "time": "2026-10-16T13:26:07.992432+08:00",
+  "passed": true
+}

@@ -1,0 +1,10 @@
+{
+  "exitCode": 0,
+  "startedAt": "2026-10-16T13:44:32.792323+08:00",
+  "endedAt": "2026-10-16T13:44:36.752899+08:00",
+  "command": [
+    "python",
+    "E:/web-serial-rtt-tools/docs/validation/20261016-sram-root-cause-134100/native-direct.py"
+  ],
+  "cwd": "E:\\web-serial-rtt-tools"
+}

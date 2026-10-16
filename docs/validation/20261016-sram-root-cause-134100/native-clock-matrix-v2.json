@@ -1,0 +1,74 @@
+[
+  {
+    "targetHclkMHz": 48,
+    "exitCode": 0,
+    "passed": true,
+    "command": [
+      "E:/sdk_env_v1.11.0/tools/openocd/openocd.exe",
+      "-s",
+      "E:/sdk_env_v1.11.0/tools/openocd/tcl",
+      "-f",
+      "E:\\web-serial-rtt-tools\\docs\\validation\\20261016-sram-root-cause-134100\\native-64k-v2-48mhz\\benchmark_readback.tcl",
+      "-c",
+      "gdb port disabled",
+      "-c",
+      "tcl port disabled",
+      "-c",
+      "telnet port disabled"
+    ],
+    "cwd": "E:\\web-serial-rtt-tools\\docs\\validation\\20261016-sram-root-cause-134100\\native-64k-v2-48mhz",
+    "source": "E:\\Share\\github\\akaLinkPro\\script_test\\swd\\benchmark_readback.tcl",
+    "sourceSha256": "b341f78098203ba0830f68a2a049a1aff3221262fb0cee2d58c2e16c0976627a",
+    "adaptations": "Controlled RCC setup; SRAM paths only; final resume replaced by halt; original 10-round alternating-file comparison unchanged",
+    "writeKiBps": 3344.253,
+    "readKiBps": 2930.558
+  },
+  {
+    "targetHclkMHz": 64,
+    "exitCode": 0,
+    "passed": true,
+    "command": [
+      "E:/sdk_env_v1.11.0/tools/openocd/openocd.exe",
+      "-s",
+      "E:/sdk_env_v1.11.0/tools/openocd/tcl",
+      "-f",
+      "E:\\web-serial-rtt-tools\\docs\\validation\\20261016-sram-root-cause-134100\\native-64k-v2-64mhz\\benchmark_readback.tcl",
+      "-c",
+      "gdb port disabled",
+      "-c",
+      "tcl port disabled",
+      "-c",
+      "telnet port disabled"
+    ],
+    "cwd": "E:\\web-serial-rtt-tools\\docs\\validation\\20261016-sram-root-cause-134100\\native-64k-v2-64mhz",
+    "source": "E:\\Share\\github\\akaLinkPro\\script_test\\swd\\benchmark_readback.tcl",
+    "sourceSha256": "b341f78098203ba0830f68a2a049a1aff3221262fb0cee2d58c2e16c0976627a",
+    "adaptations": "Controlled RCC setup; SRAM paths only; final resume replaced by halt; original 10-round alternating-file comparison unchanged",
+    "writeKiBps": 3296.361,
+    "readKiBps": 2735.336
+  },
+  {
+    "targetHclkMHz": 96,
+    "exitCode": 0,
+    "passed": true,
+    "command": [
+      "E:/sdk_env_v1.11.0/tools/openocd/openocd.exe",
+      "-s",
+      "E:/sdk_env_v1.11.0/tools/openocd/tcl",
+      "-f",
+      "E:\\web-serial-rtt-tools\\docs\\validation\\20261016-sram-root-cause-134100\\native-64k-v2-96mhz\\benchmark_readback.tcl",
+      "-c",
+      "gdb port disabled",
+      "-c",
+      "tcl port disabled",
+      "-c",
+      "telnet port disabled"
+    ],
+    "cwd": "E:\\web-serial-rtt-tools\\docs\\validation\\20261016-sram-root-cause-134100\\native-64k-v2-96mhz",
+    "source": "E:\\Share\\github\\akaLinkPro\\script_test\\swd\\benchmark_readback.tcl",
+    "sourceSha256": "b341f78098203ba0830f68a2a049a1aff3221262fb0cee2d58c2e16c0976627a",
+    "adaptations": "Controlled RCC setup; SRAM paths only; final resume replaced by halt; original 10-round alternating-file comparison unchanged",
+    "writeKiBps": 3376.399,
+    "readKiBps": 2966.543
+  }
+]

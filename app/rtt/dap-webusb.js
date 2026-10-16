@@ -611,7 +611,11 @@ export class WebUsbDapProbe {
    *    写 DP ABORT 的 STKCMPERR|STKERR|WDERR|ORUNERR(=0x1E) 就是干这个的。
    */
   async abort(){
-    try { await this._ctrl(CMD.WriteABORT, Uint8Array.of(0x1e, 0x00, 0x00, 0x00)); } catch {}
+    // DAP_WriteABORT carries a DAP index before the 32-bit ABORT value.
+    try {
+      const res = await this._ctrl(CMD.WriteABORT, Uint8Array.of(0, 0x1e, 0, 0, 0));
+      return res[0] === 0;
+    } catch { return false; }
   }
 
   async setClock(hz){

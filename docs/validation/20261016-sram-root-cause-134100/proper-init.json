@@ -1,0 +1,421 @@
+{
+  "cases": [
+    {
+      "mode": "abort-only",
+      "khz": 36000,
+      "repeat": 0,
+      "attempts": [
+        {
+          "id": 463475831
+        }
+      ],
+      "verified": true
+    },
+    {
+      "mode": "abort-only",
+      "khz": 36000,
+      "repeat": 1,
+      "attempts": [
+        {
+          "id": 463475831
+        }
+      ],
+      "verified": true
+    },
+    {
+      "mode": "abort-only",
+      "khz": 36000,
+      "repeat": 2,
+      "attempts": [
+        {
+          "id": 463475831
+        }
+      ],
+      "verified": true
+    },
+    {
+      "mode": "abort-only",
+      "khz": 45000,
+      "repeat": 0,
+      "attempts": [
+        {
+          "id": 463475831
+        }
+      ],
+      "verified": true
+    },
+    {
+      "mode": "abort-only",
+      "khz": 45000,
+      "repeat": 1,
+      "attempts": [
+        {
+          "id": 463475831
+        }
+      ],
+      "verified": true
+    },
+    {
+      "mode": "abort-only",
+      "khz": 45000,
+      "repeat": 2,
+      "attempts": [
+        {
+          "error": "SWD ACK=0（传输 0/1 条，地址 0x0）"
+        },
+        {
+          "id": 463475831
+        }
+      ],
+      "verified": true
+    },
+    {
+      "mode": "abort-only",
+      "khz": 60000,
+      "repeat": 0,
+      "attempts": [
+        {
+          "id": 463475831
+        }
+      ],
+      "verified": true
+    },
+    {
+      "mode": "abort-only",
+      "khz": 60000,
+      "repeat": 1,
+      "attempts": [
+        {
+          "id": 463475831
+        }
+      ],
+      "verified": true
+    },
+    {
+      "mode": "abort-only",
+      "khz": 60000,
+      "repeat": 2,
+      "attempts": [
+        {
+          "id": 463475831
+        }
+      ],
+      "verified": true
+    },
+    {
+      "mode": "abort-power",
+      "khz": 36000,
+      "repeat": 0,
+      "attempts": [
+        {
+          "id": 463475831
+        }
+      ],
+      "verified": true
+    },
+    {
+      "mode": "abort-power",
+      "khz": 36000,
+      "repeat": 1,
+      "attempts": [
+        {
+          "id": 463475831
+        }
+      ],
+      "verified": true
+    },
+    {
+      "mode": "abort-power",
+      "khz": 36000,
+      "repeat": 2,
+      "attempts": [
+        {
+          "id": 463475831
+        }
+      ],
+      "verified": true
+    },
+    {
+      "mode": "abort-power",
+      "khz": 45000,
+      "repeat": 0,
+      "attempts": [
+        {
+          "error": "SWD ACK=0（传输 0/1 条，地址 0x0）"
+        },
+        {
+          "id": 463475831
+        }
+      ],
+      "verified": true
+    },
+    {
+      "mode": "abort-power",
+      "khz": 45000,
+      "repeat": 1,
+      "attempts": [
+        {
+          "error": "SWD ACK=0（传输 0/1 条，地址 0x0）"
+        },
+        {
+          "id": 463475831
+        }
+      ],
+      "verified": true
+    },
+    {
+      "mode": "abort-power",
+      "khz": 45000,
+      "repeat": 2,
+      "attempts": [
+        {
+          "id": 463475831
+        }
+      ],
+      "verified": true
+    },
+    {
+      "mode": "abort-power",
+      "khz": 60000,
+      "repeat": 0,
+      "attempts": [
+        {
+          "id": 463475831
+        }
+      ],
+      "verified": true
+    },
+    {
+      "mode": "abort-power",
+      "khz": 60000,
+      "repeat": 1,
+      "attempts": [
+        {
+          "id": 463475831
+        }
+      ],
+      "verified": true
+    },
+    {
+      "mode": "abort-power",
+      "khz": 60000,
+      "repeat": 2,
+      "attempts": [
+        {
+          "id": 463475831
+        }
+      ],
+      "verified": true
+    },
+    {
+      "mode": "resync-power",
+      "khz": 36000,
+      "repeat": 0,
+      "attempts": [
+        {
+          "id": 463475831
+        }
+      ],
+      "verified": true
+    },
+    {
+      "mode": "resync-power",
+      "khz": 36000,
+      "repeat": 1,
+      "attempts": [
+        {
+          "id": 463475831
+        }
+      ],
+      "verified": true
+    },
+    {
+      "mode": "resync-power",
+      "khz": 36000,
+      "repeat": 2,
+      "attempts": [
+        {
+          "id": 463475831
+        }
+      ],
+      "verified": true
+    },
+    {
+      "mode": "resync-power",
+      "khz": 45000,
+      "repeat": 0,
+      "attempts": [
+        {
+          "id": 463475831
+        }
+      ],
+      "verified": true
+    },
+    {
+      "mode": "resync-power",
+      "khz": 45000,
+      "repeat": 1,
+      "attempts": [
+        {
+          "error": "SWD ACK=0（传输 0/1 条，地址 0x0）"
+        },
+        {
+          "id": 463475831
+        }
+      ],
+      "verified": true
+    },
+    {
+      "mode": "resync-power",
+      "khz": 45000,
+      "repeat": 2,
+      "attempts": [
+        {
+          "error": "SWD ACK=0（传输 0/1 条，地址 0x0）"
+        },
+        {
+          "id": 463475831
+        }
+      ],
+      "verified": true
+    },
+    {
+      "mode": "resync-power",
+      "khz": 60000,
+      "repeat": 0,
+      "attempts": [
+        {
+          "id": 463475831
+        }
+      ],
+      "verified": true
+    },
+    {
+      "mode": "resync-power",
+      "khz": 60000,
+      "repeat": 1,
+      "attempts": [
+        {
+          "id": 463475831
+        }
+      ],
+      "verified": true
+    },
+    {
+      "mode": "resync-power",
+      "khz": 60000,
+      "repeat": 2,
+      "attempts": [
+        {
+          "id": 463475831
+        }
+      ],
+      "verified": true
+    },
+    {
+      "mode": "resync-old-abort",
+      "khz": 36000,
+      "repeat": 0,
+      "attempts": [
+        {
+          "id": 463475831
+        }
+      ],
+      "verified": true
+    },
+    {
+      "mode": "resync-old-abort",
+      "khz": 36000,
+      "repeat": 1,
+      "attempts": [
+        {
+          "id": 463475831
+        }
+      ],
+      "verified": true
+    },
+    {
+      "mode": "resync-old-abort",
+      "khz": 36000,
+      "repeat": 2,
+      "attempts": [
+        {
+          "id": 463475831
+        }
+      ],
+      "verified": true
+    },
+    {
+      "mode": "resync-old-abort",
+      "khz": 45000,
+      "repeat": 0,
+      "attempts": [
+        {
+          "id": 463475831
+        }
+      ],
+      "verified": true
+    },
+    {
+      "mode": "resync-old-abort",
+      "khz": 45000,
+      "repeat": 1,
+      "attempts": [
+        {
+          "error": "SWD ACK=0（传输 0/1 条，地址 0x0）"
+        },
+        {
+          "id": 463475831
+        }
+      ],
+      "verified": true
+    },
+    {
+      "mode": "resync-old-abort",
+      "khz": 45000,
+      "repeat": 2,
+      "attempts": [
+        {
+          "error": "SWD ACK=0（传输 0/1 条，地址 0x0）"
+        },
+        {
+          "id": 463475831
+        }
+      ],
+      "verified": true
+    },
+    {
+      "mode": "resync-old-abort",
+      "khz": 60000,
+      "repeat": 0,
+      "attempts": [
+        {
+          "id": 463475831
+        }
+      ],
+      "verified": true
+    },
+    {
+      "mode": "resync-old-abort",
+      "khz": 60000,
+      "repeat": 1,
+      "attempts": [
+        {
+          "id": 463475831
+        }
+      ],
+      "verified": true
+    },
+    {
+      "mode": "resync-old-abort",
+      "khz": 60000,
+      "repeat": 2,
+      "attempts": [
+        {
+          "id": 463475831
+        }
+      ],
+      "verified": true
+    }
+  ]
+}

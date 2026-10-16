@@ -75,9 +75,9 @@
     "app/flash/image.js": "648ad44b7e51bc64f72b1213e15b24e7610d832efaae11b0a598bbea881f291b",
     "app/flash/runner.js": "5d90b2413f10087eeea066fe2f4659cf15f55f71a078a08a6bf4cc5198c12b86",
     "app/flash/sram-bench.js": "290a7d3b8c8d6d65e7043f37ad431b68429a2fa6922aa4755fd0be7632c0fea2",
-    "app/flash/sram-transfer.js": "6872a17e976c99f7183e9a7828b4889c46c876a7b379bb71a681ff71e11102ba",
+    "app/flash/sram-transfer.js": "91c9433b8d426e8e71d67761a6a5dce7eddbb372cab86f4d43d2012049a41128",
     "app/flash/target-reset.js": "28bba630fa0131a29c298709fbbc6fa4822247e32caf50ba9e60e9ae18371c3e",
-    "app/flash/view.js": "def20d47d3bc1ad453e20c032a5be5fb1d30f5e4c237aa2e1d6bfcff10b220be",
+    "app/flash/view.js": "f023adce57ff151a08d77012b87484e33c625a45d2cf621c0f9485a276f75ab9",
     "app/gen/bridge-kit.js": "ff664ad92bdbceb2e3251e4398edc80511a2d8b5c10d6d0595fa22e1f23dd3d7",
     "app/gen/bridge-src.js": "6dff9d3d0bd55eed5048711c2cb1f44eea528d64e99a2605be5ee6708cd66146",
     "app/gen/etm-kit-src.js": "97fb8184723d159fde6ae7908a7c4c619e422bf6d5c03215806ec0b2331ca515",
@@ -103,7 +103,7 @@
     "app/i2c/view.js": "b0c5d1610039da10a3cc654135ac5335f34e81edc0282cf9df668962472d9288",
     "app/main.js": "40adec9762075af463a114744c1e620e4a0a452d65acdb38f5faeecc31a49708",
     "app/rtt/bridge.js": "483cdf7c69882f63b3930619a8a9b78fefc38f2e3c079b64b167918e560d567e",
-    "app/rtt/dap-webusb.js": "11a5f166485443f4f81bf9278e8c3b2250ef63b403626f3f6c84090660dc10b5",
+    "app/rtt/dap-webusb.js": "1f433d9d5b102a64a0cfd7851e238393d859f703c179252a2645f910e2e11cdf",
     "app/rtt/elf.js": "76a6278965724f52133467f8f07d4472077c5a9c35ca187fece59abad42405c7",
     "app/rtt/mock.js": "713da5c0c48d4a912ed9da57dbaf5decf824e57be3b185adc70023e02a1c072d",
     "app/rtt/protocol.js": "0104940dc646b390b28fcb6a4eeb2aedaa22b5b75585b6f45d05d6908b9835ef",
@@ -172,6 +172,6 @@
     "app/ui/workspace.js": "25b6ce94e5d90302a37e6cec2b7e35c975af95ce29bef1094a4493f3890fc0b7",
     "app/ui/zoom-controls.js": "d7520d813135941c8b0e8f5601722c45f53d2d2ed8a940f789bc032da0180ff9"
   },
-  "outputSha256": "efbe4c0a3e12b52140b5486c51ca32f4da5c8d91bb01507bc6ea3fb9e33de46a",
-  "outputBytes": 1320778
+  "outputSha256": "fe4853a23cc2e05631acfd43caea6ea21f2518c1c2ed20afd14eda8e3ee56220",
+  "outputBytes": 1321966
 }

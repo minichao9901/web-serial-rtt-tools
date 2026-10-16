@@ -1,0 +1,227 @@
+[
+  {
+    "targetHclkMHz": 48,
+    "ui": [
+      {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 20.799999952316284,
+        "readMs": 23.5,
+        "writeRate": 2.9538461606178057,
+        "readRate": 2.6144680851063833,
+        "clockKhz": 60000,
+        "clockSetup": {
+          "attempts": 1,
+          "failures": []
+        },
+        "failedClocks": [],
+        "transport": "transfer-4/1024B",
+        "verified": true
+      },
+      {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 19.799999952316284,
+        "readMs": 24.100000023841858,
+        "writeRate": 3.1030303105032333,
+        "readRate": 2.5493775908389256,
+        "clockKhz": 60000,
+        "clockSetup": {
+          "attempts": 1,
+          "failures": []
+        },
+        "failedClocks": [],
+        "transport": "transfer-4/1024B",
+        "verified": true
+      },
+      {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 19.800000071525574,
+        "readMs": 22.899999976158142,
+        "writeRate": 3.103030291820908,
+        "readRate": 2.6829694351077285,
+        "clockKhz": 60000,
+        "clockSetup": {
+          "attempts": 1,
+          "failures": []
+        },
+        "failedClocks": [],
+        "transport": "transfer-4/1024B",
+        "verified": true
+      }
+    ],
+    "direct": {
+      "rcc": 1115146,
+      "size": 65536,
+      "passes": 10,
+      "readMs": 216.80000030994415,
+      "writeMs": 209.39999997615814,
+      "clockSetup": {
+        "attempts": 1,
+        "failures": []
+      },
+      "verified": true,
+      "readMBps": 3.0228782244606855,
+      "writeMBps": 3.1297039163066764
+    },
+    "entry": {
+      "entry": "source",
+      "bundle": "app/site/main.js?v=fe4853a23cc2e056"
+    },
+    "passed": true
+  },
+  {
+    "targetHclkMHz": 64,
+    "ui": [
+      {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 27.699999928474426,
+        "readMs": 22.699999928474426,
+        "writeRate": 2.2180505472435863,
+        "readRate": 2.7066079380436867,
+        "clockKhz": 60000,
+        "clockSetup": {
+          "attempts": 1,
+          "failures": []
+        },
+        "failedClocks": [],
+        "transport": "transfer-4/1024B",
+        "verified": true
+      },
+      {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 20.299999952316284,
+        "readMs": 21.899999976158142,
+        "writeRate": 3.026600992331014,
+        "readRate": 2.8054794551090336,
+        "clockKhz": 60000,
+        "clockSetup": {
+          "attempts": 1,
+          "failures": []
+        },
+        "failedClocks": [],
+        "transport": "transfer-4/1024B",
+        "verified": true
+      },
+      {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 21.399999976158142,
+        "readMs": 21.600000023841858,
+        "writeRate": 2.871028040581806,
+        "readRate": 2.844444441304776,
+        "clockKhz": 60000,
+        "clockSetup": {
+          "attempts": 1,
+          "failures": []
+        },
+        "failedClocks": [],
+        "transport": "transfer-4/1024B",
+        "verified": true
+      }
+    ],
+    "direct": {
+      "rcc": 3671050,
+      "size": 65536,
+      "passes": 10,
+      "readMs": 226.29999995231628,
+      "writeMs": 210.5,
+      "clockSetup": {
+        "attempts": 1,
+        "failures": []
+      },
+      "verified": true,
+      "readMBps": 2.895978789828065,
+      "writeMBps": 3.113349168646081
+    },
+    "entry": {
+      "entry": "source",
+      "bundle": "app/site/main.js?v=fe4853a23cc2e056"
+    },
+    "passed": true
+  },
+  {
+    "targetHclkMHz": 96,
+    "ui": [
+      {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 25,
+        "readMs": 23.50000011920929,
+        "writeRate": 2.4576,
+        "readRate": 2.6144680718438775,
+        "clockKhz": 60000,
+        "clockSetup": {
+          "attempts": 1,
+          "failures": []
+        },
+        "failedClocks": [],
+        "transport": "transfer-4/1024B",
+        "verified": true
+      },
+      {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 24.699999928474426,
+        "readMs": 23.200000047683716,
+        "writeRate": 2.4874493999156373,
+        "readRate": 2.6482758566258777,
+        "clockKhz": 60000,
+        "clockSetup": {
+          "attempts": 1,
+          "failures": []
+        },
+        "failedClocks": [],
+        "transport": "transfer-4/1024B",
+        "verified": true
+      },
+      {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 21.200000166893005,
+        "readMs": 22.800000190734863,
+        "writeRate": 2.8981131847323196,
+        "readRate": 2.6947368195622694,
+        "clockKhz": 60000,
+        "clockSetup": {
+          "attempts": 1,
+          "failures": []
+        },
+        "failedClocks": [],
+        "transport": "transfer-4/1024B",
+        "verified": true
+      }
+    ],
+    "direct": {
+      "rcc": 2688010,
+      "size": 65536,
+      "passes": 10,
+      "readMs": 223.79999995231628,
+      "writeMs": 206.40000009536743,
+      "clockSetup": {
+        "attempts": 1,
+        "failures": []
+      },
+      "verified": true,
+      "readMBps": 2.9283288656820092,
+      "writeMBps": 3.1751937969825095
+    },
+    "entry": {
+      "entry": "source",
+      "bundle": "app/site/main.js?v=fe4853a23cc2e056"
+    },
+    "passed": true
+  }
+]

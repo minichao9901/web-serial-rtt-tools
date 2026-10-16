@@ -1,0 +1,181 @@
+{
+  "started": "2026-10-16T05:21:45.325Z",
+  "method": "actual FlashView.benchmarkSram and browser WebUSB; CPU pre-halted, entire 64 KiB RAM preserved externally",
+  "cases": [
+    {
+      "requestedKhz": 20000,
+      "result": {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 51.800000071525574,
+        "readMs": 51.59999990463257,
+        "writeRate": 1.1861003844626155,
+        "readRate": 1.1906976766192592,
+        "clockKhz": 20000,
+        "failedClocks": [],
+        "transport": "atomic-4",
+        "verified": true
+      },
+      "error": null,
+      "registersPreserved": true,
+      "cpuKeptHalted": true,
+      "ui": "读 1.19 MB/s · 写 1.19 MB/s · SWD 20 MHz · 20 KiB × 3 轮 · 校验通过 · CPU 保持暂停"
+    },
+    {
+      "requestedKhz": 20000,
+      "result": {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 52.199999928474426,
+        "readMs": 58.200000047683716,
+        "writeRate": 1.1770114958656401,
+        "readRate": 1.0556701022278647,
+        "clockKhz": 20000,
+        "failedClocks": [],
+        "transport": "atomic-4",
+        "verified": true
+      },
+      "error": null,
+      "registersPreserved": true,
+      "cpuKeptHalted": true,
+      "ui": "读 1.06 MB/s · 写 1.18 MB/s · SWD 20 MHz · 20 KiB × 3 轮 · 校验通过 · CPU 保持暂停"
+    },
+    {
+      "requestedKhz": 20000,
+      "result": {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 55.10000002384186,
+        "readMs": 49.199999928474426,
+        "writeRate": 1.1150635203886536,
+        "readRate": 1.24878048962032,
+        "clockKhz": 20000,
+        "failedClocks": [],
+        "transport": "atomic-4",
+        "verified": true
+      },
+      "error": null,
+      "registersPreserved": true,
+      "cpuKeptHalted": true,
+      "ui": "读 1.25 MB/s · 写 1.12 MB/s · SWD 20 MHz · 20 KiB × 3 轮 · 校验通过 · CPU 保持暂停"
+    },
+    {
+      "requestedKhz": 0,
+      "result": {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 32.799999952316284,
+        "readMs": 35.5,
+        "writeRate": 1.8731707344304798,
+        "readRate": 1.730704225352113,
+        "clockKhz": 45000,
+        "failedClocks": [
+          {
+            "clockKhz": 60000,
+            "error": "SRAM 地址设置/完成检查失败 @0x20000000：异常 ACK 0x00；可降低 SWD 时钟后重试（命令/ACK：02 05 00 00 06 00 00 07）"
+          }
+        ],
+        "transport": "atomic-4",
+        "verified": true
+      },
+      "error": null,
+      "registersPreserved": true,
+      "cpuKeptHalted": true,
+      "ui": "读 1.73 MB/s · 写 1.87 MB/s · SWD 45 MHz · 20 KiB × 3 轮 · 校验通过 · CPU 保持暂停"
+    },
+    {
+      "requestedKhz": 0,
+      "result": {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 33.300000071525574,
+        "readMs": 33.39999997615814,
+        "writeRate": 1.845045041082045,
+        "readRate": 1.8395209593969342,
+        "clockKhz": 45000,
+        "failedClocks": [
+          {
+            "clockKhz": 60000,
+            "error": "SRAM 地址设置/完成检查失败 @0x20000000：异常 ACK 0x00；可降低 SWD 时钟后重试（命令/ACK：02 05 00 00 06 00 00 07）"
+          }
+        ],
+        "transport": "atomic-4",
+        "verified": true
+      },
+      "error": null,
+      "registersPreserved": true,
+      "cpuKeptHalted": true,
+      "ui": "读 1.84 MB/s · 写 1.85 MB/s · SWD 45 MHz · 20 KiB × 3 轮 · 校验通过 · CPU 保持暂停"
+    },
+    {
+      "requestedKhz": 0,
+      "result": {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 54.60000002384186,
+        "readMs": 51.799999952316284,
+        "writeRate": 1.1252747247833583,
+        "readRate": 1.1861003871922333,
+        "clockKhz": 20000,
+        "failedClocks": [
+          {
+            "clockKhz": 60000,
+            "error": "SRAM 地址设置/完成检查失败 @0x20000000：异常 ACK 0x00；可降低 SWD 时钟后重试（命令/ACK：02 05 00 00 06 00 00 07）"
+          },
+          {
+            "clockKhz": 45000,
+            "error": "SRAM 地址设置/完成检查失败 @0x20000000：异常 ACK 0x00；可降低 SWD 时钟后重试（命令/ACK：02 05 01 00 06 78 00 08）"
+          },
+          {
+            "clockKhz": 36000,
+            "error": "SRAM 地址设置/完成检查失败 @0x20000000：SWD 协议错误；可降低 SWD 时钟后重试（命令/ACK：02 05 01 08 06 78 00 01）"
+          }
+        ],
+        "transport": "atomic-4",
+        "verified": true
+      },
+      "error": null,
+      "registersPreserved": true,
+      "cpuKeptHalted": true,
+      "ui": "读 1.19 MB/s · 写 1.13 MB/s · SWD 20 MHz · 20 KiB × 3 轮 · 校验通过 · CPU 保持暂停"
+    }
+  ],
+  "errors": [],
+  "flashWrites": false,
+  "original": {
+    "identity": {
+      "cpuid": 1092600369,
+      "device": 268657684,
+      "flashKiB": 512
+    },
+    "wasHalted": false,
+    "regs": [
+      0,
+      131072,
+      0,
+      536877048,
+      0,
+      8,
+      79764919,
+      7,
+      6,
+      134218745,
+      134236266,
+      28,
+      536878076,
+      536936424,
+      134219185,
+      134226530,
+      1090519040
+    ],
+    "ramBytes": 65536,
+    "ramSha256": "85753b32aa0911c02c649493aaf0b473ef1e436826ca2fed9bf0dfc7d2f09e6a",
+    "flashSha256": "61a097c84c8ca7cae573a950618de6009083048755b5c26def16f6cc351a354d"
+  }
+}

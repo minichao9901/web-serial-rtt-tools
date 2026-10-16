@@ -23,7 +23,7 @@ import { CHIPS, fillChipSelect } from '../core/chips.js';
 import { BridgeClient } from '../rtt/bridge.js';
 import { WebUsbDapProbe, withTimeout } from '../rtt/dap-webusb.js';
 import { pulseTargetReset } from './target-reset.js';
-import { SramBenchTransfer } from './sram-transfer.js';
+import { SramBenchTransfer, prepareSramClock } from './sram-transfer.js';
 import { ALGOS, F1_DEV, checkFlashRange } from './algos.js';
 import { HPM_BOARDS, hpmBoard, hpmCheckRange } from './hpm/chips.js';
 import { DBGMCU_BASES, FLASH_SIZE_REGS, decodeCpuid, decodeDpIdcode, decodeStm32Dev, refineByFlash, saneFlashKb } from './devid.js';
@@ -307,7 +307,7 @@ export class FlashView {
       const bulk = typeof p.info==='function' ? await SramBenchTransfer.create(p) : null;
       const write = (address, data) => bulk ? bulk.write(address,data) : p.writeMem(address,data);
       const read = (address, length) => bulk ? bulk.read(address,length) : p.readMem(address,length);
-      let writeMs = 0, readMs = 0, clockKhz = requestedClock;
+      let writeMs = 0, readMs = 0, clockKhz = requestedClock, clockSetup = null;
       const failedClocks = [];
       const candidates = requestedClock ? [requestedClock] : [60000,45000,36000,20000,10000,4000,1000];
       p.verifyWrites = false;
@@ -315,7 +315,7 @@ export class FlashView {
         for (const candidate of candidates){
           try {
             clockKhz = candidate; writeMs = 0; readMs = 0;
-            if (p.setClock) await p.setClock(clockKhz*1000);
+            clockSetup = await prepareSramClock(p, clockKhz*1000);
             this._status(`写入 ${size / 1024} KiB SRAM（${SRAM_BENCH_PASSES} 轮）…`);
             for (let pass = 0; pass < SRAM_BENCH_PASSES; pass++){
               for (let i = 0; i < size; i++) pattern[i] = ((i * 73) ^ (i >>> 3) ^ (i >>> 11) ^ seed ^ (pass * 97)) & 0xff;
@@ -354,7 +354,7 @@ export class FlashView {
       const totalBytes = size * SRAM_BENCH_PASSES;
       const writeRate = totalBytes / (Math.max(0.001, writeMs) / 1000) / 1e6;
       const readRate = totalBytes / (Math.max(0.001, readMs) / 1000) / 1e6;
-      result = { addr, size, passes: SRAM_BENCH_PASSES, writeMs, readMs, writeRate, readRate, clockKhz, failedClocks, transport: bulk ? `atomic-${bulk.depth}` : 'standard', verified: true };
+      result = { addr, size, passes: SRAM_BENCH_PASSES, writeMs, readMs, writeRate, readRate, clockKhz, clockSetup, failedClocks, transport: bulk ? `transfer-${bulk.depth}/${bulk.packetSize}B` : 'standard', verified: true };
     } catch (e){
       operationError = e;
     } finally {

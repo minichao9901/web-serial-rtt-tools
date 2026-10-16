@@ -1,0 +1,19 @@
+{
+  "flashWrites": false,
+  "testedDirty": true,
+  "task": "Flash page SRAM benchmark on actual F103ZE",
+  "testedBase": "fb06da2348543b75db5fbc237dd4d3b0ffe1d655",
+  "testedRevision": "pre-commit-worktree",
+  "startedAt": "2026-10-16T13:18:09.8838736+08:00",
+  "runId": "20261016-f103ze-sram-131809-fcaefe",
+  "endedAt": "2026-10-16T13:27:37.237798+08:00",
+  "experimentCompleted": true,
+  "validationResult": "partial",
+  "hardwareTest": "partial",
+  "verifiedCases": 11,
+  "cases": 14,
+  "ramRestored": true,
+  "originalProgramRestarted": true,
+  "flashUnchanged": true,
+  "productionSourceChanges": false
+}

@@ -1,0 +1,10 @@
+{
+  "exitCode": 1,
+  "startedAt": "2026-10-16T13:56:12.058019+08:00",
+  "endedAt": "2026-10-16T13:56:12.395179+08:00",
+  "command": [
+    "node",
+    "E:/web-serial-rtt-tools/docs/validation/20261016-sram-root-cause-134100/abort-hardware.mjs"
+  ],
+  "cwd": "E:\\web-serial-rtt-tools"
+}

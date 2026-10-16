@@ -1,0 +1,10 @@
+{
+  "exitCode": 0,
+  "startedAt": "2026-10-16T13:40:38.115188+08:00",
+  "endedAt": "2026-10-16T13:40:41.756555+08:00",
+  "command": [
+    "python",
+    "E:/web-serial-rtt-tools/docs/validation/20261016-sram-root-cause-134100/reproduce-native.py"
+  ],
+  "cwd": "E:/Share/github/akaLinkPro"
+}

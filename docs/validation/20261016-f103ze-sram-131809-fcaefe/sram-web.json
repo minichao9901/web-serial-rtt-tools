@@ -1,0 +1,200 @@
+{
+  "started": "2026-10-16T05:19:53.020Z",
+  "method": "actual FlashView.benchmarkSram and browser WebUSB; CPU pre-halted, entire 64 KiB RAM preserved externally",
+  "cases": [
+    {
+      "requestedKhz": 1000,
+      "result": {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 735,
+        "readMs": 728.2000000476837,
+        "writeRate": 0.08359183673469388,
+        "readRate": 0.0843724251523988,
+        "clockKhz": 1000,
+        "failedClocks": [],
+        "transport": "atomic-4",
+        "verified": true
+      },
+      "error": null,
+      "registersPreserved": true,
+      "cpuKeptHalted": true,
+      "ui": "读 0.08 MB/s · 写 0.08 MB/s · SWD 1 MHz · 20 KiB × 3 轮 · 校验通过 · CPU 保持暂停"
+    },
+    {
+      "requestedKhz": 4000,
+      "result": {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 194.39999997615814,
+        "readMs": 186.79999995231628,
+        "writeRate": 0.31604938275481076,
+        "readRate": 0.32890792299616467,
+        "clockKhz": 4000,
+        "failedClocks": [],
+        "transport": "atomic-4",
+        "verified": true
+      },
+      "error": null,
+      "registersPreserved": true,
+      "cpuKeptHalted": true,
+      "ui": "读 0.33 MB/s · 写 0.32 MB/s · SWD 4 MHz · 20 KiB × 3 轮 · 校验通过 · CPU 保持暂停"
+    },
+    {
+      "requestedKhz": 10000,
+      "result": {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 89.99999988079071,
+        "readMs": 82.60000002384186,
+        "writeRate": 0.6826666675708912,
+        "readRate": 0.7438256656448646,
+        "clockKhz": 10000,
+        "failedClocks": [],
+        "transport": "atomic-4",
+        "verified": true
+      },
+      "error": null,
+      "registersPreserved": true,
+      "cpuKeptHalted": true,
+      "ui": "读 0.74 MB/s · 写 0.68 MB/s · SWD 10 MHz · 20 KiB × 3 轮 · 校验通过 · CPU 保持暂停"
+    },
+    {
+      "requestedKhz": 20000,
+      "result": {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 57.799999952316284,
+        "readMs": 81.10000002384186,
+        "writeRate": 1.062975779423644,
+        "readRate": 0.7575832303568163,
+        "clockKhz": 20000,
+        "failedClocks": [],
+        "transport": "atomic-4",
+        "verified": true
+      },
+      "error": null,
+      "registersPreserved": true,
+      "cpuKeptHalted": true,
+      "ui": "读 0.76 MB/s · 写 1.06 MB/s · SWD 20 MHz · 20 KiB × 3 轮 · 校验通过 · CPU 保持暂停"
+    },
+    {
+      "requestedKhz": 36000,
+      "result": null,
+      "error": "页面异常：Error: SRAM 地址设置/完成检查失败 @0x20000000：SWD 协议错误；可降低 SWD 时钟后重试（命令/ACK：02 05 01 08 06 78 00 01）\n    at fail (http://127.0.0.1:8899/app/flash/sram-transfer.js:67:19)\n    at http://127.0.0.1:8899/app/flash/sram-transfer.js:69:38\n    at async WebUsbDapProbe._withLock (http://127.0.0.1:8899/app/rtt/dap-webusb.js:1034:18)\n    at async SramBenchTransfer._move (http://127.0.0.1:8899/app/flash/sram-transfer.js:43:18)\n    at async SramBenchTransfer.write (http://127.0.0.1:8899/app/flash/sram-transfer.js:39:28)\n    at async withTimeout (http://127.0.0.1:8899/app/rtt/dap-webusb.js:74:16)\n    at async FlashView._benchmarkSramOnce (http://127.0.0.1:8899/app/flash/view.js:323:15)\n    at async runProbeOperation.reason.reason (http://127.0.0.1:8899/app/flash/view.js:209:16)\n    at async execute (http://127.0.0.1:8899/app/core/probe-manager.js:89:20)",
+      "registersPreserved": true,
+      "cpuKeptHalted": true,
+      "ui": "SRAM 测速失败：SRAM 地址设置/完成检查失败 @0x20000000：SWD 协议错误；可降低 SWD 时钟后重试（命令/ACK：02 05 01 08 06 78 00 01）"
+    },
+    {
+      "requestedKhz": 45000,
+      "result": null,
+      "error": "页面异常：Error: SRAM 地址设置/完成检查失败 @0x20000000：异常 ACK 0x00；可降低 SWD 时钟后重试（命令/ACK：02 05 01 00 06 78 00 08）\n    at fail (http://127.0.0.1:8899/app/flash/sram-transfer.js:67:19)\n    at http://127.0.0.1:8899/app/flash/sram-transfer.js:69:38\n    at async WebUsbDapProbe._withLock (http://127.0.0.1:8899/app/rtt/dap-webusb.js:1034:18)\n    at async SramBenchTransfer._move (http://127.0.0.1:8899/app/flash/sram-transfer.js:43:18)\n    at async SramBenchTransfer.write (http://127.0.0.1:8899/app/flash/sram-transfer.js:39:28)\n    at async withTimeout (http://127.0.0.1:8899/app/rtt/dap-webusb.js:74:16)\n    at async FlashView._benchmarkSramOnce (http://127.0.0.1:8899/app/flash/view.js:323:15)\n    at async runProbeOperation.reason.reason (http://127.0.0.1:8899/app/flash/view.js:209:16)\n    at async execute (http://127.0.0.1:8899/app/core/probe-manager.js:89:20)",
+      "registersPreserved": true,
+      "cpuKeptHalted": true,
+      "ui": "SRAM 测速失败：SRAM 地址设置/完成检查失败 @0x20000000：异常 ACK 0x00；可降低 SWD 时钟后重试（命令/ACK：02 05 01 00 06 78 00 08）"
+    },
+    {
+      "requestedKhz": 60000,
+      "result": null,
+      "error": "页面异常：Error: SRAM 地址设置/完成检查失败 @0x20000000：异常 ACK 0x00；可降低 SWD 时钟后重试（命令/ACK：02 05 00 00 06 00 00 07）\n    at fail (http://127.0.0.1:8899/app/flash/sram-transfer.js:67:19)\n    at http://127.0.0.1:8899/app/flash/sram-transfer.js:69:38\n    at async WebUsbDapProbe._withLock (http://127.0.0.1:8899/app/rtt/dap-webusb.js:1034:18)\n    at async SramBenchTransfer._move (http://127.0.0.1:8899/app/flash/sram-transfer.js:43:18)\n    at async SramBenchTransfer.write (http://127.0.0.1:8899/app/flash/sram-transfer.js:39:28)\n    at async withTimeout (http://127.0.0.1:8899/app/rtt/dap-webusb.js:74:16)\n    at async FlashView._benchmarkSramOnce (http://127.0.0.1:8899/app/flash/view.js:323:15)\n    at async runProbeOperation.reason.reason (http://127.0.0.1:8899/app/flash/view.js:209:16)\n    at async execute (http://127.0.0.1:8899/app/core/probe-manager.js:89:20)",
+      "registersPreserved": true,
+      "cpuKeptHalted": true,
+      "ui": "SRAM 测速失败：SRAM 地址设置/完成检查失败 @0x20000000：异常 ACK 0x00；可降低 SWD 时钟后重试（命令/ACK：02 05 00 00 06 00 00 07）"
+    },
+    {
+      "requestedKhz": 0,
+      "result": {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 55.700000047683716,
+        "readMs": 51.89999997615814,
+        "writeRate": 1.1030520636876548,
+        "readRate": 1.1838150294455558,
+        "clockKhz": 20000,
+        "failedClocks": [
+          {
+            "clockKhz": 60000,
+            "error": "SRAM 地址设置/完成检查失败 @0x20000000：异常 ACK 0x00；可降低 SWD 时钟后重试（命令/ACK：02 05 00 00 06 00 00 07）"
+          },
+          {
+            "clockKhz": 45000,
+            "error": "SRAM 地址设置/完成检查失败 @0x20000000：SWD 协议错误；可降低 SWD 时钟后重试（命令/ACK：02 05 01 08 06 78 00 01）"
+          },
+          {
+            "clockKhz": 36000,
+            "error": "SRAM 地址设置/完成检查失败 @0x20000000：SWD 协议错误；可降低 SWD 时钟后重试（命令/ACK：02 05 01 08 06 78 00 01）"
+          }
+        ],
+        "transport": "atomic-4",
+        "verified": true
+      },
+      "error": null,
+      "registersPreserved": true,
+      "cpuKeptHalted": true,
+      "ui": "读 1.18 MB/s · 写 1.10 MB/s · SWD 20 MHz · 20 KiB × 3 轮 · 校验通过 · CPU 保持暂停"
+    }
+  ],
+  "errors": [],
+  "flashWrites": false,
+  "original": {
+    "identity": {
+      "cpuid": 1092600369,
+      "device": 268657684,
+      "flashKiB": 512
+    },
+    "wasHalted": false,
+    "regs": [
+      1,
+      131072,
+      0,
+      1,
+      0,
+      8,
+      79764919,
+      7,
+      6,
+      134218745,
+      134236266,
+      28,
+      536878076,
+      536936424,
+      134219199,
+      134219252,
+      553648128
+    ],
+    "ramBytes": 65536,
+    "ramSha256": "e567652de580263f06496ea4c955eeee7681214cf6d9170b65ff74679260100f",
+    "flashSha256": "61a097c84c8ca7cae573a950618de6009083048755b5c26def16f6cc351a354d"
+  },
+  "rangeLimits": [
+    {
+      "size": 32768,
+      "rejected": true,
+      "error": "0x20000000–0x20008000 不在当前芯片的已知 SRAM 区间内"
+    },
+    {
+      "size": 65536,
+      "rejected": true,
+      "error": "0x20000000–0x20010000 不在当前芯片的已知 SRAM 区间内"
+    },
+    {
+      "size": 131072,
+      "rejected": true,
+      "error": "0x20000000–0x20020000 不在当前芯片的已知 SRAM 区间内"
+    }
+  ],
+  "completed": true,
+  "restore": {
+    "ramRestored": true,
+    "registersPreserved": true,
+    "halted": false,
+    "flashSha256": "61a097c84c8ca7cae573a950618de6009083048755b5c26def16f6cc351a354d"
+  },
+  "finished": "2026-10-16T05:20:21.481Z"
+}

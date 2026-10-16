@@ -1,0 +1,10 @@
+{
+  "exitCode": 0,
+  "startedAt": "2026-10-16T13:52:02.153228+08:00",
+  "endedAt": "2026-10-16T13:52:20.678200+08:00",
+  "command": [
+    "node",
+    "E:/web-serial-rtt-tools/docs/validation/20261016-sram-root-cause-134100/production-ui.mjs"
+  ],
+  "cwd": "E:\\web-serial-rtt-tools"
+}
