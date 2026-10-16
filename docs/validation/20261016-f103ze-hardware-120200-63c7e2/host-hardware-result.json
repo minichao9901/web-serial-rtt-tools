@@ -1,0 +1,9 @@
+{
+  "method": "production toolbox WebUsbDapProbe, raw USB bytes, actual F103ZE + Kingst",
+  "rounds": [],
+  "passed": false,
+  "elfSha": "63881ed9f6c1187d56924795ccad3f151a677aea0dfa201823fe44e0cb857522",
+  "entry": 134218960,
+  "error": "AssertionError [ERR_ASSERTION]: 不能唯一确定 TPIU 字节相位：0 个候选；请检查通道和取样位置。\n\n'error' !== 'done'\n\n    at file:///E:/web-serial-rtt-tools/tools/selftest/etm-host-reset-hw.mjs:32:10\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)",
+  "finalRunning": true
+}

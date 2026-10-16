@@ -1,0 +1,11 @@
+{
+  "exitCode": 0,
+  "startedAt": "2026-10-16T12:13:34.500928+08:00",
+  "endedAt": "2026-10-16T12:13:48.192830+08:00",
+  "command": [
+    "node",
+    "tools/selftest/diagnostics-hw.mjs",
+    "--board=f103ze"
+  ],
+  "cwd": "E:\\web-serial-rtt-tools"
+}

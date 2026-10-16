@@ -1,0 +1,7 @@
+ETMv3
+0x4114f241
+0x810
+0x18800
+0x2
+0x8000000 E:\web-serial-rtt-tools\docs\validation\20261016-f103ze-retest-125542-c3d845\etm-records\capture-61f2784d0b6948329b7efd1d9e8186ae\image-0.bin
+0x20000000 E:\web-serial-rtt-tools\docs\validation\20261016-f103ze-retest-125542-c3d845\etm-records\capture-61f2784d0b6948329b7efd1d9e8186ae\image-1.bin

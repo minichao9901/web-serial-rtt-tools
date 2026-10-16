@@ -1,0 +1,13 @@
+{
+  "exitCode": 0,
+  "startedAt": "2026-10-16T12:22:48.153934+08:00",
+  "endedAt": "2026-10-16T12:23:08.115890+08:00",
+  "command": [
+    "node",
+    "tools/dev/hss-web-bench.mjs",
+    "docs/validation/20261016-f103ze-hardware-120200-63c7e2/scope72.json",
+    "[{\"period\":2,\"draw\":true,\"adaptive\":true},{\"period\":3,\"draw\":true,\"adaptive\":true},{\"period\":20,\"draw\":true,\"adaptive\":true}]",
+    "5"
+  ],
+  "cwd": "E:\\web-serial-rtt-tools"
+}

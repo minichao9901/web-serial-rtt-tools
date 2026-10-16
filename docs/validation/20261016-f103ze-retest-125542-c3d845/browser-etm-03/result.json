@@ -1,0 +1,256 @@
+{
+  "method": "actual same-origin iframe, real browser WebUSB and ProbeManager, UI file/controls/live capture; directory compatibility File API with actual referenced source bytes",
+  "views": [
+    {
+      "view": "instructions",
+      "body": "序号PC机器码 / 指令函数 / 源码0未同步边界（初始化或缺口）1跟踪开启边界20x080005a0ldrb r3, [r3]cdc_poll :27430x080005a2cbnz r3, #0x80005bacdc_poll :27440x080005a4msr primask, r4cdc_poll :41450x080005a8pop {r3, r4, r5, pc}cdc_poll :",
+      "source": "cdc_poll · 第 274 行"
+    },
+    {
+      "view": "functions",
+      "body": "函数路径记录实际调用未知状态cdc_poll4,6574230main3,80800HAL_IncTick710SysTick_Handler30 / IRQ 10",
+      "source": "cdc_poll · 第 274 行"
+    },
+    {
+      "view": "hotspots",
+      "body": "函数 / 源码行路径记录未知状态main :4491,6930main :4581,6920cdc_poll :2741,2710cdc_poll :2711,2690cdc_poll :4144240cdc_poll :2994240main :4524230cdc_poll :2664230cdc_poll :3864230cdc_poll :1424230HAL_IncTick :29560",
+      "source": "cdc_poll · 第 274 行"
+    },
+    {
+      "view": "packets",
+      "body": "偏移长度包04NOTSYNC : Trace Stream not synchronised416NOTSYNC : Trace Stream not synchronised2016NOTSYNC : Trace Stream not synchronised3616NOTSYNC : Trace Stream not synchronised5216NOTSYNC : Trace Stream",
+      "source": "cdc_poll · 第 274 行"
+    },
+    {
+      "view": "quality",
+      "body": "区段关联 ETM 偏移状态 / 原因#00未同步边界( [init-decoder])#11529跟踪开启边界( [begin or filter])物理边界—TPIU 同步前物理字节 · 2 字节物理边界—不完整的 TPIU 尾帧 · 14 字节",
+      "source": "cdc_poll · 第 274 行"
+    },
+    {
+      "view": "flame",
+      "body": "按执行顺序按调用权重上一级收起源码#～查看#0～#8479 · 横轴为执行序号，当前没有逐指令时间戳。拖选、缩放按钮或 Ctrl＋滚轮查看局部序号区间；纵向按实际调用深度延展，可滚动查看。灰色“多段调用”表示当前显示桶含多条路径，放大后可查看细节。#0#2120#4240#6359#8479#0 OCSD_GEN_TRC_ELEM_NO_SYNC( [init-decoder])；#1 OCSD_",
+      "source": "cdc_poll · 第 274 行"
+    }
+  ],
+  "errors": [],
+  "sources": [
+    {
+      "path": "E:/web-etm-trace-worktrees/codex-f103-target/firmware/stm32f103_cdc_trace/cherryusb/class/cdc/usbd_cdc_acm.c",
+      "sha256": "bbb5836dedc069ca66cee1a76cff68f90ba2afa225085fd0f5fbaf9564277d84"
+    },
+    {
+      "path": "E:/web-etm-trace-worktrees/codex-f103-target/firmware/stm32f103_cdc_trace/cherryusb/common/usb_memcpy.h",
+      "sha256": "f8293845dd5fbf8bc8b566e4aed2f1b577c8f0ca54213a1d11d5521d65fb06e7"
+    },
+    {
+      "path": "E:/web-etm-trace-worktrees/codex-f103-target/firmware/stm32f103_cdc_trace/cherryusb/core/usbd_core.c",
+      "sha256": "686d8cf8fa4fc29b698124b0f1c9962af77fe99b8f4bbcaa4c5e7d25474b8afb"
+    },
+    {
+      "path": "E:/web-etm-trace-worktrees/codex-f103-target/firmware/stm32f103_cdc_trace/cherryusb/port/fsdev/usb_dc_fsdev.c",
+      "sha256": "a681a55196661f3a8ddf1a389f6daccc30e980bbec739eed5ced9b5026b7d2ae"
+    },
+    {
+      "path": "E:/web-etm-trace-worktrees/codex-f103-target/firmware/stm32f103_cdc_trace/cherryusb/port/fsdev/usb_glue_st.c",
+      "sha256": "d2f0830bd5883a34071d24bb777a6a5674acfbfdb76c6a6292ecbfe472a7309c"
+    },
+    {
+      "path": "E:/web-etm-trace-worktrees/codex-f103-target/firmware/stm32f103_cdc_trace/sdk/Drivers/CMSIS/Device/ST/STM32F1xx/Source/Templates/gcc/startup_stm32f103xe.s",
+      "sha256": "433d5b5fe985bbf6fd06e2672f6ce5ca7d86ed0e429b9e813861b032fa72a377"
+    },
+    {
+      "path": "E:/web-etm-trace-worktrees/codex-f103-target/firmware/stm32f103_cdc_trace/sdk/Drivers/CMSIS/Include/cmsis_gcc.h",
+      "sha256": "8c16d51f7884a9fc07c5cbe6f2bcd24e5e092ddc519f71d36740c2d2e2ff6a27"
+    },
+    {
+      "path": "E:/web-etm-trace-worktrees/codex-f103-target/firmware/stm32f103_cdc_trace/sdk/Drivers/CMSIS/Include/core_cm3.h",
+      "sha256": "368296087a925cf78133d27e0854d748605441915e0f4fece93f2f97eea68adb"
+    },
+    {
+      "path": "E:/web-etm-trace-worktrees/codex-f103-target/firmware/stm32f103_cdc_trace/sdk/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal.c",
+      "sha256": "6650fcfa559dca126b91c6c0f576e3dec25ddb26811c55e294cbcc01888a85ec"
+    },
+    {
+      "path": "E:/web-etm-trace-worktrees/codex-f103-target/firmware/stm32f103_cdc_trace/sdk/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_cortex.c",
+      "sha256": "024427c57b2f4413fe95806fb5e91b3703093d9b132f4976bd9a1525989f6e23"
+    },
+    {
+      "path": "E:/web-etm-trace-worktrees/codex-f103-target/firmware/stm32f103_cdc_trace/sdk/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio.c",
+      "sha256": "a2e12792c9d49eecdc567ab9fc1a49ed90723007f9579b702c28960dfd83e121"
+    },
+    {
+      "path": "E:/web-etm-trace-worktrees/codex-f103-target/firmware/stm32f103_cdc_trace/sdk/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc.c",
+      "sha256": "5316062f62ea8b049b49f8e3d78102ba5ddd744ed975e1e627cf826cbab9e501"
+    },
+    {
+      "path": "E:/web-etm-trace-worktrees/codex-f103-target/firmware/stm32f103_cdc_trace/sdk/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c",
+      "sha256": "eb7503a6a1f0b7bfd7488bd851ae3cac2b88194f344847c74e0a15e563b41db1"
+    },
+    {
+      "path": "E:/web-etm-trace-worktrees/codex-f103-target/firmware/stm32f103_cdc_trace/sdk/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_uart.c",
+      "sha256": "12921c287574a4eb75aa2b71a2e590963b4f869a3b05e1532d495390412df3b8"
+    },
+    {
+      "path": "E:/web-etm-trace-worktrees/codex-f103-target/firmware/stm32f103_cdc_trace/segger_rtt/SEGGER_RTT.c",
+      "sha256": "6e575f15435e78c21e85c50a76b4403216966a88196163d72c4e5e871c492aaf"
+    },
+    {
+      "path": "E:/web-etm-trace-worktrees/codex-f103-target/firmware/stm32f103_cdc_trace/src/cdc_console.c",
+      "sha256": "85b3a9a4771c142082ea9fc654aee95d478956e71509d09a91b14ef5dd5ae6a2"
+    },
+    {
+      "path": "E:/web-etm-trace-worktrees/codex-f103-target/firmware/stm32f103_cdc_trace/src/main.c",
+      "sha256": "9bd0bbdee9608e845abf0bdfa2ab61f7a8a2a1956ea5a7924fca3ff5fd8cd367"
+    },
+    {
+      "path": "E:/web-etm-trace-worktrees/codex-f103-target/firmware/stm32f103_cdc_trace/src/stm32f1xx_hal_msp.c",
+      "sha256": "83035a73a124020b925c5cc0d20bab5e3e0be21d1c84894d9d1670feed9c7e16"
+    },
+    {
+      "path": "E:/web-etm-trace-worktrees/codex-f103-target/firmware/stm32f103_cdc_trace/src/stm32f1xx_it.c",
+      "sha256": "871da49a50f3ff14cc2b943b44c959c586dc518706704166deb3e9ffb2abc70b"
+    },
+    {
+      "path": "E:/web-etm-trace-worktrees/codex-f103-target/firmware/stm32f103_cdc_trace/src/syscalls.c",
+      "sha256": "d33346cbb6155f2ae29db9f8141350559920be7cc6bb859e4d49a79d739c0b19"
+    },
+    {
+      "path": "E:/web-etm-trace-worktrees/codex-f103-target/firmware/stm32f103_cdc_trace/src/system_stm32f1xx.c",
+      "sha256": "6d73104f1f3c9835f5e1a2b53ef59c98b5015675acdc09124d55ac9fe42dee79"
+    },
+    {
+      "path": "E:/web-etm-trace-worktrees/codex-f103-target/firmware/stm32f103_cdc_trace/src/trace_hooks.c",
+      "sha256": "cc96edccacb87d216401c04d663b7bd14e7ece0a6434f175ebd17b828a599a29"
+    }
+  ],
+  "before": {
+    "elfSha": "63881ed9f6c1187d56924795ccad3f151a677aea0dfa201823fe44e0cb857522",
+    "clocks": {
+      "knownHz": 48000000,
+      "knownTraceHz": 48000000,
+      "coreHz": 48000000,
+      "traceHz": 48000000,
+      "external": true,
+      "source": "HSE → PLL",
+      "path": "HSE 8 MHz ÷1 ×6 → AHB ÷1",
+      "tracePath": "HCLK → TRACEPORTCK（与 CPU 相同）",
+      "traceReady": true,
+      "busDivider": 1,
+      "coreDivider": 1,
+      "traceRelation": "Trace 输入 = HCLK；4 位 DDR 的 TRACECLK = HCLK / 2",
+      "physicalTraceHz": 24000000,
+      "hclkHz": 48000000
+    },
+    "entry": 134218960,
+    "usbAuthorized": 1,
+    "disabled": false
+  },
+  "capture": {
+    "record": "capture-2bcf2a43afbb45b08321583fd9dfd1d8",
+    "summary": {
+      "exceptions": 1,
+      "executed": 7628,
+      "functions": {
+        "HAL_IncTick": 7,
+        "SysTick_Handler": 3,
+        "cdc_poll": 3810,
+        "main": 3808
+      },
+      "gaps": 1,
+      "instructions": 8475,
+      "packetIssues": 0,
+      "packets": 2293,
+      "ranges": 8475,
+      "sourceMapped": 8475,
+      "unknownExecution": 0
+    },
+    "quality": {
+      "accountedBytes": 3261,
+      "basis": "字节核算不等于采集无损证明；源码映射率不等于程序覆盖率",
+      "boundaryPresent": true,
+      "decoderLastError": 0,
+      "firstPathOffset": 1535,
+      "initialPhysicalBytes": 2,
+      "inputBytes": 3261,
+      "overflowPackets": 0,
+      "overlapBytes": 0,
+      "packetIssues": 0,
+      "processedBytes": 3261,
+      "timing": {
+        "cycleElements": 0,
+        "timeFlameAvailable": false
+      },
+      "trailingFrameBytes": 14,
+      "trailingSyncBytes": 0,
+      "unaccountedBytes": 0,
+      "unknownExecution": 0,
+      "unknownSourceBytes": 0,
+      "unprocessedBytes": 0,
+      "unsynchronizedBytes": 1017,
+      "unsynchronizedRecords": 79,
+      "validPackets": 2214
+    },
+    "jobState": "记录已保存",
+    "source": "1/*2 * STM32F103（CB/R8/ZE）+ CherryUSB CDC ACM 例程 + etm-trace 钩子3 * ============================================================================4 * 目录：E:\\web-etm-trace\\firmware\\stm32f103_cdc_trace5 *6 * 基线说明（本工程怎么来的）：7 *   以你提供的参考工程 cherry_drag_n_drop_bootloader_fat16（MSC 拖拽 IAP，8 *   已在同一块板上验证可枚举）为基底，**只做三处改动**：9 *     1) USB 类：class/msc → class/cdc（用 CherryUSB demo/cdc_acm_template.c 改写）10 *     2) 时钟/GPIO/UART 初始化：直接沿用参考工程 main.c 的 SystemClock_Config / MX_GPIO_Init11 *        （ZE 默认 HSE 8MHz × PLL6 = 48MHz；CB 及显式对照档 PLL9 = 72MHz，USB 均为 48MHz）12 *     3) 增加 etm-trace 钩子（SEGGER RTT 日志 + DWT 打点），删掉 MSC/flash_fat16/DFU 相关文件13 *   USB 底层（usb_dc_fsdev.c / usb_fsdev_reg.h / usb_glue_st.c / usb_config.h）保持原样，14 *   唯一额外的构建前准备是 tools/prep.ps1（解开 ST 启动文件对 USB 中断的弱别名锁定，15 *   原因见该脚本注释与 README）。16 *17 * CDC 命令（串口工具/脚本，DTR 必须拉起来）：18 *   PING | INFO | MARK | ECHO on|off | ECHO <text>19 *   默认\"收到什么回什么\"。20 *21 * 构建：pwsh -NoProfile -File .\\build.ps1            （默认 -Chip cb，在线板）22 *       pwsh -NoProfile -File .\\build.ps1 -Chip ze  （F103ZE 目标板，带 ETM）23 */24#include \"main.h\"25#include \"usbd_core.h\"26#include \"usbd_cdc_acm.h\"27#include \"trace_hooks.h\"28#include \"cdc_console.h\"29#include \"SEGGER_RTT.h\"30#include \"trace_workload.h\"31 32#if (defined(TRACE_CPU_24MHZ) + defined(TRACE_CPU_48MHZ) + defined(TRACE_CPU_72MHZ)) > 133#error \"Choose only one CPU clock profile\"34#endif35#if defined(STM32F103xE) && !defined(TRACE_CPU_72MHZ) && !defined(TRACE_CPU_48MHZ) && !defined(TRACE_CPU_24MHZ)36#define TRACE_CPU_48MHZ37#endif38 39#include <string.h>40#include <stdio.h>41 42UART_HandleTypeDef huart1;43 44/* 时钟实测值，给 trace_hooks.c 用 */45uint32_t g_sysclk_hz = 0;46uint32_t g_clock_err = 0;47 48/* ======================= CherryUSB CDC ACM 描述符 =======================49 * 端点号与 demo/cdc_acm_template.c 一致：INT=0x83 / OUT=0x02 / IN=0x81 */50#define CDC_IN_EP  0x8151#define CDC_OUT_EP 0x0252#define CDC_INT_EP 0x8353 54#define USBD_VID           0xF05555#define USBD_PID           0x103156#define USBD_MAX_POWER     10057#define USBD_LANGID_STRING 103358 59#define USB_CONFIG_SIZE (9 + CDC_ACM_DESCRIPTOR_LEN)60 61/* F103 只有全速 USB，包长固定 64 */62#define CDC_MAX_MPS 6463 64/* 模板里是 2048；F103CB 只有 20KB RAM，缩到 512（逻辑完全一样） */65#define CDC_BUF_SIZE 51266 67static const uint8_t device_descriptor[] = {68    USB_DEVICE_DESCRIPTOR_INIT(USB_2_0, 0xEF, 0x02, 0x01, USBD_VID, USBD_PID, 0x0100, 0x01)69};70 71static const uint8_t config_descriptor[] = {72    USB_CONFIG_DESCRIPTOR_INIT(USB_CONFIG_SIZE, 0x02, 0x01, USB_CONFIG_BUS_POWERED, USBD_MAX_POWER),73    CDC_ACM_DESCRIPTOR_INIT(0x00, CDC_INT_EP, CDC_OUT_EP, CDC_IN_EP, CDC_MAX_MPS, 0x02)74};75 76static const uint8_t device_quality_descriptor[] = {77    /* device qualifier（FS 设备也要给，Windows 会问） */78    0x0a, USB_DESCRIPTOR_TYPE_DEVICE_QUALIFIER,79    0x00, 0x02, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00,80};81 82static const char *string_descriptors[] = {83    (const char[]){ 0x09, 0x04 }, /* Langid = 1033 */84    \"web-etm-trace\",              /* Manufacturer */85    \"STM32F103 CDC ACM (CherryUSB)\", /* Product */86    \"F103CDC0001\",                /* Serial */87};88 89static const uint8_t *device_descriptor_callback(uint8_t speed)90{91    (void)speed; return device_descriptor;92}93static const uint8_t *config_descriptor_callback(uint8_t speed)94{95    (void)speed; return config_descriptor;96}97static const uint8_t *device_quality_descriptor_callback(uint8_t speed)98{99    (void)speed; return device_quality_descriptor;100}101static const char *string_descriptor_callback(uint8_t speed, uint8_t index)102{103    (void)speed;104    if (index >= (sizeof(string_descriptors) / sizeof(char *))) return NULL;105    return string_descriptors[index];106}107 108static const struct usb_descriptor cdc_descriptor = {109    .device_descriptor_callback = device_descriptor_callback,110    .config_descriptor_callback = config_descriptor_callback,111    .device_quality_descriptor_callback = device_quality_descriptor_callback,112    .string_descriptor_callback = string_descriptor_callback113};114 115/* ======================= 端点缓冲 =======================116 * 缓冲大小与 H7B0 的 CDC_RX_SIZE/CDC_TX_SIZE 不同：F103CB 只有 20KB RAM。 */117static uint8_t read_buffer[CDC_BUF_SIZE];118static uint8_t write_buffer[CDC_BUF_SIZE];119 120static volatile uint32_t rx_len;121static uint32_t rx_processed;122static volatile uint8_t rx_pending;123static uint8_t rx_armed;124static volatile uint32_t rx_total;125static volatile uint32_t tx_total;126static volatile uint8_t ep_tx_busy_flag;127static volatile uint8_t dtr_enable;128static volatile uint8_t usb_configured;129static uint8_t banner_sent;130 131static const char banner[] =132    \"\\r\\n=== STM32F103 CherryUSB CDC ACM (etm-trace target) ===\\r\\n\"133    \"commands: PING | INFO | MARK | ECHO on|off | ECHO <text>\\r\\n\";134 135/* ======================= USB 事件回调 =======================136 * 回调只更新标志；队列与接收缓冲由主循环在临界区里统一处理（见 cdc_poll）。 */137static void cdc_session_reset(void)138{139    usb_configured = 0;140    dtr_enable = 0;141    rx_pending = rx_armed = 0;142    rx_len = rx_processed = 0;143    ep_tx_busy_flag = banner_sent = 0;144    cdc_console_reset();145}146 147static void usbd_event_handler(uint8_t busid, uint8_t event)148{149    (void)busid;150    switch (event) {151        case USBD_EVENT_RESET:152            cdc_session_reset();153            USB_LOG_RAW(\"[usb] reset\\r\\n\");154            break;155        case USBD_EVENT_CONNECTED:156            USB_LOG_RAW(\"[usb] connected\\r\\n\");157            break;158        case USBD_EVENT_DISCONNECTED:159            cdc_session_reset();160            USB_LOG_RAW(\"[usb] disconnected\\r\\n\");161            break;162        case USBD_EVENT_RESUME:163        case USBD_EVENT_SUSPEND:164            break;165        case USBD_EVENT_CONFIGURED:166            cdc_session_reset();167            usb_configured = 1;168            USB_LOG_RAW(\"[usb] configured\\r\\n\");169            break;170        case USBD_EVENT_SET_REMOTE_WAKEUP:171        case USBD_EVENT_CLR_REMOTE_WAKEUP:172            break;173        default:174            break;175    }176}177 178void usbd_cdc_acm_bulk_out(uint8_t busid, uint8_t ep, uint32_t nbytes)179{180    (void)busid;181    (void)ep;182    rx_armed = 0;183    rx_len = nbytes;184    rx_processed = 0;185    rx_pending = 1;186    rx_total += nbytes;187    g_trace.usb_rx = rx_total;188    /* 主循环处理完这包才重新接收；TX 满时通过 OUT NAK 施加背压。 */189}190 191void usbd_cdc_acm_bulk_in(uint8_t busid, uint8_t ep, uint32_t nbytes)192{193    tx_total += nbytes;194    g_trace.usb_tx = tx_total;195 196    uint16_t mps = usbd_get_ep_mps(busid, ep);197    if (usb_configured && mps && nbytes && (nbytes % mps) == 0) {198        /* 整包后补 ZLP；ZLP 完成前保持忙标志。 */199        if (usbd_ep_start_write(busid, CDC_IN_EP, NULL, 0) != 0) {200            ep_tx_busy_flag = 0;201        }202    } else {203        ep_tx_busy_flag = 0;204    }205}206 207static struct usbd_endpoint cdc_out_ep = { .ep_addr = CDC_OUT_EP, .ep_cb = usbd_cdc_acm_bulk_out };208static struct usbd_endpoint cdc_in_ep = { .ep_addr = CDC_IN_EP, .ep_cb = usbd_cdc_acm_bulk_in };209static struct usbd_interface intf0;210static struct usbd_interface intf1;211 212/* CDC 类请求回调（模板里是 __WEAK，这里给真实实现） */213void usbd_cdc_acm_set_dtr(uint8_t busid, uint8_t intf, bool dtr)214{215    (void)busid;216    (void)intf;217    dtr_enable = dtr ? 1 : 0;218    if (!dtr) {219        /* 关闭串口：清命令行和待发队列，再次打开时重新发欢迎信息。 */220        cdc_console_reset();221        rx_processed = rx_len;222        banner_sent = 0;223    }224}225 226void usbd_cdc_acm_set_rts(uint8_t busid, uint8_t intf, bool rts)227{228    (void)busid;229    (void)intf;230    (void)rts;231}232 233static int cdc_acm_init(uint8_t busid, uintptr_t reg_base)234{235    usbd_desc_register(busid, &cdc_descriptor);236    usbd_add_interface(busid, usbd_cdc_acm_init_intf(busid, &intf0));237    usbd_add_interface(busid, usbd_cdc_acm_init_intf(busid, &intf1));238    usbd_add_endpoint(busid, &cdc_out_ep);239    usbd_add_endpoint(busid, &cdc_in_ep);240 241    cdc_session_reset();242    /* 内部会调 usb_dc_init() → usb_dc_low_level_init()，243     * 后者在 usb_glue_st.c 里走 HAL_PCD_MspInit 开时钟与中断。 */244    return usbd_initialize(busid, reg_base, usbd_event_handler);245}246 247/* ======================= 主循环收发 =======================248 * 调用前必须关中断（见 cdc_poll），与 USB 回调串行化对队列和缓冲的所有权。 */249static void cdc_tx_poll(void)250{251    if (!usb_configured || !dtr_enable || ep_tx_busy_flag) {252        return;253    }254    uint32_t n = (uint32_t)cdc_console_peek(write_buffer, sizeof(write_buffer));255    if (n) {256        ep_tx_busy_flag = 1;257        if (usbd_ep_start_write(0, CDC_IN_EP, write_buffer, n) == 0) {258            cdc_console_consume(n);259        } else {260            ep_tx_busy_flag = 0; /* 保留队列数据，下次重试 */261        }262    }263}264 265static void cdc_poll(void)266{267    uint32_t primask = __get_PRIMASK();268    __disable_irq();269 270    /* 每次只解析一包 64 字节，主循环里不做等待或 RTT 日志。 */271    if (usb_configured && !usb_device_is_configured(0)) {272        cdc_session_reset(); /* SET_CONFIGURATION(0) 不会触发回调 */273    }274    if (usb_configured) {275        cdc_tx_poll();276        if (dtr_enable && !banner_sent &&277            cdc_console_write((const uint8_t *)banner, sizeof(banner) - 1u)) {278            banner_sent = 1;279        }280        if (rx_pending) {281            if (dtr_enable) {282                rx_processed += (uint32_t)cdc_console_feed(283                    read_buffer + rx_processed, rx_len - rx_processed);284            } else {285                rx_processed = rx_len;286            }287            if (rx_processed == rx_len) {288                rx_pending = 0;289            }290        }291        if (!rx_pending && !rx_armed) {292            if (usbd_ep_start_read(0, CDC_OUT_EP, read_buffer, sizeof(read_buffer)) == 0) {293                rx_armed = 1;294            }295        }296        cdc_tx_poll();297    }298    __set_PRIMASK(primask);299}300 301/* ======================= CDC 命令行（协议由 cdc_console.c 负责）=======================302 * 板级回调：INFO 字段与 H7B0 不同（F103 没有 TRACECLK）。303 * usbhp/ctr 用于排查枚举；RESET/ERR/SUSP 走 LP 向量，本工程不计数（见 trace_hooks.h）。 */304size_t cdc_console_info(char *out, size_t capacity)305{306    int n = snprintf(out, capacity,307                     \"chip=STM32F103 sysclk=%luHz clk_err=%lu loops=%lu marks=%lu rx=%lu tx=%lu \"308                     \"usbhp=%lu ctr=%lu\\r\\n\",309                     (unsigned long)g_sysclk_hz, (unsigned long)g_clock_err,310                     (unsigned long)g_trace.loops, (unsigned long)g_trace.marks,311                     (unsigned long)rx_total, (unsigned long)tx_total,312                     (unsigned long)g_trace.usb_hp_irq, (unsigned long)g_trace.usb_ctr);313    return n > 0 ? (size_t)n : 0u;314}315 316void cdc_console_mark(void)317{318    trace_hook_mark();319}320 321/* ======================= 时钟 / 外设初始化（沿用参考工程） ======================= */322void SystemClock_Config(void)323{324    RCC_OscInitTypeDef RCC_OscInitStruct = { 0 };325    RCC_ClkInitTypeDef RCC_ClkInitStruct = { 0 };326    RCC_PeriphCLKInitTypeDef PeriphClkInit = { 0 };327 328    /* F103ZE defaults to PLL6: CPU/HCLK 48 MHz, TRACECLK 24 MHz, USB 48 MHz.329     * PLL9 remains available as an explicit 72/36 MHz comparison build. */330    RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;331    RCC_OscInitStruct.HSEState = RCC_HSE_ON;332    RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV1;333    RCC_OscInitStruct.HSIState = RCC_HSI_ON;334    RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;335    RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;336#if defined(TRACE_CPU_48MHZ) || defined(TRACE_CPU_24MHZ)337    RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL6;338#else339    RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL9;340#endif341    if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK) {342        g_clock_err |= 1u;343    }344 345    RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK |346                                  RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;347    RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;348#ifdef TRACE_CPU_24MHZ349    RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV2; /* PLL48 retains USB48, CPU24/TRACECLK12. */350#else351    RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;352#endif353    RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;354    RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;355#ifdef TRACE_CPU_24MHZ356    if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK) {357#elif defined(TRACE_CPU_48MHZ)358    if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_1) != HAL_OK) {359#else360    if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK) {361#endif362        g_clock_err |= 2u;363    }364 365    /* USB 时钟固定为 48 MHz：72 MHz 档 PLL /1.5，48 MHz 档 PLL /1。 */366    PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USB;367#if defined(TRACE_CPU_48MHZ) || defined(TRACE_CPU_24MHZ)368    PeriphClkInit.UsbClockSelection = RCC_USBCLKSOURCE_PLL;369#else370    PeriphClkInit.UsbClockSelection = RCC_USBCLKSOURCE_PLL_DIV1_5;371#endif372    if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK) {373        g_clock_err |= 4u;374    }375 376    g_sysclk_hz = HAL_RCC_GetHCLKFreq();377}378 379static void MX_GPIO_Init(void)380{381    GPIO_InitTypeDef GPIO_InitStruct = { 0 };382 383    __HAL_RCC_GPIOA_CLK_ENABLE();384    __HAL_RCC_GPIOB_CLK_ENABLE();385 386#if defined(STM32F103xE)387    /* Parallel ETM trace output: PE2=TRACECLK, PE3..PE6=TRACED0..3.388     * These pins reset as floating inputs.  DBGMCU_CR selects the trace389     * function later, but the GPIO output stages must be configured here.390     * Keep this independent of the host's ETM/TPIU enable sequence. */391    __HAL_RCC_GPIOE_CLK_ENABLE();392    GPIO_InitStruct.Pin = GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_4 |393                          GPIO_PIN_5 | GPIO_PIN_6;394    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;395    GPIO_InitStruct.Pull = GPIO_NOPULL;396    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH; /* F1: 50 MHz output mode */397    HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);398#endif399 400    /* PA0：保留参照工程的输入脚（不驱动，避免与板级跳线冲突）。401     * PA1：trace 打点脚，由 trace_hooks.c 初始化为推挽输出。 */402    GPIO_InitStruct.Pin = GPIO_PIN_0;403    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;404    GPIO_InitStruct.Pull = GPIO_PULLDOWN;405    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;406    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);407 408    /* PB2：参照工程的状态输出脚，保留以免板级行为变化。 */409    GPIO_InitStruct.Pin = GPIO_PIN_2;410    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;411    GPIO_InitStruct.Pull = GPIO_NOPULL;412    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;413    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);414}415 416static void MX_USART1_UART_Init(void)417{418    huart1.Instance = USART1;419    huart1.Init.BaudRate = 115200;420    huart1.Init.WordLength = UART_WORDLENGTH_8B;421    huart1.Init.StopBits = UART_STOPBITS_1;422    huart1.Init.Parity = UART_PARITY_NONE;423    huart1.Init.Mode = UART_MODE_TX_RX;424    huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;425    if (HAL_UART_Init(&huart1) != HAL_OK) {426        g_clock_err |= 8u;427    }428}429 430/* ======================= main ======================= */431int main(void)432{433    HAL_Init();434    SystemClock_Config();435    SystemCoreClockUpdate();436    MX_GPIO_Init();437    MX_USART1_UART_Init();438 439    SEGGER_RTT_Init();440    trace_log_printf(\"\\r\\n=== STM32F103 CDC ACM (CherryUSB) ===\\r\\n\");441    trace_log_printf(\"SYSCLK=%lu Hz, HCLK=%lu Hz, clock_err=%lu\\r\\n\",442                     (unsigned long)HAL_RCC_GetSysClockFreq(),443                     (unsigned long)HAL_RCC_GetHCLKFreq(),444                     (unsigned long)g_clock_err);445 446    trace_hook_init();447    trace_hook_entry();448 449    (void)cdc_acm_init(0, (uintptr_t)USB_BASE);450    trace_log_printf(\"usb initialized (USB_BASE=0x%08lx)\\r\\n\", (unsigned long)USB_BASE);451 452    trace_hook_ready();453 454    for (;;) {455        g_trace.loops++;456 457        /* 每轮只处理一包；RTT 日志与 USB 回调互不阻塞。 */458        cdc_poll();459 460#ifdef TRACE_PATH_WORKLOAD461        trace_workload_round(g_trace.loops);462#endif463 464        if ((g_trace.loops & 0xFFFFFu) == 0u) {465            trace_hook_mark();466        }467    }468}469 ",
+    "selected": 2,
+    "info": {
+      "cpuid": 1092600369,
+      "device": 268657684,
+      "profile": "stm32f103ze",
+      "name": "STM32F103ZE / 高容量 F103（PE2～PE6）",
+      "core": "Cortex-M3",
+      "etmVersion": "ETMv3.4",
+      "traceSupported": true,
+      "traceStatus": "F103ZE 48/24 MHz Kingst 联动与 ETMv3 解码已验收；封装须有 PE2～PE6",
+      "flashLimit": 134742016,
+      "traceOptions": {
+        "branchBroadcast": true,
+        "returnStack": false,
+        "cycleCount": false
+      },
+      "config": {
+        "protocol": "ETMv3",
+        "idr": 1091891777,
+        "ctrl": 1041,
+        "ccer": 100352,
+        "traceid": 0
+      },
+      "halted": false,
+      "rcc": {
+        "cr": 50548355,
+        "cfgr": 5309450
+      },
+      "clocks": {
+        "knownHz": 48000000,
+        "knownTraceHz": 48000000,
+        "coreHz": 48000000,
+        "traceHz": 48000000,
+        "external": true,
+        "source": "HSE → PLL",
+        "path": "HSE 8 MHz ÷1 ×6 → AHB ÷1",
+        "tracePath": "HCLK → TRACEPORTCK（与 CPU 相同）",
+        "traceReady": true,
+        "busDivider": 1,
+        "coreDivider": 1,
+        "traceRelation": "Trace 输入 = HCLK；4 位 DDR 的 TRACECLK = HCLK / 2",
+        "physicalTraceHz": 24000000,
+        "hclkHz": 48000000
+      },
+      "clockError": null,
+      "hseHz": 8000000,
+      "width": 1
+    },
+    "leases": [
+      "etm"
+    ]
+  },
+  "export_record": 770453,
+  "export_csv": 1375088,
+  "export_source": 1261083,
+  "handoff": {
+    "connected": true,
+    "etmProbeClosed": true,
+    "etmLeaseReleased": true
+  },
+  "passed": true
+}

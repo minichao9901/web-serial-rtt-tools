@@ -1,0 +1,127 @@
+{
+  "method": "actual same-origin iframe, real browser WebUSB and ProbeManager, UI file/controls/live capture",
+  "views": [],
+  "errors": [],
+  "before": {
+    "elfSha": "63881ed9f6c1187d56924795ccad3f151a677aea0dfa201823fe44e0cb857522",
+    "clocks": {
+      "knownHz": 48000000,
+      "knownTraceHz": 48000000,
+      "coreHz": 48000000,
+      "traceHz": 48000000,
+      "external": true,
+      "source": "HSE → PLL",
+      "path": "HSE 8 MHz ÷1 ×6 → AHB ÷1",
+      "tracePath": "HCLK → TRACEPORTCK（与 CPU 相同）",
+      "traceReady": true,
+      "busDivider": 1,
+      "coreDivider": 1,
+      "traceRelation": "Trace 输入 = HCLK；4 位 DDR 的 TRACECLK = HCLK / 2",
+      "physicalTraceHz": 24000000,
+      "hclkHz": 48000000
+    },
+    "entry": 134218960,
+    "usbAuthorized": 1,
+    "disabled": false
+  },
+  "capture": {
+    "record": "capture-9b7b7bab8de94eb48da516772fde2c75",
+    "summary": {
+      "exceptions": 1,
+      "executed": 7645,
+      "functions": {
+        "HAL_IncTick": 7,
+        "SysTick_Handler": 3,
+        "cdc_poll": 3819,
+        "main": 3816
+      },
+      "gaps": 1,
+      "instructions": 8494,
+      "packetIssues": 0,
+      "packets": 2297,
+      "ranges": 8494,
+      "sourceMapped": 8494,
+      "unknownExecution": 0
+    },
+    "quality": {
+      "accountedBytes": 3265,
+      "basis": "字节核算不等于采集无损证明；源码映射率不等于程序覆盖率",
+      "boundaryPresent": true,
+      "decoderLastError": 0,
+      "firstPathOffset": 1535,
+      "initialPhysicalBytes": 1,
+      "inputBytes": 3265,
+      "overflowPackets": 0,
+      "overlapBytes": 0,
+      "packetIssues": 0,
+      "processedBytes": 3265,
+      "timing": {
+        "cycleElements": 0,
+        "timeFlameAvailable": false
+      },
+      "trailingFrameBytes": 0,
+      "trailingSyncBytes": 3,
+      "unaccountedBytes": 0,
+      "unknownExecution": 0,
+      "unknownSourceBytes": 0,
+      "unprocessedBytes": 0,
+      "unsynchronizedBytes": 1017,
+      "unsynchronizedRecords": 79,
+      "validPackets": 2218
+    },
+    "jobState": "记录已保存",
+    "source": "尚未载入配套源码，可在文件页选择目录。",
+    "selected": 2,
+    "info": {
+      "cpuid": 1092600369,
+      "device": 268657684,
+      "profile": "stm32f103ze",
+      "name": "STM32F103ZE / 高容量 F103（PE2～PE6）",
+      "core": "Cortex-M3",
+      "etmVersion": "ETMv3.4",
+      "traceSupported": true,
+      "traceStatus": "F103ZE 48/24 MHz Kingst 联动与 ETMv3 解码已验收；封装须有 PE2～PE6",
+      "flashLimit": 134742016,
+      "traceOptions": {
+        "branchBroadcast": true,
+        "returnStack": false,
+        "cycleCount": false
+      },
+      "config": {
+        "protocol": "ETMv3",
+        "idr": 1091891777,
+        "ctrl": 1041,
+        "ccer": 100352,
+        "traceid": 0
+      },
+      "halted": false,
+      "rcc": {
+        "cr": 50548355,
+        "cfgr": 5309450
+      },
+      "clocks": {
+        "knownHz": 48000000,
+        "knownTraceHz": 48000000,
+        "coreHz": 48000000,
+        "traceHz": 48000000,
+        "external": true,
+        "source": "HSE → PLL",
+        "path": "HSE 8 MHz ÷1 ×6 → AHB ÷1",
+        "tracePath": "HCLK → TRACEPORTCK（与 CPU 相同）",
+        "traceReady": true,
+        "busDivider": 1,
+        "coreDivider": 1,
+        "traceRelation": "Trace 输入 = HCLK；4 位 DDR 的 TRACECLK = HCLK / 2",
+        "physicalTraceHz": 24000000,
+        "hclkHz": 48000000
+      },
+      "clockError": null,
+      "hseHz": 8000000,
+      "width": 1
+    },
+    "leases": [
+      "etm"
+    ]
+  },
+  "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(report.capture.source.length>40)\n\n    at file:///E:/web-serial-rtt-tools/docs/validation/20261016-f103ze-retest-125542-c3d845/etm-browser.mjs:22:281"
+}

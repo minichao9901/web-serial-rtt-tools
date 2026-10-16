@@ -1,0 +1,232 @@
+{
+  "method": "persistent OpenOCD TCL writes while free-running Kingst capture is active; weak pull-up/down input",
+  "actualDepth": "1200000",
+  "actualTime": "0 1.2",
+  "rows": [
+    {
+      "high": true,
+      "pinHigh": true,
+      "seconds": 0.15911969996523112
+    },
+    {
+      "high": false,
+      "pinHigh": false,
+      "seconds": 0.16627019993029535
+    },
+    {
+      "high": true,
+      "pinHigh": true,
+      "seconds": 0.17343259998597205
+    },
+    {
+      "high": false,
+      "pinHigh": false,
+      "seconds": 0.18082289991434664
+    },
+    {
+      "high": true,
+      "pinHigh": true,
+      "seconds": 0.18815970001742244
+    },
+    {
+      "high": false,
+      "pinHigh": false,
+      "seconds": 0.19512139994185418
+    },
+    {
+      "high": true,
+      "pinHigh": true,
+      "seconds": 0.2025830999482423
+    },
+    {
+      "high": false,
+      "pinHigh": false,
+      "seconds": 0.2095950999064371
+    },
+    {
+      "high": true,
+      "pinHigh": true,
+      "seconds": 0.21650879993103445
+    },
+    {
+      "high": false,
+      "pinHigh": false,
+      "seconds": 0.22393759991973639
+    },
+    {
+      "high": true,
+      "pinHigh": true,
+      "seconds": 0.23123139992821962
+    },
+    {
+      "high": false,
+      "pinHigh": false,
+      "seconds": 0.23850849992595613
+    },
+    {
+      "high": true,
+      "pinHigh": true,
+      "seconds": 0.2455258999252692
+    },
+    {
+      "high": false,
+      "pinHigh": false,
+      "seconds": 0.25262339995242655
+    },
+    {
+      "high": true,
+      "pinHigh": true,
+      "seconds": 0.2596067999256775
+    },
+    {
+      "high": false,
+      "pinHigh": false,
+      "seconds": 0.2670430999714881
+    },
+    {
+      "high": true,
+      "pinHigh": true,
+      "seconds": 0.27462289994582534
+    },
+    {
+      "high": false,
+      "pinHigh": false,
+      "seconds": 0.28235729993321
+    },
+    {
+      "high": true,
+      "pinHigh": true,
+      "seconds": 0.2894249999662861
+    },
+    {
+      "high": false,
+      "pinHigh": false,
+      "seconds": 0.29709439992439
+    },
+    {
+      "high": true,
+      "pinHigh": true,
+      "seconds": 0.30441320000682026
+    },
+    {
+      "high": false,
+      "pinHigh": false,
+      "seconds": 0.31193909991998225
+    },
+    {
+      "high": true,
+      "pinHigh": true,
+      "seconds": 0.3189936999697238
+    },
+    {
+      "high": false,
+      "pinHigh": false,
+      "seconds": 0.3261515999911353
+    },
+    {
+      "high": true,
+      "pinHigh": true,
+      "seconds": 0.3331316999392584
+    },
+    {
+      "high": false,
+      "pinHigh": false,
+      "seconds": 0.3405298999277875
+    },
+    {
+      "high": true,
+      "pinHigh": true,
+      "seconds": 0.3474518000148237
+    },
+    {
+      "high": false,
+      "pinHigh": false,
+      "seconds": 0.3547075999667868
+    },
+    {
+      "high": true,
+      "pinHigh": true,
+      "seconds": 0.36189369997009635
+    },
+    {
+      "high": false,
+      "pinHigh": false,
+      "seconds": 0.3692952999845147
+    },
+    {
+      "high": true,
+      "pinHigh": true,
+      "seconds": 0.3763861999614164
+    },
+    {
+      "high": false,
+      "pinHigh": false,
+      "seconds": 0.38375989999622107
+    },
+    {
+      "high": true,
+      "pinHigh": true,
+      "seconds": 0.3906569000100717
+    },
+    {
+      "high": false,
+      "pinHigh": false,
+      "seconds": 0.3980073999846354
+    },
+    {
+      "high": true,
+      "pinHigh": true,
+      "seconds": 0.40543419995810837
+    },
+    {
+      "high": false,
+      "pinHigh": false,
+      "seconds": 0.41241240000817925
+    },
+    {
+      "high": true,
+      "pinHigh": true,
+      "seconds": 0.4196958999382332
+    },
+    {
+      "high": false,
+      "pinHigh": false,
+      "seconds": 0.42685249994974583
+    },
+    {
+      "high": true,
+      "pinHigh": true,
+      "seconds": 0.43394969997461885
+    },
+    {
+      "high": false,
+      "pinHigh": false,
+      "seconds": 0.44089620001614094
+    }
+  ],
+  "gpioReadbackPassed": true,
+  "transitions": {
+    "0": 0,
+    "1": 0,
+    "2": 0,
+    "3": 0,
+    "4": 0,
+    "5": 0,
+    "6": 0,
+    "7": 0,
+    "8": 0,
+    "9": 0,
+    "10": 0,
+    "11": 0,
+    "12": 0,
+    "13": 0,
+    "14": 0,
+    "15": 0
+  },
+  "observedChannels": [],
+  "channel4PathPassed": false,
+  "overlapWindow": [
+    0.15911969996523112,
+    0.44089620001614094
+  ]
+}

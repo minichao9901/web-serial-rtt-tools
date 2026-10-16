@@ -1,0 +1,17 @@
+{
+  "exitCode": 0,
+  "startedAt": "2026-10-16T12:23:08.955791+08:00",
+  "endedAt": "2026-10-16T12:23:33.749597+08:00",
+  "command": [
+    "python",
+    "tools/selftest/probe-hid-diag.py",
+    "--mode=loss",
+    "--seq",
+    "--clk=45",
+    "--com=COM43",
+    "--iters=3",
+    "--window=5",
+    "--rxbuf=1048576"
+  ],
+  "cwd": "E:\\web-serial-rtt-tools"
+}

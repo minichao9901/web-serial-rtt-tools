@@ -1,0 +1,44 @@
+[
+  {
+    "path": "E:\\web-serial-rtt-tools\\tools\\target-firmware\\stm32f103_rtt_speed\\build-ze\\fw.elf",
+    "bytes": 139168,
+    "sha256": "786a1918032126fdb1ceb6d6a7e02679905e6a06e1e809182bfed3dbf5270190",
+    "archivedPath": "E:\\web-serial-rtt-tools\\docs\\validation\\20261016-f103ze-acceptance-112445-5b3aac\\built-artifacts\\1-stm32f103_rtt_speed-build-ze.elf"
+  },
+  {
+    "path": "E:\\web-serial-rtt-tools\\tools\\target-firmware\\stm32f103_rtt_seq\\build-ze\\fw.elf",
+    "bytes": 139496,
+    "sha256": "73796c30c97deada68e603a266834e9391e4a11dcd81c39b88fbb8cfe86a899a",
+    "archivedPath": "E:\\web-serial-rtt-tools\\docs\\validation\\20261016-f103ze-acceptance-112445-5b3aac\\built-artifacts\\2-stm32f103_rtt_seq-build-ze.elf"
+  },
+  {
+    "path": "E:\\web-serial-rtt-tools\\tools\\target-firmware\\stm32f103_scope\\build\\fw.elf",
+    "bytes": 160964,
+    "sha256": "0dce6952d7d92beee8a0faafd2ff087735c5e28c73bfb5082816a73eb1f3675d",
+    "archivedPath": "E:\\web-serial-rtt-tools\\docs\\validation\\20261016-f103ze-acceptance-112445-5b3aac\\built-artifacts\\3-stm32f103_scope-build.elf"
+  },
+  {
+    "path": "E:\\web-serial-rtt-tools\\tools\\target-firmware\\stm32f103_dbgstress\\build\\fw.elf",
+    "bytes": 189280,
+    "sha256": "eaa07aa96e99d8e021f867a4d2d08e7eaab213145a6f570e29cc25e7135c71ce",
+    "archivedPath": "E:\\web-serial-rtt-tools\\docs\\validation\\20261016-f103ze-acceptance-112445-5b3aac\\built-artifacts\\4-stm32f103_dbgstress-build.elf"
+  },
+  {
+    "path": "E:\\web-serial-rtt-tools\\tools\\target-firmware\\stm32f103_dbgstress\\build-og\\fw.elf",
+    "bytes": 187952,
+    "sha256": "1c0cc3a27bbb897ea379e917ea0bc5f1e422913637ce2eb81715ade913a495ea",
+    "archivedPath": "E:\\web-serial-rtt-tools\\docs\\validation\\20261016-f103ze-acceptance-112445-5b3aac\\built-artifacts\\5-stm32f103_dbgstress-build-og.elf"
+  },
+  {
+    "path": "E:\\web-serial-rtt-tools\\tools\\target-firmware\\stm32f103ze_fault\\build\\fw.elf",
+    "bytes": 162392,
+    "sha256": "07e419ba586bf2b70558c2e6037e224c1b4833a82402b1f8ef6cdb9a6ea8857c",
+    "archivedPath": "E:\\web-serial-rtt-tools\\docs\\validation\\20261016-f103ze-acceptance-112445-5b3aac\\built-artifacts\\6-stm32f103ze_fault-build.elf"
+  },
+  {
+    "path": "E:\\web-serial-rtt-tools\\docs\\validation\\20261016-f103ze-acceptance-112445-5b3aac\\swo-ze\\fw.elf",
+    "bytes": 174580,
+    "sha256": "e9748f430a7e3fdf7c86b31ea08ee12228c22300ee85293286a3ec85f6423b48",
+    "archivedPath": "E:\\web-serial-rtt-tools\\docs\\validation\\20261016-f103ze-acceptance-112445-5b3aac\\built-artifacts\\7-20261016-f103ze-acceptance-112445-5b3aac-swo-ze.elf"
+  }
+]

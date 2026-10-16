@@ -1,0 +1,10 @@
+{
+  "exitCode": 0,
+  "startedAt": "2026-10-16T12:07:34.559339+08:00",
+  "endedAt": "2026-10-16T12:07:40.436054+08:00",
+  "command": [
+    "node",
+    "docs/validation/20261016-f103ze-hardware-120200-63c7e2/clock-diag.mjs"
+  ],
+  "cwd": "E:\\web-serial-rtt-tools"
+}

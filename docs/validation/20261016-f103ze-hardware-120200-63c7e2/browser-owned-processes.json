@@ -1,0 +1,42 @@
+[
+  {
+    "ProcessId": 33356,
+    "Name": "chrome.exe",
+    "CommandLine": "\"C:\\Users\\Administrator\\AppData\\Local\\Google\\Chrome\\Bin\\chrome.exe\" --remote-debugging-port=9333 --user-data-dir=C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\chrome-f103ze-20261016-f103ze-hardware-120200-63c7e2 --no-first-run --no-default-browser-check --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-renderer-backgrounding --window-size=1400,950 http://127.0.0.1:8899/index.html"
+  },
+  {
+    "ProcessId": 29176,
+    "Name": "chrome.exe",
+    "CommandLine": "C:\\Users\\Administrator\\AppData\\Local\\Google\\Chrome\\Bin\\chrome.exe --type=crashpad-handler --user-data-dir=C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\chrome-f103ze-20261016-f103ze-hardware-120200-63c7e2 /prefetch:4 --monitor-self-annotation=ptype=crashpad-handler --database=C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\chrome-f103ze-20261016-f103ze-hardware-120200-63c7e2\\Crashpad --url=https://clients2.google.com/cr/report --annotation=channel= --annotation=plat=Win64 --annotation=prod=Chrome --annotation=ver=155.0.8059.84 --initial-client-data=0x120,0x124,0x128,0xfc,0x12c,0x7ffb859e2ed0,0x7ffb859e2ee0,0x7ffb859e2ef0"
+  },
+  {
+    "ProcessId": 7204,
+    "Name": "chrome.exe",
+    "CommandLine": "\"C:\\Users\\Administrator\\AppData\\Local\\Google\\Chrome\\Bin\\chrome.exe\" --type=gpu-process --gpu-recent-crash-count=0 --user-data-dir=\"C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\chrome-f103ze-20261016-f103ze-hardware-120200-63c7e2\" --no-pre-read-main-dll --gpu-preferences=WAAAAAAAAADgAAAEAAAAAAAAAAAAAGAAQAAAAAAAAAADAAAAAAAAADgAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAKAAAAAAAAAAoAAAAAAAAAAgAAAAAAAAAEAAAAAIAAAABAAAAAAAAAAgAAAAAAAAACAAAAAAAAAA= --metrics-shmem-handle=1768,i,15524978125011004346,4919585076559785496,262144 --field-trial-handle=1860,i,6291597823697124143,11083427291116340985,262144 --variations-seed-version --pseudonymization-salt-handle=1864,i,4985657560907824974,15435785769743145167,4 --trace-process-track-uuid=3190708988185955192 --mojo-platform-channel-handle=1828 /prefetch:2"
+  },
+  {
+    "ProcessId": 15112,
+    "Name": "chrome.exe",
+    "CommandLine": "\"C:\\Users\\Administrator\\AppData\\Local\\Google\\Chrome\\Bin\\chrome.exe\" --type=utility --utility-sub-type=network.mojom.NetworkService --lang=zh-CN --service-sandbox-type=none --user-data-dir=\"C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\chrome-f103ze-20261016-f103ze-hardware-120200-63c7e2\" --no-pre-read-main-dll --metrics-shmem-handle=2020,i,7731713496615517770,8464577963207670477,524288 --field-trial-handle=1860,i,6291597823697124143,11083427291116340985,262144 --variations-seed-version --pseudonymization-salt-handle=1864,i,4985657560907824974,15435785769743145167,4 --trace-process-track-uuid=3190708989122997041 --mojo-platform-channel-handle=2136 /prefetch:11"
+  },
+  {
+    "ProcessId": 10288,
+    "Name": "chrome.exe",
+    "CommandLine": "\"C:\\Users\\Administrator\\AppData\\Local\\Google\\Chrome\\Bin\\chrome.exe\" --type=utility --utility-sub-type=storage.mojom.StorageService --lang=zh-CN --service-sandbox-type=service --user-data-dir=\"C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\chrome-f103ze-20261016-f103ze-hardware-120200-63c7e2\" --no-pre-read-main-dll --metrics-shmem-handle=2460,i,16741478715501875109,16950072645396951535,524288 --field-trial-handle=1860,i,6291597823697124143,11083427291116340985,262144 --variations-seed-version --pseudonymization-salt-handle=1864,i,4985657560907824974,15435785769743145167,4 --trace-process-track-uuid=3190708990060038890 --mojo-platform-channel-handle=2472 /prefetch:13"
+  },
+  {
+    "ProcessId": 32228,
+    "Name": "chrome.exe",
+    "CommandLine": "\"C:\\Users\\Administrator\\AppData\\Local\\Google\\Chrome\\Bin\\chrome.exe\" --type=renderer --top-chrome-webui --user-data-dir=\"C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\chrome-f103ze-20261016-f103ze-hardware-120200-63c7e2\" --no-pre-read-main-dll --disable-background-timer-throttling --remote-debugging-port=9333 --video-capture-use-gpu-memory-buffer --lang=zh-CN --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=5 --launch-time-ticks=790212738965 --metrics-shmem-handle=3720,i,8852470649371050672,10275723497631594200,1572864 --field-trial-handle=1860,i,6291597823697124143,11083427291116340985,262144 --variations-seed-version --pseudonymization-salt-handle=1864,i,4985657560907824974,15435785769743145167,4 --trace-process-track-uuid=3190708990997080739 --mojo-platform-channel-handle=3736 /prefetch:1"
+  },
+  {
+    "ProcessId": 20036,
+    "Name": "chrome.exe",
+    "CommandLine": "\"C:\\Users\\Administrator\\AppData\\Local\\Google\\Chrome\\Bin\\chrome.exe\" --type=renderer --user-data-dir=\"C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\chrome-f103ze-20261016-f103ze-hardware-120200-63c7e2\" --no-pre-read-main-dll --disable-background-timer-throttling --remote-debugging-port=9333 --video-capture-use-gpu-memory-buffer --lang=zh-CN --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=6 --launch-time-ticks=790212821518 --metrics-shmem-handle=4132,i,16538808080925194127,10356714754827781170,1572864 --field-trial-handle=1860,i,6291597823697124143,11083427291116340985,262144 --variations-seed-version --pseudonymization-salt-handle=1864,i,4985657560907824974,15435785769743145167,4 --trace-process-track-uuid=3190708991934122588 --mojo-platform-channel-handle=4140 /prefetch:1"
+  },
+  {
+    "ProcessId": 16368,
+    "Name": "chrome.exe",
+    "CommandLine": "\"C:\\Users\\Administrator\\AppData\\Local\\Google\\Chrome\\Bin\\chrome.exe\" --type=renderer --user-data-dir=\"C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\chrome-f103ze-20261016-f103ze-hardware-120200-63c7e2\" --no-pre-read-main-dll --disable-background-timer-throttling --remote-debugging-port=9333 --video-capture-use-gpu-memory-buffer --lang=zh-CN --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=26 --launch-time-ticks=790217928319 --metrics-shmem-handle=6324,i,4721977746826704265,10184724100240708020,1572864 --field-trial-handle=1860,i,6291597823697124143,11083427291116340985,262144 --variations-seed-version --pseudonymization-salt-handle=1864,i,4985657560907824974,15435785769743145167,4 --trace-process-track-uuid=3190709010674959568 --mojo-platform-channel-handle=6996 /prefetch:1"
+  }
+]

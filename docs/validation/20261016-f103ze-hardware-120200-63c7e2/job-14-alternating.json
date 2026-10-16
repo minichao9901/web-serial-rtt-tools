@@ -1,0 +1,1 @@
+{"command":["node","tools/selftest/hw-campaign.mjs","--board=f103ze","--local","--com=COM43","--cycles=0","--alt=5","--out=docs/validation/20261016-f103ze-hardware-120200-63c7e2/alternating.json"],"mutates":true,"timeout":300}

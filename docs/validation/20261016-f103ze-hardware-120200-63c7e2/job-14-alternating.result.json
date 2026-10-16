@@ -1,0 +1,16 @@
+{
+  "exitCode": 0,
+  "startedAt": "2026-10-16T12:13:48.197081+08:00",
+  "endedAt": "2026-10-16T12:14:03.000167+08:00",
+  "command": [
+    "node",
+    "tools/selftest/hw-campaign.mjs",
+    "--board=f103ze",
+    "--local",
+    "--com=COM43",
+    "--cycles=0",
+    "--alt=5",
+    "--out=docs/validation/20261016-f103ze-hardware-120200-63c7e2/alternating.json"
+  ],
+  "cwd": "E:\\web-serial-rtt-tools"
+}

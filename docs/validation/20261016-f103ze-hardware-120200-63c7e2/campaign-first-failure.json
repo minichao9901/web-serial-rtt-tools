@@ -1,0 +1,13 @@
+{
+ "startedAt": "2026-10-16T04:06:02.748Z",
+ "app": "http://127.0.0.1:8899/index.html?t=1792123561986#flash",
+ "board": "f103ze",
+ "com": "COM43",
+ "chip": "stm32f103",
+ "clock": "60000000",
+ "cycles": [],
+ "alt": [],
+ "errors": [
+  "判决未通过：转发跑在 60 MHz 档（实际 45 MHz）"
+ ]
+}

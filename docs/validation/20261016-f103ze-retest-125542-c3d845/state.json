@@ -1,0 +1,18 @@
+{
+  "stage": "ready",
+  "lastJob": "job-09-full",
+  "lastResult": {
+    "exitCode": 2,
+    "startedAt": "2026-10-16T13:07:28.263787+08:00",
+    "endedAt": "2026-10-16T13:07:49.665390+08:00",
+    "command": [
+      "make",
+      "-o",
+      "page-prep",
+      "full_flow_f103ze",
+      "ARGS=--com=COM43"
+    ],
+    "cwd": "E:\\web-serial-rtt-tools"
+  },
+  "pid": 35100
+}

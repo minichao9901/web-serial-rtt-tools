@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "frameOracle": "frame-oracle.json",
+  "cases": 7,
+  "smoke": [
+    "hardware breakpoint",
+    "registers",
+    "memory",
+    "backtrace",
+    "stepi",
+    "next",
+    "finish",
+    "detach"
+  ]
+}

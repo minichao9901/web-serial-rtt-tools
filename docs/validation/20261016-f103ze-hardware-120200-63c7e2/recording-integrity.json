@@ -1,0 +1,12 @@
+{
+  "bytes": 30912512,
+  "sha256": "b331be86ad76b16f46957bd6a19122644c3acc56d29548b1338ec4621b785d63",
+  "source": "E:\\web-serial-rtt-tools\\tmp\\rtt-forward-2026-10-16T04-08-47.bin",
+  "archived": "E:\\web-serial-rtt-tools\\docs\\validation\\20261016-f103ze-hardware-120200-63c7e2\\rtt-forward-10s.bin",
+  "expectedPattern": "hello world!\\n",
+  "phase": 4,
+  "everyByteMatchesPeriodicPattern": true,
+  "limitation": "A periodic payload cannot detect a missing whole multiple of 13 bytes. Sequence-number RTT is tested separately.",
+  "windowFileRatio": 0.9972251585623678,
+  "seconds": 10.2
+}

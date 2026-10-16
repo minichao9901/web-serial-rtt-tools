@@ -1,0 +1,23 @@
+{
+  "route": "same web NRST button with VC_CORERESET, actual RCC_CSR/PC evidence",
+  "flashWrites": false,
+  "resetOutput": {
+    "openDrain": true,
+    "supportsMode": true,
+    "dualReset": true,
+    "pa27Configurable": true,
+    "capabilities": 7
+  },
+  "before": {
+    "demcr": 16777216,
+    "vector": 134218313,
+    "dhcsr": 16842753
+  },
+  "after": {
+    "dhcsr": 16842753,
+    "csr": 0,
+    "pc": null,
+    "tick": 6355
+  },
+  "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n0 !== 67108864\n\n    at file:///E:/web-serial-rtt-tools/docs/validation/20261016-f103ze-retest-125542-c3d845/nrst-catch.mjs:9:9"
+}

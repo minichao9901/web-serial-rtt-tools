@@ -1,0 +1,1 @@
+{"command":["python","tools/selftest/probe-hid-diag.py","--mode=loss","--seq","--clk=45","--com=COM43","--iters=3","--window=5","--rxbuf=1048576"],"timeout":90}

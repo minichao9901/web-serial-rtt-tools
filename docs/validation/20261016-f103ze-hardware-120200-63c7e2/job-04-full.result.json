@@ -1,0 +1,13 @@
+{
+  "exitCode": 2,
+  "startedAt": "2026-10-16T12:07:50.456456+08:00",
+  "endedAt": "2026-10-16T12:09:31.228879+08:00",
+  "command": [
+    "make",
+    "-o",
+    "page-prep",
+    "full_flow_f103ze",
+    "ARGS=--com=COM43"
+  ],
+  "cwd": "E:\\web-serial-rtt-tools"
+}

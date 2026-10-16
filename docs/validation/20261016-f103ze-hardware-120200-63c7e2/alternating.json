@@ -1,0 +1,47 @@
+{
+ "startedAt": "2026-10-16T04:13:48.989Z",
+ "app": "http://127.0.0.1:8899/index.html?t=1792124028262#flash",
+ "board": "f103ze",
+ "com": "COM43",
+ "chip": "stm32f103",
+ "clock": "60000000",
+ "cycles": [],
+ "alt": [
+  {
+   "i": 1,
+   "spamMs": 785,
+   "scopeMs": 1249,
+   "spamSum": "已关掉本页签 1 个探针 USB 句柄（残留认领会挡住这次烧录）烧录数据时钟 1 MHz；执行控制 1 MHz── 零安装烧录：fw.elf（1.0 KB）→ stm32f103 ──   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始复位后 PC=0x800022e（在刚烧进去的固件里 ✓）── 完成 ──耗时小结：探针 69ms · 加载算法 244ms · 读DEV_ID 1ms · 擦除 85ms · 写入 129ms · 校验 30ms · 复位 121ms · 合计 0.68s",
+   "scopeSum": "已关掉本页签 1 个探针 USB 句柄（残留认领会挡住这次烧录）烧录数据时钟 1 MHz；执行控制 1 MHz── 零安装烧录：fw.elf（3.3 KB）→ stm32f103 ──   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始复位后 PC=0x80001e4（在刚烧进去的固件里 ✓）── 完成 ──耗时小结：探针 108ms · 加载算法 234ms · 读DEV_ID 1ms · 擦除 160ms · 写入 335ms · 校验 93ms · 复位 114ms · 合计 1.04s"
+  },
+  {
+   "i": 2,
+   "spamMs": 784,
+   "scopeMs": 1245,
+   "spamSum": "已关掉本页签 1 个探针 USB 句柄（残留认领会挡住这次烧录）烧录数据时钟 1 MHz；执行控制 1 MHz── 零安装烧录：fw.elf（1.0 KB）→ stm32f103 ──   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始复位后 PC=0x8000250（在刚烧进去的固件里 ✓）── 完成 ──耗时小结：探针 83ms · 加载算法 222ms · 读DEV_ID 2ms · 擦除 85ms · 写入 139ms · 校验 29ms · 复位 120ms · 合计 0.68s",
+   "scopeSum": "已关掉本页签 1 个探针 USB 句柄（残留认领会挡住这次烧录）烧录数据时钟 1 MHz；执行控制 1 MHz── 零安装烧录：fw.elf（3.3 KB）→ stm32f103 ──   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始复位后 PC=0x80001e4（在刚烧进去的固件里 ✓）── 完成 ──耗时小结：探针 61ms · 加载算法 236ms · 读DEV_ID 1ms · 擦除 165ms · 写入 345ms · 校验 96ms · 复位 123ms · 合计 1.03s"
+  },
+  {
+   "i": 3,
+   "spamMs": 787,
+   "scopeMs": 1099,
+   "spamSum": "已关掉本页签 1 个探针 USB 句柄（残留认领会挡住这次烧录）烧录数据时钟 1 MHz；执行控制 1 MHz── 零安装烧录：fw.elf（1.0 KB）→ stm32f103 ──   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始复位后 PC=0x800036c（在刚烧进去的固件里 ✓）── 完成 ──耗时小结：探针 88ms · 加载算法 236ms · 读DEV_ID 1ms · 擦除 84ms · 写入 132ms · 校验 30ms · 复位 121ms · 合计 0.69s",
+   "scopeSum": "已关掉本页签 1 个探针 USB 句柄（残留认领会挡住这次烧录）烧录数据时钟 1 MHz；执行控制 1 MHz── 零安装烧录：fw.elf（3.3 KB）→ stm32f103 ──   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始复位后 PC=0x80001e4（在刚烧进去的固件里 ✓）── 完成 ──耗时小结：探针 61ms · 加载算法 236ms · 读DEV_ID 2ms · 擦除 170ms · 写入 327ms · 校验 91ms · 复位 114ms · 合计 1.00s"
+  },
+  {
+   "i": 4,
+   "spamMs": 775,
+   "scopeMs": 1247,
+   "spamSum": "已关掉本页签 1 个探针 USB 句柄（残留认领会挡住这次烧录）烧录数据时钟 1 MHz；执行控制 1 MHz── 零安装烧录：fw.elf（1.0 KB）→ stm32f103 ──   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始复位后 PC=0x800024e（在刚烧进去的固件里 ✓）── 完成 ──耗时小结：探针 104ms · 加载算法 216ms · 读DEV_ID 1ms · 擦除 77ms · 写入 133ms · 校验 31ms · 复位 127ms · 合计 0.69s",
+   "scopeSum": "已关掉本页签 1 个探针 USB 句柄（残留认领会挡住这次烧录）烧录数据时钟 1 MHz；执行控制 1 MHz── 零安装烧录：fw.elf（3.3 KB）→ stm32f103 ──   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始复位后 PC=0x80001e4（在刚烧进去的固件里 ✓）── 完成 ──耗时小结：探针 61ms · 加载算法 234ms · 读DEV_ID 1ms · 擦除 183ms · 写入 344ms · 校验 91ms · 复位 126ms · 合计 1.04s"
+  },
+  {
+   "i": 5,
+   "spamMs": 936,
+   "scopeMs": 1240,
+   "spamSum": "已关掉本页签 1 个探针 USB 句柄（残留认领会挡住这次烧录）烧录数据时钟 1 MHz；执行控制 1 MHz── 零安装烧录：fw.elf（1.0 KB）→ stm32f103 ──   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始复位后 PC=0x8000222（在刚烧进去的固件里 ✓）── 完成 ──耗时小结：探针 124ms · 加载算法 261ms · 读DEV_ID 1ms · 擦除 90ms · 写入 147ms · 校验 36ms · 复位 126ms · 合计 0.79s",
+   "scopeSum": "已关掉本页签 1 个探针 USB 句柄（残留认领会挡住这次烧录）烧录数据时钟 1 MHz；执行控制 1 MHz── 零安装烧录：fw.elf（3.3 KB）→ stm32f103 ──   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始复位后 PC=0x800006a（在刚烧进去的固件里 ✓）── 完成 ──耗时小结：探针 65ms · 加载算法 234ms · 读DEV_ID 1ms · 擦除 162ms · 写入 360ms · 校验 94ms · 复位 121ms · 合计 1.04s"
+  }
+ ],
+ "errors": []
+}

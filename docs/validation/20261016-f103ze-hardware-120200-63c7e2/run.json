@@ -1,0 +1,23 @@
+{
+  "startedAt": "2026-10-16T12:02:01.0214807+08:00",
+  "testedRevision": "pre-commit-worktree",
+  "testedBase": "fb06da2348543b75db5fbc237dd4d3b0ffe1d655",
+  "preflight": "20261016-f103ze-acceptance-112445-5b3aac",
+  "testedDirty": true,
+  "status": "completed-with-findings",
+  "runId": "20261016-f103ze-hardware-120200-63c7e2",
+  "firmwareRevision": "321487255d2ececea8d56282b07f3c7254e9862b",
+  "validationResult": "partial",
+  "hardwareTest": "partial",
+  "endedAt": "2026-10-16T12:36:12.178086+08:00",
+  "originalFirmwareRestored": true,
+  "restoreSha256": "61a097c84c8ca7cae573a950618de6009083048755b5c26def16f6cc351a354d",
+  "restoredCdcVerified": false,
+  "probeLockReleased": true,
+  "issues": [
+    "A01: full flow 60 MHz intermittently falls to 45 MHz",
+    "A02: PE6 level changes do not reach any Kingst channel; ETM decode blocked",
+    "A03: initial RTT sequence test reported one malformed record; raw-capture repeat clean",
+    "A04: restored firmware runs at 48 MHz with heartbeat; Windows COM34 configure returns device error 31"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "exitCode": 0,
+  "startedAt": "2026-10-16T12:10:28.895796+08:00",
+  "endedAt": "2026-10-16T12:10:30.943451+08:00",
+  "command": [
+    "python",
+    "docs/validation/20261016-f103ze-hardware-120200-63c7e2/flash-fixture.py",
+    "bridge/etm/backend/firmware/stm32f103_cdc_trace/fw-ze.elf",
+    "etm-flash"
+  ],
+  "cwd": "E:\\web-serial-rtt-tools"
+}

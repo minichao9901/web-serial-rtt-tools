@@ -1,0 +1,1 @@
+{"command":["python","docs/validation/20261016-f103ze-hardware-120200-63c7e2/flash-fixture.py","docs/validation/20261016-f103ze-hardware-120200-63c7e2/rtt-seq72/fw.elf","rtt72-flash"],"mutates":true,"timeout":150}

@@ -1,0 +1,170 @@
+{
+ "startedAt": "2026-10-16T04:07:57.410Z",
+ "app": "http://127.0.0.1:8899/index.html?t=1792123676711#flash",
+ "board": "f103ze",
+ "com": "COM43",
+ "chip": "stm32f103",
+ "clock": "60000000",
+ "cycles": [
+  {
+   "cycle": 1,
+   "flashSpam": {
+    "label": "狂发 #1",
+    "fw": "fw.elf",
+    "size": 139168,
+    "ms": 931,
+    "ok": true,
+    "summary": "已关掉本页签 1 个探针 USB 句柄（残留认领会挡住这次烧录）烧录数据时钟 1 MHz；执行控制 1 MHz── 零安装烧录：fw.elf（1.0 KB）→ stm32f103 ──   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始复位后 PC=0x8000372（在刚烧进去的固件里 ✓）── 完成 ──耗时小结：探针 66ms · 加载算法 267ms · 读DEV_ID 1ms · 擦除 86ms · 写入 153ms · 校验 31ms · 复位 123ms · 合计 0.73s"
+   },
+   "rtt": {
+    "bytesPerSec": 457357,
+    "pollHz": 24.8,
+    "seconds": 6,
+    "pageRate": "497.6 KB/s",
+    "cb": "0x2000000c",
+    "up": "2",
+    "lost": 0,
+    "err": "高速 275.3 KB/s：渲染已停（收数/记录不受影响）· 点此恢复显示"
+   },
+   "fwd": {
+    "rate": 3044835.7646182235,
+    "rateMB": 2.9,
+    "probeRateMB": 2.9,
+    "mhz": 60,
+    "cb": "0x2000000c",
+    "pageRate": "2972.0 KB/s",
+    "seconds": 8,
+    "record": {
+     "seconds": 10.2,
+     "rxBytes": 30998528,
+     "fileBytes": 30912512,
+     "writes": 135,
+     "backlog": 249855,
+     "path": "tmp/rtt-forward-2026-10-16T04-08-47.bin",
+     "head": "o world! hello world! hello world! hello world! hello world!",
+     "words": 314
+    }
+   },
+   "flashScope": {
+    "label": "scope #1",
+    "fw": "fw.elf",
+    "size": 160964,
+    "ms": 1255,
+    "ok": true,
+    "summary": "已关掉本页签 1 个探针 USB 句柄（残留认领会挡住这次烧录）烧录数据时钟 1 MHz；执行控制 1 MHz── 零安装烧录：fw.elf（3.3 KB）→ stm32f103 ──   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始复位后 PC=0x80001e8（在刚烧进去的固件里 ✓）── 完成 ──耗时小结：探针 56ms · 加载算法 268ms · 读DEV_ID 2ms · 擦除 182ms · 写入 332ms · 校验 93ms · 复位 113ms · 合计 1.05s"
+   },
+   "elf": {
+    "cached": false,
+    "n": 19
+   },
+   "picks": {
+    "one": [
+     0
+    ],
+    "three": [
+     0,
+     1,
+     2
+    ],
+    "oneName": "g_lfsr",
+    "threeNames": [
+     "g_lfsr",
+     "g_far_cnt",
+     "g_far_sq100"
+    ]
+   },
+   "s1_fast": {
+    "label": "1 变量 @2µs",
+    "periodUs": 2,
+    "wantHz": 500000,
+    "vars": [
+     "g_lfsr@0x20000000"
+    ],
+    "spans": 1,
+    "frameBytes": 4,
+    "estUs": 4.47,
+    "estHz": 223914,
+    "samples": 1488248,
+    "rateHz": 496057,
+    "packets": 12208,
+    "lostProbe": 12082,
+    "lostUsb": 738,
+    "lostGap": 0,
+    "state": "已停止（时长到 3.000 s）：1488248 个样本 / 3.000 s，跳拍 12082 / USB 丢样本 738 / 读错 0 / 包缺口 0",
+    "autoStopped": true,
+    "wallMs": 3494
+   },
+   "s1_50k": {
+    "label": "1 变量 @20µs",
+    "periodUs": 20,
+    "wantHz": 50000,
+    "vars": [
+     "g_lfsr@0x20000000"
+    ],
+    "spans": 1,
+    "frameBytes": 4,
+    "estUs": 4.47,
+    "estHz": 223914,
+    "samples": 150040,
+    "rateHz": 49999,
+    "packets": 1232,
+    "lostProbe": 2,
+    "lostUsb": 0,
+    "lostGap": 0,
+    "state": "已停止（时长到 3.001 s）：150040 个样本 / 3.001 s，跳拍 2 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+    "autoStopped": true,
+    "wallMs": 3467
+   },
+   "s3_fast": {
+    "label": "3 变量 @2µs",
+    "periodUs": 2,
+    "wantHz": 500000,
+    "vars": [
+     "g_lfsr@0x20000000",
+     "g_far_cnt@0x20000008",
+     "g_far_sq100@0x2000000c"
+    ],
+    "spans": 1,
+    "frameBytes": 10,
+    "estUs": 7.81,
+    "estHz": 127975,
+    "samples": 331240,
+    "rateHz": 110401,
+    "packets": 6878,
+    "lostProbe": 1214939,
+    "lostUsb": 0,
+    "lostGap": 0,
+    "state": "已停止（时长到 3.000 s）：331240 个样本 / 3.000 s，跳拍 1214939 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+    "autoStopped": true,
+    "wallMs": 3456
+   },
+   "s3_50k": {
+    "label": "3 变量 @20µs",
+    "periodUs": 20,
+    "wantHz": 50000,
+    "vars": [
+     "g_lfsr@0x20000000",
+     "g_far_cnt@0x20000008",
+     "g_far_sq100@0x2000000c"
+    ],
+    "spans": 1,
+    "frameBytes": 10,
+    "estUs": 7.81,
+    "estHz": 127975,
+    "samples": 150038,
+    "rateHz": 49999,
+    "packets": 3117,
+    "lostProbe": 2,
+    "lostUsb": 0,
+    "lostGap": 0,
+    "state": "已停止（时长到 3.001 s）：150038 个样本 / 3.001 s，跳拍 2 / USB 丢样本 0 / 读错 0 / 包缺口 0",
+    "autoStopped": true,
+    "wallMs": 3616
+   }
+  }
+ ],
+ "alt": [],
+ "errors": [
+  "判决未通过：转发跑在 60 MHz 档（实际 45 MHz）"
+ ]
+}

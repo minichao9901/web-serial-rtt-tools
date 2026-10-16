@@ -1,0 +1,12 @@
+{
+  "exitCode": 0,
+  "startedAt": "2026-10-16T12:22:47.062016+08:00",
+  "endedAt": "2026-10-16T12:22:48.150030+08:00",
+  "command": [
+    "python",
+    "docs/validation/20261016-f103ze-hardware-120200-63c7e2/flash-fixture.py",
+    "tools/target-firmware/stm32f103_scope/build-72mhz/fw.elf",
+    "scope72-flash"
+  ],
+  "cwd": "E:\\web-serial-rtt-tools"
+}

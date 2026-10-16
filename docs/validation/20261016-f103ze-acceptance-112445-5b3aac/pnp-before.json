@@ -1,0 +1,92 @@
+[
+  {
+    "Status": "OK",
+    "Class": "USB",
+    "FriendlyName": "USB 根集线器(USB 3.0)",
+    "InstanceId": "USB\\ROOT_HUB30\\5&26163371&0&0"
+  },
+  {
+    "Status": "OK",
+    "Class": "USB",
+    "FriendlyName": "USB Composite Device",
+    "InstanceId": "USB\\VID_12D1&PID_10FC\\3YMZD25A15X50174"
+  },
+  {
+    "Status": "OK",
+    "Class": "USB",
+    "FriendlyName": "USB Composite Device",
+    "InstanceId": "USB\\VID_046D&PID_C534\\6&35D7B968&0&2"
+  },
+  {
+    "Status": "OK",
+    "Class": "Image",
+    "FriendlyName": "HUAWEI PixLab Series (WIA)",
+    "InstanceId": "USB\\VID_12D1&PID_10FC&MI_00\\7&31CFB837&6&0000"
+  },
+  {
+    "Status": "OK",
+    "Class": "USB",
+    "FriendlyName": "USB 根集线器(USB 3.0)",
+    "InstanceId": "USB\\ROOT_HUB30\\5&1AC17F6D&0&0"
+  },
+  {
+    "Status": "OK",
+    "Class": "Biometric",
+    "FriendlyName": "Synaptics UWP WBDI",
+    "InstanceId": "USB\\VID_06CB&PID_00BD\\08ADD1C8F382"
+  },
+  {
+    "Status": "OK",
+    "Class": "USB",
+    "FriendlyName": "USB Composite Device",
+    "InstanceId": "USB\\VID_0489&PID_E0CD\\000000000"
+  },
+  {
+    "Status": "OK",
+    "Class": "Camera",
+    "FriendlyName": "Integrated Camera",
+    "InstanceId": "USB\\VID_5986&PID_2130&MI_00\\7&3AF46754&1&0000"
+  },
+  {
+    "Status": "OK",
+    "Class": "USB",
+    "FriendlyName": "HUAWEI CV81-WDMSE",
+    "InstanceId": "USB\\VID_12D1&PID_10FC&MI_01\\7&31CFB837&6&0001"
+  },
+  {
+    "Status": "OK",
+    "Class": "Printer",
+    "FriendlyName": "HUAWEI CV81-WDMSE",
+    "InstanceId": "USBPRINT\\HUAWEICV81-WDMSE\\8&28B4338&0&USB003"
+  },
+  {
+    "Status": "OK",
+    "Class": "USB",
+    "FriendlyName": "USB 根集线器(USB 3.0)",
+    "InstanceId": "USB\\ROOT_HUB30\\5&3149114&0&0"
+  },
+  {
+    "Status": "OK",
+    "Class": "USB",
+    "FriendlyName": "USB Composite Device",
+    "InstanceId": "USB\\VID_5986&PID_2130\\6&D23BCD2&0&4"
+  },
+  {
+    "Status": "OK",
+    "Class": "Bluetooth",
+    "FriendlyName": "MediaTek Bluetooth Adapter",
+    "InstanceId": "USB\\VID_0489&PID_E0CD&MI_00\\7&32DC556E&1&0000"
+  },
+  {
+    "Status": "OK",
+    "Class": "HIDClass",
+    "FriendlyName": "USB 输入设备",
+    "InstanceId": "USB\\VID_046D&PID_C534&MI_01\\7&8217590&2&0001"
+  },
+  {
+    "Status": "OK",
+    "Class": "HIDClass",
+    "FriendlyName": "USB 输入设备",
+    "InstanceId": "USB\\VID_046D&PID_C534&MI_00\\7&8217590&2&0000"
+  }
+]

@@ -1,0 +1,7 @@
+{
+  "time": "2026-10-16T12:34:44.703496+08:00",
+  "target": "F055:1031",
+  "operation": "USB reset only",
+  "passed": false,
+  "error": "[Errno 2] Entity not found"
+}

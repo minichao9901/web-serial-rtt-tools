@@ -1,0 +1,12 @@
+{
+  "board": "f103ze",
+  "passed": 8,
+  "total": 8,
+  "identity": {
+    "cpuid": 1092600369,
+    "deviceId": 268657684,
+    "flashKiB": 512,
+    "clockHz": 10000000
+  },
+  "sourceChecked": true
+}

@@ -1,0 +1,12 @@
+{
+  "exitCode": 0,
+  "startedAt": "2026-10-16T12:10:21.712956+08:00",
+  "endedAt": "2026-10-16T12:10:23.003706+08:00",
+  "command": [
+    "python",
+    "docs/validation/20261016-f103ze-hardware-120200-63c7e2/flash-fixture.py",
+    "docs/validation/20261016-f103ze-acceptance-112445-5b3aac/swo-ze/fw.elf",
+    "swo-flash"
+  ],
+  "cwd": "E:\\web-serial-rtt-tools"
+}

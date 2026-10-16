@@ -1,0 +1,10 @@
+{
+  "exitCode": 0,
+  "startedAt": "2026-10-16T12:24:52.676516+08:00",
+  "endedAt": "2026-10-16T12:25:20.762185+08:00",
+  "command": [
+    "python",
+    "docs/validation/20261016-f103ze-hardware-120200-63c7e2/rtt-seq-capture.py"
+  ],
+  "cwd": "E:\\web-serial-rtt-tools"
+}

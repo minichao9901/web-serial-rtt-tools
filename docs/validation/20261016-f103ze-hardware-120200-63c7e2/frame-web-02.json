@@ -1,0 +1,3112 @@
+{
+  "at": "2026-10-16T04:21:59.142Z",
+  "board": "f103ze",
+  "elf": "/tools/target-firmware/stm32f103_dbgstress/build/fw.elf",
+  "elfSha256": "eaa07aa96e99d8e021f867a4d2d08e7eaab213145a6f570e29cc25e7135c71ce",
+  "build": {
+    "board": "f103ze",
+    "elfSha256": "eaa07aa96e99d8e021f867a4d2d08e7eaab213145a6f570e29cc25e7135c71ce",
+    "compiler": "arm-none-eabi-gcc.exe (GNU Arm Embedded Toolchain 10.3-2021.10) 10.3.1 20210824 (release)",
+    "dwarf": 4,
+    "sources": {
+      "model.c": "6d6fe329b9851730cc459576023d2f6d5f10c3b05dc8950591ee7c1271c606cc",
+      "startup.c": "56a4d80c3a7015e7ebb58504ec2fb58b2af6f1c66bff0f6f024e5a67e724722f",
+      "engine.c": "8a0db35269ae77441fcd7ce3106bf63fe343b6b213f923c88decd6b6aaf81655",
+      "main.c": "172d430383508c563c22ebe8ea99080206daea00ec8f2f5711521478a7c7ec1b",
+      "dbg_frames.c": "da17310c3fdb5a010289560e1383e7549010e7db6c5cacb91a4bf895900dd1af"
+    },
+    "optimization": "Os",
+    "schema": 1,
+    "flags": [
+      "-mcpu=cortex-m3",
+      "-mthumb",
+      "-Os",
+      "-g3",
+      "-fasynchronous-unwind-tables",
+      "-ffunction-sections",
+      "-fdata-sections",
+      "-fno-common",
+      "-Wall",
+      "-Wextra",
+      "-Wno-unused-parameter",
+      "-IE:\\web-serial-rtt-tools\\tools\\target-firmware\\stm32f103_dbgstress\\src",
+      "-TE:\\web-serial-rtt-tools\\tools\\target-firmware\\stm32f103_dbgstress\\ld\\stm32f103ze.ld",
+      "-nostartfiles",
+      "-specs=nano.specs",
+      "-specs=nosys.specs",
+      "-Wl,--gc-sections",
+      "-Wl,-Map=E:\\web-serial-rtt-tools\\tools\\target-firmware\\stm32f103_dbgstress\\build\\fw.map",
+      "-gdwarf-4"
+    ]
+  },
+  "pass": 19,
+  "fail": 0,
+  "failures": [],
+  "frameResults": [
+    {
+      "id": "recursive",
+      "elapsedMs": 1236,
+      "frames": [
+        {
+          "name": "engine_frame_recursive",
+          "pc": 134220122,
+          "sp": 536936224,
+          "rows": [
+            {
+              "name": "depth",
+              "argument": true,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "value": "0"
+            },
+            {
+              "name": "seed",
+              "argument": true,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "value": "1028"
+            },
+            {
+              "name": "depth_copy",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "address": 536936228,
+              "value": "0"
+            },
+            {
+              "name": "seed_copy",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "address": 536936232,
+              "value": "1028"
+            },
+            {
+              "name": "frame_value",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "address": 536936236,
+              "value": "1028"
+            },
+            {
+              "name": "result",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "value": "0"
+            }
+          ],
+          "variables": [
+            {
+              "name": "depth",
+              "occurrence": 0,
+              "argument": true,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "0"
+                }
+              ]
+            },
+            {
+              "name": "seed",
+              "occurrence": 0,
+              "argument": true,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "1028"
+                }
+              ]
+            },
+            {
+              "name": "depth_copy",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "0"
+                }
+              ],
+              "address": 536936228
+            },
+            {
+              "name": "seed_copy",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "1028"
+                }
+              ],
+              "address": 536936232
+            },
+            {
+              "name": "frame_value",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "1028"
+                }
+              ],
+              "address": 536936236
+            },
+            {
+              "name": "result",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "0"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "engine_frame_recursive",
+          "pc": 134220158,
+          "sp": 536936256,
+          "rows": [
+            {
+              "name": "depth",
+              "argument": true,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "value": "1"
+            },
+            {
+              "name": "seed",
+              "argument": true,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "value": "1021"
+            },
+            {
+              "name": "depth_copy",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "address": 536936260,
+              "value": "1"
+            },
+            {
+              "name": "seed_copy",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "address": 536936264,
+              "value": "1021"
+            },
+            {
+              "name": "frame_value",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "address": 536936268,
+              "value": "1121"
+            },
+            {
+              "name": "result",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "value": "0"
+            }
+          ],
+          "variables": [
+            {
+              "name": "depth",
+              "occurrence": 0,
+              "argument": true,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "1"
+                }
+              ]
+            },
+            {
+              "name": "seed",
+              "occurrence": 0,
+              "argument": true,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "1021"
+                }
+              ]
+            },
+            {
+              "name": "depth_copy",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "1"
+                }
+              ],
+              "address": 536936260
+            },
+            {
+              "name": "seed_copy",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "1021"
+                }
+              ],
+              "address": 536936264
+            },
+            {
+              "name": "frame_value",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "1121"
+                }
+              ],
+              "address": 536936268
+            },
+            {
+              "name": "result",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "0"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "engine_frame_recursive",
+          "pc": 134220158,
+          "sp": 536936288,
+          "rows": [
+            {
+              "name": "depth",
+              "argument": true,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "value": "2"
+            },
+            {
+              "name": "seed",
+              "argument": true,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "value": "1014"
+            },
+            {
+              "name": "depth_copy",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "address": 536936292,
+              "value": "2"
+            },
+            {
+              "name": "seed_copy",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "address": 536936296,
+              "value": "1014"
+            },
+            {
+              "name": "frame_value",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "address": 536936300,
+              "value": "1214"
+            },
+            {
+              "name": "result",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "value": "0"
+            }
+          ],
+          "variables": [
+            {
+              "name": "depth",
+              "occurrence": 0,
+              "argument": true,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "2"
+                }
+              ]
+            },
+            {
+              "name": "seed",
+              "occurrence": 0,
+              "argument": true,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "1014"
+                }
+              ]
+            },
+            {
+              "name": "depth_copy",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "2"
+                }
+              ],
+              "address": 536936292
+            },
+            {
+              "name": "seed_copy",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "1014"
+                }
+              ],
+              "address": 536936296
+            },
+            {
+              "name": "frame_value",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "1214"
+                }
+              ],
+              "address": 536936300
+            },
+            {
+              "name": "result",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "0"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "engine_frame_recursive",
+          "pc": 134220158,
+          "sp": 536936320,
+          "rows": [
+            {
+              "name": "depth",
+              "argument": true,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "value": "3"
+            },
+            {
+              "name": "seed",
+              "argument": true,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "value": "1007"
+            },
+            {
+              "name": "depth_copy",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "address": 536936324,
+              "value": "3"
+            },
+            {
+              "name": "seed_copy",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "address": 536936328,
+              "value": "1007"
+            },
+            {
+              "name": "frame_value",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "address": 536936332,
+              "value": "1307"
+            },
+            {
+              "name": "result",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "value": "0"
+            }
+          ],
+          "variables": [
+            {
+              "name": "depth",
+              "occurrence": 0,
+              "argument": true,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "3"
+                }
+              ]
+            },
+            {
+              "name": "seed",
+              "occurrence": 0,
+              "argument": true,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "1007"
+                }
+              ]
+            },
+            {
+              "name": "depth_copy",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "3"
+                }
+              ],
+              "address": 536936324
+            },
+            {
+              "name": "seed_copy",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "1007"
+                }
+              ],
+              "address": 536936328
+            },
+            {
+              "name": "frame_value",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "1307"
+                }
+              ],
+              "address": 536936332
+            },
+            {
+              "name": "result",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "0"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "engine_frame_recursive",
+          "pc": 134220158,
+          "sp": 536936352,
+          "rows": [
+            {
+              "name": "depth",
+              "argument": true,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "value": "4"
+            },
+            {
+              "name": "seed",
+              "argument": true,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "value": "1000"
+            },
+            {
+              "name": "depth_copy",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "address": 536936356,
+              "value": "4"
+            },
+            {
+              "name": "seed_copy",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "address": 536936360,
+              "value": "1000"
+            },
+            {
+              "name": "frame_value",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "address": 536936364,
+              "value": "1400"
+            },
+            {
+              "name": "result",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "value": "0"
+            }
+          ],
+          "variables": [
+            {
+              "name": "depth",
+              "occurrence": 0,
+              "argument": true,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "4"
+                }
+              ]
+            },
+            {
+              "name": "seed",
+              "occurrence": 0,
+              "argument": true,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "1000"
+                }
+              ]
+            },
+            {
+              "name": "depth_copy",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "4"
+                }
+              ],
+              "address": 536936356
+            },
+            {
+              "name": "seed_copy",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "1000"
+                }
+              ],
+              "address": 536936360
+            },
+            {
+              "name": "frame_value",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "1400"
+                }
+              ],
+              "address": 536936364
+            },
+            {
+              "name": "result",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "0"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "engine_frame_stage",
+          "pc": 134220272,
+          "sp": 536936384,
+          "rows": [
+            {
+              "name": "stage_cookie",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7287,
+              "address": 536936388,
+              "value": "20281789"
+            },
+            {
+              "name": "result",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7287,
+              "address": 536936392,
+              "value": "0"
+            },
+            {
+              "name": "register_arg",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7287,
+              "address": 536936396,
+              "value": "23"
+            }
+          ],
+          "variables": [
+            {
+              "name": "stage_cookie",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "20281789"
+                }
+              ],
+              "address": 536936388
+            },
+            {
+              "name": "result",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "0"
+                }
+              ],
+              "address": 536936392
+            },
+            {
+              "name": "register_arg",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "23"
+                }
+              ],
+              "address": 536936396
+            }
+          ]
+        }
+      ],
+      "differences": [],
+      "m7ErratumRecoveries": [],
+      "pressureRounds": 200,
+      "pressureM7ErratumRecoveries": 0
+    },
+    {
+      "id": "leaf",
+      "elapsedMs": 1375,
+      "frames": [
+        {
+          "name": "engine_frame_leaf",
+          "pc": 134220072,
+          "sp": 536936176,
+          "rows": [
+            {
+              "name": "arg",
+              "argument": true,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7879,
+              "value": "1028"
+            },
+            {
+              "name": "leaf_value",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7879,
+              "address": 536936176,
+              "value": "1128"
+            },
+            {
+              "name": "items",
+              "argument": false,
+              "type": {
+                "kind": "array",
+                "elem": {
+                  "kind": "scalar",
+                  "size": 4,
+                  "scalar": "u32",
+                  "name": "long unsigned int",
+                  "alias": "uint32_t"
+                },
+                "count": 3,
+                "lowerBound": 0,
+                "size": 12,
+                "unsupportedLayout": false
+              },
+              "scope": 7879,
+              "address": 536936180,
+              "value": "{[0]=1028, [1]=1029, [2]=1030}",
+              "children": [
+                {
+                  "depth": 0,
+                  "name": "[0]",
+                  "off": 0,
+                  "size": 4,
+                  "text": "1028",
+                  "hex": "0x404",
+                  "type": "uint32_t",
+                  "cls": ""
+                },
+                {
+                  "depth": 0,
+                  "name": "[1]",
+                  "off": 4,
+                  "size": 4,
+                  "text": "1029",
+                  "hex": "0x405",
+                  "type": "uint32_t",
+                  "cls": ""
+                },
+                {
+                  "depth": 0,
+                  "name": "[2]",
+                  "off": 8,
+                  "size": 4,
+                  "text": "1030",
+                  "hex": "0x406",
+                  "type": "uint32_t",
+                  "cls": ""
+                }
+              ]
+            },
+            {
+              "name": "record",
+              "argument": false,
+              "type": {
+                "kind": "struct",
+                "size": 12,
+                "name": "FrameRecord",
+                "members": [
+                  {
+                    "name": "tag",
+                    "offset": 0,
+                    "type": {
+                      "kind": "scalar",
+                      "size": 4,
+                      "scalar": "u32",
+                      "name": "long unsigned int",
+                      "alias": "uint32_t"
+                    },
+                    "bitSize": null,
+                    "bitOffset": null,
+                    "reason": null
+                  },
+                  {
+                    "name": "signed_value",
+                    "offset": 4,
+                    "type": {
+                      "kind": "scalar",
+                      "size": 4,
+                      "scalar": "i32",
+                      "name": "long int",
+                      "alias": "int32_t"
+                    },
+                    "bitSize": null,
+                    "bitOffset": null,
+                    "reason": null
+                  },
+                  {
+                    "name": "pair",
+                    "offset": 8,
+                    "type": {
+                      "kind": "array",
+                      "elem": {
+                        "kind": "scalar",
+                        "size": 2,
+                        "scalar": "u16",
+                        "name": "short unsigned int",
+                        "alias": "uint16_t"
+                      },
+                      "count": 2,
+                      "lowerBound": 0,
+                      "size": 4,
+                      "unsupportedLayout": false
+                    },
+                    "bitSize": null,
+                    "bitOffset": null,
+                    "reason": null
+                  }
+                ]
+              },
+              "scope": 7879,
+              "address": 536936192,
+              "value": "{tag=305419896, signed_value=-17}",
+              "children": [
+                {
+                  "depth": 0,
+                  "name": "tag",
+                  "off": 0,
+                  "size": 4,
+                  "text": "305419896",
+                  "hex": "0x12345678",
+                  "type": "uint32_t",
+                  "cls": ""
+                },
+                {
+                  "depth": 0,
+                  "name": "signed_value",
+                  "off": 4,
+                  "size": 4,
+                  "text": "-17",
+                  "hex": "0xffffffef",
+                  "type": "int32_t",
+                  "cls": ""
+                },
+                {
+                  "depth": 0,
+                  "name": "pair",
+                  "off": 8,
+                  "size": 4,
+                  "text": "[2]",
+                  "type": "uint16_t[2]",
+                  "cls": "dim"
+                },
+                {
+                  "depth": 1,
+                  "name": "[0]",
+                  "off": 8,
+                  "size": 2,
+                  "text": "21",
+                  "hex": "0x15",
+                  "type": "uint16_t",
+                  "cls": ""
+                },
+                {
+                  "depth": 1,
+                  "name": "[1]",
+                  "off": 10,
+                  "size": 2,
+                  "text": "34",
+                  "hex": "0x22",
+                  "type": "uint16_t",
+                  "cls": ""
+                }
+              ]
+            }
+          ],
+          "variables": [
+            {
+              "name": "arg",
+              "occurrence": 0,
+              "argument": true,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "1028"
+                }
+              ]
+            },
+            {
+              "name": "leaf_value",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "1128"
+                }
+              ],
+              "address": 536936176
+            },
+            {
+              "name": "items",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "[0]",
+                  "value": "1028"
+                },
+                {
+                  "path": "[1]",
+                  "value": "1029"
+                },
+                {
+                  "path": "[2]",
+                  "value": "1030"
+                }
+              ],
+              "address": 536936180
+            },
+            {
+              "name": "record",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "tag",
+                  "value": "305419896"
+                },
+                {
+                  "path": "signed_value",
+                  "value": "-17"
+                },
+                {
+                  "path": "pair[0]",
+                  "value": "21"
+                },
+                {
+                  "path": "pair[1]",
+                  "value": "34"
+                }
+              ],
+              "address": 536936192
+            }
+          ]
+        },
+        {
+          "name": "engine_frame_recursive",
+          "pc": 134220130,
+          "sp": 536936224,
+          "rows": [
+            {
+              "name": "depth",
+              "argument": true,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "value": "0"
+            },
+            {
+              "name": "seed",
+              "argument": true,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "error": "该帧寄存器 R1 不可恢复"
+            },
+            {
+              "name": "depth_copy",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "address": 536936228,
+              "value": "0"
+            },
+            {
+              "name": "seed_copy",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "address": 536936232,
+              "value": "1028"
+            },
+            {
+              "name": "frame_value",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "address": 536936236,
+              "value": "1028"
+            },
+            {
+              "name": "result",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "value": "0"
+            }
+          ],
+          "variables": [
+            {
+              "name": "depth",
+              "occurrence": 0,
+              "argument": true,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "0"
+                }
+              ]
+            },
+            {
+              "name": "seed",
+              "occurrence": 0,
+              "argument": true,
+              "status": "unavailable",
+              "fields": [],
+              "reason": "该帧寄存器 R1 不可恢复"
+            },
+            {
+              "name": "depth_copy",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "0"
+                }
+              ],
+              "address": 536936228
+            },
+            {
+              "name": "seed_copy",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "1028"
+                }
+              ],
+              "address": 536936232
+            },
+            {
+              "name": "frame_value",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "1028"
+                }
+              ],
+              "address": 536936236
+            },
+            {
+              "name": "result",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "0"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "engine_frame_recursive",
+          "pc": 134220158,
+          "sp": 536936256,
+          "rows": [
+            {
+              "name": "depth",
+              "argument": true,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "value": "1"
+            },
+            {
+              "name": "seed",
+              "argument": true,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "value": "1021"
+            },
+            {
+              "name": "depth_copy",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "address": 536936260,
+              "value": "1"
+            },
+            {
+              "name": "seed_copy",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "address": 536936264,
+              "value": "1021"
+            },
+            {
+              "name": "frame_value",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "address": 536936268,
+              "value": "1121"
+            },
+            {
+              "name": "result",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "value": "0"
+            }
+          ],
+          "variables": [
+            {
+              "name": "depth",
+              "occurrence": 0,
+              "argument": true,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "1"
+                }
+              ]
+            },
+            {
+              "name": "seed",
+              "occurrence": 0,
+              "argument": true,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "1021"
+                }
+              ]
+            },
+            {
+              "name": "depth_copy",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "1"
+                }
+              ],
+              "address": 536936260
+            },
+            {
+              "name": "seed_copy",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "1021"
+                }
+              ],
+              "address": 536936264
+            },
+            {
+              "name": "frame_value",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "1121"
+                }
+              ],
+              "address": 536936268
+            },
+            {
+              "name": "result",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "0"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "engine_frame_recursive",
+          "pc": 134220158,
+          "sp": 536936288,
+          "rows": [
+            {
+              "name": "depth",
+              "argument": true,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "value": "2"
+            },
+            {
+              "name": "seed",
+              "argument": true,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "value": "1014"
+            },
+            {
+              "name": "depth_copy",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "address": 536936292,
+              "value": "2"
+            },
+            {
+              "name": "seed_copy",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "address": 536936296,
+              "value": "1014"
+            },
+            {
+              "name": "frame_value",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "address": 536936300,
+              "value": "1214"
+            },
+            {
+              "name": "result",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "value": "0"
+            }
+          ],
+          "variables": [
+            {
+              "name": "depth",
+              "occurrence": 0,
+              "argument": true,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "2"
+                }
+              ]
+            },
+            {
+              "name": "seed",
+              "occurrence": 0,
+              "argument": true,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "1014"
+                }
+              ]
+            },
+            {
+              "name": "depth_copy",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "2"
+                }
+              ],
+              "address": 536936292
+            },
+            {
+              "name": "seed_copy",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "1014"
+                }
+              ],
+              "address": 536936296
+            },
+            {
+              "name": "frame_value",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "1214"
+                }
+              ],
+              "address": 536936300
+            },
+            {
+              "name": "result",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "0"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "engine_frame_recursive",
+          "pc": 134220158,
+          "sp": 536936320,
+          "rows": [
+            {
+              "name": "depth",
+              "argument": true,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "value": "3"
+            },
+            {
+              "name": "seed",
+              "argument": true,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "value": "1007"
+            },
+            {
+              "name": "depth_copy",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "address": 536936324,
+              "value": "3"
+            },
+            {
+              "name": "seed_copy",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "address": 536936328,
+              "value": "1007"
+            },
+            {
+              "name": "frame_value",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "address": 536936332,
+              "value": "1307"
+            },
+            {
+              "name": "result",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "value": "0"
+            }
+          ],
+          "variables": [
+            {
+              "name": "depth",
+              "occurrence": 0,
+              "argument": true,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "3"
+                }
+              ]
+            },
+            {
+              "name": "seed",
+              "occurrence": 0,
+              "argument": true,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "1007"
+                }
+              ]
+            },
+            {
+              "name": "depth_copy",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "3"
+                }
+              ],
+              "address": 536936324
+            },
+            {
+              "name": "seed_copy",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "1007"
+                }
+              ],
+              "address": 536936328
+            },
+            {
+              "name": "frame_value",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "1307"
+                }
+              ],
+              "address": 536936332
+            },
+            {
+              "name": "result",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "0"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "engine_frame_recursive",
+          "pc": 134220158,
+          "sp": 536936352,
+          "rows": [
+            {
+              "name": "depth",
+              "argument": true,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "value": "4"
+            },
+            {
+              "name": "seed",
+              "argument": true,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "value": "1000"
+            },
+            {
+              "name": "depth_copy",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "address": 536936356,
+              "value": "4"
+            },
+            {
+              "name": "seed_copy",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "address": 536936360,
+              "value": "1000"
+            },
+            {
+              "name": "frame_value",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "address": 536936364,
+              "value": "1400"
+            },
+            {
+              "name": "result",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7705,
+              "value": "0"
+            }
+          ],
+          "variables": [
+            {
+              "name": "depth",
+              "occurrence": 0,
+              "argument": true,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "4"
+                }
+              ]
+            },
+            {
+              "name": "seed",
+              "occurrence": 0,
+              "argument": true,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "1000"
+                }
+              ]
+            },
+            {
+              "name": "depth_copy",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "4"
+                }
+              ],
+              "address": 536936356
+            },
+            {
+              "name": "seed_copy",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "1000"
+                }
+              ],
+              "address": 536936360
+            },
+            {
+              "name": "frame_value",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "1400"
+                }
+              ],
+              "address": 536936364
+            },
+            {
+              "name": "result",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "0"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "engine_frame_stage",
+          "pc": 134220272,
+          "sp": 536936384,
+          "rows": [
+            {
+              "name": "stage_cookie",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7287,
+              "address": 536936388,
+              "value": "20281789"
+            },
+            {
+              "name": "result",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7287,
+              "address": 536936392,
+              "value": "0"
+            },
+            {
+              "name": "register_arg",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7287,
+              "address": 536936396,
+              "value": "23"
+            }
+          ],
+          "variables": [
+            {
+              "name": "stage_cookie",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "20281789"
+                }
+              ],
+              "address": 536936388
+            },
+            {
+              "name": "result",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "0"
+                }
+              ],
+              "address": 536936392
+            },
+            {
+              "name": "register_arg",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "23"
+                }
+              ],
+              "address": 536936396
+            }
+          ]
+        }
+      ],
+      "differences": [],
+      "m7ErratumRecoveries": []
+    },
+    {
+      "id": "shadow",
+      "elapsedMs": 842,
+      "frames": [
+        {
+          "name": "engine_frame_shadow",
+          "pc": 134220178,
+          "sp": 536936368,
+          "rows": [
+            {
+              "name": "seed",
+              "argument": true,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7588,
+              "value": "50"
+            },
+            {
+              "name": "shadow",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7588,
+              "address": 536936368,
+              "value": "60"
+            },
+            {
+              "name": "outer_copy",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7588,
+              "address": 536936372,
+              "value": "60"
+            },
+            {
+              "name": "shadow",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7664,
+              "address": 536936376,
+              "value": "70"
+            },
+            {
+              "name": "inner_copy",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7664,
+              "address": 536936380,
+              "value": "70"
+            }
+          ],
+          "variables": [
+            {
+              "name": "seed",
+              "occurrence": 0,
+              "argument": true,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "50"
+                }
+              ]
+            },
+            {
+              "name": "shadow",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "60"
+                }
+              ],
+              "address": 536936368
+            },
+            {
+              "name": "outer_copy",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "60"
+                }
+              ],
+              "address": 536936372
+            },
+            {
+              "name": "shadow",
+              "occurrence": 1,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "70"
+                }
+              ],
+              "address": 536936376
+            },
+            {
+              "name": "inner_copy",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "70"
+                }
+              ],
+              "address": 536936380
+            }
+          ]
+        },
+        {
+          "name": "engine_frame_stage",
+          "pc": 134220280,
+          "sp": 536936384,
+          "rows": [
+            {
+              "name": "stage_cookie",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7287,
+              "address": 536936388,
+              "value": "20281789"
+            },
+            {
+              "name": "result",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7287,
+              "address": 536936392,
+              "value": "19450"
+            },
+            {
+              "name": "register_arg",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7287,
+              "address": 536936396,
+              "value": "23"
+            }
+          ],
+          "variables": [
+            {
+              "name": "stage_cookie",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "20281789"
+                }
+              ],
+              "address": 536936388
+            },
+            {
+              "name": "result",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "19450"
+                }
+              ],
+              "address": 536936392
+            },
+            {
+              "name": "register_arg",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "23"
+                }
+              ],
+              "address": 536936396
+            }
+          ]
+        }
+      ],
+      "differences": [],
+      "m7ErratumRecoveries": []
+    },
+    {
+      "id": "shadow-exit",
+      "elapsedMs": 834,
+      "frames": [
+        {
+          "name": "engine_frame_shadow",
+          "pc": 134220188,
+          "sp": 536936368,
+          "rows": [
+            {
+              "name": "seed",
+              "argument": true,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7588,
+              "value": "50"
+            },
+            {
+              "name": "shadow",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7588,
+              "address": 536936368,
+              "value": "60"
+            },
+            {
+              "name": "outer_copy",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7588,
+              "address": 536936372,
+              "value": "130"
+            }
+          ],
+          "variables": [
+            {
+              "name": "seed",
+              "occurrence": 0,
+              "argument": true,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "50"
+                }
+              ]
+            },
+            {
+              "name": "shadow",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "60"
+                }
+              ],
+              "address": 536936368
+            },
+            {
+              "name": "outer_copy",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "130"
+                }
+              ],
+              "address": 536936372
+            }
+          ]
+        },
+        {
+          "name": "engine_frame_stage",
+          "pc": 134220280,
+          "sp": 536936384,
+          "rows": [
+            {
+              "name": "stage_cookie",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7287,
+              "address": 536936388,
+              "value": "20281789"
+            },
+            {
+              "name": "result",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7287,
+              "address": 536936392,
+              "value": "19450"
+            },
+            {
+              "name": "register_arg",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7287,
+              "address": 536936396,
+              "value": "23"
+            }
+          ],
+          "variables": [
+            {
+              "name": "stage_cookie",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "20281789"
+                }
+              ],
+              "address": 536936388
+            },
+            {
+              "name": "result",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "19450"
+                }
+              ],
+              "address": 536936392
+            },
+            {
+              "name": "register_arg",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "23"
+                }
+              ],
+              "address": 536936396
+            }
+          ]
+        }
+      ],
+      "differences": [],
+      "m7ErratumRecoveries": []
+    },
+    {
+      "id": "register",
+      "elapsedMs": 803,
+      "frames": [
+        {
+          "name": "engine_frame_register",
+          "pc": 134220208,
+          "sp": 536936384,
+          "rows": [
+            {
+              "name": "arg",
+              "argument": true,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7521,
+              "value": "23"
+            },
+            {
+              "name": "register_value",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7521,
+              "value": "70"
+            }
+          ],
+          "variables": [
+            {
+              "name": "arg",
+              "occurrence": 0,
+              "argument": true,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "23"
+                }
+              ]
+            },
+            {
+              "name": "register_value",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "70"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "engine_frame_stage",
+          "pc": 134220292,
+          "sp": 536936384,
+          "rows": [
+            {
+              "name": "stage_cookie",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7287,
+              "address": 536936388,
+              "value": "20281789"
+            },
+            {
+              "name": "result",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7287,
+              "address": 536936392,
+              "value": "19210"
+            },
+            {
+              "name": "register_arg",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7287,
+              "address": 536936396,
+              "value": "23"
+            }
+          ],
+          "variables": [
+            {
+              "name": "stage_cookie",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "20281789"
+                }
+              ],
+              "address": 536936388
+            },
+            {
+              "name": "result",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "19210"
+                }
+              ],
+              "address": 536936392
+            },
+            {
+              "name": "register_arg",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "23"
+                }
+              ],
+              "address": 536936396
+            }
+          ]
+        }
+      ],
+      "differences": [],
+      "m7ErratumRecoveries": []
+    },
+    {
+      "id": "before-call",
+      "elapsedMs": 859,
+      "frames": [
+        {
+          "name": "engine_frame_migrate",
+          "pc": 134220224,
+          "sp": 536936360,
+          "rows": [
+            {
+              "name": "arg",
+              "argument": true,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7430,
+              "value": "70"
+            },
+            {
+              "name": "stack_value",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7430,
+              "address": 536936372,
+              "value": "79"
+            },
+            {
+              "name": "result",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7430,
+              "error": "已优化掉或没有位置描述"
+            }
+          ],
+          "variables": [
+            {
+              "name": "arg",
+              "occurrence": 0,
+              "argument": true,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "70"
+                }
+              ]
+            },
+            {
+              "name": "stack_value",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "79"
+                }
+              ],
+              "address": 536936372
+            },
+            {
+              "name": "result",
+              "occurrence": 0,
+              "argument": false,
+              "status": "unavailable",
+              "fields": [],
+              "reason": "已优化掉或没有位置描述"
+            }
+          ]
+        },
+        {
+          "name": "engine_frame_stage",
+          "pc": 134220304,
+          "sp": 536936384,
+          "rows": [
+            {
+              "name": "stage_cookie",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7287,
+              "address": 536936388,
+              "value": "20281789"
+            },
+            {
+              "name": "result",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7287,
+              "address": 536936392,
+              "value": "19291"
+            },
+            {
+              "name": "register_arg",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7287,
+              "address": 536936396,
+              "value": "23"
+            }
+          ],
+          "variables": [
+            {
+              "name": "stage_cookie",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "20281789"
+                }
+              ],
+              "address": 536936388
+            },
+            {
+              "name": "result",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "19291"
+                }
+              ],
+              "address": 536936392
+            },
+            {
+              "name": "register_arg",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "23"
+                }
+              ],
+              "address": 536936396
+            }
+          ]
+        }
+      ],
+      "differences": [],
+      "m7ErratumRecoveries": []
+    },
+    {
+      "id": "after-call",
+      "elapsedMs": 838,
+      "frames": [
+        {
+          "name": "engine_frame_migrate",
+          "pc": 134220232,
+          "sp": 536936360,
+          "rows": [
+            {
+              "name": "arg",
+              "argument": true,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7430,
+              "value": "70"
+            },
+            {
+              "name": "stack_value",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7430,
+              "address": 536936372,
+              "value": "79"
+            },
+            {
+              "name": "result",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7430,
+              "value": "346"
+            }
+          ],
+          "variables": [
+            {
+              "name": "arg",
+              "occurrence": 0,
+              "argument": true,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "70"
+                }
+              ]
+            },
+            {
+              "name": "stack_value",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "79"
+                }
+              ],
+              "address": 536936372
+            },
+            {
+              "name": "result",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "346"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "engine_frame_stage",
+          "pc": 134220304,
+          "sp": 536936384,
+          "rows": [
+            {
+              "name": "stage_cookie",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7287,
+              "address": 536936388,
+              "value": "20281789"
+            },
+            {
+              "name": "result",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7287,
+              "address": 536936392,
+              "value": "19291"
+            },
+            {
+              "name": "register_arg",
+              "argument": false,
+              "type": {
+                "kind": "scalar",
+                "size": 4,
+                "scalar": "u32",
+                "name": "long unsigned int",
+                "alias": "uint32_t"
+              },
+              "scope": 7287,
+              "address": 536936396,
+              "value": "23"
+            }
+          ],
+          "variables": [
+            {
+              "name": "stage_cookie",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "20281789"
+                }
+              ],
+              "address": 536936388
+            },
+            {
+              "name": "result",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "19291"
+                }
+              ],
+              "address": 536936392
+            },
+            {
+              "name": "register_arg",
+              "occurrence": 0,
+              "argument": false,
+              "status": "ok",
+              "fields": [
+                {
+                  "path": "",
+                  "value": "23"
+                }
+              ],
+              "address": 536936396
+            }
+          ]
+        }
+      ],
+      "differences": [],
+      "m7ErratumRecoveries": []
+    }
+  ]
+}

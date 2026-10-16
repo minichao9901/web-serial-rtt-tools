@@ -1,0 +1,604 @@
+[
+  {
+    "id": "job-01-full",
+    "command": [
+      "make",
+      "-o",
+      "page-prep",
+      "full_flow_f103ze",
+      "ARGS=--com=COM43"
+    ],
+    "mutates": true,
+    "timeout": 1500,
+    "result": {
+      "exitCode": 2,
+      "startedAt": "2026-10-16T12:05:37.072747+08:00",
+      "endedAt": "2026-10-16T12:05:37.235624+08:00",
+      "command": [
+        "make",
+        "-o",
+        "page-prep",
+        "full_flow_f103ze",
+        "ARGS=--com=COM43"
+      ],
+      "cwd": "E:\\web-serial-rtt-tools"
+    }
+  },
+  {
+    "id": "job-02-full",
+    "command": [
+      "make",
+      "-o",
+      "page-prep",
+      "full_flow_f103ze",
+      "ARGS=--com=COM43"
+    ],
+    "mutates": true,
+    "timeout": 1500,
+    "result": {
+      "exitCode": 2,
+      "startedAt": "2026-10-16T12:05:55.421279+08:00",
+      "endedAt": "2026-10-16T12:06:14.913456+08:00",
+      "command": [
+        "make",
+        "-o",
+        "page-prep",
+        "full_flow_f103ze",
+        "ARGS=--com=COM43"
+      ],
+      "cwd": "E:\\web-serial-rtt-tools"
+    }
+  },
+  {
+    "id": "job-03-clock",
+    "command": [
+      "node",
+      "docs/validation/20261016-f103ze-hardware-120200-63c7e2/clock-diag.mjs"
+    ],
+    "timeout": 90,
+    "result": {
+      "exitCode": 0,
+      "startedAt": "2026-10-16T12:07:34.559339+08:00",
+      "endedAt": "2026-10-16T12:07:40.436054+08:00",
+      "command": [
+        "node",
+        "docs/validation/20261016-f103ze-hardware-120200-63c7e2/clock-diag.mjs"
+      ],
+      "cwd": "E:\\web-serial-rtt-tools"
+    }
+  },
+  {
+    "id": "job-04-full",
+    "command": [
+      "make",
+      "-o",
+      "page-prep",
+      "full_flow_f103ze",
+      "ARGS=--com=COM43"
+    ],
+    "mutates": true,
+    "timeout": 1500,
+    "result": {
+      "exitCode": 2,
+      "startedAt": "2026-10-16T12:07:50.456456+08:00",
+      "endedAt": "2026-10-16T12:09:31.228879+08:00",
+      "command": [
+        "make",
+        "-o",
+        "page-prep",
+        "full_flow_f103ze",
+        "ARGS=--com=COM43"
+      ],
+      "cwd": "E:\\web-serial-rtt-tools"
+    }
+  },
+  {
+    "id": "job-05-gdb",
+    "command": [
+      "python",
+      "docs/validation/20261016-f103ze-hardware-120200-63c7e2/gdb-accept.py"
+    ],
+    "mutates": true,
+    "timeout": 420,
+    "result": {
+      "exitCode": 1,
+      "startedAt": "2026-10-16T12:09:31.232075+08:00",
+      "endedAt": "2026-10-16T12:09:33.849797+08:00",
+      "command": [
+        "python",
+        "docs/validation/20261016-f103ze-hardware-120200-63c7e2/gdb-accept.py"
+      ],
+      "cwd": "E:\\web-serial-rtt-tools"
+    }
+  },
+  {
+    "id": "job-06-frame-web",
+    "command": [
+      "node",
+      "tools/selftest/dbg-hw-stress.mjs",
+      "--board=f103ze",
+      "--frames-only",
+      "--frame-oracle=docs/validation/20261016-f103ze-hardware-120200-63c7e2/frame-oracle.json",
+      "--frame-rounds=200",
+      "--clock=1000",
+      "--out=docs/validation/20261016-f103ze-hardware-120200-63c7e2/frame-web.json"
+    ],
+    "mutates": true,
+    "timeout": 900,
+    "result": {
+      "exitCode": 1,
+      "startedAt": "2026-10-16T12:09:33.853174+08:00",
+      "endedAt": "2026-10-16T12:09:33.935863+08:00",
+      "command": [
+        "node",
+        "tools/selftest/dbg-hw-stress.mjs",
+        "--board=f103ze",
+        "--frames-only",
+        "--frame-oracle=docs/validation/20261016-f103ze-hardware-120200-63c7e2/frame-oracle.json",
+        "--frame-rounds=200",
+        "--clock=1000",
+        "--out=docs/validation/20261016-f103ze-hardware-120200-63c7e2/frame-web.json"
+      ],
+      "cwd": "E:\\web-serial-rtt-tools"
+    }
+  },
+  {
+    "id": "job-07-debug-stress",
+    "command": [
+      "node",
+      "tools/selftest/dbg-hw-stress.mjs",
+      "--board=f103ze",
+      "--clock=1000",
+      "--oracle=docs/validation/20261016-f103ze-hardware-120200-63c7e2/no-old-oracle.json",
+      "--out=docs/validation/20261016-f103ze-hardware-120200-63c7e2/debug-stress.json"
+    ],
+    "mutates": true,
+    "timeout": 1200,
+    "result": {
+      "exitCode": 1,
+      "startedAt": "2026-10-16T12:09:33.938312+08:00",
+      "endedAt": "2026-10-16T12:10:21.709843+08:00",
+      "command": [
+        "node",
+        "tools/selftest/dbg-hw-stress.mjs",
+        "--board=f103ze",
+        "--clock=1000",
+        "--oracle=docs/validation/20261016-f103ze-hardware-120200-63c7e2/no-old-oracle.json",
+        "--out=docs/validation/20261016-f103ze-hardware-120200-63c7e2/debug-stress.json"
+      ],
+      "cwd": "E:\\web-serial-rtt-tools"
+    }
+  },
+  {
+    "id": "job-08-swo-flash",
+    "command": [
+      "python",
+      "docs/validation/20261016-f103ze-hardware-120200-63c7e2/flash-fixture.py",
+      "docs/validation/20261016-f103ze-acceptance-112445-5b3aac/swo-ze/fw.elf",
+      "swo-flash"
+    ],
+    "mutates": true,
+    "timeout": 150,
+    "result": {
+      "exitCode": 0,
+      "startedAt": "2026-10-16T12:10:21.712956+08:00",
+      "endedAt": "2026-10-16T12:10:23.003706+08:00",
+      "command": [
+        "python",
+        "docs/validation/20261016-f103ze-hardware-120200-63c7e2/flash-fixture.py",
+        "docs/validation/20261016-f103ze-acceptance-112445-5b3aac/swo-ze/fw.elf",
+        "swo-flash"
+      ],
+      "cwd": "E:\\web-serial-rtt-tools"
+    }
+  },
+  {
+    "id": "job-09-swo",
+    "command": [
+      "node",
+      "docs/validation/20261016-f103ze-hardware-120200-63c7e2/swo-ze.mjs"
+    ],
+    "mutates": true,
+    "timeout": 150,
+    "result": {
+      "exitCode": 0,
+      "startedAt": "2026-10-16T12:10:23.007457+08:00",
+      "endedAt": "2026-10-16T12:10:28.892293+08:00",
+      "command": [
+        "node",
+        "docs/validation/20261016-f103ze-hardware-120200-63c7e2/swo-ze.mjs"
+      ],
+      "cwd": "E:\\web-serial-rtt-tools"
+    }
+  },
+  {
+    "id": "job-10-etm-flash",
+    "command": [
+      "python",
+      "docs/validation/20261016-f103ze-hardware-120200-63c7e2/flash-fixture.py",
+      "bridge/etm/backend/firmware/stm32f103_cdc_trace/fw-ze.elf",
+      "etm-flash"
+    ],
+    "mutates": true,
+    "timeout": 150,
+    "result": {
+      "exitCode": 0,
+      "startedAt": "2026-10-16T12:10:28.895796+08:00",
+      "endedAt": "2026-10-16T12:10:30.943451+08:00",
+      "command": [
+        "python",
+        "docs/validation/20261016-f103ze-hardware-120200-63c7e2/flash-fixture.py",
+        "bridge/etm/backend/firmware/stm32f103_cdc_trace/fw-ze.elf",
+        "etm-flash"
+      ],
+      "cwd": "E:\\web-serial-rtt-tools"
+    }
+  },
+  {
+    "id": "job-11-etm",
+    "command": [
+      "python",
+      "docs/validation/20261016-f103ze-hardware-120200-63c7e2/etm-accept.py"
+    ],
+    "mutates": true,
+    "timeout": 1800,
+    "result": {
+      "exitCode": 0,
+      "startedAt": "2026-10-16T12:10:30.946801+08:00",
+      "endedAt": "2026-10-16T12:11:07.770153+08:00",
+      "command": [
+        "python",
+        "docs/validation/20261016-f103ze-hardware-120200-63c7e2/etm-accept.py"
+      ],
+      "cwd": "E:\\web-serial-rtt-tools"
+    }
+  },
+  {
+    "id": "job-12-fault-flash",
+    "command": [
+      "python",
+      "docs/validation/20261016-f103ze-hardware-120200-63c7e2/flash-fixture.py",
+      "tools/target-firmware/stm32f103ze_fault/build/fw.elf",
+      "fault-flash"
+    ],
+    "mutates": true,
+    "timeout": 150,
+    "result": {
+      "exitCode": 0,
+      "startedAt": "2026-10-16T12:13:33.296280+08:00",
+      "endedAt": "2026-10-16T12:13:34.496701+08:00",
+      "command": [
+        "python",
+        "docs/validation/20261016-f103ze-hardware-120200-63c7e2/flash-fixture.py",
+        "tools/target-firmware/stm32f103ze_fault/build/fw.elf",
+        "fault-flash"
+      ],
+      "cwd": "E:\\web-serial-rtt-tools"
+    }
+  },
+  {
+    "id": "job-13-fault-diag",
+    "command": [
+      "node",
+      "tools/selftest/diagnostics-hw.mjs",
+      "--board=f103ze"
+    ],
+    "mutates": true,
+    "timeout": 240,
+    "env": {
+      "DIAG_OUT": "docs/validation/20261016-f103ze-hardware-120200-63c7e2/fault-diag",
+      "DIAG_FIXTURE": "tools/target-firmware/stm32f103ze_fault/build/fw.elf",
+      "DIAG_SOURCE": "tools/target-firmware/stm32f103ze_fault/src"
+    },
+    "result": {
+      "exitCode": 0,
+      "startedAt": "2026-10-16T12:13:34.500928+08:00",
+      "endedAt": "2026-10-16T12:13:48.192830+08:00",
+      "command": [
+        "node",
+        "tools/selftest/diagnostics-hw.mjs",
+        "--board=f103ze"
+      ],
+      "cwd": "E:\\web-serial-rtt-tools"
+    }
+  },
+  {
+    "id": "job-14-alternating",
+    "command": [
+      "node",
+      "tools/selftest/hw-campaign.mjs",
+      "--board=f103ze",
+      "--local",
+      "--com=COM43",
+      "--cycles=0",
+      "--alt=5",
+      "--out=docs/validation/20261016-f103ze-hardware-120200-63c7e2/alternating.json"
+    ],
+    "mutates": true,
+    "timeout": 300,
+    "result": {
+      "exitCode": 0,
+      "startedAt": "2026-10-16T12:13:48.197081+08:00",
+      "endedAt": "2026-10-16T12:14:03.000167+08:00",
+      "command": [
+        "node",
+        "tools/selftest/hw-campaign.mjs",
+        "--board=f103ze",
+        "--local",
+        "--com=COM43",
+        "--cycles=0",
+        "--alt=5",
+        "--out=docs/validation/20261016-f103ze-hardware-120200-63c7e2/alternating.json"
+      ],
+      "cwd": "E:\\web-serial-rtt-tools"
+    }
+  },
+  {
+    "id": "job-15-gdb",
+    "command": [
+      "python",
+      "docs/validation/20261016-f103ze-hardware-120200-63c7e2/gdb-accept.py"
+    ],
+    "mutates": true,
+    "timeout": 420,
+    "env": {
+      "GDB_OUT": "E:/web-serial-rtt-tools/docs/validation/20261016-f103ze-hardware-120200-63c7e2/gdb-02"
+    },
+    "result": {
+      "exitCode": 0,
+      "startedAt": "2026-10-16T12:14:22.574291+08:00",
+      "endedAt": "2026-10-16T12:14:26.248779+08:00",
+      "command": [
+        "python",
+        "docs/validation/20261016-f103ze-hardware-120200-63c7e2/gdb-accept.py"
+      ],
+      "cwd": "E:\\web-serial-rtt-tools"
+    }
+  },
+  {
+    "id": "job-16-frame-web",
+    "command": [
+      "node",
+      "tools/selftest/dbg-hw-stress.mjs",
+      "--board=f103ze",
+      "--frames-only",
+      "--frame-oracle=docs/validation/20261016-f103ze-hardware-120200-63c7e2/gdb-02/frame-oracle.json",
+      "--frame-rounds=200",
+      "--clock=1000",
+      "--out=docs/validation/20261016-f103ze-hardware-120200-63c7e2/frame-web-02.json"
+    ],
+    "mutates": true,
+    "timeout": 1200,
+    "result": {
+      "exitCode": 0,
+      "startedAt": "2026-10-16T12:15:00.882013+08:00",
+      "endedAt": "2026-10-16T12:21:59.158533+08:00",
+      "command": [
+        "node",
+        "tools/selftest/dbg-hw-stress.mjs",
+        "--board=f103ze",
+        "--frames-only",
+        "--frame-oracle=docs/validation/20261016-f103ze-hardware-120200-63c7e2/gdb-02/frame-oracle.json",
+        "--frame-rounds=200",
+        "--clock=1000",
+        "--out=docs/validation/20261016-f103ze-hardware-120200-63c7e2/frame-web-02.json"
+      ],
+      "cwd": "E:\\web-serial-rtt-tools"
+    }
+  },
+  {
+    "id": "job-17-debug-stress",
+    "command": [
+      "node",
+      "tools/selftest/dbg-hw-stress.mjs",
+      "--board=f103ze",
+      "--clock=1000",
+      "--oracle=docs/validation/20261016-f103ze-hardware-120200-63c7e2/no-old-oracle.json",
+      "--out=docs/validation/20261016-f103ze-hardware-120200-63c7e2/debug-stress-02.json"
+    ],
+    "mutates": true,
+    "timeout": 1200,
+    "result": {
+      "exitCode": 0,
+      "startedAt": "2026-10-16T12:21:59.163039+08:00",
+      "endedAt": "2026-10-16T12:22:47.057245+08:00",
+      "command": [
+        "node",
+        "tools/selftest/dbg-hw-stress.mjs",
+        "--board=f103ze",
+        "--clock=1000",
+        "--oracle=docs/validation/20261016-f103ze-hardware-120200-63c7e2/no-old-oracle.json",
+        "--out=docs/validation/20261016-f103ze-hardware-120200-63c7e2/debug-stress-02.json"
+      ],
+      "cwd": "E:\\web-serial-rtt-tools"
+    }
+  },
+  {
+    "id": "job-18-scope72-flash",
+    "command": [
+      "python",
+      "docs/validation/20261016-f103ze-hardware-120200-63c7e2/flash-fixture.py",
+      "tools/target-firmware/stm32f103_scope/build-72mhz/fw.elf",
+      "scope72-flash"
+    ],
+    "mutates": true,
+    "timeout": 150,
+    "result": {
+      "exitCode": 0,
+      "startedAt": "2026-10-16T12:22:47.062016+08:00",
+      "endedAt": "2026-10-16T12:22:48.150030+08:00",
+      "command": [
+        "python",
+        "docs/validation/20261016-f103ze-hardware-120200-63c7e2/flash-fixture.py",
+        "tools/target-firmware/stm32f103_scope/build-72mhz/fw.elf",
+        "scope72-flash"
+      ],
+      "cwd": "E:\\web-serial-rtt-tools"
+    }
+  },
+  {
+    "id": "job-19-scope72",
+    "command": [
+      "node",
+      "tools/dev/hss-web-bench.mjs",
+      "docs/validation/20261016-f103ze-hardware-120200-63c7e2/scope72.json",
+      "[{\"period\":2,\"draw\":true,\"adaptive\":true},{\"period\":3,\"draw\":true,\"adaptive\":true},{\"period\":20,\"draw\":true,\"adaptive\":true}]",
+      "5"
+    ],
+    "timeout": 240,
+    "env": {
+      "SCOPE_ELF": "tools/target-firmware/stm32f103_scope/build-72mhz/fw.elf",
+      "SCOPE_CLOCK_MHZ": "45",
+      "CDP": "http://127.0.0.1:9333"
+    },
+    "result": {
+      "exitCode": 0,
+      "startedAt": "2026-10-16T12:22:48.153934+08:00",
+      "endedAt": "2026-10-16T12:23:08.115890+08:00",
+      "command": [
+        "node",
+        "tools/dev/hss-web-bench.mjs",
+        "docs/validation/20261016-f103ze-hardware-120200-63c7e2/scope72.json",
+        "[{\"period\":2,\"draw\":true,\"adaptive\":true},{\"period\":3,\"draw\":true,\"adaptive\":true},{\"period\":20,\"draw\":true,\"adaptive\":true}]",
+        "5"
+      ],
+      "cwd": "E:\\web-serial-rtt-tools"
+    }
+  },
+  {
+    "id": "job-20-rtt72-flash",
+    "command": [
+      "python",
+      "docs/validation/20261016-f103ze-hardware-120200-63c7e2/flash-fixture.py",
+      "docs/validation/20261016-f103ze-hardware-120200-63c7e2/rtt-seq72/fw.elf",
+      "rtt72-flash"
+    ],
+    "mutates": true,
+    "timeout": 150,
+    "result": {
+      "exitCode": 0,
+      "startedAt": "2026-10-16T12:23:08.120452+08:00",
+      "endedAt": "2026-10-16T12:23:08.951190+08:00",
+      "command": [
+        "python",
+        "docs/validation/20261016-f103ze-hardware-120200-63c7e2/flash-fixture.py",
+        "docs/validation/20261016-f103ze-hardware-120200-63c7e2/rtt-seq72/fw.elf",
+        "rtt72-flash"
+      ],
+      "cwd": "E:\\web-serial-rtt-tools"
+    }
+  },
+  {
+    "id": "job-21-rtt72-integrity",
+    "command": [
+      "python",
+      "tools/selftest/probe-hid-diag.py",
+      "--mode=loss",
+      "--seq",
+      "--clk=45",
+      "--com=COM43",
+      "--iters=3",
+      "--window=5",
+      "--rxbuf=1048576"
+    ],
+    "timeout": 90,
+    "result": {
+      "exitCode": 0,
+      "startedAt": "2026-10-16T12:23:08.955791+08:00",
+      "endedAt": "2026-10-16T12:23:33.749597+08:00",
+      "command": [
+        "python",
+        "tools/selftest/probe-hid-diag.py",
+        "--mode=loss",
+        "--seq",
+        "--clk=45",
+        "--com=COM43",
+        "--iters=3",
+        "--window=5",
+        "--rxbuf=1048576"
+      ],
+      "cwd": "E:\\web-serial-rtt-tools"
+    }
+  },
+  {
+    "id": "job-22-pe6-line",
+    "command": [
+      "python",
+      "docs/validation/20261016-f103ze-hardware-120200-63c7e2/pe6-line-check.py"
+    ],
+    "mutates": true,
+    "timeout": 90,
+    "result": {
+      "exitCode": 0,
+      "startedAt": "2026-10-16T12:23:33.753821+08:00",
+      "endedAt": "2026-10-16T12:23:42.310937+08:00",
+      "command": [
+        "python",
+        "docs/validation/20261016-f103ze-hardware-120200-63c7e2/pe6-line-check.py"
+      ],
+      "cwd": "E:\\web-serial-rtt-tools"
+    }
+  },
+  {
+    "id": "job-23-rtt72-raw",
+    "command": [
+      "python",
+      "docs/validation/20261016-f103ze-hardware-120200-63c7e2/rtt-seq-capture.py"
+    ],
+    "timeout": 90,
+    "result": {
+      "exitCode": 0,
+      "startedAt": "2026-10-16T12:24:52.676516+08:00",
+      "endedAt": "2026-10-16T12:25:20.762185+08:00",
+      "command": [
+        "python",
+        "docs/validation/20261016-f103ze-hardware-120200-63c7e2/rtt-seq-capture.py"
+      ],
+      "cwd": "E:\\web-serial-rtt-tools"
+    }
+  },
+  {
+    "id": "job-24-pe6-all-channels",
+    "command": [
+      "python",
+      "docs/validation/20261016-f103ze-hardware-120200-63c7e2/pe6-all-channels.py"
+    ],
+    "timeout": 120,
+    "result": {
+      "exitCode": 0,
+      "startedAt": "2026-10-16T12:27:42.558416+08:00",
+      "endedAt": "2026-10-16T12:27:45.094271+08:00",
+      "command": [
+        "python",
+        "docs/validation/20261016-f103ze-hardware-120200-63c7e2/pe6-all-channels.py"
+      ],
+      "cwd": "E:\\web-serial-rtt-tools"
+    }
+  },
+  {
+    "id": "job-25-pe6-timed",
+    "command": [
+      "python",
+      "docs/validation/20261016-f103ze-hardware-120200-63c7e2/pe6-timed-check.py"
+    ],
+    "mutates": true,
+    "timeout": 90,
+    "result": {
+      "exitCode": 0,
+      "startedAt": "2026-10-16T12:29:10.594801+08:00",
+      "endedAt": "2026-10-16T12:29:20.410209+08:00",
+      "command": [
+        "python",
+        "docs/validation/20261016-f103ze-hardware-120200-63c7e2/pe6-timed-check.py"
+      ],
+      "cwd": "E:\\web-serial-rtt-tools"
+    }
+  },
+  {
+    "id": "job-99-stop",
+    "stop": true,
+    "result": {
+      "stop": true
+    }
+  }
+]

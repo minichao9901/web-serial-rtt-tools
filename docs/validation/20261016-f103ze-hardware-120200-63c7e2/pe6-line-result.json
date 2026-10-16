@@ -1,0 +1,25 @@
+{
+  "source": "direct PE6 weak input pull-up/down, ETM gate temporarily disabled, GPIO/RCC/DBG restored",
+  "pinHighReads": 20,
+  "pinLowReads": 20,
+  "gpioReadbackPassed": true,
+  "initial": {
+    "0": 0,
+    "1": 0,
+    "2": 0,
+    "3": 0,
+    "4": 0
+  },
+  "transitions": {
+    "0": 0,
+    "1": 0,
+    "2": 0,
+    "3": 0,
+    "4": 0
+  },
+  "laCH4PathPassed": false,
+  "rate": 1000000,
+  "seconds": 0.0,
+  "previousRate": 500000000,
+  "previousTime": 0.01
+}

@@ -1,0 +1,36 @@
+{
+  "board": "f103ze",
+  "elfSha256": "eaa07aa96e99d8e021f867a4d2d08e7eaab213145a6f570e29cc25e7135c71ce",
+  "compiler": "arm-none-eabi-gcc.exe (GNU Arm Embedded Toolchain 10.3-2021.10) 10.3.1 20210824 (release)",
+  "dwarf": 4,
+  "sources": {
+    "model.c": "6d6fe329b9851730cc459576023d2f6d5f10c3b05dc8950591ee7c1271c606cc",
+    "startup.c": "56a4d80c3a7015e7ebb58504ec2fb58b2af6f1c66bff0f6f024e5a67e724722f",
+    "engine.c": "8a0db35269ae77441fcd7ce3106bf63fe343b6b213f923c88decd6b6aaf81655",
+    "main.c": "172d430383508c563c22ebe8ea99080206daea00ec8f2f5711521478a7c7ec1b",
+    "dbg_frames.c": "da17310c3fdb5a010289560e1383e7549010e7db6c5cacb91a4bf895900dd1af"
+  },
+  "optimization": "Os",
+  "schema": 1,
+  "flags": [
+    "-mcpu=cortex-m3",
+    "-mthumb",
+    "-Os",
+    "-g3",
+    "-fasynchronous-unwind-tables",
+    "-ffunction-sections",
+    "-fdata-sections",
+    "-fno-common",
+    "-Wall",
+    "-Wextra",
+    "-Wno-unused-parameter",
+    "-IE:\\web-serial-rtt-tools\\tools\\target-firmware\\stm32f103_dbgstress\\src",
+    "-TE:\\web-serial-rtt-tools\\tools\\target-firmware\\stm32f103_dbgstress\\ld\\stm32f103ze.ld",
+    "-nostartfiles",
+    "-specs=nano.specs",
+    "-specs=nosys.specs",
+    "-Wl,--gc-sections",
+    "-Wl,-Map=E:\\web-serial-rtt-tools\\tools\\target-firmware\\stm32f103_dbgstress\\build\\fw.map",
+    "-gdwarf-4"
+  ]
+}

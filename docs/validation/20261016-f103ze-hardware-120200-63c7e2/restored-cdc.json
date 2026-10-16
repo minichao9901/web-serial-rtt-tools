@@ -1,0 +1,10 @@
+{
+  "port": "COM34",
+  "plannedTx": "PING\r\nINFO\r\nECHO acceptance-restored\r\n",
+  "rx": "",
+  "error": "SerialException(\"Cannot configure port, something went wrong. Original message: PermissionError(13, '连到系统上的设备没有发挥作用。', None, 31)\")",
+  "pong": false,
+  "echo": false,
+  "time": "2026-10-16T12:35:42.523962+08:00",
+  "passed": false
+}

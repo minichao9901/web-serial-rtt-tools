@@ -942,7 +942,7 @@ sec('== 5. 内存 / 监视：结构体树、位域、复合路径 ==');
       try { after = [...await d.session.memRead(0x08000000, 8)].map(x => x.toString(16)).join(' '); } catch (e){ after = 'ERR ' + e.message; }
       return { msg, after, heals: d.session.probe.faultHeals || 0 };
     })()`);
-  ok(/总线 FAULT/.test(fault.msg) && /不用重连/.test(fault.msg), '读不到的总线地址给出人话错误：' + fault.msg.slice(0, 80));
+  ok(/总线 FAULT/.test(fault.msg) && fault.msg.includes('0x' + BOARD.faultAddr.toString(16)), '读不到的总线地址说明故障及地址：' + fault.msg.slice(0, 80));
   ok(/^0 /.test(fault.after) && fault.heals >= 1, `FAULT 之后链路自愈、还能继续读 flash（自愈 ${fault.heals} 次）：${fault.after}`);
 }
 

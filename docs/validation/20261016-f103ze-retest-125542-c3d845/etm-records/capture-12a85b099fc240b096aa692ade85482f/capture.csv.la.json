@@ -1,0 +1,105 @@
+{
+  "basis": "record snapshot",
+  "source": "E:\\web-serial-rtt-tools\\docs\\validation\\20261016-f103ze-retest-125542-c3d845\\etm-records\\capture-12a85b099fc240b096aa692ade85482f\\capture.kvdat",
+  "keepOnRestart": false,
+  "channels": [
+    {
+      "channel": 0,
+      "enabled": true,
+      "samples": 2,
+      "widthNs": 4.0
+    },
+    {
+      "channel": 1,
+      "enabled": true,
+      "samples": 2,
+      "widthNs": 4.0
+    },
+    {
+      "channel": 2,
+      "enabled": true,
+      "samples": 2,
+      "widthNs": 4.0
+    },
+    {
+      "channel": 3,
+      "enabled": true,
+      "samples": 2,
+      "widthNs": 4.0
+    },
+    {
+      "channel": 4,
+      "enabled": true,
+      "samples": 2,
+      "widthNs": 4.0
+    },
+    {
+      "channel": 5,
+      "enabled": false,
+      "samples": 1,
+      "widthNs": 2.0
+    },
+    {
+      "channel": 6,
+      "enabled": false,
+      "samples": 1,
+      "widthNs": 2.0
+    },
+    {
+      "channel": 7,
+      "enabled": false,
+      "samples": 1,
+      "widthNs": 2.0
+    },
+    {
+      "channel": 8,
+      "enabled": false,
+      "samples": 1,
+      "widthNs": 2.0
+    },
+    {
+      "channel": 9,
+      "enabled": false,
+      "samples": 1,
+      "widthNs": 2.0
+    },
+    {
+      "channel": 10,
+      "enabled": false,
+      "samples": 1,
+      "widthNs": 2.0
+    },
+    {
+      "channel": 11,
+      "enabled": false,
+      "samples": 1,
+      "widthNs": 2.0
+    },
+    {
+      "channel": 12,
+      "enabled": false,
+      "samples": 1,
+      "widthNs": 2.0
+    },
+    {
+      "channel": 13,
+      "enabled": false,
+      "samples": 1,
+      "widthNs": 2.0
+    },
+    {
+      "channel": 14,
+      "enabled": false,
+      "samples": 1,
+      "widthNs": 2.0
+    },
+    {
+      "channel": 15,
+      "enabled": false,
+      "samples": 1,
+      "widthNs": 2.0
+    }
+  ],
+  "sampleRate": 500000000,
+  "nativeSocketControl": false
+}

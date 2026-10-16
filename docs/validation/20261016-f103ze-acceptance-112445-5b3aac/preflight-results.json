@@ -1,0 +1,139 @@
+[
+  {
+    "name": "make-full-dry-run",
+    "command": [
+      "make",
+      "-n",
+      "full_flow_f103ze"
+    ],
+    "cwd": "E:\\web-serial-rtt-tools",
+    "startedAt": "2026-10-16T11:25:12.582543+08:00",
+    "endedAt": "2026-10-16T11:25:12.605554+08:00",
+    "exitCode": 0
+  },
+  {
+    "name": "kingst-read-only-info",
+    "command": [
+      "python",
+      "tools/la/kingst_la.py",
+      "info"
+    ],
+    "cwd": "E:\\web-serial-rtt-tools",
+    "startedAt": "2026-10-16T11:25:12.606005+08:00",
+    "endedAt": "2026-10-16T11:25:15.313675+08:00",
+    "exitCode": 0
+  },
+  {
+    "name": "usb-enumeration",
+    "command": [
+      "python",
+      "-c",
+      "import json,usb.core,serial.tools.list_ports as p; print(json.dumps(dict(usb=[dict(vid=hex(d.idVendor),pid=hex(d.idProduct)) for d in usb.core.find(find_all=True)],serial=[dict(port=x.device,description=x.description,hwid=x.hwid) for x in p.comports()]),indent=2))"
+    ],
+    "cwd": "E:\\web-serial-rtt-tools",
+    "startedAt": "2026-10-16T11:25:15.314040+08:00",
+    "endedAt": "2026-10-16T11:25:15.536946+08:00",
+    "exitCode": 0
+  },
+  {
+    "name": "openocd-version",
+    "command": [
+      "openocd",
+      "--version"
+    ],
+    "cwd": "E:\\web-serial-rtt-tools",
+    "startedAt": "2026-10-16T11:25:15.537344+08:00",
+    "endedAt": "2026-10-16T11:25:16.103266+08:00",
+    "exitCode": 0
+  },
+  {
+    "name": "gdb-python",
+    "command": [
+      "arm-none-eabi-gdb",
+      "-q",
+      "-nx",
+      "-batch",
+      "-ex",
+      "python print(\"GDB_PYTHON_AVAILABLE\")"
+    ],
+    "cwd": "E:\\web-serial-rtt-tools",
+    "startedAt": "2026-10-16T11:25:16.103738+08:00",
+    "endedAt": "2026-10-16T11:25:16.347769+08:00",
+    "exitCode": 1
+  },
+  {
+    "name": "build-f103ze-examples",
+    "command": [
+      "make",
+      "build-f103ze-examples"
+    ],
+    "cwd": "E:\\web-serial-rtt-tools",
+    "startedAt": "2026-10-16T11:25:16.348219+08:00",
+    "endedAt": "2026-10-16T11:25:25.497801+08:00",
+    "exitCode": 0
+  },
+  {
+    "name": "build-f103ze-debug-og",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "tools/target-firmware/stm32f103_dbgstress/build.ps1",
+      "-Board",
+      "ze",
+      "-Optimization",
+      "Og"
+    ],
+    "cwd": "E:\\web-serial-rtt-tools",
+    "startedAt": "2026-10-16T11:25:25.498163+08:00",
+    "endedAt": "2026-10-16T11:25:26.927323+08:00",
+    "exitCode": 0
+  },
+  {
+    "name": "build-f103ze-fault",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "tools/target-firmware/stm32f103ze_fault/build.ps1"
+    ],
+    "cwd": "E:\\web-serial-rtt-tools",
+    "startedAt": "2026-10-16T11:25:26.927776+08:00",
+    "endedAt": "2026-10-16T11:25:27.851409+08:00",
+    "exitCode": 0
+  },
+  {
+    "name": "build-swo-ze-24mhz",
+    "command": [
+      "arm-none-eabi-gcc",
+      "-mcpu=cortex-m3",
+      "-mthumb",
+      "-mfloat-abi=soft",
+      "-O1",
+      "-g3",
+      "-gdwarf-4",
+      "-fno-omit-frame-pointer",
+      "-fno-optimize-sibling-calls",
+      "-funwind-tables",
+      "-ffunction-sections",
+      "-fdata-sections",
+      "-Wall",
+      "-Wextra",
+      "-nostartfiles",
+      "-specs=nano.specs",
+      "-specs=nosys.specs",
+      "-Wl,--gc-sections",
+      "-TE:\\web-serial-rtt-tools\\tools\\target-firmware\\stm32f103_dbgstress\\ld\\stm32f103ze.ld",
+      "E:\\web-serial-rtt-tools\\tools\\target-firmware\\stm32f103cb_swo_hse\\src\\clock-24mhz.c",
+      "E:\\web-serial-rtt-tools\\tools\\target-firmware\\stm32f103cb_swo_hse\\src\\main.c",
+      "E:\\web-serial-rtt-tools\\tools\\target-firmware\\stm32f103cb_swo_hse\\src\\pipeline.c",
+      "E:\\web-serial-rtt-tools\\tools\\target-firmware\\stm32f103cb_swo_hse\\src\\startup.c",
+      "-o",
+      "E:\\web-serial-rtt-tools\\docs\\validation\\20261016-f103ze-acceptance-112445-5b3aac\\swo-ze\\fw.elf"
+    ],
+    "cwd": "E:\\web-serial-rtt-tools",
+    "startedAt": "2026-10-16T11:25:27.852090+08:00",
+    "endedAt": "2026-10-16T11:25:28.455677+08:00",
+    "exitCode": 0
+  }
+]

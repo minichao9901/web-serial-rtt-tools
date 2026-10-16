@@ -1,0 +1,1 @@
+{"exitCode": 1, "command": ["node", "tools/selftest/etm-host-reset-hw.mjs"], "records": "E:\\web-serial-rtt-tools\\docs\\validation\\20261016-f103ze-hardware-120200-63c7e2\\etm-records"}

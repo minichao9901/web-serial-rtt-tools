@@ -1,0 +1,62 @@
+ M Makefile
+ M app/analog/view.js
+ M app/app.css
+ M app/core/bus-periodic.js
+ M app/core/display-stream.js
+ M app/core/probe-users.js
+ M app/core/store.js
+ M app/core/usb-device.js
+ M app/dbg/riscv.js
+ M app/dbg/session.js
+ M app/elf/dwarf.js
+ M app/flash/hpm/riscv-dm.js
+ M app/flash/view.js
+ M app/hid/stream.js
+ M app/hid/view.js
+ M app/i2c/view.js
+ M app/main.js
+ M app/rtt/dap-webusb.js
+ M app/rtt/protocol.js
+ M app/scope/transport.js
+ M app/scope/view.js
+ M app/serial/assistant.js
+ M app/serial/session.js
+ M app/serial/terminal.js
+ M app/site/main.js
+ M app/site/manifest.json
+ M app/spi-cdc/session.js
+ M app/spi-cdc/view.js
+ M app/spi/acq-view.js
+ M app/spi/anim.js
+ M app/spi/bus-view.js
+ M app/spi/panel-view.js
+ M app/spi/reg-view.js
+ M app/spi/session.js
+ M app/spi/transport.js
+ M app/swo/capture.js
+ M app/ui/probe-status.js
+ M bridge/etm/downloads/etm-bridge-win64.zip
+ M bridge/etm/downloads/manifest.json
+ M index.html
+ M tools/dev/build-etm-package.py
+ M tools/selftest/README.md
+ M tools/selftest/bus-periodic.test.mjs
+ M tools/selftest/dbg-backend-lifecycle.test.mjs
+ M tools/selftest/dbg-hw-stress.mjs
+ M tools/selftest/flash-sram-flow.test.mjs
+ M tools/selftest/probe-handoff.test.mjs
+?? .agent-teams/
+?? app/core/operation-budget.js
+?? app/ui/dock-navigation.js
+?? docs/etm-page-review-2026-10-14.md
+?? docs/page-review-2026-10-16.md
+?? docs/validation/20261016-cross-review-065747/
+?? docs/validation/20261016-f103ze-acceptance-112445-5b3aac/
+?? docs/validation/20261016-f103ze-hardware-120200-63c7e2/
+?? docs/validation/20261016-web-fixes-074958/
+?? docs/validation/20261016-web-review-062721/
+?? docs/web-review-fix-list-2026-10-16.md
+?? tools/selftest/dap-ap-discovery.test.mjs
+?? tools/selftest/web-review-fixes.test.mjs
+?? tools/selftest/web-review-maintenance.test.mjs
+?? validation/

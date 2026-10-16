@@ -1,0 +1,22 @@
+{
+  "status": "waiting-for-probe",
+  "usbProbeDetected": false,
+  "runId": "20261016-f103ze-acceptance-112445-5b3aac",
+  "hardwareModified": false,
+  "testedDirty": true,
+  "testedRevision": "pre-commit-worktree",
+  "userConfirmed": true,
+  "firmwareRevision": "321487255d2ececea8d56282b07f3c7254e9862b",
+  "testedBase": "fb06da2348543b75db5fbc237dd4d3b0ffe1d655",
+  "startedAt": "2026-10-16T11:24:45.6264218+08:00",
+  "cwd": "E:\\web-serial-rtt-tools",
+  "validationResult": "partial",
+  "hardwareTest": "not-run",
+  "endedAt": "2026-10-16T11:27:14.203183+08:00",
+  "flashBackup": "not-run: probe absent",
+  "probeLockAcquired": false,
+  "publicBuildCopiesRestored": [
+    "tools/target-firmware/stm32f103_dbgstress/fw.elf",
+    "tools/target-firmware/stm32f103ze_fault/fw.elf"
+  ]
+}

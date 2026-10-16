@@ -1,0 +1,14 @@
+{
+  "recordBytes": 770453,
+  "recordSha256": "ea61feb56d1a166645825b98d74c4e2dbc371a48b32cf4186b8b3dcdcae3f123",
+  "zipEntries": [
+    "session.json",
+    "capture.csv",
+    "firmware.elf",
+    "sources.json",
+    "capture.kvdat"
+  ],
+  "sources": 4,
+  "csvRows": 8480,
+  "elfVerified": true
+}

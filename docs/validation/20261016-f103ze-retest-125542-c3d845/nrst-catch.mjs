@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';import {writeFileSync} from 'node:fs';import {Cdp,sleep} from '../../../tools/selftest/cdp-lib.mjs';
+const c=new Cdp();const report={route:'same web NRST button with VC_CORERESET, actual RCC_CSR/PC evidence',flashWrites:false};
+try{
+ await c.connect();
+ report.resetOutput=await c.eval(`const h=__tools.hid;await h.reconnect({silent:false});try{return await h.dev.getResetOutputMode();}finally{await h.dev.close();}`);
+ report.before=await c.eval(`const {WebUsbDapProbe:P}=await import('./app/rtt/dap-webusb.js');const p=await P.open((await P.authorized())[0],{clockKhz:1000});try{await p.halt();const demcr=await p._readWord(0xe000edfc),vector=await p._readWord(0x08000004);const write=async(a,v)=>{const b=new Uint8Array(4);new DataView(b.buffer).setUint32(0,v>>>0,true);await p.writeMemDiagnostic(a,b);};window.__nrstOriginalDemcr=demcr;await write(0xe000edfc,demcr|1);await write(0x40021024,(await p._readWord(0x40021024))|(1<<24));await p.run();return {demcr,vector,dhcsr:await p._readWord(0xe000edf0)};}finally{await p.disconnect();}`);
+ await c.eval('await __tools.flash.resetTarget();');await sleep(100);
+ report.after=await c.eval(`const {WebUsbDapProbe:P}=await import('./app/rtt/dap-webusb.js');const p=await P.open((await P.authorized())[0],{clockKhz:1000});try{const dhcsr=await p._readWord(0xe000edf0),csr=await p._readWord(0x40021024);return {dhcsr,csr,pc:dhcsr&(1<<17)?await p.regRead(15):null,tick:await p._readWord(0x20001d90)};}finally{const b=new Uint8Array(4);new DataView(b.buffer).setUint32(0,window.__nrstOriginalDemcr,true);await p.writeMemDiagnostic(0xe000edfc,b);await p.run();await p.disconnect();}`);
+ assert.equal(report.after.csr&(1<<26),1<<26);assert.equal(report.after.dhcsr&(1<<17),1<<17);assert.equal(report.after.pc&~1,report.before.vector&~1);report.passed=true;
+}catch(e){report.error=e.stack;process.exitCode=1;}finally{writeFileSync(new URL('./nrst-catch.json',import.meta.url),JSON.stringify(report,null,2));console.log(JSON.stringify(report));c.close();}

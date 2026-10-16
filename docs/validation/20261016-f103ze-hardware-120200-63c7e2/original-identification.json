@@ -1,0 +1,17 @@
+[
+  {
+    "elf": "bridge/etm/backend/firmware/stm32f103_cdc_trace/fw-ze.elf",
+    "bytes": 20168,
+    "match": true
+  },
+  {
+    "elf": "tools/target-firmware/stm32f103_dbgstress/build/fw.elf",
+    "bytes": 9820,
+    "match": false
+  },
+  {
+    "elf": "tools/target-firmware/stm32f103_rtt_speed/build-ze/fw.elf",
+    "bytes": 1052,
+    "match": false
+  }
+]

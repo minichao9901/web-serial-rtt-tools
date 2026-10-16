@@ -1,0 +1,10 @@
+{
+  "exitCode": 1,
+  "startedAt": "2026-10-16T12:56:47.096756+08:00",
+  "endedAt": "2026-10-16T12:56:48.836786+08:00",
+  "command": [
+    "node",
+    "docs/validation/20261016-f103ze-retest-125542-c3d845/nrst-web.mjs"
+  ],
+  "cwd": "E:\\web-serial-rtt-tools"
+}

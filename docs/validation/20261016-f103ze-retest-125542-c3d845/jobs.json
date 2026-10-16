@@ -1,0 +1,225 @@
+[
+  {
+    "name": "job-01-nrst-web",
+    "definition": {
+      "command": [
+        "node",
+        "docs/validation/20261016-f103ze-retest-125542-c3d845/nrst-web.mjs"
+      ],
+      "timeout": 120
+    },
+    "result": {
+      "exitCode": 1,
+      "startedAt": "2026-10-16T12:56:47.096756+08:00",
+      "endedAt": "2026-10-16T12:56:48.836786+08:00",
+      "command": [
+        "node",
+        "docs/validation/20261016-f103ze-retest-125542-c3d845/nrst-web.mjs"
+      ],
+      "cwd": "E:\\web-serial-rtt-tools"
+    }
+  },
+  {
+    "name": "job-02-cdc",
+    "definition": {
+      "command": [
+        "python",
+        "docs/validation/20261016-f103ze-retest-125542-c3d845/check-cdc.py"
+      ],
+      "timeout": 30
+    },
+    "result": {
+      "exitCode": 0,
+      "startedAt": "2026-10-16T12:56:48.838807+08:00",
+      "endedAt": "2026-10-16T12:56:49.320773+08:00",
+      "command": [
+        "python",
+        "docs/validation/20261016-f103ze-retest-125542-c3d845/check-cdc.py"
+      ],
+      "cwd": "E:\\web-serial-rtt-tools"
+    }
+  },
+  {
+    "name": "job-03-etm",
+    "definition": {
+      "command": [
+        "python",
+        "docs/validation/20261016-f103ze-retest-125542-c3d845/etm-accept.py"
+      ],
+      "timeout": 1500
+    },
+    "result": {
+      "exitCode": 0,
+      "startedAt": "2026-10-16T12:56:49.323866+08:00",
+      "endedAt": "2026-10-16T13:01:15.389387+08:00",
+      "command": [
+        "python",
+        "docs/validation/20261016-f103ze-retest-125542-c3d845/etm-accept.py"
+      ],
+      "cwd": "E:\\web-serial-rtt-tools"
+    }
+  },
+  {
+    "name": "job-03b-etm-browser",
+    "definition": {
+      "command": [
+        "python",
+        "docs/validation/20261016-f103ze-retest-125542-c3d845/etm-browser.py"
+      ],
+      "timeout": 480
+    },
+    "result": {
+      "exitCode": 1,
+      "startedAt": "2026-10-16T13:01:15.392054+08:00",
+      "endedAt": "2026-10-16T13:01:30.796162+08:00",
+      "command": [
+        "python",
+        "docs/validation/20261016-f103ze-retest-125542-c3d845/etm-browser.py"
+      ],
+      "cwd": "E:\\web-serial-rtt-tools"
+    }
+  },
+  {
+    "name": "job-04-nrst-catch",
+    "definition": {
+      "command": [
+        "node",
+        "docs/validation/20261016-f103ze-retest-125542-c3d845/nrst-catch.mjs"
+      ],
+      "timeout": 120
+    },
+    "result": {
+      "exitCode": 1,
+      "startedAt": "2026-10-16T13:01:30.798915+08:00",
+      "endedAt": "2026-10-16T13:01:31.468009+08:00",
+      "command": [
+        "node",
+        "docs/validation/20261016-f103ze-retest-125542-c3d845/nrst-catch.mjs"
+      ],
+      "cwd": "E:\\web-serial-rtt-tools"
+    }
+  },
+  {
+    "name": "job-05-etm-browser",
+    "definition": {
+      "command": [
+        "python",
+        "docs/validation/20261016-f103ze-retest-125542-c3d845/etm-browser-02.py"
+      ],
+      "timeout": 480
+    },
+    "result": {
+      "exitCode": 1,
+      "startedAt": "2026-10-16T13:03:21.741204+08:00",
+      "endedAt": "2026-10-16T13:03:41.925787+08:00",
+      "command": [
+        "python",
+        "docs/validation/20261016-f103ze-retest-125542-c3d845/etm-browser-02.py"
+      ],
+      "cwd": "E:\\web-serial-rtt-tools"
+    }
+  },
+  {
+    "name": "job-06-full",
+    "definition": {
+      "command": [
+        "make",
+        "-o",
+        "page-prep",
+        "full_flow_f103ze",
+        "ARGS=--com=COM43"
+      ],
+      "mutates": true,
+      "timeout": 1500
+    },
+    "result": {
+      "exitCode": 2,
+      "startedAt": "2026-10-16T13:03:41.939604+08:00",
+      "endedAt": "2026-10-16T13:04:43.241114+08:00",
+      "command": [
+        "make",
+        "-o",
+        "page-prep",
+        "full_flow_f103ze",
+        "ARGS=--com=COM43"
+      ],
+      "cwd": "E:\\web-serial-rtt-tools"
+    }
+  },
+  {
+    "name": "job-07-reopen",
+    "definition": {
+      "command": [
+        "python",
+        "docs/validation/20261016-f103ze-retest-125542-c3d845/reopen-environment.py"
+      ],
+      "timeout": 120
+    },
+    "result": {
+      "exitCode": 0,
+      "startedAt": "2026-10-16T13:06:37.046668+08:00",
+      "endedAt": "2026-10-16T13:06:40.082672+08:00",
+      "command": [
+        "python",
+        "docs/validation/20261016-f103ze-retest-125542-c3d845/reopen-environment.py"
+      ],
+      "cwd": "E:\\web-serial-rtt-tools"
+    }
+  },
+  {
+    "name": "job-08-etm-browser",
+    "definition": {
+      "command": [
+        "python",
+        "docs/validation/20261016-f103ze-retest-125542-c3d845/etm-browser-03.py"
+      ],
+      "timeout": 480
+    },
+    "result": {
+      "exitCode": 0,
+      "startedAt": "2026-10-16T13:06:40.089678+08:00",
+      "endedAt": "2026-10-16T13:07:01.175530+08:00",
+      "command": [
+        "python",
+        "docs/validation/20261016-f103ze-retest-125542-c3d845/etm-browser-03.py"
+      ],
+      "cwd": "E:\\web-serial-rtt-tools"
+    }
+  },
+  {
+    "name": "job-09-full",
+    "definition": {
+      "command": [
+        "make",
+        "-o",
+        "page-prep",
+        "full_flow_f103ze",
+        "ARGS=--com=COM43"
+      ],
+      "mutates": true,
+      "timeout": 1500
+    },
+    "result": {
+      "exitCode": 2,
+      "startedAt": "2026-10-16T13:07:28.263787+08:00",
+      "endedAt": "2026-10-16T13:07:49.665390+08:00",
+      "command": [
+        "make",
+        "-o",
+        "page-prep",
+        "full_flow_f103ze",
+        "ARGS=--com=COM43"
+      ],
+      "cwd": "E:\\web-serial-rtt-tools"
+    }
+  },
+  {
+    "name": "job-99-stop",
+    "definition": {
+      "stop": true
+    },
+    "result": {
+      "stop": true
+    }
+  }
+]

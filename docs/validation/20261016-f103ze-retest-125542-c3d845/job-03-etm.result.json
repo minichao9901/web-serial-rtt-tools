@@ -1,0 +1,10 @@
+{
+  "exitCode": 0,
+  "startedAt": "2026-10-16T12:56:49.323866+08:00",
+  "endedAt": "2026-10-16T13:01:15.389387+08:00",
+  "command": [
+    "python",
+    "docs/validation/20261016-f103ze-retest-125542-c3d845/etm-accept.py"
+  ],
+  "cwd": "E:\\web-serial-rtt-tools"
+}

@@ -1,0 +1,10 @@
+{
+  "exitCode": 0,
+  "startedAt": "2026-10-16T12:10:23.007457+08:00",
+  "endedAt": "2026-10-16T12:10:28.892293+08:00",
+  "command": [
+    "node",
+    "docs/validation/20261016-f103ze-hardware-120200-63c7e2/swo-ze.mjs"
+  ],
+  "cwd": "E:\\web-serial-rtt-tools"
+}

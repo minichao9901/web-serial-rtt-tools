@@ -1,0 +1,1 @@
+{"command":["node","tools/selftest/dbg-hw-stress.mjs","--board=f103ze","--clock=1000","--oracle=docs/validation/20261016-f103ze-hardware-120200-63c7e2/no-old-oracle.json","--out=docs/validation/20261016-f103ze-hardware-120200-63c7e2/debug-stress.json"],"mutates":true,"timeout":1200}

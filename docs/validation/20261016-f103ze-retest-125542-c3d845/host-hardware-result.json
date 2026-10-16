@@ -1,0 +1,168 @@
+{
+  "method": "production toolbox WebUsbDapProbe, raw USB bytes, actual F103ZE + Kingst",
+  "rounds": [
+    {
+      "round": 0,
+      "record": "capture-d051d1a27d0444ceb4e71c887bb4f954",
+      "resets": 1,
+      "entry": 134218960,
+      "runTo": 134219152,
+      "breakpointRestored": true,
+      "summary": {
+        "exceptions": 9,
+        "executed": 155349,
+        "functions": {
+          "HAL_IncTick": 63,
+          "SysTick_Handler": 27,
+          "cdc_poll": 77634,
+          "main": 77625
+        },
+        "gaps": 1,
+        "instructions": 172600,
+        "packetIssues": 0,
+        "packets": 35255,
+        "ranges": 172600,
+        "sourceMapped": 172600,
+        "unknownExecution": 0
+      },
+      "quality": {
+        "accountedBytes": 36596,
+        "basis": "字节核算不等于采集无损证明；源码映射率不等于程序覆盖率",
+        "boundaryPresent": true,
+        "decoderLastError": 0,
+        "firstPathOffset": 1535,
+        "initialPhysicalBytes": 0,
+        "inputBytes": 36596,
+        "overflowPackets": 0,
+        "overlapBytes": 0,
+        "packetIssues": 0,
+        "processedBytes": 36596,
+        "timing": {
+          "cycleElements": 0,
+          "timeFlameAvailable": false
+        },
+        "trailingFrameBytes": 0,
+        "trailingSyncBytes": 1,
+        "unaccountedBytes": 0,
+        "unknownExecution": 0,
+        "unknownSourceBytes": 0,
+        "unprocessedBytes": 0,
+        "unsynchronizedBytes": 1017,
+        "unsynchronizedRecords": 79,
+        "validPackets": 35176
+      }
+    },
+    {
+      "round": 1,
+      "record": "capture-a393ff9b85354819a6e03c84647dff37",
+      "resets": 1,
+      "entry": 134218960,
+      "runTo": 134219152,
+      "breakpointRestored": true,
+      "summary": {
+        "exceptions": 9,
+        "executed": 155349,
+        "functions": {
+          "HAL_IncTick": 63,
+          "SysTick_Handler": 27,
+          "cdc_poll": 77634,
+          "main": 77625
+        },
+        "gaps": 1,
+        "instructions": 172600,
+        "packetIssues": 0,
+        "packets": 35255,
+        "ranges": 172600,
+        "sourceMapped": 172600,
+        "unknownExecution": 0
+      },
+      "quality": {
+        "accountedBytes": 36596,
+        "basis": "字节核算不等于采集无损证明；源码映射率不等于程序覆盖率",
+        "boundaryPresent": true,
+        "decoderLastError": 0,
+        "firstPathOffset": 1535,
+        "initialPhysicalBytes": 0,
+        "inputBytes": 36596,
+        "overflowPackets": 0,
+        "overlapBytes": 0,
+        "packetIssues": 0,
+        "processedBytes": 36596,
+        "timing": {
+          "cycleElements": 0,
+          "timeFlameAvailable": false
+        },
+        "trailingFrameBytes": 0,
+        "trailingSyncBytes": 1,
+        "unaccountedBytes": 0,
+        "unknownExecution": 0,
+        "unknownSourceBytes": 0,
+        "unprocessedBytes": 0,
+        "unsynchronizedBytes": 1017,
+        "unsynchronizedRecords": 79,
+        "validPackets": 35176
+      }
+    },
+    {
+      "round": 2,
+      "record": "capture-aab68c7b5cbe45e6b256e1c907a714e4",
+      "resets": 1,
+      "entry": 134218960,
+      "runTo": 134219152,
+      "breakpointRestored": true,
+      "summary": {
+        "exceptions": 9,
+        "executed": 155349,
+        "functions": {
+          "HAL_IncTick": 63,
+          "SysTick_Handler": 27,
+          "cdc_poll": 77634,
+          "main": 77625
+        },
+        "gaps": 1,
+        "instructions": 172600,
+        "packetIssues": 0,
+        "packets": 35255,
+        "ranges": 172600,
+        "sourceMapped": 172600,
+        "unknownExecution": 0
+      },
+      "quality": {
+        "accountedBytes": 36596,
+        "basis": "字节核算不等于采集无损证明；源码映射率不等于程序覆盖率",
+        "boundaryPresent": true,
+        "decoderLastError": 0,
+        "firstPathOffset": 1535,
+        "initialPhysicalBytes": 3,
+        "inputBytes": 36596,
+        "overflowPackets": 0,
+        "overlapBytes": 0,
+        "packetIssues": 0,
+        "processedBytes": 36596,
+        "timing": {
+          "cycleElements": 0,
+          "timeFlameAvailable": false
+        },
+        "trailingFrameBytes": 0,
+        "trailingSyncBytes": 2,
+        "unaccountedBytes": 0,
+        "unknownExecution": 0,
+        "unknownSourceBytes": 0,
+        "unprocessedBytes": 0,
+        "unsynchronizedBytes": 1017,
+        "unsynchronizedRecords": 79,
+        "validPackets": 35176
+      }
+    }
+  ],
+  "passed": true,
+  "elfSha": "63881ed9f6c1187d56924795ccad3f151a677aea0dfa201823fe44e0cb857522",
+  "entry": 134218960,
+  "recovery": {
+    "pc": 134219152,
+    "dhcsr": 196611,
+    "noReset": true,
+    "keptHalted": true
+  },
+  "finalRunning": true
+}

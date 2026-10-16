@@ -1,0 +1,21 @@
+{
+  "started": "2026-10-16T04:56:47.153Z",
+  "route": "actual FlashView.resetTarget -> pulseTargetReset -> SWJ_Pins NRST",
+  "flashWrites": false,
+  "before": {
+    "csr": 469762048,
+    "cleared": 0
+  },
+  "resetReturned": true,
+  "after": {
+    "csr": 0,
+    "pc": 134219062,
+    "wokeFromRom": false,
+    "clockError": 0,
+    "coreHz": 48000000,
+    "tick1": 1547324,
+    "tick2": 1547479,
+    "dhcsr": 16842753
+  },
+  "error": "AssertionError [ERR_ASSERTION]: RCC_CSR.PINRSTF confirms physical external reset\n\n0 !== 67108864\n\n    at file:///E:/web-serial-rtt-tools/docs/validation/20261016-f103ze-retest-125542-c3d845/nrst-web.mjs:11:49"
+}

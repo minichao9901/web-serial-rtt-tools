@@ -1,0 +1,22 @@
+{
+  "testedBase": "fb06da2348543b75db5fbc237dd4d3b0ffe1d655",
+  "userConfirmedCh4Corrected": true,
+  "runId": "20261016-f103ze-retest-125542-c3d845",
+  "hardwareResetAuthorized": true,
+  "testedRevision": "pre-commit-worktree",
+  "priorRun": "20261016-f103ze-hardware-120200-63c7e2",
+  "testedDirty": true,
+  "startedAt": "2026-10-16T12:55:42.6269139+08:00",
+  "endedAt": "2026-10-16T13:15:04.484899+08:00",
+  "validationResult": "partial",
+  "hardwareTest": "partial",
+  "etmPassed": true,
+  "browserEtmPassed": true,
+  "cdcRestored": true,
+  "originalFlashRestored": true,
+  "originalFlashSha256": "61a097c84c8ca7cae573a950618de6009083048755b5c26def16f6cc351a354d",
+  "fullPassed": false,
+  "nrstPassed": false,
+  "nrstDeferredByUser": true,
+  "productionSourceChanges": false
+}

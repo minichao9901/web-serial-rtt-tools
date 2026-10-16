@@ -1,0 +1,9 @@
+{
+  "method": "actual toolbox JS + raw USB + F103ZE/Kingst",
+  "cases": [],
+  "passed": false,
+  "flashWrites": false,
+  "elfSha": "63881ed9f6c1187d56924795ccad3f151a677aea0dfa201823fe44e0cb857522",
+  "error": "AssertionError [ERR_ASSERTION]: {\"error\":\"不能唯一确定 TPIU 字节相位：0 个候选；请检查通道和取样位置。\",\"id\":\"a3c70eb86ea24c8eb162a0ac9fbd17cb\",\"kind\":\"capture\",\"record\":\"capture-c1f719b0a3f0442483c80a610477cb74\",\"started\":1792123842.0271983,\"state\":\"error\"}\n\n'error' !== 'done'\n\n    at file:///E:/web-serial-rtt-tools/tools/selftest/etm-audit-hw.mjs:35:15\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)",
+  "finalRunning": true
+}

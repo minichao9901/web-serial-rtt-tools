@@ -1,0 +1,35 @@
+[
+  {
+    "records": 1004068,
+    "missing": 0,
+    "extra": 0,
+    "bad": 0,
+    "rewound": 0,
+    "jumps": 0,
+    "first": -1,
+    "bytes": 13052884,
+    "malformed": []
+  },
+  {
+    "records": 1003438,
+    "missing": 0,
+    "extra": 0,
+    "bad": 0,
+    "rewound": 0,
+    "jumps": 0,
+    "first": -1,
+    "bytes": 13044694,
+    "malformed": []
+  },
+  {
+    "records": 1001440,
+    "missing": 0,
+    "extra": 0,
+    "bad": 0,
+    "rewound": 0,
+    "jumps": 0,
+    "first": -1,
+    "bytes": 13018720,
+    "malformed": []
+  }
+]

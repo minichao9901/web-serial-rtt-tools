@@ -1,0 +1,18 @@
+{
+  "command": [
+    "E:/Share/env-windows/tools/gnu_gcc/arm_gcc/mingw/bin/arm-none-eabi-gdb-py.exe",
+    "-q",
+    "-nx",
+    "-batch",
+    "-ex",
+    "python import _gdb; print(\"GDB_EMBEDDED_PYTHON_AVAILABLE\"); print(_gdb.VERSION)"
+  ],
+  "cwd": "E:\\web-serial-rtt-tools",
+  "time": "2026-10-16T11:26:18.073701+08:00",
+  "exitCode": 0,
+  "scopedEnvironment": {
+    "PYTHONPATH": "E:\\web-serial-rtt-tools\\docs\\validation\\20261016-f103ze-acceptance-112445-5b3aac\\gdb-python",
+    "PYTHONHOME": null
+  },
+  "targetAccess": false
+}

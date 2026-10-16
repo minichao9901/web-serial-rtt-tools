@@ -1,0 +1,10 @@
+{
+  "exitCode": 1,
+  "startedAt": "2026-10-16T12:09:31.232075+08:00",
+  "endedAt": "2026-10-16T12:09:33.849797+08:00",
+  "command": [
+    "python",
+    "docs/validation/20261016-f103ze-hardware-120200-63c7e2/gdb-accept.py"
+  ],
+  "cwd": "E:\\web-serial-rtt-tools"
+}

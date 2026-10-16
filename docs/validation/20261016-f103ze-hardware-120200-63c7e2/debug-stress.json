@@ -1,0 +1,142 @@
+{
+ "at": "2026-10-16T04:10:21.693Z",
+ "elf": "/tools/target-firmware/stm32f103_dbgstress/build/fw.elf",
+ "board": "f103ze",
+ "clockKhz": 1000,
+ "pass": 81,
+ "fail": 1,
+ "failures": [
+  "读不到的总线地址给出人话错误：读 0x20020000（16 字节）失败：目标回了总线 FAULT —— 这个地址在当前状态读/写不了（没映射的窗口 / 外设时钟没开 / 只写寄存器 / 跨"
+ ],
+ "recoveries": [],
+ "oracle": {
+  "elf": "/tools/target-firmware/stm32f103_dbgstress/build/fw.elf",
+  "linear": [
+   {
+    "pc": 134218116,
+    "line": 24,
+    "halted": true
+   },
+   {
+    "pc": 134218126,
+    "line": 25,
+    "halted": true
+   },
+   {
+    "pc": 134218132,
+    "line": 26,
+    "halted": true
+   },
+   {
+    "pc": 134218138,
+    "line": 27,
+    "halted": true
+   },
+   {
+    "pc": 134218146,
+    "line": 28,
+    "halted": true
+   },
+   {
+    "pc": 134218154,
+    "line": 29,
+    "halted": true
+   },
+   {
+    "pc": 134218162,
+    "line": 30,
+    "halted": true
+   },
+   {
+    "pc": 134218170,
+    "line": 31,
+    "halted": true
+   },
+   {
+    "pc": 134218180,
+    "line": 32,
+    "halted": true
+   },
+   {
+    "pc": 134218188,
+    "line": 33,
+    "halted": true
+   },
+   {
+    "pc": 134218196,
+    "line": 34,
+    "halted": true
+   },
+   {
+    "pc": 134218204,
+    "line": 35,
+    "halted": true
+   },
+   {
+    "pc": 134218216,
+    "line": 36,
+    "halted": true
+   },
+   {
+    "pc": 134218224,
+    "line": 37,
+    "halted": true
+   },
+   {
+    "pc": 134218234,
+    "line": 38,
+    "halted": true
+   },
+   {
+    "pc": 134218242,
+    "line": 39,
+    "halted": true
+   },
+   {
+    "pc": 134218252,
+    "line": 40,
+    "halted": true
+   },
+   {
+    "pc": 134218260,
+    "line": 41,
+    "halted": true
+   },
+   {
+    "pc": 134218270,
+    "line": 78,
+    "halted": true
+   },
+   {
+    "pc": 134218436,
+    "line": 88,
+    "halted": true
+   }
+  ],
+  "bpAddr": {
+   "engine.c:24": 134218116,
+   "model.c:120": 134219376
+  },
+  "steps": {
+   "intoLeaf": 134218342
+  },
+  "struct": {
+   "w0": 2246822519,
+   "w1": 3266489917,
+   "bits": {
+    "on": 1,
+    "level": 3,
+    "mode": 3,
+    "parity": 1,
+    "rev": 404,
+    "spare": 34283
+   },
+   "sb": {
+    "bias": -3,
+    "tag": 696,
+    "rest": 49842
+   }
+  },
+  "resetVec": 134219948
+ }
+}
