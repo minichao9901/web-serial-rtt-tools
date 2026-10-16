@@ -1,0 +1,42 @@
+{
+  "runId": "20261016-sram-tar-boundary-170200",
+  "started": "2026-10-16T08:57:28.391Z",
+  "test": "Write exactly 255 words from a 1 KiB boundary, then write two sentinel words. The second word crosses the boundary; read the page head/tail to identify the actual TAR behavior. Full RAM and Flash are backed up and checked after the test.",
+  "browser": {
+    "entry": "source",
+    "usb": [
+      [
+        3368,
+        516,
+        "8F538633E6AEC4CA8ABB6A36FEBB1AC2"
+      ]
+    ]
+  },
+  "result": {
+    "id": {
+      "dp": 463475831,
+      "device": 268657684,
+      "flashKiB": 512
+    },
+    "wasHalted": false,
+    "dpAbortResyncChecked": true,
+    "bytesWritten": 1028,
+    "values": {
+      "pageHead": 286331153,
+      "pageLastWord": 3149642683,
+      "nextPageHead": 3435973836
+    },
+    "interpretation": "TAR continued across the 1 KiB boundary",
+    "ramBytes": 65536,
+    "ramSha256": "79c61cdc5a698eb16e68ac3875a1ee58518b7bbdd433484621a836df6988663d",
+    "flashSha256Before": "61a097c84c8ca7cae573a950618de6009083048755b5c26def16f6cc351a354d",
+    "restore": {
+      "ramVerified": true,
+      "registersPreserved": true,
+      "flashUnchanged": true,
+      "cpuResumed": true
+    }
+  },
+  "passed": true,
+  "finished": "2026-10-16T08:57:47.984Z"
+}

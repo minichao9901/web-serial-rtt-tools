@@ -1,0 +1,159 @@
+{
+  "runId": "20261016-sram-4k-tar-ab-172900",
+  "started": "2026-10-16T09:15:08.335Z",
+  "approach": "Experimental path sets TAR once per verified 4 KiB MEM-AP window and refills completed in-window transfer slots immediately. TAR windows stay serial.",
+  "packet": 1024,
+  "depth": 4,
+  "maxWords": 253,
+  "means": {
+    "page": {
+      "writeMBps": 3142.8655125625637,
+      "readMBps": 2906.997998382548
+    },
+    "tar4k": {
+      "writeMBps": 2352.5446066691957,
+      "readMBps": 2401.2877571215986
+    }
+  },
+  "delta": {
+    "writePercent": -25.14650731106126,
+    "readPercent": -17.39630510727308
+  },
+  "passed": true,
+  "rows": [
+    {
+      "round": 0,
+      "mode": "page",
+      "writeMBps": 2884.507032567323,
+      "readMBps": 2925.714285714286,
+      "writeMs": 7.100000023841858,
+      "readMs": 7
+    },
+    {
+      "round": 0,
+      "mode": "tar4k",
+      "writeMBps": 2301.123601670007,
+      "readMBps": 2438.095245015324,
+      "writeMs": 8.899999976158142,
+      "readMs": 8.399999976158142
+    },
+    {
+      "round": 1,
+      "mode": "tar4k",
+      "writeMBps": 2409.4117647058824,
+      "readMBps": 2381.3953422352456,
+      "writeMs": 8.5,
+      "readMs": 8.600000023841858
+    },
+    {
+      "round": 1,
+      "mode": "page",
+      "writeMBps": 3103.030291820908,
+      "readMBps": 2767.567576484318,
+      "writeMs": 6.600000023841858,
+      "readMs": 7.399999976158142
+    },
+    {
+      "round": 2,
+      "mode": "page",
+      "writeMBps": 3103.030291820908,
+      "readMBps": 2844.4444256064335,
+      "writeMs": 6.600000023841858,
+      "readMs": 7.200000047683716
+    },
+    {
+      "round": 2,
+      "mode": "tar4k",
+      "writeMBps": 2327.2727398832967,
+      "readMBps": 2438.095245015324,
+      "writeMs": 8.799999952316284,
+      "readMs": 8.399999976158142
+    },
+    {
+      "round": 3,
+      "mode": "tar4k",
+      "writeMBps": 2155.7894736842104,
+      "readMBps": 2327.272708356873,
+      "writeMs": 9.5,
+      "readMs": 8.800000071525574
+    },
+    {
+      "round": 3,
+      "mode": "page",
+      "writeMBps": 3150.769230769231,
+      "readMBps": 3011.764674203206,
+      "writeMs": 6.5,
+      "readMs": 6.800000071525574
+    },
+    {
+      "round": 4,
+      "mode": "page",
+      "writeMBps": 3200.000011920929,
+      "readMBps": 2884.507032567323,
+      "writeMs": 6.399999976158142,
+      "readMs": 7.100000023841858
+    },
+    {
+      "round": 4,
+      "mode": "tar4k",
+      "writeMBps": 2133.3333280351426,
+      "readMBps": 2354.0229756036138,
+      "writeMs": 9.600000023841858,
+      "readMs": 8.700000047683716
+    },
+    {
+      "round": 5,
+      "mode": "tar4k",
+      "writeMBps": 2528.3950542862176,
+      "readMBps": 2528.395091497104,
+      "writeMs": 8.100000023841858,
+      "readMs": 8.099999904632568
+    },
+    {
+      "round": 5,
+      "mode": "page",
+      "writeMBps": 3199.999952316285,
+      "readMBps": 2925.714285714286,
+      "writeMs": 6.400000095367432,
+      "readMs": 7
+    },
+    {
+      "round": 6,
+      "mode": "page",
+      "writeMBps": 3250.7936753984,
+      "readMBps": 2884.507032567323,
+      "writeMs": 6.299999952316284,
+      "readMs": 7.100000023841858
+    },
+    {
+      "round": 6,
+      "mode": "tar4k",
+      "writeMBps": 2497.5609973950586,
+      "readMBps": 2275.5555555555557,
+      "writeMs": 8.199999928474426,
+      "readMs": 9
+    },
+    {
+      "round": 7,
+      "mode": "tar4k",
+      "writeMBps": 2467.469893693751,
+      "readMBps": 2467.469893693751,
+      "writeMs": 8.299999952316284,
+      "readMs": 8.299999952316284
+    },
+    {
+      "round": 7,
+      "mode": "page",
+      "writeMBps": 3250.7936138865275,
+      "readMBps": 3011.764674203206,
+      "writeMs": 6.300000071525574,
+      "readMs": 6.800000071525574
+    }
+  ],
+  "restore": {
+    "ramVerified": true,
+    "registersPreserved": true,
+    "flashUnchanged": true,
+    "cpuResumed": true
+  }
+}

@@ -1,0 +1,133 @@
+{
+  "runId": "20261016-sram-tar-walk-172400",
+  "started": "2026-10-16T09:09:29.511Z",
+  "result": {
+    "clockSetup": {
+      "attempts": 1,
+      "failures": []
+    },
+    "packet": 1024,
+    "startTAR": "0x20000000",
+    "frameCount": 21,
+    "walk": [
+      {
+        "offset": 0,
+        "words": 253,
+        "response": {
+          "out": "ok",
+          "in": "ok",
+          "echo": 6,
+          "count": 253,
+          "ack": 1
+        },
+        "expectedTAR": "0x200003f4",
+        "actualTAR": "0x200003f4",
+        "tarMatched": true
+      },
+      {
+        "offset": 1012,
+        "words": 253,
+        "response": {
+          "out": "ok",
+          "in": "ok",
+          "echo": 6,
+          "count": 253,
+          "ack": 1
+        },
+        "expectedTAR": "0x200007e8",
+        "actualTAR": "0x200007e8",
+        "tarMatched": true
+      },
+      {
+        "offset": 2024,
+        "words": 253,
+        "response": {
+          "out": "ok",
+          "in": "ok",
+          "echo": 6,
+          "count": 253,
+          "ack": 1
+        },
+        "expectedTAR": "0x20000bdc",
+        "actualTAR": "0x20000bdc",
+        "tarMatched": true
+      },
+      {
+        "offset": 3036,
+        "words": 253,
+        "response": {
+          "out": "ok",
+          "in": "ok",
+          "echo": 6,
+          "count": 253,
+          "ack": 1
+        },
+        "expectedTAR": "0x20000fd0",
+        "actualTAR": "0x20000fd0",
+        "tarMatched": true
+      },
+      {
+        "offset": 4048,
+        "words": 253,
+        "response": {
+          "out": "ok",
+          "in": "ok",
+          "echo": 6,
+          "count": 253,
+          "ack": 1
+        },
+        "expectedTAR": "0x200013c4",
+        "actualTAR": "0x200003c4",
+        "tarMatched": false
+      }
+    ],
+    "readbackVerified": false,
+    "firstDiff": 0,
+    "expectedFirst": [
+      97,
+      40,
+      243,
+      186,
+      69,
+      12,
+      215,
+      158,
+      40,
+      241,
+      186,
+      67,
+      12,
+      213,
+      158,
+      39
+    ],
+    "actualFirst": [
+      99,
+      42,
+      241,
+      184,
+      71,
+      14,
+      213,
+      156,
+      42,
+      243,
+      184,
+      65,
+      14,
+      215,
+      156,
+      37
+    ],
+    "ramSha256": "4959ae1bfcad7dc19bea5c3456a30b6b65e1562ba1438da7624f6555a9718d2a",
+    "flashSha256": "61a097c84c8ca7cae573a950618de6009083048755b5c26def16f6cc351a354d",
+    "restore": {
+      "ramVerified": true,
+      "registersPreserved": true,
+      "flashUnchanged": true,
+      "cpuResumed": true
+    }
+  },
+  "passed": false,
+  "finished": "2026-10-16T09:09:49.070Z"
+}
