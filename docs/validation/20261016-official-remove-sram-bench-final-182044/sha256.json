@@ -1,0 +1,25 @@
+{
+  "runId": "20261016-official-remove-sram-bench-final-182044",
+  "files": [
+    {
+      "path": "E:/web-serial-rtt-tools/docs/validation/20261016-official-remove-sram-bench-final-182044/report.md",
+      "sha256": "eb73d722009970c2d5348b3f202507cb9c735b8157ada05f0a10357f4e29066e"
+    },
+    {
+      "path": "E:/web-serial-rtt-tools/docs/validation/20261016-official-remove-sram-bench-final-182044/ui-layout.json",
+      "sha256": "8a59eb616af2c4e34221439376145c2d8774e60a86ecea6c05e7ffbb675bab6f"
+    },
+    {
+      "path": "E:/web-serial-rtt-tools/docs/validation/20261016-official-remove-sram-bench-final-182044/flash-1280.png",
+      "sha256": "78ba213b6bcfad04092f545b0d8b6725b2249916fd2765f74b149e00a8c38f7f"
+    },
+    {
+      "path": "E:/web-serial-rtt-tools/app/site/main.js",
+      "sha256": "6114b29e31c3ce0342375affe645aa9bac6f5c476548e3a4c321f0c9c2ac116c"
+    },
+    {
+      "path": "E:/web-serial-rtt-tools/app/site/manifest.json",
+      "sha256": "10def7e946b11ee5d5453368330ed37bd84fe68a561eb01bec4b25d9b98ca076"
+    }
+  ]
+}

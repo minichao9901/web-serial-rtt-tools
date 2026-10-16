@@ -1,0 +1,277 @@
+{
+  "time": "2026-10-16T10:20:29.115Z",
+  "pass": 66,
+  "fail": 0,
+  "pages": [
+    {
+      "tab": "tab-serial",
+      "width": 1600,
+      "rootOverflow": 0,
+      "sideOverflow": 0,
+      "labels": [],
+      "stopInside": true,
+      "bodyFont": "13px"
+    },
+    {
+      "tab": "tab-terminal",
+      "width": 1600,
+      "rootOverflow": 0,
+      "sideOverflow": 0,
+      "labels": [],
+      "stopInside": true,
+      "bodyFont": "13px"
+    },
+    {
+      "tab": "tab-rtt",
+      "width": 1600,
+      "rootOverflow": 0,
+      "sideOverflow": 0,
+      "labels": [],
+      "stopInside": true,
+      "bodyFont": "13px"
+    },
+    {
+      "tab": "tab-rttcdc",
+      "width": 1600,
+      "rootOverflow": 0,
+      "sideOverflow": 0,
+      "labels": [],
+      "stopInside": true,
+      "bodyFont": "13px"
+    },
+    {
+      "tab": "tab-scope",
+      "width": 1600,
+      "rootOverflow": 0,
+      "sideOverflow": 0,
+      "labels": [],
+      "stopInside": true,
+      "bodyFont": "13px"
+    },
+    {
+      "tab": "tab-flash",
+      "width": 1600,
+      "rootOverflow": 0,
+      "sideOverflow": 0,
+      "labels": [],
+      "stopInside": true,
+      "bodyFont": "13px"
+    },
+    {
+      "tab": "tab-dbg",
+      "width": 1600,
+      "rootOverflow": 0,
+      "sideOverflow": 0,
+      "labels": [],
+      "stopInside": true,
+      "bodyFont": "13px"
+    },
+    {
+      "tab": "tab-spi",
+      "width": 1600,
+      "rootOverflow": 0,
+      "sideOverflow": 0,
+      "labels": [],
+      "stopInside": true,
+      "bodyFont": "13px"
+    },
+    {
+      "tab": "tab-panel",
+      "width": 1600,
+      "rootOverflow": 0,
+      "sideOverflow": 0,
+      "labels": [],
+      "stopInside": true,
+      "bodyFont": "13px"
+    },
+    {
+      "tab": "tab-spicdc",
+      "width": 1600,
+      "rootOverflow": 0,
+      "sideOverflow": 0,
+      "labels": [],
+      "stopInside": true,
+      "bodyFont": "13px"
+    },
+    {
+      "tab": "tab-swo",
+      "width": 1600,
+      "rootOverflow": 0,
+      "sideOverflow": 0,
+      "labels": [],
+      "stopInside": true,
+      "bodyFont": "13px"
+    },
+    {
+      "tab": "tab-etm",
+      "width": 1600,
+      "rootOverflow": 0,
+      "sideOverflow": 0,
+      "labels": [],
+      "stopInside": true,
+      "bodyFont": "13px"
+    },
+    {
+      "tab": "tab-i2c",
+      "width": 1600,
+      "rootOverflow": 0,
+      "sideOverflow": 0,
+      "labels": [],
+      "stopInside": true,
+      "bodyFont": "13px"
+    },
+    {
+      "tab": "tab-analog",
+      "width": 1600,
+      "rootOverflow": 0,
+      "sideOverflow": 0,
+      "labels": [],
+      "stopInside": true,
+      "bodyFont": "13px"
+    },
+    {
+      "tab": "tab-gen",
+      "width": 1600,
+      "rootOverflow": 0,
+      "sideOverflow": 0,
+      "labels": [],
+      "stopInside": true,
+      "bodyFont": "13px"
+    },
+    {
+      "tab": "tab-serial",
+      "width": 1280,
+      "rootOverflow": 0,
+      "sideOverflow": 0,
+      "labels": [],
+      "stopInside": true,
+      "bodyFont": "13px"
+    },
+    {
+      "tab": "tab-terminal",
+      "width": 1280,
+      "rootOverflow": 0,
+      "sideOverflow": 0,
+      "labels": [],
+      "stopInside": true,
+      "bodyFont": "13px"
+    },
+    {
+      "tab": "tab-rtt",
+      "width": 1280,
+      "rootOverflow": 0,
+      "sideOverflow": 0,
+      "labels": [],
+      "stopInside": true,
+      "bodyFont": "13px"
+    },
+    {
+      "tab": "tab-rttcdc",
+      "width": 1280,
+      "rootOverflow": 0,
+      "sideOverflow": 0,
+      "labels": [],
+      "stopInside": true,
+      "bodyFont": "13px"
+    },
+    {
+      "tab": "tab-scope",
+      "width": 1280,
+      "rootOverflow": 0,
+      "sideOverflow": 0,
+      "labels": [],
+      "stopInside": true,
+      "bodyFont": "13px"
+    },
+    {
+      "tab": "tab-flash",
+      "width": 1280,
+      "rootOverflow": 0,
+      "sideOverflow": 0,
+      "labels": [],
+      "stopInside": true,
+      "bodyFont": "13px"
+    },
+    {
+      "tab": "tab-dbg",
+      "width": 1280,
+      "rootOverflow": 0,
+      "sideOverflow": 0,
+      "labels": [],
+      "stopInside": true,
+      "bodyFont": "13px"
+    },
+    {
+      "tab": "tab-spi",
+      "width": 1280,
+      "rootOverflow": 0,
+      "sideOverflow": 0,
+      "labels": [],
+      "stopInside": true,
+      "bodyFont": "13px"
+    },
+    {
+      "tab": "tab-panel",
+      "width": 1280,
+      "rootOverflow": 0,
+      "sideOverflow": 0,
+      "labels": [],
+      "stopInside": true,
+      "bodyFont": "13px"
+    },
+    {
+      "tab": "tab-spicdc",
+      "width": 1280,
+      "rootOverflow": 0,
+      "sideOverflow": 0,
+      "labels": [],
+      "stopInside": true,
+      "bodyFont": "13px"
+    },
+    {
+      "tab": "tab-swo",
+      "width": 1280,
+      "rootOverflow": 0,
+      "sideOverflow": 0,
+      "labels": [],
+      "stopInside": true,
+      "bodyFont": "13px"
+    },
+    {
+      "tab": "tab-etm",
+      "width": 1280,
+      "rootOverflow": 0,
+      "sideOverflow": 0,
+      "labels": [],
+      "stopInside": true,
+      "bodyFont": "13px"
+    },
+    {
+      "tab": "tab-i2c",
+      "width": 1280,
+      "rootOverflow": 0,
+      "sideOverflow": 0,
+      "labels": [],
+      "stopInside": true,
+      "bodyFont": "13px"
+    },
+    {
+      "tab": "tab-analog",
+      "width": 1280,
+      "rootOverflow": 0,
+      "sideOverflow": 0,
+      "labels": [],
+      "stopInside": true,
+      "bodyFont": "13px"
+    },
+    {
+      "tab": "tab-gen",
+      "width": 1280,
+      "rootOverflow": 0,
+      "sideOverflow": 0,
+      "labels": [],
+      "stopInside": true,
+      "bodyFont": "13px"
+    }
+  ]
+}

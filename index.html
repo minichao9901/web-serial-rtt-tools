@@ -13,7 +13,7 @@
   var mode = new URLSearchParams(location.search).get('modules');
   var local = ['localhost', '127.0.0.1', '[::1]'].indexOf(location.hostname) !== -1;
   window.__useWebBundle = mode === 'bundle' || (mode !== 'source' && !local);
-  window.__webBundleUrl = 'app/site/main.js?v=e5cfac68f77c1efe';
+  window.__webBundleUrl = 'app/site/main.js?v=6114b29e31c3ce03';
   var preload = document.createElement('link');
   preload.rel = 'modulepreload';
   preload.href = window.__useWebBundle ? window.__webBundleUrl : 'app/main.js';
@@ -672,11 +672,7 @@
 <!-- ============================ 烧录器 ============================ -->
 <section class="panel" id="tab-flash">
   <div class="ws">
-    <aside class="side tool-side" data-sidebar-tabs="flash">
-      <nav class="tool-side-tabs" role="tablist" aria-label="烧录器工具">
-        <button type="button" id="f-side-flash-tab" role="tab" aria-controls="f-side-flash-panel" aria-selected="true" data-side-tab="flash">烧录</button>
-        <button type="button" id="f-side-sram-tab" role="tab" aria-controls="f-side-sram-panel" aria-selected="false" tabindex="-1" data-side-tab="sram">SRAM 读写测试</button>
-      </nav>
+    <aside class="side tool-side">
       <fieldset>
         <legend>目标与连接</legend>
         <label class="row"><span>后端</span>
@@ -693,82 +689,56 @@
           <button id="f-idcode" title="只读地认目标（不动 flash、不改运行状态）：ARM/SWD 读 DP IDCODE + CPUID + STM32 DBGMCU DEV_ID/REV_ID + flash 容量寄存器；RISC-V/JTAG 读 TAP IDCODE。选错芯片也能读 —— 这个按钮不吃「芯片」那一格（只按后端选 SWD 还是 JTAG）。">读 IDCODE</button>
         </div>
       </fieldset>
-      <div id="f-side-flash-panel" class="tool-side-panel" role="tabpanel" aria-labelledby="f-side-flash-tab" data-side-panel="flash">
-      <fieldset>
-        <legend>烧录时钟</legend>
-        <label class="row" id="f-custom-speed-row"><span>时钟</span>
-          <select id="f-speed" title="WebUSB Cortex-M：所选档用于 RAM 数据与 Flash 校验，执行控制保留 1 MHz；本地桥和 RISC-V 使用整体调试时钟。高频传输不稳定时请降低档位。">
-            <option value="">默认（WebUSB 1 MHz）</option>
-            <option value="1000">1 MHz</option>
-            <option value="4000">4 MHz</option>
-            <option value="5000">5 MHz</option>
-            <option value="10000">10 MHz</option>
-            <option value="20000">20 MHz</option>
-            <option value="30000">30 MHz</option>
-            <option value="36000">36 MHz</option>
-            <option value="40000">40 MHz</option>
-            <option value="45000">45 MHz</option>
-            <option value="50000">50 MHz</option>
-            <option value="60000">60 MHz</option>
-          </select>
-        </label>
-      </fieldset>
-      <fieldset id="f-bridge-settings">
-        <legend>本地桥设置</legend>
-        <label class="row"><span>桥地址</span><input id="f-bridge-url" value="ws://127.0.0.1:17321"></label>
-        <div class="row cfgrow" id="f-custom-cfgs-row" hidden><span>cfg 文件</span>
-          <input id="f-cfgs" title="逗号/空格分隔，按顺序加载。相对 OpenOCD scripts 目录或绝对路径">
-          <button id="f-cfgs-pick" type="button" title="列出桥所在机器的 OpenOCD cfg 让你挑">选择…</button>
-        </div>
-
-        <p class="hint">烧录走仓库里的 <code>bridge/start-bridge.bat</code>（与 RTT 的桥同一个）。</p>
-      </fieldset>
-
-      <fieldset>
-        <legend>固件</legend>
-        <label class="row"><span>路径</span>
-          <input id="f-path" placeholder="桥所在电脑上的 .elf / .hex / .bin 路径">
-        </label>
-        <div class="row btnrow">
-          <button id="f-pick">选择文件…</button>
-        </div>
-        <p class="hint" id="f-file-info">支持 .elf / .hex / .bin：填桥所在电脑上的路径，或点「选择文件…」/ 拖进右侧日志区</p>
-        <label class="row" id="f-base-row" hidden><span>基地址</span>
-          <input id="f-base" class="address" value="0x08000000" title=".bin 没有地址信息，按这里填的地址写入">
-        </label>
-        <label class="chk"><input type="checkbox" id="f-verify" checked> 校验</label>
-        <label class="chk"><input type="checkbox" id="f-reset" checked> 烧录后复位运行</label>
-        <div class="row btnrow">
-          <button id="f-flash" class="primary">烧录</button>
-        </div>
-        <p class="hint">烧录会暂停目标并在完成后复位；烧录前会断开占用探针的 RTT 会话。</p>
-      </fieldset>
-      </div>
-      <div id="f-side-sram-panel" class="tool-side-panel" role="tabpanel" aria-labelledby="f-side-sram-tab" data-side-panel="sram" hidden>
-        <p id="f-sram-unavailable" class="hint" hidden>SRAM 读写测试需要 WebUSB 后端和支持的 Cortex-M 芯片，请在上方选择。</p>
-      <fieldset id="f-sram-bench">
-        <legend>SRAM 读写测速</legend>
-          <label class="row"><span>SWD 时钟</span>
-            <select id="f-ram-clock">
-              <option value="0">自动（完整校验后选择档位）</option>
-              <option value="60000">60 MHz</option><option value="45000">45 MHz</option>
-              <option value="36000">36 MHz</option><option value="20000">20 MHz</option>
-              <option value="10000">10 MHz</option><option value="4000">4 MHz</option><option value="1000">1 MHz</option>
+      <div class="tool-side-panel">
+        <fieldset>
+          <legend>烧录时钟</legend>
+          <label class="row" id="f-custom-speed-row"><span>时钟</span>
+            <select id="f-speed" title="WebUSB Cortex-M：所选档用于 RAM 数据与 Flash 校验，执行控制保留 1 MHz；本地桥和 RISC-V 使用整体调试时钟。高频传输不稳定时请降低档位。">
+              <option value="">默认（WebUSB 1 MHz）</option>
+              <option value="1000">1 MHz</option>
+              <option value="4000">4 MHz</option>
+              <option value="5000">5 MHz</option>
+              <option value="10000">10 MHz</option>
+              <option value="20000">20 MHz</option>
+              <option value="30000">30 MHz</option>
+              <option value="36000">36 MHz</option>
+              <option value="40000">40 MHz</option>
+              <option value="45000">45 MHz</option>
+              <option value="50000">50 MHz</option>
+              <option value="60000">60 MHz</option>
             </select>
           </label>
-        <label class="row"><span>起始地址</span><input id="f-ram-address" class="address" value="" placeholder="0x24080000"></label>
-        <label class="row"><span>测试长度</span>
-          <select id="f-ram-length">
-            <option value="20480">20 KiB</option>
-            <option value="32768">32 KiB</option>
-            <option value="65536">64 KiB</option>
-            <option value="131072">128 KiB</option>
-          </select>
-        </label>
-        <p class="hint">暂停 CPU 后通过 SWD 测量读写速度，再恢复原运行状态。所选 SRAM 会被测试数据覆盖且不恢复；地址须完全落在所选芯片的已知 RAM 区间。</p>
-        <div class="row btnrow"><button id="f-ram-run" type="button">开始读写测速</button></div>
-        <p id="f-ram-result" class="hint" aria-live="polite">选择 Cortex-M 芯片后可用；H7B0 推荐空闲 AXI SRAM：0x24080000。</p>
-      </fieldset>
+        </fieldset>
+        <fieldset id="f-bridge-settings">
+          <legend>本地桥设置</legend>
+          <label class="row"><span>桥地址</span><input id="f-bridge-url" value="ws://127.0.0.1:17321"></label>
+          <div class="row cfgrow" id="f-custom-cfgs-row" hidden><span>cfg 文件</span>
+            <input id="f-cfgs" title="逗号/空格分隔，按顺序加载。相对 OpenOCD scripts 目录或绝对路径">
+            <button id="f-cfgs-pick" type="button" title="列出桥所在电脑的 OpenOCD cfg 让你挑">选择…</button>
+          </div>
+
+          <p class="hint">烧录走仓库里的 <code>bridge/start-bridge.bat</code>（与 RTT 的桥同一个）。</p>
+        </fieldset>
+
+        <fieldset>
+          <legend>固件</legend>
+          <label class="row"><span>路径</span>
+            <input id="f-path" placeholder="桥所在电脑上的 .elf / .hex / .bin 路径">
+          </label>
+          <div class="row btnrow">
+            <button id="f-pick">选择文件…</button>
+          </div>
+          <p class="hint" id="f-file-info">支持 .elf / .hex / .bin：填桥所在电脑上的路径，或点「选择文件…」/ 拖进右侧日志区</p>
+          <label class="row" id="f-base-row" hidden><span>基地址</span>
+            <input id="f-base" class="address" value="0x08000000" title=".bin 没有地址信息，按这里填的地址写入">
+          </label>
+          <label class="chk"><input type="checkbox" id="f-verify" checked> 校验</label>
+          <label class="chk"><input type="checkbox" id="f-reset" checked> 烧录后复位运行</label>
+          <div class="row btnrow">
+            <button id="f-flash" class="primary">烧录</button>
+          </div>
+          <p class="hint">烧录会暂停目标并在完成后复位；烧录前会断开占用探针的 RTT 会话。</p>
+        </fieldset>
       </div>
     </aside>
     <section class="main">
@@ -778,7 +748,7 @@
         <span class="spacer"></span>
         <button id="f-logclear">清空日志</button>
       </div>
-      <pre class="rx eventlog" data-empty="烧录或 SRAM 测试的进度与结果显示在这里。" id="f-log" tabindex="0"></pre>
+      <pre class="rx eventlog" data-empty="烧录、身份读取和复位的进度与结果显示在这里。" id="f-log" tabindex="0"></pre>
       <div class="stats">
         <span id="f-result">—</span>
         <span class="spacer"></span>

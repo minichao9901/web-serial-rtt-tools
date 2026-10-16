@@ -1,12 +1,12 @@
-/** Real H7B0 acceptance. USB and HID must be authorized in the test profile.
- * Overwrites 0x24080000..0x2409ffff; does not flash target firmware.
- * node tools/selftest/reset-sram-hw.mjs <persistent-output-directory> */
+/** Real target-reset acceptance. USB and HID must be authorized in the test profile.
+ * Does not flash firmware or write target SRAM.
+ * node tools/selftest/target-reset-hw.mjs <persistent-output-directory> */
 import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { Cdp } from './cdp-lib.mjs';
 
-const out = resolve(process.argv[2] || 'validation/reset-sram-hw');
+const out = resolve(process.argv[2] || 'validation/target-reset-hw');
 await mkdir(out, { recursive: true });
 await writeFile(resolve(out,'run-started.json'),JSON.stringify({started:new Date().toISOString()}),{flag:'wx'});
 const c = new Cdp();
@@ -17,7 +17,6 @@ try {
   c.onEvent = m => { if (m.method === 'Runtime.exceptionThrown') report.errors.push(m.params); };
   const auth = await c.eval(`return {usb:(await navigator.usb.getDevices()).length,hid:(await navigator.hid.getDevices()).length};`);
   assert.ok(auth.usb && auth.hid, 'authorize both USB and HID first');
-  await c.eval(`const $=id=>document.getElementById(id); $('f-chip').value='stm32h7b0'; $('f-chip').dispatchEvent(new Event('change')); $('f-backend').value='webusb'; $('f-backend').dispatchEvent(new Event('change')); $('f-ram-address').value='0x24080000'; return true;`);
   for (const mode of [false, true]){
     const state = await c.eval(`
       const h=window.__tools.hid; await h.reconnect({silent:false});
@@ -65,12 +64,6 @@ try {
     assert.equal(evidence.pc & ~1, evidence.resetVector & ~1, 'PC is Reset_Handler');
     assert.ok(evidence.rsr & (1 << 22), 'RCC_RSR.PINRSTF: external NRST caused reset');
     console.log('web reset PASS', mode ? 'OD' : 'PP', JSON.stringify(evidence));
-  }
-  for (const size of [20480, 32768, 65536, 131072]){
-    const result = await c.eval(`document.getElementById('f-ram-length').value='${size}'; return await window.__tools.flash.benchmarkSram();`);
-    assert.equal(result.verified, true); assert.equal(result.size, size);
-    report.cases.push({ name: 'web SRAM benchmark', ...result });
-    console.log('web SRAM PASS', size, result.readRate.toFixed(2), result.writeRate.toFixed(2), 'MB/s');
   }
   for (let i=0;i<3;i++) assert.equal(await c.eval('return await window.__tools.flash.resetTarget();'), true);
   report.cases.push({ name: 'three consecutive global resets', passed: true });
