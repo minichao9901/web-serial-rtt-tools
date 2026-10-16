@@ -75,7 +75,7 @@
     "app/flash/image.js": "648ad44b7e51bc64f72b1213e15b24e7610d832efaae11b0a598bbea881f291b",
     "app/flash/runner.js": "5d90b2413f10087eeea066fe2f4659cf15f55f71a078a08a6bf4cc5198c12b86",
     "app/flash/sram-bench.js": "290a7d3b8c8d6d65e7043f37ad431b68429a2fa6922aa4755fd0be7632c0fea2",
-    "app/flash/sram-transfer.js": "91c9433b8d426e8e71d67761a6a5dce7eddbb372cab86f4d43d2012049a41128",
+    "app/flash/sram-transfer.js": "054f9a67cb6cd3b96d240248c4f71be58d884543d5039fe0cc56e6417dfdac42",
     "app/flash/target-reset.js": "28bba630fa0131a29c298709fbbc6fa4822247e32caf50ba9e60e9ae18371c3e",
     "app/flash/view.js": "f023adce57ff151a08d77012b87484e33c625a45d2cf621c0f9485a276f75ab9",
     "app/gen/bridge-kit.js": "ff664ad92bdbceb2e3251e4398edc80511a2d8b5c10d6d0595fa22e1f23dd3d7",
@@ -172,6 +172,6 @@
     "app/ui/workspace.js": "25b6ce94e5d90302a37e6cec2b7e35c975af95ce29bef1094a4493f3890fc0b7",
     "app/ui/zoom-controls.js": "d7520d813135941c8b0e8f5601722c45f53d2d2ed8a940f789bc032da0180ff9"
   },
-  "outputSha256": "fe4853a23cc2e05631acfd43caea6ea21f2518c1c2ed20afd14eda8e3ee56220",
-  "outputBytes": 1321966
+  "outputSha256": "e5cfac68f77c1efe025eb46ce9bd648bb73d1efd473c430268270fafa0610755",
+  "outputBytes": 1322027
 }

@@ -1,0 +1,683 @@
+{
+  "result": {
+    "clock": {
+      "attempts": 1,
+      "failures": []
+    },
+    "transport": {
+      "advertised": 1024,
+      "depth": 4,
+      "packetSize": 1024,
+      "framing": "short"
+    },
+    "limits": {
+      "writeWordsPerFrame": 203,
+      "readWordsPerFrame": 254,
+      "blockWordsPerFrame": 254
+    },
+    "frameProbe": [
+      {
+        "name": "tar",
+        "reqLen": 8,
+        "res": [
+          5,
+          1,
+          1
+        ],
+        "len": 3
+      },
+      {
+        "name": "wordsWrite-4",
+        "reqLen": 28,
+        "res": [
+          5,
+          5,
+          1
+        ],
+        "len": 3
+      },
+      {
+        "name": "wordsRead-4",
+        "reqLen": 12,
+        "res": [
+          5,
+          5,
+          1,
+          0,
+          73,
+          146,
+          219,
+          36,
+          109,
+          182,
+          255,
+          73
+        ],
+        "len": 19
+      },
+      {
+        "name": "blockWrite-4",
+        "reqLen": 21,
+        "res": [
+          6,
+          4,
+          0,
+          1
+        ],
+        "len": 4
+      },
+      {
+        "name": "blockRead-4",
+        "reqLen": 5,
+        "res": [
+          6,
+          4,
+          0,
+          1,
+          36,
+          109,
+          182,
+          255,
+          64,
+          137,
+          210,
+          27
+        ],
+        "len": 20
+      }
+    ],
+    "wrapTest": {
+      "tail8": [
+        187,
+        187,
+        187,
+        187,
+        204,
+        204,
+        204,
+        204
+      ],
+      "head8": [
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        17
+      ],
+      "readme": "无回绕（跨 1KB 继续自增）",
+      "headFirst": [
+        17,
+        17,
+        17,
+        17
+      ]
+    },
+    "timings": {
+      "wordsWrite|d4": {
+        "mean": {
+          "MBs": 3.138,
+          "cmdPerS": 6128,
+          "cmds": 40,
+          "bytesOut": 25920
+        },
+        "runs": [
+          {
+            "dt": 0.0065,
+            "MBs": 3.151,
+            "cmds": 40,
+            "cmdPerS": 6154,
+            "bytesOut": 25920
+          },
+          {
+            "dt": 0.0068,
+            "MBs": 3.012,
+            "cmds": 40,
+            "cmdPerS": 5882,
+            "bytesOut": 25920
+          },
+          {
+            "dt": 0.0063,
+            "MBs": 3.251,
+            "cmds": 40,
+            "cmdPerS": 6349,
+            "bytesOut": 25920
+          }
+        ]
+      },
+      "blockWrite|d4": {
+        "mean": {
+          "MBs": 2.931,
+          "cmdPerS": 8587,
+          "cmds": 60,
+          "bytesOut": 20840
+        },
+        "runs": [
+          {
+            "dt": 0.0066,
+            "MBs": 3.103,
+            "cmds": 60,
+            "cmdPerS": 9091,
+            "bytesOut": 20840
+          },
+          {
+            "dt": 0.0073,
+            "MBs": 2.805,
+            "cmds": 60,
+            "cmdPerS": 8219,
+            "bytesOut": 20840
+          },
+          {
+            "dt": 0.0071,
+            "MBs": 2.885,
+            "cmds": 60,
+            "cmdPerS": 8451,
+            "bytesOut": 20840
+          }
+        ]
+      },
+      "chainWrite|d4": {
+        "mean": {
+          "MBs": 3.572,
+          "cmdPerS": 3838,
+          "cmds": 22,
+          "bytesOut": 20593
+        },
+        "runs": [
+          {
+            "dt": 0.0057,
+            "MBs": 3.593,
+            "cmds": 22,
+            "cmdPerS": 3860,
+            "bytesOut": 20593
+          },
+          {
+            "dt": 0.0058,
+            "MBs": 3.531,
+            "cmds": 22,
+            "cmdPerS": 3793,
+            "bytesOut": 20593
+          },
+          {
+            "dt": 0.0057,
+            "MBs": 3.593,
+            "cmds": 22,
+            "cmdPerS": 3860,
+            "bytesOut": 20593
+          }
+        ]
+      },
+      "wordsRead|d4": {
+        "mean": {
+          "MBs": 2.998,
+          "cmdPerS": 5855,
+          "cmds": 40,
+          "bytesOut": 5440
+        },
+        "runs": [
+          {
+            "dt": 0.0068,
+            "MBs": 3.012,
+            "cmds": 40,
+            "cmdPerS": 5882,
+            "bytesOut": 5440
+          },
+          {
+            "dt": 0.0067,
+            "MBs": 3.057,
+            "cmds": 40,
+            "cmdPerS": 5970,
+            "bytesOut": 5440
+          },
+          {
+            "dt": 0.007,
+            "MBs": 2.926,
+            "cmds": 40,
+            "cmdPerS": 5714,
+            "bytesOut": 5440
+          }
+        ]
+      },
+      "blockRead|d4": {
+        "mean": {
+          "MBs": 2.556,
+          "cmdPerS": 7489,
+          "cmds": 60,
+          "bytesOut": 360
+        },
+        "runs": [
+          {
+            "dt": 0.0075,
+            "MBs": 2.731,
+            "cmds": 60,
+            "cmdPerS": 8000,
+            "bytesOut": 360
+          },
+          {
+            "dt": 0.0081,
+            "MBs": 2.528,
+            "cmds": 60,
+            "cmdPerS": 7407,
+            "bytesOut": 360
+          },
+          {
+            "dt": 0.0085,
+            "MBs": 2.409,
+            "cmds": 60,
+            "cmdPerS": 7059,
+            "bytesOut": 360
+          }
+        ]
+      },
+      "chainRead|d4": {
+        "mean": {
+          "MBs": 3.376,
+          "cmdPerS": 3627,
+          "cmds": 22,
+          "bytesOut": 113
+        },
+        "runs": [
+          {
+            "dt": 0.006,
+            "MBs": 3.413,
+            "cmds": 22,
+            "cmdPerS": 3667,
+            "bytesOut": 113
+          },
+          {
+            "dt": 0.0062,
+            "MBs": 3.303,
+            "cmds": 22,
+            "cmdPerS": 3548,
+            "bytesOut": 113
+          },
+          {
+            "dt": 0.006,
+            "MBs": 3.413,
+            "cmds": 22,
+            "cmdPerS": 3667,
+            "bytesOut": 113
+          }
+        ]
+      },
+      "wordsWrite|d8": {
+        "mean": {
+          "MBs": 3.107,
+          "cmdPerS": 6069,
+          "cmds": 40,
+          "bytesOut": 25920
+        },
+        "runs": [
+          {
+            "dt": 0.0069,
+            "MBs": 2.968,
+            "cmds": 40,
+            "cmdPerS": 5797,
+            "bytesOut": 25920
+          },
+          {
+            "dt": 0.0063,
+            "MBs": 3.251,
+            "cmds": 40,
+            "cmdPerS": 6349,
+            "bytesOut": 25920
+          },
+          {
+            "dt": 0.0066,
+            "MBs": 3.103,
+            "cmds": 40,
+            "cmdPerS": 6061,
+            "bytesOut": 25920
+          }
+        ]
+      },
+      "blockWrite|d8": {
+        "mean": {
+          "MBs": 2.706,
+          "cmdPerS": 7927,
+          "cmds": 60,
+          "bytesOut": 20840
+        },
+        "runs": [
+          {
+            "dt": 0.0086,
+            "MBs": 2.381,
+            "cmds": 60,
+            "cmdPerS": 6977,
+            "bytesOut": 20840
+          },
+          {
+            "dt": 0.0074,
+            "MBs": 2.768,
+            "cmds": 60,
+            "cmdPerS": 8108,
+            "bytesOut": 20840
+          },
+          {
+            "dt": 0.0069,
+            "MBs": 2.968,
+            "cmds": 60,
+            "cmdPerS": 8696,
+            "bytesOut": 20840
+          }
+        ]
+      },
+      "chainWrite|d8": {
+        "mean": {
+          "MBs": 3.532,
+          "cmdPerS": 3794,
+          "cmds": 22,
+          "bytesOut": 20593
+        },
+        "runs": [
+          {
+            "dt": 0.0059,
+            "MBs": 3.471,
+            "cmds": 22,
+            "cmdPerS": 3729,
+            "bytesOut": 20593
+          },
+          {
+            "dt": 0.0057,
+            "MBs": 3.593,
+            "cmds": 22,
+            "cmdPerS": 3860,
+            "bytesOut": 20593
+          },
+          {
+            "dt": 0.0058,
+            "MBs": 3.531,
+            "cmds": 22,
+            "cmdPerS": 3793,
+            "bytesOut": 20593
+          }
+        ]
+      },
+      "wordsRead|d8": {
+        "mean": {
+          "MBs": 2.933,
+          "cmdPerS": 5728,
+          "cmds": 40,
+          "bytesOut": 5440
+        },
+        "runs": [
+          {
+            "dt": 0.0075,
+            "MBs": 2.731,
+            "cmds": 40,
+            "cmdPerS": 5333,
+            "bytesOut": 5440
+          },
+          {
+            "dt": 0.0067,
+            "MBs": 3.057,
+            "cmds": 40,
+            "cmdPerS": 5970,
+            "bytesOut": 5440
+          },
+          {
+            "dt": 0.0068,
+            "MBs": 3.012,
+            "cmds": 40,
+            "cmdPerS": 5882,
+            "bytesOut": 5440
+          }
+        ]
+      },
+      "blockRead|d8": {
+        "mean": {
+          "MBs": 2.983,
+          "cmdPerS": 8739,
+          "cmds": 60,
+          "bytesOut": 360
+        },
+        "runs": [
+          {
+            "dt": 0.0069,
+            "MBs": 2.968,
+            "cmds": 60,
+            "cmdPerS": 8696,
+            "bytesOut": 360
+          },
+          {
+            "dt": 0.0069,
+            "MBs": 2.968,
+            "cmds": 60,
+            "cmdPerS": 8696,
+            "bytesOut": 360
+          },
+          {
+            "dt": 0.0068,
+            "MBs": 3.012,
+            "cmds": 60,
+            "cmdPerS": 8824,
+            "bytesOut": 360
+          }
+        ]
+      },
+      "chainRead|d8": {
+        "mean": {
+          "MBs": 3.396,
+          "cmdPerS": 3648,
+          "cmds": 22,
+          "bytesOut": 113
+        },
+        "runs": [
+          {
+            "dt": 0.006,
+            "MBs": 3.413,
+            "cmds": 22,
+            "cmdPerS": 3667,
+            "bytesOut": 113
+          },
+          {
+            "dt": 0.0059,
+            "MBs": 3.471,
+            "cmds": 22,
+            "cmdPerS": 3729,
+            "bytesOut": 113
+          },
+          {
+            "dt": 0.0062,
+            "MBs": 3.303,
+            "cmds": 22,
+            "cmdPerS": 3548,
+            "bytesOut": 113
+          }
+        ]
+      },
+      "wordsWrite|d12": {
+        "mean": {
+          "MBs": 3.303,
+          "cmdPerS": 6452,
+          "cmds": 40,
+          "bytesOut": 25920
+        },
+        "runs": [
+          {
+            "dt": 0.0062,
+            "MBs": 3.303,
+            "cmds": 40,
+            "cmdPerS": 6452,
+            "bytesOut": 25920
+          },
+          {
+            "dt": 0.0062,
+            "MBs": 3.303,
+            "cmds": 40,
+            "cmdPerS": 6452,
+            "bytesOut": 25920
+          },
+          {
+            "dt": 0.0062,
+            "MBs": 3.303,
+            "cmds": 40,
+            "cmdPerS": 6452,
+            "bytesOut": 25920
+          }
+        ]
+      },
+      "blockWrite|d12": {
+        "mean": {
+          "MBs": 3.159,
+          "cmdPerS": 9254,
+          "cmds": 60,
+          "bytesOut": 20840
+        },
+        "runs": [
+          {
+            "dt": 0.0065,
+            "MBs": 3.151,
+            "cmds": 60,
+            "cmdPerS": 9231,
+            "bytesOut": 20840
+          },
+          {
+            "dt": 0.0061,
+            "MBs": 3.357,
+            "cmds": 60,
+            "cmdPerS": 9836,
+            "bytesOut": 20840
+          },
+          {
+            "dt": 0.0069,
+            "MBs": 2.968,
+            "cmds": 60,
+            "cmdPerS": 8696,
+            "bytesOut": 20840
+          }
+        ]
+      },
+      "chainWrite|d12": {
+        "mean": {
+          "MBs": 3.572,
+          "cmdPerS": 3838,
+          "cmds": 22,
+          "bytesOut": 20593
+        },
+        "runs": [
+          {
+            "dt": 0.0057,
+            "MBs": 3.593,
+            "cmds": 22,
+            "cmdPerS": 3860,
+            "bytesOut": 20593
+          },
+          {
+            "dt": 0.0057,
+            "MBs": 3.593,
+            "cmds": 22,
+            "cmdPerS": 3860,
+            "bytesOut": 20593
+          },
+          {
+            "dt": 0.0058,
+            "MBs": 3.531,
+            "cmds": 22,
+            "cmdPerS": 3793,
+            "bytesOut": 20593
+          }
+        ]
+      },
+      "wordsRead|d12": {
+        "mean": {
+          "MBs": 2.971,
+          "cmdPerS": 5803,
+          "cmds": 40,
+          "bytesOut": 5440
+        },
+        "runs": [
+          {
+            "dt": 0.0068,
+            "MBs": 3.012,
+            "cmds": 40,
+            "cmdPerS": 5882,
+            "bytesOut": 5440
+          },
+          {
+            "dt": 0.0067,
+            "MBs": 3.057,
+            "cmds": 40,
+            "cmdPerS": 5970,
+            "bytesOut": 5440
+          },
+          {
+            "dt": 0.0072,
+            "MBs": 2.844,
+            "cmds": 40,
+            "cmdPerS": 5556,
+            "bytesOut": 5440
+          }
+        ]
+      },
+      "blockRead|d12": {
+        "mean": {
+          "MBs": 3.201,
+          "cmdPerS": 9377,
+          "cmds": 60,
+          "bytesOut": 360
+        },
+        "runs": [
+          {
+            "dt": 0.0065,
+            "MBs": 3.151,
+            "cmds": 60,
+            "cmdPerS": 9231,
+            "bytesOut": 360
+          },
+          {
+            "dt": 0.0064,
+            "MBs": 3.2,
+            "cmds": 60,
+            "cmdPerS": 9375,
+            "bytesOut": 360
+          },
+          {
+            "dt": 0.0063,
+            "MBs": 3.251,
+            "cmds": 60,
+            "cmdPerS": 9524,
+            "bytesOut": 360
+          }
+        ]
+      },
+      "chainRead|d12": {
+        "mean": {
+          "MBs": 3.432,
+          "cmdPerS": 3688,
+          "cmds": 22,
+          "bytesOut": 113
+        },
+        "runs": [
+          {
+            "dt": 0.0059,
+            "MBs": 3.471,
+            "cmds": 22,
+            "cmdPerS": 3729,
+            "bytesOut": 113
+          },
+          {
+            "dt": 0.006,
+            "MBs": 3.413,
+            "cmds": 22,
+            "cmdPerS": 3667,
+            "bytesOut": 113
+          },
+          {
+            "dt": 0.006,
+            "MBs": 3.413,
+            "cmds": 22,
+            "cmdPerS": 3667,
+            "bytesOut": 113
+          }
+        ]
+      }
+    },
+    "chainWriteVerified": {
+      "ok": false,
+      "firstDiff": 0
+    }
+  }
+}

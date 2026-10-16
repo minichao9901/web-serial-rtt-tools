@@ -1,0 +1,609 @@
+{
+  "cases": [
+    {
+      "repeat": 0,
+      "requestedKhz": 1000,
+      "result": {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 710.2000000476837,
+        "readMs": 697.7999999523163,
+        "writeRate": 0.08651084201052499,
+        "readRate": 0.08804815133877682,
+        "clockKhz": 1000,
+        "clockSetup": {
+          "attempts": 1,
+          "failures": []
+        },
+        "failedClocks": [],
+        "transport": "transfer-4/1024B",
+        "verified": true
+      },
+      "cpuKeptHalted": true,
+      "registersPreserved": true,
+      "targetClockUnchanged": true
+    },
+    {
+      "repeat": 0,
+      "requestedKhz": 4000,
+      "result": {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 175.89999997615814,
+        "readMs": 185.29999995231628,
+        "writeRate": 0.34928936900697954,
+        "readRate": 0.3315704264209957,
+        "clockKhz": 4000,
+        "clockSetup": {
+          "attempts": 1,
+          "failures": []
+        },
+        "failedClocks": [],
+        "transport": "transfer-4/1024B",
+        "verified": true
+      },
+      "cpuKeptHalted": true,
+      "registersPreserved": true,
+      "targetClockUnchanged": true
+    },
+    {
+      "repeat": 0,
+      "requestedKhz": 10000,
+      "result": {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 75.00000011920929,
+        "readMs": 81.19999992847443,
+        "writeRate": 0.8191999986979166,
+        "readRate": 0.7566502469719192,
+        "clockKhz": 10000,
+        "clockSetup": {
+          "attempts": 1,
+          "failures": []
+        },
+        "failedClocks": [],
+        "transport": "transfer-4/1024B",
+        "verified": true
+      },
+      "cpuKeptHalted": true,
+      "registersPreserved": true,
+      "targetClockUnchanged": true
+    },
+    {
+      "repeat": 0,
+      "requestedKhz": 20000,
+      "result": {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 45.39999997615814,
+        "readMs": 45.699999928474426,
+        "writeRate": 1.3533039654683983,
+        "readRate": 1.3444201333951953,
+        "clockKhz": 20000,
+        "clockSetup": {
+          "attempts": 1,
+          "failures": []
+        },
+        "failedClocks": [],
+        "transport": "transfer-4/1024B",
+        "verified": true
+      },
+      "cpuKeptHalted": true,
+      "registersPreserved": true,
+      "targetClockUnchanged": true
+    },
+    {
+      "repeat": 0,
+      "requestedKhz": 36000,
+      "result": {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 28.899999976158142,
+        "readMs": 29.200000047683716,
+        "writeRate": 2.125951558847288,
+        "readRate": 2.1041095856050767,
+        "clockKhz": 36000,
+        "clockSetup": {
+          "attempts": 2,
+          "failures": [
+            "SWD ACK=0（传输 0/1 条，地址 0x0）"
+          ]
+        },
+        "failedClocks": [],
+        "transport": "transfer-4/1024B",
+        "verified": true
+      },
+      "cpuKeptHalted": true,
+      "registersPreserved": true,
+      "targetClockUnchanged": true
+    },
+    {
+      "repeat": 0,
+      "requestedKhz": 45000,
+      "result": {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 23.799999952316284,
+        "readMs": 25.899999976158142,
+        "writeRate": 2.5815126102141224,
+        "readRate": 2.3722007743844666,
+        "clockKhz": 45000,
+        "clockSetup": {
+          "attempts": 2,
+          "failures": [
+            "SWD ACK=0（传输 0/1 条，地址 0x0）"
+          ]
+        },
+        "failedClocks": [],
+        "transport": "transfer-4/1024B",
+        "verified": true
+      },
+      "cpuKeptHalted": true,
+      "registersPreserved": true,
+      "targetClockUnchanged": true
+    },
+    {
+      "repeat": 0,
+      "requestedKhz": 60000,
+      "result": {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 21,
+        "readMs": 23.09999990463257,
+        "writeRate": 2.9257142857142853,
+        "readRate": 2.6597402707208917,
+        "clockKhz": 60000,
+        "clockSetup": {
+          "attempts": 1,
+          "failures": []
+        },
+        "failedClocks": [],
+        "transport": "transfer-4/1024B",
+        "verified": true
+      },
+      "cpuKeptHalted": true,
+      "registersPreserved": true,
+      "targetClockUnchanged": true
+    },
+    {
+      "repeat": 0,
+      "requestedKhz": 0,
+      "result": {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 20.600000023841858,
+        "readMs": 22.800000071525574,
+        "writeRate": 2.9825242683927704,
+        "readRate": 2.6947368336516404,
+        "clockKhz": 60000,
+        "clockSetup": {
+          "attempts": 1,
+          "failures": []
+        },
+        "failedClocks": [],
+        "transport": "transfer-4/1024B",
+        "verified": true
+      },
+      "cpuKeptHalted": true,
+      "registersPreserved": true,
+      "targetClockUnchanged": true
+    },
+    {
+      "repeat": 1,
+      "requestedKhz": 1000,
+      "result": {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 704.2999999523163,
+        "readMs": 698,
+        "writeRate": 0.08723555303728485,
+        "readRate": 0.08802292263610316,
+        "clockKhz": 1000,
+        "clockSetup": {
+          "attempts": 1,
+          "failures": []
+        },
+        "failedClocks": [],
+        "transport": "transfer-4/1024B",
+        "verified": true
+      },
+      "cpuKeptHalted": true,
+      "registersPreserved": true,
+      "targetClockUnchanged": true
+    },
+    {
+      "repeat": 1,
+      "requestedKhz": 4000,
+      "result": {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 177.10000014305115,
+        "readMs": 186.10000002384186,
+        "writeRate": 0.34692264229459246,
+        "readRate": 0.33014508324625863,
+        "clockKhz": 4000,
+        "clockSetup": {
+          "attempts": 1,
+          "failures": []
+        },
+        "failedClocks": [],
+        "transport": "transfer-4/1024B",
+        "verified": true
+      },
+      "cpuKeptHalted": true,
+      "registersPreserved": true,
+      "targetClockUnchanged": true
+    },
+    {
+      "repeat": 1,
+      "requestedKhz": 10000,
+      "result": {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 99.89999997615814,
+        "readMs": 80.60000002384186,
+        "writeRate": 0.6150150151617928,
+        "readRate": 0.7622828781864238,
+        "clockKhz": 10000,
+        "clockSetup": {
+          "attempts": 1,
+          "failures": []
+        },
+        "failedClocks": [],
+        "transport": "transfer-4/1024B",
+        "verified": true
+      },
+      "cpuKeptHalted": true,
+      "registersPreserved": true,
+      "targetClockUnchanged": true
+    },
+    {
+      "repeat": 1,
+      "requestedKhz": 20000,
+      "result": {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 43.799999952316284,
+        "readMs": 45.200000047683716,
+        "writeRate": 1.4027397275545168,
+        "readRate": 1.3592920339642458,
+        "clockKhz": 20000,
+        "clockSetup": {
+          "attempts": 1,
+          "failures": []
+        },
+        "failedClocks": [],
+        "transport": "transfer-4/1024B",
+        "verified": true
+      },
+      "cpuKeptHalted": true,
+      "registersPreserved": true,
+      "targetClockUnchanged": true
+    },
+    {
+      "repeat": 1,
+      "requestedKhz": 36000,
+      "result": {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 28.299999833106995,
+        "readMs": 30.5,
+        "writeRate": 2.1710247477854714,
+        "readRate": 2.0144262295081967,
+        "clockKhz": 36000,
+        "clockSetup": {
+          "attempts": 1,
+          "failures": []
+        },
+        "failedClocks": [],
+        "transport": "transfer-4/1024B",
+        "verified": true
+      },
+      "cpuKeptHalted": true,
+      "registersPreserved": true,
+      "targetClockUnchanged": true
+    },
+    {
+      "repeat": 1,
+      "requestedKhz": 45000,
+      "result": {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 23.90000009536743,
+        "readMs": 26.800000071525574,
+        "writeRate": 2.5707112868133,
+        "readRate": 2.2925373073143636,
+        "clockKhz": 45000,
+        "clockSetup": {
+          "attempts": 1,
+          "failures": []
+        },
+        "failedClocks": [],
+        "transport": "transfer-4/1024B",
+        "verified": true
+      },
+      "cpuKeptHalted": true,
+      "registersPreserved": true,
+      "targetClockUnchanged": true
+    },
+    {
+      "repeat": 1,
+      "requestedKhz": 60000,
+      "result": {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 21.399999856948853,
+        "readMs": 24.300000071525574,
+        "writeRate": 2.871028056574947,
+        "readRate": 2.528395054286218,
+        "clockKhz": 60000,
+        "clockSetup": {
+          "attempts": 1,
+          "failures": []
+        },
+        "failedClocks": [],
+        "transport": "transfer-4/1024B",
+        "verified": true
+      },
+      "cpuKeptHalted": true,
+      "registersPreserved": true,
+      "targetClockUnchanged": true
+    },
+    {
+      "repeat": 1,
+      "requestedKhz": 0,
+      "result": {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 21.799999952316284,
+        "readMs": 28.899999976158142,
+        "writeRate": 2.8183486300178595,
+        "readRate": 2.125951558847288,
+        "clockKhz": 60000,
+        "clockSetup": {
+          "attempts": 1,
+          "failures": []
+        },
+        "failedClocks": [],
+        "transport": "transfer-4/1024B",
+        "verified": true
+      },
+      "cpuKeptHalted": true,
+      "registersPreserved": true,
+      "targetClockUnchanged": true
+    },
+    {
+      "repeat": 2,
+      "requestedKhz": 1000,
+      "result": {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 704,
+        "readMs": 698.6000000238419,
+        "writeRate": 0.08727272727272728,
+        "readRate": 0.08794732321486283,
+        "clockKhz": 1000,
+        "clockSetup": {
+          "attempts": 1,
+          "failures": []
+        },
+        "failedClocks": [],
+        "transport": "transfer-4/1024B",
+        "verified": true
+      },
+      "cpuKeptHalted": true,
+      "registersPreserved": true,
+      "targetClockUnchanged": true
+    },
+    {
+      "repeat": 2,
+      "requestedKhz": 4000,
+      "result": {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 175.70000004768372,
+        "readMs": 187.19999992847443,
+        "writeRate": 0.34968696632513163,
+        "readRate": 0.3282051283305292,
+        "clockKhz": 4000,
+        "clockSetup": {
+          "attempts": 1,
+          "failures": []
+        },
+        "failedClocks": [],
+        "transport": "transfer-4/1024B",
+        "verified": true
+      },
+      "cpuKeptHalted": true,
+      "registersPreserved": true,
+      "targetClockUnchanged": true
+    },
+    {
+      "repeat": 2,
+      "requestedKhz": 10000,
+      "result": {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 75.00000011920929,
+        "readMs": 81.60000002384186,
+        "writeRate": 0.8191999986979166,
+        "readRate": 0.7529411762505942,
+        "clockKhz": 10000,
+        "clockSetup": {
+          "attempts": 1,
+          "failures": []
+        },
+        "failedClocks": [],
+        "transport": "transfer-4/1024B",
+        "verified": true
+      },
+      "cpuKeptHalted": true,
+      "registersPreserved": true,
+      "targetClockUnchanged": true
+    },
+    {
+      "repeat": 2,
+      "requestedKhz": 20000,
+      "result": {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 45.90000021457672,
+        "readMs": 46.200000047683716,
+        "writeRate": 1.3385620852456588,
+        "readRate": 1.329870128497551,
+        "clockKhz": 20000,
+        "clockSetup": {
+          "attempts": 1,
+          "failures": []
+        },
+        "failedClocks": [],
+        "transport": "transfer-4/1024B",
+        "verified": true
+      },
+      "cpuKeptHalted": true,
+      "registersPreserved": true,
+      "targetClockUnchanged": true
+    },
+    {
+      "repeat": 2,
+      "requestedKhz": 36000,
+      "result": {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 29.600000143051147,
+        "readMs": 30.300000071525574,
+        "writeRate": 2.0756756656443316,
+        "readRate": 2.027722767490626,
+        "clockKhz": 36000,
+        "clockSetup": {
+          "attempts": 1,
+          "failures": []
+        },
+        "failedClocks": [],
+        "transport": "transfer-4/1024B",
+        "verified": true
+      },
+      "cpuKeptHalted": true,
+      "registersPreserved": true,
+      "targetClockUnchanged": true
+    },
+    {
+      "repeat": 2,
+      "requestedKhz": 45000,
+      "result": {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 24.899999976158142,
+        "readMs": 29.799999952316284,
+        "writeRate": 2.4674698818806853,
+        "readRate": 2.061744969742002,
+        "clockKhz": 45000,
+        "clockSetup": {
+          "attempts": 1,
+          "failures": []
+        },
+        "failedClocks": [],
+        "transport": "transfer-4/1024B",
+        "verified": true
+      },
+      "cpuKeptHalted": true,
+      "registersPreserved": true,
+      "targetClockUnchanged": true
+    },
+    {
+      "repeat": 2,
+      "requestedKhz": 60000,
+      "result": {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 24.799999952316284,
+        "readMs": 25.100000143051147,
+        "writeRate": 2.4774193596021195,
+        "readRate": 2.4478087509895676,
+        "clockKhz": 60000,
+        "clockSetup": {
+          "attempts": 1,
+          "failures": []
+        },
+        "failedClocks": [],
+        "transport": "transfer-4/1024B",
+        "verified": true
+      },
+      "cpuKeptHalted": true,
+      "registersPreserved": true,
+      "targetClockUnchanged": true
+    },
+    {
+      "repeat": 2,
+      "requestedKhz": 0,
+      "result": {
+        "addr": 536870912,
+        "size": 20480,
+        "passes": 3,
+        "writeMs": 22,
+        "readMs": 23.100000023841858,
+        "writeRate": 2.792727272727273,
+        "readRate": 2.659740256995102,
+        "clockKhz": 60000,
+        "clockSetup": {
+          "attempts": 1,
+          "failures": []
+        },
+        "failedClocks": [],
+        "transport": "transfer-4/1024B",
+        "verified": true
+      },
+      "cpuKeptHalted": true,
+      "registersPreserved": true,
+      "targetClockUnchanged": true
+    }
+  ],
+  "errors": [],
+  "initial": {
+    "regs": [
+      1,
+      131072,
+      0,
+      536871744,
+      0,
+      8,
+      79764919,
+      5,
+      8,
+      134218747,
+      536875076,
+      28,
+      536878076,
+      536936424,
+      134219259,
+      134219062,
+      553648128
+    ],
+    "rcc": 5309450,
+    "cpuid": 1092600369
+  },
+  "passed": true
+}

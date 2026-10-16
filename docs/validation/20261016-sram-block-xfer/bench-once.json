@@ -1,0 +1,76 @@
+{
+  "runs": [
+    {
+      "addr": 536870912,
+      "size": 20480,
+      "passes": 3,
+      "writeMs": 19.699999928474426,
+      "readMs": 23.600000023841858,
+      "writeRate": 3.11878173721181,
+      "readRate": 2.6033898278784044,
+      "clockKhz": 60000,
+      "clockSetup": {
+        "attempts": 1,
+        "failures": []
+      },
+      "failedClocks": [],
+      "transport": "transfer-4/1024B",
+      "verified": true
+    },
+    {
+      "addr": 536870912,
+      "size": 20480,
+      "passes": 3,
+      "writeMs": 19.199999928474426,
+      "readMs": 27.300000071525574,
+      "writeRate": 3.2000000119209293,
+      "readRate": 2.250549444653046,
+      "clockKhz": 60000,
+      "clockSetup": {
+        "attempts": 1,
+        "failures": []
+      },
+      "failedClocks": [],
+      "transport": "transfer-4/1024B",
+      "verified": true
+    },
+    {
+      "addr": 536870912,
+      "size": 20480,
+      "passes": 3,
+      "writeMs": 22.700000047683716,
+      "readMs": 23.399999976158142,
+      "writeRate": 2.706607923829907,
+      "readRate": 2.625641028316246,
+      "clockKhz": 60000,
+      "clockSetup": {
+        "attempts": 1,
+        "failures": []
+      },
+      "failedClocks": [],
+      "transport": "transfer-4/1024B",
+      "verified": true
+    },
+    {
+      "addr": 536870912,
+      "size": 20480,
+      "passes": 3,
+      "writeMs": 23,
+      "readMs": 23.899999976158142,
+      "writeRate": 2.6713043478260867,
+      "readRate": 2.570711299635587,
+      "clockKhz": 60000,
+      "clockSetup": {
+        "attempts": 1,
+        "failures": []
+      },
+      "failedClocks": [],
+      "transport": "transfer-4/1024B",
+      "verified": true
+    }
+  ],
+  "mean": {
+    "readMBs": 2.513,
+    "writeMBs": 2.924
+  }
+}

@@ -100,10 +100,17 @@ export class SramBenchTransfer {
         const address=(addr+offset)>>>0;
         const words=Math.min(maxWords,(bytes.length-offset)/4,(1024-(address&1023))/4);
         const req=new Uint8Array(8+(read?words:words*5));
-        req.set([5,0,1+words,5]);new DataView(req.buffer).setUint32(4,address,true);
+        /**
+         * 🚨 造帧是**在计时窗口里**跑的（benchmarkSram 只把 write()/read() 计时），
+         *    所以这里刻意不用 `set([...])` / `DataView.setUint32` / 每字 `subarray`：
+         *    真机实测同样是 20 KiB 一帧量，朴素写法 0.265 ms、这个写法 0.071 ms —— 一站
+         *    传输才 ~6.5 ms，那 0.2 ms 就是白白丢掉的 3%。**别改回漂亮写法**。
+         */
+        req[0]=5;req[1]=0;req[2]=(1+words)&0xff;req[3]=5;
+        req[4]=address&0xff;req[5]=(address>>>8)&0xff;req[6]=(address>>>16)&0xff;req[7]=(address>>>24)&0xff;
         if(read)req.fill(15,8);
-        else for(let i=0;i<words;i++){
-          req[8+i*5]=13;req.set(bytes.subarray(offset+i*4,offset+i*4+4),9+i*5);
+        else for(let i=0,s=offset,d=9;i<words;i++,s+=4,d+=5){
+          req[d-1]=13;req[d]=bytes[s];req[d+1]=bytes[s+1];req[d+2]=bytes[s+2];req[d+3]=bytes[s+3];
         }
         batch.push({req,offset,words});offset+=words*4;
       }

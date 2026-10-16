@@ -1,0 +1,55 @@
+{
+  "result": {
+    "transport": "depth=4/1024B",
+    "seq": [
+      {
+        "rep": 0,
+        "writeTotal": 7.5,
+        "writeExch": 6.7,
+        "writeFrames": 0.8,
+        "write2Total": 6.8,
+        "write2Exch": 6.6,
+        "write2Frames": 0.2,
+        "readTotal": 7,
+        "readExch": 6.8,
+        "readFrames": 0.2,
+        "flush": 0,
+        "writeMBs": 2.731,
+        "write2MBs": 3.012,
+        "readMBs": 2.926
+      },
+      {
+        "rep": 1,
+        "writeTotal": 6.8,
+        "writeExch": 6.3,
+        "writeFrames": 0.5,
+        "write2Total": 6.5,
+        "write2Exch": 6.3,
+        "write2Frames": 0.2,
+        "readTotal": 7.1,
+        "readExch": 7,
+        "readFrames": 0.1,
+        "flush": 0,
+        "writeMBs": 3.012,
+        "write2MBs": 3.151,
+        "readMBs": 2.885
+      },
+      {
+        "rep": 2,
+        "writeTotal": 6.4,
+        "writeExch": 6.3,
+        "writeFrames": 0.1,
+        "write2Total": 6.4,
+        "write2Exch": 6.3,
+        "write2Frames": 0.1,
+        "readTotal": 8.3,
+        "readExch": 8.2,
+        "readFrames": 0.1,
+        "flush": 0,
+        "writeMBs": 3.2,
+        "write2MBs": 3.2,
+        "readMBs": 2.467
+      }
+    ]
+  }
+}

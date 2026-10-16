@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';import {Cdp,sleep} from '../../../tools/selftest/cdp-lib.mjs';import {writeFileSync} from 'node:fs';
+const out=new URL('./',import.meta.url),c=new Cdp(undefined,120000),report={cases:[],errors:[]};const setup=`const {WebUsbDapProbe:P}=await import('./app/rtt/dap-webusb.js');const p=await P.open((await P.authorized())[0],{clockKhz:1000});`;
+try{await c.connect();c.onEvent=m=>{if(m.method==='Runtime.exceptionThrown')report.errors.push(m.params.exceptionDetails);};await c.send('Page.navigate',{url:'http://127.0.0.1:8899/index.html?production-sram='+Date.now()+'#flash'});for(let i=0;i<100;i++){if(await c.eval('return !!window.__tools?.flash;').catch(()=>false))break;await sleep(100);}
+await c.eval(`await __tools.probeManager.releaseOthers(null,'SRAM 修复实测');document.getElementById('f-chip').value='stm32f103';document.getElementById('f-chip').dispatchEvent(new Event('change'));document.getElementById('f-backend').value='webusb';document.getElementById('f-backend').dispatchEvent(new Event('change'));document.getElementById('f-ram-address').value='0x20000000';document.getElementById('f-ram-length').value='20480';document.getElementById('f-side-sram-tab').click();return true;`);
+const state=await c.eval(setup+`try{await p.halt();const regs=[];for(let i=0;i<17;i++)regs.push(await p.regRead(i));return {regs,rcc:await p._readWord(0x40021004),cpuid:await p._readWord(0xe000ed00)};}finally{await p.disconnect();}`);report.initial=state;
+for(let repeat=0;repeat<3;repeat++)for(const khz of [1000,4000,10000,20000,36000,45000,60000,0]){
+ let result,error;try{result=await c.eval(`document.getElementById('f-ram-clock').value='${khz}';return await __tools.flash.benchmarkSram();`);}catch(e){error=e.message;}
+ const after=await c.eval(setup+`try{const halted=!!((await p._readWord(0xe000edf0))&(1<<17));const regs=[];for(let i=0;i<17;i++)regs.push(await p.regRead(i));return {halted,regs,rcc:await p._readWord(0x40021004)};}finally{await p.disconnect();}`);
+ assert.equal(after.halted,true);assert.deepEqual(after.regs,state.regs);assert.equal(after.rcc,state.rcc);
+ const row={repeat,requestedKhz:khz,result,error,cpuKeptHalted:true,registersPreserved:true,targetClockUnchanged:true};report.cases.push(row);writeFileSync(new URL('production-ui-after.json',out),JSON.stringify(report,null,2));console.log(JSON.stringify(row));
+ if(result){assert.equal(result.verified,true);assert.equal(result.passes,3);assert.equal(result.size,20480);if(khz)assert.equal(result.clockKhz,khz);}
+ if(repeat===2&&[60000,0].includes(khz))writeFileSync(new URL('production-after-' + khz + '.png',out),Buffer.from((await c.send('Page.captureScreenshot',{format:'png'})).data,'base64'));
+}
+assert.deepEqual(report.errors,[]);assert.equal(report.cases.filter(x=>x.result?.verified).length,24);report.passed=true;
+}catch(e){report.error=e.stack;process.exitCode=1;console.error(e.stack);}finally{writeFileSync(new URL('production-ui-after.json',out),JSON.stringify(report,null,2));c.close();}

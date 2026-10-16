@@ -1,0 +1,39 @@
+{
+  "result": {
+    "transport": "depth=4/1024B",
+    "pairs": [
+      {
+        "rep": 0,
+        "productMBs": 2.844,
+        "bareMBs": 2.409,
+        "productMs": 7.2,
+        "bareMs": 8.5
+      },
+      {
+        "rep": 1,
+        "productMBs": 2.885,
+        "bareMBs": 2.592,
+        "productMs": 7.1,
+        "bareMs": 7.9
+      },
+      {
+        "rep": 2,
+        "productMBs": 2.968,
+        "bareMBs": 2.768,
+        "productMs": 6.9,
+        "bareMs": 7.4
+      },
+      {
+        "rep": 3,
+        "productMBs": 2.968,
+        "bareMBs": 3.012,
+        "productMs": 6.9,
+        "bareMs": 6.8
+      }
+    ],
+    "mean": {
+      "productMBs": 2.916,
+      "bareMBs": 2.695
+    }
+  }
+}

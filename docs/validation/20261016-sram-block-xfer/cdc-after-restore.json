@@ -1,0 +1,12 @@
+{
+  "ports": [
+    [
+      "COM34",
+      "F103CDC0001"
+    ]
+  ],
+  "rx": "PING\r\nPONG\r\nINFO\r\nchip=STM32F103 sysclk=48000000Hz clk_err=0 loops=2043417 marks=1 rx=33 tx=116 usbhp=0 ctr=0\r\nECHO after-xfer-opt\r\nafter-xfer-opt\r\n",
+  "pong": true,
+  "echo": true,
+  "passed": true
+}
