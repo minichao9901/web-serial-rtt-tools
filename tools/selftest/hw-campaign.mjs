@@ -696,9 +696,16 @@ async function rttForward(){
     return 'stub';
   })()`);
   await cdp.eval(`document.getElementById('c-record-ts').checked = false`);   // 不带时间戳头，便于逐字节核对
-  const r0 = await cdp.evalJson(`({ rx: window.__tools.stream.rxc.total, t: performance.now() })`);
   await cdp.eval(`document.getElementById('c-record').click()`, true);
   await cdp.waitFor(`window.__tools.stream.rec.active`, 8000, '记录已开始');
+  /**
+   * 🚨 `r0` 必须在**记录器真的开始收数之后**再采：原来在点「记录」之前采，
+   *    于是 r0→active 之间那段（点击 + 轮询，实测 0.2~0.4 s ≈ 0.6 MB @2.9 MB/s）
+   *    被算进"同窗口收到"，而它根本没进文件 —— 2% 的容差被这段系统性偏置吃掉，
+   *    45 MHz 档侥幸过、60 MHz 档就报 97.98% 假失败（2026-10-16 真机现场）。
+   *    另外把记录器自己的 `pushed` 一并记下来，便于区分"写盘丢"和"窗口没对齐"。
+   */
+  const r0 = await cdp.evalJson(`({ rx: window.__tools.stream.rxc.total, pushed: window.__tools.stream.rec.pushed, t: performance.now() })`);
   console.log(`   [存盘] 记录 ${REC_SECS}s…`);
   await nap(REC_SECS * 1000);
   const mid = await cdp.evalJson(`({ pushed: window.__tools.stream.rec.pushed, written: window.__tools.stream.rec.written,
@@ -727,16 +734,17 @@ async function rttForward(){
     bufs.push(Buffer.from(b64, 'base64'));
   }
   fs.writeFileSync(savePath, Buffer.concat(bufs));
-  console.log(`   [存盘] 记录 ${recDt.toFixed(1)}s（页面收 ${(recRx / 1048576).toFixed(2)} MB）→ 文件 ${(fileInfo.size / 1048576).toFixed(2)} MB`
-    + ` · write ${fileInfo.writes} 次 · 停止时按钮「${drain.btn}」· 已导出 ${savePath}`);
+  const recPushed = mid.pushed - (r0.pushed || 0);
+  console.log(`   [存盘] 记录 ${recDt.toFixed(1)}s（页面收 ${(recRx / 1048576).toFixed(2)} MB · 记录器收 ${(recPushed / 1048576).toFixed(2)} MB）`
+    + ` → 文件 ${(fileInfo.size / 1048576).toFixed(2)} MB · write ${fileInfo.writes} 次 · 停止时按钮「${drain.btn}」· 已导出 ${savePath}`);
   judge('存盘字节数 = 同窗口收到的字节（误差 <2%）', Math.abs(fileInfo.size - recRx) / Math.max(1, recRx) < 0.02,
-    `文件 ${fileInfo.size} vs 收到 ${recRx}`);
+    `文件 ${fileInfo.size} vs 收到 ${recRx}（记录器收 ${recPushed}）`);
   judge('存盘内容可读（hello world!）', fileInfo.words > 10, `头 4 KB 里 ${fileInfo.words} 个`);
   judge('记录无积压（写盘跟得上）', mid.backlog < 1024 * 1024, `积压 ${(mid.backlog / 1024).toFixed(0)} KB`);
 
   const out = { rate: rxRate, rateMB: +(rxRate / 1048576).toFixed(2), probeRateMB: +(probeRate / 1048576).toFixed(2),
                 mhz: st0.mhz, cb: '0x' + Number(st0.cb || 0).toString(16), pageRate: b.rate, seconds: +dt.toFixed(1),
-                record: { seconds: +recDt.toFixed(1), rxBytes: recRx, fileBytes: fileInfo.size, writes: fileInfo.writes,
+                record: { seconds: +recDt.toFixed(1), rxBytes: recRx, pushedBytes: recPushed, fileBytes: fileInfo.size, writes: fileInfo.writes,
                           backlog: mid.backlog, path: savePath, head: fileInfo.head, words: fileInfo.words } };
   await cdp.eval(`window.__tools.session.close()`).catch(() => {});
   await cdp.eval(`document.getElementById('h-stop').click()`, true).catch(() => {});

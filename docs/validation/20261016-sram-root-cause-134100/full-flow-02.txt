@@ -1,0 +1,421 @@
+node tools/selftest/serial-grant.mjs --if-idle
+⏭ C:\Users\ADMINI~1\AppData\Local\Temp\edge-rtt-tools-test：浏览器正在用（--if-idle 跳过；下次 make open 会补）
+── C:\Users\ADMINI~1\AppData\Local\Temp\chrome-rtt-authorized
+   3 个来源都写好了（串口条目合计 32 条）
+   已写回 C:\Users\ADMINI~1\AppData\Local\Temp\chrome-rtt-authorized\Default\Preferences
+
+完成：改了 1 个 profile，跳过 1 个（浏览器在用）；来源：https://minichao9901.github.io:443 · http://127.0.0.1:8899 · http://localhost:8899
+提示：换 USB 口 / 换探针之后重跑一次即可；`make open` 每次都会自动补（只在浏览器没跑时改）。
+pwsh -NoProfile -Command "if (-not (Get-NetTCPConnection -State Listen -LocalPort 8899 -ErrorAction SilentlyContinue)) { Start-Process -FilePath 'python' -ArgumentList '-m','http.server','8899','--bind','127.0.0.1' -WindowStyle Hidden; Start-Sleep -Seconds 1 }"
+pwsh -NoProfile -Command "try { Invoke-WebRequest 'http://127.0.0.1:9333/json/version' -TimeoutSec 2 -UseBasicParsing | Out-Null } catch { & 'tools/selftest/launch-browser.ps1' -Port 9333 -Url 'http://127.0.0.1:8899/index.html'; Start-Sleep -Seconds 3 }"
+node tools/selftest/read-idcode.mjs --board=f103ze
+== 认板子（读 IDCODE）==  STM32F103ZE（本机那块 · Cortex-M3）（--board=f103ze）
+   该板档案：芯片下拉 stm32f103 · 目标类型 swd · Cortex-M3 · 512KB flash / 64KB RAM · 6 个 FPB 比较器
+   芯片 stm32f103 → stm32f103 · 后端 webusb · 目标类型 swd
+
+---- 页面日志（读身份那段，用时 367 ms）----
+   已关掉本页签 1 个探针 USB 句柄（残留认领会挡住这次烧录）──── 读目标身份（ARM/SWD · 零安装）────   ① DP IDCODE  0x1BA01477 → 设计者 ARM · SW-DP（DPv1） · 修订 1   ② CPUID      0x411FC231 → Cortex-M3 r1p1 · 实现者 0x41 · 架构 0xF   ③ DBGMCU     0xE0042000 = 0x10036414 → DEV_ID 0x414（STM32F10x 大容量（F103xC/D/E）） · REV_ID 0x1003   ④ flash 容量 0x1FFFF7E0 = 512 KB（F1/F3 的容量寄存器）   ⇒ 判读：STM32F103xC/D/E（大容量 512 KB） · Cortex-M3 · 512 KB flash · SW-DP（DPv1）──── 读完（60 ms）────
+
+---- 判读 ----
+✅ 板上就是 STM32F103ZE（本机那块 · Cortex-M3）
+pwsh -NoProfile -File tools/target-firmware/stm32f103_rtt_speed/build.ps1 -Board ze
+board   : ze  (512KB flash / 64KB RAM, RTT up 32KB)
+outdir  : E:\web-serial-rtt-tools\tools\target-firmware\stm32f103_rtt_speed\build-ze
+   text	   data	    bss	    dec	    hex	filename
+   1052	      0	  33132	  34184	   8588	E:\web-serial-rtt-tools\tools\target-firmware\stm32f103_rtt_speed\build-ze\fw.elf
+入库： E:\web-serial-rtt-tools\tools\target-firmware\stm32f103_rtt_speed\fw.elf
+
+产物： E:\web-serial-rtt-tools\tools\target-firmware\stm32f103_rtt_speed\build-ze\fw.elf
+       E:\web-serial-rtt-tools\tools\target-firmware\stm32f103_rtt_speed\build-ze\fw.bin (1052 B)
+pwsh -NoProfile -File tools/target-firmware/stm32f103_rtt_seq/build.ps1 -Board ze
+board   : ze  (512KB flash / 64KB RAM, RTT up 32KB)
+outdir  : E:\web-serial-rtt-tools\tools\target-firmware\stm32f103_rtt_seq\build-ze
+   text	   data	    bss	    dec	    hex	filename
+   1104	      0	  33132	  34236	   85bc	E:\web-serial-rtt-tools\tools\target-firmware\stm32f103_rtt_seq\build-ze\fw.elf
+入库： E:\web-serial-rtt-tools\tools\target-firmware\stm32f103_rtt_seq\fw.elf
+
+产物： E:\web-serial-rtt-tools\tools\target-firmware\stm32f103_rtt_seq\build-ze\fw.elf
+       E:\web-serial-rtt-tools\tools\target-firmware\stm32f103_rtt_seq\build-ze\fw.bin (1104 B)
+pwsh -NoProfile -File tools/target-firmware/stm32f103_scope/build.ps1 -Board ze
+core    : 96 MHz
+board   : ze  (512KB flash / 64KB RAM)
+   text	   data	    bss	    dec	    hex	filename
+   3384	      4	   4160	   7548	   1d7c	E:\web-serial-rtt-tools\tools\target-firmware\stm32f103_scope\build\fw.elf
+已复制给用户下载： E:\web-serial-rtt-tools\tools\target-firmware\stm32f103_scope\fw.elf
+
+被采样变量（nm 实测地址/大小）：
+  20001030 00000001 B g_pulse
+  2000000c 00000002 B g_far_sq100
+  2000102c 00000002 B g_pair_a
+  2000102e 00000002 B g_pair_b
+  20001040 00000002 B g_sq5k
+  20000008 00000004 B g_far_cnt
+  20001010 00000004 B g_isr_count
+  20000000 00000004 D g_lfsr
+  20001044 00000004 B g_tick
+  20001038 00000008 B g_ramp64
+  20001014 00000018 B g_pack
+  08000000 00000040 R g_vectors
+  2000000e 00001000 B g_hole
+
+产物： E:\web-serial-rtt-tools\tools\target-firmware\stm32f103_scope\build\fw.elf
+       E:\web-serial-rtt-tools\tools\target-firmware\stm32f103_scope\build\fw.bin (3388 B)
+pwsh -NoProfile -File tools/target-firmware/stm32f103_dbgstress/build.ps1 -Board ze
+   text	   data	    bss	    dec	    hex	filename
+   9720	    100	    784	  10604	   296c	E:\web-serial-rtt-tools\tools\target-firmware\stm32f103_dbgstress\build\fw.elf
+
+board   ： ze
+DWARF   ： 4
+产物    ： E:\web-serial-rtt-tools\tools\target-firmware\stm32f103_dbgstress\build\fw.elf
+          E:\web-serial-rtt-tools\tools\target-firmware\stm32f103_dbgstress\build\fw.bin (9820 B)
+
+关键符号（压测脚本要按这些地址/名字断言）：
+  20000068 00000004 B g_checksum
+  20000370 00000004 B g_frame_result
+  2000006c 00000004 B g_isr_seen
+  20000070 00000004 B g_last_result
+  20000074 00000004 B g_loops
+  20000208 00000004 B g_model_bf_seed
+  2000020c 00000004 B g_model_epoch
+  20000078 00000004 B g_pendsv_count
+  2000009c 00000004 B g_stage
+  200000a0 00000004 B g_ticks
+  08000248 00000006 t fn_rol
+  08000234 00000006 t fn_xor
+  0800022c 00000008 t fn_add
+  08000308 0000000a T engine_deep_chain
+  080003d8 0000000a T engine_uses_inline
+  080009aa 0000000c t engine_frame_register
+  08000266 0000000c T engine_leaf
+  0800023c 0000000c t fn_mul
+  0800025a 0000000c t is_even
+  0800024e 0000000c t is_odd
+  0800021e 0000000e t deep_l5
+  080002ca 0000000e T engine_deep_l3
+  0800007c 00000010 T PendSV_Handler
+  080002b8 00000012 T engine_deep_l4
+  080002d8 00000016 T engine_deep_l2
+  080002f0 00000018 t deep_l1
+  08000354 00000018 T engine_mutual
+  0800036c 0000001c T engine_dispatch
+  08000338 0000001c T engine_rec_ack
+  2000007c 00000020 B g_seq_slot
+  080009b6 00000022 t engine_frame_migrate
+  08000808 00000024 T model_bitfield_touch
+  08000312 00000026 T engine_rec_fib
+  08000980 0000002a t engine_frame_shadow
+  08000944 0000003c t engine_frame_recursive
+  08000040 0000003c T SysTick_Handler
+  08000000 00000040 R g_vectors
+  08000274 00000044 T engine_linear_os
+  080008fc 00000048 t engine_frame_leaf
+  08000388 00000050 T engine_branchy
+  080009d8 00000058 T engine_frame_stage
+  0800082c 0000007c T model_checksum
+  08000184 0000009a T engine_linear
+  200000a8 00000160 B g_model
+  08002280 00000160 T g_model_const
+  20000210 00000160 B g_model_plain
+  08000670 00000198 T model_update
+  080004b8 000001b8 T model_init
+
+已复制给用户下载： E:\web-serial-rtt-tools\tools\target-firmware\stm32f103_dbgstress\fw.elf
+
+node tools/selftest/hw-campaign.mjs --board=f103ze --local 
+   浏览器已在跑：Chrome/155.0.8059.84
+== 真机场景测试 ==  本地页面 http://127.0.0.1:8899/index.html
+   靶子：STM32F103ZE + akaLinkPro（SWD/ARM）（--board=f103ze）
+   固件：狂发 tools/target-firmware/stm32f103_rtt_speed/build-ze/fw.elf
+         scope tools/target-firmware/stm32f103_scope/build/fw.elf
+   RTT 控制块搜索窗口：0x20000000-0x20005000（找法：探针自动搜）
+   计划：2 轮 × (烧狂发→RTT Viewer 6s→转发 8s+存盘 10s→烧 scope→J-Scope 4 组) ＋ 交替烧录 5 遍
+   串口授权：页面看到 1 个口 ✓
+   前置：芯片 stm32f103 → stm32f103（STM32F1（F103 等））· 后端 webusb
+         目标类型：探针 swd → swd · RTT Viewer swd → swd · 波形页 swd → swd
+         时钟：转发 (空) → 60000000 · Viewer 60000 → 60000 kHz
+
+========== 第 1/2 轮 ==========
+   [烧录] 狂发 #1：0.9s ✅
+          已关掉本页签 1 个探针 USB 句柄（残留认领会挡住这次烧录）烧录数据时钟 1 MHz；执行控制 1 MHz── 零安装烧录：fw.elf（1.0 KB）→ stm32f103 ──   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始复位后 PC=0x8000248（在刚烧进去的固件里 ✓）── 完成 ──耗时小结：探针 74ms · 加载算法 284ms · 读DEV_ID 2ms · 擦除 89ms · 写入 137ms · 校验 30ms · 复位 120ms · 合计 0.74s
+   [RTT Viewer] 第 1 次没连上，等 2 s 重试：等待超时：RTT 控制块定位（probe=false 地址格=(空) 状态栏=连接失败：SWD NO ACK（传输 0/1 条，地址 0x4））
+   [RTT Viewer] 量速率 6s…（时钟档 60000 kHz）
+   [RTT Viewer] 490.9 KB/s（页面显示 496.7 KB/s · 轮询 27.8 Hz · 控制块 0x2000000c）
+   ✅ 判决 PASS  RTT Viewer 速率 > 300 KB/s —— 490.9 KB/s
+   [转发]（ELF 精确地址） 从 ELF 取控制块：h-addr=0x2000000c · h-size=0x1000
+   [转发] 探针报告档位 45 MHz · 控制块 0x2000000c（请求 60，探针按设计降档）
+   ✅ 判决 PASS  转发档位 ≥ 45 MHz（探针固件稳定档下限） —— 实际 45 MHz
+   [转发速率] 量 8s…（页面 RX 计数）
+   [转发速率] 页面 RX 2.46 MB/s（页面显示 2512.0 KB/s）· 探针侧搬运 2.25 MB/s · 窗口 8.0s
+   ✅ 判决 PASS  RTT 转发速率 > 2.00 MB/s（45 MHz 档） —— 2.46 MB/s
+   [存盘] 记录 10s…
+   [存盘] 记录 10.0s（页面收 24.58 MB · 记录器收 24.58 MB） → 文件 24.98 MB · write 102 次 · 停止时按钮「● 记录到文件」· 已导出 tmp/rtt-forward-2026-10-16T06-51-17.bin
+   ✅ 判决 PASS  存盘字节数 = 同窗口收到的字节（误差 <2%） —— 文件 26198016 vs 收到 25776128（记录器收 25776128）
+   ✅ 判决 PASS  存盘内容可读（hello world!） —— 头 4 KB 里 314 个
+   ✅ 判决 PASS  记录无积压（写盘跟得上） —— 积压 172 KB
+   [烧录] scope #1：1.3s ✅
+          已关掉本页签 1 个探针 USB 句柄（残留认领会挡住这次烧录）烧录数据时钟 1 MHz；执行控制 1 MHz── 零安装烧录：fw.elf（3.3 KB）→ stm32f103 ──   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始复位后 PC=0x80001e4（在刚烧进去的固件里 ✓）── 完成 ──耗时小结：探针 59ms · 加载算法 281ms · 读DEV_ID 2ms · 擦除 195ms · 写入 345ms · 校验 93ms · 复位 118ms · 合计 1.09s
+   变量：1 个 = g_lfsr；3 个 = g_lfsr, g_far_cnt, g_far_sq100
+   [J-Scope] 1 变量 @2µs：1 变量 1 span/4B · 实测 491.97 kHz（名义 500.0 kHz）· 1475972 样本 · 丢：探针 24620（16680.5 ppm） / USB 454 / 缺口 0
+   ✅ 判决 PASS  J-Scope 1 变量 @2µs 跑通 —— 491.97 kHz / 1475972 样本
+   [J-Scope] 1 变量 @20µs：1 变量 1 span/4B · 实测 50.00 kHz（名义 50.0 kHz）· 150040 样本 · 丢：探针 3（20.0 ppm） / USB 0 / 缺口 0
+   ✅ 判决 PASS  J-Scope 1 变量 @20µs 零丢样本（探针跳拍 ≤ 100 ppm） —— 探针 3/150040（20.0 ppm）/ USB 0 / 缺口 0
+   [J-Scope] 3 变量 @2µs：3 变量 1 span/10B · 实测 94.87 kHz（名义 500.0 kHz）· 284641 样本 · 丢：探针 1269840（4461198.5 ppm） / USB 0 / 缺口 0
+   ✅ 判决 PASS  J-Scope 3 变量 @2µs 跑通 —— 94.87 kHz / 284641 样本
+   [J-Scope] 3 变量 @20µs：3 变量 1 span/10B · 实测 50.00 kHz（名义 50.0 kHz）· 150038 样本 · 丢：探针 3（20.0 ppm） / USB 0 / 缺口 0
+   ✅ 判决 PASS  J-Scope 3 变量 @20µs 零丢样本（探针跳拍 ≤ 100 ppm） —— 探针 3/150038（20.0 ppm）/ USB 0 / 缺口 0
+
+========== 第 2/2 轮 ==========
+   [烧录] 狂发 #2：0.8s ✅
+          已关掉本页签 1 个探针 USB 句柄（残留认领会挡住这次烧录）烧录数据时钟 1 MHz；执行控制 1 MHz── 零安装烧录：fw.elf（1.0 KB）→ stm32f103 ──   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始复位后 PC=0x8000248（在刚烧进去的固件里 ✓）── 完成 ──耗时小结：探针 55ms · 加载算法 231ms · 读DEV_ID 2ms · 擦除 79ms · 写入 128ms · 校验 31ms · 复位 147ms · 合计 0.67s
+   [RTT Viewer] 第 1 次没连上，等 2 s 重试：等待超时：RTT 控制块定位（probe=false 地址格=(空) 状态栏=连接失败：SWD ACK=0（传输 0/1 条，地址 0x0））
+   [RTT Viewer] 量速率 6s…（时钟档 60000 kHz）
+   [RTT Viewer] 431.6 KB/s（页面显示 453.9 KB/s · 轮询 23.7 Hz · 控制块 0x2000000c）
+   ✅ 判决 PASS  RTT Viewer 速率 > 300 KB/s —— 431.6 KB/s
+   [转发]（ELF 精确地址） 从 ELF 取控制块：h-addr=0x2000000c · h-size=0x1000
+   [转发] 探针报告档位 45 MHz · 控制块 0x2000000c（请求 60，探针按设计降档）
+   ✅ 判决 PASS  转发档位 ≥ 45 MHz（探针固件稳定档下限） —— 实际 45 MHz
+   [转发速率] 量 8s…（页面 RX 计数）
+   [转发速率] 页面 RX 2.46 MB/s（页面显示 2516.0 KB/s）· 探针侧搬运 2.26 MB/s · 窗口 8.0s
+   ✅ 判决 PASS  RTT 转发速率 > 2.00 MB/s（45 MHz 档） —— 2.46 MB/s
+   [存盘] 记录 10s…
+   [存盘] 记录 10.1s（页面收 23.27 MB · 记录器收 23.27 MB） → 文件 23.63 MB · write 98 次 · 停止时按钮「● 记录到文件」· 已导出 tmp/rtt-forward-2026-10-16T06-52-25.bin
+   ✅ 判决 PASS  存盘字节数 = 同窗口收到的字节（误差 <2%） —— 文件 24772608 vs 收到 24403968（记录器收 24403968）
+   ✅ 判决 PASS  存盘内容可读（hello world!） —— 头 4 KB 里 314 个
+   ✅ 判决 PASS  记录无积压（写盘跟得上） —— 积压 240 KB
+   [烧录] scope #2：1.2s ✅
+          已关掉本页签 1 个探针 USB 句柄（残留认领会挡住这次烧录）烧录数据时钟 1 MHz；执行控制 1 MHz── 零安装烧录：fw.elf（3.3 KB）→ stm32f103 ──   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始复位后 PC=0x80001e4（在刚烧进去的固件里 ✓）── 完成 ──耗时小结：探针 61ms · 加载算法 235ms · 读DEV_ID 1ms · 擦除 170ms · 写入 347ms · 校验 93ms · 复位 126ms · 合计 1.03s
+   变量：1 个 = g_lfsr；3 个 = g_lfsr, g_far_cnt, g_far_sq100
+   [J-Scope] 1 变量 @2µs：1 变量 1 span/4B · 实测 491.98 kHz（名义 500.0 kHz）· 1475972 样本 · 丢：探针 24596（16664.3 ppm） / USB 227 / 缺口 0
+   ✅ 判决 PASS  J-Scope 1 变量 @2µs 跑通 —— 491.98 kHz / 1475972 样本
+   [J-Scope] 1 变量 @20µs：1 变量 1 span/4B · 实测 50.00 kHz（名义 50.0 kHz）· 150040 样本 · 丢：探针 4（26.7 ppm） / USB 0 / 缺口 0
+   ✅ 判决 PASS  J-Scope 1 变量 @20µs 零丢样本（探针跳拍 ≤ 100 ppm） —— 探针 4/150040（26.7 ppm）/ USB 0 / 缺口 0
+   [J-Scope] 3 变量 @2µs：3 变量 1 span/10B · 实测 94.86 kHz（名义 500.0 kHz）· 284592 样本 · 丢：探针 1269878（4462100.1 ppm） / USB 0 / 缺口 0
+   ✅ 判决 PASS  J-Scope 3 变量 @2µs 跑通 —— 94.86 kHz / 284592 样本
+   [J-Scope] 3 变量 @20µs：3 变量 1 span/10B · 实测 50.00 kHz（名义 50.0 kHz）· 150038 样本 · 丢：探针 4（26.7 ppm） / USB 0 / 缺口 0
+   ✅ 判决 PASS  J-Scope 3 变量 @20µs 零丢样本（探针跳拍 ≤ 100 ppm） —— 探针 4/150038（26.7 ppm）/ USB 0 / 缺口 0
+
+========== 4) 狂发 ↔ scope 交替烧录 5 遍 ==========
+   [烧录] 交替#1 狂发：0.8s ✅
+          已关掉本页签 1 个探针 USB 句柄（残留认领会挡住这次烧录）烧录数据时钟 1 MHz；执行控制 1 MHz── 零安装烧录：fw.elf（1.0 KB）→ stm32f103 ──   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始复位后 PC=0x800021e（在刚烧进去的固件里 ✓）── 完成 ──耗时小结：探针 55ms · 加载算法 241ms · 读DEV_ID 1ms · 擦除 77ms · 写入 128ms · 校验 29ms · 复位 116ms · 合计 0.65s
+   [烧录] 交替#1 scope：1.1s ✅
+          已关掉本页签 1 个探针 USB 句柄（残留认领会挡住这次烧录）烧录数据时钟 1 MHz；执行控制 1 MHz── 零安装烧录：fw.elf（3.3 KB）→ stm32f103 ──   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始复位后 PC=0x80001e8（在刚烧进去的固件里 ✓）── 完成 ──耗时小结：探针 57ms · 加载算法 225ms · 读DEV_ID 1ms · 擦除 165ms · 写入 351ms · 校验 93ms · 复位 120ms · 合计 1.01s
+   [烧录] 交替#2 狂发：0.8s ✅
+          已关掉本页签 1 个探针 USB 句柄（残留认领会挡住这次烧录）烧录数据时钟 1 MHz；执行控制 1 MHz── 零安装烧录：fw.elf（1.0 KB）→ stm32f103 ──   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始复位后 PC=0x8000246（在刚烧进去的固件里 ✓）── 完成 ──耗时小结：探针 109ms · 加载算法 229ms · 读DEV_ID 2ms · 擦除 78ms · 写入 126ms · 校验 30ms · 复位 114ms · 合计 0.69s
+   [烧录] 交替#2 scope：1.3s ✅
+          已关掉本页签 1 个探针 USB 句柄（残留认领会挡住这次烧录）烧录数据时钟 1 MHz；执行控制 1 MHz── 零安装烧录：fw.elf（3.3 KB）→ stm32f103 ──   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始复位后 PC=0x80001e8（在刚烧进去的固件里 ✓）── 完成 ──耗时小结：探针 62ms · 加载算法 233ms · 读DEV_ID 1ms · 擦除 194ms · 写入 343ms · 校验 90ms · 复位 120ms · 合计 1.04s
+   [烧录] 交替#3 狂发：0.9s ✅
+          已关掉本页签 1 个探针 USB 句柄（残留认领会挡住这次烧录）烧录数据时钟 1 MHz；执行控制 1 MHz── 零安装烧录：fw.elf（1.0 KB）→ stm32f103 ──   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始复位后 PC=0x8000246（在刚烧进去的固件里 ✓）── 完成 ──耗时小结：探针 119ms · 加载算法 217ms · 读DEV_ID 2ms · 擦除 80ms · 写入 131ms · 校验 30ms · 复位 114ms · 合计 0.69s
+   [烧录] 交替#3 scope：1.3s ✅
+          已关掉本页签 1 个探针 USB 句柄（残留认领会挡住这次烧录）烧录数据时钟 1 MHz；执行控制 1 MHz── 零安装烧录：fw.elf（3.3 KB）→ stm32f103 ──   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始复位后 PC=0x80001e8（在刚烧进去的固件里 ✓）── 完成 ──耗时小结：探针 54ms · 加载算法 243ms · 读DEV_ID 2ms · 擦除 173ms · 写入 336ms · 校验 92ms · 复位 119ms · 合计 1.02s
+   [烧录] 交替#4 狂发：0.8s ✅
+          已关掉本页签 1 个探针 USB 句柄（残留认领会挡住这次烧录）烧录数据时钟 1 MHz；执行控制 1 MHz── 零安装烧录：fw.elf（1.0 KB）→ stm32f103 ──   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始复位后 PC=0x8000252（在刚烧进去的固件里 ✓）── 完成 ──耗时小结：探针 98ms · 加载算法 230ms · 读DEV_ID 1ms · 擦除 83ms · 写入 129ms · 校验 30ms · 复位 116ms · 合计 0.69s
+   [烧录] 交替#4 scope：1.1s ✅
+          已关掉本页签 1 个探针 USB 句柄（残留认领会挡住这次烧录）烧录数据时钟 1 MHz；执行控制 1 MHz── 零安装烧录：fw.elf（3.3 KB）→ stm32f103 ──   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始复位后 PC=0x80001e4（在刚烧进去的固件里 ✓）── 完成 ──耗时小结：探针 53ms · 加载算法 222ms · 读DEV_ID 1ms · 擦除 173ms · 写入 339ms · 校验 92ms · 复位 116ms · 合计 1.00s
+   [烧录] 交替#5 狂发：0.9s ✅
+          已关掉本页签 1 个探针 USB 句柄（残留认领会挡住这次烧录）烧录数据时钟 1 MHz；执行控制 1 MHz── 零安装烧录：fw.elf（1.0 KB）→ stm32f103 ──   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始复位后 PC=0x8000222（在刚烧进去的固件里 ✓）── 完成 ──耗时小结：探针 100ms · 加载算法 226ms · 读DEV_ID 2ms · 擦除 82ms · 写入 155ms · 校验 31ms · 复位 115ms · 合计 0.71s
+   [烧录] 交替#5 scope：1.3s ✅
+          已关掉本页签 1 个探针 USB 句柄（残留认领会挡住这次烧录）烧录数据时钟 1 MHz；执行控制 1 MHz── 零安装烧录：fw.elf（3.3 KB）→ stm32f103 ──   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始复位后 PC=0x80001e4（在刚烧进去的固件里 ✓）── 完成 ──耗时小结：探针 59ms · 加载算法 240ms · 读DEV_ID 2ms · 擦除 163ms · 写入 343ms · 校验 91ms · 复位 120ms · 合计 1.02s
+
+================ 汇总 ================
+第 1 轮：烧狂发 0.9s · RTT Viewer 490.9 KB/s · 转发 2.46 MB/s（探针侧 2.25 MB/s，45 MHz） · 存盘 24.98 MB/10s → tmp/rtt-forward-2026-10-16T06-51-17.bin · 烧 scope 1.3s
+        1 变量 @2µs：491.97 kHz（1 span/4B · 1475972 样本，丢 探针24620/USB454/缺口0）
+        1 变量 @20µs：50.00 kHz（1 span/4B · 150040 样本，丢 探针3/USB0/缺口0）
+        3 变量 @2µs：94.87 kHz（1 span/10B · 284641 样本，丢 探针1269840/USB0/缺口0）
+        3 变量 @20µs：50.00 kHz（1 span/10B · 150038 样本，丢 探针3/USB0/缺口0）
+第 2 轮：烧狂发 0.8s · RTT Viewer 431.6 KB/s · 转发 2.46 MB/s（探针侧 2.26 MB/s，45 MHz） · 存盘 23.63 MB/10.1s → tmp/rtt-forward-2026-10-16T06-52-25.bin · 烧 scope 1.2s
+        1 变量 @2µs：491.98 kHz（1 span/4B · 1475972 样本，丢 探针24596/USB227/缺口0）
+        1 变量 @20µs：50.00 kHz（1 span/4B · 150040 样本，丢 探针4/USB0/缺口0）
+        3 变量 @2µs：94.86 kHz（1 span/10B · 284592 样本，丢 探针1269878/USB0/缺口0）
+        3 变量 @20µs：50.00 kHz（1 span/10B · 150038 样本，丢 探针4/USB0/缺口0）
+交替烧录：狂发 0.8/0.8/0.9/0.8/0.9s（均 0.84s）· scope 1.1/1.3/1.3/1.1/1.3s（均 1.19s）
+
+================ STM32F103ZE + akaLinkPro（SWD/ARM） 基准小结 ================
+spec 口径：速率类 = 首跑实测均值 × 80% · 耗时类 = 实测最坏值 + 15% · 正确性类钉死
++---------------------------+--------------+--------------+-------------------------+-----------------+-------+
+| 项目                       | 第 1 轮       | 第 2 轮       | 均值 / 统计              | spec             | 判定   |
++---------------------------+--------------+--------------+-------------------------+-----------------+-------+
+| 烧录 狂发固件              | 0.9 s         | 0.8 s         | 均 0.86 s                | —                | —      |
+| 烧录 scope 固件            | 1.3 s         | 1.2 s         | 均 1.25 s                | —                | —      |
+| RTT Viewer（WebUSB · 60 MHz） | 490.9 KB/s    | 431.6 KB/s    | 均 461.2 KB/s            | > 300.0 KB/s     | PASS   |
+| 　└ 错位读（溢出丢字节）   | —             | —             | 共 0 次（丢 0 B）        | = 0              | 未测   |
+| RTT 转发（页面 RX 计数）   | 2.460 MB/s    | 2.460 MB/s    | 均 2.460 MB/s            | > 2.000 MB/s     | PASS   |
+| 　└ 探针侧自报搬运         | 2.250 MB/s    | 2.260 MB/s    | 均 2.255 MB/s            | （参考）         | —      |
+| 转发 10 s 存盘（一致性）   | 101.6 %       | 101.5 %       | 均 101.57 %              | ≥ 98.0 %         | PASS   |
+| 　└ 文件大小 / 积压        | 24.98 MB      | 23.63 MB      | 积压 172/240 KB          | （参考）         | —      |
+| J-Scope 1 变量 @2µs        | 492.0 kHz     | 492.0 kHz     | 均 492.0 kHz             | —                | —      |
+| J-Scope 3 变量 @2µs        | 94.9 kHz      | 94.9 kHz      | 均 94.9 kHz              | —                | —      |
+| 低速率档丢样本（探针跳拍 ≤ 100 ppm · USB = 0） | 20.0 ppm      | 26.7 ppm      | 探针跳拍 14 / 600156 样本 · USB 0 个 | ≤ 100 ppm        | PASS   |
++---------------------------+--------------+--------------+-------------------------+-----------------+-------+
+交替烧录（5 遍）：flood 0.8/0.8/0.9/0.8/0.9 s · scope 1.1/1.3/1.3/1.1/1.3 s
+本表判决：4 通过 / 0 失败（表内 4 项，脚本内逐次判决更细）
+跑的时间：2026/10/16 14:50:42
+
+
+判决：20 通过 / 0 失败
+结果已写 tmp/campaign-result.json
+node tools/selftest/flash-elf.mjs --board=f103ze 
+== 烧录靶子固件 ==  板子 STM32F103ZE（--board=f103ze）
+   E:\web-serial-rtt-tools\tools\target-firmware\stm32f103_dbgstress\build\fw.elf
+   (184.8 KB) · 芯片 stm32f103 · 后端 webusb · 目标类型 swd
+   芯片 stm32f103 → stm32f103（STM32F1（F103 等））· 后端 webusb · 目标类型 swd · 时钟格「」
+   已装载 fw.elf（189280 B）
+   [+  1557ms] 空闲
+   [+  1711ms] 复位目标（清掉上一次可能留下的 LOCKUP）…
+   [+  1863ms] 加载 flashloader 到目标 RAM…
+   [+  2021ms] 擦除扇区 1/5（0x8000000）…
+   [+  2178ms] 擦除扇区 3/5（0x8001000）…
+   [+  2335ms] 擦除扇区 4/5（0x8001800）…
+   [+  2491ms] 擦除扇区 5/5（0x8002000）…
+   [+  2646ms] 写入 2.0 KB / 9.6 KB（0x8000000）…
+   [+  2797ms] 写入 4.0 KB / 9.6 KB（0x8000800）…
+   [+  2959ms] 写入 6.0 KB / 9.6 KB（0x8001000）…
+   [+  3114ms] 写入 8.0 KB / 9.6 KB（0x8001800）…
+   [+  3272ms] 校验（读回比对）…
+   [+  3586ms] 复位运行…
+   [+  3742ms] 空闲（上次烧录用时 2.0s）
+   结果：✅ stm32f103 · 9.6 KB · 校验通过 · 已复位运行（用时 3.7s）
+   --- 页面关于"复位后核在哪"的判断 ---
+   已关掉本页签 1 个探针 USB 句柄（残留认领会挡住这次烧录）烧录数据时钟 1 MHz；执行控制 1 MHz── 零安装烧录：fw.elf（9.6 KB）→ stm32f103 ──   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始复位后 PC=0x80000fe（在刚烧进去的固件里 ✓）── 完成 ──耗时小结：探针 58ms · 加载算法 230ms · 读DEV_ID 2ms · 擦除 421ms · 写入 917ms · 校验 269ms · 复位 120ms · 合计 2.02s
+   --- 烧录日志尾部 ---
+   已关掉本页签 1 个探针 USB 句柄（残留认领会挡住这次烧录）烧录数据时钟 1 MHz；执行控制 1 MHz── 零安装烧录：fw.elf（9.6 KB）→ stm32f103 ──   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：开始   [usb] 恢复 SWD 调试连接：DAP 命令 0x2   [usb] 恢复 SWD 调试连接：DAP 命令 0x11   [usb] 恢复 SWD 调试连接：DAP 命令 0x13   [usb] 恢复 SWD 调试连接：DAP 命令 0x12   [usb] 恢复 SWD 调试连接：DAP 命令 0x4   [usb] 恢复 SWD 调试连接：DAP 命令 0x5   [usb] 恢复 SWD 调试连接：DAP 命令 0x6   [usb] 恢复 SWD 调试连接：开始复位后 PC=0x80000fe（在刚烧进去的固件里 ✓）── 完成 ──耗时小结：探针 58ms · 加载算法 230ms · 读DEV_ID 2ms · 擦除 421ms · 写入 917ms · 校验 269ms · 复位 120ms · 合计 2.02s
+
+✅ 靶子固件已烧进板子
+node tools/selftest/dbg-hw-stress.mjs --board=f103ze 
+== 靶子：STM32F103ZE（本机那块 · Cortex-M3）（--board=f103ze）==
+   ELF   /tools/target-firmware/stm32f103_dbgstress/build/fw.elf
+   源码  /tools/target-firmware/stm32f103_dbgstress/src（6 个文件） · 该板 BOOT0=1，复位后脚本会自动唤醒
+
+== 0. 前置：ELF + 源码目录 + 连接探针 ==
+   351 个符号（函数 134 · 数据 20），其中 48 个带类型变量（DWARF），行号表 603 条
+   行号表：5 段 · 603 条记录 · 15 个源文件（DWARF 4）
+   源码目录「（已选文件夹）」：6 个文件
+  PASS  ELF 带行号表：行号表：5 段 · 603 条记录 · 15 个源文件（DWARF 4）
+  PASS  源码目录已喂进页面（真文件）：源码目录「（已选文件夹）」：6 个文件
+  PASS  靶子源码行号定位成功（调用在第 31 / 37 行）
+   SWD 时钟：10000 → 10000 kHz
+   靶子存活：g_ticks 19231 → 25501 → 28129 → 34345 · g_loops 554 → 735 → 810 → 989 · DHCSR 0x30003 → 0x1010001 → 0x1010001 → 0x1010001
+   在跑 ✓ · 停点 PC=0x80000fa
+  PASS  靶子固件在跑（g_ticks 19231 → 25501 → 28129 → 34345 · g_loops 554 → 735 → 810 → 989 · DHCSR 0x30003 → 0x1010001 → 0x1010001 → 0x1010001）
+   探针 akaLinkPro CMSIS-DAP · 512B/包 · SWD 10000kHz · IDCODE 0x1ba01477 · FPB 6 个 rev1
+   复位向量 = 0x80008ac（Reset_Handler 符号 = 0x80008ac）· 起点 PC=0x8000bac __aeabi_dadd+0x170
+  PASS  连上真探针并停住目标
+  PASS  FPB 比较器够用（6 个）
+  PASS  干净起点：没有任何断点占着比较器
+
+== 1. 断点：文件:行 / 符号 / static / 偏移 / 多断点 / ISR ==
+   符号表（函数 → 首行）：engine_linear=0x8000184 engine.c:24  engine_deep_chain=0x8000308 engine.c:113  engine_rec_fib=0x8000312 engine.c:121  engine_dispatch=0x800036c engine.c:166  model_update=0x8000670 model.c:120  deep_l5=0x800021e engine.c:78  is_even=0x800025a engine.c:137
+  PASS  关键函数都在符号表里（含 static 的 deep_l5 / is_even）
+  PASS  b engine.c:24 落到 0x8000184（与 b engine_linear 的 0x8000184 一致）
+  PASS  b model.c:120 落到 0x8000670（与 b model_update 的 0x8000670 一致）
+  PASS  b deep_l5（static 函数）能下：0x800021e
+  PASS  b engine_linear+8 支持偏移：0x800018c
+  PASS  内联函数下不到断点时会明说：✗ 认不出地址/符号/文件行：「engine_inline_double」
+  PASS  行号超出文件范围时说人话：✗ 解析不了「engine.c:99999」：（engine.c 里只有第 9~202 行有代码，没有第 99999 行）
+  PASS  4 个断点同时挂着，每一轮都轮到：engine_linear → engine_deep_chain → engine_dispatch → model_update
+  PASS  4 个断点占的就是 4 个比较器（没有多占）
+  PASS  清空断点后比较器全部释放
+  PASS  中断里的断点命中（0x8000040 SysTick_Handler，用时 80ms）
+  PASS  同一个断点连续命中 5 次都在 0x800025a（is_even）
+
+== 2. 代码同步：停下时 PC → 源码位置必须自洽（跨文件）==
+  PASS  停到 engine_linear：源码视图高亮第 24 行 == 行号表的第 24 行（engine.c:24）
+  PASS  停止位置显示函数名 engine_linear：engine_linear
+  PASS  停到 model_bitfield_touch：源码视图高亮第 153 行 == 行号表的第 153 行（model.c:153）
+  PASS  停止位置显示函数名 model_bitfield_touch：model_bitfield_touch
+  PASS  停到 engine_branchy：源码视图高亮第 177 行 == 行号表的第 177 行（engine.c:177）
+  PASS  停止位置显示函数名 engine_branchy：engine_branchy
+  PASS  停到 main：源码视图高亮第 88 行 == 行号表的第 88 行（main.c:88）
+  PASS  停止位置显示函数名 main：main
+  PASS  指令级单步时每一步的"源码高亮 == 行号表"：engine.c:24 engine.c:24 engine.c:24 engine.c:24 engine.c:25 engine.c:25
+  PASS  si 的 PC 单调前进（0x8000186 → 0x8000188 → 0x800018a → 0x800018c → 0x800018e → 0x8000190）
+
+== 3. 单步：n / si / fin（源码级，含间接调用与 5 层爬栈）==
+   单步序列：0x8000184(L24) → 0x800018e(L25) → 0x8000194(L26) → 0x800019a(L27) → 0x80001a2(L28) → 0x80001aa(L29) → 0x80001b2(L30) → 0x80001ba(L31) → 0x80001c4(L32) → 0x80001cc(L33) → 0x80001d4(L34) → 0x80001dc(L35) → 0x80001e8(L36) → 0x80001f0(L37) → 0x80001fa(L38) → 0x8000202(L39) → 0x800020c(L40) → 0x8000214(L41) → 0x800021e(L78) → 0x80002c4(L88)
+  PASS  拿到 20 步的落点序列（每一步都真的停住了）
+  PASS  每一步 PC 都变了（不会"点了没反应"）
+  PASS  每一步都有源码行号
+  PASS  20 次单步后**只**占着用户断点那 1 个比较器（直读 FP_COMP：1 个 / 断点 1 个）
+  PASS  断在调用那一句（engine.c:31）
+  PASS  n（跳过）越过调用、没进 engine_leaf：0x80001ba → 0x80001c4（engine.c:32）
+  PASS  si 从调用点进入 engine_leaf（第 3 次 si 停在 0x8000266，路径 0x80001bc → 0x80001be → 0x8000266）
+  PASS  si 之后比较器也没多占（用户断点 1 个 → 硬件占 1 个）
+   fin 爬栈：deep_l5 → engine_deep_l4 → engine_deep_l3 → engine_deep_l2 → deep_l1 → engine_deep_chain
+  PASS  连续 5 次「跳出」逐层爬回调用者：deep_l5 → engine_deep_l4 → engine_deep_l3 → engine_deep_l2 → deep_l1 → engine_deep_chain
+  PASS  每一步都停住了（不是超时后的残留状态）
+  PASS  fin 之后比较器收干净
+  PASS  si 能跟进**函数指针**调用（第 7 次停在 fn_add）：engine_dispatch@0x800036e → engine_dispatch@0x8000372 → engine_dispatch@0x8000374 → engine_dispatch@0x8000378 → engine_dispatch@0x800037a → engine_dispatch@0x800037c → fn_add@0x800022c
+  PASS  间接调用单步后比较器也收干净
+  PASS  递归函数里 n/fin 都能回到递归体（n→engine_rec_fib+0x8，fin→engine_rec_fib）
+  PASS  递归里单步后比较器也收干净
+
+== 4. 复位重跑：必须停在复位向量 → 断点仍然有效 → 再命中（连续 3 轮）==
+   第 1 轮：复位后 PC=0x80008ac Reset_Handler（比较器 1） → 继续命中=true 0x8000184 engine_linear
+   第 2 轮：复位后 PC=0x80008ac Reset_Handler（比较器 1） → 继续命中=true 0x8000184 engine_linear
+   第 3 轮：复位后 PC=0x80008ac Reset_Handler（比较器 1） → 继续命中=true 0x8000184 engine_linear
+  PASS  复位 3 轮都跑完了
+  PASS  「复位并停」停在**复位向量**上（0x80008ac = Reset_Handler）［本机 BOOT0=1：脚本按唤醒配方把 PC 从 ROM 搬回 flash］：0x80008ac , 0x80008ac , 0x80008ac
+  PASS  复位之后断点仍然有效、继续就能命中：0x8000184 , 0x8000184 , 0x8000184
+
+== 5. 内存 / 监视：结构体树、位域、复合路径 ==
+   p g_model            : g_model @ 0x200000a8  :  struct（352 字节，97 行）
+   p g_model.flags      : g_model.flags @ 0x200000b0  :  struct（20 字节，14 行）
+   p <位域>             : g_model.flags.bits.level @ 0x200000b4  :  long unsigned int 位域[bit 1 · 3 位] = 3  (0x3)
+   p <有符号位域>       : g_model.flags.sbits.bias @ 0x200000bc  :  long int 位域[bit 0 · 6 位] 有符号 = -3  (0x3d)
+   p nodes[1].cell.scale: g_model.nodes[1].cell.scale @ 0x20000110  :  double = 1.00000
+  PASS  p g_model 打出结构体树（99 行）
+  PASS  p g_model.flags：嵌套结构体带位域行
+  PASS  p <位域>按位取（不是把整个 u32 打出来）：g_model.flags.bits.level @ 0x200000b4  :  long unsigned int 位域[bit 1 · 3 位] = 3  (0x3)
+  PASS  有符号位域明确标出来：g_model.flags.sbits.bias @ 0x200000bc  :  long int 位域[bit 0 · 6 位] 有符号 = -3  (0x3d)
+  PASS  p g_model.nodes[1]（数组元素）✓：g_model.nodes[1] @ 0x200000f0  :  node_s（40 字节，21 行）
+  PASS  p g_model.nodes[1].cell（数组元素里的结构体）✓：g_model.nodes[1].cell @ 0x20000108  :  struct（16 字节，4 行）
+  PASS  p g_model.nodes[1].cell.scale（三层路径）✓：g_model.nodes[1].cell.scale @ 0x20000110  :  double = 1.00000
+  PASS  p g_model.word.halves.hi（联合体里的成员）✓：g_model.word.halves.hi @ 0x200000c6  :  short unsigned int = 16256  (0x3f80)
+  PASS  p g_model.blob（字节数组 8 项）9 行
+  PASS  char[8] 当字符串显示（没有 NUL 也不越界）：g_model.tag @ 0x200001fe  :  array（8 字节，9 行）
+  PASS  p g_model.label（指针成员）能打：g_model.label @ 0x200001f0  :  pointer = 0x0800222c　（指针只显示地址本身，要跟进去用 p *0x0800222c）
+  PASS  p g_model.head（结构体指针）能打：g_model.head @ 0x20000168  :  pointer = 0x200000c8　（指针只显示地址本身，要跟进去用 p *0x200000c8）
+  PASS  下标越界如实报错：✗ 「g_model.nodes[9]」：下标 [9] 越界（数组只有 4 项）
+  PASS  成员名写错如实报错：✗ 「g_model.nosuchmember」：没有成员「nosuchmember」（model_t 里有：magic · mode · flags · word · nodes · head · grid · matrix · label · blob · delta · tag）
+  PASS  p g_model_plain（非 volatile 对照）同样能展开
+  PASS  p g_model_const（const/flash 里的对象）同样能展开：g_model_const @ 0x08002280  :  struct（352 字节，97 行）
+  PASS  位域与影子字逐位对账（word=0x85ebca77 / word2=0xc2b2ae3d，9 个字段）
+   w g_model → {"e":"g_model","err":null,"kind":"struct","v":"{magic=1297040453, mode=0, word=2246822519, on : 1=1  (0x1), …}"}
+  PASS  监视加结构体项：{"e":"g_model","err":null,"kind":"struct","v":"{magic=1297040453, mode=0, word=2246822519, on : 1=1  (0x1), …}"}
+  PASS  展开后画出成员树（97 行）
+  PASS  树里有位域行：on : 11  (0x1)uint32_t 位域0x200000b4
+  PASS  监视复合路径（位域）✓：{"e":"g_model.flags.bits.level","err":null,"kind":"var","v":"3  (0x3)"}
+  PASS  监视复合路径（数组元素成员）✓：{"e":"g_model.nodes[2].cell.scale","err":null,"kind":"var","v":"2.00000"}
+  PASS  监视里写错的名字会标红并说明：{"e":"g_model.nope","err":"「g_model.nope」：没有成员「nope」（model_t 里有：magic · mode · flags · word · nodes · head · grid · matrix · label · blob · delta · tag）","v":null}
+  PASS  读不到的总线地址说明故障及地址：读 0x20020000（16 字节）失败：目标回了总线 FAULT —— 这个地址在当前状态读/写不了（没映射的窗口 / 外设时钟没开 / 只写寄存器 / 跨
+  PASS  FAULT 之后链路自愈、还能继续读 flash（自愈 4 次）：0 0 1 20 ad 8 0 8
+
+== 6. 调试辅助：bt / bt scan + DWT 数据观察点 ==
+   bt：{"n":8,"names":["deep_l5","engine_deep_l4","engine_deep_l3","engine_deep_l2","deep_l1","engine_deep_chain","main","Reset_Handler"],"reason":"达到回溯深度上限","err":[]}
+   bt scan：{"n":8,"names":["deep_l5","engine_deep_l4","engine_deep_l3","engine_deep_l2","deep_l1","engine_deep_chain","main","Reset_Handler"],"reason":"扫描结果仅为候选返回地址，可能含旧栈值或普通数据，不是已证实调用链","err":null}
+  PASS  bt 在真实停点返回当前帧（deep_l5 → engine_deep_l4 → engine_deep_l3 → engine_deep_l2 → deep_l1 → engine_deep_chain → main → Reset_Handler）
+  PASS  bt scan 返回至少一个候选帧（8 个；扫描结果仅为候选返回地址，可能含旧栈值或普通数据，不是已证实调用链）
+   DWT：{"before":{"items":1,"capacity":4,"addr":536871068,"mode":"w","size":4},"listed":"#1 0x2000009c 4 B w\n1 个观察点；硬件 4 个槽位","afterHit":{"halted":true,"pc":134217916,"name":"main+0x30","reason":"DWT 数据访问命中（PC 可能在访问指令之后）","dwtStatus":"#6 0x08000116  SP=0x2000ffd8  main+0x88  main.c:74  [cfi] | #7 0x080008e6  SP=0x2000fff8  Reset_Handler+0x38  startup.c:55  [cfi] | #0 0x0800021e  SP=0x2000ffb0  deep_l5  engine.c:78  [current] | DWT #1 0x2000009c 4 B w（数据访问时停止）","stageAddr":536871068},"cleared":{"items":0,"capacity":4}}
+  PASS  wp g_stage 写观察点已编程（0x2000009c，4 B，w）
+  PASS  CPU 写 g_stage 由 DWT 停住（PC=0x80000bc）
+  PASS  wpd all 清理后 DWT 槽位归零
+
+== 7. 压力：连续 60 次「停 — 走 — 停」+ 比较器泄漏 ==
+   60 轮：停下来的函数集合 = engine_branchy · 行号集合 = 177
+  PASS  连续 60 轮都停下来了（实际 60，漏 0）
+  PASS  60 轮都由 engine_branchy 的 FPB 断点触发
+  PASS  过程中比较器占用始终等于"用户断点个数"（没有临时断点残留）
+  PASS  压完清空断点，硬件比较器回到 0（峰值多占 0）
+
+== 8. 收尾 + 与 gdb 对照 ==
+  PASS  整轮没有一个页面未捕获错误
+
+   ⚠ 本轮撞上 8 次探针 FAULT，已自动重试（页面在下一次访问前会 _targetInit 修口子）：
+     {"memRead":8}
+   自愈记录：0 次（目标全程没被意外复位）
+   （没有 tmp/gdb-oracle-f103.json，跳过 gdb 对照 —— 先跑 node tmp/dbg-gdb-oracle.mjs）
+   测量结果已写入 tmp/dbg-stress-page-f103.json
+
+== 汇总：82 通过 / 0 失败 ==
+pwsh -NoProfile -Command "Write-Host 'full flow (f103ze) done'"
+full flow (f103ze) done
+make-exit=0

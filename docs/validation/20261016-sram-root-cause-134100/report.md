@@ -173,16 +173,28 @@ CMSIS-DAP 的 `DAP_WriteABORT` 请求是 `[0x08, DAP索引, abort(4B LE)]`；修
 | `campaign-03` | 线上 | 60 MHz | **60 MHz** | 2.90 MB/s | ✅ 10/10 |
 | `campaign-45mhz`（`--clock=45000000`） | 线上 | 45 MHz | 45 MHz | **2.46 MB/s** | ✅ 10/10（校验 2.0 线） |
 | `campaign-04-local` | **本地** | 60 MHz | **60 MHz** | 2.90 MB/s | ✅ 10/10 |
+| **`full_flow_f103ze`**（第一次） | 本地 | 60 MHz | 45 + 60 MHz | 2.46 + 2.90 MB/s | ❌ 卡在「存盘字节数」97.98%（见下） |
+| **`full_flow_f103ze`**（修正后） | 本地 | 60 MHz | 45 + 45 MHz | 2.46 + 2.46 MB/s | ✅ **整条流程通过**（campaign 20/20 + dbg-stress 82/82） |
 
 ⇒ 新判据在两条分支上都有真机数据：60 MHz 档 2.90 MB/s（≥2.5）、45 MHz 档 2.46 MB/s（≥2.0）。
-同时回答"是不是一次都到不了 60"：**不是** —— 最近 4 次正式运行里 2 次落在 60 MHz（含本节两次
-2.90 MB/s），2 次被探针按设计降到 45 MHz。
+同时回答"是不是一次都到不了 60"：**不是** —— 最近 5 次正式运行里 2 次落在 60 MHz（两次都 2.90 MB/s），
+其余按探针设计降到 45 MHz。
+
+### 顺带修正的测量口径：存盘窗口起点
+
+第一次 `full_flow_f103ze` 已经过了新档位判据（45 MHz / 2.46 MB/s ✅、60 MHz / 2.90 MB/s ✅），
+却卡在「存盘字节数 = 同窗口收到的字节（误差 <2%）」：文件 30785536 vs 收到 31420416 = **97.98%**
+（阈值 98%）。查过测量口径后发现是**脚本自身的系统性偏置**：`r0`（页面 RX 基准）在点「记录」
+**之前**就采了，于是"点击 → 记录器真的 active"这 0.2~0.4 s（@2.9 MB/s ≈ 0.6 MB）被算进"同窗口收到"，
+但那段根本没进文件。改成**记录器 active 之后再采 r0**，并把记录器自己的 `pushed` 一起记进日志/结果
+（便于区分"写盘丢"与"窗口没对齐"）；修正后两轮文件都略大于 RX 窗口（记录了停止点击前的残余），
+20/20 判据通过。这条不是产品缺陷，是测试口径。
 
 ## 七、证据清单
 
 `abort-hardware-02.json` · `bundle-fault-check.json` · `restore-app.json` · `production-ui.json` ·
 `sram-96mhz.json` · `sram-96mhz-60mhz.png` · `campaign-02.txt` · `campaign-03.log` ·
-`campaign-45mhz.log` · `campaign-04-local.log` · `bridge-clock-sweep.json` ·
+`campaign-45mhz.log` · `campaign-04-local.log` · `full-flow-01.txt` · `full-flow-02.txt` · `bridge-clock-sweep.json` ·
 `bundle-check.json` · `browser-matrix.json` · `web-clock-matrix.json` · `native-clock-matrix.json` ·
 `native-direct.json` · `atomic-ramp.json` · `clock-sequence.json` · `resync-matrix.json` ·
 `transport-matrix.json` · `packet-matrix.json` · 各 `job-*.log` 与源码/测试日志。
