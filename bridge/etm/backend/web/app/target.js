@@ -253,9 +253,38 @@ export class EtmTarget {
     },async()=>{await this.clearEntryBreak();await this.write(0xe000edfc,demcr);},e=>this.log('复位后的清理失败（保留首次错误）：'+e.message));
   }
   async verifyElf(info){
-    await this.halt();let checked=0;
-    for(const segment of info.segments){const expected=Uint8Array.from(atob(segment.data),c=>c.charCodeAt(0));for(let i=0;i<expected.length;i+=512){const length=Math.min(512,expected.length-i);let actual;try{actual=await this.probe.readMemDiagnostic((segment.address+i)>>>0,length);}catch(e){throw this.accessError(e,'校验 Flash',segment.address+i);}for(let j=0;j<length;j++)if(actual[j]!==expected[i+j])throw Error(`目标机器码与 ELF 不匹配：${hex(segment.address+i+j)}`);checked+=length;}}
-    this.log(`ELF 校验通过：${checked} 字节目标 Flash 一致`);return checked;
+    await this.halt();
+    let checked=0;
+    for(const segment of info.segments){
+      const expected=Uint8Array.from(atob(segment.data),c=>c.charCodeAt(0));
+      for(let i=0;i<expected.length;i+=512){
+        const length=Math.min(512,expected.length-i);
+        // 🚨 2026-10 真机定因：SWD 链路偶发单字节读错（用户现场：线刚接回就报 0x08000298，
+        //    而三份候选 ELF 在该地址的字节完全相同——说明是**读错**，不是 ELF 选错）。
+        //    原实现"首个不一致即抛"会把偶发读错报成"你的 ELF 不对"。
+        //    这里改成**整块重读最多 4 次**：只有持续不一致才判定不匹配，并给出两边字节。
+        let lastBad=-1, lastValue=null, done=false, lastError=null;
+        for(let attempt=0;attempt<4&&!done;attempt++){
+          let actual;
+          try{ actual=await this.probe.readMemDiagnostic((segment.address+i)>>>0,length); }
+          catch(e){ lastError=e; if(attempt<3){ await new Promise(r=>setTimeout(r,20)); continue; } throw this.accessError(e,'校验 Flash',segment.address+i); }
+          lastError=null;
+          lastBad=-1;
+          for(let j=0;j<length;j++){ if(actual[j]!==expected[i+j]){ lastBad=j; lastValue=actual[j]; break; } }
+          if(lastBad<0) done=true;
+          else if(attempt<3) await new Promise(r=>setTimeout(r,20));
+        }
+        if(!done){
+          const at=(segment.address+i+lastBad)>>>0;
+          const want=expected[i+lastBad].toString(16).padStart(2,'0');
+          const got=(lastValue??0).toString(16).padStart(2,'0');
+          throw Error(`目标机器码与 ELF 不匹配：${hex(at)}（重读 4 次仍不一致：ELF ${want} ≠ 目标 ${got}）`);
+        }
+        checked+=length;
+      }
+    }
+    this.log(`ELF 校验通过：${checked} 字节目标 Flash 一致`);
+    return checked;
   }
   async configure({traceid=2,branchBroadcast=false,returnStack=false,cycleCount=false,pinSpeed=3}={}){
     await this.inspect();if(!this.info.traceSupported)throw Error(this.info.traceStatus);
