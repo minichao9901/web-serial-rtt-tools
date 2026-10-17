@@ -29,6 +29,18 @@ rem ============================================================================
 setlocal
 cd /d "%~dp0"
 
+rem ---- 0) 本 bat 需要兄弟仓库 web-etm-trace（它才是 ETM 后端）----
+rem     只有工具箱仓库的用户请改用包自带的 start-etm-bridge.bat（便携桥）
+if not exist "..\web-etm-trace\server.py" (
+  echo.
+  echo   [x] 找不到 ..\web-etm-trace 目录 —— 本 bat 需要和 ETM 仓库并排放。
+  echo       如果你只 clone 了工具箱，请改用便携桥：
+  echo         bridge\etm\downloads\etm-bridge-win64.zip ^-^> 解压 ^-^> 双击 start-etm-bridge.bat
+  echo.
+  pause
+  exit /b 1
+)
+
 set "PORT=%~1"
 if "%PORT%"=="" set "PORT=8878"
 set "URL=http://127.0.0.1:%PORT%/#tab-etm"
