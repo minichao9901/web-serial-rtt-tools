@@ -41,6 +41,23 @@
 
 ETM使用 [完整便携桥包与说明](docs/etm-integration.md)：在“工程生成 → ETM 桥”下载完整 Windows 64 位包，解压后双击 `start-etm-bridge.bat`，打开 `http://127.0.0.1:8878/#etm`。包已包含运行环境与解码器，只需另行准备 KingstVIS；无需配置两个工程目录。
 
+第一次用 ETM 的五个坑（都是真机踩过的，按顺序看）：
+
+- **ETM 页在 `/etm/`，不是首页**：`http://127.0.0.1:8878/` 是工具箱首页，执行轨迹页在
+  `http://127.0.0.1:8878/etm/`（或首页「更多功能 → ETM 执行轨迹」）。
+- **HSE 必须对**：时钟页的 HSE 是"实际频率"的换算依据。填错/没填时采集会在第一步停下，
+  报「实测 CPU … / TRACECLK …；预期 …」，照里面的数字改 HSE 或预期值即可
+  （H743 / H7B0 常见 **25 MHz**，F103 多为 **8 MHz**；已内置这三种板子的默认值，换板子记得改）。
+- **浏览器占着探针时，OpenOCD / pyOCD 烧不进去**（典型报错 `CMSIS-DAP command CMD_INFO failed`）：
+  先在 ETM 页点「断开」，烧完再连回来。
+- **WebUSB 授权按「来源 + 端口」记**：换端口（如 8878 → 8880）要重新点一次设备选择框；
+  固定用 8878 就只需授权一次。重启浏览器不清授权，换浏览器 profile 才清。
+- **包内自带示例 ELF**，没有自己的固件也能先跑通流程：
+  `runtime/backend/firmware/stm32h743_cdc_trace/fw.elf`（阿波罗 H743）、
+  `runtime/backend/firmware/stm32h7b0_spi_trace/stable-70-35-v1/fw.elf`、
+  `runtime/backend/firmware/stm32f103_cdc_trace/fw-ze.elf`。
+
+
 打开 [SWO 执行轨迹](https://minichao9901.github.io/web-serial-rtt-tools/#swo)，录制一段目标的 DWT PC 采样数据，停止后用匹配的 ELF 和源码分析。也可直接载入 [F103CB 实测示例](samples/swo/README.md)，无需连接硬件。
 
 - **配置与计算。** 识别内核及已适配芯片的 CPU / Trace 时钟，选择 PC 间隔（含 64 / 128 周期）、时间戳、异常与 ITM 事件。独立计算器展示 PC/s、带宽预算、SWO 波特率和探针接收分频；支持自动匹配及手动输入最高 30 Mbaud 的请求值，以双端实际回读为准。

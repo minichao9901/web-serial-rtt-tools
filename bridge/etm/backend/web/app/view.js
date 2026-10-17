@@ -8,7 +8,7 @@ import {traceSettings,traceSettingsText} from './trace-options.js';
 import {HistoryView} from './history.js';
 import {COMMON_TARGETS,completeClocks,targetPort} from './clock.js';
 const $=id=>document.getElementById(id),hex=n=>'0x'+(n>>>0).toString(16).padStart(8,'0'),sleep=ms=>new Promise(r=>setTimeout(r,ms));
-const state={records:[],current:null,job:null,operation:false,elfInfo:null,elfId:null,elfFile:null,sourceFiles:{},sourceSnapshot:null,sourceCompat:false,sources:new SourceStore(),entryAddress:null,hseValues:{stm32h7b0:25},symbolAddress:null,pendingBreakpointRestore:[],lastTraceConfig:null,waiting:false,traceConfigDirty:false};
+const state={records:[],current:null,job:null,operation:false,elfInfo:null,elfId:null,elfFile:null,sourceFiles:{},sourceSnapshot:null,sourceCompat:false,sources:new SourceStore(),entryAddress:null,hseValues:{stm32h7b0:25,stm32h743:25,stm32f103ze:8},symbolAddress:null,pendingBreakpointRestore:[],lastTraceConfig:null,waiting:false,traceConfigDirty:false};
 const host=embeddedHost(),target=new EtmTarget(log,{host});
 const apiBase=document.body.dataset.apiBase||'/api/';
 async function api(path,body){return requestJson(apiBase+path,body===undefined?{}:{method:'POST',...(body instanceof FormData?{body}:{headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})},{timeout:path.endsWith('/overview')?300000:45000});}
@@ -203,7 +203,15 @@ on('start',async()=>{const sync=$('sync').checked,tokens=$('channels').value.spl
     if($('entry-before').checked){captureEntry=selectedEntry;await showTarget($('reset-before').checked?await target.reset({address:captureEntry}):await target.runTo(captureEntry));}
     else await target.halt();
     stage='核对实际时钟';log('采集步骤：'+stage);const before=await target.inspect(),c=before.clocks;
-    if(!c?.coreHz||!c?.physicalTraceHz||Math.abs(c.coreHz-Number($('expected-cpu').value)*1e6)>100||Math.abs(c.physicalTraceHz-Number($('expected-trace').value)*1e6)>100)throw Error('实际 CPU/TRACECLK 未确定或与预期不一致；目标保持暂停，请在时钟页核对');
+    if(!c?.coreHz||!c?.physicalTraceHz||Math.abs(c.coreHz-Number($('expected-cpu').value)*1e6)>100||Math.abs(c.physicalTraceHz-Number($('expected-trace').value)*1e6)>100){
+      const fmt=(hz)=>hz?(hz/1e6).toFixed(3)+' MHz':'未知';
+      const detail='实测 CPU '+fmt(c?.coreHz)+' / TRACECLK '+fmt(c?.physicalTraceHz)+
+        '；预期 '+($('expected-cpu').value||'未填')+' / '+($('expected-trace').value||'未填')+' MHz';
+      const hint=!$('hse').value
+        ? '。最可能的原因：『2 时钟』页的 HSE 没填 —— 不填就算不出实际频率（本板 HSE 常见 25 MHz；F103 多为 8 MHz）'
+        : '。请在『2 时钟』页核对 HSE 与预期 CPU/TRACECLK';
+      throw Error(detail+hint+'；目标保持暂停');
+    }
     stage='配置 ETM / TPIU';log('采集步骤：'+stage);await showTarget(await target.configure(requestedOptions));config=target.config;
   }else config=externalDecodeConfig();
   stage='启动 LA 并采集';log('采集步骤：'+stage);const created=await api('capture',{rate:Number($('rate').value),seconds:Number($('duration').value)/1000,threshold:Number($('threshold').value),sync,decode:$('auto-decode').checked,clock:channels[0],data:channels.slice(1),fraction:Number($('fraction').value),glitchNs:Number($('glitch-ns').value),config,elfId:captureElfId,targetVerified:sync,targetSnapshot:sync?target.info:null,captureScope:sync?'business-unfiltered-window':'externally-configured-window',captureEntry,sourceSnapshot:captureSourceSnapshot});

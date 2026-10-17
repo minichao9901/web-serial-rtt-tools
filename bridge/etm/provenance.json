@@ -1,6 +1,6 @@
 {
   "sourceRepository": "web-etm-trace",
-  "sourceRevision": "66b758e7a63d16d41ea6da1768bacbe1104abcd0",
+  "sourceRevision": "d358d1dfb38c9af0181ff14466bab5c3fb860e34",
   "sourceHashes": {
     "server.py": "d398322b97f585fb5df4f4deec5e87380112b272676ad23fbd857741bf3ddc35",
     "requirements.txt": "b27aa32a35a280eeb7d5144a5fc51574c9a7f82b765017b660515066dac99af2",
@@ -30,7 +30,7 @@
     "web/app/target-f103.js": "2758e8cfa98749d1b9e5abc8fa467bfcd40f14c9e32d4c61dac2500497cdb82e",
     "web/app/target.js": "f66a813cd3f892741a96ca371bc2b357fc37613592e687bd842e49f8bdeb59ef",
     "web/app/trace-options.js": "f2ab252a6fcbba585c65f433e483b1b0d54dd4fe79358eb190149e5c99fea27c",
-    "web/app/view.js": "62714654bc9ac019a763595af2f21c085f62348bb774afae9fe9267404ad7b05",
+    "web/app/view.js": "2252d36dc3386aa78a4ca2c868a46e058ef59206e42bf237282b1993b428df96",
     "web/app/zoom-controls.js": "3a6028535017b11c778537d966a53c5134988497da97abc24a368cae8d378167",
     "web/app/shared/core/bin.js": "0a236f6fb5165ef3effec574c0d0c2486ca15200c6587740b0caa4d3158c4ae5",
     "web/app/shared/core/pace.js": "ac27d5db130cc32033221c5b96c1f2fa5c108450a8ddbc706a174dc6c2ab1b8e",
@@ -53,7 +53,7 @@
   "packagedHashes": {
     "requirements.txt": "b27aa32a35a280eeb7d5144a5fc51574c9a7f82b765017b660515066dac99af2",
     "server.py": "47b0b6921d5d00281af026bfc9cbef85357eaf7e71b5a3b5cba07d592d99ce01",
-    "build-native/etm_decode.exe": "a3961b14ea7eaa6762ba9247831b2f25a29b6c914a57d6cbb66682d28af7a863",
+    "build-native/etm_decode.exe": "0de502031be5f697cbf91a2406d7c4e1a8d8f473bb818fc12d903332e7dad0fa",
     "demo/decoded.json.gz": "0969b9b9e4f342a82dd61ce144e7d741ef67486c5ac56d718733b50061bd5301",
     "demo/sample.etmrecord": "75ab2c319c7e97268cd5f54e3feaee25310658323853761adb34cbbf75ff6b48",
     "native/decoder.cpp": "d80011b8b32cf6b1e383fc37c6130c176a8772f1665aee5382aeb13a42189c84",
@@ -82,7 +82,7 @@
     "web/app/target-f103.js": "2758e8cfa98749d1b9e5abc8fa467bfcd40f14c9e32d4c61dac2500497cdb82e",
     "web/app/target.js": "f66a813cd3f892741a96ca371bc2b357fc37613592e687bd842e49f8bdeb59ef",
     "web/app/trace-options.js": "f2ab252a6fcbba585c65f433e483b1b0d54dd4fe79358eb190149e5c99fea27c",
-    "web/app/view.js": "62714654bc9ac019a763595af2f21c085f62348bb774afae9fe9267404ad7b05",
+    "web/app/view.js": "2252d36dc3386aa78a4ca2c868a46e058ef59206e42bf237282b1993b428df96",
     "web/app/zoom-controls.js": "3a6028535017b11c778537d966a53c5134988497da97abc24a368cae8d378167",
     "web/app/shared/core/bin.js": "0a236f6fb5165ef3effec574c0d0c2486ca15200c6587740b0caa4d3158c4ae5",
     "web/app/shared/core/pace.js": "ac27d5db130cc32033221c5b96c1f2fa5c108450a8ddbc706a174dc6c2ab1b8e",
