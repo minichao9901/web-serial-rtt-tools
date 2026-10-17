@@ -30,6 +30,12 @@ function mergeSegs(segs){
       merged.fill(0xff, end - last.addr, end - last.addr + gap);
       merged.set(s.data, end - last.addr + gap);
       last.data = merged;
+      // 🚨 空洞被填成 0xFF 了：语义上没错（未编程=0xFF），但**必须记下来**，
+      //    否则这份"填平"的数据既写又校验，一路静默通过，而镜像其实缺了字节。
+      if (gap > 0){
+        out.gaps ||= [];
+        out.gaps.push({ addr: end, length: gap });
+      }
     } else {
       out.push({ addr: s.addr, data: s.data });
     }
@@ -164,6 +170,22 @@ export function parseIntelHex(text){
   }
   if (!segs.length) throw new Error('HEX 里没有数据记录');
   return mergeSegs(segs);
+}
+
+/**
+ * 找出相邻区段之间的"空洞"（没有任何数据记录覆盖的地址区间）。
+ * 只报**内部**空洞：首段之前 / 末段之后不算（那是镜像范围之外）。
+ * 用途见 view.js：objcopy 的 ihex 输出会省掉整段 0x00，烧这种 hex 会漏字节。
+ */
+export function findGaps(regions){
+  if (Array.isArray(regions?.gaps)) return regions.gaps;   // mergeSegs 已经记下来的（准确）
+  const out = [];
+  const sorted = [...regions].sort((a, b) => a.addr - b.addr);
+  for (let i = 1; i < sorted.length; i++){
+    const prevEnd = sorted[i - 1].addr + sorted[i - 1].data.length;
+    if (sorted[i].addr > prevEnd) out.push({ addr: prevEnd, length: sorted[i].addr - prevEnd });
+  }
+  return out;
 }
 
 /** 按扩展名解析；bin 用调用方给的基地址 */

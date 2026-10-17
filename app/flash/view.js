@@ -34,7 +34,7 @@ import { resolveHpmTarget, assertHpmIdentity } from '../targets/hpm/porting.js';
 import { selectedHpmBoard, rememberHpmBoard } from '../targets/hpm/select.js';
 import { AkaLinkHid } from '../hid/probe.js';
 import { FlashRunner } from './runner.js';
-import { parseFirmware } from './image.js';
+import { parseFirmware, findGaps } from './image.js';
 import { bytes as fBytes } from '../core/format.js';
 import { waitMs } from '../core/pace.js';
 import { pickCfgs } from '../ui/cfgpicker.js';
@@ -483,6 +483,28 @@ export class FlashView {
     const raw = Uint8Array.from(atob(this.file.dataB64), c => c.charCodeAt(0));
     const base = Number($('f-base').value) || 0;
     const regions = parseFirmware(name, raw, base);
+    /**
+     * 🚨 2026-10 真机现场：objcopy 2.36 的 `-O ihex` 会**省掉整段 0x00**，
+     *    于是 hex 里出现"空洞"。烧录器按"hex 里有的区段"擦/写/**校验**，
+     *    空洞既不在写清单也不在校验清单 → 写也跳过、校验也跳过、静默通过；
+     *    那些字节保持擦除态 0xFF，之后用到这份镜像的工具（例如 ETM 页逐字节比对 ELF）
+     *    才报「目标机器码与 ELF 不匹配」。本次实测：0x08000298..0x0800029F 少 8 字节。
+     *    ⇒ 有空洞就明确告警并默认拦下来，让用户改用 .elf / .bin。
+     */
+    if (/\.(hex|ihex)$/i.test(String(name || ''))){
+      const gaps = findGaps(regions);
+      if (gaps.length){
+        const desc = gaps.slice(0, 4).map(g => `0x${g.addr.toString(16)} 起 ${g.length} B`).join('、') +
+          (gaps.length > 4 ? ` 等 ${gaps.length} 处` : '');
+        this._log(`⚠ 这个 hex 有 ${gaps.length} 处空洞：${desc} —— 烧上去那些字节会保持擦除态 0xFF，` +
+          `而且回读校验查不出来（校验只比 hex 里有的区段）`);
+        if (!confirm(`这个 hex 有 ${gaps.length} 处空洞：\n${desc}\n\n` +
+          `这通常是 hex 生成工具省掉了整段 0x00（objcopy 的 ihex 输出会这样）。\n` +
+          `继续烧会让这些地址保持 0xFF，回读校验发现不了。\n\n建议改用 .elf 或 .bin。仍然继续？`)){
+          throw new Error(`已取消：这个 hex 有 ${gaps.length} 处空洞（${desc}），建议改用 .elf 或 .bin 烧录`);
+        }
+      }
+    }
     const total = regions.reduce((s, r) => s + r.data.length, 0);
 
     // 探针：复用已授权的（不弹框），没有才弹浏览器选择框。
