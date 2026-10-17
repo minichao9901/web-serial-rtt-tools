@@ -119,6 +119,45 @@ export function parseElfImage(u8){
       segs.push({ addr: lmaOf(addr, size), data: u8.slice(off, off + size) });
     }
   }
+  /**
+   * 🚨 **用 PT_LOAD 的文件字节把"节间空隙"补上**（2026-10 真机定因）。
+   *
+   * 节与节之间可能有**对齐空隙**（本例 `.isr_vector` 结束于 0x08000298，
+   * `.text` 从 0x080002A0 开始，中间 8 字节不属于任何节）。按节取数据时这些字节缺失，
+   * 后续 `mergeSegs` 会把它们填成 0xFF 并写进 flash —— 但 ELF 的 PT_LOAD 段里
+   * 它们是真实的 0x00（链接器填的）。
+   *
+   * 后果（H743 实测）：板子上是 0xFF、ELF 期望 0x00，逐字节比对（ETM 页 verifyElf）
+   * 报「目标机器码与 ELF 不匹配：0x08000298（ELF 00 ≠ 目标 ff）」；而烧录器自己的
+   * 回读校验比的就是它填的 0xFF，所以显示"校验 OK"。OpenOCD 按段写所以没事。
+   *
+   * 修法：对每个 PT_LOAD，把它范围内"没有被任何节覆盖"的区间用**段文件字节**补成独立区段。
+   */
+  if (segs.length && loads.length){
+    const byAddr = [...segs].sort((a, b) => a.addr - b.addr);
+    const extra = [];
+    for (const L of loads){
+      const segStart = (L.paddr || L.vaddr) >>> 0;
+      const segEnd = segStart + L.filesz;
+      let cursor = segStart;
+      for (const sg of byAddr){
+        const sgEnd = sg.addr + sg.data.length;
+        if (sgEnd <= segStart || sg.addr >= segEnd) continue;
+        const lo = Math.max(sg.addr, segStart);
+        if (lo > cursor){
+          const off = L.off + (cursor - segStart);
+          extra.push({ addr: cursor, data: u8.slice(off, off + (lo - cursor)) });
+        }
+        cursor = Math.max(cursor, Math.min(sgEnd, segEnd));
+      }
+      if (cursor < segEnd){
+        const off = L.off + (cursor - segStart);
+        extra.push({ addr: cursor, data: u8.slice(off, off + (segEnd - cursor)) });
+      }
+    }
+    for (const seg of extra) segs.push(seg);
+  }
+
   // 没有节表（被 strip 过的裸 ELF）就退回按段来 —— 至少比报错强
   if (!segs.length){
     for (const L of loads) segs.push({ addr: (L.paddr || L.vaddr) >>> 0, data: u8.slice(L.off, L.off + L.filesz) });
