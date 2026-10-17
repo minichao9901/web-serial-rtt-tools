@@ -1,9 +1,9 @@
-/** STM32 SWO ports: board oscillator values are inputs, never inferred from CPUID. */
+/** STM32 trace ports: board oscillator values are inputs, never inferred from CPUID. */
 export const COMMON_TARGETS=[
   {id:'stm32f103ze',name:'STM32F103ZE / 高容量 F103（PE2～PE6）',core:'Cortex-M3',part:0xc23,devices:[0x414],flashLimit:0x08080000,traceValidated:true,etmVersion:'ETMv3.4',maxCoreHz:72e6,rcc:0x40021000,clockRegisters:{cr:0,cfgr:4},traceRelation:'Trace 输入 = HCLK；4 位 DDR 的 TRACECLK = HCLK / 2',traceDiv:1},
   {id:'stm32f1',name:'STM32F103（标准/超大容量，Trace 待验收）',core:'Cortex-M3',part:0xc23,devices:[0x410,0x430],flashLimit:0x08100000,traceValidated:false,etmVersion:'ETMv3（须核对具体型号/封装）',maxCoreHz:72e6,rcc:0x40021000,clockRegisters:{cr:0,cfgr:4},traceRelation:'HCLK = CPU',traceDiv:1},
   {id:'stm32f4',name:'STM32F407 / F405',core:'Cortex-M4',part:0xc24,devices:[0x413],flashLimit:0x08100000,traceValidated:false,etmVersion:'ETMv3.5',maxCoreHz:168e6,rcc:0x40023800,clockRegisters:{cr:0,pll:4,cfgr:8},traceRelation:'HCLK = CPU',traceDiv:1},
-  {id:'stm32h743',name:'STM32H743 / H742 / H750 / H753',core:'Cortex-M7',part:0xc27,devices:[0x450],flashLimit:0x08200000,traceValidated:false,etmVersion:'ETMv4',maxCoreHz:480e6,rcc:0x58024400,clockRegisters:{cr:0,cfgr:0x10,domain:0x18,pllSource:0x28,pllConfig:0x2c,pllDiv:0x30,pllFrac:0x34},traceRelation:'SWO 输入：HSI / CSI / HSE / PLL1_R，由 RCC SW 选择；独立于 CPU / HCLK 分频',traceDiv:null},
+  {id:'stm32h743',name:'STM32H743 / H742 / H750 / H753',core:'Cortex-M7',part:0xc27,devices:[0x450],flashLimit:0x08200000,traceImplemented:true,traceValidated:false,etmVersion:'ETMv4',maxCoreHz:480e6,rcc:0x58024400,clockRegisters:{cr:0,cfgr:0x10,domain:0x18,pllSource:0x28,pllConfig:0x2c,pllDiv:0x30,pllFrac:0x34},traceRelation:'并行 trace 输入 TRACEPORTCK：HSI / CSI / HSE / PLL1_R；物理 TRACECLK = 输入 / 2；CPU / HCLK 独立分频',traceDiv:null},
   {id:'stm32h7b0',name:'STM32H7B0 / H7A3 / H7B3',core:'Cortex-M7',part:0xc27,devices:[0x480],flashLimit:0x08200000,traceValidated:true,etmVersion:'ETMv4',maxCoreHz:280e6,rcc:0x58024400,clockRegisters:{cr:0,cfgr:0x10,domain:0x18,pllSource:0x28,pllConfig:0x2c,pllDiv:0x30,pllFrac:0x34},traceRelation:'并行 trace 的输入 TRACEPORTCK：HSI / CSI / HSE / PLL1_R；CPU 另经 CDCPRE 分频',traceDiv:null}
 ];
 export const targetPort=id=>COMMON_TARGETS.find(p=>p.id===id);

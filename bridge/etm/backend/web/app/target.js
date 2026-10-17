@@ -20,7 +20,7 @@ export class EtmTarget {
     if(!this.Probe.supported())throw Error('请用支持 WebUSB 的桌面 Chrome / Edge 打开页面');
     let device=devices.length===1?devices[0]:null;
     if(!device){let timer;try{device=await Promise.race([navigator.usb.requestDevice({filters:[{vendorId:0x0d28}]}),new Promise((_,reject)=>{timer=setTimeout(()=>reject(Error('浏览器仍在等待 USB 设备选择；请选中探针后重新连接')),30000);})]);}finally{clearTimeout(timer);}}
-    this.probe=await this.Probe.open(device,{clockKhz:1000,skipClearHalt:true});
+    this.probe=await this.Probe.open(device,{clockKhz:1000});
     this.debugFault=false;this.probe.onLog=this.log;
     try{return await this.inspect();}catch(e){try{await this.disconnect();}catch(cleanup){this.log('连接失败后的清理错误（保留首次错误）：'+cleanup.message);}throw e;}
   }
@@ -98,7 +98,7 @@ export class EtmTarget {
     const device=await this.read(part===0xc27?0x5c001000:0xe0042000);
     const port=identifyTarget(cpuid,device,this.profile);
     if(!port)throw Error(`未预置此芯片：CPUID ${hex(cpuid)} / DEV_ID ${hex(device&4095)}`);
-    const traceSupported=port.traceValidated;
+    const traceSupported=!!(port.traceValidated||port.traceImplemented);
     const config={};let width=null;
     if(traceSupported&&port.id==='stm32f103ze'){
       this.traceFamily='f103';const f=await inspectF103(this);Object.assign(config,f.config);width=f.width;
@@ -120,7 +120,7 @@ export class EtmTarget {
     }catch(e){clockError=e.message;}
     this.breakpoints.capacity=decodeFpCtrl(await this.read(0xe0002000)).numCode;
     this.info={cpuid,device,profile:port.id,name:port.name,core:port.core,etmVersion:port.etmVersion,traceSupported,
-      traceStatus:traceSupported?port.id==='stm32f103ze'?'F103ZE 48/24 MHz Kingst 联动与 ETMv3 解码已验收；封装须有 PE2～PE6':'H7B0 70/35 MHz 已验收；同组其他型号仍需实测':'型号/时钟/断点可用；本型号 trace 配置与解码尚未验收',
+      traceStatus:traceSupported?port.id==='stm32f103ze'?'F103ZE 48/24 MHz Kingst 联动与 ETMv3 解码已验收；封装须有 PE2～PE6':port.id==='stm32h743'?'H743 ETMv4 实验适配：推荐 CPU 60 / TRACECLK 30 MHz；同组其他型号未验收':'H7B0 70/35 MHz 已验收；同组其他型号仍需实测':'型号/时钟/断点可用；本型号 trace 配置与解码尚未验收',
       flashLimit:port.id==='stm32h7b0'?0x08020000:port.flashLimit,traceOptions:traceCapabilities(port.id,config),
       config,halted:await this.isHalted(),rcc,clocks,clockError,hseHz:this.hseHz,width};return this.info;
   }
@@ -146,9 +146,50 @@ export class EtmTarget {
     if(await this.isHalted()){
       const pc=await this.pc();
       if(this.breakpoints.items.some(b=>b.lease&&b.address===pc)){this.breakpoints.hit(pc);this.log(`已命中硬件断点 ${hex(pc)}`);}
-      else throw Error('目标仍暂停，未命中本页断点，请检查其他断点或异常');
+      else if (await this.clearStaleComparator(pc)) {
+        // 🚨 2026-10 真机定因（H743 + 包路径，连续 3 次可复现）：
+        //    PC 正好停在入口、DFSR=0x3（断点命中）、DHCSR.S_HALT=1、同地址断点"未租用"。
+        //    也就是说 reset({address}) 为停在业务起点而临时装的入口比较器**没被摘掉**
+        //    （这颗探针的 PPB 写偶发丢失，文档里记过），于是放行瞬间又命中同一地址。
+        //    这里做一次防御性自愈：清掉该地址上无人认领的比较器，再放行一次。
+        this.log(`已在 ${hex(pc)} 上清掉残留比较器，重新放行`);
+        await this.probe.run();
+        if (await this.isHalted()) {
+          const pc2 = await this.pc();
+          if (this.breakpoints.items.some(b => b.lease && b.address === pc2)) { this.breakpoints.hit(pc2); this.log(`已命中硬件断点 ${hex(pc2)}`); }
+          else throw Error(`目标仍暂停：PC ${hex(pc2)}（已清掉 ${hex(pc)} 的残留比较器仍未跑起来）；请检查其他断点或异常`);
+        }
+      }
+      else {
+        // 诊断：把 PC / 停机原因 / 该地址是否有未租用的断点一并报出来，
+        // 否则只知道"未命中"，分不清是入口比较器没摘干净、还是有别的断点/异常在拦。
+        const dhcsr = await this.read(0xe000edf0), dfsr = await this.read(0xe000ed30), demcr = await this.read(0xe000edfc);
+        const hits = this.breakpoints.items.filter(b => b.enabled && b.address === pc)
+          .map(b => `${hex(b.address)}${b.lease ? '(已租用)' : '(未租用)'}`);
+        throw Error(`目标仍暂停，未命中本页断点：PC ${hex(pc)}，DFSR ${hex(dfsr)}，DHCSR ${hex(dhcsr)}，DEMCR ${hex(demcr)}` +
+          (hits.length ? `；同地址断点：${hits.join('、')}` : '；该地址没有本页断点') + '；请检查其他断点或异常');
+      }
     }
   }
+  /**
+   * 清掉某个地址上"无人认领"的 FPB 比较器（入口临时比较器残留时用）；返回是否清过。
+   * 比较器个数/编码都按 FP_CTRL 现场回读，rev1/rev2 通吃；地址比较忽略 match 位与使能位。
+   */
+  async clearStaleComparator(pc){
+    const caps = decodeFpCtrl(await this.read(0xe0002000));
+    const want = encodeComparator(pc & ~1, caps.rev) & 0x1ffffffc;
+    let cleared = false;
+    for (let i = 0; i < caps.numCode; i++){
+      const slot = compAddr(i), v = await this.read(slot);
+      if (!(v & 1) || ((v & 0x1ffffffc) !== want)) continue;
+      await this.write(slot, 0, false);
+      if ((await this.read(slot)) & 1) await this.write(slot, 0, false);   // 这颗探针 PPB 写偶发丢，补一次
+      this.log(`清掉残留比较器：槽 ${i} @ ${hex(pc)}`);
+      cleared = true;
+    }
+    return cleared;
+  }
+
   async pc(){await this.write(0xe000edf4,15,false);await this.wait(0xe000edf0,1<<16,1<<16);return (await this.read(0xe000edf8))&~1;}
   async unexpectedHalt(pc,address,label){
     const dhcsr=await this.read(0xe000edf0),dfsr=await this.read(0xe000ed30),demcr=await this.read(0xe000edfc);

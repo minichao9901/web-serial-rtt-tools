@@ -80,24 +80,34 @@ def mark_execution(events, predicates=None):
 def byte_accounting(result):
     size = result.get('status', {}).get('processed', 0)
     input_size=result.get('inputBytes',size)
-    intervals = sorted((p['offset'], p['offset'] + p['size']) for p in result['packets'])
-    end = covered = overlap = 0
-    for start, stop in intervals:
+    packets = result['packets']
+    # Native packets are monotonic. Legacy in-memory records may be unordered.
+    ordered = sorted(packets, key=lambda p: p['offset']) if isinstance(packets, list) else packets
+    end = covered = overlap = unknown = unsync_records = invalid_count = overflow_count = packet_count = 0
+    previous = -1
+    for packet in ordered:
+        start, stop = packet['offset'], packet['offset'] + packet['size']
+        if start < previous:
+            raise ValueError('包偏移倒序，拒绝伪造字节对账')
+        previous = start
         if start < end:
             overlap += max(0, min(end, stop) - start)
         covered += max(0, stop - max(start, end))
         end = max(end, stop)
-    types = Counter(p['text'].split(' : ')[0] for p in result['packets'])
-    not_sync = ('I_NOT_SYNC', 'NOTSYNC')
-    unknown = sum(p['size'] for p in result['packets'] if p['text'].startswith(not_sync))
-    unsync_records = sum(types[t] for t in not_sync)
-    invalid = [p for p in result['packets'] if any(s in p['text'].upper() for s in ('BAD_', 'RESERVED', 'OVERFLOW', 'INCOMPLETE_EOT'))]
+        text = packet.get('text', '')
+        packet_count += 1
+        if text.startswith(('I_NOT_SYNC', 'NOTSYNC')):
+            unknown += packet['size']
+            unsync_records += 1
+        if any(t in text.upper() for t in ('BAD_', 'RESERVED', 'OVERFLOW', 'INCOMPLETE_EOT')):
+            invalid_count += 1
+            overflow_count += 'OVERFLOW' in text.upper()
     unknown_execution = sum(e.get('executionState') == 'unknown' for e in result['events'])
     framing = result.get('framing', {})
     return dict(inputBytes=input_size,unprocessedBytes=max(0,input_size-size),processedBytes=size, accountedBytes=covered, overlapBytes=overlap,
                 unaccountedBytes=max(0, input_size-covered), unsynchronizedBytes=unknown,
-                unsynchronizedRecords=unsync_records, validPackets=len(result['packets'])-unsync_records-len(invalid),
-                packetIssues=len(invalid), overflowPackets=sum('OVERFLOW' in p['text'].upper() for p in invalid),
+                unsynchronizedRecords=unsync_records, validPackets=packet_count-unsync_records-invalid_count,
+                packetIssues=invalid_count, overflowPackets=overflow_count,
                 decoderLastError=result.get('status', {}).get('lastErrorCode', None),
                 unknownExecution=unknown_execution, initialPhysicalBytes=framing.get('initial_skipped_bytes'),
                 unknownSourceBytes=framing.get('unknown_bytes'), trailingFrameBytes=framing.get('trailing_frame_bytes'),
@@ -229,6 +239,7 @@ def enrich(result, image=None):
     result['analysis'] = analyze_calls(result['events'])
     result['summary']['executed'] = sum(e['kind']=='instruction' and e.get('executed') is True for e in result['events'])
     result['summary']['unknownExecution'] = result['quality']['unknownExecution']
+    result['summary']['packetIssues'] = result['quality']['packetIssues']
     result['summary']['functions'] = dict(Counter(e.get('function') or '(未知函数)' for e in result['events'] if e['kind']=='instruction' and e.get('executed') is True))
     result['version'] = 3
     return result

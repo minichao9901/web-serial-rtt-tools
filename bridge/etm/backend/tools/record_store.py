@@ -17,7 +17,7 @@ class RecordStore:
     def signature(self):
         p=self.folder/'decoded.json';s=p.stat()
         parts=[f'{VERSION}:{s.st_size}:{s.st_mtime_ns}']
-        for name in ('spi-validation.json','phase-validation.json','firmware.elf','capture.csv','capture.bin','etm.bin','session.json'):
+        for name in ('spi-validation.json','phase-validation.json','firmware.elf','capture.csv','capture.bin','etm.bin','session.json','events.jsonl','packets.jsonl','elements.jsonl','sources.json'):
             side=self.folder/name
             if side.exists():t=side.stat();parts.append(f'{name}:{t.st_size}:{t.st_mtime_ns}')
         return '|'.join(parts)
@@ -75,7 +75,7 @@ class RecordStore:
                 end_run()
                 q=r.get('quality',{})
                 packet_end=0
-                for p in sorted(r['packets'],key=lambda p:p['offset']):
+                for p in (sorted(r['packets'],key=lambda p:p['offset']) if isinstance(r['packets'],list) else r['packets']):
                     start,stop=p['offset'],p['offset']+p['size']
                     if start>packet_end:issues.append(dict(category='gap',startSeq=None,endSeq=None,records=0,offset=packet_end,bytes=start-packet_end,reason='ETM 包字节覆盖缺口；不能据此补造指令'))
                     if start<packet_end:issues.append(dict(category='overlap',startSeq=None,endSeq=None,records=0,offset=start,bytes=max(0,min(stop,packet_end)-start),reason='ETM 包字节覆盖重叠'))

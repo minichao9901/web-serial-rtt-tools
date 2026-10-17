@@ -17,7 +17,8 @@ def demux(raw):
     current = None
     streams = {}
     stats = dict(frames=0, fsyncs=0, hsyncs=0, errors=0, unknown_bytes=0,
-                 initial_skipped_bytes=skipped, id_changes=[], trailing_sync_bytes=0)
+                 initial_skipped_bytes=skipped, id_changes=[], trailing_sync_bytes=0,
+                 idle_resyncs=0, dropped_partial_frame_bytes=0, mid_frame_fsyncs=0)
 
     def emit(source, value):
         if source is None:
@@ -45,9 +46,10 @@ def demux(raw):
             position += 2
             continue
         if pair == b'\xff\xff':
-            stats['errors'] += 1
-            # A broken frame is not silently concatenated into a trusted stream.
-            raise ValueError(f'帧中出现非法 FSYNC/ID，字节偏移 {position}，已完成 {stats["frames"]} 帧。')
+            # Arm IHI0029D D4.2.2: full sync occurs BETWEEN frames.
+            # Only halfword sync may interrupt a frame (D4.2.3).
+            # Joining a partial frame across FSYNC can fabricate trace bytes.
+            raise ValueError(f'TPIU 帧内完整同步或非法源 ID 0x7f（物理偏移 {position}，帧内 {len(frame)} 字节）；拒绝拼接损坏帧')
         frame.extend(pair)
         position += 2
         if len(frame) != 16:

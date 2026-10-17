@@ -11,8 +11,8 @@ export async function requestJson(url,options={}, {timeout=45000,fetchImpl=globa
 }
 
 export async function pollJob(id,{read,onState=()=>{},onResume=null,onDone=()=>{},shouldResume=()=>true,
-  sleep=ms=>new Promise(r=>setTimeout(r,ms)),now=Date.now,interval=200,totalMs=900000,
-  stageMs={queued:45000,starting:45000,armed:90000,saving:360000,decoding:300000}}){
+  sleep=ms=>new Promise(r=>setTimeout(r,ms)),now=Date.now,interval=200,totalMs=1800000,
+  stageMs={queued:45000,starting:45000,armed:90000,saving:360000,decoding:900000}}){
   const started=now();let phase=null,phaseStarted=started,resumed=false;
   for(;;){
     const job=await read(id),time=now();

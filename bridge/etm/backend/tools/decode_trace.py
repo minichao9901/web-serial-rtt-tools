@@ -132,7 +132,7 @@ class Image:
         return ''
 
 
-def decode(id_stream, elf, workdir, config=None, sources=None):
+def decode(id_stream, elf, workdir, config=None, sources=None, max_events=2000000):
     workdir = Path(workdir)
     workdir.mkdir(parents=True, exist_ok=True)
     config = decoder_config(config)
@@ -186,8 +186,8 @@ def decode(id_stream, elf, workdir, config=None, sources=None):
                 events.append(event)
                 if executed:
                     counts[function or '(未知函数)'] += 1
-                if len(events) > 2000000:
-                    raise ValueError('记录超过初版 200 万条展开上限，请缩短采集窗；未输出截断结果。')
+                if max_events and len(events) > max_events:
+                    raise ValueError(f'已超过 --max-events={max_events}；为保护本机内存，请改用流式解码。')
         elif element['type'] in (1, 2, 3, 6, 7, 8, 9, 10):
             event = dict(kind='event', seq=len(events), type=element['type'],
                          offset=element['offset'], text=element['text'], payload=element['payload'],
@@ -214,22 +214,27 @@ def decode(id_stream, elf, workdir, config=None, sources=None):
     return enrich(result, image)
 
 
-def decode_capture(path, elf, workdir, config=None, sources=None, fraction=.25, clock=0, data=None):
+def decode_capture(path, elf, workdir, config=None, sources=None, fraction=.25, clock=0, data=None, glitch_ns=0):
     path, workdir = Path(path), Path(workdir)
     config = decoder_config(config)
     physical = None
     if path.suffix.lower() == '.csv':
-        physical, candidates = extract(path, clock, data or [1, 2, 3, 4], fraction)
+        physical, candidates = extract(path, clock, data or [1, 2, 3, 4], fraction, glitch_ns)
         valid = []
+        failures=[]
+        workdir.mkdir(parents=True,exist_ok=True)
+        (workdir/'physical.json').write_text(json.dumps(physical,ensure_ascii=False),encoding='utf8')
         for phase, raw in enumerate(candidates):
             try:
                 frames, streams = demux(raw)
                 if int(config['traceid']) in streams and frames['frames']:
                     valid.append((phase, frames, streams))
-            except ValueError:
+            except ValueError as error:
+                failures.append({'phase':phase,'error':str(error)})
                 continue
         if len(valid) != 1:
-            raise ValueError(f'不能唯一确定 TPIU 字节相位：{len(valid)} 个候选；请检查通道和取样位置。')
+            (workdir/'demux-errors.json').write_text(json.dumps(failures,ensure_ascii=False),encoding='utf8')
+            raise ValueError(f'不能唯一确定 TPIU 字节相位：{len(valid)} 个候选；请检查通道和取样位置。'+ (' '+failures[-1]['error'] if failures else ''))
         phase, frames, streams = valid[0]
         raw = candidates[phase]
         workdir.mkdir(parents=True, exist_ok=True)

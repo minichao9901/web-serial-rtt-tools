@@ -11,7 +11,7 @@ const $=id=>document.getElementById(id),hex=n=>'0x'+(n>>>0).toString(16).padStar
 const state={records:[],current:null,job:null,operation:false,elfInfo:null,elfId:null,elfFile:null,sourceFiles:{},sourceSnapshot:null,sourceCompat:false,sources:new SourceStore(),entryAddress:null,hseValues:{stm32h7b0:25},symbolAddress:null,pendingBreakpointRestore:[],lastTraceConfig:null,waiting:false,traceConfigDirty:false};
 const host=embeddedHost(),target=new EtmTarget(log,{host});
 const apiBase=document.body.dataset.apiBase||'/api/';
-async function api(path,body){return requestJson(apiBase+path,body===undefined?{}:{method:'POST',...(body instanceof FormData?{body}:{headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})});}
+async function api(path,body){return requestJson(apiBase+path,body===undefined?{}:{method:'POST',...(body instanceof FormData?{body}:{headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})},{timeout:path.endsWith('/overview')?300000:45000});}
 function log(message){$('log').textContent=new Date().toLocaleTimeString('zh-CN')+' '+message+'\n'+$('log').textContent;controls();}
 function error(e){log(e.message);$('job-state').textContent=e.message;$('job-state').classList.add('bad');}
 const history=new HistoryView(api,error);
@@ -28,7 +28,7 @@ function controls(){const busy=state.operation||!!state.job,connected=!!target.p
   for(const b of document.querySelectorAll('.symbol-row button,.breakpoint-row button,.breakpoint-row input,#break-candidates button'))b.disabled=busy;
   $('target-profile').disabled=busy||connected;$('show-experiments').disabled=busy;
   $('save-record').disabled=!state.current;$('decode').disabled=!state.current||busy;$('export').disabled=!state.current;
-  for(const id of ['rate','duration','threshold','fraction','channels','hse','expected-cpu','expected-trace','sync','reset-before','entry-before','pin-speed','traceid','branch-broadcast','return-stack','cycles','auto-clock'])$(id).disabled=busy;
+  for(const id of ['rate','duration','threshold','fraction','glitch-ns','channels','hse','expected-cpu','expected-trace','sync','reset-before','entry-before','pin-speed','traceid','branch-broadcast','return-stack','cycles','auto-clock'])$(id).disabled=busy;
   for(const [id,option]of [['branch-broadcast','branchBroadcast'],['return-stack','returnStack'],['cycles','cycleCount']])$(id).disabled=busy||target.info?.traceOptions?.[option]===false;
   if(target.info?.profile==='stm32f103ze')$('pin-speed').disabled=true;
   $('reset-before').disabled=busy||!$('entry-before').checked;
@@ -103,7 +103,7 @@ async function resumeBreakpoints(items){
 }
 async function withBreakpointsSuspended(fn){const items=target.breakpoints.items.filter(b=>b.lease);await target.halt();state.pendingBreakpointRestore=items;state.waiting=true;return withCleanup(async()=>{await target.breakpoints.suspend();renderBreakpoints();return await fn();},async()=>{state.waiting=false;await resumeBreakpoints(items);},e=>log('断点恢复失败（保留首次错误）：'+e.message));}
 async function showTarget(info){state.lastTraceConfig=info.traceSupported&&info.config?{...info.config}:null;$('target-state').textContent=info.name+' · '+(info.halted?'已暂停':'运行中')+' · DEV_ID '+hex(info.device&4095);$('config-values').textContent=JSON.stringify(info,null,2);
-  $('target-capability').textContent=info.etmVersion+(info.traceSupported?' · 已适配':' · Trace 待适配');$('target-capability').title=info.traceStatus;$('expected-cpu').max=String(targetPort(info.profile).maxCoreHz/1e6);
+  $('target-capability').textContent=info.etmVersion+(info.traceSupported?info.profile==='stm32h743'?' · 实验适配':' · 已适配':' · Trace 待适配');$('target-capability').title=info.traceStatus;$('expected-cpu').max=String(targetPort(info.profile).maxCoreHz/1e6);
   const f103=info.profile==='stm32f103ze';
   if(info.traceSupported&&!state.traceConfigDirty){
     $('traceid').value=info.config.traceid>=1&&info.config.traceid<=111?info.config.traceid:2;
@@ -127,8 +127,11 @@ function showClocks(info=target.info){const c=info?.clocks,mhz=n=>n===null||n===
 function clockPlan(){const cpu=Number($('expected-cpu').value),trace=Number($('expected-trace').value),rate=Number($('rate').value),hse=Number($('hse').value);
   if(!(cpu>0&&trace>0&&hse>0)){$('clock-plan').textContent=$('auto-clock').checked?'连接目标并填写板上 HSE 后，根据 RCC 自动计算频率。':'请填写有效的板级和预期频率';return;}
   if(target.info?.profile&&!target.info.profile.startsWith('stm32h7')){$('clock-plan').textContent=target.info.clocks?.path+'\nTrace 输入 = HCLK；TRACECLK = HCLK / 2（4 位 DDR）\n每半周期约 '+(rate/(2*trace*1e6)).toFixed(2)+' 个采样点\n固件负责 HSE/PLL/Flash/业务外设；Web 配置 Trace 引脚、ETM/TPIU 与采样。'+(target.info.traceSupported?'':'\n本型号 Trace 输出仍待适配。');return;}
-  const p=560/cpu,r=280/trace,samples=rate/(2*trace*1e6);
-  $('clock-plan').textContent='以本例 VCO 560 MHz、CDCPRE=1 为计算示例：\nP = '+p.toFixed(3)+'，R = '+r.toFixed(3)+'\nCPU / TRACECLK = '+(cpu/trace).toFixed(2)+'\n每半周期约 '+samples.toFixed(2)+' 个采样点\n'+(hse===25&&Number.isInteger(p)&&Number.isInteger(r)?'25 MHz HSE 的本例 M=5、N=112；仍需由固件验证合法分频、供电和总线约束。':'分频示例不是可直接应用的配置；HSE 改变时必须由固件重新规划 PLL。')+'\n零解码错误和频率比例都不能单独证明无损。';
+  const registers=target.info?.rcc,actual=target.info?.clocks;
+  const vco=registers&&actual?.coreHz?actual.coreHz*actual.coreDivider*(((registers.pllDiv>>>9)&127)+1)/1e6:null;
+  const samples=rate/(2*trace*1e6);
+  $('clock-plan').textContent=(vco?'当前 RCC 对应 VCO '+vco.toFixed(3)+' MHz：\nP = '+(vco/cpu).toFixed(3)+'，R = '+(vco/(2*trace)).toFixed(3):'连接目标并识别 RCC 后显示 PLL 分频')+'\nCPU / TRACECLK = '+(cpu/trace).toFixed(2)+'\n每半周期约 '+samples.toFixed(2)+' 个采样点\n固件负责 HSE/PLL、供电、Flash 和业务外设；Web 不改变 CPU/Trace 输入频率。\n零解码错误和频率比例都不能单独证明无损。';
+
 }
 $('hse').onchange=()=>{const value=Number($('hse').value),profile=target.info?.profile||$('target-profile').value;target.hseHz=value>0?value*1e6:null;state.hseValues[profile]=value>0?value:null;
   if(target.info){try{target.info.clocks=completeClocks(targetPort(target.info.profile),target.info.rcc,target.hseHz);target.info.clockError=null;}catch(e){target.info.clocks=null;target.info.clockError=e.message;}}showClocks();};
@@ -182,11 +185,12 @@ on('apply-config',async()=>{entry(true);const info=await target.configure(option
 on('check-la',async()=>{const s=await api('status');$('la-state').textContent='Kingst 已连接';$('la-state').className='status good';const old=$('rate').value;$('rate').replaceChildren(...s.rates.filter(n=>n>=50000000).map(n=>new Option(n/1e6+' MSa/s',n)));$('rate').value=s.rates.includes(Number(old))?old:String(s.rates[0]);clockPlan();});
 on('open-record',()=>loadRecord($('records').value));
 on('start',async()=>{const sync=$('sync').checked,tokens=$('channels').value.split(','),channels=tokens.map(s=>Number(s.trim()));if(tokens.some(t=>!t.trim())||channels.length!==5||new Set(channels).size!==5||channels.some(c=>!Number.isInteger(c)||c<0||c>15))throw Error('需要五个不同且不为空的 CH0～15 通道');
+  const glitchNs=Number($('glitch-ns').value);if(!Number.isFinite(glitchNs)||glitchNs<0||glitchNs>100)throw Error('软件滤波须为 0～100 ns，0 表示关闭；尚未操作目标');
   const rate=Number($('rate').value),seconds=Number($('duration').value)/1000,threshold=Number($('threshold').value),fraction=Number($('fraction').value),requested=options();
   if(!Number.isInteger(rate)||!(rate>0&&rate<=500000000&&seconds>0&&seconds<=2&&rate*seconds<=100000000))throw Error('采集参数无效：时间上限 2 秒、深度上限 1 亿样本；尚未操作目标');
   if(!Number.isFinite(threshold)||threshold< -4||threshold>4||!(fraction>0&&fraction<1))throw Error('阈值或取样相位无效；尚未操作目标');
   if(!Number.isInteger(requested.traceid)||requested.traceid<1||requested.traceid>111)throw Error('Trace ID 范围为 1～111；尚未操作目标');
-  log('采集步骤：检查逻辑分析仪');const available=await api('status');if(!available.rates.includes(rate))throw Error('LA 不支持所选采样率；请选择设备支持的采样率，尚未操作目标');
+  log('采集步骤：检查逻辑分析仪');const available=await api('status');if(available.captureProtocol!==2)throw Error('本地 ETM 桥版本不匹配，请重启或更新完整桥包，避免新页面混用旧解码器；尚未操作目标');if(!available.rates.includes(rate))throw Error('LA 不支持所选采样率；请选择设备支持的采样率，尚未操作目标');
   const flashLimit=target.info?.flashLimit||0x08020000;
   if(state.elfInfo.segments.some(s=>s.address+atob(s.data).length>flashLimit))throw Error('ELF 超出当前目标的 Trace Flash 范围');
   const captureElf=state.elfInfo,captureElfId=state.elfId,captureSourceSnapshot=state.sourceSnapshot,requestedOptions=options(),selectedEntry=sync&&$('entry-before').checked?entry(true):null;
@@ -202,7 +206,7 @@ on('start',async()=>{const sync=$('sync').checked,tokens=$('channels').value.spl
     if(!c?.coreHz||!c?.physicalTraceHz||Math.abs(c.coreHz-Number($('expected-cpu').value)*1e6)>100||Math.abs(c.physicalTraceHz-Number($('expected-trace').value)*1e6)>100)throw Error('实际 CPU/TRACECLK 未确定或与预期不一致；目标保持暂停，请在时钟页核对');
     stage='配置 ETM / TPIU';log('采集步骤：'+stage);await showTarget(await target.configure(requestedOptions));config=target.config;
   }else config=externalDecodeConfig();
-  stage='启动 LA 并采集';log('采集步骤：'+stage);const created=await api('capture',{rate:Number($('rate').value),seconds:Number($('duration').value)/1000,threshold:Number($('threshold').value),sync,decode:$('auto-decode').checked,clock:channels[0],data:channels.slice(1),fraction:Number($('fraction').value),config,elfId:captureElfId,targetVerified:sync,targetSnapshot:sync?target.info:null,captureScope:sync?'business-unfiltered-window':'externally-configured-window',captureEntry,sourceSnapshot:captureSourceSnapshot});
+  stage='启动 LA 并采集';log('采集步骤：'+stage);const created=await api('capture',{rate:Number($('rate').value),seconds:Number($('duration').value)/1000,threshold:Number($('threshold').value),sync,decode:$('auto-decode').checked,clock:channels[0],data:channels.slice(1),fraction:Number($('fraction').value),glitchNs:Number($('glitch-ns').value),config,elfId:captureElfId,targetVerified:sync,targetSnapshot:sync?target.info:null,captureScope:sync?'business-unfiltered-window':'externally-configured-window',captureEntry,sourceSnapshot:captureSourceSnapshot});
   log('联动任务创建；起点 '+(captureEntry===null?'当前暂停位置':hex(captureEntry)));await watchJob(created.job,{resume:sync,kind:'capture'});
   }catch(e){throw new Error(stage+'失败：'+e.message,{cause:e});}},async()=>{if(sync&&target.probe){target.assertTransport();await target.clearEntryBreak();await target.restore();await resumeBreakpoints(suspendedBps);await showTarget(await target.inspect());log('本次 trace 配置与断点已恢复；目标状态已刷新');}},e=>log('采集后的清理/回读失败（未覆盖首次错误）：'+e.message));
 });
@@ -250,7 +254,7 @@ $('sources-files').onchange=async()=>{
     await store.setExpectedPaths(info.sourceFiles);store.indexFileList(files);await saveSourceStore(store);
   }catch(e){error(e);}finally{state.operation=false;$('sources-files').value='';controls();}
 };
-$('capture-file').onchange=async()=>{if(state.operation||state.job){error(Error('请等待当前操作完成后再导入'));$('capture-file').value='';return;}try{await perform(async()=>{const f=$('capture-file').files[0];if(!f)return;const form=new FormData();form.append('capture',f);if(!f.name.toLowerCase().endsWith('.etmrecord')){if(!state.elfInfo)throw Error('导入原始 CSV/BIN 前请在调试页载入匹配 ELF；记录包可直接导入');if(state.elfFile)form.append('elf',state.elfFile);else{const response=await fetch(state.elfInfo.download||apiBase+'record-firmware/'+state.elfId);if(!response.ok)throw Error('先选择匹配 ELF');form.append('elf',new Blob([await response.arrayBuffer()]),'firmware.elf');}form.append('config',JSON.stringify(externalDecodeConfig()));form.append('fraction',$('fraction').value);for(const [name,text]of Object.entries(state.sourceFiles))form.append('sources',new Blob([text]),name);}const saved=await api('import',form);await refreshRecords();await watchJob((await api('decode/'+saved.record,{})).job);},{hardware:false});}catch(e){error(e);}finally{$('capture-file').value='';}};
+$('capture-file').onchange=async()=>{if(state.operation||state.job){error(Error('请等待当前操作完成后再导入'));$('capture-file').value='';return;}try{await perform(async()=>{const f=$('capture-file').files[0];if(!f)return;const form=new FormData();form.append('capture',f);if(!f.name.toLowerCase().endsWith('.etmrecord')){if(!state.elfInfo)throw Error('导入原始 CSV/BIN 前请在调试页载入匹配 ELF；记录包可直接导入');if(state.elfFile)form.append('elf',state.elfFile);else{const response=await fetch(state.elfInfo.download||apiBase+'record-firmware/'+state.elfId);if(!response.ok)throw Error('先选择匹配 ELF');form.append('elf',new Blob([await response.arrayBuffer()]),'firmware.elf');}form.append('config',JSON.stringify(externalDecodeConfig()));form.append('fraction',$('fraction').value);form.append('glitchNs',$('glitch-ns').value);for(const [name,text]of Object.entries(state.sourceFiles))form.append('sources',new Blob([text]),name);}const saved=await api('import',form);await refreshRecords();await watchJob((await api('decode/'+saved.record,{})).job);},{hardware:false});}catch(e){error(e);}finally{$('capture-file').value='';}};
 function sideButtonLabel(){$('toggle-settings').textContent=innerWidth<=780?'采集设置':document.body.classList.contains('side-hidden')?'显示控制':'收起控制';}
 $('help').onclick=()=>$('help-dialog').showModal();$('close-help').onclick=()=>$('help-dialog').close();$('toggle-settings').onclick=()=>{document.body.classList.toggle(innerWidth<=780?'settings-open':'side-hidden');sideButtonLabel();};window.addEventListener('resize',sideButtonLabel);sideButtonLabel();
 $('toggle-source').onclick=()=>{const open=document.body.classList.toggle('source-open');$('toggle-source').textContent=open?'轨迹':'源码';$('toggle-source').setAttribute('aria-expanded',String(open));};

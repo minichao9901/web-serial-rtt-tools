@@ -11,7 +11,7 @@ export function traceSettings(config){
 
 export function traceCapabilities(profile,config){
   if(profile==='stm32f103ze')return {branchBroadcast:true,returnStack:false,cycleCount:false};
-  if(profile==='stm32h7b0')return {branchBroadcast:!!(config.idr0&0x20),returnStack:!!(config.idr0&0x200),cycleCount:!!(config.idr0&0x80)};
+  if(profile==='stm32h7b0'||profile==='stm32h743')return {branchBroadcast:!!(config.idr0&0x20),returnStack:!!(config.idr0&0x200),cycleCount:!!(config.idr0&0x80)};
   return {branchBroadcast:false,returnStack:false,cycleCount:false};
 }
 

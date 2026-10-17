@@ -73,7 +73,17 @@ def pack_nibbles(nibbles, phase):
                  for i in range(phase, len(nibbles) - 1, 2))
 
 
-def extract(path, clock, data, fraction=0.25):
+def filter_pulses(edges, limit_ns):
+    """Remove only complete pulse pairs; preserve all surviving edge timestamps."""
+    filtered=[]
+    for edge in edges:
+        filtered.append(edge)
+        if len(filtered)>=2 and (filtered[-1][0]-filtered[-2][0])*1e9<=limit_ns+0.001:
+            filtered.pop();filtered.pop()
+    return filtered
+
+
+def extract(path, clock, data, fraction=0.25, glitch_ns=0):
     if not 0 < fraction < 1:
         raise ValueError('取样位置必须介于 0 和 1。')
     initial, tracks, start, end = read_tracks(path)
@@ -83,6 +93,17 @@ def extract(path, clock, data, fraction=0.25):
     missing = set(needed) - set(initial)
     if missing:
         raise ValueError(f'CSV 缺少通道：{sorted(missing)}')
+    if not isinstance(glitch_ns,(int,float)) or not 0<=glitch_ns<=100:
+        raise ValueError('软件滤波宽度须为 0～100 ns（0 为关闭）')
+    raw_clock_edges=len(tracks[clock]);removed={}
+    if glitch_ns:
+        raw_intervals=[b[0]-a[0] for a,b in zip(tracks[clock],tracks[clock][1:])]
+        if not raw_intervals or glitch_ns>=statistics.median(raw_intervals)*1e9/2:
+            raise ValueError('软件滤波阈值须小于典型时钟半周期的一半，避免滤掉正常 Trace；请降低阈值')
+        for channel in needed:
+            filtered=filter_pulses(tracks[channel],glitch_ns)
+            removed[str(channel)]=len(tracks[channel])-len(filtered)
+            tracks[channel]=filtered
     edges = tracks[clock]
     if len(edges) < 4:
         raise ValueError('TRACECLK 没有足够跳变。')
@@ -124,9 +145,15 @@ def extract(path, clock, data, fraction=0.25):
         nibbles.append(value)
     streams = [pack_nibbles(nibbles, phase) for phase in (0, 1)]
     sync = b'\xff\xff\xff\x7f'
+    digest=hashlib.sha256()
+    with path.open('rb') as stream:
+        for chunk in iter(lambda:stream.read(1024*1024),b''):digest.update(chunk)
     report = {
         'input': str(path.resolve()),
-        'input_sha256': hashlib.sha256(path.read_bytes()).hexdigest(),
+        'input_sha256': digest.hexdigest(),
+        'software_filter':dict(enabled=bool(glitch_ns),limit_ns=glitch_ns,
+            removed_transitions=removed,raw_clock_edges=raw_clock_edges,
+            basis='complete pulses <= limit; raw CSV and KVDAT remain unchanged'),
         'stage': 'physical DDR extraction only; no TPIU demux or ETM instruction decode',
         'clock_channel': clock, 'data_channels_D0_to_D3': data,
         'window_seconds': [start, end], 'clock_edges': len(edges),

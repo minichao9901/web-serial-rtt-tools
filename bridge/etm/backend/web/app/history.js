@@ -49,6 +49,7 @@ export class HistoryView{
     if(r.quality.unsynchronizedBytes)$('quality').textContent+=' · 未同步 '+r.quality.unsynchronizedBytes+' 字节';
     if(r.quality.unknownSourceBytes)$('quality').textContent+=' · 未知源 '+r.quality.unknownSourceBytes+' 字节';
     if(r.captureStart&&!r.captureStart.entryRecovered)$('quality').textContent+=' · 所选起点未出现在恢复指令中（开头同步边界）';
+    if(r.physical?.software_filter?.enabled)$('quality').textContent+=' · 软件滤波 ≤'+r.physical.software_filter.limit_ns+' ns（移除 '+Object.values(r.physical.software_filter.removed_transitions||{}).reduce((a,b)=>a+b,0)+' 个边沿；原始波形保留）';
     $('quality').title=$('quality').textContent;
     $('quality').classList.toggle('warn',!!r.status.lastErrorCode||!!r.quality.packetIssues||!!r.quality.unaccountedBytes||!!r.quality.overlapBytes||r.samplingValidation?.sensitive||!!r.recordError||!!(r.captureStart&&!r.captureStart.entryRecovered));
     $('summary-content').replaceChildren(integrityView(r));await this.render();if(generation!==this.recordRevision)return;if(r.firstSeq!==null)await this.select(r.firstSeq,false);
@@ -110,12 +111,12 @@ export class HistoryView{
   }
   scopeParams(p){if(this.range){p.set('fromSeq',this.range.start);p.set('toSeq',this.range.end);}return p;}
   async setRange(range,remember=true,focusSeq=null){
-    if(!this.result||this.scopeBusy)return;const generation=this.recordRevision;
+    if(!this.result||this.scopeBusy)return;const generation=this.recordRevision,selectionRevision=this.selectRevision;
     if(focusSeq===null)focusSeq=this.selected;
     if(range&&(!Number.isInteger(range.start)||!Number.isInteger(range.end)||range.start<0||range.end<range.start))throw Error('请输入有效的执行序号区间');
     if(remember&&range)this.rangeHistory.push(this.range?{...this.range}:null);if(!range&&remember)this.rangeHistory=[];
     this.scopeBusy=true;this.updateZoomControlState();try{this.range=range?{start:Math.min(range.start,Math.max(0,this.result.eventCount-1)),end:Math.min(range.end,Math.max(0,this.result.eventCount-1))}:null;this.window=null;this.timelineKey=null;this.timelineData=null;this.offset=0;
-      await this.render();if(generation!==this.recordRevision)return;const first=this.range?this.window?.firstSeq:this.result.firstSeq;const keep=Number.isInteger(focusSeq)&&(!this.range||focusSeq>=this.range.start&&focusSeq<=this.range.end);const target=keep?focusSeq:first;if(target!=null)await this.select(target,false);
+      await this.render();if(generation!==this.recordRevision||selectionRevision!==this.selectRevision)return;const first=this.range?this.window?.firstSeq:this.result.firstSeq;const keep=Number.isInteger(focusSeq)&&(!this.range||focusSeq>=this.range.start&&focusSeq<=this.range.end);const target=keep?focusSeq:first;if(target!=null)await this.select(target,false);
     }finally{if(generation===this.recordRevision){this.scopeBusy=false;this.updateZoomControlState();}}
   }
   async backRange(){if(!this.rangeHistory.length)return;const range=this.rangeHistory.pop();await this.setRange(range,false,this.selected);}
